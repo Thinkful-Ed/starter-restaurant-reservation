@@ -1,3 +1,9 @@
+/**
+ * Knex configuration file.
+ *
+ * You will not need to make changes to this file.
+ */
+
 const path = require("path");
 
 const {

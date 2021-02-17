@@ -1,10 +1,14 @@
-const timeFormat = /\d\d:\d\d/;
+import { formatAsTime } from "./date-time";
 
+/**
+ * Formats the reservation_time property for each reservation in an array of reservations.
+ * @param reservations
+ * @returns {[reservation]}
+ *  the specified reservations array with each reservation_time property formatted as HH:MM.
+ */
 function formatReservationTime(reservations = []) {
   return reservations.map((reservation) => {
-    reservation.reservation_time = reservation.reservation_time.match(
-      timeFormat
-    )[0];
+    reservation.reservation_time = formatAsTime(reservation.reservation_time);
     return reservation;
   });
 }
