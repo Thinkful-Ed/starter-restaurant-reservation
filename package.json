@@ -16,10 +16,10 @@
     "start:front-end": "npm --prefix ./front-end start",
     "start:dev": "npx concurrently 'npm run start:dev --prefix ./back-end' 'npm start --prefix ./front-end'",
     "test": "npm run test:back-end test && npm run test:front-end",
-    "test:back-end": "npm test --prefix ./back-end",
-    "test:front-end": "npm test --prefix ./front-end",
+    "test:backend": "npm test --prefix ./back-end",
+    "test:frontend": "npm test --prefix ./front-end",
     "test:e2e": "npm run test:e2e --prefix ./front-end",
-    "test:front-end:watch": "npm test --prefix ./front-end"
+    "test:frontend:watch": "npm test --prefix ./front-end"
   },
   "keywords": [],
   "author": "Thinkful, Inc.",
