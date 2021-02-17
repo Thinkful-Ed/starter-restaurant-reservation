@@ -1,6 +1,5 @@
 # Capstone: Restaurant Reservation System Frontend
 
-Used by restaurant personnel when a customer calls to request a reservation.
-No online access by the customer at this point.
+This starter code for the backend of the capstone project in the Thinkful curriculum.
 
-There are no user stories for deployment, it is expected that you will deploy the application to production after you finish a user story.
+See [../README.md](../README.md) for detailed instructions.
