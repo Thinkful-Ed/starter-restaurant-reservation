@@ -41,7 +41,7 @@ The table below describes the existing files in the `./back-end` folder:
 | `./back-end/src/reservations/reservations.controller.js` | A controller for the reservations resource.                                                                          |
 | `./back-end/src/reservations/reservations.router.js`     | A router for the reservations resource.                                                                              |
 | `./back-end/src/server.js`                               | Defines the node server.                                                                                             |
-| `./back-end/test`                                        | A folder that contains all of the integrattion tests. You will not need to make changes to the files in this folder. |
+| `./back-end/test`                                        | A folder that contains all of the integration tests. You will not need to make changes to the files in this folder. |
 | `./back-end/vercel.json`                                 | A vercel deployment configuration file. You will not need to make changes to this file.                              |
 
 ### Frontend Existing files
@@ -52,15 +52,15 @@ The table below describes the existing files in the `./front-end` folder:
 
 | Folder/file path                                 | Description                                                                                                        |
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `./front-end/e2e`                                | A folder that contains all of the end-to-end tests. You will not need to make changes to the files in this folder. |
-| `./front-end/jest-puppeteer.config.js`           | The jest-puppeteer configuration file. You will not need to make changes to this file.                             |
+| `./front-end/e2e`                                | Contains all of the end-to-end tests. You will not need to make changes to the files in this folder. |
+| `./front-end/jest-puppeteer.config.js`           | A jest-puppeteer configuration file. You will not need to make changes to this file.                             |
 | `./front-end/src/App.js`                         | Defines the root application component. You will not need to make changes to this file.                            |
 | `./front-end/src/App.test.js`                    | Contains the tests for the root application component. You will not need to make changes to this file.             |
 | `./front-end/src/dashboard/Dashboard.js`         | Defines the Dashboard page.                                                                                        |
 | `./front-end/src/index.js`                       | The main entry point for the React application.                                                                    |
 | `./front-end/src/layout/ErrorAlert.js`           | Defines an error alert component that display only when an error is specified.                                     |
 | `./front-end/src/layout/Layout.css`              | The css for the Layout component.                                                                                  |
-| `./front-end/src/layout/Layout.js`               | Defined the main layout of the applicaiton.                                                                        |
+| `./front-end/src/layout/Layout.js`               | Defined the main layout of the application.                                                                        |
 | `./front-end/src/layout/Menu.js`                 | Defines the menu for the application.                                                                              |
 | `./front-end/src/layout/NotFound.js`             | Defines the "Not found" component that is display when no route matches.                                           |
 | `./front-end/src/layout/Routes.js`               | Defines all the routes for the application.                                                                        |
@@ -107,7 +107,7 @@ Have a look at the following examples:
 - `npm run test:3:backend` runs only the integration tests for user story 2.
 - `npm run test:3:frontend` runs the frontend unit tests, and the end-to-end tests for user story 3.
 
-Once you have all user stories complete, you can run all of the tests using the follwing commands:
+Once you have all user stories complete, you can run all the tests using the following commands:
 
 - `npm test` runs _all_ tests.
 - `npm run test:backend` runs _all_ integration tests.
@@ -265,7 +265,7 @@ so that I can seat more guests at that table.<br/>
    - Display a "Finish" button on each _occupied_ table.
    - the "Finish" button must have a `data-table-id-finish={table.table_id}` attribute, so it can be found by the tests.
    - Clicking the "Finish" button will display the following confirmation: "Is this table ready to seat new guests? This cannot be undone." If the user selects "Ok" the system will: - Send a `DELETE` request to `/tables/:table_id/seat` in order to remove the table assignment. The tests do not check the body returned by this request. - The server should return 400 if the table is not occupied. - Refresh the list of tables to show that the table is now available.
-   - If the user selects "Cancel" no changes are made.
+   - Clicking the "Cancel" makes no changes.
 
 > **Hint** The end-to-end test waits for the tables list to be refreshed before checking the free/occupied status of the table, so be sure to send a GET request to `/tables` to refresh the tables list.
 
@@ -280,7 +280,7 @@ so that I can see which reservation parties are seated, and finished reservation
 1. The `/dashboard` page will
    - display the status of the reservation. The default status is "booked"
      - the status text must have a `data-reservation-id-status={reservation.reservation_id}` attribute, so it can be found by the tests.
-   - if reservation status is "booked", display the Seat button.
+   - display the Seat button only when the reservation status is "booked".
    - clicking the Seat button changes the status to "seated" and hides the Seat button.
    - clicking the Finish button associated with the table changes the reservation status to "finished" and removes the reservation from the dashboard.
    - to set the status, PUT to `/reservations/:reservation_id/status` with a body of `{data: { status: "<new-status>" } }` where `<new-status>` is one of booked, seated, or finished
@@ -301,7 +301,7 @@ so that I can quickly access a customer's reservation when they call about their
    - Clicking on the "Find" button will submit a request to the server (e.g. GET `/reservations?mobile_phone=555-1212`).
      - then the system will look for the reservation(s) in the database and display all matched records on the `/search` page using the same reservations list component as the `/dashboard` page.
      - the search page will display all reservations matching the phone number, regardless of status.
-   - If there are no records found after clicking Find, then display a message `No reservations found`.
+   - display `No reservations found` if there are no records found after clicking the Find button.
 
 > **Hint** To search for a partial or complete phone number, you should ignore all formatting and search only for the digits.
 > You will need to remove any non-numeric characters from the submitted mobile number and also use the PostgreSQL translate function.
@@ -334,12 +334,12 @@ so that reservations are accurate and current.
    - Display a "Cancel" button next to each reservation
    - The Cancel button must have a `data-reservation-id-cancel={reservation.reservation_id}` attribute, so it can be found by the tests.
    - Clicking the "Cancel" button will display the following confirmation: "Do you want to cancel this reservation? This cannot be undone."
-     - If the user selects "Ok", the reservation is removed from the page and deleted from the database, the confirmation disappears, and the results on the page are refreshed.
-       - this will set the status of the reservation to `cancelled` with a PUT to `/reservations/:reservation_id/status` with a body of `{data: { status: "cancelled" } }`.
-     - If the user selects "Cancel" no changes are made.
+     - Clicking "Ok" on the confirmation dialog, sets the reservation status to  `cancelled`, and the results on the page are refreshed.
+       - set the status of the reservation to `cancelled` using a PUT to `/reservations/:reservation_id/status` with a body of `{data: { status: "cancelled" } }`.
+     - Clicking "Cancel" on the confirmation dialog makes no changes.
 1. The `/reservations/:reservation_id/edit` page will display the reservation form with the existing reservation data filled in
-   - If the user selects "Submit", the reservation is updated, then the user is taken back to the previous page.
-   - Only reservations with a status of "booked" can be edited.
-   - If the user selects "Cancel" no changes are made.
+	- Only reservations with a status of "booked" can be edited.
+	- Clicking the "Submit" button will save the reservation, then displays the previous page.
+	- Clicking "Cancel" makes no changes, then display the previous page.
 
 > **Hint** The same validation used for create applies to editing a reservation. The form and the API for updating a reservation must not allow the user to violate any of the rules specified when creating a reservation.
