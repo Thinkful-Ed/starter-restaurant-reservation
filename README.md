@@ -95,21 +95,30 @@ If you have trouble getting the server to run, reach out for assistance.
 
 This project has unit, integration, and end-to-end (e2e) tests. You have seen unit and integration tests in previous projects.
 End-to-end tests use browser automation to interact with the application just like the user does.
-Once the tests are passing for a given user story, you know you have the necessary functionality.
+Once the tests are passing for a given user story, you have implemented the necessary functionality.
 
-1. Run `npm test` to run all tests - unit, integration, and end-to-end.
-1. Run `npm run test:back-end` to run unit, integration, and end-to-end tests for the backend. The logging level for the backend is set to `warn` when running tests and `info` otherwise.
-1. Run `npm run test:front-end` to run unit, integration, and end-to-end tests for the frontend.
-1. Run `npm run test:e2e` to run only the end-to-end tests for the frontend.
+Test are split up by user story. You can run the tests for a given user story by running:
+
+`npm run test:X` where `X` is the user story number. 
+
+Have a look at the following examples:
+
+- `npm run test:1` runs all the tests for user story 1 (both integration and end-to-end).
+- `npm run test:3:backend` runs only the integration tests for user story 2.
+- `npm run test:3:frontend` runs the frontend unit tests, and the end-to-end tests for user story 3.
+
+Once you have all user stories complete, you can run all of the tests using the follwing commands:
+
+- `npm test` runs _all_ tests.
+- `npm run test:backend` runs _all_ integration tests.
+- `npm run test:frontend` to run unit, and end-to-end tests for the frontend.
+- `npm run test:e2e` to run only the end-to-end tests.
+
+Note that the logging level for the backend is set to `warn` when running tests and `info` otherwise.
 
 > **Note**: After running `npm test` or `npm run test:e2e` you might see something like the following in the output: `[start:frontend] Assertion failed:`. This is not a failure, it is just the frontend project getting shutdown automatically.
 
 > **Hint**: If you stop the tests before they finish, it can leave the test database in an unusual state causing the tests to fail unexpectedly the next time you run them. If this happens, delete all the tables in the test database, including the knex\_\* tables, and try the tests again.
-
-### End-to-end tests
-
-HEADLESS
-SLO_MO
 
 #### Screenshots
 
