@@ -3,7 +3,7 @@ const request = require("supertest");
 const app = require("../src/app");
 const knex = require("../src/db/connection");
 
-describe("Create reservations future date", () => {
+describe("US-02 - Create reservations future date", () => {
   beforeAll(() => {
     return knex.migrate
       .forceFreeMigrationsLock()
