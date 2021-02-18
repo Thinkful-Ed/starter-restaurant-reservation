@@ -1,5 +1,4 @@
 module.exports = {
-  preset: "jest-puppeteer",
   testTimeout: 8000,
   verbose: true,
   reporters: [
@@ -8,7 +7,7 @@ module.exports = {
     [
       "jest-html-reporter",
       {
-        pageTitle: "Frontend test suite",
+        pageTitle: "Backend test suite",
         outputPath: "test-report/index.html",
         includeFailureMsg: true,
       },
