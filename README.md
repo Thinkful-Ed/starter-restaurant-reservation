@@ -107,6 +107,8 @@ Have a look at the following examples:
 - `npm run test:3:backend` runs only the integration tests for user story 2.
 - `npm run test:3:frontend` runs the frontend unit tests, and the end-to-end tests for user story 3.
 
+Since tests do take time to run, you might want to consider running only the tests for the user story you're working on at any given time.
+
 Once you have all user stories complete, you can run all the tests using the following commands:
 
 - `npm test` runs _all_ tests.
