@@ -99,13 +99,13 @@ Once the tests are passing for a given user story, you have implemented the nece
 
 Test are split up by user story. You can run the tests for a given user story by running:
 
-`npm run test:X` where `X` is the user story number.
+`npm run test X` where `X` is the user story number.
 
 Have a look at the following examples:
 
-- `npm run test:1` runs all the tests for user story 1 (both integration and end-to-end).
-- `npm run test:3:backend` runs only the integration tests for user story 2.
-- `npm run test:3:frontend` runs the frontend unit tests, and the end-to-end tests for user story 3.
+- `npm run test 1` runs all the tests for user story 1 (both integration and end-to-end).
+- `npm run test 3 backend` runs only the integration tests for user story 3.
+- `npm run test 3 frontend` runs the frontend unit tests, and the end-to-end tests for user story 3.
 
 Since tests do take time to run, you might want to consider running only the tests for the user story you're working on at any given time.
 
@@ -118,7 +118,11 @@ Once you have all user stories complete, you can run all the tests using the fol
 
 Note that the logging level for the backend is set to `warn` when running tests and `info` otherwise.
 
-After running the tests each time, a test report will be generated and stored at `front-end/test-report` for the end-to-end tests and `back-end/test-report` for the integration tests. To view the report, you can open up the `index.html` file in your browser with VSCode Live Server.
+After running the tests each time, a test report will be generated and stored at `front-end/test-report` for the end-to-end tests and `back-end/test-report` for the integration tests. To view the report, you can open up the `index.html` file in your browser with VSCode Live Server. Here's an example of what a report might look like:
+
+![Test Report Example](./test-report-example.png)
+
+A green row represents a passing test, whereas a red row indicates a failing test, which includes a stack trace for the failure.
 
 > **Note**: After running `npm test` or `npm run test:e2e` you might see something like the following in the output: `[start:frontend] Assertion failed:`. This is not a failure, it is just the frontend project getting shutdown automatically.
 
