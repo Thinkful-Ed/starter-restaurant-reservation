@@ -22,13 +22,13 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start:backend": "npm run start:e2e --prefix ./../back-end ",
+    "start:backend": "npm run start:e2e --prefix ./../back-end",
     "start:frontend": "npx cross-env BROWSER=none NODE_ENV=test react-scripts start",
     "build": "react-scripts build",
     "test": "npx cross-env CI=true run-s test:unit test:e2e",
     "test:unit": "react-scripts test",
     "test:e2e": "run-p -l -r start:* test:e2e:run",
-    "test:e2e:run": "wait-on http://localhost:5000/reservations?date=2020-01-01 && jest --config ./e2e/jest.config.js",
+    "test:e2e:run": "wait-on http://localhost:5000/reservations?date=2020-01-01 && jest --config ./e2e/jest.config.js $npm_package_config_testFile",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -53,6 +53,8 @@
     "cross-fetch": "^3.0.6",
     "jest-puppeteer": "^4.4.0",
     "npm-run-all": "^4.1.5",
-    "puppeteer": "^5.5.0"
+    "puppeteer": "^5.5.0",
+    "jest-html-reporter": "^3.3.0",
+    "jest-standard-reporter": "^2.0.0"
   }
 }

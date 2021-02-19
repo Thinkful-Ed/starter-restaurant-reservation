@@ -9,7 +9,7 @@ const onPageConsole = (msg) =>
     console.log(`<LOG::page console ${msg.type()}>`, ...eventJson)
   );
 
-describe("US-02 - Create reservation on a future, working date - E2E", () => {
+describe("US-03 - Create reservation on a future, working date - E2E", () => {
   let page;
   let browser;
 

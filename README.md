@@ -29,20 +29,20 @@ The `./back-end` folder contains all the code for the backend project.
 
 The table below describes the existing files in the `./back-end` folder:
 
-| Folder/file path                                         | Description                                                                                                          |
-| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `./back-end/knexfile.js`                                 | The Knex configuration file. You will not need to make changes to this file.                                         |
-| `./back-end/src/app.js`                                  | Defines the Express application and connects routers.                                                                |
-| `./back-end/src/db/connection.js`                        | The Knex connection file. You will not need to make changes to this file.                                            |
-| `./back-end/src/db/migrations`                           | The Knex migrations folder.                                                                                          |
-| `./back-end/src/db/seeds/`                               | The Knex seeds folder.                                                                                               |
-| `./back-end/src/errors/errorHandler.js`                  | Defined an Express API error handler.                                                                                |
-| `./back-end/src/errors/notFound.js`                      | Defined an Express API "not found" handler.                                                                          |
-| `./back-end/src/reservations/reservations.controller.js` | A controller for the reservations resource.                                                                          |
-| `./back-end/src/reservations/reservations.router.js`     | A router for the reservations resource.                                                                              |
-| `./back-end/src/server.js`                               | Defines the node server.                                                                                             |
+| Folder/file path                                         | Description                                                                                                         |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `./back-end/knexfile.js`                                 | The Knex configuration file. You will not need to make changes to this file.                                        |
+| `./back-end/src/app.js`                                  | Defines the Express application and connects routers.                                                               |
+| `./back-end/src/db/connection.js`                        | The Knex connection file. You will not need to make changes to this file.                                           |
+| `./back-end/src/db/migrations`                           | The Knex migrations folder.                                                                                         |
+| `./back-end/src/db/seeds/`                               | The Knex seeds folder.                                                                                              |
+| `./back-end/src/errors/errorHandler.js`                  | Defined an Express API error handler.                                                                               |
+| `./back-end/src/errors/notFound.js`                      | Defined an Express API "not found" handler.                                                                         |
+| `./back-end/src/reservations/reservations.controller.js` | A controller for the reservations resource.                                                                         |
+| `./back-end/src/reservations/reservations.router.js`     | A router for the reservations resource.                                                                             |
+| `./back-end/src/server.js`                               | Defines the node server.                                                                                            |
 | `./back-end/test`                                        | A folder that contains all of the integration tests. You will not need to make changes to the files in this folder. |
-| `./back-end/vercel.json`                                 | A vercel deployment configuration file. You will not need to make changes to this file.                              |
+| `./back-end/vercel.json`                                 | A vercel deployment configuration file. You will not need to make changes to this file.                             |
 
 ### Frontend Existing files
 
@@ -50,25 +50,25 @@ The `./front-end` folder contains all the code for the frontend project.
 
 The table below describes the existing files in the `./front-end` folder:
 
-| Folder/file path                                 | Description                                                                                                        |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `./front-end/e2e`                                | Contains all of the end-to-end tests. You will not need to make changes to the files in this folder. |
-| `./front-end/jest-puppeteer.config.js`           | A jest-puppeteer configuration file. You will not need to make changes to this file.                             |
-| `./front-end/src/App.js`                         | Defines the root application component. You will not need to make changes to this file.                            |
-| `./front-end/src/App.test.js`                    | Contains the tests for the root application component. You will not need to make changes to this file.             |
-| `./front-end/src/dashboard/Dashboard.js`         | Defines the Dashboard page.                                                                                        |
-| `./front-end/src/index.js`                       | The main entry point for the React application.                                                                    |
-| `./front-end/src/layout/ErrorAlert.js`           | Defines an error alert component that display only when an error is specified.                                     |
-| `./front-end/src/layout/Layout.css`              | The css for the Layout component.                                                                                  |
-| `./front-end/src/layout/Layout.js`               | Defined the main layout of the application.                                                                        |
-| `./front-end/src/layout/Menu.js`                 | Defines the menu for the application.                                                                              |
-| `./front-end/src/layout/NotFound.js`             | Defines the "Not found" component that is display when no route matches.                                           |
-| `./front-end/src/layout/Routes.js`               | Defines all the routes for the application.                                                                        |
-| `./front-end/src/utils/api.js`                   | Defines the functions uses to access the backend API                                                               |
-| `./front-end/src/utils/date-time.js`             | Defines functions to format date and time strings.                                                                 |
-| `./front-end/src/utils/formatReservationDate.js` | Defines a function to format the date on an array of reservations.                                                 |
-| `./front-end/src/utils/formatReservationTime.js` | Defines a function to format the time on an array of reservations.                                                 |
-| `./front-end/src/utils/useQuery.js`              | Defines a custom hook to parse the query parameters from the URL.                                                  |
+| Folder/file path                                 | Description                                                                                            |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `./front-end/e2e`                                | Contains all of the end-to-end tests. You will not need to make changes to the files in this folder.   |
+| `./front-end/jest-puppeteer.config.js`           | A jest-puppeteer configuration file. You will not need to make changes to this file.                   |
+| `./front-end/src/App.js`                         | Defines the root application component. You will not need to make changes to this file.                |
+| `./front-end/src/App.test.js`                    | Contains the tests for the root application component. You will not need to make changes to this file. |
+| `./front-end/src/dashboard/Dashboard.js`         | Defines the Dashboard page.                                                                            |
+| `./front-end/src/index.js`                       | The main entry point for the React application.                                                        |
+| `./front-end/src/layout/ErrorAlert.js`           | Defines an error alert component that display only when an error is specified.                         |
+| `./front-end/src/layout/Layout.css`              | The css for the Layout component.                                                                      |
+| `./front-end/src/layout/Layout.js`               | Defined the main layout of the application.                                                            |
+| `./front-end/src/layout/Menu.js`                 | Defines the menu for the application.                                                                  |
+| `./front-end/src/layout/NotFound.js`             | Defines the "Not found" component that is display when no route matches.                               |
+| `./front-end/src/layout/Routes.js`               | Defines all the routes for the application.                                                            |
+| `./front-end/src/utils/api.js`                   | Defines the functions uses to access the backend API                                                   |
+| `./front-end/src/utils/date-time.js`             | Defines functions to format date and time strings.                                                     |
+| `./front-end/src/utils/formatReservationDate.js` | Defines a function to format the date on an array of reservations.                                     |
+| `./front-end/src/utils/formatReservationTime.js` | Defines a function to format the time on an array of reservations.                                     |
+| `./front-end/src/utils/useQuery.js`              | Defines a custom hook to parse the query parameters from the URL.                                      |
 
 ## Database setup
 
@@ -99,13 +99,15 @@ Once the tests are passing for a given user story, you have implemented the nece
 
 Test are split up by user story. You can run the tests for a given user story by running:
 
-`npm run test:X` where `X` is the user story number. 
+`npm run test X` where `X` is the user story number.
 
 Have a look at the following examples:
 
-- `npm run test:1` runs all the tests for user story 1 (both integration and end-to-end).
-- `npm run test:3:backend` runs only the integration tests for user story 2.
-- `npm run test:3:frontend` runs the frontend unit tests, and the end-to-end tests for user story 3.
+- `npm run test 1` runs all the tests for user story 1 (both integration and end-to-end).
+- `npm run test 3 backend` runs only the integration tests for user story 3.
+- `npm run test 3 frontend` runs the frontend unit tests, and the end-to-end tests for user story 3.
+
+Since tests do take time to run, you might want to consider running only the tests for the user story you're working on at any given time.
 
 Once you have all user stories complete, you can run all the tests using the following commands:
 
@@ -115,6 +117,12 @@ Once you have all user stories complete, you can run all the tests using the fol
 - `npm run test:e2e` to run only the end-to-end tests.
 
 Note that the logging level for the backend is set to `warn` when running tests and `info` otherwise.
+
+After running the tests each time, a test report will be generated and stored at `front-end/test-report` for the end-to-end tests and `back-end/test-report` for the integration tests. To view the report, you can open up the `index.html` file in your browser with VSCode Live Server. Here's an example of what a report might look like:
+
+![Test Report Example](./test-report-example.png)
+
+A green row represents a passing test, whereas a red row indicates a failing test, which includes a stack trace for the failure.
 
 > **Note**: After running `npm test` or `npm run test:e2e` you might see something like the following in the output: `[start:frontend] Assertion failed:`. This is not a failure, it is just the frontend project getting shutdown automatically.
 
@@ -334,12 +342,12 @@ so that reservations are accurate and current.
    - Display a "Cancel" button next to each reservation
    - The Cancel button must have a `data-reservation-id-cancel={reservation.reservation_id}` attribute, so it can be found by the tests.
    - Clicking the "Cancel" button will display the following confirmation: "Do you want to cancel this reservation? This cannot be undone."
-     - Clicking "Ok" on the confirmation dialog, sets the reservation status to  `cancelled`, and the results on the page are refreshed.
+     - Clicking "Ok" on the confirmation dialog, sets the reservation status to `cancelled`, and the results on the page are refreshed.
        - set the status of the reservation to `cancelled` using a PUT to `/reservations/:reservation_id/status` with a body of `{data: { status: "cancelled" } }`.
      - Clicking "Cancel" on the confirmation dialog makes no changes.
 1. The `/reservations/:reservation_id/edit` page will display the reservation form with the existing reservation data filled in
-	- Only reservations with a status of "booked" can be edited.
-	- Clicking the "Submit" button will save the reservation, then displays the previous page.
-	- Clicking "Cancel" makes no changes, then display the previous page.
+   - Only reservations with a status of "booked" can be edited.
+   - Clicking the "Submit" button will save the reservation, then displays the previous page.
+   - Clicking "Cancel" makes no changes, then display the previous page.
 
 > **Hint** The same validation used for create applies to editing a reservation. The form and the API for updating a reservation must not allow the user to violate any of the rules specified when creating a reservation.
