@@ -99,13 +99,17 @@ Once the tests are passing for a given user story, you have implemented the nece
 
 Test are split up by user story. You can run the tests for a given user story by running:
 
-`npm run test X` where `X` is the user story number.
+`npm run test:X` where `X` is the user story number.
 
 Have a look at the following examples:
 
-- `npm run test 1` runs all the tests for user story 1 (both integration and end-to-end).
-- `npm run test 3 backend` runs only the integration tests for user story 3.
-- `npm run test 3 frontend` runs the frontend unit tests, and the end-to-end tests for user story 3.
+- `npm run test:1` runs all the tests for user story 1 (both integration and end-to-end).
+- `npm run test:3:backend` runs only the integration tests for user story 3.
+- `npm run test:3:frontend` runs the frontend unit tests, and the end-to-end tests for user story 3.
+
+Whenever possible, frontend tests will run before backend tests to help you follow outside-in development.
+
+> **Note** When running `npm run test:X` If the frontend tests fail, the tests will stop before running the backend tests. Remember, you can always run `npm run test:X:backend` or `npm run test:X:frontend` to target a specific part of the application.
 
 Since tests do take time to run, you might want to consider running only the tests for the user story you're working on at any given time.
 
@@ -116,9 +120,9 @@ Once you have all user stories complete, you can run all the tests using the fol
 - `npm run test:frontend` to run unit, and end-to-end tests for the frontend.
 - `npm run test:e2e` to run only the end-to-end tests.
 
-Note that the logging level for the backend is set to `warn` when running tests and `info` otherwise.
+If you would like a reminder of which npm scripts are available, run `npm run` to see a list of available commands.
 
-After running the tests each time, a test report will be generated and stored at `front-end/test-report` for the end-to-end tests and `back-end/test-report` for the integration tests. To view the report, you can open up the `index.html` file in your browser with VSCode Live Server. Here's an example of what a report might look like:
+Note that the logging level for the backend is set to `warn` when running tests and `info` otherwise.
 
 ![Test Report Example](./test-report-example.png)
 
