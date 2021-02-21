@@ -19,6 +19,19 @@ describe("US-01 - Create and list reservations", () => {
     return await knex.migrate.rollback(null, true).then(() => knex.destroy());
   });
 
+  describe("App", () => {
+    describe("not found handler", () => {
+      test("returns 404 for non-existent route", async () => {
+        const response = await request(app)
+          .get("/fastidious")
+          .set("Accept", "application/json");
+
+        expect(response.status).toBe(404);
+        expect(response.body.error).toBe("Path not found: /fastidious");
+      });
+    });
+  });
+
   describe("GET /reservations/:reservation_id", () => {
     test("returns 404 for non-existent id", async () => {
       const response = await request(app)

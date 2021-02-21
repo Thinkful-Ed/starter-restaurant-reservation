@@ -1,7 +1,8 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
-const { createReservation } = require("./api");
 const fsPromises = fs.promises;
+
+const { createReservation } = require("./api");
 
 const baseURL = process.env.BASE_URL || "http://localhost:3000";
 
