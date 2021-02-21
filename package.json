@@ -9,8 +9,8 @@
   },
   "scripts": {
     "build": "npm -prefix front-end run build",
-    "preinstall": "npm install --prefix ./back-end ",
-    "install": "npm install --prefix ./front-end",
+    "preinstall": "cd ./back-end && npm install",
+    "install": "cd ./front-end && npm install",
     "start": "npx concurrently 'npm run start:backend' 'npm run start:frontend'",
     "start:backend": "npm --prefix ./back-end start",
     "start:frontend": "npm --prefix ./front-end start",
