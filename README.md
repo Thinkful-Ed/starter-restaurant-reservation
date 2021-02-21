@@ -107,7 +107,9 @@ Have a look at the following examples:
 - `npm run test:3:backend` runs only the integration tests for user story 3.
 - `npm run test:3:frontend` runs the frontend unit tests, and the end-to-end tests for user story 3.
 
-Whenever possible, frontend tests will run before backend tests to help you follow outside-in development. 
+Whenever possible, frontend tests will run before backend tests to help you follow outside-in development.
+
+> **Note** When running `npm run test:X` If the frontend tests fail, the tests will stop before running the backend tests. Remember, you can always run `npm run test:X:backend` or `npm run test:X:frontend` to target a specific part of the application.
 
 Since tests do take time to run, you might want to consider running only the tests for the user story you're working on at any given time.
 
