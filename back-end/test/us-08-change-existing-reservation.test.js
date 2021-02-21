@@ -53,6 +53,8 @@ describe("US-08 - Change an existing reservation", () => {
         .where("reservation_id", 1)
         .first();
 
+      expect(reservation).not.toBeUndefined();
+
       Object.entries(expected).forEach(
         ([key, value]) => (reservation[key] = value)
       );
@@ -352,9 +354,12 @@ describe("US-08 - Change an existing reservation", () => {
 
   describe("PUT /reservations/:reservation_id/status", () => {
     test("returns 200 for status cancelled", async () => {
-      let reservation = await knex("reservations")
+      const reservation = await knex("reservations")
         .orderBy(["reservation_date", "reservation_time"])
         .first();
+
+      expect(reservation).not.toBeUndefined();
+
       const status = "cancelled";
 
       const response = await request(app)

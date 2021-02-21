@@ -59,7 +59,8 @@ describe("US-08 - Change an existing reservation - E2E", () => {
         await page.waitForSelector(hrefSelector);
 
         await page.screenshot({
-          path: ".screenshots/us-08-dashboard-edit-click-after.png",
+          path:
+            ".screenshots/us-08-dashboard-edit-click-after-no-change-expected.png",
           fullPage: true,
         });
 

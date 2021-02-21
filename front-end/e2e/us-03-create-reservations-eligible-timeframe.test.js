@@ -21,6 +21,7 @@ describe("US-03 - Create reservation on a future, working date - E2E", () => {
     browser = await puppeteer.launch();
     page = await browser.newPage();
     page.on("console", onPageConsole);
+    await page.setViewport({ width: 1920, height: 1080 });
     await page.goto(`${baseURL}/reservations/new`, { waitUntil: "load" });
   });
 

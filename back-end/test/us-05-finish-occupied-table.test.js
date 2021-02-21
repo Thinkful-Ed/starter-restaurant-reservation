@@ -49,6 +49,8 @@ describe("US-05 - Finish an occupied table", () => {
     });
 
     test("returns 200 if table_id is occupied ", async () => {
+      expect(tableOne).not.toBeUndefined();
+
       const seatResponse = await request(app)
         .put(`/tables/${tableOne.table_id}/seat`)
         .set("Accept", "application/json")
