@@ -1,7 +1,8 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
-const { createReservation } = require("./api");
 const fsPromises = fs.promises;
+
+const { createReservation } = require("./api");
 
 const baseURL = process.env.BASE_URL || "http://localhost:3000";
 
@@ -58,7 +59,8 @@ describe("US-08 - Change an existing reservation - E2E", () => {
         await page.waitForSelector(hrefSelector);
 
         await page.screenshot({
-          path: ".screenshots/us-08-dashboard-edit-click-after.png",
+          path:
+            ".screenshots/us-08-dashboard-edit-click-after-no-change-expected.png",
           fullPage: true,
         });
 

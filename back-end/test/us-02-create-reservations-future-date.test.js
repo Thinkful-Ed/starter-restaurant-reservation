@@ -20,7 +20,7 @@ describe("US-02 - Create reservations future date", () => {
   });
 
   describe("POST /reservations", () => {
-    test("returns 400 if reservation does not occur in the future", async () => {
+    test("returns 400 if reservation occurs in the past", async () => {
       const data = {
         first_name: "first",
         last_name: "last",
@@ -35,9 +35,10 @@ describe("US-02 - Create reservations future date", () => {
         .set("Accept", "application/json")
         .send({ data });
 
+      expect(response.body.error).toContain("future");
       expect(response.status).toBe(400);
     });
-    test("returns 400 if reservation_date falls on a non-working day", async () => {
+    test("returns 400 if reservation_date falls on a tuesday", async () => {
       const data = {
         first_name: "first",
         last_name: "last",
@@ -52,6 +53,7 @@ describe("US-02 - Create reservations future date", () => {
         .set("Accept", "application/json")
         .send({ data });
 
+      expect(response.body.error).toContain("closed");
       expect(response.status).toBe(400);
     });
   });

@@ -153,6 +153,7 @@ describe("US-04 - Seat reservation", () => {
           .get("/tables")
           .set("Accept", "application/json");
 
+        expect(response.body.error).toBeUndefined();
         expect(response.body.data).toHaveLength(4);
         expect(response.body.data[0].table_name).toBe("#1");
         expect(response.body.data[1].table_name).toBe("#2");
@@ -188,6 +189,8 @@ describe("US-04 - Seat reservation", () => {
 
     describe("PUT /tables/:table_id/seat", () => {
       test("returns 400 if data is missing", async () => {
+        expect(tableOne).not.toBeUndefined();
+
         const response = await request(app)
           .put(`/tables/${tableOne.table_id}/seat`)
           .set("Accept", "application/json")
@@ -198,6 +201,7 @@ describe("US-04 - Seat reservation", () => {
       });
 
       test("returns 400 if reservation_id is missing", async () => {
+        expect(tableOne).not.toBeUndefined();
         const data = {};
 
         const response = await request(app)
@@ -210,6 +214,8 @@ describe("US-04 - Seat reservation", () => {
       });
 
       test("returns 404 if reservation_id does not exist", async () => {
+        expect(tableOne).not.toBeUndefined();
+
         const data = {
           reservation_id: 999,
         };
@@ -224,6 +230,8 @@ describe("US-04 - Seat reservation", () => {
       });
 
       test("returns 200 if table has sufficient capacity", async () => {
+        expect(tableOne).not.toBeUndefined();
+
         const response = await request(app)
           .put(`/tables/${tableOne.table_id}/seat`)
           .set("Accept", "application/json")
@@ -233,6 +241,8 @@ describe("US-04 - Seat reservation", () => {
         expect(response.status).toBe(200);
       });
       test("returns 400 if table does not have sufficient capacity", async () => {
+        expect(barTableOne).not.toBeUndefined();
+
         const response = await request(app)
           .put(`/tables/${barTableOne.table_id}/seat`)
           .set("Accept", "application/json")
@@ -243,6 +253,8 @@ describe("US-04 - Seat reservation", () => {
       });
 
       test("returns 400 if table is occupied", async () => {
+        expect(tableOne).not.toBeUndefined();
+
         // first, occupy the table
         const occupyResponse = await request(app)
           .put(`/tables/${tableOne.table_id}/seat`)

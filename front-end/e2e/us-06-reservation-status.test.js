@@ -1,9 +1,8 @@
 const puppeteer = require("puppeteer");
-
 const fs = require("fs");
-const { containsText } = require("./utils");
 const fsPromises = fs.promises;
 
+const { containsText } = require("./utils");
 const { createReservation, createTable, seatReservation } = require("./api");
 
 const baseURL = process.env.BASE_URL || "http://localhost:3000";

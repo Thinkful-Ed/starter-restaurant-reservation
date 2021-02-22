@@ -1,6 +1,6 @@
 # Capstone: Restaurant Reservation System
 
-> You have been hired as a full stack developer at _Periodic Tables_, a startup that is creating reservation systems for fine dining restaurants.
+> You have been hired as a full stack developer at _Periodic Tables_, a startup that is creating a reservation system for fine dining restaurants.
 > The software is used only by restaurant personnel when a customer calls to request a reservation.
 > At this point, the customers will not access the system online.
 
@@ -12,7 +12,7 @@ There are no user stories for logging: it is expected that you will add logging 
 
 This repository is set up as a monorepo, meaning that the frontend and backend projects are in one repository. This allows you to open both projects in the same editor.
 
-As you work through the user stories listed later in this document, you will be writing code that allows your frontend and backend code to talk to each other. You will also write code to allow your controllers and services to connect to, and query, your PostgreSQL database via [Knex](http://knexjs.org/).
+As you work through the user stories listed later in this document, you will be writing code that allows your frontend and backend applications to talk to each other. You will also write code to allow your controllers and services to connect to, and query, your PostgreSQL database via [Knex](http://knexjs.org/).
 
 The table below describes the folders in this starter repository:
 
@@ -50,25 +50,25 @@ The `./front-end` folder contains all the code for the frontend project.
 
 The table below describes the existing files in the `./front-end` folder:
 
-| Folder/file path                                 | Description                                                                                            |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| `./front-end/e2e`                                | Contains all of the end-to-end tests. You will not need to make changes to the files in this folder.   |
-| `./front-end/jest-puppeteer.config.js`           | A jest-puppeteer configuration file. You will not need to make changes to this file.                   |
-| `./front-end/src/App.js`                         | Defines the root application component. You will not need to make changes to this file.                |
-| `./front-end/src/App.test.js`                    | Contains the tests for the root application component. You will not need to make changes to this file. |
-| `./front-end/src/dashboard/Dashboard.js`         | Defines the Dashboard page.                                                                            |
-| `./front-end/src/index.js`                       | The main entry point for the React application.                                                        |
-| `./front-end/src/layout/ErrorAlert.js`           | Defines an error alert component that display only when an error is specified.                         |
-| `./front-end/src/layout/Layout.css`              | The css for the Layout component.                                                                      |
-| `./front-end/src/layout/Layout.js`               | Defined the main layout of the application.                                                            |
-| `./front-end/src/layout/Menu.js`                 | Defines the menu for the application.                                                                  |
-| `./front-end/src/layout/NotFound.js`             | Defines the "Not found" component that is display when no route matches.                               |
-| `./front-end/src/layout/Routes.js`               | Defines all the routes for the application.                                                            |
-| `./front-end/src/utils/api.js`                   | Defines the functions uses to access the backend API                                                   |
-| `./front-end/src/utils/date-time.js`             | Defines functions to format date and time strings.                                                     |
-| `./front-end/src/utils/formatReservationDate.js` | Defines a function to format the date on an array of reservations.                                     |
-| `./front-end/src/utils/formatReservationTime.js` | Defines a function to format the time on an array of reservations.                                     |
-| `./front-end/src/utils/useQuery.js`              | Defines a custom hook to parse the query parameters from the URL.                                      |
+| Folder/file path                                   | Description                                                                                            |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `./front-end/e2e`                                  | Contains all of the end-to-end tests. You will not need to make changes to the files in this folder.   |
+| `./front-end/jest-puppeteer.config.js`             | A configuration file used by the end-to-end tests. You will not need to make changes to this file.     |
+| `./front-end/src/App.js`                           | Defines the root application component. You will not need to make changes to this file.                |
+| `./front-end/src/App.test.js`                      | Contains the tests for the root application component. You will not need to make changes to this file. |
+| `./front-end/src/dashboard/Dashboard.js`           | Defines the Dashboard page.                                                                            |
+| `./front-end/src/index.js`                         | The main entry point for the React application.                                                        |
+| `./front-end/src/layout/ErrorAlert.js`             | Defines an error alert component that display only when an error is specified.                         |
+| `./front-end/src/layout/Layout.css`                | The css for the Layout component.                                                                      |
+| `./front-end/src/layout/Layout.js`                 | Defines the main layout of the application.                                                            |
+| `./front-end/src/layout/Menu.js`                   | Defines the menu for the application.                                                                  |
+| `./front-end/src/layout/NotFound.js`               | Defines the "Not found" component that is displayed when no route matches.                             |
+| `./front-end/src/layout/Routes.js`                 | Defines all the routes for the application.                                                            |
+| `./front-end/src/utils/api.js`                     | Defines the functions used to access the backend API                                                   |
+| `./front-end/src/utils/date-time.js`               | Defines functions to format date and time strings.                                                     |
+| `./front-end/src/utils/format-reservation-date.js` | Defines a function to format the date on a single reservation or an array of reservations.             |
+| `./front-end/src/utils/format-reservation-time.js` | Defines a function to format the time on a single reservation or an array of reservations.             |
+| `./front-end/src/utils/useQuery.js`                | Defines a custom hook to parse the query parameters from the URL.                                      |
 
 ## Database setup
 
@@ -103,34 +103,30 @@ Test are split up by user story. You can run the tests for a given user story by
 
 Have a look at the following examples:
 
-- `npm run test:1` runs all the tests for user story 1 (both integration and end-to-end).
-- `npm run test:3:backend` runs only the integration tests for user story 3.
-- `npm run test:3:frontend` runs the frontend unit tests, and the end-to-end tests for user story 3.
+- `npm run test:1` runs all the tests for user story 1 (both frontend and backend).
+- `npm run test:3:backend` runs only the backend tests for user story 3.
+- `npm run test:3:frontend` runs only the frontend tests for user story 3.
 
 Whenever possible, frontend tests will run before backend tests to help you follow outside-in development.
 
 > **Note** When running `npm run test:X` If the frontend tests fail, the tests will stop before running the backend tests. Remember, you can always run `npm run test:X:backend` or `npm run test:X:frontend` to target a specific part of the application.
 
-Since tests do take time to run, you might want to consider running only the tests for the user story you're working on at any given time.
+Since tests take time to run, you might want to consider running only the tests for the user story you're working on at any given time.
 
 Once you have all user stories complete, you can run all the tests using the following commands:
 
 - `npm test` runs _all_ tests.
-- `npm run test:backend` runs _all_ integration tests.
-- `npm run test:frontend` to run unit, and end-to-end tests for the frontend.
-- `npm run test:e2e` to run only the end-to-end tests.
+- `npm run test:backend` runs _all_ backend tests.
+- `npm run test:frontend` runs _all_ frontend tests.
+- `npm run test:e2e` runs only the end-to-end tests.
 
 If you would like a reminder of which npm scripts are available, run `npm run` to see a list of available commands.
 
 Note that the logging level for the backend is set to `warn` when running tests and `info` otherwise.
 
-![Test Report Example](./test-report-example.png)
+> **Note**: After running `npm test`, `npm run test:X`, or `npm run test:e2e` you might see something like the following in the output: `[start:frontend] Assertion failed:`. This is not a failure, it is just the frontend project getting shutdown automatically.
 
-A green row represents a passing test, whereas a red row indicates a failing test, which includes a stack trace for the failure.
-
-> **Note**: After running `npm test` or `npm run test:e2e` you might see something like the following in the output: `[start:frontend] Assertion failed:`. This is not a failure, it is just the frontend project getting shutdown automatically.
-
-> **Hint**: If you stop the tests before they finish, it can leave the test database in an unusual state causing the tests to fail unexpectedly the next time you run them. If this happens, delete all the tables in the test database, including the knex\_\* tables, and try the tests again.
+> **Hint**: If you stop the tests before they finish, it can leave the test database in an unusual state causing the tests to fail unexpectedly the next time you run them. If this happens, delete all tables in the test database, including the `knex_*` tables, and try the tests again.
 
 #### Screenshots
 
@@ -166,7 +162,7 @@ so that I know how many customers will arrive at the restaurant on a given day.
    - display a `Cancel` button that, when clicked, returns the user to the previous page
    - display any error messages returned from the API
 1. The `/dashboard` page will
-   - list all reservations for one date only. (E.g. if the URL is `/dashboard?date=2020-12-30` then send a GET to `/reservations?date=2020-12-30` to list the reservations for that date). The date is defaulted to today, and the reservations are sorted by time.
+   - list all reservations for one date only. (E.g. if the URL is `/dashboard?date=2035-12-30` then send a GET to `/reservations?date=2035-12-30` to list the reservations for that date). The date is defaulted to today, and the reservations are sorted by time.
    - display next, previous, and today buttons that allow the user to see reservations on other dates
    - display any error messages returned from the API
 1. The `/reservations` API will have the same validations as above and will return 400, along with an informative error message, when a validation error happens.
@@ -180,7 +176,7 @@ so that I know how many customers will arrive at the restaurant on a given day.
 >
 > `<input type="time" />` will store the time in `HH:MM:SS` format. This is a format that works well with the PostgreSQL `time` data type.
 >
-> You do not need to worry about different or changing time zones for dates or times.
+> You can assume that all dates and times will be in your local time zone.
 
 ### US-02 Create reservation on a future, working date
 
@@ -191,7 +187,7 @@ so that users do not accidentally create a reservation for days when we are clos
 #### Acceptance criteria
 
 1. The `/reservations/new` page will display an error message with `className="alert alert-danger"` if any of the following constraints are violated:
-   - The reservation date is a Tuesday as the restaurant is closed on Tuesday.
+   - The reservation date is a Tuesday as the restaurant is closed on Tuesdays.
    - The reservation date is in the past. Only future reservations are allowed.
 1. The `/reservations` API will have the same validations as above and will return 400, along with an informative error message, when a validation error happens.
 
@@ -269,7 +265,7 @@ so that I know which tables are occupied and free.
 
 As a restaurant manager<br/>
 I want to free up an occupied table when the guests leave<br/>
-so that I can seat more guests at that table.<br/>
+so that I can seat new guests at that table.<br/>
 
 #### Acceptance Criteria
 

@@ -96,6 +96,8 @@ describe("US-06 - Reservation status", () => {
     });
 
     test("returns 400 for unknown status", async () => {
+      expect(reservationOne).not.toBeUndefined();
+
       const response = await request(app)
         .put(`/reservations/${reservationOne.reservation_id}/status`)
         .set("Accept", "application/json")
@@ -106,6 +108,8 @@ describe("US-06 - Reservation status", () => {
     });
 
     test("returns 400 if status is currently finished (a finished reservation cannot be updated)", async () => {
+      expect(reservationOne).not.toBeUndefined();
+
       reservationOne.status = "finished";
       await knex("reservations")
         .where({ reservation_id: reservationOne.reservation_id })
@@ -123,6 +127,8 @@ describe("US-06 - Reservation status", () => {
     test.each(["booked", "seated", "finished"])(
       "returns 200 for status '%s'",
       async (status) => {
+        expect(reservationOne).not.toBeUndefined();
+
         const response = await request(app)
           .put(`/reservations/${reservationOne.reservation_id}/status`)
           .set("Accept", "application/json")
@@ -147,6 +153,9 @@ describe("US-06 - Reservation status", () => {
     });
 
     test("returns 200 and changes reservation status to 'seated'", async () => {
+      expect(tableOne).not.toBeUndefined();
+      expect(reservationOne).not.toBeUndefined();
+
       const seatResponse = await request(app)
         .put(`/tables/${tableOne.table_id}/seat`)
         .set("Accept", "application/json")
@@ -165,6 +174,9 @@ describe("US-06 - Reservation status", () => {
     });
 
     test("returns 400 if reservation is already 'seated'", async () => {
+      expect(tableOne).not.toBeUndefined();
+      expect(reservationOne).not.toBeUndefined();
+
       const firstSeatResponse = await request(app)
         .put(`/tables/${tableOne.table_id}/seat`)
         .set("Accept", "application/json")
@@ -195,6 +207,9 @@ describe("US-06 - Reservation status", () => {
     });
 
     test("returns 200 and changes reservation status to 'finished'", async () => {
+      expect(tableOne).not.toBeUndefined();
+      expect(reservationOne).not.toBeUndefined();
+
       const seatResponse = await request(app)
         .put(`/tables/${tableOne.table_id}/seat`)
         .set("Accept", "application/json")
@@ -236,6 +251,9 @@ describe("US-06 - Reservation status", () => {
     });
 
     test("does not include 'finished' reservations", async () => {
+      expect(tableOne).not.toBeUndefined();
+      expect(reservationOne).not.toBeUndefined();
+
       const seatResponse = await request(app)
         .put(`/tables/${tableOne.table_id}/seat`)
         .set("Accept", "application/json")

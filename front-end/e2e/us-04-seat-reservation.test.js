@@ -1,11 +1,9 @@
-const { selectOptionByText } = require("./utils");
-
 const puppeteer = require("puppeteer");
-
 const fs = require("fs");
 const fsPromises = fs.promises;
 
 const { createReservation } = require("./api");
+const { selectOptionByText } = require("./utils");
 
 const baseURL = process.env.BASE_URL || "http://localhost:3000";
 
