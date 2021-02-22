@@ -35,12 +35,20 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Install frontend dependencies
+        if: steps.frontend-node-cache.outputs.cache-hit != 'true'
+        run: npm install --prefix ./front-end
+
       - name: Cache frontend node_modules
         id: frontend-node-cache
         uses: actions/cache@v2
         with:
           path: front-end/node_modules
           key: frontend-node-modules-${{ hashFiles('front-end/package-lock.json') }}
+
+      - name: Install backend dependencies
+        if: steps.backend-node-cache.outputs.cache-hit != 'true'
+        run: npm install --prefix ./back-end
 
       - name: Cache backend node_modules
         id: backend-node-cache
@@ -49,25 +57,10 @@ jobs:
           path: backend-end/node_modules
           key: backend-node-modules-${{ hashFiles('back-end/package-lock.json') }}
 
-      - name: Install frontend dependencies
-        if: steps.frontend-node-cache.outputs.cache-hit != 'true'
-        run: npm install --prefix ./front-end
-
-      - name: Install backend dependencies
-        if: steps.backend-node-cache.outputs.cache-hit != 'true'
-        run: npm install --prefix ./back-end
-
       - run: npm run build --if-present
 
       - name: Test frontend
         run: npm run test:frontend
-        env:
-          DATABASE_URL_TEST: postgresql://postgres:postgres@127.0.0.1:5432
-          NODE_ENV: test
-
-      - name: Test backend
-        if: always()
-        run: npm run test:backendend
         env:
           DATABASE_URL_TEST: postgresql://postgres:postgres@127.0.0.1:5432
           NODE_ENV: test
@@ -79,3 +72,10 @@ jobs:
           name: screenshots
           path: |
             front-end/.screenshots
+
+      - name: Test backend
+        if: always()
+        run: npm run test:backend
+        env:
+          DATABASE_URL_TEST: postgresql://postgres:postgres@127.0.0.1:5432
+          NODE_ENV: test
