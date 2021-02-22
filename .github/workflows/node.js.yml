@@ -61,6 +61,9 @@ jobs:
 
       - name: Test frontend
         run: npm run test:frontend
+        env:
+          DATABASE_URL_TEST: postgresql://postgres:postgres@127.0.0.1:5432
+          NODE_ENV: test
 
       - name: Test backend
         if: always()
@@ -68,8 +71,6 @@ jobs:
         env:
           DATABASE_URL_TEST: postgresql://postgres:postgres@127.0.0.1:5432
           NODE_ENV: test
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
 
       - name: Archive screenshots
         uses: actions/upload-artifact@v2
