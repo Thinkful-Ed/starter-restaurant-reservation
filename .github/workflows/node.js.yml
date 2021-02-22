@@ -35,27 +35,21 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install frontend dependencies
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: npm install
         if: steps.frontend-node-cache.outputs.cache-hit != 'true'
-        run: npm install --prefix ./front-end
-
-      - name: Cache frontend node_modules
-        id: frontend-node-cache
-        uses: actions/cache@v2
-        with:
-          path: front-end/node_modules
-          key: frontend-node-modules-${{ hashFiles('front-end/package-lock.json') }}
-
-      - name: Install backend dependencies
-        if: steps.backend-node-cache.outputs.cache-hit != 'true'
-        run: npm install --prefix ./back-end
-
-      - name: Cache backend node_modules
-        id: backend-node-cache
-        uses: actions/cache@v2
-        with:
-          path: backend-end/node_modules
-          key: backend-node-modules-${{ hashFiles('back-end/package-lock.json') }}
+        run: npm install
 
       - run: npm run build --if-present
 
