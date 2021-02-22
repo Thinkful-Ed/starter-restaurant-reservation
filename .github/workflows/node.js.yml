@@ -37,4 +37,4 @@ jobs:
         run: npm test
         env:
           NODE_ENV: test
-          DATABASE_URL_TEST: postgresql://postgres@postgres:5432
+          DATABASE_URL_TEST: postgresql://postgres@postgres
