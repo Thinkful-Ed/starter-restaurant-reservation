@@ -29,12 +29,36 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
+
+      - name: Cache frontend node_modules
+        id: frontend-node-cache
+        uses: actions/cache@v2
+        with:
+          path: front-end/node_modules
+          key: frontend-node-modules-${{ hashFiles('front-end/package-lock.json') }}
+
+      - name: Cache backend node_modules
+        id: backend-node-cache
+        uses: actions/cache@v2
+        with:
+          path: backend-end/node_modules
+          key: backend-node-modules-${{ hashFiles('back-end/package-lock.json') }}
+
+      - name: Install frontend dependencies
+        if: steps.frontend-node-cache.outputs.cache-hit != 'true'
+        run: npm install --prefix ./front-end
+
+      - name: Install backend dependencies
+        if: steps.backend-node-cache.outputs.cache-hit != 'true'
+        run: npm install --prefix ./back-end
+
       - run: npm run build --if-present
+
       - name: Run tests
         run: npm test
         env:
@@ -42,3 +66,10 @@ jobs:
           NODE_ENV: test
           POSTGRES_HOST: localhost
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+
+      - name: Archive screenshots
+        uses: actions/upload-artifact@v2
+        with:
+          name: screenshots
+          path: |
+            front-end/.screenshots
