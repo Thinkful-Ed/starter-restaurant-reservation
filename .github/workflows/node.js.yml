@@ -59,8 +59,12 @@ jobs:
 
       - run: npm run build --if-present
 
-      - name: Run tests
-        run: npm test
+      - name: Test frontend
+        run: npm run test:frontend
+
+      - name: Test backend
+        if: always()
+        run: npm run test:backendend
         env:
           DATABASE_URL_TEST: postgresql://postgres:postgres@127.0.0.1:5432
           NODE_ENV: test
@@ -69,6 +73,7 @@ jobs:
 
       - name: Archive screenshots
         uses: actions/upload-artifact@v2
+        if: always()
         with:
           name: screenshots
           path: |
