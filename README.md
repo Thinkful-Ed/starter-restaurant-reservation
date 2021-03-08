@@ -186,6 +186,36 @@ so that I know how many customers will arrive at the restaurant on a given day.
 >
 > You can assume that all dates and times will be in your local time zone.
 
+> **Hint** In the backend code, be sure to wrap any async controller functions in an `asyncErrorBoundary` call to ensure errors in async code are property handled.
+
+In `back-end/src/errors/asyncErrorBoundary.js`
+
+```javascript
+function asyncErrorBoundary(delegate, defaultStatus) {
+  return (request, response, next) => {
+    Promise.resolve()
+      .then(() => delegate(request, response, next))
+      .catch((error = {}) => {
+        const { status = defaultStatus, message = error } = error;
+        next({
+          status,
+          message,
+        });
+      });
+  };
+}
+
+module.exports = asyncErrorBoundary;
+```
+
+Use in controllers as part of `module.exports`. For example:
+
+```javascript
+module.exports = {
+	create: asyncErrorBoundary(create)
+}
+```
+
 ### US-02 Create reservation on a future, working date
 
 As a restaurant manager<br/>
@@ -301,7 +331,9 @@ so that I can see which reservation parties are seated, and finished reservation
    - clicking the Finish button associated with the table changes the reservation status to "finished" and removes the reservation from the dashboard.
    - to set the status, PUT to `/reservations/:reservation_id/status` with a body of `{data: { status: "<new-status>" } }` where `<new-status>` is one of booked, seated, or finished
 
-> **Hint** Use `Knex.transaction()` to make sure the `tables` and `reservations` records are always in sync with each other.
+> **Hint** You can add a field to a table in a migration `up` method by defining a new column. E.g. `table.string("last_name", null).notNullable();` will create a new last_name column.  Be sure to remove the column in the `down` function using `dropColumn()`. E.g. `table.dropColumn("last_name");`
+
+> **Hint** Use [`Knex.transaction()`](http://knexjs.org/#Transactions) to make sure the `tables` and `reservations` records are always in sync with each other.
 
 ### US-07 Search for a reservation by phone number
 
