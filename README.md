@@ -128,6 +128,12 @@ Note that the logging level for the backend is set to `warn` when running tests 
 
 > **Hint**: If you stop the tests before they finish, it can leave the test database in an unusual state causing the tests to fail unexpectedly the next time you run them. If this happens, delete all tables in the test database, including the `knex_*` tables, and try the tests again.
 
+### Frontend test timeout failure
+
+Running the frontend tests on a resource constrained computer may result in timeout failures. 
+
+If you believe your implementation is correct, but needs a bit more time to finish, you can update the `testTimeout` value in `front-end/e2e/jest.config.js`. A value of 10000 or event 12000 will give each test a few more seconds to complete.
+
 #### Screenshots
 
 To help you better understand what might be happening during the end-to-end tests, screenshots are taken at various points in the test.
