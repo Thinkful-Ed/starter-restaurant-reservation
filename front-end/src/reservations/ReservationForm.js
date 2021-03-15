@@ -1,6 +1,9 @@
 import React from "react"
+import { useHistory } from "react-router-dom";
+
 
 function ReservationForm(){
+    const history = useHistory();
 
     return (
         <form>
@@ -11,8 +14,9 @@ function ReservationForm(){
             <input name="reservation_time" />
             <input name="people" />
             <button type="submit">Submit</button>
-            <button type="cancel">Cancel</button>
-
+            <button type="button" onClick={() => history.goBack()}>
+              Cancel
+            </button>
         </form>
     )
 }
