@@ -26,7 +26,12 @@ function ReservationForm(){
     function submitHandler(event){
         event.preventDefault();
         event.stopPropagation();
-        createReservation(reservation);
+        createReservation(reservation)
+        .then((createdReservation) => {
+        history.push(
+          `/dashboard?date=${createdReservation.reservation_date}`
+        );
+      })
     }
 
 
