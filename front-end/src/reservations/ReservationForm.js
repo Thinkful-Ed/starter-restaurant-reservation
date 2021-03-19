@@ -28,12 +28,12 @@ function ReservationForm(){
         event.stopPropagation();
         createReservation(reservation)
         .then((createdReservation) => {
+            const res_date = createdReservation.reservation_date.match(/\d{4}-\d{2}-\d{2}/)[0];
         history.push(
-          `/dashboard?date=${createdReservation.reservation_date}`
+          `/dashboard?date=`+res_date
         );
       })
     }
-
 
     return (
         <form onSubmit={submitHandler}>

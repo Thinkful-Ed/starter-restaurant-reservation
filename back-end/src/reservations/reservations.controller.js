@@ -34,19 +34,33 @@ function bodyDataHas(propertyName) {
   };
 }
 
-const has_first_name = bodyDataHas("first_name");
-const has_last_name = bodyDataHas("last_name");
-const has_mobile_number = bodyDataHas("mobile_number");
-const has_reservation_date = bodyDataHas("reservation_date");
-const has_reservation_time = bodyDataHas("reservation_time");
-const has_people = bodyDataHas("people");
+function isDate(req, res, next){
+  const { data = {} } = req.body;
+  if (isNaN(Date.parse(data['reservation_date']))){
+      return next({ status: 400, message: `Invalid reservation_date` });
+  }
+  next();
+}
 
-/**
- * List handler for reservation resources
- */
+function isTime(req, res, next){
+  const { data = {} } = req.body;
+  if (/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(data['reservation_time'])){
+    return next();
+  }
+  next({ status: 400, message: `Invalid reservation_time` });
+}
+
+function isValidNumber(req, res, next){
+  const { data = {} } = req.body;
+  if (data['people'] === 0 || !Number.isInteger(data['people'])){
+      return next({ status: 400, message: `Invalid number of people` });
+  }
+  next();
+}
+
 async function list(req, res) {
   const data = await service.list(req.query.date);
-
+ 
   res.json({
     data,
   });
@@ -60,6 +74,14 @@ async function create(req, res) {
   });
 }
 
+const has_first_name = bodyDataHas("first_name");
+const has_last_name = bodyDataHas("last_name");
+const has_mobile_number = bodyDataHas("mobile_number");
+const has_reservation_date = bodyDataHas("reservation_date");
+const has_reservation_time = bodyDataHas("reservation_time");
+const has_people = bodyDataHas("people");
+
+
 module.exports = {
   create: [
       hasValidFields,
@@ -69,7 +91,10 @@ module.exports = {
       has_reservation_date,
       has_reservation_time,
       has_people,
+      isDate,
+      isTime,
+      isValidNumber,
       asyncErrorBoundary(create)
   ],
-  list: asyncErrorBoundary(list),
+  list: [asyncErrorBoundary(list)],
 };
