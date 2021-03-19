@@ -23,6 +23,13 @@ function ReservationForm(){
       }));
     }
 
+    function changeHandlerNum({ target: { name, value } }) {
+      setReservation((prevState) => ({
+        ...prevState,
+        [name]: Number(value),
+      }));
+    }
+
     function submitHandler(event){
         event.preventDefault();
         event.stopPropagation();
@@ -70,7 +77,7 @@ function ReservationForm(){
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Number of people:</label>
                 <div class="col-sm-10">
-                    <input name="people" value={reservation.people} onChange={changeHandler} />
+                    <input name="people" type="number" min={1} value={reservation.people} onChange={changeHandlerNum} />
                 </div>
             </div>
             <button type="submit">Submit</button>
