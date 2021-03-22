@@ -2,6 +2,7 @@ import React from "react"
 import {useState} from "react"
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
+import ReservationErrors from "./ReservationError";
 
 function ReservationForm(){
     const history = useHistory();
@@ -30,20 +31,57 @@ function ReservationForm(){
       }));
     }
 
+    const [error, setError] = useState(null);
+
+
+    function validate(reservation){
+
+        const errors = []
+
+        function isFutureDate({ reservation_date, reservation_time }) {
+          const dt = new Date(`${reservation_date}T${reservation_time}`);
+          if (dt < new Date()) {
+              errors.push(new Error("Reservation must be set in the future"));
+            }
+        }
+
+        function isTuesday({ reservation_date }) {
+          const day = new Date(reservation_date).getUTCDay();
+          if (day === 2) {
+            errors.push(new Error("No reservations available on Tuesday."));
+          }
+        }
+
+        isFutureDate(reservation);
+        isTuesday(reservation);
+        
+        return errors;
+    }
+
+
     function submitHandler(event){
         event.preventDefault();
         event.stopPropagation();
+
+        const reservationErrors = validate(reservation);
+
+        console.log(reservationErrors);
+        if (reservationErrors.length) {
+          return setError(reservationErrors);
+        }
+
         createReservation(reservation)
         .then((createdReservation) => {
             const res_date = createdReservation.reservation_date.match(/\d{4}-\d{2}-\d{2}/)[0];
         history.push(
           `/dashboard?date=`+res_date
-        );
+        ).catch(setError);
       })
     }
 
     return (
         <form onSubmit={submitHandler}>
+            <ReservationErrors errors={error} />
             <div className="form-group row">
                 <label className="col-sm-2 col-form-label">First name:</label>
                 <div className="col-sm-10">
