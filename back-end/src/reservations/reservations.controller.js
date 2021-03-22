@@ -34,10 +34,19 @@ function bodyDataHas(propertyName) {
   };
 }
 
-function isDate(req, res, next){
+function isValidDate(req, res, next){
   const { data = {} } = req.body;
+  const reservation_date = new Date(data['reservation_date']);
+  const day = reservation_date.getUTCDay();
+
   if (isNaN(Date.parse(data['reservation_date']))){
       return next({ status: 400, message: `Invalid reservation_date` });
+  }
+  if (day === 2) {
+      return next({ status: 400, message: `Restaurant is closed on Tuesdays` });
+  }
+  if (reservation_date < new Date()) {
+      return next({ status: 400, message: `Reservation must be set in the future` });
   }
   next();
 }
@@ -60,7 +69,7 @@ function isValidNumber(req, res, next){
 
 async function list(req, res) {
   const data = await service.list(req.query.date);
- 
+
   res.json({
     data,
   });
@@ -91,7 +100,7 @@ module.exports = {
       has_reservation_date,
       has_reservation_time,
       has_people,
-      isDate,
+      isValidDate,
       isTime,
       isValidNumber,
       asyncErrorBoundary(create)
