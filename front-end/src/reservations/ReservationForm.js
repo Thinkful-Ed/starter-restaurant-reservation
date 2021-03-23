@@ -42,7 +42,7 @@ function ReservationForm(){
           const dt = new Date(`${reservation_date}T${reservation_time}`);
           if (dt < new Date()) {
               errors.push(new Error("Reservation must be set in the future"));
-            }
+          }
         }
 
         function isTuesday({ reservation_date }) {
@@ -52,9 +52,23 @@ function ReservationForm(){
           }
         }
 
+        function isOpenHours({ reservation_time }){
+          const hour = parseInt(reservation_time.split(":")[0]);
+          const mins = parseInt(reservation_time.split(":")[1]);
+
+          if (hour <= 10 && mins <= 30){
+              errors.push(new Error("Restaurant is only open after 10:30 am"));
+          }
+
+          if (hour >= 22){
+              errors.push(new Error("Restaurant is closed after 10:00 pm"));
+          }
+        }
+
         isFutureDate(reservation);
         isTuesday(reservation);
-        
+        isOpenHours(reservation);
+
         return errors;
     }
 
