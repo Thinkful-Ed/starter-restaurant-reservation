@@ -81,7 +81,7 @@ export async function createReservation(reservation, signal) {
 
 // Note: These functions are found in api.js from the e2e folder
 
-async function createTable(table, signal) {
+export async function createTable(table, signal) {
   const url = `${API_BASE_URL}/tables`;
   const options = {
     method: "POST",
@@ -92,7 +92,7 @@ async function createTable(table, signal) {
   return await fetchJson(url, options, table);
 }
 
-async function seatReservation(reservation_id, table_id) {
+export async function seatReservation(reservation_id, table_id) {
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
   const options = {
     method: "PUT",
@@ -101,9 +101,3 @@ async function seatReservation(reservation_id, table_id) {
   };
   return await fetchJson(url, options, {});
 }
-
-module.exports = {
-  createReservation,
-  createTable,
-  seatReservation,
-};

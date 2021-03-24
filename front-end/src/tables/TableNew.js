@@ -4,7 +4,7 @@ import TableForm from "./TableForm";
 function TableNew() {
   return (
     <main>
-      <h1> Create a New Reservation </h1>
+      <h1> Create a New Table </h1>
       <TableForm />
     </main>
   );

@@ -13,14 +13,14 @@ function TableForm(){
 
     const [table, setTable] = useState(initialState);
     function changeHandler({ target: { name, value } }) {
-      setReservation((prevState) => ({
+      setTable((prevState) => ({
         ...prevState,
         [name]: value,
       }));
     }
 
     function changeHandlerNum({ target: { name, value } }) {
-      setReservation((prevState) => ({
+      setTable((prevState) => ({
         ...prevState,
         [name]: Number(value),
       }));
@@ -29,7 +29,7 @@ function TableForm(){
     const [error, setError] = useState(null);
 
 
-    function validate(reservation){
+    function validate(table){
         const errors = []
         return errors;
     }
@@ -39,14 +39,14 @@ function TableForm(){
         event.preventDefault();
         event.stopPropagation();
 
-        const tableErrors = validate(reservation);
+        //const tableErrors = validate(table);
 
-        console.log(tableErrors);
-        if (tableErrors.length) {
-          return setError(tableErrors);
-        }
+        //console.log(tableErrors);
+        //if (tableErrors.length) {
+        //  return setError(tableErrors);
+        //}
 
-        createTable(reservation)
+        createTable(table)
         .then((createdTable) => {
         history.push(
           `/dashboard`
@@ -75,4 +75,4 @@ function TableForm(){
     )
 }
 
-export default ReservationForm;
+export default TableForm;
