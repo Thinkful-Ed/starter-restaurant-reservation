@@ -3,6 +3,8 @@ import {useState} from "react"
 import { useHistory } from "react-router-dom";
 import { createTable } from "../utils/api";
 import TableErrors from "./TableError";
+import { today } from "../utils/date-time";
+
 
 function TableForm(){
     const history = useHistory();
@@ -38,6 +40,7 @@ function TableForm(){
     function submitHandler(event){
         event.preventDefault();
         event.stopPropagation();
+        setError(null);
 
         //const tableErrors = validate(table);
 
@@ -47,11 +50,10 @@ function TableForm(){
         //}
 
         createTable(table)
-        .then((createdTable) => {
-        history.push(
-          `/dashboard`
-        ).catch(setError);
-      })
+           .then(() => {
+             history.push(`/dashboard?date=${today()}`);
+           })
+           .catch(setError);
     }
 
     return (
@@ -60,13 +62,13 @@ function TableForm(){
             <div className="form-group row">
                 <label className="col-sm-2 col-form-label">Table name:</label>
                 <div className="col-sm-10">
-                    <input name="table_name" value={table.table_name} onChange={changeHandler} />
+                    <input name="table_name" minlength={2} required={true} value={table.table_name} onChange={changeHandler} />
                 </div>
             </div>
             <div className="form-group row">
                 <label className="col-sm-2 col-form-label">Number of people:</label>
                 <div className="col-sm-10">
-                    <input name="capacity" type="number" min={1} value={table.capacity} onChange={changeHandlerNum} />
+                    <input name="capacity" type="number" min={1} required={true} value={table.capacity} onChange={changeHandlerNum} />
                 </div>
             </div>
             <button type="submit">Submit</button>
