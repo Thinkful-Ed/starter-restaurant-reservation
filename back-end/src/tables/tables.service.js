@@ -4,6 +4,7 @@ const tableName = "tables";
 
 function list(date) {
   return knex(tableName)
+    .orderBy("table_name");
 }
 
 function create(table) {
