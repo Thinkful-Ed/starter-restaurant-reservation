@@ -58,8 +58,9 @@ export function today() {
  */
 export function previous(currentDate) {
   const array = currentDate.split("-");
-  array[1] -= 1;
-  const date = new Date(array[0], array[1], array[2]);
+  let [ year, month, day ] = array;
+  month -= 1;
+  const date = new Date(year, month, day);
   date.setMonth(date.getMonth());
   date.setDate(date.getDate() - 1);
   return asDateString(date);
@@ -74,8 +75,9 @@ export function previous(currentDate) {
  */
 export function next(currentDate) {
   const array = currentDate.split("-");
-  array[1] -= 1;
-  const date = new Date(array[0], array[1], array[2]);
+  let [ year, month, day ] = array;
+  month -= 1;
+  const date = new Date(year, month, day);
   date.setMonth(date.getMonth());
   date.setDate(date.getDate() + 1);
   return asDateString(date);
