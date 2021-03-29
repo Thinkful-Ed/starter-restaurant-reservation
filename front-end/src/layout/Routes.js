@@ -28,10 +28,7 @@ function Routes() {
         <Redirect to={"/dashboard"} />
       </Route>
       <Route path="/dashboard">
-        <Dashboard date={query.get("date")} />
-      </Route>
-      <Route path="/dashboard">
-        <Dashboard date={today()} />
+        <Dashboard date={query.get("date") || today() } />
       </Route>
       <Route path="/reservations/new">
         <ReservationNew />

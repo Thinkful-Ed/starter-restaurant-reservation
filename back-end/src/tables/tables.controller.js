@@ -20,6 +20,19 @@ function hasValidFields(req, res, next) {
   next();
 }
 
+function hasTableId(req, res, next) {
+  const table = req.params.reservation_id;
+  console.log(table);
+  if(table){
+      next();
+  } else {
+      next({
+          status: 400,
+          message: `missing table_id`,
+      });
+  }
+}
+
 function bodyDataHas(propertyName) {
   return function (req, res, next) {
     const { data = {} } = req.body;
@@ -43,8 +56,10 @@ function isValidTableName(req, res, next){
 
 function isValidNumber(req, res, next){
   const { data = {} } = req.body;
-  if (data['capacity'] === 0 || !Number.isInteger(data['capacity'])){
-      return next({ status: 400, message: `capacity must be a number.` });
+  if ('capacity' in data){
+      if (data['capacity'] === 0 || !Number.isInteger(data['capacity'])){
+          return next({ status: 400, message: `capacity must be a number.` });
+      }
   }
   next();
 }
@@ -65,14 +80,25 @@ async function create(req, res) {
   });
 }
 
+async function read(req, res) {
+  const data = res.locals.reservation;
+  console.log("DEBUG>>>>>>>>>>>>");
+  console.log(data);
+
+  res.status(200).json({
+    data,
+  })
+}
+
 module.exports = {
   create: [
       has_table_name,
       has_capacity,
-      isValidNumber,
       isValidTableName,
       hasValidFields,
+      isValidNumber,
       asyncErrorBoundary(create)
   ],
+  read: [hasTableId, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
 };

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import Reservations from "./Reservations";
+import Tables from "./Tables";
+
 
 /**
  * Defines the dashboard page.
@@ -24,9 +27,9 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
 
     listTables().then(setTables).catch(setTablesError);
-    console.log("Debug");
-    console.log(tables);
-    console.log(tablesError);
+    //console.log("Debug");
+    //console.log(tables);
+    //console.log(tablesError);
     return () => abortController.abort();
   }
 
@@ -34,11 +37,14 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
-      {JSON.stringify(tables)}
+      <Reservations reservations={reservations} />
+      <div className="d-md-flex mb-3">
+        <h4 className="mb-0">Tables</h4>
+      </div>
+      <Tables tables={tables} />
     </main>
   );
 }

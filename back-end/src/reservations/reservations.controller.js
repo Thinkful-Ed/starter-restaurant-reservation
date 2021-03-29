@@ -24,6 +24,19 @@ function hasValidFields(req, res, next) {
   next();
 }
 
+function hasReservationId(req, res, next) {
+  const reservation = req.params.reservation_id;
+  console.log(reservation);
+  if(reservation){
+      next();
+  } else {
+      next({
+          status: 400,
+          message: `missing reservation_id`,
+      });
+  }
+}
+
 function bodyDataHas(propertyName) {
   return function (req, res, next) {
     const { data = {} } = req.body;
@@ -83,6 +96,14 @@ async function create(req, res) {
   });
 }
 
+async function read(req, res) {
+  const data = res.locals.reservation;
+
+  res.status(200).json({
+    data,
+  })
+}
+
 const has_first_name = bodyDataHas("first_name");
 const has_last_name = bodyDataHas("last_name");
 const has_mobile_number = bodyDataHas("mobile_number");
@@ -105,5 +126,6 @@ module.exports = {
       isValidNumber,
       asyncErrorBoundary(create)
   ],
+  read: [hasReservationId, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
 };
