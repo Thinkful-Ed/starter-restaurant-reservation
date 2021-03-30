@@ -90,6 +90,13 @@ async function read(req, res) {
   })
 }
 
+async function seat(req, res) {
+  const data = await service.seat(res.locals.table.table_id, res.locals.reservation.reservation_id);d
+  res.json({
+    data,
+  });
+}
+
 module.exports = {
   create: [
       has_table_name,

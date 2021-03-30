@@ -7,6 +7,7 @@ function Tables({ tables = [] }) {
         <div className="form-group row" key={table.table_id}>
           <div className="col-sm-1">{table.table_name}</div>
           <div className="col-sm-1">{table.capacity}</div>
+          <div className="col-sm-1" data-table-id-status={table.table_id}>{table.reservation_id ? "Occupied" : "Free"}</div>
         </div>
       );
     })

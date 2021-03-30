@@ -27,9 +27,6 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
 
     listTables().then(setTables).catch(setTablesError);
-    //console.log("Debug");
-    //console.log(tables);
-    //console.log(tablesError);
     return () => abortController.abort();
   }
 

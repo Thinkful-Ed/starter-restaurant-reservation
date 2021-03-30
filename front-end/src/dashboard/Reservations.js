@@ -11,7 +11,8 @@ function Reservations({ reservations = [] }) {
           <div className="col-sm-1">{reservation.reservation_date}</div>
           <div className="col-sm-1">{reservation.reservation_time}</div>
           <div className="col-sm-1">{reservation.people}</div>
-          <div className="col-sm-1"><a  href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a></div>
+          <div className="col-sm-1"><a className="btn"
+href={`/reservations/${reservation.reservation_id}/seat`}>seat</a></div>
         </div>
       );
     })

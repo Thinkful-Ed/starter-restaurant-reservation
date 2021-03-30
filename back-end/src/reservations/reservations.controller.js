@@ -26,14 +26,25 @@ function hasValidFields(req, res, next) {
 
 function hasReservationId(req, res, next) {
   const reservation = req.params.reservation_id;
-  console.log(reservation);
   if(reservation){
+      res.locals.reservation_id = reservation;
       next();
   } else {
       next({
           status: 400,
           message: `missing reservation_id`,
       });
+  }
+}
+
+async function reservationExists(req, res, next) {
+  const reservation_id = res.locals.reservation_id;
+  const reservation = await service.read(reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    next();
+  } else {
+    next({status: 404, message: `Reservation not found: ${reservation_id}`});
   }
 }
 
@@ -98,7 +109,6 @@ async function create(req, res) {
 
 async function read(req, res) {
   const data = res.locals.reservation;
-
   res.status(200).json({
     data,
   })
@@ -126,6 +136,6 @@ module.exports = {
       isValidNumber,
       asyncErrorBoundary(create)
   ],
-  read: [hasReservationId, asyncErrorBoundary(read)],
+  read: [hasReservationId, reservationExists, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
 };
