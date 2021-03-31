@@ -24,6 +24,46 @@ function hasValidFields(req, res, next) {
   next();
 }
 
+function hasReservationId(req, res, next) {
+  const reservation = req.params.reservation_id || req.body?.data?.reservation_id;
+
+  if(reservation){
+      res.locals.reservation_id = reservation;
+      next();
+  } else {
+      next({
+          status: 400,
+          message: `missing reservation_id`,
+      });
+  }
+}
+
+
+function hasReservationIdForTable(req, res, next) {
+  const reservation = req.params.reservation_id || req.params.table_id || req.body?.data?.reservation_id;
+  if(reservation){
+      res.locals.reservation_id = reservation;
+      next();
+  } else {
+      next({
+          status: 400,
+          message: `missing reservation_id`,
+      });
+  }
+}
+
+
+async function reservationExists(req, res, next) {
+  const reservation_id = res.locals.reservation_id;
+  const reservation = await service.read(reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    next();
+  } else {
+    next({status: 404, message: `Reservation not found: ${reservation_id}`});
+  }
+}
+
 function bodyDataHas(propertyName) {
   return function (req, res, next) {
     const { data = {} } = req.body;
@@ -83,13 +123,22 @@ async function create(req, res) {
   });
 }
 
+async function read(req, res) {
+  const data = res.locals.reservation;
+  res.status(200).json({
+    data,
+  })
+}
+
 const has_first_name = bodyDataHas("first_name");
 const has_last_name = bodyDataHas("last_name");
 const has_mobile_number = bodyDataHas("mobile_number");
 const has_reservation_date = bodyDataHas("reservation_date");
 const has_reservation_time = bodyDataHas("reservation_time");
 const has_people = bodyDataHas("people");
-
+const has_capacity = bodyDataHas("capacity");
+const has_table_name = bodyDataHas("table_name");
+const has_reservation_id = bodyDataHas("reservation_id");
 
 module.exports = {
   create: [
@@ -105,5 +154,7 @@ module.exports = {
       isValidNumber,
       asyncErrorBoundary(create)
   ],
+  read: [hasReservationId, reservationExists, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
+  reservationExists: [hasReservationId, reservationExists],
 };
