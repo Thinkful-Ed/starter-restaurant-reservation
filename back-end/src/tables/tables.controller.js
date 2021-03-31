@@ -24,6 +24,7 @@ function hasTableId(req, res, next) {
   const table = req.params.reservation_id;
   console.log(table);
   if(table){
+      res.locals.reservation = table;
       next();
   } else {
       next({
@@ -82,19 +83,74 @@ async function create(req, res) {
 
 async function read(req, res) {
   const data = res.locals.reservation;
-  console.log("DEBUG>>>>>>>>>>>>");
-  console.log(data);
-
   res.status(200).json({
     data,
   })
 }
 
+function hasCapacity(req, res, next) {
+  const tableCapacity = res.locals.table.capacity;
+  const guests = res.locals.reservation.people;
+  if ( tableCapacity < guests ) {
+    next({
+      status: 400,
+      message: `Too many guests ( ${guests} ) for table size. Please choose table with capacity.`,
+    });
+  } else {
+    next();
+  }
+}
+
 async function seat(req, res) {
-  const data = await service.seat(res.locals.table.table_id, res.locals.reservation.reservation_id);d
+  console.log("SEAT DEBUG");
+  console.log(res.locals.reservation.reservation_id);
+  console.log(res.locals.table.table_id);
+  const data = await service.seat(res.locals.table.table_id, res.locals.reservation.reservation_id);
   res.json({
     data,
   });
+}
+
+async function tableExists(req, res, next) {
+  const { table_id } = req.params;
+  const table = await service.read(Number(table_id));
+
+  if (table) {
+    res.locals.table = table;
+    next();
+  } else {
+    next({ status: 404, message: `No such table: ${table_id}` });
+  }
+}
+
+function isOccupied(req, res, next) {
+  if (res.locals.table.reservation_id) {
+    next();
+  } else {
+    next({
+      status: 400,
+      message: `Table is not occupied`,
+    });
+  }
+}
+
+async function occupy(req, res) {
+  const data = await service.occupy(res.locals.table);
+
+  res.json({
+    data,
+  });
+}
+
+function isAvailable(req, res, next) {
+  if (res.locals.table.reservation_id) {
+    next({
+      status: 400,
+      message: `Table id is occupied: ${res.locals.table.table_id}`,
+    });
+  } else {
+    next();
+  }
 }
 
 module.exports = {
@@ -108,4 +164,6 @@ module.exports = {
   ],
   read: [hasTableId, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
+  seat: [tableExists, isAvailable, hasCapacity, seat],
+  occupy: [isOccupied, occupy]
 };

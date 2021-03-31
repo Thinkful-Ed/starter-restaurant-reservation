@@ -25,7 +25,7 @@ function hasValidFields(req, res, next) {
 }
 
 function hasReservationId(req, res, next) {
-  const reservation = req.params.reservation_id;
+  const reservation = req.params.reservation_id || req.body?.data?.reservation_id;
   if(reservation){
       res.locals.reservation_id = reservation;
       next();
@@ -138,4 +138,5 @@ module.exports = {
   ],
   read: [hasReservationId, reservationExists, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
+  reservationExists: [hasReservationId,reservationExists],
 };

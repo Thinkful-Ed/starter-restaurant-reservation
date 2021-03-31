@@ -28,8 +28,31 @@ function seat(table_id, reservation_id) {
   });
 }
 
+function read(table_id){
+    return knex(tableName)
+      .where("table_id", table_id)
+      .first();
+}
+
+function occupy(table) {
+  return knex.transaction(async (transaction) => {
+    await knex("reservations")
+      .where({ reservation_id: table.reservation_id })
+      .update({ status: "finished" })
+      .transacting(transaction);
+
+    return knex(tableName)
+      .where({ table_id: table.table_id })
+      .update({ reservation_id: null }, "*")
+      .transacting(transaction)
+      .then((records) => records[0]);
+  });
+}
+
 module.exports = {
   create,
   list,
-  seat
+  seat,
+  read,
+  occupy
 };
