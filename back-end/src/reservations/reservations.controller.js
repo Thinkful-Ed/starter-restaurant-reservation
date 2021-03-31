@@ -26,6 +26,7 @@ function hasValidFields(req, res, next) {
 
 function hasReservationId(req, res, next) {
   const reservation = req.params.reservation_id || req.body?.data?.reservation_id;
+
   if(reservation){
       res.locals.reservation_id = reservation;
       next();
@@ -36,6 +37,21 @@ function hasReservationId(req, res, next) {
       });
   }
 }
+
+
+function hasReservationIdForTable(req, res, next) {
+  const reservation = req.params.reservation_id || req.params.table_id || req.body?.data?.reservation_id;
+  if(reservation){
+      res.locals.reservation_id = reservation;
+      next();
+  } else {
+      next({
+          status: 400,
+          message: `missing reservation_id`,
+      });
+  }
+}
+
 
 async function reservationExists(req, res, next) {
   const reservation_id = res.locals.reservation_id;
@@ -120,7 +136,9 @@ const has_mobile_number = bodyDataHas("mobile_number");
 const has_reservation_date = bodyDataHas("reservation_date");
 const has_reservation_time = bodyDataHas("reservation_time");
 const has_people = bodyDataHas("people");
-
+const has_capacity = bodyDataHas("capacity");
+const has_table_name = bodyDataHas("table_name");
+const has_reservation_id = bodyDataHas("reservation_id");
 
 module.exports = {
   create: [
@@ -138,5 +156,5 @@ module.exports = {
   ],
   read: [hasReservationId, reservationExists, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
-  reservationExists: [hasReservationId,reservationExists],
+  reservationExists: [hasReservationId, reservationExists],
 };

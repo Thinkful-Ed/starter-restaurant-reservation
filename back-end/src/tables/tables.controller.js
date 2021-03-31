@@ -21,7 +21,7 @@ function hasValidFields(req, res, next) {
 }
 
 function hasTableId(req, res, next) {
-  const table = req.params.reservation_id;
+  const table = req.params.table_id;
   console.log(table);
   if(table){
       res.locals.reservation = table;

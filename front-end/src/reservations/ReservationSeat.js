@@ -13,7 +13,14 @@ function ReservationSeat() {
 
   useEffect(() => {
     listTables().then(setTables);
-  });
+  }, []);
+
+  useEffect(() => {
+      setReservationError(null);
+      readReservation(reservation_id)
+      .then(setReservation)
+      .catch(setReservationError);
+   }, [reservation_id]);
 
   function changeHandler({ target: { value } }) {
     setTableId(value);
@@ -37,7 +44,7 @@ function ReservationSeat() {
                 <option value="">Table</option>
                 {tables.map((table) => (
                   <option key={table.table_id} value={table.table_id}>
-                    {table.table_name}({table.capacity})
+                    {table.table_name} - {table.capacity}
                   </option>
                 ))}
               </select>
