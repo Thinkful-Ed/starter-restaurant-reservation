@@ -1,18 +1,20 @@
 import React from "react";
 import {finishTable} from "../utils/api";
 
-function Tables({ tables = [] }) {
+function Tables({onFinish, tables = [] }) {
 
   function finishHandler({
       target: { dataset: { tableIdFinish, reservationIdFinish } } = {},
     }) {
       if (
-        tableIdFinish &&
+        tableIdFinish && reservationIdFinish &&
         window.confirm(
           "Is this table ready to seat new guests? This cannot be undone."
         )
       ) {
-          finishTable(tableIdFinish, reservationIdFinish);
+          //finishTable(tableIdFinish, reservationIdFinish);
+          onFinish(tableIdFinish, reservationIdFinish);
+
       }
   }
 
@@ -26,7 +28,8 @@ function Tables({ tables = [] }) {
           <div className="col-sm-1" data-table-id-status={table.table_id}>{table.reservation_id ? "Occupied" : "Free"}</div>
           <div className="col-sm-1">
             {table.reservation_id ?
-              <button type="button" className="btn" data-table-id-finish={table.table_id} onClick={finishHandler}>
+              <button type="button" className="btn" data-table-id-finish={table.table_id} data-reservation-id-finish={table.reservation_id}
+ onClick={finishHandler}>
                 Finish
               </button> : ("")
             }

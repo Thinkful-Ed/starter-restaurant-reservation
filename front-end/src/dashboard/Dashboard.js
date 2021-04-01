@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import { listReservations, listTables, finishTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import Reservations from "./Reservations";
 import Tables from "./Tables";
@@ -30,6 +30,12 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  function onFinish(table_id, reservation_id) {
+    finishTable(table_id, reservation_id)
+      .then(loadDashboard)
+      .catch(setTablesError);
+  }
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -41,7 +47,7 @@ function Dashboard({ date }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Tables</h4>
       </div>
-      <Tables tables={tables} />
+      <Tables onFinish={onFinish} tables={tables} />
     </main>
   );
 }

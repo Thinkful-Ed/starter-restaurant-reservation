@@ -75,7 +75,6 @@ async function list(req, res) {
 
 async function create(req, res) {
   const data = await service.create(req.body.data);
-
   res.status(201).json({
     data: data,
   });
@@ -102,9 +101,6 @@ function hasCapacity(req, res, next) {
 }
 
 async function seat(req, res) {
-  console.log("SEAT DEBUG");
-  console.log(res.locals.reservation.reservation_id);
-  console.log(res.locals.table.table_id);
   const data = await service.seat(res.locals.table.table_id, res.locals.reservation.reservation_id);
   res.json({
     data,
@@ -160,8 +156,8 @@ module.exports = {
       has_table_name,
       has_capacity,
       isValidTableName,
-      hasValidFields,
       isValidNumber,
+//      hasValidFields,
       asyncErrorBoundary(create)
   ],
   read: [hasTableId, asyncErrorBoundary(read)],
