@@ -113,3 +113,12 @@ export async function readReservation(reservation_id, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime)
 }
+
+export async function finishTable(table_id, reservation_id) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = {
+    method: "DELETE",
+    headers,
+  };
+  return await fetchJson(url, options, {});
+}

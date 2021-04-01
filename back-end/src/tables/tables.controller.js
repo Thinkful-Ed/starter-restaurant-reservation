@@ -135,6 +135,8 @@ function isOccupied(req, res, next) {
 }
 
 async function occupy(req, res) {
+    console.log("DEBUG FINISH");
+    console.log(res.locals.table);
   const data = await service.occupy(res.locals.table);
 
   res.json({
@@ -165,5 +167,5 @@ module.exports = {
   read: [hasTableId, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
   seat: [tableExists, isAvailable, hasCapacity, seat],
-  occupy: [isOccupied, occupy]
+  occupy: [tableExists, isOccupied, occupy]
 };
