@@ -10,6 +10,7 @@ function hasValidFields(req, res, next) {
     "reservation_date",
     "reservation_time",
     "people",
+    "status"
   ]);
 
   const invalidFields = Object.keys(data).filter(
@@ -51,7 +52,6 @@ function hasReservationIdForTable(req, res, next) {
       });
   }
 }
-
 
 async function reservationExists(req, res, next) {
   const reservation_id = res.locals.reservation_id;
@@ -99,6 +99,14 @@ function isTime(req, res, next){
   next({ status: 400, message: `Invalid reservation_time` });
 }
 
+function checkStatus(req, res, next){
+  const { data = {} } = req.body;
+  if (data['status'] === 'seated' || data['status'] === 'finished'){
+      return next({ status: 400, message: `status is ${data['status']}` });
+  }
+  next();
+}
+
 function isValidNumber(req, res, next){
   const { data = {} } = req.body;
   if (data['people'] === 0 || !Number.isInteger(data['people'])){
@@ -130,6 +138,25 @@ async function read(req, res) {
   })
 }
 
+async function status(req, res) {
+  res.locals.reservation.status = req.body.data.status;
+  const data = await service.status(res.locals.reservation);
+  res.json({ data });
+}
+
+async function unfinishedStatus(req, res, next){
+  console.log("DEBUG");
+  console.log(res.locals.reservation.status);
+  if ("booked" !== res.locals.reservation.status) {
+    next({
+      status: 400,
+      message: `Reservation status: '${res.locals.reservation.status}'.`,
+    });
+  } else {
+      next();
+  }
+}
+
 const has_first_name = bodyDataHas("first_name");
 const has_last_name = bodyDataHas("last_name");
 const has_mobile_number = bodyDataHas("mobile_number");
@@ -152,9 +179,11 @@ module.exports = {
       isValidDate,
       isTime,
       isValidNumber,
+      checkStatus,
       asyncErrorBoundary(create)
   ],
   read: [hasReservationId, reservationExists, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
   reservationExists: [hasReservationId, reservationExists],
+  status: [hasReservationId, reservationExists, unfinishedStatus, asyncErrorBoundary(status)]
 };

@@ -151,6 +151,17 @@ function isAvailable(req, res, next) {
   }
 }
 
+function isBooked(req, res, next) {
+  if (res.locals.reservation.status === "booked") {
+    next();
+  } else {
+    // if it is seated:
+    next({
+      status: 400,
+      message: `Reservation is ${res.locals.reservation.status}.`,
+    });
+  }
+}
 module.exports = {
   create: [
       has_table_name,
@@ -162,6 +173,6 @@ module.exports = {
   ],
   read: [hasTableId, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
-  seat: [tableExists, isAvailable, hasCapacity, seat],
+  seat: [tableExists, isAvailable, hasCapacity, isBooked, seat],
   occupy: [tableExists, isOccupied, occupy]
 };
