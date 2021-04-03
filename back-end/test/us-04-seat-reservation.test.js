@@ -23,10 +23,10 @@ describe("US-04 - Seat reservation", () => {
     describe("GET /tables/:table_id", () => {
       test("returns 404 for non-existent id", async () => {
         const response = await request(app)
-          .get("/reservations/99")
+          .get("/tables/99999")
           .set("Accept", "application/json");
 
-        expect(response.body.error).toContain("99");
+        expect(response.body.error).toContain("99999");
         expect(response.status).toBe(404);
       });
     });
@@ -34,7 +34,7 @@ describe("US-04 - Seat reservation", () => {
     describe("POST /tables", () => {
       test("returns 400 if data is missing", async () => {
         const response = await request(app)
-          .post("/reservations")
+          .post("/tables")
           .set("Accept", "application/json")
           .send({ datum: {} });
 
