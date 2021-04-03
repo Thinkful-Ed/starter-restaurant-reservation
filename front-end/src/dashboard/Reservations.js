@@ -17,7 +17,7 @@ function Reservations({ reservations = [] }) {
       );
     })
     ) : (
-    <div>No results</div>
+    <div>No reservations found</div>
   );
   return (
       <div className="table">
