@@ -10,7 +10,7 @@ There are no user stories for logging: it is expected that you will add logging 
 
 ## Existing files
 
-This repository is set up as a monorepo, meaning that the frontend and backend projects are in one repository. This allows you to open both projects in the same editor.
+This repository is set up as a *monorepo*, meaning that the frontend and backend projects are in one repository. This allows you to open both projects in the same editor.
 
 As you work through the user stories listed later in this document, you will be writing code that allows your frontend and backend applications to talk to each other. You will also write code to allow your controllers and services to connect to, and query, your PostgreSQL database via [Knex](http://knexjs.org/).
 
@@ -146,7 +146,7 @@ You can use the screenshots to debug your code by rendering additional informati
 
 The Product Manager has already created the user stories for _Periodic Tables_. Each of the user stories is listed below, and your Product Manager wants them to be implemented in the order in which they are listed. Another developer has already written the tests for each of the user stories so that you don't have to.
 
-Although the user stories do not say anything about deployment, you should consider deploying early and often. You may even decide to deploy before adding any features. Since this is a monorepo, you can follow the instructions in [this vercel article on monorepos](https://vercel.com/blog/monorepos) to deploy this project.
+Although the user stories do not say anything about deployment, you should consider deploying early and often. You may even decide to deploy before adding any features. Since this is a monorepo, you can follow the instructions in [this Vercel article on monorepos](https://vercel.com/blog/monorepos) to deploy this project.
 
 ### US-01 Create and list reservations
 
@@ -298,6 +298,10 @@ so that I know which tables are occupied and free.
 - if the table is occupied, return 400 with an error message.
 
 > **Hint** Work through the acceptance criteria in the order listed, step-by-step. A different order may be more challenging.
+
+> **Hint** Seed the `tables` table in a similar way as it's done with the `reservations` table.
+
+> **Hint** Add a `reservation_id` column in the `tables` table. Use the `.references()` and `inTable()` knex functions to add the foreign key reference.
 
 ### US-05 Finish an occupied table
 
