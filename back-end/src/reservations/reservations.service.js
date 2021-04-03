@@ -44,9 +44,19 @@ function validStatus(reservation) {
   throw error;
 }
 
+function search(mobile_number) {
+  return knex(tableName)
+    .whereRaw(
+      "translate(mobile_number, '() -', '') like ?",
+      `%${mobile_number.replace(/\D/g, "")}%`
+    )
+    .orderBy("reservation_date");
+}
+
 module.exports = {
   create,
   list,
   read,
-  status
+  status,
+  search
 };

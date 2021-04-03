@@ -116,8 +116,12 @@ function isValidNumber(req, res, next){
 }
 
 async function list(req, res) {
-  const data = await service.list(req.query.date);
-
+  const mobile_number = req.query.mobile_number;
+  const data = await (
+      mobile_number
+    ? service.search(mobile_number)
+    : service.list(req.query.date)
+  );
   res.json({
     data,
   });
