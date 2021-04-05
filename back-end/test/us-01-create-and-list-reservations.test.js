@@ -9,7 +9,7 @@ describe("US-01 - Create and list reservations", () => {
       .forceFreeMigrationsLock()
       .then(() => knex.migrate.rollback(null, true))
       .then(() => knex.migrate.latest());
-  });
+  },20000);
 
   beforeEach(() => {
     return knex.seed.run();

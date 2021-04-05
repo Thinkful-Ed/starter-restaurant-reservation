@@ -8,9 +8,11 @@ const cors = require("cors");
 const errorHandler = require("./errors/errorHandler");
 const notFound = require("./errors/notFound");
 const reservationsRouter = require("./reservations/reservations.router");
+const knex = require("./db/connection");
 
 const app = express();
 
+app.set("db", knex)
 app.use(cors());
 app.use(express.json());
 

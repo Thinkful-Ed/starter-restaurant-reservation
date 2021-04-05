@@ -9,7 +9,7 @@ describe("US-02 - Create reservations future date", () => {
       .forceFreeMigrationsLock()
       .then(() => knex.migrate.rollback(null, true))
       .then(() => knex.migrate.latest());
-  });
+  },20000);
 
   beforeEach(() => {
     return knex.seed.run();
