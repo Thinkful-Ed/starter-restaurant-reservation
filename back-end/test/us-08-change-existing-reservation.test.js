@@ -9,7 +9,7 @@ describe("US-08 - Change an existing reservation", () => {
       .forceFreeMigrationsLock()
       .then(() => knex.migrate.rollback(null, true))
       .then(() => knex.migrate.latest());
-  });
+  },20000);
 
   beforeEach(() => {
     return knex.seed.run();

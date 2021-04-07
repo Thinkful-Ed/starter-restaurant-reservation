@@ -62,19 +62,28 @@ const createReservation = (knex, data) => {
   return knex('reservations').insert(data)
 }
 
-const getReservations = (knex, date) => {
+const updateReservation = (knex, reservationId, data) => {
+  const { reservation_id, ...params } = data
+  return knex('reservations').where({reservation_id: reservationId}).insert(params)
+}
+
+const getReservations = (knex, query) => {
+  const { date, mobile_number} = query
+
+  if (mobile_number)
+    return knex('reservations').whereRaw("translate(mobile_number, '() -', '') like ?", `%${mobile_number.replace(/\D/g, "")}%`).orderBy("reservation_date")
   if (date)
-    return knex('reservations').where({ reservation_date: date }).select().orderBy('reservation_time', 'asc')
+    return knex('reservations').whereNot({ status: "finished" }).where({ reservation_date: date}).select().orderBy('reservation_time', 'asc')
   else
-    return knex('reservations').select().orderBy('reservation_time', 'asc')
+    return knex('reservations').whereNot({ status: "finished" }).select().orderBy('reservation_time', 'asc')
 }
 
 const getReservationById = (knex, reservationId) => {
   return knex('reservations as r').where({'r.reservation_id': Number(reservationId)}).select('r.*').first();
 }
 
-const validateStatus = (reservationStatus) => {
-  return (reservationStatus === "booked" || reservationStatus === "seated" || reservationStatus === "finished")
+const validateStatus = (status) => {
+  return (status === "booked" || status === "seated" || status === "finished" || status === "cancelled")
 }
 
 const finishedStatus = (knex, reservationId) => {
@@ -92,5 +101,6 @@ module.exports = {
   getReservationById,
   changeStatus,
   validateStatus,
-  finishedStatus
+  finishedStatus,
+  updateReservation
 }

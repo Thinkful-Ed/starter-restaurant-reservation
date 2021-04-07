@@ -9,7 +9,7 @@ const serviceTable = require('../tables/tables.service')
 async function list(req, res) {
   const knex = req.app.get('db')
 
-  let reservations = await service.getReservations(knex, req.query.date)
+  let reservations = await service.getReservations(knex, req.query)
   res.json({
     data: await reservations
   });
@@ -23,6 +23,28 @@ async function create(req, res) {
   res.status(201)
   res.json({
     data: req.body.data
+  });
+}
+
+async function update(req, res) {
+  const knex = req.app.get('db')
+  service.validateParams(req.body.data)
+  const reservationId = req.params.reservation_Id;
+  const reservation = await serviceTable.getReservation(knex, reservationId)
+
+  let error
+  if (!reservation) {
+    res.status(404)
+    error = `reservation id ${reservationId} not found`
+  } else {
+    res.status(200)
+    await service.updateReservation(knex,req. reservationId, req.body.data)
+  }
+
+
+  res.json({
+    data: req.body.data,
+    error: error
   });
 }
 
@@ -43,6 +65,8 @@ async function show(req, res) {
   });
 }
 
+
+
 async function updateStatus(req, res) {
   const knex = req.app.get('db')
   const status = req.body.data.status
@@ -50,9 +74,6 @@ async function updateStatus(req, res) {
   const reservation = await serviceTable.getReservation(knex, reservationId)
   const validStatus = await service.validateStatus(status)
   const reservationResult = await service.finishedStatus(knex, reservationId)
-
-  // console.log("rservation status ", reservationStatus)
-
 
   let error
   if (!reservation) {
@@ -62,7 +83,6 @@ async function updateStatus(req, res) {
     res.status(400)
     error = `status ${status} is not valid`
   } else if (reservationResult.status === 'finished') {
-    console.log("yess it is")
     res.status(400)
     error = `status finished cannot be updated`
   }
@@ -74,5 +94,6 @@ module.exports = {
   list,
   create: asyncErrorBoundary(create),
   show,
+  update: asyncErrorBoundary(update),
   updateStatus
 };

@@ -31,12 +31,9 @@ async function update(req, res) {
   service.validateUpdateParams(req.body)
   const tableId = req.params.table_id
   const reservationId = req.body.data.reservation_id
-
   const reservation = await service.getReservation(knex, reservationId)
   const table = await service.getFreeTable(knex, tableId)
   const reservationStatus = await serviceReservation.finishedStatus(knex, reservationId)
-
-  console.log("reservationStatus", reservationStatus)
 
   let error
 
@@ -71,14 +68,14 @@ async function deleteTable(req, res) {
   if (!table) {
     res.status(404)
     error = `table id ${tableId} not found`
-  }
-  if (freeTable) {
+  } else if (freeTable) {
     res.status(400)
     error = `table is not occupied`
+  } else {
+    await service.freeOccupiedTable(knex, tableId)
+    await service.changeStatusTofinish(knex, tableId, table.reservation_id)
   }
 
-  await service.freeOccupiedTable(knex, tableId)
-  await service.changeStatusTofinish(knex, tableId, table.reservation_id)
   res.json({ data: [], error });
 }
 

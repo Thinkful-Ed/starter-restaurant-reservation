@@ -9,7 +9,7 @@ describe("US-07 - Search reservation by phone number", () => {
       .forceFreeMigrationsLock()
       .then(() => knex.migrate.rollback(null, true))
       .then(() => knex.migrate.latest());
-  });
+  },20000);
 
   beforeEach(() => {
     return knex.seed.run();
