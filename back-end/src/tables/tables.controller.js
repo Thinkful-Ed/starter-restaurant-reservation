@@ -32,7 +32,7 @@ async function update(req, res) {
   const reservationId = req.body.data.reservation_id
 
   const reservation = await service.getReservation(knex, reservationId)
-  const table = await service.getTable(knex, tableId)
+  const table = await service.getFreeTable(knex, tableId)
 
   let error
 
@@ -52,8 +52,29 @@ async function update(req, res) {
   res.json({ data: [], error });
 }
 
+async function deleteTable(req, res) {
+  const knex = req.app.get('db')
+  const tableId = req.params.table_id
+  const table = await service.getTable(knex, tableId)
+  const freeTable = await service.getFreeTable(knex, tableId)
+
+  let error
+  if (!table) {
+    res.status(404)
+    error = `table id ${tableId} not found`
+  }
+  if (freeTable) {
+    res.status(400)
+    error = `table is not occupied`
+  }
+
+  await service.freeOccupiedTable(knex, tableId )
+  res.json({ data: [], error });
+}
+
 module.exports = {
   list,
   create: asyncErrorBoundary(create),
-  update: asyncErrorBoundary(update)
+  update: asyncErrorBoundary(update),
+  deleteTable: asyncErrorBoundary(deleteTable),
 };

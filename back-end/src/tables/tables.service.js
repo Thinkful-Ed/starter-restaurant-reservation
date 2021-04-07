@@ -29,6 +29,10 @@ const updateTable = (knex, tableId, reservationId) => {
   return knex('tables').where({ table_id: tableId}).update({'reservation_id': reservationId})
 }
 
+const freeOccupiedTable = (knex, tableId) => {
+  return knex('tables').where({table_id: tableId}).update({'reservation_id': null})
+}
+
 const validateUpdateParams = (params) => {
   const { data } = params;
   if (!data)
@@ -45,8 +49,12 @@ const hasCapacity = (table, reservation) => {
   return table.capacity >= reservation.people
 }
 
-const getTable = (knex, tableId) => {
+const getFreeTable = (knex, tableId) => {
   return knex('tables').where({ table_id: tableId, reservation_id: null}).first()
+}
+
+const getTable = (knex, tableId) => {
+  return knex('tables').where({ 'table_id': tableId }).first()
 }
 
 const validateAvailability = (knex, reservationId) => {
@@ -57,10 +65,12 @@ module.exports = {
   validateParams,
   createTable,
   getTables,
-  getTable,
+  getFreeTable,
   updateTable,
   validateUpdateParams,
   getReservation,
   hasCapacity,
-  validateAvailability
+  validateAvailability,
+  freeOccupiedTable,
+  getTable
 }
