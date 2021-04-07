@@ -4,6 +4,7 @@
 
 const asyncErrorBoundary = require('../errors/asyncErrorBoundary')
 const service = require('./tables.service')
+const serviceReservation = require('../reservations/reservations.service')
 
 async function list(req, res) {
   const knex = req.app.get('db')
@@ -33,6 +34,9 @@ async function update(req, res) {
 
   const reservation = await service.getReservation(knex, reservationId)
   const table = await service.getFreeTable(knex, tableId)
+  const reservationStatus = await serviceReservation.finishedStatus(knex, reservationId)
+
+  console.log("reservationStatus", reservationStatus)
 
   let error
 
@@ -45,8 +49,13 @@ async function update(req, res) {
   } else if (!service.hasCapacity(table, reservation)) {
     res.status(400)
     error = "insufficient capacity"
-  } else {
+  } else if (reservationStatus.status === 'seated') {
+    res.status(400)
+    error = "reservation is already seated"
+  }
+  else {
     await service.updateTable(knex, table.table_id, reservationId)
+    await service.updateStatus(knex, reservationId)
   }
 
   res.json({ data: [], error });
@@ -68,7 +77,8 @@ async function deleteTable(req, res) {
     error = `table is not occupied`
   }
 
-  await service.freeOccupiedTable(knex, tableId )
+  await service.freeOccupiedTable(knex, tableId)
+  await service.changeStatusTofinish(knex, tableId, table.reservation_id)
   res.json({ data: [], error });
 }
 

@@ -29,8 +29,16 @@ const updateTable = (knex, tableId, reservationId) => {
   return knex('tables').where({ table_id: tableId}).update({'reservation_id': reservationId})
 }
 
+const updateStatus = (knex, reservationId) => {
+  return knex('reservations').where({ reservation_id: reservationId}).update({'status': "seated"})
+}
+
 const freeOccupiedTable = (knex, tableId) => {
   return knex('tables').where({table_id: tableId}).update({'reservation_id': null})
+}
+
+const changeStatusTofinish = async (knex, tableId, reservationId) => {
+  return knex('reservations').where({ reservation_id: reservationId}).update({'status': "finished"})
 }
 
 const validateUpdateParams = (params) => {
@@ -72,5 +80,7 @@ module.exports = {
   hasCapacity,
   validateAvailability,
   freeOccupiedTable,
-  getTable
+  getTable,
+  updateStatus,
+  changeStatusTofinish
 }

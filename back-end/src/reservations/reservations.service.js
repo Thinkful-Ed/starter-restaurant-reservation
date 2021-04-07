@@ -1,7 +1,7 @@
 const moment = require('moment')
 
 const validateParams = (params) => {
-  const { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = params;
+  const { first_name, last_name, mobile_number, reservation_date, reservation_time, people, status } = params;
   if (!first_name || first_name === "")
     throw new Error("first_name cannot be blank")
   if (!last_name || last_name === "")
@@ -28,6 +28,8 @@ const validateParams = (params) => {
     throw new Error("The reservation time is after 9:30 PM, the restaurant will be closed at 10:30 PM")
   if (timeInPast(reservation_time))
     throw new Error("Reservation time must be in the future")
+  if (status && status != "booked")
+    throw new Error(`status ${status} is not valid`)
 }
 
 const dateInPast = (date) => {
@@ -71,9 +73,24 @@ const getReservationById = (knex, reservationId) => {
   return knex('reservations as r').where({'r.reservation_id': Number(reservationId)}).select('r.*').first();
 }
 
+const validateStatus = (reservationStatus) => {
+  return (reservationStatus === "booked" || reservationStatus === "seated" || reservationStatus === "finished")
+}
+
+const finishedStatus = (knex, reservationId) => {
+  return knex('reservations').where({ reservation_id: reservationId }).first().select('status')
+}
+
+const changeStatus = (knex, reservationStatus, reservationId) => {
+  return knex('reservations').where({ 'reservation_id': reservationId }).update({status: reservationStatus})
+}
+
 module.exports = {
   validateParams,
   createReservation,
   getReservations,
-  getReservationById
+  getReservationById,
+  changeStatus,
+  validateStatus,
+  finishedStatus
 }

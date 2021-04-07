@@ -4,6 +4,7 @@
 
 const asyncErrorBoundary = require('../errors/asyncErrorBoundary')
 const service = require('./reservations.service')
+const serviceTable = require('../tables/tables.service')
 
 async function list(req, res) {
   const knex = req.app.get('db')
@@ -42,8 +43,36 @@ async function show(req, res) {
   });
 }
 
+async function updateStatus(req, res) {
+  const knex = req.app.get('db')
+  const status = req.body.data.status
+  const reservationId = req.params.reservation_id;
+  const reservation = await serviceTable.getReservation(knex, reservationId)
+  const validStatus = await service.validateStatus(status)
+  const reservationResult = await service.finishedStatus(knex, reservationId)
+
+  // console.log("rservation status ", reservationStatus)
+
+
+  let error
+  if (!reservation) {
+    res.status(404)
+    error = `reservation id ${reservationId} not found`
+  } else if (!validStatus) {
+    res.status(400)
+    error = `status ${status} is not valid`
+  } else if (reservationResult.status === 'finished') {
+    console.log("yess it is")
+    res.status(400)
+    error = `status finished cannot be updated`
+  }
+  await service.changeStatus(knex, status, reservationId)
+  res.json({ data: { status: status }, error });
+}
+
 module.exports = {
   list,
   create: asyncErrorBoundary(create),
-  show
+  show,
+  updateStatus
 };
