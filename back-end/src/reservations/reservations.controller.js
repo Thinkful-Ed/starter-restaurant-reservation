@@ -25,7 +25,19 @@ async function create(req, res) {
   });
 }
 
+async function show(req, res) {
+  const knex = req.app.get('db')
+  const reservationId = req.params.reservation_Id;
+  let reservation = await service.getReservationById(knex, reservationId)
+
+  res.status(200)
+  res.json({
+    data: reservation
+  });
+}
+
 module.exports = {
   list,
-  create: asyncErrorBoundary(create)
+  create: asyncErrorBoundary(create),
+  show
 };

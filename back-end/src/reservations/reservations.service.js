@@ -57,7 +57,7 @@ const timeInPast = (date, time) => {
 }
 
 const createReservation = (knex, data) => {
-  knex('reservations').insert(data)
+  return knex('reservations').insert(data)
 }
 
 const getReservations = (knex, date) => {
@@ -67,8 +67,13 @@ const getReservations = (knex, date) => {
     return knex('reservations').select().orderBy('reservation_time', 'asc')
 }
 
+const getReservationById = (knex, reservationId) => {
+  return knex('reservations as r').where({'r.reservation_id': Number(reservationId)}).select('r.*').first();
+}
+
 module.exports = {
   validateParams,
   createReservation,
-  getReservations
+  getReservations,
+  getReservationById
 }
