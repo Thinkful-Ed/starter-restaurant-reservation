@@ -25,7 +25,7 @@ describe("US-03 - Create reservations eligible timeframe", () => {
         first_name: "first",
         last_name: "last",
         mobile_number: "800-555-1212",
-        reservation_date: "2050-01-04",
+        reservation_date: "2050-01-05",
         reservation_time: "09:30",
         people: 3,
       };
@@ -50,7 +50,7 @@ describe("US-03 - Create reservations eligible timeframe", () => {
         .send({ data });
       expect(response.status).toBe(400);
 
-      data.reservation_time = "15:30";
+      data.reservation_time = "05:30";
       response = await request(app)
         .post("/reservations")
         .set("Accept", "application/json")
