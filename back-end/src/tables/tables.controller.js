@@ -31,9 +31,8 @@ async function update(req, res) {
   service.validateUpdateParams(req.body)
   const tableId = req.params.table_id
   const reservationId = req.body.data.reservation_id
-  const reservation = await service.getReservation(knex, reservationId)
+  const reservation = await serviceReservation.getReservation(knex, reservationId)
   const table = await service.getFreeTable(knex, tableId)
-  const reservationStatus = await serviceReservation.finishedStatus(knex, reservationId)
 
   let error
 
@@ -46,13 +45,13 @@ async function update(req, res) {
   } else if (!service.hasCapacity(table, reservation)) {
     res.status(400)
     error = "insufficient capacity"
-  } else if (reservationStatus.status === 'seated') {
+  } else if (reservation.status === 'seated') {
     res.status(400)
     error = "reservation is already seated"
   }
   else {
     await service.updateTable(knex, table.table_id, reservationId)
-    await service.updateStatus(knex, reservationId)
+    await serviceReservation.updateStatus(knex, reservationId, "seated")
   }
 
   res.json({ data: [], error });
@@ -62,18 +61,17 @@ async function deleteTable(req, res) {
   const knex = req.app.get('db')
   const tableId = req.params.table_id
   const table = await service.getTable(knex, tableId)
-  const freeTable = await service.getFreeTable(knex, tableId)
 
   let error
   if (!table) {
     res.status(404)
     error = `table id ${tableId} not found`
-  } else if (freeTable) {
+  } else if (table.reservation_id == null) {
     res.status(400)
     error = `table is not occupied`
   } else {
-    await service.freeOccupiedTable(knex, tableId)
-    await service.changeStatusTofinish(knex, tableId, table.reservation_id)
+    await service.updateTable(knex, table.table_id, null)
+    await serviceReservation.updateStatus(knex, table.reservation_id, "finished")
   }
 
   res.json({ data: [], error });

@@ -17,29 +17,12 @@ const matchString = (str) => {
   return (!(matchString && matchString.length >= 2))
 }
 
-const createTable = (knex, data) => {
-  return knex('tables').insert(data)
-}
+const createTable = (knex, data) => knex('tables').insert(data)
 
-const getTables = (knex) => {
-  return knex('tables').select().orderBy('table_name')
-}
+const getTables = (knex) => knex('tables').select().orderBy('table_name')
 
-const updateTable = (knex, tableId, reservationId) => {
-  return knex('tables').where({ table_id: tableId}).update({'reservation_id': reservationId})
-}
-
-const updateStatus = (knex, reservationId) => {
-  return knex('reservations').where({ reservation_id: reservationId}).update({'status': "seated"})
-}
-
-const freeOccupiedTable = (knex, tableId) => {
-  return knex('tables').where({table_id: tableId}).update({'reservation_id': null})
-}
-
-const changeStatusTofinish = async (knex, tableId, reservationId) => {
-  return knex('reservations').where({ reservation_id: reservationId}).update({'status': "finished"})
-}
+const updateTable = (knex, tableId, reservationId) =>
+  knex('tables').where({ table_id: tableId }).update({'reservation_id': reservationId})
 
 const validateUpdateParams = (params) => {
   const { data } = params;
@@ -49,25 +32,17 @@ const validateUpdateParams = (params) => {
     throw new Error("reservation_id is missing")
 }
 
-const getReservation = (knex, id) => {
-  return knex('reservations').where({ 'reservation_id': id }).first()
-}
 
-const hasCapacity = (table, reservation) => {
-  return table.capacity >= reservation.people
-}
 
-const getFreeTable = (knex, tableId) => {
-  return knex('tables').where({ table_id: tableId, reservation_id: null}).first()
-}
+const hasCapacity = (table, reservation) => table.capacity >= reservation.people
 
-const getTable = (knex, tableId) => {
-  return knex('tables').where({ 'table_id': tableId }).first()
-}
+const getFreeTable = (knex, tableId) =>
+  knex('tables').where({ table_id: tableId, reservation_id: null }).first()
 
-const validateAvailability = (knex, reservationId) => {
-  return knex('tables').where({reservation_id: reservationId}).first()
-}
+const getTable = (knex, tableId) => knex('tables').where({ 'table_id': tableId }).first()
+
+const validateAvailability = (knex, reservationId) =>
+  knex('tables').where({ reservation_id: reservationId }).first()
 
 module.exports = {
   validateParams,
@@ -76,11 +51,7 @@ module.exports = {
   getFreeTable,
   updateTable,
   validateUpdateParams,
-  getReservation,
   hasCapacity,
   validateAvailability,
-  freeOccupiedTable,
   getTable,
-  updateStatus,
-  changeStatusTofinish
 }

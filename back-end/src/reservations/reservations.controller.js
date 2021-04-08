@@ -4,7 +4,6 @@
 
 const asyncErrorBoundary = require('../errors/asyncErrorBoundary')
 const service = require('./reservations.service')
-const serviceTable = require('../tables/tables.service')
 
 async function list(req, res) {
   const knex = req.app.get('db')
@@ -30,7 +29,7 @@ async function update(req, res) {
   const knex = req.app.get('db')
   service.validateParams(req.body.data)
   const reservationId = req.params.reservation_Id;
-  const reservation = await serviceTable.getReservation(knex, reservationId)
+  const reservation = await service.getReservation(knex, reservationId)
 
   let error
   if (!reservation) {
@@ -51,7 +50,7 @@ async function update(req, res) {
 async function show(req, res) {
   const knex = req.app.get('db')
   const reservationId = req.params.reservation_Id;
-  let reservation = await service.getReservationById(knex, reservationId)
+  let reservation = await service.getReservation(knex, reservationId)
   if (!reservation) {
     res.status(404)
     return res.json({
@@ -71,22 +70,21 @@ async function updateStatus(req, res) {
   const knex = req.app.get('db')
   const status = req.body.data.status
   const reservationId = req.params.reservation_id;
-  const reservation = await serviceTable.getReservation(knex, reservationId)
-  const validStatus = await service.validateStatus(status)
-  const reservationResult = await service.finishedStatus(knex, reservationId)
+  const reservation = await service.getReservation(knex, reservationId)
+  const isStatusValid = await service.isStatusValid(status)
 
   let error
   if (!reservation) {
     res.status(404)
     error = `reservation id ${reservationId} not found`
-  } else if (!validStatus) {
+  } else if (!isStatusValid) {
     res.status(400)
     error = `status ${status} is not valid`
-  } else if (reservationResult.status === 'finished') {
+  } else if (reservation.status === 'finished') {
     res.status(400)
     error = `status finished cannot be updated`
   }
-  await service.changeStatus(knex, status, reservationId)
+  await service.updateStatus(knex, reservationId, status)
   res.json({ data: { status: status }, error });
 }
 

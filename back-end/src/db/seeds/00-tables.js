@@ -1,5 +1,5 @@
 exports.seed = function (knex) {
-  return knex('tables').del().then(
+  return knex.raw("TRUNCATE TABLE tables RESTART IDENTITY CASCADE").then(
     function () {
       return knex('tables').insert(require('./00-tables.json'))
     })

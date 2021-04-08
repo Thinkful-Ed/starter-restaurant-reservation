@@ -53,14 +53,11 @@ const timeInPast = (date, time) => {
   if (date > todayDate)
     return false
 
-  if (currentTime >= time) {
+  if (currentTime >= time)
     return true
-  }
 }
 
-const createReservation = (knex, data) => {
-  return knex('reservations').insert(data)
-}
+const createReservation = (knex, data) => knex('reservations').insert(data)
 
 const updateReservation = (knex, reservationId, data) => {
   const { reservation_id, ...params } = data
@@ -71,36 +68,36 @@ const getReservations = (knex, query) => {
   const { date, mobile_number} = query
 
   if (mobile_number)
-    return knex('reservations').whereRaw("translate(mobile_number, '() -', '') like ?", `%${mobile_number.replace(/\D/g, "")}%`).orderBy("reservation_date")
+    return knex('reservations')
+      .whereRaw("translate(mobile_number, '() -', '') like ?", `%${mobile_number.replace(/\D/g, "")}%`)
+      .orderBy("reservation_date")
   if (date)
-    return knex('reservations').whereNot({ status: "finished" }).where({ reservation_date: date}).select().orderBy('reservation_time', 'asc')
+    return knex('reservations')
+      .whereNot({ status: "finished" })
+      .where({ reservation_date: date })
+      .select()
+      .orderBy('reservation_time', 'asc')
   else
-    return knex('reservations').whereNot({ status: "finished" }).select().orderBy('reservation_time', 'asc')
+    return knex('reservations')
+      .whereNot({ status: "finished" })
+      .select()
+      .orderBy('reservation_time', 'asc')
 }
 
-const getReservationById = (knex, reservationId) => {
-  return knex('reservations as r').where({'r.reservation_id': Number(reservationId)}).select('r.*').first();
-}
+const getReservation = (knex, id) => knex('reservations').where({ 'reservation_id': id }).first()
 
-const validateStatus = (status) => {
-  return (status === "booked" || status === "seated" || status === "finished" || status === "cancelled")
-}
+const isStatusValid = (status) =>
+  (status === "booked" || status === "seated" || status === "finished" || status === "cancelled")
 
-const finishedStatus = (knex, reservationId) => {
-  return knex('reservations').where({ reservation_id: reservationId }).first().select('status')
-}
-
-const changeStatus = (knex, reservationStatus, reservationId) => {
-  return knex('reservations').where({ 'reservation_id': reservationId }).update({status: reservationStatus})
-}
+const updateStatus = (knex, reservationId, status="seated") =>
+  knex('reservations').where({ reservation_id: reservationId}).update({'status': status})
 
 module.exports = {
   validateParams,
   createReservation,
   getReservations,
-  getReservationById,
-  changeStatus,
-  validateStatus,
-  finishedStatus,
+  getReservation,
+  isStatusValid,
+  updateStatus,
   updateReservation
 }
