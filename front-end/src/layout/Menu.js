@@ -1,14 +1,8 @@
-import React from "react";
+import React from 'react'
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
-/**
- * Defines the menu for this application.
- *
- * @returns {JSX.Element}
- */
-
-function Menu() {
+function Menu(props) {
   return (
     <nav className="navbar navbar-dark align-items-start p-0">
       <div className="container-fluid d-flex flex-column p-0">
@@ -56,7 +50,7 @@ function Menu() {
         </div>
       </div>
     </nav>
-  );
+  )
 }
 
-export default Menu;
+export default Menu

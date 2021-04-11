@@ -1,4 +1,12 @@
 .side-bar {
   background-color: #393a44;
   min-width: 200px;
+  position: fixed;     
+height: 100%;
+z-index: 1;
+/* background-color: #222;  */
+overflow-x: hidden;     
+min-width: 200px;
 }
+
+

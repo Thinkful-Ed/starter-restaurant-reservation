@@ -9,16 +9,16 @@ import "./Layout.css";
  *
  * You will not need to make changes to this file.
  *
- * @returns {JSX.Element}
+//  * @returns {JSX.Element}
  */
 function Layout() {
   return (
-    <div className="container-fluid">
+    <div className="">
       <div className="row h-100">
         <div className="col-md-2 side-bar">
           <Menu />
         </div>
-        <div className="col">
+        <div className="col-md-10" style={{ position: "absolute", left: "15%" }}>
           <Routes />
         </div>
       </div>

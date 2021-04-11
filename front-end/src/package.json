@@ -19,9 +19,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "styled-components": "^5.2.3",
-    "web-vitals": "^0.2.4",
-    "sweetalert2": "^10.16.0",
-    "axios": "^0.21.1"
+    "web-vitals": "^0.2.4"
   },
   "scripts": {
     "build": "react-scripts build",
