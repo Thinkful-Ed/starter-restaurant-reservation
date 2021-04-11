@@ -19,7 +19,6 @@ function Dashboard({ date }, props) {
   const [reservationsError, setReservationsError] = useState(null)
 
   useEffect(loadDashboard, [date])
-  // useEffect(loadDashboard, [])
 
   function loadDashboard() {
     const abortController = new AbortController()
@@ -48,10 +47,8 @@ function Dashboard({ date }, props) {
         {reservationsError ? (
           <ErrorAlert error={reservationsError} />
         ) : (
-          <TableComp />
+          <TableComp date={date}/>
         )}
-        {JSON.stringify(reservations)}
-
         <button
           type="submit"
           className="btn btn-secondary float-right"

@@ -64,11 +64,13 @@ class Seat extends Component {
             <label htmlFor="first_name">Table number</label>
             <select name="table_id" id="table_id" onChange={(e) => this.handleChange(e)}>
               <option value="">Select</option>
-              {DataForTable && DataForTable.map((table) => (
+              {DataForTable && DataForTable.map((table) => 
+              table.reservation_id === null ?
+              (
                 <option key={table.table_name} value={table.table_id}>
                   {table.table_name} - {table.capacity}
                 </option>
-              ))}
+              ):null)}
             </select>
           </div>
         </div>

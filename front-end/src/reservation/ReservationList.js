@@ -10,9 +10,9 @@ class ReservationList extends Component {
 
     this.Reservation_status =
       process.env.REACT_APP_API_BASE_URL + '/reservations'
-    this.state = { 
-      DataForReservation: this.props.responseFromSearch ?this.props.responseFromSearch:[], 
-      errorFromAPI: '' 
+    this.state = {
+      DataForReservation: this.props.responseFromSearch?this.props.responseFromSearch.data.data:[],
+      errorFromAPI: ''
     }
   }
   handleSeatLinkClick = (event, data, to) => {
@@ -37,13 +37,13 @@ class ReservationList extends Component {
         let model = {
           status: 'cancelled',
         }
-        let data1 = {data :{}};
-        data1.data =model
+        let data1 = { data: {} };
+        data1.data = model
         axios
-          .put(this.Reservation_status +"/"+ data.reservation_id + '/status', data1)
+          .put(this.Reservation_status + "/" + data.reservation_id + '/status', data1)
           .then((res) => {
-            Swal.fire('Updated!', '', 'success').then(()=>{
-              this.UNSAFE_componentWillMount()
+            Swal.fire('Updated!', '', 'success').then(() => {
+              this.componentDidMount()
             })
           })
           .catch((err) => {
@@ -55,17 +55,11 @@ class ReservationList extends Component {
     })
   }
 
-  UNSAFE_componentWillMount() {
-    if (this.props.responseFromSearch) {
-      this.setState({
-        DataForReservation: this.props.responseFromSearch.data.data,
-      })
-      return
-    } else {
+    componentDidMount() {
       axios
         .get(this.Reservation_status)
         .then((res) => {
-          let resFromFun=formatReservationDate(res.data.data)
+          let resFromFun = formatReservationDate(res.data.data)
           this.setState({
             DataForReservation: resFromFun,
           })
@@ -73,7 +67,7 @@ class ReservationList extends Component {
         .catch((err) => {
           this.setState({ errorFromAPI: err })
         })
-    }
+    
 
   }
   render() {
@@ -123,8 +117,9 @@ class ReservationList extends Component {
                   ) : (
                     <td>{table.status}</td>
                   )}
-
-                  <td>
+                  {table.status === "seated" || table.status === "cancelled" ? (
+                    <td></td>
+                  ) : (<td>
                     <a
                       href={'/reservations/:' + table.reservation_id + '/cacel'}
                       onClick={(event) => this.handleCancelButton(event, table)}
@@ -132,7 +127,8 @@ class ReservationList extends Component {
                     >
                       Cancel
                     </a>
-                  </td>
+                  </td>)}
+
                 </tr>
               )
             })}

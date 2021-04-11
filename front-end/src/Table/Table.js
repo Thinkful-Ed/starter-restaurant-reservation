@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-// import { DataForReservation } from '../Data';
 import axios from 'axios'
 import formatReservationDate from '../utils/format-reservation-date'
 
@@ -9,22 +8,27 @@ export default class TableComp extends Component {
     this.Reservation_status =
       process.env.REACT_APP_API_BASE_URL + '/reservations'
     this.state = {
-      DataForReservation: []
+      DataForReservation: [],
+      willMountCall: false,
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
+
     axios
-      .get(this.Reservation_status)
+      .get(this.Reservation_status + "?date=" + this.props.date)
       .then((res) => {
-        let resFromFun=formatReservationDate(res.data.data)
+        let resFromFun = formatReservationDate(res.data.data)
         this.setState({
           DataForReservation: resFromFun,
+          willMountCall: true
         })
       })
       .catch((err) => {
         this.setState({ errorFromAPI: err })
       })
+
+
   }
   render() {
     const { DataForReservation } = this.state

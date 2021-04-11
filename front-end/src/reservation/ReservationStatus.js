@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
-import Swal from 'sweetalert2'
 import axios from 'axios'
 import ErrorAlert from '../layout/ErrorAlert'
 class ReservationStatus extends Component {
@@ -11,7 +10,7 @@ class ReservationStatus extends Component {
             process.env.REACT_APP_API_BASE_URL + '/reservations'
         this.state = { DataForReservation: [], errorFromAPI: '' }
     }
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
 
         axios
             .get(this.Reservation_status)
@@ -26,25 +25,28 @@ class ReservationStatus extends Component {
     }
 
     handleSeatBtn = (data) => {
-        let model = {
-          status: 'seated',
-        }
-        let data1 = { data: {} };
-        data1.data = model
-        axios
-          .put(
-            this.Reservation_status +"/"+data.reservation_id+"/status",
-            data1,
-          )
-          .then((res) => {
-            Swal.fire('Updated!', '', 'success').then(()=>{
-                this.UNSAFE_componentWillMount()
-            })
-          })
-          .catch((err) => {
-            this.setState({ errorFromAPI: err })
-          })
-      }
+
+        this.props.history.push('/reservations/:' + data.reservation_id + '/seat')
+
+        // let model = {
+        //   status: 'seated',
+        // }
+        // let data1 = { data: {} };
+        // data1.data = model
+        // axios
+        //   .put(
+        //     this.Reservation_status +"/"+data.reservation_id+"/status",
+        //     data1,
+        //   )
+        //   .then((res) => {
+        //     Swal.fire('Updated!', '', 'success').then(()=>{
+        //         this.componentDidMount()
+        //     })
+        //   })
+        //   .catch((err) => {
+        //     this.setState({ errorFromAPI: err })
+        //   })
+    }
     render() {
         const { errorFromAPI, DataForReservation } = this.state
         return (

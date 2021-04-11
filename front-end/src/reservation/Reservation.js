@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 import ErrorAlert from '../layout/ErrorAlert'
 import axios from 'axios'
+import Swal from 'sweetalert2'
+
 import formatReservationDate from '../utils/format-reservation-date'
 class Reservation extends Component {
   constructor(props) {
@@ -32,13 +34,13 @@ class Reservation extends Component {
 
     try {
       if (this.props.match.params.reservation_id !== undefined) {
-        var res = this.props.match.params.reservation_id ?this.props.match.params.reservation_id.split(':') :"";
-        axios.get(this.Reservation_status+"/"+res[1]).then((res)=>{
-          let resFromFun=formatReservationDate(res.data.data)
+        var res = this.props.match.params.reservation_id ? this.props.match.params.reservation_id.split(':') : "";
+        axios.get(this.Reservation_status + "/" + res[1]).then((res) => {
+          let resFromFun = formatReservationDate(res.data.data)
           this.setState({
             reservationModel: resFromFun,
           })
-        }).catch((err)=>{
+        }).catch((err) => {
           this.setState({
             errorFromAPI: err,
           })
@@ -116,34 +118,64 @@ class Reservation extends Component {
 
   saveReservation(event) {
     event.preventDefault()
-    
+
+
     let Validation_Res = this.validateTime();
-    let reser_Model ={...this.state.reservationModel};
+    let reser_Model = { ...this.state.reservationModel };
     reser_Model.people = parseInt(reser_Model.people, 10)              // convert people from str to number 
-    let data = {data :{}};
-    data.data =reser_Model
+    let data = { data: {} };
+    data.data = reser_Model
     if (Validation_Res) {
-      axios
-        .post(this.Reservation_status, data)
-        .then((res) => {
-          this.setState(
-            {
-              reservationModel: res.data,
-            },
-            () => {
-              this.props.history.push(
-                `/dashboard`,
-                { from: '/reservations/new' },
-                { date: this.state.reservationModel.reservation_date },
+
+
+      if (reser_Model.reservation_id) {                       // for update
+        // /:reservation_id/status
+
+        axios
+          .put(this.Reservation_status + "/" + reser_Model.reservation_id + '/status', data)
+          .then((res) => {
+            Swal.fire('Updated!', '', 'success').then(() => {
+              this.setState(
+                {
+                  reservationModel: res.data,
+                },
+                () => {
+                  this.props.history.push(
+                    `/dashboard`,
+                    { from: '/reservations/new' },
+                    { date: this.state.reservationModel.reservation_date },
+                  )
+                },
               )
-            },
-          )
-        })
-        .catch((error) => {
-          this.setState({
-            errorFromAPI: error,
+            })
           })
-        })
+          .catch((err) => {
+            this.setState({ errorFromAPI: err })
+          })
+      } else {                                                    // to create new reservation
+        axios
+          .post(this.Reservation_status, data)
+          .then((res) => {
+            this.setState(
+              {
+                reservationModel: res.data,
+              },
+              () => {
+                this.props.history.push(
+                  `/dashboard`,
+                  { from: '/reservations/new' },
+                  { date: this.state.reservationModel.reservation_date },
+                )
+              },
+            )
+          })
+          .catch((error) => {
+            this.setState({
+              errorFromAPI: error,
+            })
+          })
+      }
+
     } else {
       return
     }
