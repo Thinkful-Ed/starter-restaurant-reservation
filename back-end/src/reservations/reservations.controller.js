@@ -63,10 +63,12 @@ async function validateNewReservation(request, response, next) {
   next()
 }
 
-async function isValidDate(request, response, next) {
-  const { reservation_date } = request.body.data
+async function isValidDateTime(request, response, next) {
+  const { reservation_date, reservation_time } = request.body.data
   let today = new Date()
   const resDate = new Date(reservation_date).toUTCString()
+
+  console.log(reservation_time)
 
   if (resDate.includes('Tue')) {
     return next({
@@ -82,6 +84,12 @@ async function isValidDate(request, response, next) {
     })
   }
 
+  if (reservation_time < '10:30' || reservation_time > '21:30') {
+    return next({
+      status: 400,
+      message: 'Sorry, we are closed at that time. Please choose another time.',
+    })
+  }
   next()
 }
 
@@ -116,7 +124,7 @@ async function list(request, response) {
 module.exports = {
   create: [
     asyncErrorBoundary(validateNewReservation),
-    asyncErrorBoundary(isValidDate),
+    asyncErrorBoundary(isValidDateTime),
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
