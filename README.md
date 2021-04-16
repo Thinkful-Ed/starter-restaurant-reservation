@@ -23,6 +23,8 @@ The table below describes the folders in this starter repository:
 
 This starter code closely follows the best practices and patterns established in the Robust Server Structure module.
 
+**Note**: Please do not submit a pull request to this repository with your solution.
+
 ### Backend Existing files
 
 The `./back-end` folder contains all the code for the backend project.
@@ -125,6 +127,8 @@ If you would like a reminder of which npm scripts are available, run `npm run` t
 Note that the logging level for the backend is set to `warn` when running tests and `info` otherwise.
 
 > **Note**: After running `npm test`, `npm run test:X`, or `npm run test:e2e` you might see something like the following in the output: `[start:frontend] Assertion failed:`. This is not a failure, it is just the frontend project getting shutdown automatically.
+
+> **Note**: If you are getting a `unable to resolve dependency tree` error when running the frontend tests, run the following command: `npm install --force --prefix front-end`. This will allow you to run the frontend tests.
 
 > **Hint**: If you stop the tests before they finish, it can leave the test database in an unusual state causing the tests to fail unexpectedly the next time you run them. If this happens, delete all tables in the test database, including the `knex_*` tables, and try the tests again.
 
