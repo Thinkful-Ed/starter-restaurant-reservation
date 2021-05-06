@@ -1,4 +1,5 @@
 const puppeteer = require("puppeteer");
+const { setDefaultOptions } = require('expect-puppeteer');
 const fs = require("fs");
 const fsPromises = fs.promises;
 
@@ -15,6 +16,7 @@ describe("US-07 - Search reservations - E2E", () => {
 
   beforeAll(async () => {
     await fsPromises.mkdir("./.screenshots", { recursive: true });
+    setDefaultOptions({ timeout: 1000 });
   });
 
   beforeEach(async () => {
