@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
-import ErrorAlert from "../layout/ErrorAlert";
+import React, { useEffect, useState } from "react"
+import { listReservations } from "../utils/api"
+import ErrorAlert from "../layout/ErrorAlert"
 
 /**
  * Defines the dashboard page.
@@ -9,18 +9,18 @@ import ErrorAlert from "../layout/ErrorAlert";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
-  const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
+  const [reservations, setReservations] = useState([])
+  const [reservationsError, setReservationsError] = useState(null)
 
-  useEffect(loadDashboard, [date]);
+  useEffect(loadDashboard, [date])
 
   function loadDashboard() {
-    const abortController = new AbortController();
-    setReservationsError(null);
+    const abortController = new AbortController()
+    setReservationsError(null)
     listReservations({ date }, abortController.signal)
       .then(setReservations)
-      .catch(setReservationsError);
-    return () => abortController.abort();
+      .catch(setReservationsError)
+    return () => abortController.abort()
   }
 
   return (
@@ -32,7 +32,7 @@ function Dashboard({ date }) {
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
     </main>
-  );
+  )
 }
 
-export default Dashboard;
+export default Dashboard
