@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 import { useHistory } from "react-router-dom"
-const BASE_API_URL = ""
+const BASE_API_URL = "https://localhost:5000" // "https://restaurant-reservation-api.vercel.app"
 
 export default function NewReservation() {
   const initialFormState = {

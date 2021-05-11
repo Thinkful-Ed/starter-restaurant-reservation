@@ -4,8 +4,8 @@
  * You will not need to make changes to this file.
  */
 
-require('dotenv').config();
-const path = require("path");
+require("dotenv").config()
+const path = require("path")
 
 const {
   DATABASE_URL = "postgresql://postgres@localhost/postgres",
@@ -13,7 +13,7 @@ const {
   DATABASE_URL_TEST = "postgresql://postgres@localhost/postgres",
   DATABASE_URL_PREVIEW = "postgresql://postgres@localhost/postgres",
   DEBUG,
-} = process.env;
+} = process.env
 
 module.exports = {
   development: {
@@ -64,4 +64,4 @@ module.exports = {
     },
     debug: !!DEBUG,
   },
-};
+}
