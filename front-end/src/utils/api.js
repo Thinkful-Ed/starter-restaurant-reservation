@@ -2,17 +2,17 @@
  * Defines the base URL for the API.
  * The default values is overridden by the `API_BASE_URL` environment variable.
  */
-import formatReservationDate from "./format-reservation-date";
-import formatReservationTime from "./format-reservation-date";
+import formatReservationDate from "./format-reservation-date"
+import formatReservationTime from "./format-reservation-date"
 
 const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+  process.env.REACT_APP_API_BASE_URL || "http://localhost:5000"
 
 /**
  * Defines the default headers for these functions to work with `json-server`
  */
-const headers = new Headers();
-headers.append("Content-Type", "application/json");
+const headers = new Headers()
+headers.append("Content-Type", "application/json")
 
 /**
  * Fetch `json` from the specified URL and handle error status codes and ignore `AbortError`s
@@ -31,24 +31,24 @@ headers.append("Content-Type", "application/json");
  */
 async function fetchJson(url, options, onCancel) {
   try {
-    const response = await fetch(url, options);
+    const response = await fetch(url, options)
 
     if (response.status === 204) {
-      return null;
+      return null
     }
 
-    const payload = await response.json();
+    const payload = await response.json()
 
     if (payload.error) {
-      return Promise.reject({ message: payload.error });
+      return Promise.reject({ message: payload.error })
     }
-    return payload.data;
+    return payload.data
   } catch (error) {
     if (error.name !== "AbortError") {
-      console.error(error.stack);
-      throw error;
+      console.error(error.stack)
+      throw error
     }
-    return Promise.resolve(onCancel);
+    return Promise.resolve(onCancel)
   }
 }
 
@@ -59,11 +59,12 @@ async function fetchJson(url, options, onCancel) {
  */
 
 export async function listReservations(params, signal) {
-  const url = new URL(`${API_BASE_URL}/reservations`);
+  const url = new URL(`${API_BASE_URL}/reservations`)
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
-  );
+  )
+  console.log(url)
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
-    .then(formatReservationTime);
+    .then(formatReservationTime)
 }

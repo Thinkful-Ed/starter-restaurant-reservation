@@ -1,8 +1,8 @@
+const knex = require("../db/connection")
+
 /**
  * List + listDate service for reservation resources
  */
-const knex = require("../db/connection")
-
 function list() {
   return knex("reservations").select("*")
 }

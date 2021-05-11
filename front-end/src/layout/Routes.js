@@ -22,12 +22,13 @@ function Routes() {
       <Route exact={true} path="/reservations">
         <Redirect to={"/dashboard"} />
       </Route>
-      <Route path="/dashboard">
+      <Route exact path="/dashboard">
         <Dashboard date={today()} />
       </Route>
       <Route path="/reservations/new">
         <NewReservation />
       </Route>
+
       <Route>
         <NotFound />
       </Route>
