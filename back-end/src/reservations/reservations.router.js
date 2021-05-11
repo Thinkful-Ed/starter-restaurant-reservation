@@ -1,12 +1,12 @@
 /**
- * Defines the router for reservation resources.
+ * Defines the router for reservation resources
  *
  * @type {Router}
  */
 
-const router = require("express").Router();
-const controller = require("./reservations.controller");
+const router = require("express").Router()
+const controller = require("./reservations.controller")
 
-router.route("/").get(controller.list);
+router.route("/").get(controller.list)
 
-module.exports = router;
+module.exports = router
