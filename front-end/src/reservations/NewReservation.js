@@ -28,6 +28,9 @@ export default function NewReservation() {
       .post(`${BASE_API_URL}/reservations`, formData)
       .then(history.push(`/reservations?date=${formData.reservation_date}`))
   }
+  const handleCancel = () => {
+    history.goBack()
+  }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -106,6 +109,9 @@ export default function NewReservation() {
       </div>
       <button type="submit" className="btn btn-outline-primary">
         Submit
+      </button>
+      <button onClick={handleCancel} className="btn btn-outline-primary">
+        Cancel
       </button>
     </form>
   )
