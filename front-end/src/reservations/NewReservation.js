@@ -26,7 +26,9 @@ export default function NewReservation() {
     e.preventDefault()
     axios
       .post(`${BASE_API_URL}/reservations`, formData)
-      .then(history.push(`/reservations?date=${formData.reservation_date}`))
+      // .then(console.log)
+      .then(history.push(`/dashboard?date=${formData.reservation_date}`))
+      .catch((err) => console.error(err))
   }
   const handleCancel = () => {
     history.goBack()

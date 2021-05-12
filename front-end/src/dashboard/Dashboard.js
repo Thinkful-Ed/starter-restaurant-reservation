@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { listReservations } from "../utils/api"
 import ErrorAlert from "../layout/ErrorAlert"
+import DashboardNav from "./DashboardNav"
 
 /**
  * Defines the dashboard page.
@@ -8,7 +9,7 @@ import ErrorAlert from "../layout/ErrorAlert"
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date }) {
+export default function Dashboard({ date }) {
   const [reservations, setReservations] = useState([])
   const [reservationsError, setReservationsError] = useState(null)
 
@@ -16,7 +17,7 @@ function Dashboard({ date }) {
 
   function loadDashboard() {
     const abortController = new AbortController()
-    console.log("Date: ", date)
+    // console.log("Date: ", date)
     setReservationsError(null)
     listReservations({ date }, abortController.signal)
       .then(setReservations)
@@ -43,8 +44,7 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={reservationsError} />
       {reservationsList}
+      <DashboardNav date={date} />
     </main>
   )
 }
-
-export default Dashboard
