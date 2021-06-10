@@ -118,7 +118,7 @@ describe("US-04 - Seat reservation", () => {
       test("returns 400 if capacity is not a number", async () => {
         const data = {
           table_name: "table name",
-          people: "2",
+          capacity: "2",
         };
 
         const response = await request(app)
