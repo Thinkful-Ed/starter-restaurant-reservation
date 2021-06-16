@@ -69,17 +69,17 @@ export async function listReservations(params, signal) {
 }
 
 /**
- * Saves deck to the database (public/data/db.json).
+ * Saves Reservation to the database.
  * There is no validation done on the deck object, any object will be saved.
  * @param reservation
- *  the deck to save, which must not have an `id` property
+ *  the reservation to save, which must not have an `reservation_id` property
  * @param signal
  *  optional AbortController.signal
- * @returns {Promise<deck>}
- *  a promise that resolves the saved deck, which will now have an `id` property.
+ * @returns {Promise<reservation>}
+ *  a promise that resolves the saved reservation, which will now have an `reservation_id` property.
  */
 export async function createReservation(reservation, signal) {
-  const url = `${API_BASE_URL}/new`;
+  const url = `${API_BASE_URL}/reservations`;
   const options = {
     method: "POST",
     headers,

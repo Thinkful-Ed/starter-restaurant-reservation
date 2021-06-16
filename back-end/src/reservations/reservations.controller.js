@@ -32,8 +32,8 @@ function hasOnlyValidProperties(req, res, next) {
 }
 // Create Handler for reservastions
 async function create(req, res) {
-  const data = await service.create(req.body.data);
-  res.send(201).json({ data });
+  const reservation = await service.create(req.body.data);
+  res.send(201).json({ reservation });
 }
 
 module.exports = {
