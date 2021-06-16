@@ -5,10 +5,14 @@ async function list() {
   return knex(reservations).select("*");
 }
 
-async function create() {}
+function create(newReservation) {
+  return knex(reservations)
+    .insert(newReservation, "*")
+    .then((createdRecords) => createdRecords[0]);
+}
 
 async function read() {}
 
 async function update() {}
 
-module.exports = { list };
+module.exports = { list, create };
