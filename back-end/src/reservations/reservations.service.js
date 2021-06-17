@@ -13,6 +13,4 @@ function create(newReservation) {
     .then((createdRecords) => createdRecords[0]);
 }
 
-async function update() {}
-
 module.exports = { list, create };

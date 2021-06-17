@@ -1,7 +1,6 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
-// reservation validater
 const VALID_FIELDS = [
   "first_name",
   "last_name",
@@ -73,11 +72,5 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [
-    asyncErrorBoundary(isValidReservation),
-    // asyncErrorBoundary(isValidTime),
-    // asyncErrorBoundary(isValidDate),
-    // asyncErrorBoundary(isValidNumOfPeople),
-    asyncErrorBoundary(create),
-  ],
+  create: [asyncErrorBoundary(isValidReservation), asyncErrorBoundary(create)],
 };
