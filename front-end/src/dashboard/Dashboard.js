@@ -60,18 +60,7 @@ function Dashboard({ date }) {
       <main>
         <h1>Dashboard</h1>
         <div className="d-md-flex mb-3">
-          <div className="d-flex">
-            <button type="submit" className="btn btn-primary ml-1 mt-2">
-              Today
-            </button>
-            <button type="submit" className="btn btn-danger ml-1 mt-2">
-              Tomorrow
-            </button>
-            <button type="submit" className="btn btn-danger ml-1 mt-2">
-              Yesterday
-            </button>
-          </div>
-          {/* Button Group */}
+          <h4 className="mb-0">Reservations for date</h4>
         </div>
         <ErrorAlert error={reservationsError} />
         <div className="card-columns">{reservationCards}</div>
