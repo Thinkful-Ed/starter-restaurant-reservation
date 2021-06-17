@@ -2,6 +2,7 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
+
 /**
  * Defines the menu for this application.
  *
@@ -37,7 +38,6 @@ function Menu() {
           <li className="nav-item">
             <Link className="nav-link" to="/reservations/new">
               <span className="oi oi-plus" />
-              &nbsp;New Reservation
             </Link>
           </li>
           <li className="nav-item">
