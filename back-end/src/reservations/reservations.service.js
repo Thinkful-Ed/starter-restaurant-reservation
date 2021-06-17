@@ -1,8 +1,10 @@
 const knex = require("../db/connection");
 const reservations = "reservations";
 
-async function list() {
-  return knex(reservations).select("*");
+async function list(reservation_date) {
+  return knex(reservations)
+    .where({ reservation_date })
+    .orderBy("reservation_time", "asc");
 }
 
 function create(newReservation) {
@@ -10,8 +12,6 @@ function create(newReservation) {
     .insert(newReservation, "*")
     .then((createdRecords) => createdRecords[0]);
 }
-
-async function read() {}
 
 async function update() {}
 
