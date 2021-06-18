@@ -1,5 +1,4 @@
-exports.seed = function (knex) {
-  return knex("reservations").insert([
+[
   {
     "first_name": "Rick",
     "last_name": "Sanchez",
@@ -49,6 +48,15 @@ exports.seed = function (knex) {
     "people": 2,
     "created_at": "2020-12-10T08:31:32.326Z",
     "updated_at": "2020-12-10T08:31:32.326Z"
+  },
+  {
+    "first_name": "Anthfsdfsdfdsfony",
+    "last_name": "Charbfdfsdfdsfoneau",
+    "mobile_number": "622-646-8897",
+    "reservation_date": "2021-06-18",
+    "reservation_time": "14:00",
+    "people": 5,
+    "created_at": "2020-12-10T08:31:32.326Z",
+    "updated_at": "2020-12-10T08:31:32.326Z"
   }
-])
-}
+]

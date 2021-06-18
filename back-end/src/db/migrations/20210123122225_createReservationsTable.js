@@ -4,8 +4,8 @@ exports.up = function (knex) {
     table.string("first_name").notNullable()
     table.string("last_name").notNullable()
     table.string("mobile_number").notNullable()
-    table.string("reservation_date")
-    table.string("reservation_time")
+    table.date("reservation_date")
+    table.time("reservation_time")
     table.integer("people")
     table.timestamps(true, true)
   });
