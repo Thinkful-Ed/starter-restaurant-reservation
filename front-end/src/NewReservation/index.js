@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+
 const DEFAULT_RESERVATION_STATE = {
   first_name: "",
   last_name: "",
@@ -76,6 +78,7 @@ function NewReservation() {
             />
           </div>
           {/* Form input */}
+
           <div className="col-md">
             <label htmlFor="last_name">Last Name</label>
             <input
@@ -176,7 +179,6 @@ function NewReservation() {
         {/* Button Group */}
       </form>
     </div>
-
     /* Container */
   );
 }
