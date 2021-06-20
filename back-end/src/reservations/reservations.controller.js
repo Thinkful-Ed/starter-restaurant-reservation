@@ -10,7 +10,7 @@ const VALID_FIELDS = [
   "people",
 ];
 
-function isValidReservation(req, res, next) {
+async function hasValidFields(req, res, next) {
   const { data } = req.body;
   // returns 400 if data is missing
   if (!data) {
@@ -19,8 +19,6 @@ function isValidReservation(req, res, next) {
       message: "request recieved is empty.",
     });
   }
-  const { people, reservation_date, reservation_time } = data;
-
   // returns 400 if any field is empty or missing
   for (const field of VALID_FIELDS) {
     if (!data[field]) {
@@ -30,6 +28,11 @@ function isValidReservation(req, res, next) {
       });
     }
   }
+  next();
+}
+
+async function hasValidDateTime(req, res, next) {
+  const { reservation_date, reservation_time, people } = req.body.data;
   // returns 400 if reservation_time is not a time that matches 00:00 format
   if (!reservation_time.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)) {
     return next({
@@ -44,6 +47,12 @@ function isValidReservation(req, res, next) {
       message: "reservation_date is not valid date.",
     });
   }
+
+  next();
+}
+
+async function hasValidNumberOfPeople(req, res, next) {
+  const { people } = req.body.data;
   // returns 400 if people is not a number or is less than or equal to zero
   if (typeof people !== "number" || people <= 0) {
     return next({
@@ -51,10 +60,8 @@ function isValidReservation(req, res, next) {
       message: "number of people is not a valid number.",
     });
   }
-
   next();
 }
-
 // List handler for reservation resources
 async function list(req, res) {
   const { date } = req.query;
@@ -72,5 +79,10 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [asyncErrorBoundary(isValidReservation), asyncErrorBoundary(create)],
+  create: [
+    asyncErrorBoundary(hasValidFields),
+    asyncErrorBoundary(hasValidNumberOfPeople),
+    asyncErrorBoundary(hasValidDateTime),
+    asyncErrorBoundary(create),
+  ],
 };
