@@ -1,6 +1,6 @@
 import { useHistory } from "react-router-dom";
 import { today, previous, next } from "../utils/date-time";
-import ReservationCards from "./ReservationCards";
+import ReservationTable from "./ReservationTable";
 
 function ReservationList({ date, reservations }) {
   const history = useHistory();
@@ -42,18 +42,32 @@ function ReservationList({ date, reservations }) {
     );
   };
 
-  const active = reservations.map((reservation) => {
+  const tableRows = reservations.map((reservation) => {
     return (
-      <ReservationCards
+      <ReservationTable
         key={reservation.reservation_id}
         reservation={reservation}
       />
     );
   });
+
   return (
     <div>
       <div className="mb-3">{controlButtons()}</div>
-      <div className="card-columns">{active}</div>
+      <table className="table table-hover table-responsive">
+        <thead className="thead-light">
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col">First name</th>
+            <th scope="col">Last name</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Party of</th>
+          </tr>
+        </thead>
+        {reservations.length ? tableRows : `No Reservations for ${date}`}
+      </table>
     </div>
   );
 }

@@ -29,16 +29,14 @@ function Dashboard({ date }) {
   }
 
   return (
-    reservations.length && (
-      <main>
-        <h1>Dashboard</h1>
-        <div className="d-md-flex mb-3">
-          <h4 className="mb-0">Reservations for: {date}</h4>
-        </div>
-        <ReservationList date={date} reservations={reservations} />
-        <ErrorAlert error={reservationsError} />
-      </main>
-    )
+    <main>
+      <h1>Dashboard</h1>
+      <div className="d-md-flex mb-3">
+        <h4 className="mb-0">Reservations for: {date}</h4>
+      </div>
+      <ReservationList date={date} reservations={reservations} />
+      <ErrorAlert error={reservationsError} />
+    </main>
   );
 }
 
