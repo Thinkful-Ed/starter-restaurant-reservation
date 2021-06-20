@@ -53,7 +53,7 @@ function ReservationList({ date, reservations }) {
   return (
     <div>
       <div className="mb-3">{controlButtons()}</div>
-      <div>{active}</div>
+      <div className="card-columns">{active}</div>
     </div>
   );
 }
