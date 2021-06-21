@@ -45,6 +45,9 @@
     "test:e2e": "npm run test:e2e --prefix ./front-end",
     "test:frontend:watch": "npm test --prefix ./front-end"
   },
+  "engines": {
+    "node": "14.x"
+  },
   "keywords": [],
   "author": "Thinkful, Inc.",
   "license": "UNLICENSED"
