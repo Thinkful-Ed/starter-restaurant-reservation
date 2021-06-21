@@ -15,8 +15,6 @@ const {
   DEBUG,
 } = process.env;
 
-console.log(DATABASE_URL);
-
 module.exports = {
   development: {
     client: "postgresql",
@@ -65,5 +63,6 @@ module.exports = {
       directory: path.join(__dirname, "src", "db", "seeds"),
     },
     debug: !!DEBUG,
+    ssl: true,
   },
 };
