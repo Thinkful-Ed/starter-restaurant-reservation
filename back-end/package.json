@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation",
+    "url": "https://github.com/ryandavidmercado/Table-It",
     "directory": "/back-end"
   },
   "scripts": {
