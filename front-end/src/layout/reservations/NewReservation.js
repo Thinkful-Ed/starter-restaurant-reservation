@@ -1,74 +1,105 @@
 import { Link } from "react-router-dom";
-
+import { useState } from "react";
+import { useHistory } from "react-router-dom";
+import ErrorAlert from "../ErrorAlert";
 
 const NewReservation = () => {
+
+  const [reservationsError, setReservationsError] = useState(null);
+
+  const [newRes, setNewRes] = useState({first_name: "",
+                                        last_name: "",
+                                        mobile_number: "",
+                                        reservation_date: "",
+                                        reservation_time: "",
+                                        people: ""
+                                      })
+
+  const history = useHistory();
+
+  function handleChange(event) {
+    setNewRes({...newRes, 
+               [event.target.name]: event.target.value})
+  }
+
+  async function submitHandler(e) {
+    e.preventDefault();
+
+  try {
+    const response = await fetch('http://localhost:5000/reservations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({data: newRes})
+    })
+      await response.json();
+      history.push(`/dashboard?date=${newRes.reservation_date}`)
+  }
+  catch(error) {
+    setReservationsError(error)
+  }
+      
+  }
+
   return (
-    <form>
-      <label htmlFor="name">First Name</label>
+    <main>
+    <ErrorAlert error={reservationsError} />
+    <form onSubmit={submitHandler}>
+      <label htmlFor="first_name">First Name</label>
       <input
         type="text"
         className="form-control"
-        id="name"
-        name="name"
-        //value
-        aria-describedby="emailHelp"
+        id="first_name"
+        name="first_name"
         placeholder="First Name"
-        onChange
+        onChange={handleChange}
       ></input>
-      <label htmlFor="description">Last Name</label>
+      <label htmlFor="last_name">Last Name</label>
       <input
         type="text"
         className="form-control"
-        id="name"
-        name="name"
-        //value
-        aria-describedby="emailHelp"
+        id="last_name"
+        name="last_name"
         placeholder="Last Name"
-        onChange
+        onChange={handleChange}
       ></input>
-      <label htmlFor="description">Mobile Number</label>
+      <label htmlFor="mobile_number">Mobile Number</label>
       <input
-        type="text"
+        type="tel"
+        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
         className="form-control"
-        id="name"
-        name="name"
-        //value
-        aria-describedby="emailHelp"
+        id="mobile_number"
+        name="mobile_number"
         placeholder="Mobile Number"
-        onChange
+        onChange={handleChange}
       ></input>
-      <label htmlFor="description">Reservation Date</label>
+      <label htmlFor="reservation_date">Reservation Date</label>
       <input
-        type="text"
+        type="date"
         className="form-control"
-        id="name"
-        name="name"
-        //value
-        aria-describedby="emailHelp"
+        id="reservation_date"
+        name="reservation_date"
         placeholder="Reservation Date"
-        onChange
+        onChange={handleChange}
       ></input>
-      <label htmlFor="description">Reservation Time</label>
+      <label htmlFor="reservation_time">Reservation Time</label>
       <input
-        type="text"
+        type="time"
         className="form-control"
-        id="name"
-        name="name"
-        //value
-        aria-describedby="emailHelp"
+        id="reservation_time"
+        name="reservation_time"
         placeholder="Reservation Time"
-        onChange
+        onChange={handleChange}
       ></input>
-      <label htmlFor="description">Number of People</label>
+      <label htmlFor="people">Number of People</label>
       <input
         type="text"
         className="form-control"
-        id="name"
-        name="name"
-        //value
-        aria-describedby="emailHelp"
+        id="people"
+        name="people"
         placeholder="Number of People"
-        onChange
+        onChange={handleChange}
       ></input>
       <Link to="/" type="button" className="btn btn-secondary">
         Cancel
@@ -77,6 +108,7 @@ const NewReservation = () => {
         Submit
       </button>
     </form>
+    </main>
   );
 };
 

@@ -1,13 +1,13 @@
 const knex = require("../db/connection");
 
 
-function read(reservation) {
-
-}
 function create(reservation) {
-    return knex("reservations")
-    .insert(reservation);
+    return knex("reservations as r")
+    .insert(reservation)
+    .returning("*");
 }
+
+
 function list(reservation_date) {
         return knex("reservations")
         .where({reservation_date})

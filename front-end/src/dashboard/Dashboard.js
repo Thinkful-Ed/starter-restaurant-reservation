@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import useQuery from "../utils/useQuery";
 import { previous, today, next } from "../utils/date-time";
 import { useHistory } from "react-router-dom"
 
@@ -14,9 +13,6 @@ import { useHistory } from "react-router-dom"
 function Dashboard({ date }) {
 
 const history = useHistory();
-
-const query = useQuery().get("date");
- if (query) date = query;;
 
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
@@ -75,7 +71,7 @@ const query = useQuery().get("date");
 
 
 
-  return ( reservations.length && (
+  return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
@@ -83,21 +79,21 @@ const query = useQuery().get("date");
       </div>
       <ErrorAlert error={reservationsError} />
       {cards(reservations)}
-      <div class="container">
-  <div class="row mt-5">
-    <div class="col-md">
-    <button type="button" class="btn btn-outline-dark" onClick={previousDate}>Previous</button>
+      <div className="container">
+  <div className="row mt-5">
+    <div className="col-md mt-2">
+    <button type="button" className="btn btn-outline-dark" onClick={previousDate}>Previous</button>
     </div>
-    <div class="col-md">
-    <button type="button" class="btn btn-outline-dark" onClick={todayDate}>Today</button>
+    <div className="col-md mt-2">
+    <button type="button" className="btn btn-outline-dark" onClick={todayDate}>Today</button>
     </div>
-    <div class="col-md">
-    <button type="button" class="btn btn-outline-dark" onClick={nextDate}>Next</button>
+    <div className="col-md mt-2">
+    <button type="button" className="btn btn-outline-dark" onClick={nextDate}>Next</button>
     </div>
   </div>
 </div>
     </main>
-  ))
+  )
 }
 
 export default Dashboard;
