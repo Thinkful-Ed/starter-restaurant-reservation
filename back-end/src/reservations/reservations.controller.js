@@ -30,6 +30,39 @@ function isValidReservation(req, res, next) {
   next();
 }
 
+function isPartyValid(req, res, next) {
+  const { people } = req.body.data;
+  if ((typeof(people) !== "number") || (people === 0)) {
+    return next({
+      status: 400,
+      message: `Number of people must be a number greater than zero.`
+    });
+  }
+  next();
+}
+
+function dateValidation(req, res, next) {
+  const { reservation_date } = req.body.data; 
+  if (reservation_date.match(/^\d{4}-\d{2}-\d{2}$/) === null) {
+    return next({
+      status: 400,
+      message: `The reservation_date must be in YYYY-MM-DD format.`
+    })
+  }
+  next();
+}
+
+function timeValidation(req, res, next) {
+    const { reservation_time } = req.body.data; 
+    if (reservation_time.match(/^\d{1,2}:\d{2}([ap]m)?$/) === null) {
+      return next({
+        status: 400,
+        message: `The reservation_time must be in HH:MM format.`
+      })
+    }
+    next();
+}
+
 async function create(req, res) {
   let reservation = req.body.data;
   let result = await reservationsService.create(reservation);
@@ -48,5 +81,5 @@ async function list(req, res) {
 }
 module.exports = {
   list: asyncErrorBoundary(list), 
-  create: [isValidReservation, asyncErrorBoundary(create)]
+  create: [isValidReservation, isPartyValid, dateValidation, timeValidation, asyncErrorBoundary(create)]
 };
