@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
-import ErrorAlert from "../layout/ErrorAlert";
 import { previous, today, next } from "../utils/date-time";
 import { useHistory } from "react-router-dom"
+import ErrorAlert from "../layout/ErrorAlert";
 
 /**
  * Defines the dashboard page.
@@ -76,8 +76,8 @@ const history = useHistory();
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {date}</h4>
+        <ErrorAlert error={reservationsError} />
       </div>
-      <ErrorAlert error={reservationsError} />
       {cards(reservations)}
       <div className="container">
   <div className="row mt-5">
