@@ -49,6 +49,22 @@ function dateValidation(req, res, next) {
       message: `The reservation_date must be in YYYY-MM-DD format.`
     })
   }
+  const date = new Date(reservation_date + "T12:00:00")
+  const day = date.getDay();
+  if (day === 2) {
+    return next({
+      status: 400,
+      message: `Restaurant is closed on Tuesdays.`
+    })
+  }
+  const current = Date.now();
+  const selected = Date.parse(reservation_date);
+  if (current - selected >= 0) {
+    return next({
+      status: 400,
+      message: `Reservation must be in the future.`
+    })
+  }
   next();
 }
 
@@ -62,6 +78,7 @@ function timeValidation(req, res, next) {
     }
     next();
 }
+
 
 async function create(req, res) {
   let reservation = req.body.data;
