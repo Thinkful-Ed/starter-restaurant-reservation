@@ -61,8 +61,8 @@ const history = useHistory();
     </tr>
   </thead>
   <tbody>
-  {reservations.filter(({ reservation_date }) => reservation_date === date).map(({first_name, last_name, mobile_number, reservation_time, people}) => (
-            <tr>
+  {reservations.filter(({ reservation_date }) => reservation_date === date).map(({reservation_id, first_name, last_name, mobile_number, reservation_time, people}) => (
+            <tr key={reservation_id}>
             <td>{last_name}</td>
             <td>{first_name}</td>
             <td>{mobile_number}</td>

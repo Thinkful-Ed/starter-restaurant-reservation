@@ -41,7 +41,7 @@ function isPartyValid(req, res, next) {
   next();
 }
 
-function dateValidation(req, res, next) {
+function dateFormatValidation(req, res, next) {
   const { reservation_date } = req.body.data; 
   if (reservation_date.match(/^\d{4}-\d{2}-\d{2}$/) === null) {
     return next({
@@ -49,20 +49,31 @@ function dateValidation(req, res, next) {
       message: `The reservation_date must be in YYYY-MM-DD format.`
     })
   }
+  next();
+}
+
+  function isNotTuesday(req, res, next) {
+  const { reservation_date } = req.body.data;
   const date = new Date(reservation_date + "T12:00:00")
   const day = date.getDay();
+  console.log(day)
   if (day === 2) {
     return next({
       status: 400,
-      message: `Restaurant is closed on Tuesdays.`
+      message: `Reservation must be in the future. Restaurant is closed on Tuesdays.`
     })
   }
+  next();
+}
+
+function isFutureDate(req, res, next) {
+  const { reservation_date } = req.body.data;
   const current = Date.now();
   const selected = Date.parse(reservation_date);
   if (current - selected >= 0) {
     return next({
       status: 400,
-      message: `Reservation must be in the future.`
+      message: `Reservation must be in the future. Restaurant is closed on Tuesdays.`
     })
   }
   next();
@@ -96,7 +107,8 @@ async function list(req, res) {
     data: reservationsByDate,
   });
 }
+
 module.exports = {
   list: asyncErrorBoundary(list), 
-  create: [isValidReservation, isPartyValid, dateValidation, timeValidation, asyncErrorBoundary(create)]
-};
+  create: [isValidReservation, isPartyValid, dateFormatValidation, isNotTuesday,  isFutureDate, timeValidation, asyncErrorBoundary(create)]
+}
