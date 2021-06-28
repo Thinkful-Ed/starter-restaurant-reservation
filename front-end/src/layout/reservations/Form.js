@@ -35,7 +35,7 @@ const Form = () => {
         e.preventDefault();
         const abortController = new AbortController();
         setReservationsError(null);
-        createReservation(newRes, abortController.signal)
+        createReservation({...newRes, people: parseInt(newRes.people)}, abortController.signal)
           .then(() => {
             history.push(`/dashboard?date=${reservation_date}`);
           })

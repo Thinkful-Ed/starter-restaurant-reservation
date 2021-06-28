@@ -32,7 +32,7 @@ function isValidReservation(req, res, next) {
 
 function isPartyValid(req, res, next) {
   const { people } = req.body.data;
-  if (!(typeof(people) === "number") || (people <= 0)) {
+  if (!(typeof(people) === "number") || people <= 0) {
     return next({
       status: 400,
       message: `Number of people must be a number greater than zero.`
