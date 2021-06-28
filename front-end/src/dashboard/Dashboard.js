@@ -45,25 +45,34 @@ const history = useHistory();
   }
 
   function cards(reservations) {
-    //filter reservations by date
-    
-    //sort reservations ascending by time
+
 
     return (
       <div className="row g-2">
-      {reservations.filter(({ reservation_date }) => reservation_date === date).map(({reservation_id, first_name, last_name, mobile_number, reservation_date, reservation_time, people}) => (
-       <div className="col-md" key = {reservation_id}>
-        <div className="card" style={{width: "18rem"}}>
-        <div className="card-body">
-          <h5 className="card-title">{reservation_time}</h5>
-          <h4 className="card-text">{last_name}, {first_name}</h4>
-          <h6 className="card-text">Party of {people}</h6>
-          <h6 className="card-text">{mobile_number}</h6>
-          <p className="card-text">{reservation_date}</p>
-        </div>
-      </div>
-      </div>
+        <table className="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Last Name</th>
+      <th scope="col">First Name</th>
+      <th scope="col">Mobile Number</th>
+      <th scope="col">Time</th>
+      <th scope="col">Party Of</th>
+
+    </tr>
+  </thead>
+  <tbody>
+  {reservations.filter(({ reservation_date }) => reservation_date === date).map(({first_name, last_name, mobile_number, reservation_time, people}) => (
+            <tr>
+            <td>{last_name}</td>
+            <td>{first_name}</td>
+            <td>{mobile_number}</td>
+            <td>{reservation_time}</td>
+            <td>{people}</td>
+          </tr>
     ))}
+  </tbody>
+</table>
+
       </div> 
     )
   }

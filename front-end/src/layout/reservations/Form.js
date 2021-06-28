@@ -1,7 +1,7 @@
 import { createReservation } from "../../utils/api";
 import { useState } from "react";
 import ErrorAlert from "../ErrorAlert";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const Form = () => {
 
@@ -30,6 +30,10 @@ const Form = () => {
     people
   } = newRes;
 
+  
+  function cancelHandler() {
+    history.goBack();
+  }
 
     function submitHandler(e) {
         e.preventDefault();
@@ -115,9 +119,9 @@ const Form = () => {
         placeholder="Number of People"
         onChange={handleChange}
       ></input>
-      <Link to="/" type="button" className="btn btn-secondary">
+      <button className="btn btn-secondary" onClick={cancelHandler}>
         Cancel
-      </Link>
+      </button>
       <button type="submit" className="btn btn-primary">
         Submit
       </button>
