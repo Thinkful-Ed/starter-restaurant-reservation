@@ -56,7 +56,6 @@ function dateFormatValidation(req, res, next) {
   const { reservation_date } = req.body.data;
   const date = new Date(reservation_date + "T12:00:00")
   const day = date.getDay();
-  console.log(day)
   if (day === 2) {
     return next({
       status: 400,
@@ -79,7 +78,7 @@ function isFutureDate(req, res, next) {
   next();
 }
 
-function timeValidation(req, res, next) {
+function timeFormatValidation(req, res, next) {
     const { reservation_time } = req.body.data; 
     if (reservation_time.match(/^\d{1,2}:\d{2}([ap]m)?$/) === null) {
       return next({
@@ -88,6 +87,53 @@ function timeValidation(req, res, next) {
       })
     }
     next();
+}
+
+function isAfterOpen(req, res, next) {
+  const { reservation_date, reservation_time } = req.body.data;
+  const momentOfOpening = new Date(`${reservation_date}T10:30`)
+  const openingTime = momentOfOpening.getTime()
+  const momentOfReservation = new Date(`${reservation_date}T${reservation_time}`);
+  const reservationTime = momentOfReservation.getTime();
+  const difference = reservationTime - openingTime
+  if (difference < 0) {
+    return next({
+      status: 400,
+      message: `The reservation_time must be at or after 10:30AM.`
+    })
+  }
+  next();
+}
+
+function isBeforeClose(req, res, next) {
+  const { reservation_date, reservation_time } = req.body.data;
+  const momentOfClosing = new Date(`${reservation_date}T21:30`)
+  const closingTime = momentOfClosing.getTime()
+  const momentOfReservation = new Date(`${reservation_date}T${reservation_time}`);
+  const reservationTime = momentOfReservation.getTime();
+  const difference = closingTime - reservationTime;
+  if (difference < 0) {
+    return next({
+      status: 400,
+      message: `The reservation_time must be at or before 09:30PM.`
+    })
+  }
+  next();
+}
+
+function isFutureTime(req, res, next) {
+  const { reservation_date, reservation_time } = req.body.data;
+  const presentMoment = Date.now();
+  const reservationMoment = new Date(`${reservation_date}T${reservation_time}`)
+  const reservationTime = reservationMoment.getTime();
+  const difference = presentMoment - reservationTime;
+  if (difference >= 0) { 
+    return next({
+      status: 400,
+      message: `Reservation time must be in the future.`
+    })
+  }
+  next();
 }
 
 
@@ -110,5 +156,5 @@ async function list(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list), 
-  create: [isValidReservation, isPartyValid, dateFormatValidation, isNotTuesday,  isFutureDate, timeValidation, asyncErrorBoundary(create)]
+  create: [isValidReservation, isPartyValid, dateFormatValidation, isNotTuesday, isFutureDate,  timeFormatValidation, isAfterOpen, isBeforeClose, isFutureTime, asyncErrorBoundary(create)]
 }
