@@ -1,6 +1,11 @@
 import { useState } from "react";
-import ErrorAlert from "../layout/ErrorAlert";
 import { useHistory } from "react-router-dom";
+import { notTuesday, isFuture } from "../utils/validation/validateDateTime";
+import { createReservation } from "../utils/api";
+
+import ErrorAlert from "../layout/ErrorAlert";
+
+const dayjs = require("dayjs");
 
 function NewReservation() {
   const [error, setError] = useState(null);
@@ -14,17 +19,42 @@ function NewReservation() {
   });
 
   const history = useHistory();
-
   const handleChange = (e) => {
     setForm((form) => ({
       ...form,
       [e.target.name]: e.target.value,
     }));
   };
+  const validateDateTime = () => {
+    setError(null);
+    const dateTime = dayjs(
+      `${form.reservation_date} ${form.reservation_time}`,
+      "YYYY-MM-DD hh:mm"
+    );
+
+    const strikes = [];
+    if (!notTuesday(dateTime))
+      strikes.push("Reservations cannot be made for a Tuesday.");
+    if (!isFuture(dateTime))
+      strikes.push("Reservations must be made for a future time and/or date.");
+
+    if (strikes.length) setError({ message: strikes.join("\n") });
+    return strikes.length ? true : false;
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const hasError = validateDateTime();
+    if (hasError) return;
+
+    createReservation(form).then((reservation) => {
+      history.push(`/dashboard?date=${reservation.reservation_date}`);
+    });
+  };
 
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="first_name">
           First Name
           <input
