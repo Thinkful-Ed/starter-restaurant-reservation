@@ -1,15 +1,19 @@
+import { createTable } from "../../utils/api";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import ErrorAlert from "../ErrorAlert";
 
 const Form = () => {
 
 
     const history = useHistory(); 
 
+    const [tableError, setTableError] = useState(null);
+
     const [table, setTable] = useState({
                                 table_name: "",
                                 capacity: ""
-                              })
+                              });
 
     const { table_name, capacity } = table;
 
@@ -23,11 +27,21 @@ const Form = () => {
         history.goBack();
     }
 
-    function handleSubmit() {
-        history.push(`/dashboard`)
-    }
+    function handleSubmit(e) {
+            e.preventDefault();
+            const abortController = new AbortController();
+            setTableError(null);
+            createTable({...table, capacity: parseInt(table.capacity)}, abortController.signal)
+              .then(() => {
+                history.push(`/dashboard`);
+              })
+              .catch(setTableError);
+            return () => abortController.abort();
+        }
 
     return ( 
+        <div>
+        <ErrorAlert error={tableError} />
         <form onSubmit={handleSubmit}>
 
             <label htmlFor="table_name">Table Name</label>
@@ -63,6 +77,7 @@ const Form = () => {
            </button>
 
         </form>
+        </div>
      );
 }
  

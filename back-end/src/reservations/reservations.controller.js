@@ -2,6 +2,15 @@ const reservationsService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 
 
+async function reservationExists(req, res, next) {
+  const { reservation_id } = req.params;
+  const reservation = await reservationsService.read(reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation
+    return next();
+  }
+  next({ status: 404, message: `Reservation cannot be found.` });
+}
 //validation for empty fields
 
 function isValidReservation(req, res, next) {
@@ -136,6 +145,10 @@ function isFutureTime(req, res, next) {
   next();
 }
 
+function read(req, res) {
+  res.json({ data: res.locals.reservation })
+}
+
 
 async function create(req, res) {
   let reservation = req.body.data;
@@ -155,6 +168,7 @@ async function list(req, res) {
 }
 
 module.exports = {
+  read: [asyncErrorBoundary(reservationExists), read],
   list: asyncErrorBoundary(list), 
   create: [isValidReservation, isPartyValid, dateFormatValidation, isNotTuesday, isFutureDate,  timeFormatValidation, isAfterOpen, isBeforeClose, isFutureTime, asyncErrorBoundary(create)]
 }

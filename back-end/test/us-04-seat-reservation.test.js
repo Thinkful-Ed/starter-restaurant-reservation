@@ -149,10 +149,9 @@ describe("US-04 - Seat reservation", () => {
 
     describe("GET /tables", () => {
       test("returns all tables sorted by table name", async () => {
-        const response = await request(app)
-          .get("/tables")
-          .set("Accept", "application/json");
-
+       const response = await request(app)
+         .get("/tables")
+         .set("Accept", "application/json");
         expect(response.body.error).toBeUndefined();
         expect(response.body.data).toHaveLength(4);
         expect(response.body.data[0].table_name).toBe("#1");

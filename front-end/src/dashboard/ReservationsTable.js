@@ -21,7 +21,7 @@ const ReservationsTable = ({ date }) => {
       return () => abortController.abort();
     }
 
-    function cards(reservations) {
+    function renderTable (reservations) {
 
 
         return (
@@ -58,7 +58,7 @@ const ReservationsTable = ({ date }) => {
     return ( 
         <div>
         <ErrorAlert error={reservationsError}/>
-        {cards(reservations)}
+        {renderTable(reservations)}
         </div>
      );
 }

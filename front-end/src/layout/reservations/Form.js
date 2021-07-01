@@ -31,11 +31,11 @@ const Form = () => {
   } = newRes;
 
   
-  function cancelHandler() {
+  function handleCancel() {
     history.goBack();
   }
 
-    function submitHandler(e) {
+    function handleSubmit(e) {
         e.preventDefault();
         const abortController = new AbortController();
         setReservationsError(null);
@@ -56,7 +56,7 @@ const Form = () => {
     return (
         <div>
         <ErrorAlert error={reservationsError} />
-        <form onSubmit={submitHandler}>
+        <form onSubmit={handleSubmit}>
       <label htmlFor="first_name">First Name</label>
       <input
         type="text"
@@ -119,7 +119,7 @@ const Form = () => {
         placeholder="Number of People"
         onChange={handleChange}
       ></input>
-      <button className="btn btn-secondary" onClick={cancelHandler}>
+      <button className="btn btn-secondary" onClick={handleCancel}>
         Cancel
       </button>
       <button type="submit" className="btn btn-primary">

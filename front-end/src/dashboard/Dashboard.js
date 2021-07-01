@@ -1,6 +1,7 @@
 import { previous, today, next } from "../utils/date-time";
 import { useHistory } from "react-router-dom"
 import ReservationsTable from "./ReservationsTable";
+import TablesTable from "./TablesTable"
 
 /**
  * Defines the dashboard page.
@@ -39,6 +40,7 @@ const history = useHistory();
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
       <ReservationsTable date={date}/>
+      <TablesTable />
       <div className="container">
   <div className="row mt-5">
     <div className="col-md mt-2">

@@ -1,8 +1,7 @@
 const reservationsData = require("./00-reservations.json");
 exports.seed = function (knex, Promise) {
-  // Deletes ALL existing entries
-  return knex("reservations")
-    .del()
+  return knex
+    .raw("TRUNCATE TABLE reservations RESTART IDENTITY CASCADE")
     .then(function () {
       // Inserts seed entries
       return knex("reservations").insert(reservationsData);
