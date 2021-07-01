@@ -47,9 +47,11 @@ function NewReservation() {
     const hasError = validateDateTime();
     if (hasError) return;
 
-    createReservation(form).then((reservation) => {
-      history.push(`/dashboard?date=${reservation.reservation_date}`);
-    });
+    createReservation(form)
+      .then((reservation) => {
+        history.push(`/dashboard?date=${reservation.reservation_date}`);
+      })
+      .catch(setError);
   };
 
   return (
