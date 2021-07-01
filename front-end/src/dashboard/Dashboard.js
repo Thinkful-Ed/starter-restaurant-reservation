@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 const dayjs = require("dayjs");
@@ -13,7 +13,11 @@ const dayjs = require("dayjs");
 function Dashboard() {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const { date = dayjs().format("YYYY-MM-DD") } = useParams();
+  const location = useLocation();
+  const date =
+    new URLSearchParams(location.search).get("date") ||
+    dayjs().format("YYYY-MM-DD");
+  console.log(date);
 
   useEffect(loadDashboard, [date]);
 
