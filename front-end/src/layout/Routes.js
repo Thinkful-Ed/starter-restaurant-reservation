@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 
-import Dashboard from "../dashboard/Dashboard";
-import NotFound from "./NotFound";
-
 import { today } from "../utils/date-time";
 import { listReservations, listTables } from "../utils/api";
 import useQuery from "../utils/useQuery";
 
+import Dashboard from "../dashboard/Dashboard";
+import NotFound from "./NotFound";
 import NewReservation from "../reservations/NewReservation";
 import SeatReservation from "../reservations/SeatReservation";
 import NewTable from "../tables/NewTable";
+import Search from "../search/Search";
+
 
 /**
  * Defines all the routes for the application.
@@ -41,8 +42,7 @@ function Routes() {
       .then(setReservations)
       .catch(setReservationsError);
 
-
-      // Error ? setTablesError, check Dashboards.js
+    // Error ? setTablesError, check Dashboards.js
 
     listTables(abortController.signal)
       .then((tables) =>
@@ -76,10 +76,8 @@ function Routes() {
       </Route>
 
       <Route path="/tables/new">
-				<NewTable 
-					loadDashboard={loadDashboard}
-				/>
-			</Route>
+        <NewTable loadDashboard={loadDashboard} />
+      </Route>
 
       <Route path="/dashboard">
         <Dashboard
@@ -90,6 +88,10 @@ function Routes() {
           tablesError={tablesError}
           loadDashboard={loadDashboard}
         />
+      </Route>
+
+      <Route path="/search">
+        <Search />
       </Route>
 
       <Route>
