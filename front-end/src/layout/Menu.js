@@ -27,7 +27,7 @@ function Menu() {
               <span className="oi oi-dashboard" />
               &nbsp;Dashboard
             </Link>
-          </li>
+          </li> 
           <li className="nav-item">
             <Link className="nav-link" to="/search">
               <span className="oi oi-magnifying-glass" />
