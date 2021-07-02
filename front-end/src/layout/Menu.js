@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Link } from "react-router-dom";
 
 /**
@@ -23,11 +22,11 @@ function Menu() {
         <hr className="sidebar-divider my-0" />
         <ul className="nav navbar-nav text-light" id="accordionSidebar">
           <li className="nav-item">
-            <Link className="nav-link" to="/dashboard">
+            <Link className="nav-link" to={`/dashboard`}>
               <span className="oi oi-dashboard" />
               &nbsp;Dashboard
             </Link>
-          </li> 
+          </li>
           <li className="nav-item">
             <Link className="nav-link" to="/search">
               <span className="oi oi-magnifying-glass" />
