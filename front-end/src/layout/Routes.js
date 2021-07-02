@@ -31,11 +31,6 @@ function Routes() {
 
 	useEffect(loadDashboard, [date]);
 
-
-
-
-
-
   function loadDashboard() {
     const abortController = new AbortController();
 
