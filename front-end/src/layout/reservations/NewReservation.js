@@ -37,10 +37,19 @@ function NewReservation() {
       history.goBack();
   }
 
+  function Tuesday(){
+    const date = new Date(reservation.reservation_date);
+    const day = date.getDay();
+    if ( day === 2 ){
+      
+    }
+  }
+
   function submitHandler(event){
       event.preventDefault();
       reservation.mobile_number = mobile.replace(/[^0-9]/g,"");
       reservation.people = Number(reservation.people);
+      console.log(reservation.reservation_date);
       createReservation(reservation)
         .then( () => history.push(`/dashboard?date=${reservation.reservation_date}`) )
         .catch(setCreateError);

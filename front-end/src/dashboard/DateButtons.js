@@ -26,7 +26,7 @@ export default function DateButtons({ date }){
                 </Link>
                 <Link to={`/dashboard?date=${next(date)}`} type="button" className="btn btn-primary ">
                     Next&nbsp;
-                    <span class="oi oi-arrow-circle-right" />
+                    <span className="oi oi-arrow-circle-right" />
                 </Link>
             </div>
         </div>
