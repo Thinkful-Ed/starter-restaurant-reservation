@@ -34,7 +34,7 @@ const ReservationsTable = ({ date }) => {
           <th scope="col">Mobile Number</th>
           <th scope="col">Time</th>
           <th scope="col">Party Of</th>
-    
+          <th scope="col">Status</th>
         </tr>
       </thead>
       <tbody>
@@ -45,6 +45,7 @@ const ReservationsTable = ({ date }) => {
                 <td>{mobile_number}</td>
                 <td>{reservation_time}</td>
                 <td>{people}</td>
+                <td data-reservation-id-status={reservation_id}>Booked</td>
                 <td><Link to={`/reservations/${reservation_id}/seat`} type="button" className="btn btn-success">Seat</Link></td>
               </tr>
         ))}
