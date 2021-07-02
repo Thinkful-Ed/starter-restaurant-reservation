@@ -41,6 +41,9 @@ function Routes() {
       .then(setReservations)
       .catch(setReservationsError);
 
+
+      // Error ? setTablesError, check Dashboards.js
+
     listTables(abortController.signal)
       .then((tables) =>
         tables.sort((tableA, tableB) => tableA.table_id - tableB.table_id)

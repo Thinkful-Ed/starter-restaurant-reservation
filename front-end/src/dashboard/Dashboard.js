@@ -66,6 +66,9 @@ function Dashboard({ date, reservations, reservationsError, tables, tablesError,
 
       <h4 className="mb-0">Tables</h4>
 
+
+      {/* TRIGGERS ERROR */}
+
       <ErrorAlert error={tablesError} />
 
       <table class="table">
