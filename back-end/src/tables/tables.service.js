@@ -18,10 +18,14 @@ function create(table) {
     .then((createdRecords) => createdRecords[0]);
 }
 
+function destroy(table_id, reservation_id) {
+    return knex("tables").where({ table_id }).update({reservation_id: null, status: "Free"}).returning("*");
+}
+
 function list() {
     return knex("tables")
     .orderBy("table_name", "asc");
 }
 
 
-module.exports = { create, list, read, update }
+module.exports = { list, create, read, update, destroy }
