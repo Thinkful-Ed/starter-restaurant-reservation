@@ -13,12 +13,16 @@ export default function ReservationRow({ reservation }) {
 			<td>{reservation.reservation_time}</td>
 			<td>{reservation.people}</td>
 			<td>{reservation.status}</td>
-			
+
+            <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
+
+            {reservation.status === "booked" &&
 			<td>
 				<a href={`/reservations/${reservation.reservation_id}/seat`}>
 					<button type="button">Seat</button>
 				</a>
 			</td>
+            }
 		</tr>
 	);
 }
