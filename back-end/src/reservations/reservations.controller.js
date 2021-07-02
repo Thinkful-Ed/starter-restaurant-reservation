@@ -1,4 +1,4 @@
-const service = require("./reservations.service");
+const service = require("./reservations.services");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 /**
