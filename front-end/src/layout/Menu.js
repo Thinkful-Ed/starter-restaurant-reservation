@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 
 function Menu() {
   return (
-    <nav className="navbar navbar-dark align-items-start p-0">
+    <nav className="navbar navbar-dark align-items-end bg-dark p-0">
       <div className="container-fluid d-flex flex-column p-0">
         <Link
           className="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
@@ -20,7 +20,7 @@ function Menu() {
             <span>Periodic Tables</span>
           </div>
         </Link>
-        <hr className="sidebar-divider my-0" />
+        <hr className="sidebar-divider my-0 border-2" />
         <ul className="nav navbar-nav text-light" id="accordionSidebar">
           <li className="nav-item">
             <Link className="nav-link" to="/dashboard">
@@ -49,7 +49,7 @@ function Menu() {
         </ul>
         <div className="text-center d-none d-md-inline">
           <button
-            className="btn rounded-circle border-0"
+            className="btn rounded-circle border-1"
             id="sidebarToggle"
             type="button"
           />

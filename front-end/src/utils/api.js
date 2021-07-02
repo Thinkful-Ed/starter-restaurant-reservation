@@ -5,6 +5,7 @@
 import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-date";
 
+
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
 
@@ -13,6 +14,20 @@ const API_BASE_URL =
  */
 const headers = new Headers();
 headers.append("Content-Type", "application/json");
+
+// Since the route in the backend does not exists I use an array for now
+
+export async function createReservation(reservation, signal){
+  const url=`${API_BASE_URL}/reservations`;
+  const options={
+    method : "POST",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  }
+  return await fetchJson(url, options);
+}
+
 
 /**
  * Fetch `json` from the specified URL and handle error status codes and ignore `AbortError`s
@@ -67,3 +82,5 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+

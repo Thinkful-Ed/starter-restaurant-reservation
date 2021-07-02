@@ -8,6 +8,10 @@
     "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation"
   },
   "scripts": {
+    "deploy:backend": "heroku apps:create restaurant-reservation-server",
+    "deploy:client": "heroku apps:create my-bao-client3 --buildpack mars/create-react-app",
+    "deploy:gitremoteserver": "git remote add heroku-server https://git.heroku.com/restaurant-reservation-server.git",
+    "deploy:gitremoteclient": "git remote add heroku-client https://git.heroku.com/restaurant-reservation-client.git",
     "build": "npm -prefix front-end run build",
     "preinstall": "cd ./back-end && npm install",
     "install": "cd ./front-end && npm install",
