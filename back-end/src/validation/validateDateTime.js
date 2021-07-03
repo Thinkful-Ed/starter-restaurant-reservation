@@ -17,4 +17,4 @@ const isFuture = (req, res, next) => {
       );
 };
 
-export { notTuesday, isFuture };
+module.exports = { notTuesday, isFuture };
