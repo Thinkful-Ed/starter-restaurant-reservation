@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { notTuesday, isFuture } from "../utils/validation/validateDateTime";
+import { normalizeISODate } from "../utils/parse-dateTime";
 import { createReservation } from "../utils/api";
 
 import ErrorAlert from "../layout/ErrorAlert";
@@ -43,7 +44,10 @@ function NewReservation() {
     setError(null);
     createReservation(form)
       .then((reservation) => {
-        history.push(`/dashboard?date=${reservation.reservation_date}`);
+        const { reservation_date } = reservation;
+        console.log(reservation);
+        console.log(reservation_date);
+        history.push(`/dashboard?date=${normalizeISODate(reservation_date)}`);
       })
       .catch(setError);
   };

@@ -17,7 +17,6 @@ function Dashboard() {
   const date =
     new URLSearchParams(location.search).get("date") ||
     dayjs().format("YYYY-MM-DD");
-  console.log(date);
 
   useEffect(loadDashboard, [date]);
 
