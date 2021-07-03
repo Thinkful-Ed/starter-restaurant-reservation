@@ -1,5 +1,5 @@
 const dayjs = require("dayjs");
-const parseDateTime = require("../parse-dateTime");
+import { parseDateTime } from "../parse-dateTime";
 
 const notTuesday = (date, time) => parseDateTime(date, time).day() !== 2;
 const isFuture = (date, time) =>
