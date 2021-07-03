@@ -4,7 +4,10 @@ const list = () => db("reservations").select("*");
 const listByDate = (reservation_date) => {
   return db("reservations").select("*").where({ reservation_date });
 };
-const create = (reservation) => db("reservations").insert(reservation, "*");
+const create = (reservation) =>
+  db("reservations")
+    .insert(reservation, "*")
+    .then((data) => data[0]);
 
 module.exports = {
   list,
