@@ -9,7 +9,7 @@ async function reservationExists(req, res, next) {
     res.locals.reservation = reservation
     return next();
   }
-  next({ status: 404, message: `Reservation cannot be found.` });
+  next({ status: 404, message: `Reservation ${reservation_id} cannot be found.` });
 }
 //validation for empty fields
 
@@ -145,16 +145,63 @@ function isFutureTime(req, res, next) {
   next();
 }
 
-function read(req, res) {
-  res.json({ data: res.locals.reservation })
+function isBooked(req, res, next) {
+  if (req.body.data.status === "seated") {
+    return next({
+      status: 400,
+      message: "Reservation status should not be seated."
+    })
+  };
+  if (req.body.data.status === "finished") {
+    return next({
+      status: 400,
+      message: "Reservation status should not be finished."
+    })
+  }
+  next();
 }
 
+function isValidStatus(req, res, next) {
+  const { status } = req.body.data;
+  const validStatuses = ["booked", "seated", "finished"];
+    if (!validStatuses.includes(status)) {
+      return next({
+        status: 400,
+        message: "Status input unknown."
+      });
+    }
+  next();
+}
+
+
+function isNotFinished(req, res, next) {
+  if (res.locals.reservation.status === "finished") {
+    return next({
+      status: 400,
+      message: "Reservation can not already be finished."
+    })
+  }
+  next();
+}
 
 async function create(req, res) {
   let reservation = req.body.data;
   let result = await reservationsService.create(reservation);
   res.status(201).json({data: result[0]});
 }
+
+function read(req, res) {
+  res.json({ data: res.locals.reservation })
+}
+
+async function update(req, res) {
+  const updatedReservation = {...res.locals.reservation, status: req.body.data.status};
+  res.status(200).json({ 
+    data: await reservationsService.update(updatedReservation) 
+  })
+}
+
+
 /**
  * List handler for reservation resources
  */
@@ -170,5 +217,6 @@ async function list(req, res) {
 module.exports = {
   read: [asyncErrorBoundary(reservationExists), read],
   list: asyncErrorBoundary(list), 
-  create: [isValidReservation, isPartyValid, dateFormatValidation, isNotTuesday, isFutureDate,  timeFormatValidation, isAfterOpen, isBeforeClose, isFutureTime, asyncErrorBoundary(create)]
+  create: [isValidReservation, isPartyValid, dateFormatValidation, isNotTuesday, isFutureDate,  timeFormatValidation, isAfterOpen, isBeforeClose, isFutureTime, isBooked, asyncErrorBoundary(create)],
+  update: [asyncErrorBoundary(reservationExists),  isValidStatus, isNotFinished, asyncErrorBoundary(update)]
 }

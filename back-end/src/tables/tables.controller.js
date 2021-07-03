@@ -92,6 +92,17 @@ function isValidTable(req, res, next) {
   next();
 }
 
+function reservationIsNotSeated(req, res, next) {
+  const { status } = res.locals.reservation;
+  if (status === "seated") {
+  return next({
+    status: 400,
+    message: "Reservation is already seated."
+  })
+}
+next();
+}
+
 
 
 async function update(req, res, next) {
@@ -101,9 +112,10 @@ async function update(req, res, next) {
     reservation_id: reservation_id,
     status: "occupied",
   };
-  const data = await tablesService.update(updatedTable);
+  const data = await tablesService.update(updatedTable, reservation_id);
   res.status(200).json({ data });
 }
+
 
 async function destroy(req, res) {
   const { table_id } = req.params;
@@ -131,6 +143,7 @@ module.exports = {
     asyncErrorBoundary(tableExists),
     isNotOccupied,
     hasSufficientCapacity,
+    reservationIsNotSeated,
     asyncErrorBoundary(update),
   ],
   create: [isValidTable, asyncErrorBoundary(create)],
