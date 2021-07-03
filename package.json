@@ -12,7 +12,7 @@
     "deploy:client": "heroku apps:create my-bao-client3 --buildpack mars/create-react-app",
     "deploy:remoteserver": "git remote add heroku-server https://git.heroku.com/restaurant-reservation-server.git",
     "deploy:remoteclient": "git remote add heroku-client https://git.heroku.com/restaurant-reservation-client.git",
-    "deploy:pushbackend": "git subtree push --prefix back-end heroku-server main",
+    "deploy:pushserver": "git subtree push --prefix back-end heroku-server main",
     "deploy:pushclient": "git subtree push --prefix front-end heroku-client main",
     "deploy:errors":  "heroku logs",
     "deploy:resources" : "https://sophiali.dev/how-to-deploy-monorepo-to-heroku",
