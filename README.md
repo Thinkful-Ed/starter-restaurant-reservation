@@ -1,3 +1,39 @@
+## Project description: Restaurant Reservation System
+Since everything is now Online. Restaurants are encouraged to have an online reservation system. 
+
+![This should show a picture](images-readme/screenshot.png)
+
+Restaurant personnel use this application to make a new reservation when a customer calls to request a reservation.
+
+
+### This Project is built in _ReactJS_ for the UI tire, _ExpressJS_ for the application tire, and PostgreSQL for database tire.
+
+React makes it possible to quickly build a complex web application that uses data from an external API and keeps the URL in sync with what is displayed on the screen.
+
+Express, Makes it possible to build API server that will respond to the requests made from clients. It is a back-end web application framework for Node.js.
+
+PostgreSQL, is a relational database that resides behind the application to store data. In addition to persistence, PostgreSQL provides various other properties that make it exceptionally useful, convenient, reliable, efficient, and scalable.
+
+### The knowledge applied to build this project:
+front-end: rendering, managing state, calling external APIs, and using React Router.
+back-end: recieving and validationg client requests and accessing the database to properly respond to the client requests.
+
+### What this app do Technically :
+
+#### front-end:
+- Makes API calls to create and list reservations.
+- Manages the state of the React application.
+- Defines the routes and URLs.
+- Uses state effectively over multiple components.
+#### back-end:
+- Recieves client requests through url and query params.
+- Validates client requests through various middlewares.
+- Inserts new reservation information into the database.
+- Reads reservation information from database for a specific date.
+- Handles errors and provides proper error messages to the client.
+
+-----------------------*************************************************----------------------------
+
 # Capstone: Restaurant Reservation System
 
 > You have been hired as a full stack developer at _Periodic Tables_, a startup that is creating a reservation system for fine dining restaurants.
