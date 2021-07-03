@@ -37,7 +37,7 @@ function NewReservation() {
       history.goBack();
   }
 
-  function notTuesday(){
+  function tuesday(){
     const date = new Date(reservation.reservation_date);
     const day = date.getDay();
     if ( day === 2 ){
