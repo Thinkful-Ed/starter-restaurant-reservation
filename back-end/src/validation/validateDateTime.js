@@ -1,5 +1,5 @@
 const dayjs = require("dayjs");
-const parseDateTime = require("../parse-dateTime");
+const parseDateTime = require("../utils/parse-dateTime");
 
 const notTuesday = (req, res, next) => {
   const { reservation_date: date, reservation_time: time } = req.body.data;
