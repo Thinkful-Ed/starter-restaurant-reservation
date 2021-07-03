@@ -5,8 +5,6 @@ import { createReservation } from "../utils/api";
 
 import ErrorAlert from "../layout/ErrorAlert";
 
-const dayjs = require("dayjs");
-
 function NewReservation() {
   const [error, setError] = useState(null);
   const [form, setForm] = useState({
@@ -19,34 +17,30 @@ function NewReservation() {
   });
 
   const history = useHistory();
+
   const handleChange = (e) => {
     setForm((form) => ({
       ...form,
       [e.target.name]: e.target.value,
     }));
   };
-  const validateDateTime = () => {
-    setError(null);
-    const dateTime = dayjs(
-      `${form.reservation_date} ${form.reservation_time}`,
-      "YYYY-MM-DD hh:mm"
-    );
 
-    const strikes = [];
-    if (!notTuesday(dateTime))
-      strikes.push("Reservations cannot be made for a Tuesday.");
-    if (!isFuture(dateTime))
-      strikes.push("Reservations must be made for a future time and/or date.");
-
-    if (strikes.length) setError({ message: strikes.join("\n") });
-    return strikes.length ? true : false;
+  const validateDateTime = (date, time) => {
+    return !notTuesday(date, time)
+      ? "Reservations cannot be made for a Tuesday."
+      : !isFuture(date, time)
+      ? "Reservations must be made for a future date and/or time."
+      : null;
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { reservation_date: date, reservation_time: time } = form;
 
-    const hasError = validateDateTime();
-    if (hasError) return;
+    const validationErr = validateDateTime(date, time);
+    if (validationErr) return setError({ message: validationErr });
 
+    setError(null);
     createReservation(form)
       .then((reservation) => {
         history.push(`/dashboard?date=${reservation.reservation_date}`);
