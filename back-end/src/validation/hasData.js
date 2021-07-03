@@ -1,4 +1,4 @@
-const hasDataProp = (req, res, next) => {
+const hasData = (req, res, next) => {
   if (!req.body.data)
     return next({
       status: 400,
@@ -7,4 +7,4 @@ const hasDataProp = (req, res, next) => {
   next();
 };
 
-module.exports = hasDataProp;
+module.exports = hasData;
