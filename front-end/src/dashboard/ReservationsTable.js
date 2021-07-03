@@ -38,15 +38,17 @@ const ReservationsTable = ({ date }) => {
         </tr>
       </thead>
       <tbody>
-      {reservations.filter(({ reservation_date }) => reservation_date === date).map(({reservation_id, first_name, last_name, mobile_number, reservation_time, people}) => (
-                <tr key={reservation_id}>
-                <td>{last_name}</td>
-                <td>{first_name}</td>
-                <td>{mobile_number}</td>
-                <td>{reservation_time}</td>
-                <td>{people}</td>
-                <td data-reservation-id-status={reservation_id}>Booked</td>
-                <td><Link to={`/reservations/${reservation_id}/seat`} type="button" className="btn btn-success">Seat</Link></td>
+      {reservations.filter((reservation) => reservation.reservation_date === date)
+      .map((reservation) => 
+      (
+                <tr key={reservation.reservation_id}>
+                <td>{reservation.last_name}</td>
+                <td>{reservation.first_name}</td>
+                <td>{reservation.mobile_number}</td>
+                <td>{reservation.reservation_time}</td>
+                <td>{reservation.people}</td>
+                <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
+                {reservation.status === "booked" && <td><Link to={`/reservations/${reservation.reservation_id}/seat`} type="button" className="btn btn-success">Seat</Link></td>}
               </tr>
         ))}
       </tbody>
