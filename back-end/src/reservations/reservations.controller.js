@@ -109,6 +109,30 @@ function hasValidTimeFormat(req, res, next){
   next();
 }
 
+function isNotTuesday(req, res, next){
+  const date = new Date(req.body.data.reservation_date+" 00:00");
+  const day = date.getDay();
+  if ( day === 2 ){
+    return next({
+      status : 400,
+      message : "Restaurant is closed on Tuesdays."
+    });
+  }
+  next();
+}
+
+function isFuture(req, res, next){
+  const now = new Date();
+  const date = new Date(req.body.data.reservation_date);
+  if ( now > date){
+    return next({
+      status : 400,
+      message : "Only future reservations are allowed."
+    });
+  }
+  next();
+}
+
 async function create(req, res){
   const data = await service.create(req.body.data);  
   res.status(201).json({ data, });
@@ -123,6 +147,8 @@ module.exports = {
     hasValidMobile, 
     hasValidDateFormat, 
     hasValidTimeFormat,
+    isNotTuesday,
+    isFuture,
     asyncErrorBoundary(create),
   ],
   list,

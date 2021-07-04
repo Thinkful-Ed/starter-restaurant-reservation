@@ -16,6 +16,7 @@ function NewReservation() {
   const history = useHistory();
   const [mobile, setMobile] = useState("");
   const [createError, setCreateError] = useState(null);
+  const validationErrorMessages = [];
   
   function mobileChangeHandler({ target: { value } }) {
     let clearedValue = value.replace(/[^0-9]/g, "");
@@ -37,19 +38,39 @@ function NewReservation() {
       history.goBack();
   }
 
-  function tuesday(){
-    const date = new Date(reservation.reservation_date);
+  function isNotTuesday(){
+    const date = new Date(reservation.reservation_date+" 00:00");
     const day = date.getDay();
     if ( day === 2 ){
-      
+      validationErrorMessages.push("Restaurant is closed on Tuesdays.");
+    }
+  }
+
+  function isFuture(){
+    const now = new Date();
+    const date = new Date(reservation.reservation_date);
+    if ( now > date){
+      validationErrorMessages.push("Only future reservations are allowed.");
     }
   }
 
   function submitHandler(event){
       event.preventDefault();
+      
+      try{
+        isNotTuesday();
+        isFuture();
+        if (validationErrorMessages.length){
+          //console.log("validationErrorMessages: "+validationErrorMessages.join("\n"));
+          throw new Error(validationErrorMessages.join("\n"));
+        }
+      }catch(error){
+        setCreateError(error);
+        return;
+      }
+        
       reservation.mobile_number = mobile.replace(/[^0-9]/g,"");
       reservation.people = Number(reservation.people);
-      console.log(reservation.reservation_date);
       createReservation(reservation)
         .then( () => history.push(`/dashboard?date=${reservation.reservation_date}`) )
         .catch(setCreateError);
