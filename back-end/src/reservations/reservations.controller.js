@@ -15,7 +15,7 @@ const peopleIsNum = require("../validation/peopleIsNum");
  * List handler for reservation resources
  */
 async function list(req, res) {
-  console.log(process.env.NODE_ENV);
+  console.log(app.get("migrations"));
   const { date = "" } = req.query;
   res.json({
     data: date.length ? await service.listByDate(date) : await service.list(),
