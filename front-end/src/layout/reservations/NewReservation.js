@@ -38,10 +38,9 @@ function NewReservation() {
       history.goBack();
   }
 
-  function isTuesday(){
+  function isNotTuesday(){
     const date = new Date(reservation.reservation_date+" 00:00");
     const day = date.getDay();
-    console.log("day: ",day);
     if ( day === 2 ){
       validationErrorMessages.push("Restaurant is closed on Tuesdays.");
     }
@@ -53,17 +52,16 @@ function NewReservation() {
     if ( now > date){
       validationErrorMessages.push("Only future reservations are allowed.");
     }
-
   }
 
   function submitHandler(event){
       event.preventDefault();
       
       try{
-        isTuesday();
+        isNotTuesday();
         isFuture();
         if (validationErrorMessages.length){
-          console.log("validationErrorMessages: "+validationErrorMessages.join("\n"));
+          //console.log("validationErrorMessages: "+validationErrorMessages.join("\n"));
           throw new Error(validationErrorMessages.join("\n"));
         }
       }catch(error){
