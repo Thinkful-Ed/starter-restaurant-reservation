@@ -47,6 +47,7 @@ function NewReservation() {
         const { reservation_date } = reservation;
         console.log(reservation);
         console.log(reservation_date);
+        console.log(normalizeISODate(reservation_date));
         history.push(`/dashboard?date=${normalizeISODate(reservation_date)}`);
       })
       .catch(setError);
