@@ -75,7 +75,7 @@ function NewReservation() {
       try{
         isNotTuesday();
         isFuture();
-        //isEligibleTime();
+        isEligibleTime();
         if (validationErrorMessages.length){
           throw new Error(validationErrorMessages.join("\n"));
         }
