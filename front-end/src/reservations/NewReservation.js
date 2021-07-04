@@ -42,7 +42,7 @@ function NewReservation() {
     if (validationErr) return setError({ message: validationErr });
 
     setError(null);
-    createReservation(form)
+    createReservation({ ...form, people: Number(form.people) })
       .then((reservation) => {
         const { reservation_date } = reservation;
         console.log(reservation);
