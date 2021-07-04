@@ -118,4 +118,7 @@ export async function finishTable(table_id, signal) {
   return await fetchJson(url, options);
 }
 
-
+export async function findReservationByPhoneNumber(mobile_number, signal) {
+  const url = `${API_BASE_URL}/reservations?mobile_phone=${mobile_number}`;
+  return await fetchJson(url, { headers, signal }, [])
+}

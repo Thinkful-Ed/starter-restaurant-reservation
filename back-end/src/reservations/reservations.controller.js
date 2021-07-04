@@ -11,6 +11,7 @@ async function reservationExists(req, res, next) {
   }
   next({ status: 404, message: `Reservation ${reservation_id} cannot be found.` });
 }
+
 //validation for empty fields
 
 function isValidReservation(req, res, next) {
@@ -202,16 +203,22 @@ async function update(req, res) {
 }
 
 
+
 /**
  * List handler for reservation resources
  */
 // List handler for reservation resources
 async function list(req, res) {
-  const { date } = req.query;
-  const reservationsByDate = await reservationsService.list(date);
-  res.json({
-    data: reservationsByDate,
-  });
+  if (req.query.date) {
+    const { date } = req.query;
+    const reservationsByDate = await reservationsService.list(date);
+    res.json({
+      data: reservationsByDate,
+    });
+  } if (req.query.mobile_number) {
+    const found = await reservationsService.search(req.query.mobile_number);
+  res.json({ data: found })
+   }
 }
 
 module.exports = {
