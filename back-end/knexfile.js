@@ -15,8 +15,6 @@ const {
   DEBUG,
 } = process.env;
 
-console.log(DATABASE_URL);
-
 module.exports = {
   development: {
     client: "postgresql",
