@@ -8,7 +8,8 @@ const hasFields = require("../validation/hasFields")([
   "reservation_time",
   "people",
 ]);
-const { notTuesday, isFuture } = require("../validation/validateDateTime");
+const { dateTimeMiddleware } = require("../validation/validateDateTime");
+const peopleIsNum = require("../validation/peopleIsNum");
 
 /**
  * List handler for reservation resources
@@ -21,12 +22,12 @@ async function list(req, res) {
 }
 
 async function create(req, res) {
-  res.json({
+  res.status(201).json({
     data: await service.create(req.body.data),
   });
 }
 
 module.exports = {
   list,
-  create: [hasData, hasFields, notTuesday, isFuture, create],
+  create: [hasData, hasFields, ...dateTimeMiddleware, peopleIsNum, create],
 };
