@@ -63,6 +63,5 @@ module.exports = {
       directory: path.join(__dirname, "src", "db", "seeds"),
     },
     debug: !!DEBUG,
-    ssl: true,
   },
 };
