@@ -24,7 +24,11 @@ const notTuesday = (req, res, next) => {
   const { reservation_date: date, reservation_time: time } = req.body.data;
   return parseDateTime(date, time).day() !== 2
     ? next()
-    : next(errWrapper("Reservations cannot be made for a Tuesday."));
+    : next(
+        errWrapper(
+          "Reservations cannot be made for a Tuesday, as the restaurant is closed on these days."
+        )
+      );
 };
 const isFuture = (req, res, next) => {
   const { reservation_date: date, reservation_time: time } = req.body.data;
