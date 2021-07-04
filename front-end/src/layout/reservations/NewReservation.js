@@ -61,14 +61,15 @@ function NewReservation() {
         isNotTuesday();
         isFuture();
         if (validationErrorMessages.length){
-          //console.log("validationErrorMessages: "+validationErrorMessages.join("\n"));
           throw new Error(validationErrorMessages.join("\n"));
         }
       }catch(error){
         setCreateError(error);
         return;
       }
-        
+      
+      console.log("reservation_date: ",reservation.reservation_date);  
+      console.log("reservation_time: ",reservation.reservation_time);  
       reservation.mobile_number = mobile.replace(/[^0-9]/g,"");
       reservation.people = Number(reservation.people);
       createReservation(reservation)
