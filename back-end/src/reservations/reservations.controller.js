@@ -10,6 +10,7 @@ const hasFields = require("../validation/hasFields")([
 ]);
 const { dateTimeMiddleware } = require("../validation/validateDateTime");
 const peopleIsNum = require("../validation/peopleIsNum");
+const app = require("../app");
 
 /**
  * List handler for reservation resources
