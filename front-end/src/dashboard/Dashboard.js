@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { listReservations } from "../utils/api";
+import ReservationCard from "../common-components/ReservationCard";
 import ErrorAlert from "../layout/ErrorAlert";
 const dayjs = require("dayjs");
 
@@ -33,10 +34,12 @@ function Dashboard() {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for: {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      {reservations.map((reservation) => (
+        <ReservationCard reservation={reservation} />
+      ))}
     </main>
   );
 }
