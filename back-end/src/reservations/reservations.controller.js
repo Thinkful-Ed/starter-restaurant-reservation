@@ -10,13 +10,12 @@ const hasFields = require("../validation/hasFields")([
 ]);
 const { dateTimeMiddleware } = require("../validation/validateDateTime");
 const peopleIsNum = require("../validation/peopleIsNum");
-const app = require("../app");
 
 /**
  * List handler for reservation resources
  */
 async function list(req, res) {
-  console.log(app.get("migrations"));
+  console.log(req.app.get("migrations"));
   const { date = "" } = req.query;
   res.json({
     data: date.length ? await service.listByDate(date) : await service.list(),
