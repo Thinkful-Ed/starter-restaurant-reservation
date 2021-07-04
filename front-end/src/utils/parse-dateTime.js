@@ -15,6 +15,6 @@ const parseDateTime = (date, time) => {
   return dayjs(`${date} ${time}`, `${dateFormat} ${timeFormat}`);
 };
 
-const normalizeISODate = (date) => dayjs(date).format("YYYY-MM-DD");
+const normalizeISODate = (date) => date.slice(0, 10);
 
 export { parseDateTime, normalizeISODate };
