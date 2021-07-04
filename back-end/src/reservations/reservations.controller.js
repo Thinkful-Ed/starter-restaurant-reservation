@@ -123,11 +123,11 @@ function isNotTuesday(req, res, next){
 
 function isFuture(req, res, next){
   const now = new Date();
-  const date = new Date(req.body.data.reservation_date);
+  const date = new Date(req.body.data.reservation_date+" "+req.body.data.reservation_time);
   if ( now > date){
     return next({
       status : 400,
-      message : "Only future reservations are allowed."
+      message : "Server : Only future reservations are allowed."
     });
   }
   next();
