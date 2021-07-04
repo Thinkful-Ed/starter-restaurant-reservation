@@ -17,7 +17,7 @@ function NewReservation() {
   const [mobile, setMobile] = useState("");
   const [createError, setCreateError] = useState(null);
   const validationErrorMessages = [];
-  
+
   function mobileChangeHandler({ target: { value } }) {
     let clearedValue = value.replace(/[^0-9]/g, "");
     if (clearedValue.length > 10) {
@@ -48,9 +48,24 @@ function NewReservation() {
 
   function isFuture(){
     const now = new Date();
-    const date = new Date(reservation.reservation_date);
+    const date = new Date(reservation.reservation_date+" "+reservation.reservation_time);
+    //console.log("now: ",now,"  |  date: ",date)
     if ( now > date){
       validationErrorMessages.push("Only future reservations are allowed.");
+    }
+  }
+
+  function isEligibleTime(){
+    const now     = new Date();
+    const opening = new Date(reservation.reservation_date+" 10:30");
+    const closing = new Date(reservation.reservation_date+" 21:30");
+    const request = new Date(reservation.reservation_date+" "+reservation.reservation_time);
+    if ( request < opening ){
+      validationErrorMessages.push("Please make a reservation after 10:30 AM");
+    }else if ( request > closing ){
+      validationErrorMessages.push("Please make a reservation before 09:30 PM");
+    }else if ( request < now ){
+      validationErrorMessages.push("The Reservation time you entered is passed.");
     }
   }
 
@@ -60,15 +75,16 @@ function NewReservation() {
       try{
         isNotTuesday();
         isFuture();
+        //isEligibleTime();
         if (validationErrorMessages.length){
-          //console.log("validationErrorMessages: "+validationErrorMessages.join("\n"));
           throw new Error(validationErrorMessages.join("\n"));
         }
       }catch(error){
         setCreateError(error);
         return;
       }
-        
+      //console.log("reservation_date: ",reservation.reservation_date);  
+      //console.log("reservation_time: ",reservation.reservation_time);    
       reservation.mobile_number = mobile.replace(/[^0-9]/g,"");
       reservation.people = Number(reservation.people);
       createReservation(reservation)
