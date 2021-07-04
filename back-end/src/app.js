@@ -4,6 +4,7 @@ require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
 const express = require("express");
 const cors = require("cors");
+require("express-async-errors");
 
 const errorHandler = require("./errors/errorHandler");
 const notFound = require("./errors/notFound");
