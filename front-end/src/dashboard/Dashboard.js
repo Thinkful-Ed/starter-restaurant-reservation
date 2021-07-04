@@ -37,8 +37,8 @@ function Dashboard() {
         <h4 className="mb-0">Reservations for: {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {reservations.map((reservation) => (
-        <ReservationCard reservation={reservation} />
+      {reservations.map((reservation, idx) => (
+        <ReservationCard key={idx} reservation={reservation} />
       ))}
     </main>
   );
