@@ -32,7 +32,7 @@ function hasValidFirstName(req, res, next){
     req.log.trace({__filename, methodName:"hasValidFirstName", first_name,});
     return next({
       status : 400,
-      message : "Must have a valid first_name",
+      message : "Server: Must have a valid first_name",
     });
   }
   next();
@@ -42,7 +42,7 @@ function hasValidLastName(req, res, next){
   if ( !last_name.trim().length ){
     return next({
       status : 400,
-      message : "Must have a valid last_name",
+      message : "Server: Must have a valid last_name",
     });
   }
   next();
@@ -55,7 +55,7 @@ function hasValidMobile(req, res, next){
     req.log.trace({__filename, methodName:"hasValidMobile", mobile_number});
     return next({
       status : 400,
-      message : "Must have a valid mobile_number",
+      message : "Server: Must have a valid mobile_number",
     });
   }
   next();
@@ -79,7 +79,7 @@ function hasValidPeopleNumber(req, res, next){
   if ( !people || typeof people !== "number" || isNaN(people) || people < 1 ){
     return next({
       status : 400,
-      message : "Number of people must be number greater than 1"
+      message : "Server: Number of people must be number greater than 1"
     });
   }
   next();
@@ -91,7 +91,7 @@ function hasValidDateFormat(req, res, next){
   if ( !reservation_date.match(dateFormat) ){
     return next({
       status : 400,
-      message : "reservation_date format must be YYYY-MM-DD"
+      message : "Server: reservation_date format must be YYYY-MM-DD"
     });
   }
   next();
@@ -103,7 +103,7 @@ function hasValidTimeFormat(req, res, next){
   if ( !reservation_time.match(timeFormat) ){
     return next({
       status : 400,
-      message : "reservation_time format must be HH:MM:SS"
+      message : "Server: reservation_time format must be HH:MM:SS"
     });
   }
   next();
@@ -115,7 +115,7 @@ function isNotTuesday(req, res, next){
   if ( day === 2 ){
     return next({
       status : 400,
-      message : "Restaurant is closed on Tuesdays."
+      message : "Server: Restaurant is closed on Tuesdays."
     });
   }
   next();
@@ -123,13 +123,37 @@ function isNotTuesday(req, res, next){
 
 function isFuture(req, res, next){
   const now = new Date();
-  const date = new Date(req.body.data.reservation_date);
+  const date = new Date(req.body.data.reservation_date+" "+req.body.data.reservation_time);
   if ( now > date){
     return next({
       status : 400,
-      message : "Only future reservations are allowed."
+      message : "Server : Only future reservations are allowed."
     });
   }
+  next();
+}
+
+function isEligibleTime(req, res, next){
+  const now     = new Date();
+  const opening = new Date(req.body.data.reservation_date+" 10:30");
+  const closing = new Date(req.body.data.reservation_date+" 21:30");
+  const request = new Date(req.body.data.reservation_date+" "+req.body.data.reservation_time);
+  let message = "";
+  if ( request < opening ){
+    message = "Server: Please make a reservation after 10:30 AM";
+  }else if ( request > closing ){
+    message = "Server: Please make a reservation before 09:30 PM";
+  }else if ( request < now ){
+    message = "Server: The Reservation time you entered is passed.";
+  }
+
+  if (message.length){
+    return next({
+      status : 400,
+      message,
+    });
+  }
+
   next();
 }
 
@@ -149,6 +173,7 @@ module.exports = {
     hasValidTimeFormat,
     isNotTuesday,
     isFuture,
+    isEligibleTime,
     asyncErrorBoundary(create),
   ],
   list,
