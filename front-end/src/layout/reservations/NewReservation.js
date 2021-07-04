@@ -51,7 +51,7 @@ function NewReservation() {
     const date = new Date(reservation.reservation_date+" "+reservation.reservation_time);
     //console.log("now: ",now,"  |  date: ",date)
     if ( now > date){
-      validationErrorMessages.push("Client: Only future reservations are allowed.");
+      validationErrorMessages.push("Only future reservations are allowed.");
     }
   }
 
@@ -75,7 +75,7 @@ function NewReservation() {
       try{
         isNotTuesday();
         isFuture();
-        isEligibleTime();
+        //isEligibleTime();
         if (validationErrorMessages.length){
           throw new Error(validationErrorMessages.join("\n"));
         }
