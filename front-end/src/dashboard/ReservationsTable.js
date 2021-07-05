@@ -1,25 +1,24 @@
 import ErrorAlert from "../layout/ErrorAlert";
 import React, { useState, useEffect } from "react";
-import { listReservations } from "../utils/api";
 import { Link } from "react-router-dom";
 
 
-const ReservationsTable = ({ date }) => {
+const ReservationsTable = ({reservations}) => {
 
-    const [reservations, setReservations] = useState([]);
-    const [reservationsError, setReservationsError] = useState(null);
+    // const [reservations, setReservations] = useState([]);
+    // const [reservationsError, setReservationsError] = useState(null);
   
-    useEffect(loadReservations, [date]);
+    // useEffect(loadReservations, [date]);
   
   
-    function loadReservations() {
-      const abortController = new AbortController();
-      setReservationsError(null);
-      listReservations({ date }, abortController.signal)
-        .then(setReservations)
-        .catch(setReservationsError);
-      return () => abortController.abort();
-    }
+    // function loadReservations() {
+    //   const abortController = new AbortController();
+    //   setReservationsError(null);
+    //   listReservations({ date }, abortController.signal)
+    //     .then(setReservations)
+    //     .catch(setReservationsError);
+    //   return () => abortController.abort();
+    // }
 
     function renderTable (reservations) {
 
@@ -38,7 +37,7 @@ const ReservationsTable = ({ date }) => {
         </tr>
       </thead>
       <tbody>
-      {reservations.filter((reservation) => reservation.reservation_date === date)
+      {reservations
       .map((reservation) => 
       (
                 <tr key={reservation.reservation_id}>
@@ -60,7 +59,6 @@ const ReservationsTable = ({ date }) => {
 
     return ( 
         <div>
-        <ErrorAlert error={reservationsError}/>
         {renderTable(reservations)}
         </div>
      );
