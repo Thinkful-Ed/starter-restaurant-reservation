@@ -29,5 +29,5 @@ async function create(req, res) {
 
 module.exports = {
   list,
-  create: [hasData, hasFields, ...dateTimeMiddleware, peopleIsNum, create],
+  create: [hasData, hasFields, peopleIsNum, dateTimeMiddleware, create],
 };
