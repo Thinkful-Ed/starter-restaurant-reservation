@@ -1,7 +1,11 @@
 import { previous, today, next } from "../utils/date-time";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom"
 import ReservationsTable from "./ReservationsTable";
+import { listReservations } from "../utils/api";
 import TablesTable from "./TablesTable"
+import ErrorAlert from "../layout/ErrorAlert";
+
 
 /**
  * Defines the dashboard page.
@@ -12,6 +16,21 @@ import TablesTable from "./TablesTable"
 function Dashboard({ date }) {
 
 const history = useHistory();
+
+const [reservations, setReservations] = useState([]);
+const [reservationsError, setReservationsError] = useState(null);
+
+useEffect(loadReservations, [date]);
+
+
+function loadReservations() {
+  const abortController = new AbortController();
+  setReservationsError(null);
+  listReservations({ date }, abortController.signal)
+    .then(setReservations)
+    .catch(setReservationsError);
+  return () => abortController.abort();
+}
 
 
 
@@ -39,7 +58,8 @@ const history = useHistory();
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
-      <ReservationsTable date={date}/>
+      <ErrorAlert error={reservationsError}/>
+      <ReservationsTable reservations={reservations}/>
       <TablesTable />
       <div className="container">
   <div className="row mt-5">
