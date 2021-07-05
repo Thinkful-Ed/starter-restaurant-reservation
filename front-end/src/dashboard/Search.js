@@ -1,5 +1,5 @@
 import { listReservations } from "../utils/api";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ReservationsTable from "./ReservationsTable";
 import ErrorAlert from "../layout/ErrorAlert";
 
