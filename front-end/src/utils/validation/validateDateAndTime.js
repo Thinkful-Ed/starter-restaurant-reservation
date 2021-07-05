@@ -6,7 +6,8 @@ dayjs.extend(isBetween);
 const validations = {
   notTuesday: {
     check: (dateTime) => dateTime.day() !== 2,
-    message: "Reservations cannot be made for a Tuesday.",
+    message:
+      "Reservations cannot be made for a Tuesday, as the restaurant is closed on these days.",
   },
   isFuture: {
     check: (dateTime) => dateTime.isAfter(dayjs(), "minute"),
@@ -15,10 +16,8 @@ const validations = {
   isInTimeFrame: {
     check: (dateTime) => {
       const date = dateTime.format("YYYY-MM-DD");
-      console.log(date);
       const lowerBound = parseDateTime(date, "10:30");
       const upperBound = parseDateTime(date, "21:30");
-      console.log(upperBound.isValid());
 
       return dateTime.isBetween(lowerBound, upperBound, "m", "[]");
     },
@@ -35,7 +34,7 @@ const validateDateAndTime = (date, time) => {
     if (!validation.check(dateTime)) errors.push(validation.message);
   }
 
-  return errors.join(`\n`);
+  return errors.join(" | ");
 };
 
 export { validateDateAndTime };
