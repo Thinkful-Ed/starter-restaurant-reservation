@@ -1,4 +1,4 @@
-const dayjs = require("dayjs");
+import dayjs from "dayjs";
 
 //takes in a date (YYYY-MM-DD or MMDDYYYY) and a time (HH:MM, HHMM, hh:mmA, or hhmmA) and wraps them into a dayjs object.
 const parseDateTime = (date, time) => {
