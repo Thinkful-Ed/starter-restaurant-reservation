@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { notTuesday, isFuture } from "../utils/validation/validateDateTime";
+import { validateDateAndTime } from "../utils/validation/validateDateAndTime";
 import { normalizeISODate } from "../utils/parse-dateTime";
 import { createReservation } from "../utils/api";
 
@@ -26,28 +26,17 @@ function NewReservation() {
     }));
   };
 
-  const validateDateTime = (date, time) => {
-    return !notTuesday(date, time)
-      ? "Reservations cannot be made for a Tuesday."
-      : !isFuture(date, time)
-      ? "Reservations must be made for a future date and/or time."
-      : null;
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const { reservation_date: date, reservation_time: time } = form;
 
-    const validationErr = validateDateTime(date, time);
-    if (validationErr) return setError({ message: validationErr });
+    const validationErrs = validateDateAndTime(date, time);
+    if (validationErrs.length) return setError({ message: validationErrs });
 
     setError(null);
     createReservation({ ...form, people: Number(form.people) })
       .then((reservation) => {
         const { reservation_date } = reservation;
-        console.log(reservation);
-        console.log(reservation_date);
-        console.log(normalizeISODate(reservation_date));
         history.push(`/dashboard?date=${normalizeISODate(reservation_date)}`);
       })
       .catch(setError);
