@@ -12,6 +12,21 @@ async function reservationExists(req, res, next) {
   next({ status: 404, message: `Reservation ${reservation_id} cannot be found.` });
 }
 
+async function mobileNumberDataSearch(req, res, next) {
+  if (!req.query.mobile_number) {
+    return next();
+  }
+    const found = await reservationsService.search(req.query.mobile_number)
+    if (Number.isNaN(parseInt(req.query.mobile_number))) {
+      return next({ 
+        status: 400,
+        message: "No reservations found."
+    })
+  }
+  res.locals.mobile_number = req.query.mobile_number;
+  next();
+}
+
 //validation for empty fields
 
 function isValidReservation(req, res, next) {
@@ -210,20 +225,23 @@ async function update(req, res) {
 // List handler for reservation resources
 async function list(req, res) {
   if (req.query.date) {
+    // console.log(req.query.date)
     const { date } = req.query;
     const reservationsByDate = await reservationsService.list(date);
     res.json({
       data: reservationsByDate,
     });
-  } if (req.query.mobile_number) {
-    const found = await reservationsService.search(req.query.mobile_number);
+  } if (res.locals.mobile_number) {
+    // console.log(res.locals.mobile_number)
+    const found = await reservationsService.search(res.locals.mobile_number);
+    console.log(found);
   res.json({ data: found })
    }
 }
 
 module.exports = {
   read: [asyncErrorBoundary(reservationExists), read],
-  list: asyncErrorBoundary(list), 
+  list: [asyncErrorBoundary(mobileNumberDataSearch), asyncErrorBoundary(list)],
   create: [isValidReservation, isPartyValid, dateFormatValidation, isNotTuesday, isFutureDate,  timeFormatValidation, isAfterOpen, isBeforeClose, isFutureTime, isBooked, asyncErrorBoundary(create)],
   update: [asyncErrorBoundary(reservationExists),  isValidStatus, isNotFinished, asyncErrorBoundary(update)]
 }
