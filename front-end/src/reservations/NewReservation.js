@@ -111,7 +111,9 @@ function NewReservation() {
           />
         </label>
         <button type="submit">Submit</button>
-        <button onClick={history.goBack}>Cancel</button>
+        <button type="button" onClick={history.goBack}>
+          Cancel
+        </button>
       </form>
       <ErrorAlert error={error} />
     </div>
