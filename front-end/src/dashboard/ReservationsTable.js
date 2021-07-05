@@ -46,12 +46,12 @@ const ReservationsTable = ({reservations}) => {
                 <td>{reservation.people}</td>
                 <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
                 {reservation.status === "booked" && <td><Link to={`/reservations/${reservation.reservation_id}/seat`} type="button" className="btn btn-success">Seat</Link></td>}
-                <td><Link to={`/reservations/${reservation.reservation_id}/edit`} type="button" className="btn btn-danger">Edit</Link></td>
+                <td><Link to={`/reservations/${reservation.reservation_id}/edit`} type="button" className="btn btn-alert">Edit</Link></td>
+                <td><button type="button" className="btn btn-danger">Cancel</button> </td>
               </tr>
         ))}
       </tbody>
     </table>
-    
           </div> 
         )
       }
