@@ -1,7 +1,17 @@
+import { useState } from "react";
 import Form from "./Form";
 
 
 const NewReservation = () => {
+
+  
+  const [newRes, setNewRes] = useState({first_name: "",
+  last_name: "",
+  mobile_number: "",
+  reservation_date: "",
+  reservation_time: "",
+  people: "",
+})
 
  
 //   async function submitHandler(e) {
@@ -47,7 +57,7 @@ const NewReservation = () => {
 
   return (
     <div> 
-    <Form />
+    <Form reservation={newRes} setNewRes={setNewRes}/>
     </div>
   );
 }

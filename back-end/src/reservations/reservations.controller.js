@@ -4,7 +4,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 
 async function reservationExists(req, res, next) {
   const { reservation_id } = req.params;
-  const reservation = await reservationsService.read(reservation_id);
+  const reservation = await reservationsService.read(parseInt(reservation_id));
   if (reservation) {
     res.locals.reservation = reservation
     return next();
@@ -16,7 +16,7 @@ async function mobileNumberDataSearch(req, res, next) {
   if (!req.query.mobile_number) {
     return next();
   }
-    const found = await reservationsService.search(req.query.mobile_number)
+    //const found = await reservationsService.search(req.query.mobile_number)
     if (Number.isNaN(parseInt(req.query.mobile_number))) {
       return next({ 
         status: 400,
@@ -38,6 +38,7 @@ function isValidReservation(req, res, next) {
     "reservation_time",
     "people"
   ]
+
   if (!req.body.data) {
      return next({
       status: 400,
@@ -68,7 +69,7 @@ function isPartyValid(req, res, next) {
 
 function dateFormatValidation(req, res, next) {
   const { reservation_date } = req.body.data; 
-  if (reservation_date.match(/^\d{4}-\d{2}-\d{2}$/) === null) {
+  if (reservation_date.slice(0, 10).match(/^\d{4}-\d{2}-\d{2}$/) === null) {
     return next({
       status: 400,
       message: `The reservation_date must be in YYYY-MM-DD format.`
@@ -105,7 +106,8 @@ function isFutureDate(req, res, next) {
 
 function timeFormatValidation(req, res, next) {
     const { reservation_time } = req.body.data; 
-    if (reservation_time.match(/^\d{1,2}:\d{2}([ap]m)?$/) === null) {
+    console.log(reservation_time.slice(0, 5))
+    if (reservation_time.slice(0, 5).match(/^\d{1,2}:\d{2}([ap]m)?$/) === null) {
       return next({
         status: 400,
         message: `The reservation_time must be in HH:MM format.`
@@ -179,7 +181,7 @@ function isBooked(req, res, next) {
 
 function isValidStatus(req, res, next) {
   const { status } = req.body.data;
-  const validStatuses = ["booked", "seated", "finished"];
+  const validStatuses = ["booked", "seated", "finished", "cancelled"];
     if (!validStatuses.includes(status)) {
       return next({
         status: 400,
@@ -211,10 +213,18 @@ function read(req, res) {
 }
 
 async function update(req, res) {
+  if (!req.body.data.reservation_id) {
   const updatedReservation = {...res.locals.reservation, status: req.body.data.status};
   res.status(200).json({ 
     data: await reservationsService.update(updatedReservation) 
+  }) 
+} else {
+  const updatedReservation = {...req.body.data, reservation_date: req.body.data.reservation_date.slice(0, 10), reservation_time:  req.body.data.reservation_time.slice(0, 5)};
+  console.log(updatedReservation)
+  res.status(200).json({
+    data: await reservationsService.update(updatedReservation)
   })
+}
 }
 
 
@@ -243,5 +253,6 @@ module.exports = {
   read: [asyncErrorBoundary(reservationExists), read],
   list: [asyncErrorBoundary(mobileNumberDataSearch), asyncErrorBoundary(list)],
   create: [isValidReservation, isPartyValid, dateFormatValidation, isNotTuesday, isFutureDate,  timeFormatValidation, isAfterOpen, isBeforeClose, isFutureTime, isBooked, asyncErrorBoundary(create)],
-  update: [asyncErrorBoundary(reservationExists),  isValidStatus, isNotFinished, asyncErrorBoundary(update)]
+  updateStatus: [asyncErrorBoundary(reservationExists),  isValidStatus, isNotFinished, asyncErrorBoundary(update)],
+  updateReservation: [asyncErrorBoundary(reservationExists), isValidReservation, isPartyValid, dateFormatValidation, isNotTuesday, isFutureDate,  timeFormatValidation, isAfterOpen, isBeforeClose, isFutureTime, isBooked, asyncErrorBoundary(update)]
 }

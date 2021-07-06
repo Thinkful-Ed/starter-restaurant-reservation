@@ -29,7 +29,6 @@ function loadReservations() {
   listReservations({ date }, abortController.signal)
     .then(setReservations)
     .catch(setReservationsError);
-  return () => abortController.abort();
 }
 
 
