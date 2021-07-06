@@ -28,7 +28,7 @@ function Tables() {
           <tr key={table.table_id}>
             <td>{table.table_name}</td>
             <td>{table.capacity}</td>
-            <td>{table.occupied ? "Occupied" : "Free"}</td>
+            <td>{table.reservation_id === -1 ? "Free" : "Occupied"}</td>
           </tr>
         ))}
       </table>
