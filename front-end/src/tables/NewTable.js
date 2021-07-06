@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { createTable } from "../utils/api";
 
 function NewTable() {
   const history = useHistory();
@@ -7,7 +8,7 @@ function NewTable() {
     table_name: "",
     capacity: "",
   });
-  console.log(history);
+  const [err, setErr] = useState(null);
 
   const handleChange = (e) => {
     setForm((form) => ({
@@ -18,6 +19,9 @@ function NewTable() {
 
   const handleSumbit = (e) => {
     e.preventDefault();
+    createTable({ ...form, capacity: Number(form.capacity) })
+      .then(history.push("/dashboard"))
+      .catch(setErr);
   };
 
   return (

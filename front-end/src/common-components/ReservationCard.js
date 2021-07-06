@@ -1,4 +1,5 @@
 import { formatAsTime } from "../utils/date-time";
+import { Link } from "react-router-dom";
 
 function ReservationCard({ reservation }) {
   return (
@@ -12,6 +13,11 @@ function ReservationCard({ reservation }) {
           <li>Time: {formatAsTime(reservation.reservation_time)}</li>
           <li>People: {reservation.people}</li>
         </ul>
+        <div className="card-footer">
+          <Link to={`/reservations/${reservation.reservation_id}/seat`}>
+            Seat
+          </Link>
+        </div>
       </div>
     </div>
   );
