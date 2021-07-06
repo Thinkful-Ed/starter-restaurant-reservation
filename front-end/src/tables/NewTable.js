@@ -46,6 +46,7 @@ function NewTable() {
             name="capacity"
             value={form.capacity}
             onChange={handleChange}
+            min="1"
             required
           />
         </label>
