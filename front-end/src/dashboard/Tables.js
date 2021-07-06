@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { listTables } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function Tables() {
   const [tables, setTables] = useState([]);
@@ -16,6 +17,7 @@ function Tables() {
 
   return (
     <div>
+      <ErrorAlert error={err} />
       <table className="table">
         <tr>
           <th>Table Name</th>
@@ -23,7 +25,7 @@ function Tables() {
           <th>Occupied?</th>
         </tr>
         {tables.map((table) => (
-          <tr>
+          <tr key={table.table_id}>
             <td>{table.table_name}</td>
             <td>{table.capacity}</td>
             <td>{table.occupied ? "Occupied" : "Free"}</td>
