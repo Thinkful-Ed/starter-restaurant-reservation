@@ -96,3 +96,16 @@ export async function createTable(table, signal) {
     body: JSON.stringify({ data: table }),
   });
 }
+
+export async function seatReservation(reservationId, tableId, signal) {
+  return await fetchJson(`${API_BASE_URL}/tables/${tableId}/seat`, {
+    headers,
+    signal,
+    method: "PUT",
+    body: JSON.stringify({
+      data: {
+        reservation_id: Number(reservationId),
+      },
+    }),
+  });
+}

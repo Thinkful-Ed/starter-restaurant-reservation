@@ -5,8 +5,19 @@ let id = 0;
 //stub service handlers
 const list = () => Promise.resolve(tables);
 const create = (table) => {
-  tables.push({ ...table, occupied: false, table_id: id++ });
+  tables.push({
+    ...table,
+    table_id: id++,
+    reservation_id: -1,
+  });
   return Promise.resolve(table);
 };
+const seatReservation = (tableId, reservationId) => {
+  const tableIndex = tables.findIndex((table) => table.table_id === tableId);
+  if (tableIndex === -1) return Promise.reject("Invalid table_id.");
 
-module.exports = { list, create };
+  tables[tableIndex].reservation_id = reservationId;
+  return Promise.resolve(tables[tableIndex]);
+};
+
+module.exports = { list, create, seatReservation };
