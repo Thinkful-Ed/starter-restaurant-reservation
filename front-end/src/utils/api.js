@@ -70,6 +70,10 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+export async function listTables(signal) {
+  return await fetchJson(`${API_BASE_URL}/tables`, { headers, signal });
+}
+
 /**
  * Creates a reservation.
  * @param {object} reservation
@@ -81,5 +85,14 @@ export async function createReservation(reservation, signal) {
     signal,
     method: "POST",
     body: JSON.stringify({ data: reservation }),
+  });
+}
+
+export async function createTable(table, signal) {
+  return await fetchJson(`${API_BASE_URL}/tables`, {
+    headers,
+    signal,
+    method: "POST",
+    body: JSON.stringify({ data: table }),
   });
 }
