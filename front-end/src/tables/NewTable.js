@@ -27,23 +27,25 @@ function NewTable() {
   return (
     <div>
       <form onSubmit={handleSumbit}>
-        <label for="table_name">
+        <label htmlFor="table_name">
           Table Name
           <input
             type="text"
             name="table_name"
-            minlength="2"
+            minLength="2"
             value={form.table_name}
             onChange={handleChange}
+            required
           />
         </label>
-        <label for="capacity">
+        <label htmlFor="capacity">
           Capacity
           <input
             type="number"
             name="capacity"
             value={form.capacity}
             onChange={handleChange}
+            required
           />
         </label>
         <button type="submit">Submit</button>
