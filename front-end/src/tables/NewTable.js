@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createTable } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function NewTable() {
   const history = useHistory();
@@ -53,6 +54,7 @@ function NewTable() {
           Cancel
         </button>
       </form>
+      <ErrorAlert error={err} />
     </div>
   );
 }
