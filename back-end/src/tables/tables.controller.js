@@ -5,7 +5,7 @@ const create = async (req, res) =>
   res.status(201).json({ data: await service.create(req.body.data) });
 const seatReservation = async (req, res, next) =>
   service
-    .seatReservation(req.params.tableId, req.body.data.reservation_id)
+    .seatReservation(Number(req.params.tableId), req.body.data.reservation_id)
     .then((updatedTable) => res.json({ data: updatedTable }))
     .catch((err) => next({ status: 400, message: err }));
 

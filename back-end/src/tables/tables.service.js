@@ -5,12 +5,13 @@ let id = 0;
 //stub service handlers
 const list = () => Promise.resolve(tables);
 const create = (table) => {
-  tables.push({
+  const newTable = {
     ...table,
     table_id: id++,
     reservation_id: -1,
-  });
-  return Promise.resolve(table);
+  };
+  tables.push(newTable);
+  return Promise.resolve(newTable);
 };
 const seatReservation = (tableId, reservationId) => {
   const tableIndex = tables.findIndex((table) => table.table_id === tableId);
