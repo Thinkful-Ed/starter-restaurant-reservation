@@ -8,8 +8,10 @@ const hasFields = require("../validation/hasFields")([
   "reservation_time",
   "people",
 ]);
-const { dateTimeMiddleware } = require("../validation/validateDateTime");
-const peopleIsNum = require("../validation/peopleIsNum");
+const {
+  dateTimeMiddleware,
+} = require("../validation/reservations/validateDateTime");
+const peopleIsNum = require("../validation/reservations/peopleIsNum");
 
 // Extra validation middleware
 async function reservationExists(req, res, next) {

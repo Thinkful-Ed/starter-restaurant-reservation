@@ -1,24 +1,12 @@
-// stub data
-const tables = [];
-let id = 0;
+const db = require("../db/connection");
 
-//stub service handlers
-const list = () => Promise.resolve(tables);
-const create = (table) => {
-  const newTable = {
-    ...table,
-    table_id: id++,
-    reservation_id: -1,
-  };
-  tables.push(newTable);
-  return Promise.resolve(newTable);
-};
-const seatReservation = (tableId, reservationId) => {
-  const tableIndex = tables.findIndex((table) => table.table_id === tableId);
-  if (tableIndex === -1) return Promise.reject("Invalid table_id.");
+const list = () => db("tables").select("*").orderBy("table_name");
+const read = (table_id) => db("tables").first("*").where({ table_id });
+const create = (table) =>
+  db("tables")
+    .insert(table, "*")
+    .then((res) => res[0]);
+const seatReservation = (table_id, reservation_id) =>
+  db("tables").where({ table_id }).update({ reservation_id }, "*");
 
-  tables[tableIndex].reservation_id = reservationId;
-  return Promise.resolve(tables[tableIndex]);
-};
-
-module.exports = { list, create, seatReservation };
+module.exports = { list, read, create, seatReservation };
