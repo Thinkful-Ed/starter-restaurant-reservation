@@ -21,7 +21,7 @@ function NewTable() {
   const handleSumbit = (e) => {
     e.preventDefault();
     createTable({ ...form, capacity: Number(form.capacity) })
-      .then(history.push("/dashboard"))
+      .then(() => history.push("/dashboard"))
       .catch(setErr);
   };
 

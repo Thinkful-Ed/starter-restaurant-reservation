@@ -9,6 +9,7 @@ function Tables() {
   useEffect(loadTables, []);
 
   function loadTables() {
+    console.log("Loading ...");
     const abortController = new AbortController();
     setErr(null);
     listTables(abortController.signal).then(setTables).catch(setErr);
@@ -19,18 +20,22 @@ function Tables() {
     <div>
       <ErrorAlert error={err} />
       <table className="table">
-        <tr>
-          <th>Table Name</th>
-          <th>Capacity</th>
-          <th>Occupied?</th>
-        </tr>
-        {tables.map((table) => (
-          <tr key={table.table_id}>
-            <td>{table.table_name}</td>
-            <td>{table.capacity}</td>
-            <td>{table.reservation_id === -1 ? "Free" : "Occupied"}</td>
+        <thead>
+          <tr>
+            <th>Table Name</th>
+            <th>Capacity</th>
+            <th>Occupied?</th>
           </tr>
-        ))}
+        </thead>
+        <tbody>
+          {tables.map((table) => (
+            <tr key={table.table_id}>
+              <td>{table.table_name}</td>
+              <td>{table.capacity}</td>
+              <td>{table.reservation_id === null ? "Free" : "Occupied"}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   );
