@@ -2,7 +2,7 @@ const dayjs = require("dayjs");
 const isBetween = require("dayjs/plugin/isBetween");
 dayjs.extend(isBetween);
 
-const parseDateTime = require("../utils/parse-dateTime");
+const parseDateTime = require("../../utils/parse-dateTime");
 const errWrapper = (message) => ({ status: 400, message });
 
 const validations = {
