@@ -9,10 +9,15 @@ function create(newReservation){
 }
 
 function list(date){
-    return knex(tableName)
-        .select()
-        .where({ reservation_date: date })
-        .orderBy("reservation_time");
+    if ( date ){
+        return knex(tableName)
+            .select()
+            .where({ reservation_date: date })
+            .orderBy("reservation_time");
+    }
+    else{
+        return knex(tableName).select().orderBy("reservation_date","reservation_time");
+    }
 }
 
 

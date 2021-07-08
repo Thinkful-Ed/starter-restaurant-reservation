@@ -3,20 +3,20 @@ import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
 import { previous, today, next } from "../utils/date-time";
 
-export default function DateButtons({ date }){
+export default function DateButtons({ date = today()}){
     const history = useHistory()    
     const calendarChangeHandler = ( { target: { value } } ) => {
         history.push(`/dashboard?date=${value}`);
     }
     return (
-        <div>
-            <div className="input-group mb-3 col col-6">
+        <div className="row">
+            <div className="input-group mb-3 col-6">
                 <div className="input-group-prepend">
-                    <span className="input-group-text">Pick a date</span>
+                    <span className="input-group-text">Pick a diffrent date</span>
                 </div>
                 <input type="date" className="form-control" value={date} onChange={calendarChangeHandler}/>
             </div>
-            <div className="btn-group col col-6 " >
+            <div className=" col-6 " >
                 <Link to={`/dashboard?date=${previous(date)}`} type="button" className="btn btn-primary" > 
                     <span className="oi oi-arrow-circle-left" />
                     &nbsp; Prev

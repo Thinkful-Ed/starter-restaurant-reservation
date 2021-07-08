@@ -4,7 +4,8 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { useLocation } from "react-router";
 import { today } from "../utils/date-time";
 import DateButtons from "./DateButtons";
-
+import ShowTablesList from "./ShowTablesList";
+import ShowReservationsList from "./ShowReservationsList";
 /**
  * Defines the dashboard page.
  * @param date
@@ -12,7 +13,7 @@ import DateButtons from "./DateButtons";
  * @returns {JSX.Element}
  */
 
-function Dashboard({ date : propDate }) {
+function Dashboard({ date : thisDate }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const loc = useLocation();
@@ -24,7 +25,8 @@ function Dashboard({ date : propDate }) {
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
+    // in case of /dashboard with no date params the listReservations function will be called with empty params
+    listReservations( date ? { date } : {} , abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
@@ -34,13 +36,16 @@ function Dashboard({ date : propDate }) {
     <main >
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date : {date}</h4>
+        <h4 className="mb-0">Reservations for date : {date || "All Dates"}</h4>
       </div>
-        <ErrorAlert error={reservationsError} />
-        <DateButtons date={date}/>
-      <div className="row">
-        {JSON.stringify(reservations)}
-      </div>
+      <ErrorAlert error={reservationsError} />
+
+      <DateButtons date={date || today()}/> 
+
+      <ShowReservationsList reservations={reservations} />
+
+      <ShowTablesList />
+
     </main>
   );
 }

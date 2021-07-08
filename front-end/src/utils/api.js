@@ -25,7 +25,9 @@ export async function createReservation(reservation, signal){
     body: JSON.stringify({ data: reservation }),
     signal,
   }
-  return await fetchJson(url, options);
+  const newReservation = await fetchJson(url, options);
+  reservations.push(newReservation);//to have copy of reservation to share between components
+  return newReservation;
 }
 
 
@@ -73,14 +75,55 @@ async function fetchJson(url, options, onCancel) {
  *  a promise that resolves to a possibly empty array of reservation saved in the database.
  */
 
+let reservations = []; //to have copy of reservation to share between components
 export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
   Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.append(key, value.toString())
+    value && url.searchParams.append(key, value.toString())
   );
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
-    .then(formatReservationTime);
+    .then(formatReservationTime)
+    .then( (result) => {
+      reservations = [...result];//to have copy of reservation to share between components
+      return result;
+    });
 }
 
+export function getReservationPeople(reservation_id){
+  const index = reservations.findIndex( (reservation) => reservation.reservation_id === Number(reservation_id));
+  if (index > -1){
+    return reservations[index].people;
+  }
+}
 
+const tables = [
+  {table_id: 1, table_name:"#1", capacity:6 ,reservation_id: null,},
+  {table_id: 2, table_name:"#2", capacity:6 ,reservation_id: null,},
+  {table_id: 3, table_name:"Bar #1", capacity:1 ,reservation_id: null,},
+  {table_id: 4, table_name:"Bar #2", capacity:1 ,reservation_id: null,},
+];
+
+function nextId(){
+  return Date.now();
+}
+export async function createTable(table, signal){
+  const newTable = {...table, table_id: nextId(), reservation_id: null};
+  tables.push(newTable);
+  return newTable;  
+}
+
+export async function listTables(signal){
+  // if (params){
+  //   return tables.filter( (table) => table.reservation_id === params.reservation_id);
+  // }
+  return tables;
+}
+
+export async function updateTable(tableId, reservation_id){
+  const index = tables.findIndex( (table) => table.table_id === Number(tableId) );
+  if (index > -1){
+    tables[index].reservation_id = Number(reservation_id);
+    return tables[index]; 
+  }
+}
