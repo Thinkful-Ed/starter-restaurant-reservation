@@ -2,6 +2,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import React, { useState, useEffect } from "react";
 import { listTables, finishTable } from "../utils/api";
 import { useHistory } from "react-router-dom";
+import "./Table.css"
 
 const TablesTable = () => {
   const history = useHistory();
@@ -33,8 +34,8 @@ const TablesTable = () => {
 
   function renderTable(tables) {
     return (
-      <div className="row g-2">
-        <table className="table table-dark">
+      <div className="table-container">
+        <table className="table">
           <thead>
             <tr>
               <th scope="col">Table Name</th>

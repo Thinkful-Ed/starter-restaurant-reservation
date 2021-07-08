@@ -1,0 +1,34 @@
+.form-inline {
+    margin-top: 10%;
+    justify-content: center;
+
+}
+
+.p-3 {
+    background-color: #FFFFEB;
+    border: 1px solid #424242 !important;
+}
+
+h1, h2 {
+    color: #940F69;
+}
+
+h1 {
+    font-size: 60px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 40px;
+    margin-top: 5%;
+}
+
+.btn-secondary {
+    color: #ffffff;
+    background-color: #424242;
+    margin-top: 0;
+}
+
+div.reservations-table {
+    margin-top: 2%;
+}

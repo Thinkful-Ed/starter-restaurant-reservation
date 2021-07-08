@@ -57,6 +57,8 @@ const NewReservation = () => {
 
   return (
     <div> 
+      <h1>Reservation Form</h1>
+            <hr></hr>
     <Form reservation={newRes} setNewRes={setNewRes}/>
     </div>
   );

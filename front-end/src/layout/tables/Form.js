@@ -2,6 +2,7 @@ import { createTable } from "../../utils/api";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../ErrorAlert";
+import "../Form.css"
 
 const Form = () => {
 
@@ -67,7 +68,7 @@ const Form = () => {
             placeholder="Capacity"
             onChange={handleChange}
             />
-
+            <div className="form-buttons">
            <button className="btn btn-secondary" onClick={handleCancel}>
             Cancel
            </button>
@@ -75,6 +76,7 @@ const Form = () => {
            <button type="submit" className="btn btn-primary">
             Submit
            </button>
+           </div>
 
         </form>
         </div>

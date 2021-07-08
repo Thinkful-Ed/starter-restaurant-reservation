@@ -2,6 +2,7 @@ import { listReservations } from "../utils/api";
 import { useState } from "react";
 import ReservationsTable from "./ReservationsTable";
 import ErrorAlert from "../layout/ErrorAlert";
+import "./Search.css"
 
 
 const Search = () => {
@@ -106,6 +107,8 @@ const Search = () => {
 
   return (
     <div>
+      <h1>Search</h1>
+      <hr></hr>
   <ErrorAlert error={reservationsError}/>
   <form className="form-inline" onSubmit={listReservationsByPhoneNumber}>
 	<input 
@@ -116,14 +119,14 @@ const Search = () => {
   className="form-control w-75 p-3"
   placeholder="Enter a customer's phone number">
   </input>
-  	<button id="search-button" type="submit" className="btn btn-primary mb-2">
+  	<button id="search-button" type="submit" className="btn btn-primary ml-2">
       Find
   	</button>
     </form>
-    <div>
+    <div className="reservations-table">
       {reservations.length ? 
     <ReservationsTable reservations={reservations} />
-    : <h1> No reservations found. </h1>
+    : <h2> No reservations found. </h2>
       }
     </div>
     </div>

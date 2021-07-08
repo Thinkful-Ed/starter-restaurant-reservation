@@ -5,6 +5,8 @@ const NewTable = () => {
 
     return ( 
         <div>
+            <h1>Table Form</h1>
+            <hr></hr>
             <Form />
         </div>
      );

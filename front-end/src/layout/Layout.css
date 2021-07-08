@@ -1,4 +1,37 @@
+html, body {
+  margin: 0;
+}
+html, body, div.container-fluid, /*div.col*/ div.col-md-2.side-bar, #root {
+  height: 100%;
+}
+
+div.col-md-2.side-bar { 
+  padding-bottom: 100%;
+}
+
+div.col {
+  padding-left: 0;
+  padding-bottom: 10%;
+  background-color: #FFFFEB;
+  /* padding-right: 0; */
+}
+
+
+.h-100 {
+   background-color: #FFFFEB;
+}
+
 .side-bar {
-  background-color: #393a44;
+  background-color: #079094;
+  /* border-right: 3px solid #16DAE0; */
   min-width: 200px;
 }
+
+/* 
+Colors: 
+#54688F
+#CFC6C4
+#9CB7EE
+#EBEDE6
+#B7BFA6
+*/

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { changeReservationStatus } from "../utils/api";
+import "./Table.css"
 
 const ReservationsTable = ({reservations}) => {
 
@@ -36,8 +37,8 @@ const ReservationsTable = ({reservations}) => {
       }
 
         return (
-          <div className="row g-2">
-            <table className="table table-dark">
+          <div className="table-container">
+            <table className="table">
       <thead>
         <tr>
           <th scope="col">Last Name</th>
@@ -60,8 +61,8 @@ const ReservationsTable = ({reservations}) => {
                 <td>{reservation.reservation_time}</td>
                 <td>{reservation.people}</td>
                 <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
-                {reservation.status === "booked" && <td><Link to={`/reservations/${reservation.reservation_id}/seat`} type="button" className="btn btn-success">Seat</Link></td>}
-                <td><Link to={`/reservations/${reservation.reservation_id}/edit`} type="button" className="btn btn-warning">Edit</Link></td>
+                {reservation.status === "booked" && <td><Link to={`/reservations/${reservation.reservation_id}/seat`} type="button" className="btn btn-seat">Seat</Link></td>}
+                <td><Link to={`/reservations/${reservation.reservation_id}/edit`} type="button" className="btn btn-edit">Edit</Link></td>
                 <td><button data-reservation-id-cancel={reservation.reservation_id}  value={reservation.reservation_id} type="button" className="btn btn-danger" onClick={handleCancel}>Cancel</button> </td>
               </tr>
         ))}

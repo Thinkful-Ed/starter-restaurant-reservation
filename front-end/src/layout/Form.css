@@ -1,0 +1,44 @@
+hr {
+    background-color: #079094;
+    margin-top: 0;
+    margin-bottom: 4%;
+}
+
+form {
+    background-color: #FFFFEB;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+label {
+    color: #940F69;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 1%;
+}
+
+.form-buttons {
+    margin-top: 2%;
+    padding-bottom: 2%;
+    /* margin-bottom: 4%; */
+    margin-left: 40%;
+}
+
+.btn-primary {
+    background-color: #079094;
+    border: none;
+    /* margin-top: 2%; */
+    margin-left: 2%; 
+}
+
+.btn-secondary {
+    background-color: #dc3545 !important;
+    margin-top: 2%;
+}
+
+
+.form-control {
+    background-color: #FFFFEB;
+    border: 1px solid #424242 !important;
+}
+

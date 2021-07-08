@@ -5,7 +5,7 @@ import ReservationsTable from "./ReservationsTable";
 import { listReservations } from "../utils/api";
 import TablesTable from "./TablesTable"
 import ErrorAlert from "../layout/ErrorAlert";
-
+import "./Dashboard.css";
 
 /**
  * Defines the dashboard page.
@@ -53,26 +53,29 @@ function loadReservations() {
 
   return (
     <main>
+      
+      <div className="banner">
       <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {date}</h4>
-      </div>
-      <ErrorAlert error={reservationsError}/>
-      <ReservationsTable reservations={reservations}/>
-      <TablesTable />
-      <div className="container">
-  <div className="row mt-5">
+      <hr></hr>
+  <div className="row buttons">
     <div className="col-md mt-2">
-    <button type="button" className="btn btn-outline-dark" onClick={previousDate}>Previous</button>
+    <button type="button" className="btn btn-dashboard" onClick={previousDate}>Previous</button>
     </div>
     <div className="col-md mt-2">
-    <button type="button" className="btn btn-outline-dark" onClick={todayDate}>Today</button>
+    <button type="button" className="btn btn-dashboard" onClick={todayDate}>Today</button>
     </div>
     <div className="col-md mt-2">
-    <button type="button" className="btn btn-outline-dark" onClick={nextDate}>Next</button>
+    <button type="button" className="btn btn-dashboard" onClick={nextDate}>Next</button>
     </div>
   </div>
-</div>
+  <div className="dashboard-tables">
+        <h4 className="reservations-header">Reservations for {date}</h4>
+      <ErrorAlert error={reservationsError}/>
+      <ReservationsTable reservations={reservations}/>
+      <h4 className="tables-header">Tables</h4>
+      <TablesTable />
+      </div>
+      </div>
     </main>
   )
 }
