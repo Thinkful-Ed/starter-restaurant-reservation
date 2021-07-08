@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 function ShowReservation({ reservation, index }) {
   return (
     <tr
-      key={index.toString()}
-      className={index % 2 === 0 ? "bg-light" : "bg-primary text-white"}
+      //key={index.toString()}
+      //className={index % 2 === 0 ? "bg-light" : "bg-primary text-white"}
     >
       <td>{reservation.reservation_id}</td>
       <td>{reservation.first_name}</td>
@@ -17,7 +17,7 @@ function ShowReservation({ reservation, index }) {
       <td>
         <Link
           to={`/reservations/${reservation.reservation_id}/seat`}
-          className={index % 2 === 0 ? "btn btn-outline-dark" : "btn btn-outline-light"}
+          className="btn btn-outline-dark"
         >
           Seat
         </Link>

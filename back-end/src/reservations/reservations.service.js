@@ -8,6 +8,13 @@ function create(newReservation){
         .then( (result)=>result[0] );
 }
 
+function read(reservation_id){
+    return knex(tableName)
+        .select()
+        .where({reservation_id : Number(reservation_id)})
+        .first();
+}
+
 function list(date){
     if ( date ){
         return knex(tableName)
@@ -23,5 +30,6 @@ function list(date){
 
 module.exports = {
     create,
+    read,
     list,
 }

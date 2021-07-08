@@ -11,6 +11,7 @@ function ShowTable({ table, index }){
     <tr className={cnr}>
         <td>{table.table_id}</td>
         <td>{table.table_name}</td>
+        <td>{table.capacity}</td>
         <td>{table.reservation_id}</td>
         <td data-table-id-status={table.table_id} ><span className={" p-2 rounded "+cns}>{status}</span></td>
     </tr>

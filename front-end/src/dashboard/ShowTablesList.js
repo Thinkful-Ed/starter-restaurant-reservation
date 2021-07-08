@@ -18,9 +18,10 @@ function ShowTablesList() {
         <h4> List of Tables and Status</h4>
         <table className="table table-striped">
             <thead>
-                <tr className="bg-dark text-white">
+                <tr className="bg-primary text-white">
                     <th>id#</th>
                     <th>Table Name</th>
+                    <th>Capacity</th>
                     <th>Reservation id</th>
                     <th>Status</th>
                 </tr>

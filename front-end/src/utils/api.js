@@ -26,7 +26,6 @@ export async function createReservation(reservation, signal){
     signal,
   }
   const newReservation = await fetchJson(url, options);
-  reservations.push(newReservation);//to have copy of reservation to share between components
   return newReservation;
 }
 
@@ -75,7 +74,6 @@ async function fetchJson(url, options, onCancel) {
  *  a promise that resolves to a possibly empty array of reservation saved in the database.
  */
 
-let reservations = []; //to have copy of reservation to share between components
 export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
   Object.entries(params).forEach(([key, value]) =>
@@ -85,45 +83,53 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime)
     .then( (result) => {
-      reservations = [...result];//to have copy of reservation to share between components
       return result;
     });
 }
 
-export function getReservationPeople(reservation_id){
-  const index = reservations.findIndex( (reservation) => reservation.reservation_id === Number(reservation_id));
-  if (index > -1){
-    return reservations[index].people;
-  }
-}
-
-const tables = [
-  {table_id: 1, table_name:"#1", capacity:6 ,reservation_id: null,},
-  {table_id: 2, table_name:"#2", capacity:6 ,reservation_id: null,},
-  {table_id: 3, table_name:"Bar #1", capacity:1 ,reservation_id: null,},
-  {table_id: 4, table_name:"Bar #2", capacity:1 ,reservation_id: null,},
-];
-
-function nextId(){
-  return Date.now();
-}
 export async function createTable(table, signal){
-  const newTable = {...table, table_id: nextId(), reservation_id: null};
-  tables.push(newTable);
-  return newTable;  
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method : "POST",
+    headers,
+    body : JSON.stringify({ data : table }), 
+    signal : signal,
+  }
+  const newTable = await fetchJson(url, options);
+  return newTable;
 }
-
+  
 export async function listTables(signal){
-  // if (params){
-  //   return tables.filter( (table) => table.reservation_id === params.reservation_id);
-  // }
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method : "GET",
+    headers,
+    signal : signal,
+  }
+  const tables = await fetchJson(url, options);
   return tables;
 }
 
 export async function updateTable(tableId, reservation_id){
-  const index = tables.findIndex( (table) => table.table_id === Number(tableId) );
-  if (index > -1){
-    tables[index].reservation_id = Number(reservation_id);
-    return tables[index]; 
+  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
+  const options = {
+    method : "PUT",
+    headers,
+    body : JSON.stringify({ data : {reservation_id,} }),
   }
+  const updated = await fetchJson(url, options);
+  return updated;
+}
+
+export async function readReservation(reservation_id, signal){
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+  const options = {
+    method : "GET",
+    headers,
+    signal,
+  }
+  const reservation = await fetchJson(url, options)
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+  return reservation;
 }

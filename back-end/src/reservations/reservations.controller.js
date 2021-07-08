@@ -61,19 +61,6 @@ function hasValidMobile(req, res, next){
   next();
 }
 
-// function hasValidMobile(req, res, next){
-//   req.log.debug({__filename, methodName:"hasValidMobile" });
-//   const { mobile_number="" } = req.body.data;
-//   if ( mobile_number.trim().length !== 10 || isNaN(mobile_number)){
-//     req.log.trace({__filename, methodName:"hasValidMobile", mobile_number});
-//     return next({
-//       status : 400,
-//       message : "Must have a valid mobile_number",
-//     });
-//   }
-//   next();
-// }
-
 function hasValidPeopleNumber(req, res, next){
   const { people } = req.body.data;
   if ( !people || typeof people !== "number" || isNaN(people) || people < 1 ){
@@ -162,6 +149,23 @@ async function create(req, res){
   res.status(201).json({ data, });
 }
 
+async function reservationExists(req, res, next){
+  const { reservation_id } = req.params;
+  const found = await service.read(reservation_id);
+  if (found){
+    res.locals.reservation = found;
+    return next();
+  }
+  next({
+    status : 404,
+    message : `Reservation id : ${reservation_id} not found in path ${req.originalUrl}`,
+  });
+}
+
+function read(req, res){
+  res.json({ data : res.locals.reservation});
+}
+
 module.exports = {
   create:[
     bodyHasData, 
@@ -176,5 +180,6 @@ module.exports = {
     isEligibleTime,
     asyncErrorBoundary(create),
   ],
+  read:[asyncErrorBoundary(reservationExists), read],
   list,
 };

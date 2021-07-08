@@ -15,6 +15,7 @@ function NewTable(){
 
     function submitHandler(event){
         event.preventDefault();
+        table.capacity = Number(table.capacity);
         createTable(table)
             .then( () => {history.push("/dashboard");} )
             .catch( setTableError );

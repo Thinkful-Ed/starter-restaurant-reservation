@@ -3,9 +3,9 @@ import ShowReservation from "./ShowReservation";
 
 function ShowReservationsList({ reservations = [] }){
     return (
-        <table className="table">
+        <table className="table table-striped">
             <thead>
-                <tr className="bg-dark text-white">
+                <tr className="bg-primary text-white">
                     <th >id#</th>
                     <th >First Name</th>
                     <th >Last Name</th>
