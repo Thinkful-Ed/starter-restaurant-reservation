@@ -41,7 +41,6 @@ function Dashboard({ date : thisDate }) {
       <ErrorAlert error={reservationsError} />
 
       <DateButtons date={date || today()}/> 
-
       <ShowReservationsList reservations={reservations} />
 
       <ShowTablesList />

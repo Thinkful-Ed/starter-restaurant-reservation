@@ -18,6 +18,8 @@ function ShowReservation({ reservation, index }) {
         <Link
           to={`/reservations/${reservation.reservation_id}/seat`}
           className="btn btn-outline-dark"
+          //href={`/reservations/${reservation.reservation_id}/seat`}
+          
         >
           Seat
         </Link>

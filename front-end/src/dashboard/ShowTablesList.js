@@ -10,12 +10,14 @@ function ShowTablesList() {
     const abortController = new AbortController();
     listTables(abortController.signal).then(setTables).catch(setTablesError);
     return () => abortController.abort();
-  }, [tables]);
+  }, []);
 
   return (
-    <div>
+    <div className="card">
+      <div className="card-header">
+        <h5> List of Tables and Status</h5>
+      </div>
         <ErrorAlert error={tablesError} />
-        <h4> List of Tables and Status</h4>
         <table className="table table-striped">
             <thead>
                 <tr className="bg-primary text-white">
