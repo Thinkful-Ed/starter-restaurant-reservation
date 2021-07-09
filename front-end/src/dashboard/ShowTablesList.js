@@ -10,7 +10,7 @@ function ShowTablesList() {
     const abortController = new AbortController();
     listTables(abortController.signal).then(setTables).catch(setTablesError);
     return () => abortController.abort();
-  }, []);
+  }, [tables]);
 
   return (
     <div>

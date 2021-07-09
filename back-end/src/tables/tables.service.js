@@ -10,6 +10,13 @@ function create(newTable){
         For this API, only one table will ever be inserted at a time */
 }
 
+function read(table_id){
+    return knex(tableName)
+        .select()
+        .where({table_id : Number(table_id)})
+        .first();
+}
+
 function update(table_id, reservation_id){
     return knex(tableName)
         .select("*")
@@ -29,6 +36,7 @@ function list(){
 
 module.exports = {
     create,
+    read,
     update,
     list,
 }

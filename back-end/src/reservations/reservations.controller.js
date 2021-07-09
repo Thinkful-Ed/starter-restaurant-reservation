@@ -8,7 +8,7 @@ const service = require("./reservations.service");
  */
 async function list(req, res) {
   req.log.debug({__filename, methodName:"list"});
-  const { date } = req.query || "";
+  const { date } = req.query;
   const data = await service.list(date);
   req.log.trace({__filename, methodName:"list", date, data});
   res.json({data,});
@@ -73,9 +73,11 @@ function hasValidPeopleNumber(req, res, next){
 }
 
 function hasValidDateFormat(req, res, next){
+  req.log.debug({fileName : "reservations.controller", methodeName : "hasValidDateFormat"});
   const dateFormat = /\d{4}-\d{2}-\d{2}/g;
-  const { reservation_date="" } = req.body.data;
-  if ( !reservation_date.match(dateFormat) ){
+  const reservation_date = req.body.data ? req.body.data.reservation_date : req.query.date;//to be able to use for both update and list
+  req.log.trace({fileName : "reservations.controller", methodeName : "hasValidDateFormat" , reservation_date,});
+  if (!reservation_date || reservation_date.trim().length !==10 || !reservation_date.match(dateFormat) ){
     return next({
       status : 400,
       message : "Server: reservation_date format must be YYYY-MM-DD"
@@ -150,7 +152,15 @@ async function create(req, res){
 }
 
 async function reservationExists(req, res, next){
-  const { reservation_id } = req.params;
+  //to be able to validate both for reservations read and tables update
+  //tables update puts reservation_id into tables   
+  const { reservation_id } = req.body.data ? req.body.data : req.params;
+  if (!reservation_id){
+    return next({
+      status : 400,
+      message : "reservation_id is missing"
+    });
+  }
   const found = await service.read(reservation_id);
   if (found){
     res.locals.reservation = found;
@@ -181,5 +191,6 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read:[asyncErrorBoundary(reservationExists), read],
-  list,
+  list:[hasValidDateFormat, asyncErrorBoundary(list)],
+  reservationExists,
 };
