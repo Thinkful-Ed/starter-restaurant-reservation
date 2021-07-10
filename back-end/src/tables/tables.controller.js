@@ -52,6 +52,15 @@ const tableIsNotSeated = async (req, res, next) => {
     : next();
 };
 
+const tableIsSeated = async (req, res, next) => {
+  return res.locals.table.reservation_id !== null
+    ? next()
+    : next({
+        status: 400,
+        message: `Table with table_id ${req.params.tableId} is currently not occupied.`,
+      });
+};
+
 const tableHasCapacity = async (req, res, next) => {
   const table = res.locals.table;
   const reservation = res.locals.reservation;
@@ -78,6 +87,11 @@ const seatReservation = async (req, res, next) =>
     ),
   });
 
+const finishTable = async (req, res, next) =>
+  res.json({
+    data: await service.finishTable(Number(req.params.tableId)),
+  });
+
 module.exports = {
   list,
   create: [hasData, hasFieldsCreate, validateTableNameLength, create],
@@ -90,4 +104,5 @@ module.exports = {
     tableHasCapacity,
     seatReservation,
   ],
+  finishTable: [tableExists, tableIsSeated, finishTable],
 };

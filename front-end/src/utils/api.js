@@ -116,3 +116,11 @@ export async function seatReservation(reservationId, tableId, signal) {
     }),
   });
 }
+
+export async function finishTable(tableId, signal) {
+  return await fetchJson(`${API_BASE_URL}/tables/${tableId}/seat`, {
+    headers,
+    signal,
+    method: "DELETE",
+  });
+}

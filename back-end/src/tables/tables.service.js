@@ -6,7 +6,11 @@ const create = (table) =>
   db("tables")
     .insert(table, "*")
     .then((res) => res[0]);
+
 const seatReservation = (table_id, reservation_id) =>
   db("tables").where({ table_id }).update({ reservation_id }, "*");
 
-module.exports = { list, read, create, seatReservation };
+const finishTable = (table_id) =>
+  db("tables").where({ table_id }).update({ reservation_id: null });
+
+module.exports = { list, read, create, seatReservation, finishTable };
