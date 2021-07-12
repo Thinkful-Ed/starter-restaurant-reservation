@@ -33,12 +33,12 @@ async function reservationExists(req, res, next) {
 
 // Main route handlers
 async function list(req, res) {
-  const { date = "", mobile_phone = "" } = req.query;
+  const { date = "", mobile_number = "" } = req.query;
 
   const data = date
     ? await service.listByDate(date)
-    : mobile_phone
-    ? await service.search(mobile_phone)
+    : mobile_number
+    ? await service.search(mobile_number)
     : await service.list();
 
   res.json({ data });
