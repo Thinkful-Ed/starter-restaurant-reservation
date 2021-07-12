@@ -13,7 +13,9 @@ function ReservationCard({ reservation }) {
           <li>Phone: {reservation.mobile_number}</li>
           <li>Time: {formatAsTime(reservation.reservation_time)}</li>
           <li>People: {reservation.people}</li>
-          <li>Status: {titleCaser(reservation.status)}</li>
+          <li data-reservation-id-status={reservation.reservation_id}>
+            Status: {titleCaser(reservation.status)}
+          </li>
         </ul>
         {reservation.status === "booked" && (
           <div className="card-footer">

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { listTables, readReservation, seatReservation } from "../utils/api";
 import { useHistory, useParams } from "react-router-dom";
+import { normalizeISODate } from "../utils/parse-dateTime";
 import ErrorAlert from "../layout/ErrorAlert";
 
 function SeatReservation() {
@@ -56,7 +57,11 @@ function SeatReservation() {
     if (!validateTable()) return;
 
     seatReservation(Number(reservationId), Number(tableId))
-      .then(() => history.push("/dashboard"))
+      .then(() =>
+        history.push(
+          `/dashboard?date=${normalizeISODate(reservation.reservation_date)}`
+        )
+      )
       .catch(setErr);
   }
 

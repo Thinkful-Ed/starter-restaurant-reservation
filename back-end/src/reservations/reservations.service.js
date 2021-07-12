@@ -12,6 +12,7 @@ const listByDate = (reservation_date) =>
   db("reservations")
     .select("*")
     .where({ reservation_date })
+    .whereNot({ status: "finished" })
     .orderBy("reservation_time");
 
 const create = (reservation) =>

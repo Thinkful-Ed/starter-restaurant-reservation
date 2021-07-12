@@ -13,7 +13,9 @@ const {
 } = require("../validation/reservations/validateDateTime");
 const peopleIsNum = require("../validation/reservations/peopleIsNum");
 const hasStatus = require("../validation/hasFields")(["status"]);
-const { validStatus } = require("../validation/reservations/validStatus");
+const validStatus = require("../validation/reservations/validStatus");
+const statusIsBooked = require("../validation/reservations/statusIsBooked");
+const statusIsNotFinished = require("../validation/reservations/statusIsNotFinished");
 
 // Extra validation middleware
 async function reservationExists(req, res, next) {
@@ -60,6 +62,20 @@ const updateStatus = async (req, res) => {
 module.exports = {
   list,
   read: [reservationExists, read],
-  create: [hasData, hasFields, peopleIsNum, dateTimeMiddleware, create],
-  updateStatus: [hasData, hasStatus, validStatus, updateStatus],
+  create: [
+    hasData,
+    hasFields,
+    statusIsBooked,
+    peopleIsNum,
+    dateTimeMiddleware,
+    create,
+  ],
+  updateStatus: [
+    hasData,
+    hasStatus,
+    validStatus,
+    reservationExists,
+    statusIsNotFinished,
+    updateStatus,
+  ],
 };

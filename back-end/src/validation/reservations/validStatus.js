@@ -6,10 +6,10 @@ const validStatus = (req, res, next) => {
     ? next()
     : next({
         status: 400,
-        message: `The status must be a string that exactly matches one of the following: ${validEntries
+        message: `Invalid status: '${status}'. The status must be a string that exactly matches one of the following: ${validEntries
           .map((entry) => `'${entry}'`)
           .join(", ")}.`,
       });
 };
 
-module.exports = { validStatus };
+module.exports = validStatus;

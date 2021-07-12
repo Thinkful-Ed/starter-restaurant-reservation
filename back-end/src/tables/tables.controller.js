@@ -1,6 +1,7 @@
 const service = require("./tables.service");
 const reservationsService = require("../reservations/reservations.service");
 const hasData = require("../validation/hasData");
+const P = require("pino");
 const hasFieldsSeat = require("../validation/hasFields")(["reservation_id"]);
 const hasFieldsCreate = require("../validation/hasFields")([
   "table_name",
@@ -73,6 +74,17 @@ const tableHasCapacity = async (req, res, next) => {
     : next();
 };
 
+const reservationIsNotSeated = async (req, res, next) => {
+  const reservation = res.locals.reservation;
+
+  return reservation.status === "seated"
+    ? next({
+        status: 400,
+        message: `Reservation with reservation_id ${reservation.reservation_id} is already seated.`,
+      })
+    : next();
+};
+
 //Main route handlers
 const list = async (req, res) => res.json({ data: await service.list() });
 
@@ -100,6 +112,7 @@ module.exports = {
     hasFieldsSeat,
     reservationExists,
     tableExists,
+    reservationIsNotSeated,
     tableIsNotSeated,
     tableHasCapacity,
     seatReservation,

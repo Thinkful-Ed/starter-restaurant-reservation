@@ -12,7 +12,6 @@ const parseDateTime = (date, time) => {
       ? "HH:MM"
       : "HHMM";
 
-  console.log(`${date} ${time}`, `${dateFormat} ${timeFormat}`);
   return dayjs(`${date} ${time}`, `${dateFormat} ${timeFormat}`);
 };
 
