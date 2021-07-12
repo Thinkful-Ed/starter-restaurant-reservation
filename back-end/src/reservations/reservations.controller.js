@@ -12,6 +12,8 @@ const {
   dateTimeMiddleware,
 } = require("../validation/reservations/validateDateTime");
 const peopleIsNum = require("../validation/reservations/peopleIsNum");
+const hasStatus = require("../validation/hasFields")(["status"]);
+const { validStatus } = require("../validation/reservations/validStatus");
 
 // Extra validation middleware
 async function reservationExists(req, res, next) {
@@ -45,8 +47,19 @@ function read(req, res) {
   res.json({ data: res.locals.reservation });
 }
 
+const updateStatus = async (req, res) => {
+  const payload = {
+    status: req.body.data.status,
+  };
+
+  res.json({
+    data: await service.update(Number(req.params.reservationId), payload),
+  });
+};
+
 module.exports = {
   list,
   read: [reservationExists, read],
   create: [hasData, hasFields, peopleIsNum, dateTimeMiddleware, create],
+  updateStatus: [hasData, hasStatus, validStatus, updateStatus],
 };

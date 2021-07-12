@@ -19,9 +19,16 @@ const create = (reservation) =>
     .insert(reservation, "*")
     .then((data) => data[0]);
 
+const update = (reservation_id, payload) =>
+  db("reservations")
+    .where({ reservation_id })
+    .update(payload, "*")
+    .then((res) => res[0]);
+
 module.exports = {
   list,
   read,
   listByDate,
   create,
+  update,
 };
