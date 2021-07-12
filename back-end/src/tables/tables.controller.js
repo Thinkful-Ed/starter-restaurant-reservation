@@ -1,7 +1,6 @@
 const service = require("./tables.service");
 const reservationsService = require("../reservations/reservations.service");
 const hasData = require("../validation/hasData");
-const P = require("pino");
 const hasFieldsSeat = require("../validation/hasFields")(["reservation_id"]);
 const hasFieldsCreate = require("../validation/hasFields")([
   "table_name",
