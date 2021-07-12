@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { searchReservations } from "../utils/api";
+import { listReservations } from "../utils/api";
 import ReservationCard from "../common-components/ReservationCard";
 import ErrorAlert from "../layout/ErrorAlert";
 
@@ -11,7 +11,9 @@ function Search() {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    searchReservations(number).then(setReservations).catch(setErr);
+    listReservations({ mobile_phone: number })
+      .then(setReservations)
+      .catch(setErr);
   };
 
   const changeHandler = (e) => {
