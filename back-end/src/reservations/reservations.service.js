@@ -26,10 +26,19 @@ const update = (reservation_id, payload) =>
     .update(payload, "*")
     .then((res) => res[0]);
 
+const search = (mobile_number) =>
+  db("reservations")
+    .whereRaw(
+      "translate(mobile_number, '() -', '') like ?",
+      `%${mobile_number.replace(/\D/g, "")}%`
+    )
+    .orderBy("reservation_date");
+
 module.exports = {
   list,
   read,
   listByDate,
   create,
   update,
+  search,
 };
