@@ -124,18 +124,3 @@ export async function finishTable(tableId, signal) {
     method: "DELETE",
   });
 }
-
-export async function searchReservations(mobile_number, signal) {
-  return Promise.resolve([
-    {
-      reservation_id: 1,
-      first_name: "Bobber",
-      last_name: "Biller",
-      mobile_number,
-      reservation_date: "2021-07-12",
-      reservation_time: "13:30",
-      people: 14,
-      status: "booked",
-    },
-  ]);
-}
