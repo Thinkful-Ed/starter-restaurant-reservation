@@ -4,7 +4,7 @@ import ReservationCard from "../common-components/ReservationCard";
 import ErrorAlert from "../layout/ErrorAlert";
 import DateHandler from "./DateHandler";
 
-function Reservations({ date, updateAll, setUpdateAll }) {
+function Reservations({ date, updateAll }) {
   const [reservations, setReservations] = useState([]);
   const [err, setErr] = useState(null);
 
