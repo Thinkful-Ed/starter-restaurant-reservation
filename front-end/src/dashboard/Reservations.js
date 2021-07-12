@@ -4,11 +4,11 @@ import ReservationCard from "../common-components/ReservationCard";
 import ErrorAlert from "../layout/ErrorAlert";
 import DateHandler from "./DateHandler";
 
-function Reservations({ date }) {
+function Reservations({ date, updateAll, setUpdateAll }) {
   const [reservations, setReservations] = useState([]);
   const [err, setErr] = useState(null);
 
-  useEffect(loadReservations, [date]);
+  useEffect(loadReservations, [date, updateAll]);
 
   function loadReservations() {
     const abortController = new AbortController();
@@ -26,9 +26,12 @@ function Reservations({ date }) {
       </div>
       <DateHandler date={date} />
       <ErrorAlert error={err} />
-      {reservations.map((reservation, idx) => (
-        <ReservationCard key={idx} reservation={reservation} />
-      ))}
+      {reservations.map(
+        (reservation, idx) =>
+          reservation.status !== "finished" && (
+            <ReservationCard key={idx} reservation={reservation} />
+          )
+      )}
     </div>
   );
 }

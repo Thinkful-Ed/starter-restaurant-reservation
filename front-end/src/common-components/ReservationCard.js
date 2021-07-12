@@ -1,5 +1,6 @@
 import { formatAsTime } from "../utils/date-time";
 import { Link } from "react-router-dom";
+import titleCaser from "../utils/titleCaser";
 
 function ReservationCard({ reservation }) {
   return (
@@ -12,12 +13,15 @@ function ReservationCard({ reservation }) {
           <li>Phone: {reservation.mobile_number}</li>
           <li>Time: {formatAsTime(reservation.reservation_time)}</li>
           <li>People: {reservation.people}</li>
+          <li>Status: {titleCaser(reservation.status)}</li>
         </ul>
-        <div className="card-footer">
-          <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-            Seat
-          </Link>
-        </div>
+        {reservation.status === "booked" && (
+          <div className="card-footer">
+            <Link to={`/reservations/${reservation.reservation_id}/seat`}>
+              Seat
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

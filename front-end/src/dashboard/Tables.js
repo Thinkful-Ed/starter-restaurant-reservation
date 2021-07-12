@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { listTables, finishTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
-function Tables() {
+function Tables({ updateAll, setUpdateAll }) {
   const [tables, setTables] = useState([]);
   const [err, setErr] = useState(null);
 
-  useEffect(loadTables, []);
+  useEffect(loadTables, [updateAll]);
 
   function loadTables() {
     const abortController = new AbortController();
@@ -22,7 +22,7 @@ function Tables() {
     if (!finish) return;
 
     finishTable(e.target.getAttribute("data-table-id-finish"))
-      .then(loadTables)
+      .then(() => setUpdateAll((updateAll) => !updateAll))
       .catch(setErr);
   }
 
