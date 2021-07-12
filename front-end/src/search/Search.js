@@ -11,7 +11,11 @@ function Search() {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    listReservations({ mobile_phone: number })
+    listReservations({ mobile_number: number })
+      .then((res) => {
+        if (!res.length) setErr({ message: "No reservations found" });
+        return res;
+      })
       .then(setReservations)
       .catch(setErr);
   };
