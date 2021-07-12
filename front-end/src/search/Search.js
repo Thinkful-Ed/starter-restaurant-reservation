@@ -11,6 +11,7 @@ function Search() {
   const submitHandler = (e) => {
     e.preventDefault();
 
+    setErr(null);
     listReservations({ mobile_number: number })
       .then((res) => {
         if (!res.length) setErr({ message: "No reservations found" });
