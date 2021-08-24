@@ -27,6 +27,7 @@ export default function NewReservation() {
       reservation_time: '',
       party_size: '',
     });
+    history.push('/');
   }
   function handleChange({ target: { name, value } }) {
     setReservation((previousReservation) => ({
