@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { createReservation } from '../utils/api';
 
 export default function NewReservation() {
   const [reservation, setReservation] = useState({
@@ -8,7 +9,7 @@ export default function NewReservation() {
     mobile_number: '',
     reservation_date: '',
     reservation_time: '',
-    party_size: '',
+    people: '',
   });
 
   const reservations = [];
@@ -17,17 +18,19 @@ export default function NewReservation() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    reservations.push(reservation);
-    console.log(reservations[0]);
+    createReservation(reservation).then(() => {
+      history.push('/');
+    });
+    // reservations.push(reservation);
+    // console.log(reservations[0]);
     setReservation({
       first_name: '',
       last_name: '',
       mobile_number: '',
       reservation_date: '',
       reservation_time: '',
-      party_size: '',
+      people: '',
     });
-    history.push('/');
   }
   function handleChange({ target: { name, value } }) {
     setReservation((previousReservation) => ({
@@ -97,12 +100,12 @@ export default function NewReservation() {
       <label>
         Number of people in Party:
         <input
-          name="party_size"
+          name="people"
           type="number"
           placeholder="min. 1 person"
           min="1"
           required
-          value={reservation.party_size}
+          value={reservation.people}
           onChange={handleChange}
         />
       </label>
