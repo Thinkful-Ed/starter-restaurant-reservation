@@ -9,7 +9,10 @@ const controller = require('./reservations.controller');
 const methodNotAllowed = require('../errors/methodNotAllowed');
 const cors = require('cors');
 
-router.route('/').get(controller.list);
-router.route('/new').post(controller.create).all(methodNotAllowed);
+router
+  .route('/')
+  .get(controller.list)
+  .post(controller.create)
+  .all(methodNotAllowed);
 
 module.exports = router;
