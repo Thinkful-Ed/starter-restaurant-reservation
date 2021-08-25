@@ -12,32 +12,22 @@ export default function NewReservation() {
     people: '',
   });
 
-  const reservations = [];
-
-  let history = useHistory();
+  const history = useHistory();
 
   function handleSubmit(event) {
     event.preventDefault();
-    createReservation(reservation).then(() => {
-      history.push('/');
-    });
-    // reservations.push(reservation);
-    // console.log(reservations[0]);
-    setReservation({
-      first_name: '',
-      last_name: '',
-      mobile_number: '',
-      reservation_date: '',
-      reservation_time: '',
-      people: '',
-    });
+    createReservation(reservation).then(() =>
+      history.push(`/dashboard/?date=${reservation.reservation_date}`)
+    );
   }
+
   function handleChange({ target: { name, value } }) {
     setReservation((previousReservation) => ({
       ...previousReservation,
       [name]: value,
     }));
   }
+
   return (
     <form className="reservation-form" onSubmit={handleSubmit}>
       <label>
@@ -69,7 +59,7 @@ export default function NewReservation() {
           name="mobile_number"
           type="tel"
           placeholder="555-666-6969"
-          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+          // pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
           required
           value={reservation.mobile_number}
           onChange={handleChange}
