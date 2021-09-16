@@ -8,6 +8,14 @@
     "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation"
   },
   "scripts": {
+    "deploy:backend": "heroku apps:create restaurant-reservation-server",
+    "deploy:client": "heroku apps:create my-bao-client3 --buildpack mars/create-react-app",
+    "deploy:remoteserver": "git remote add heroku-server https://git.heroku.com/restaurant-reservation-server.git",
+    "deploy:remoteclient": "git remote add heroku-client https://git.heroku.com/restaurant-reservation-client.git",
+    "deploy:pushserver": "git subtree push --prefix back-end heroku-server main",
+    "deploy:pushclient": "git subtree push --prefix front-end heroku-client main",
+    "deploy:errors":  "heroku logs",
+    "deploy:resources" : "https://sophiali.dev/how-to-deploy-monorepo-to-heroku",
     "build": "npm -prefix front-end run build",
     "preinstall": "cd ./back-end && npm install",
     "install": "cd ./front-end && npm install",
