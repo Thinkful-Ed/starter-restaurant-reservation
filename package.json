@@ -47,5 +47,14 @@
   },
   "keywords": [],
   "author": "Thinkful, Inc.",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@date-io/moment": "^2.11.0",
+    "@material-ui/pickers": "^3.3.10",
+    "dotenv": "^10.0.0",
+    "moment": "^2.29.1",
+    "prop-types": "^15.7.2",
+    "react-datepicker": "^4.2.1",
+    "react-datetime": "^3.1.1"
+  }
 }
