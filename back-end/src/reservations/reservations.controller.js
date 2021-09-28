@@ -1,6 +1,8 @@
 /**
  * List handler for reservation resources
  */
+
+//Imports for our controller
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
