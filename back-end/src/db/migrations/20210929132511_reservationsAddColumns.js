@@ -1,3 +1,4 @@
+
 exports.up = function (knex) {
     return knex.schema.table("reservations", (table) => {
       table.string("first_name");  // Add a new column
