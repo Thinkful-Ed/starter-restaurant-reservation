@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation",
+    "url": "git+https://github.com/Thinkful-Ed/starter-restaurant-reservation.git",
     "directory": "/back-end"
   },
   "scripts": {
@@ -43,5 +43,12 @@
     "jest": "^26.6.3",
     "nodemon": "^2.0.6",
     "supertest": "^6.1.1"
+  },
+  "bugs": {
+    "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation/issues"
+  },
+  "homepage": "https://github.com/Thinkful-Ed/starter-restaurant-reservation#readme",
+  "directories": {
+    "test": "test"
   }
 }
