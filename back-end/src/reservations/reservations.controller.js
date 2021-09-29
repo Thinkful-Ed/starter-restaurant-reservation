@@ -4,7 +4,7 @@ const asyncErrorboundary = require("../errors/asyncErrorBoundary");
  * List handler for reservation resources
  */
 async function list(req, res) {
-  res.json(await {data: reservationsService.list()});
+  res.json({data: await reservationsService.list()});
 }
 
 module.exports = {
