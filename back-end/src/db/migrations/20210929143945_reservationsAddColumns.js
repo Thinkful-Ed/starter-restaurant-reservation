@@ -1,9 +1,8 @@
-
 exports.up = function (knex) {
     return knex.schema.table("reservations", (table) => {
       table.string("first_name");  // Add a new column
       table.string("last_name");
-      table.integer("mobile_number");
+      table.string("mobile_number");
       table.date("reservation_date");
       table.time("reservation_time");
       table.integer("people");
