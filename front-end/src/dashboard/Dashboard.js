@@ -25,21 +25,43 @@ function Dashboard({ date }) {
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
-    .then(setReservations)
-    .catch(setReservationsError);
+      .then(setReservations)
+      .catch(setReservationsError);
     return () => abortController.abort();
   }
 
-  const list = listReservations(reservations)
+  const reservationsList = reservations.map(
+    ({
+      first_name,
+      last_name,
+      mobile_number,
+      reservation_date,
+      reservation_time,
+      people,
+      reservation_id,
+    }) => (
+      <table key={reservation_id}>
+        <tbody>
+          <tr>
+            <td>{first_name}</td>
+            <td>{last_name}</td>
+            <td>{mobile_number}</td>
+            <td>{reservation_date.substr(0, 10)}</td>
+            <td>{reservation_time.substr(0, 5)}</td>
+            <td>{people}</td>
+            <td data-reservation-id-status={reservation_id}></td>
+          </tr>
+        </tbody>
+      </table>
+    )
+  );
 
   return (
-    <main>
+    <>
       <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-      </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
-    </main>
+      {reservationsList}
+    </>
   );
 }
 

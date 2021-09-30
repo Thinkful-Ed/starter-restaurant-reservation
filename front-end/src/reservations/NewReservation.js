@@ -130,8 +130,9 @@ function NewReservation() {
         />
       </label>
       <div>
+      <br />
         <button
-          className="btn btn-primary"
+          className="btn btn-primary mr-2"
           type="submit"
           onClick={submitHandler}
         >
