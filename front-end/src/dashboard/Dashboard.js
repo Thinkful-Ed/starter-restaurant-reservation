@@ -4,6 +4,7 @@ import useQuery from "../utils/useQuery";
 import { listReservations, listTables } from "../utils/api";
 import formatDisplayDate from "../utils/date-time";
 import ReservationList from "./ReservationList";
+import NavigationBtns from "./NavigationBtns"
 
 /**
  * Defines the dashboard page.
@@ -34,6 +35,7 @@ function Dashboard({ date }) {
   return (
     <>
       <h1>Dashboard</h1>
+      <NavigationBtns date={date}/>
       <ErrorAlert error={reservationsError} />
       <ReservationList reservations={reservations}/>
     </>

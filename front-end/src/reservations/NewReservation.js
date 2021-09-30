@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { postReservation } from "../utils/api";
+import { today } from "../utils/date-time"
 
 
 function NewReservation() {
@@ -40,7 +41,7 @@ function NewReservation() {
 
   function cancelHandler(event) {
     event.preventDefault();
-    history.goBack();
+    history.push(`/dashboard?date=${today()}`);
   }
 
 
