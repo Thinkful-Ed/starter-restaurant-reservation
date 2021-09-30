@@ -3,7 +3,6 @@ import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { createReservation } from "../utils/api";
 
-
 function Reservation({ loadDashboard }) {
   const history = useHistory();
   const initialFormState = {
@@ -27,7 +26,7 @@ function Reservation({ loadDashboard }) {
     });
   };
 
-  function handleSubmit(event) {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const foundErrors = [];
     const abortController = new AbortController();
@@ -107,7 +106,7 @@ function Reservation({ loadDashboard }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       {reserveErrors()}
       <ErrorAlert error={apiError} />
       <div className="form-group">
@@ -195,7 +194,7 @@ function Reservation({ loadDashboard }) {
       >
         Cancel
       </button>
-      <button className="btn btn-primary" type="submit" value="Submit">
+      <button className="btn btn-primary" type="submit" onClick={handleSubmit}>
         Submit
       </button>
     </form>
