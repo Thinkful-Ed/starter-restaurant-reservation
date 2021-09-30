@@ -30,31 +30,7 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
-  const getReservations = reservations.map(
-    (
-      {
-        first_name,
-        last_name,
-        mobile_number,
-        reservation_date,
-        reservation_time,
-        people,
-        reservation_id,
-      }
-    ) => (
-           <tr>
-      <th scope="row">{reservation_id}</th>
-      <td>{first_name}</td>
-      <td>{last_name}</td>
-      <td>{mobile_number}</td>
-      <td>{reservation_date.substr(0, 10)}</td>
-      <td>{reservation_time.substr(0, 5)}</td>
-      <td>{people}</td>
-      <td data-reservation-id-status={reservation_id}>
-      </td>
-      </tr>
-    )
-  );
+  const list = listReservations(reservations)
 
   return (
     <main>

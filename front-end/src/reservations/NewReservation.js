@@ -43,11 +43,19 @@ function NewReservation() {
     history.goBack();
   }
 
+
   return (
-    <div className="flex">
+    <>
+      <div>
+      <h1 >
+        New Reservation
+        </h1>
+        </div>
+    <div className="d-flex">
     <form>
       <label htmlFor="first_name">
-        First name
+        First name:
+        <br />
         <input
           name="first_name"
           id="last_name"
@@ -59,7 +67,8 @@ function NewReservation() {
       </label>
       <br />
       <label htmlFor="last_name">
-        Last name
+        Last name:
+        <br />
         <input
           name="last_name"
           id="last_name"
@@ -71,7 +80,8 @@ function NewReservation() {
       </label>
       <br />
       <label htmlFor="mobile_number">
-        Mobile number
+        Mobile number:
+        <br />
         <input
           name="mobile_number"
           id="mobile_number"
@@ -83,7 +93,8 @@ function NewReservation() {
       </label>
       <br />
       <label htmlFor="reservation_date">
-        Reservation date
+        Reservation date:
+        <br />
         <input
           name="reservation_date"
           id="reservation_date"
@@ -95,7 +106,8 @@ function NewReservation() {
       </label>
       <br />
       <label htmlFor="reservation_time">
-        Reservation time
+        Reservation time:
+        <br />
         <input
           name="reservation_time"
           id="reservation_time"
@@ -107,7 +119,8 @@ function NewReservation() {
       </label>
       <br />
       <label htmlFor="people">
-        Number of guests
+        Number of guests:
+        <br />
         <input
           name="people"
           type="number"
@@ -134,6 +147,7 @@ function NewReservation() {
       </div>
     </form>
     </div>
+    </>
   );
 }
 
