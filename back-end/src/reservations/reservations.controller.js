@@ -5,17 +5,10 @@
 //Imports for our controller
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const hasProperties = require("../errors/hasProperties");
-
-function hasData(req, res, next) {
-  if (req.body.data) {
-    return next();
-  }
-  next({ status: 400, message: "body must have a data property" });
-}
 
 async function list(req, res) {
-  const data = await service.list();
+  const date = req.query.date;
+  const data = await service.list(date);
   res.json({
     data,
   });
@@ -28,5 +21,5 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [hasData, asyncErrorBoundary(create)],
+  create: [asyncErrorBoundary(create)],
 };
