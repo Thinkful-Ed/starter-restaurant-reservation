@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import DateTime from 'react-datetime';
 
 export default function NewReservation() {
   const initialFormState = {
@@ -23,8 +22,7 @@ export default function NewReservation() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("form submitted")
-    console.log(formData.date)
+    console.log(formData);
   }
 
   return (
