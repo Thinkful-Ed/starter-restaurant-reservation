@@ -3,6 +3,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import { listReservations, listTables } from "../utils/api";
 import formatDisplayDate from "../utils/date-time";
+import ReservationList from "./ReservationList";
 
 /**
  * Defines the dashboard page.
@@ -30,37 +31,11 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
-  const reservationsList = reservations.map(
-    ({
-      first_name,
-      last_name,
-      mobile_number,
-      reservation_date,
-      reservation_time,
-      people,
-      reservation_id,
-    }) => (
-      <table key={reservation_id}>
-        <tbody>
-          <tr>
-            <td>{first_name}</td>
-            <td>{last_name}</td>
-            <td>{mobile_number}</td>
-            <td>{reservation_date.substr(0, 10)}</td>
-            <td>{reservation_time.substr(0, 5)}</td>
-            <td>{people}</td>
-            <td data-reservation-id-status={reservation_id}></td>
-          </tr>
-        </tbody>
-      </table>
-    )
-  );
-
   return (
     <>
       <h1>Dashboard</h1>
       <ErrorAlert error={reservationsError} />
-      {reservationsList}
+      <ReservationList reservations={reservations}/>
     </>
   );
 }
