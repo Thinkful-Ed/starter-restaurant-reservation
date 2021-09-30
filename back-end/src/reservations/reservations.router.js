@@ -12,7 +12,7 @@ router
 .post(controller.create);
 
 router
-.route("/reservationId")
+.route("/:reservationId")
 .get(controller.read);
 
 module.exports = router;

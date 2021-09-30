@@ -1,26 +1,20 @@
 const knex = require("../db/connection");
-const reservationsController = require("./reservations.controller");
 
-
-function create(reservation){
+function create(reservation) {
   return knex("reservations")
-  .insert(reservation)
-  .returning("*")
-  .where({reservation_date: reservation.reservation_date});
+    .insert(reservation)
+    .returning("*")
+    .then((reservationsArray) => reservationsArray[0]);
 }
 
-function read (reservationId){
+function read(reservationId) {
   return knex("reservations")
-  .select("*")
-  .where({reservationId: reservation_id})
+    .select("*")
+    .where({ reservation_id: reservationId }); //left db --- right param
 }
 
 function list(date) {
-  return knex("reservations")
-  .select("*")
-  .where({ reservation_date: date });
+  return knex("reservations").select("*").where({ reservation_date: date });
 }
-
-
 
 module.exports = { list, create, read };

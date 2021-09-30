@@ -3,24 +3,24 @@ import { useHistory, useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { postReservation } from "../utils/api";
 
+
 function NewReservation() {
   const history = useHistory();
   const { reservation_id } = useParams();
 
-  const URL = process.env.REACT_APP_API_BASE_URL
+  const URL = process.env.REACT_APP_API_BASE_URL;
 
-   const initialFormState = {first_name: "",
-   last_name: "",
-   mobile_number: "",
-   reservation_date: "",
-   reservation_time: "",
-   people: "",}
+  const initialFormState = {
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    reservation_date: "",
+    reservation_time: "",
+    people: "",
+  };
 
-  const [inputData, setInputData] = useState({...initialFormState});
+  const [inputData, setInputData] = useState({ ...initialFormState });
   console.log(inputData);
-  
-
- 
 
   //changeHandler to make inputs controlled
   //get access to the values in the inputs
@@ -31,18 +31,20 @@ function NewReservation() {
   function submitHandler(event) {
     event.preventDefault();
     //have to validate (separate fxn)
-    postReservation(inputData)
-    .then(() => history.push(`/dashboard?date=${inputData.reservation_date}`))
-    
+    postReservation(inputData).then(() =>
+      history.push(`/dashboard?date=${inputData.reservation_date}`)
+    );
+
     //setInputData({...initialFormState});
   }
 
-  function cancelHandler(event){
+  function cancelHandler(event) {
     event.preventDefault();
     history.goBack();
   }
 
   return (
+    <div className="flex">
     <form>
       <label htmlFor="first_name">
         First name
@@ -131,6 +133,7 @@ function NewReservation() {
         </button>
       </div>
     </form>
+    </div>
   );
 }
 
