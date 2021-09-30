@@ -1,10 +1,8 @@
 import { useHistory } from "react-router-dom";
-import { useLocation } from "react-router";
-import { previous, today, next, formatAsDate } from "../utils/date-time"
+import { previous, today, next } from "../utils/date-time"
 
 function NavigationBtns({date}) {
 const history = useHistory();
-const { search } = useLocation()
 
   function prevDayHandler(event) {
     event.preventDefault();
@@ -23,18 +21,20 @@ const { search } = useLocation()
 
   return (
   <>
-    <div className="d-flex">
-      <button className="button" onClick={prevDayHandler}>
+  <h2>Reservations for {date}</h2>
+  <br/>
+    <div className="d-md-flex">
+      <button className= "btn btn-secondary mr-auto" type="button" onClick={prevDayHandler}>
           Prev
       </button>
-      <button className="button" onClick={currentDayHandler}>
+      <button className= "btn btn-primary mr-auto" type="button" onClick={currentDayHandler}>
           Today
       </button>
-      <button className="button" onClick={nextDayHandler}>
+      <button className= "btn btn-secondary mr-auto" type="button" onClick={nextDayHandler}>
           Next
       </button>
       </div>
-      <h2>Reservations for {date}</h2>
+      <br/>
     </>
   );
 }
