@@ -1,7 +1,7 @@
 import React from "react";
 
 function ReservationRow({ reservation }) {
-  if (!reservation) return null;
+  if (!reservation || reservation.status === "finished") return null;
 
   return (
     <tr>
@@ -11,12 +11,16 @@ function ReservationRow({ reservation }) {
       <td>{reservation.mobile_number}</td>
       <td>{reservation.reservation_time}</td>
       <td>{reservation.people}</td>
-      <td>{reservation.status}</td>
-      <td>
-        <a href={`/reservations/${reservation.reservation_id}/seat`}>
-          <button type="button">Seat</button>
-        </a>
+      <td data-reservation-id-status={reservation.reservation_id}>
+        {reservation.status}
       </td>
+      {reservation.status === "booked" && (
+        <td>
+          <a href={`/reservations/${reservation.reservation_id}/seat`}>
+            <button type="button">Seat</button>
+          </a>
+        </td>
+      )}
     </tr>
   );
 }
