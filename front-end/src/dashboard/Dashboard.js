@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import useQuery from "../utils/useQuery";
+import { listReservations, listTables } from "../utils/api";
+import formatDisplayDate from "../utils/date-time";
 
 /**
  * Defines the dashboard page.
@@ -8,7 +10,12 @@ import ErrorAlert from "../layout/ErrorAlert";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
+
 function Dashboard({ date }) {
+  const dateInUrl = useQuery().get("date");
+  if (dateInUrl) {
+    date = dateInUrl;
+  }
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -18,16 +25,41 @@ function Dashboard({ date }) {
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      .catch(setReservationsError);
+    .then(setReservations)
+    .catch(setReservationsError);
     return () => abortController.abort();
   }
+
+  const getReservations = reservations.map(
+    (
+      {
+        first_name,
+        last_name,
+        mobile_number,
+        reservation_date,
+        reservation_time,
+        people,
+        reservation_id,
+      }
+    ) => (
+           <tr>
+      <th scope="row">{reservation_id}</th>
+      <td>{first_name}</td>
+      <td>{last_name}</td>
+      <td>{mobile_number}</td>
+      <td>{reservation_date.substr(0, 10)}</td>
+      <td>{reservation_time.substr(0, 5)}</td>
+      <td>{people}</td>
+      <td data-reservation-id-status={reservation_id}>
+      </td>
+      </tr>
+    )
+  );
 
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
