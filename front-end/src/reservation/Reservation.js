@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { createReservation } from "../utils/api";
 
-function Reservation({ loadDashboard }) {
+function Reservation({ loadDashboard, reservations, edit }) {
   const history = useHistory();
+  const { reservation_id } = useParams();
   const initialFormState = {
     first_name: null,
     last_name: null,
@@ -17,6 +18,28 @@ function Reservation({ loadDashboard }) {
   const [apiError, setApiError] = useState(null);
   const [formData, setFormData] = useState({ ...initialFormState });
   const [errors, setErrors] = useState([]);
+
+  if (edit) {
+    if (!reservations || !reservations.id) return null;
+
+    const foundReservation = reservations.find(
+      (reservation) => reservation.reservation_id === Number(reservation_id)
+    );
+
+    if (!foundReservation || foundReservation.status !== "booked") {
+      return <p>Only booked reservations can be edited.</p>;
+    }
+
+    setFormData({
+      first_name: foundReservation.first_name,
+      last_name: foundReservation.last_name,
+      mobile_number: foundReservation.mobile_number,
+      reservation_date: foundReservation.reservation_date,
+      reservation_time: foundReservation.reservation_time,
+      people: foundReservation.people,
+      reservation_id: foundReservation.reservation_id,
+    });
+  }
 
   const handleChange = ({ target }) => {
     setFormData({
@@ -41,7 +64,7 @@ function Reservation({ loadDashboard }) {
     }
 
     setErrors(foundErrors);
-  }
+  };
 
   function validateFields(foundErrors) {
     for (const field in formData) {
