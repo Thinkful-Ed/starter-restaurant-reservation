@@ -70,17 +70,25 @@ export async function listReservations(params, signal) {
 
 export async function createReservation(reservation, signal) {
   const url = `${API_BASE_URL}/reservations`;
-  reservation.people = Number(reservation.people);
-  return await fetchJson(
-    url,
-    {
-      body: JSON.stringify({ data: reservation }),
-      headers,
-      method: "POST",
-      signal,
-    },
-    []
-  )
-    .then(formatReservationDate)
-    .then(formatReservationTime);
+  // this will convert our object into readable JSON as a string
+  const body = JSON.stringify({ data: reservation });
+  // we add method: "POST" as a part of the options, and also attach the body
+  return await fetchJson(url, { headers, signal, method: "POST", body }, []);
 }
+
+// export async function createReservation(reservation, signal) {
+//   const url = `${API_BASE_URL}/reservations`;
+//   reservation.people = Number(reservation.people);
+//   return await fetchJson(
+//     url,
+//     {
+//       body: JSON.stringify({ data: reservation }),
+//       headers,
+//       method: "POST",
+//       signal,
+//     },
+//     []
+//   )
+//     .then(formatReservationDate)
+//     .then(formatReservationTime);
+// }
