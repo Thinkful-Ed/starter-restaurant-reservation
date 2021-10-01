@@ -31,6 +31,10 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={reservationsError} />
       {reservations.length === 0 ? <p>There are no reservations for today</p> : JSON.stringify(reservations)}
+      <div>
+        <button>Date</button>
+        <button>Time</button>
+      </div>
     </main>
   );
 }

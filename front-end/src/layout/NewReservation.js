@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom'
+import { createReservation } from "../utils/api";
 
 export default function NewReservation() {
+  const history = useHistory();
   const initialFormState = {
     firstName: "",
     lastName: "",
@@ -10,6 +13,7 @@ export default function NewReservation() {
     peopleInParty: "",
   }
 
+  const [errors, setErrors] = useState([]);
   const [formData, setFormData] = useState({ ...initialFormState });
 
   const handleChange = ({ target }) => {
@@ -20,15 +24,46 @@ export default function NewReservation() {
     console.log("form data changed")
   }
 
+  const validateForm = () => {
+    const today = new Date();
+    const resDate = new Date(formData.date);
+    const resTime = formData.time;
+    const errorArray = [];
+
+    if (resDate.getDay() == 2) {
+      errorArray.push({ message: "Restaurant is closed on Tuesdays. Please choose a different day." })
+    }
+    if (resTime < "10:30") {
+      errorArray.push({ message: "Restaurant opens at 10:30AM. Please choose a different time." })
+    }
+    if (resTime > "21:30") {
+      errorArray.push({ message: "Last reservations are at 9:30PM. Please choose a different time" })
+    }
+    if (resDate < today) {
+      errorArray.push({ message: "You can only set reservations for future dates. Please choose a different date." })
+    }
+
+    setErrors(errorArray);
+    if (errorArray.length > 0) {
+      return false
+    }
+    return true
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    if (validateForm()) {
+      createReservation(formData)
+        .then((output) => 
+          history.push(`/dashboard?date=${formData.date}`))
+        .catch(errors);
+    }
   }
 
   return (
     <div>
       <h1>New Reservations</h1>
-      <form name='newReservation' onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} method="post">
         <label>
           First Name:
           <input 

@@ -21,7 +21,7 @@ headers.append("Content-Type", "application/json");
  *
  * @param url
  *  the url for the requst.
- * @param options
+ * @param options 
  *  any options for fetch
  * @param onCancel
  *  value to return if fetch call is aborted. Default value is undefined.
@@ -66,4 +66,15 @@ export async function listReservations(params, signal) {
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
+}
+
+export async function createReservation(reservation, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  }
+  return await fetchJson(url, options)
 }

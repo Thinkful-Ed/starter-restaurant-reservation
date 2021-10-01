@@ -19,7 +19,7 @@ async function list(req, res) {
 }
 
 async function read(req, res, next) {
-  const { resrevation } = res.locals;
+  const { reservation } = res.locals;
   if (reservation) {
     const data = await service.read(reservation.resrevation.id)
     res.status(201).json({ data })
@@ -49,7 +49,7 @@ async function destroy(req, res) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: asyncErrorBoundary(create),
-  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)]
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   update: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(update)],
-  destroy: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(destroy)],
+  delete: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(destroy)],
 };
