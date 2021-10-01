@@ -5,6 +5,36 @@
 //Imports for our controller
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const hasProperties = require("../errors/hasProperties");
+
+const hasRequiredProperties = hasProperties(
+  "first_name",
+  "last_name",
+  "mobile_number",
+  "reservation_date",
+  "reservation_time",
+  "people"
+);
+
+function validateDateAndTime(req, res, next) {
+  const date = req.body.data.reservation_date;
+  const time = req.body.data.reservation_time;
+  if (Date.parse(`${date} ${time}`)) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: `reservation_date and reservation_time must be valid`,
+  });
+}
+
+function peopleIsNumber(req, res, next) {
+  const people = req.body.data.people;
+  if (typeof people === "number") {
+    return next();
+  }
+  next({ status: 400, message: `people must be number` });
+}
 
 async function list(req, res) {
   const date = req.query.date;
@@ -21,5 +51,10 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [asyncErrorBoundary(create)],
+  create: [
+    hasRequiredProperties,
+    validateDateAndTime,
+    peopleIsNumber,
+    asyncErrorBoundary(create),
+  ],
 };
