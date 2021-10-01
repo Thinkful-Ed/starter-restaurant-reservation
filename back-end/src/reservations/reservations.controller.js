@@ -1,12 +1,20 @@
 /**
  * List handler for reservation resources
  */
-
-//VALIDATIONS/MIDDLEWARE
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
-function validateBody(req, res, next) {
+//VALIDATIONS/MIDDLEWARE
+
+async function validateData(req, res, next) {
+  if (!req.body.data) {
+    return next({ status: 400, message: "Body must include a data object" });
+  }
+
+  next();
+}
+
+async function validateBody(req, res, next) {
   if (!req.body.data) {
     return next({ status: 400, message: "Body must include a data object" });
   }
@@ -51,9 +59,9 @@ function validateBody(req, res, next) {
   next();
 }
 
-function validateDate(req, res, next) {
+async function validateDate(req, res, next) {
   const reserveDate = new Date(
-    `${req.body.data.reservation_date}T${req.body.data.reservation_time}:00.000`
+    `${req.body.data.reservation_date}T${req.body.data.reservation_time}:00.00`
   );
   const todaysDate = new Date();
 
@@ -109,16 +117,21 @@ function validateDate(req, res, next) {
 async function list(req, res) {
   const date = req.query.date;
   const response = await service.list(date);
-    res.json({ data: response });
+  res.json({ data: response });
 }
 
 async function create(req, res) {
-  req.body.data.status = "booked";
+  //req.body.data.status = "booked";
   const response = await service.create(req.body.data);
-    res.status(201).json({ data: response[0] });
+  res.status(201).json({ data: response[0] });
 }
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [validateBody, validateDate, asyncErrorBoundary(create)],
+  create: [
+    asyncErrorBoundary(validateData),
+    asyncErrorBoundary(validateBody),
+    asyncErrorBoundary(validateDate),
+    asyncErrorBoundary(create),
+  ],
 };
