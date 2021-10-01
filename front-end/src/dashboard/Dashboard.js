@@ -13,7 +13,7 @@ import { useHistory } from "react-router-dom";
  */
 function Dashboard({ date }) {
   const history = useHistory();
-  console.log("history ===>", history);
+  // console.log("history ===>", history);
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
