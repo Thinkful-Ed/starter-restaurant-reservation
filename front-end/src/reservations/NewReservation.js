@@ -5,7 +5,6 @@ import { createReservation } from "../utils/api";
 
 export default function NewReservation({ reservations }) {
   const history = useHistory();
-
   //useState hook to implement change on reservation information
   const [formData, setFormData] = useState({
     first_name: "",
@@ -46,8 +45,8 @@ export default function NewReservation({ reservations }) {
                   title="Enter your first name"
                   placeholder="Enter your first name"
                   className="form-control"
-                  onChange={handleChange} // the function we just made! the onChange attribute will automatically pass the `event` argument based off of which input was clicked
-                  value={formData.first_name} // we can use our useState hook to store the values of each input now
+                  onChange={handleChange} //the function we just made! the onChange attribute will automatically pass the `event` argument based off of which input was clicked
+                  value={formData.first_name} //we can use our useState hook to store the values of each input now
                   required
                 ></input>
               </div>
