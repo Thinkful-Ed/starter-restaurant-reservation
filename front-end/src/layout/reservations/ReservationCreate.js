@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../ErrorAlert";
 import { createReservation } from "../../utils/api";
+import { today } from "../../utils/date-time";
 
 function ReservationCreate() {
   const initialState = {
@@ -26,16 +27,39 @@ function ReservationCreate() {
 
   function submitHandler(evt) {
     evt.preventDefault();
-    createReservation(formData)
-      .then(() => {
+    if (validateDate()) {
+      createReservation(formData).then(() => {
         history.push(`/dashboard?date=${formData.reservation_date}`);
-      })
-      .catch(setError);
+      });
+    }
   }
 
   function cancelHandler() {
     history.push("/");
   }
+
+  function validateDate() {
+    const date = new Date(formData.reservation_date);
+
+    const newErrors = [];
+
+    if (date.getDay() === 2) {
+      newErrors.push({
+        message:
+          "Reservations cannot be made on a Tuesday (restaurant is closed).",
+      });
+    }
+
+    if (date < today()) {
+      newErrors.push({ message: "Reservations cannot be made in the past." });
+    }
+    setError(newErrors);
+    if (newErrors.length < 0) {
+      return false;
+    }
+    return true;
+  }
+
   return (
     <main>
       <h1>Create Reservation</h1>
