@@ -1,13 +1,71 @@
 .side-bar {
+  font-family: "Space Mono", monospace;
+  letter-spacing: auto;
   background-color: #393a44;
   min-width: 200px;
+  padding-right: 2em;
 }
 
-.h1{
+h1 {
   text-align: center;
+  font-family: "Montserrat", sans-serif;
 }
 
-.d-md-flex{
+h2 {
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+}
+
+p {
+  font-family: "Montserrat", sans-serif;
+}
+
+table {
+  table-layout: fixed;
+  width: auto;
+  border-collapse: collapse;
+  font-family: "Montserrat", sans-serif;
+}
+
+
+
+
+@media all and (max-width: 1000px) {
+  .side-bar {
+    font-family: "Space Mono", monospace;
+    background-color: #393a44;
+    min-width: 200px;
+    max-width: fit-content;
+    padding-right: 2em;
+  }
+
+  table {
+    table-layout: auto;
+  }
+
+  h1 {
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+  }
+  
+  h2 {
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+  }
+
+  nav {
+    max-width: auto;
+  }
 
 }
 
+@media all and (max-width: 400px) {
+  .sidebar{
+    width: 100%;
+    height: auto;
+    position: top;
+    text-align: center;
+    float: none;
+  }
+
+}

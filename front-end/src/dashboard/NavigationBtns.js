@@ -23,14 +23,14 @@ const history = useHistory();
   <>
   <h2>Reservations for {date}</h2>
   <br/>
-    <div className="d-md-flex">
-      <button className= "btn btn-secondary mr-auto" type="button" onClick={prevDayHandler}>
+    <div className="d-flex justify-content-between ">
+      <button className= "btn btn-secondary" type="button" onClick={prevDayHandler}>
           Prev
       </button>
-      <button className= "btn btn-primary mr-auto" type="button" onClick={currentDayHandler}>
+      <button className= "btn btn-primary" type="button" onClick={currentDayHandler}>
           Today
       </button>
-      <button className= "btn btn-secondary mr-auto" type="button" onClick={nextDayHandler}>
+      <button className= "btn btn-secondary" type="button" onClick={nextDayHandler}>
           Next
       </button>
       </div>

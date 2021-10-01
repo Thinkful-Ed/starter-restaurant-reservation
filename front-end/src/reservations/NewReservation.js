@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import ErrorAlert from "../layout/ErrorAlert";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+//import ErrorAlert from "../layout/ErrorAlert";
 import { postReservation } from "../utils/api";
 import { today } from "../utils/date-time"
 
 
 function NewReservation() {
   const history = useHistory();
-  const { reservation_id } = useParams();
-
-  const URL = process.env.REACT_APP_API_BASE_URL;
 
   const initialFormState = {
     first_name: "",
