@@ -58,7 +58,9 @@ function Dashboard({
             <th scope="col">Time</th>
             <th scope="col">People</th>
             <th scope="col">Status</th>
-            <th scope="col">Seat Table</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Cancel</th>
+            <th scope="col">Seat</th>
           </tr>
         </thead>
         <tbody>{reservationsJSX()}</tbody>
