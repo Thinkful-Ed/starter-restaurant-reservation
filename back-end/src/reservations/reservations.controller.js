@@ -36,6 +36,29 @@ function peopleIsNumber(req, res, next) {
   next({ status: 400, message: `people must be number` });
 }
 
+function dateInFuture(req, res, next) {
+  const date = req.body.data.reservation_date;
+  const time = req.body.data.reservation_time;
+  const current = new Date();
+  if (Date.parse(`${date} ${time}`) > current) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: "reservation_date and reservation_time must be in the future",
+  });
+}
+
+function dateNotTuesday(req, res, next) {
+  const date = req.body.data.reservation_date;
+  const time = req.body.data.reservation_time;
+  const current = new Date(`${date} ${time}`);
+  if (current.getDay() === 2) {
+    return next({ status: 400, message: "Restaurant is closed on Tuesdays" });
+  }
+  next();
+}
+
 async function list(req, res) {
   const date = req.query.date;
   const data = await service.list(date);
@@ -54,6 +77,8 @@ module.exports = {
   create: [
     hasRequiredProperties,
     validateDateAndTime,
+    dateNotTuesday,
+    dateInFuture,
     peopleIsNumber,
     asyncErrorBoundary(create),
   ],
