@@ -3,6 +3,9 @@
  */
 
 //VALIDATIONS/MIDDLEWARE
+const service = require("./reservations.service");
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+
 function validateBody(req, res, next) {
   if (!req.body.data) {
     return next({ status: 400, message: "Body must include a data object" });
@@ -106,13 +109,13 @@ function validateDate(req, res, next) {
 async function list(req, res) {
   const date = req.query.date;
   const response = await service.list(date);
-  res.json({ data: response });
+    res.json({ data: response });
 }
 
 async function create(req, res) {
   req.body.data.status = "booked";
   const response = await service.create(req.body.data);
-  res.status(201).json({ data: response[0] });
+    res.status(201).json({ data: response[0] });
 }
 
 module.exports = {
