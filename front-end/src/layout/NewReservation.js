@@ -7,7 +7,7 @@ export default function NewReservation() {
   const initialFormState = {
     firstName: "",
     lastName: "",
-    phoneNumber: "",
+    mobile_number: "",
     date: "",
     time: "",
     peopleInParty: "",
@@ -60,6 +60,10 @@ export default function NewReservation() {
     }
   }
 
+  const handleCancel = (e) => {
+    history.push("/dashboard")
+  }
+
   return (
     <div>
       <h1>New Reservations</h1>
@@ -94,12 +98,12 @@ export default function NewReservation() {
           Phone Number:
           <input
             type="text"
-            id='phoneNumber'
-            name='phoneNumber'
+            id='mobile_number'
+            name='mobile_number'
             required={true}
             placeholder='enter phone number'
             onChange={handleChange}
-            value={formData.phoneNumber}
+            value={formData.mobile_number}
           />
         </label>
         <br />
@@ -152,6 +156,7 @@ export default function NewReservation() {
             )
             if (confirmBox === true) {
               console.log("going back a page")
+              handleCancel();
             }
           }}>
             Cancel
