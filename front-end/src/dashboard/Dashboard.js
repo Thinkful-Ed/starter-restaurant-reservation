@@ -13,6 +13,7 @@ import { useHistory } from "react-router-dom";
  */
 function Dashboard({ date }) {
   const history = useHistory();
+  console.log("history ===>", history);
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -46,7 +47,6 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
       <div className="table-responsive">
         <table className="table no-wrap">
           <thead>

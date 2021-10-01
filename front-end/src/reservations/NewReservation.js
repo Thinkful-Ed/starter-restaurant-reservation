@@ -20,19 +20,20 @@ export default function NewReservation({ reservations }) {
     setFormData({ ...formData, [target.name]: target.value });
   }
 
-  // function handleSubmit(event) {
-  //   event.preventDefault();
-  //   createReservation(formData)
-  //     .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
-  //     .catch(console.log);
-  //   history.push(`/dashboard?date=${formData.reservation_date}`);
-  // }
+  function handleSubmit(event) {
+    event.preventDefault();
+    // createReservation(formData)
+    // //console.log("formData", formData)
+    //   .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
+    //   .catch(console.log);
+    // history.push(`/dashboard?date=${formData.reservation_date}`);
+  }
 
-  const handleSubmit = (event) => {
-    event.preventDefault(); // the normal submit refreshes the entire page.
-    history.push(`/dashboard?date=${formData.reservation_date}`); // the push function literally "pushes" the user to whatever path you give.
-    //console.log("submit button", reservation);
-  };
+  // const handleSubmit = (event) => {
+  //   event.preventDefault(); // the normal submit refreshes the entire page.
+  //   history.push(`/dashboard?date=${formData.reservation_date}`); // the push function literally "pushes" the user to whatever path you give.
+  //   //console.log("submit button", reservation);
+  // };
 
   return (
     <main>
@@ -140,7 +141,7 @@ export default function NewReservation({ reservations }) {
             <button
               type="cancel"
               className="btn btn-secondary"
-              onClick={history.goBack}
+              onClick={history.goBack()}
             >
               Cancel
             </button>
@@ -157,3 +158,4 @@ export default function NewReservation({ reservations }) {
     </main>
   );
 }
+
