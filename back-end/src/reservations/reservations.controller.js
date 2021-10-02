@@ -1,6 +1,5 @@
 const reservationsService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const { request } = require("express");
 
 /**
  * List handler for reservation resources
@@ -17,16 +16,9 @@ const requiredFields = [
 
 //validate that alll fields are filled and entered correctly
 async function hasValidFields(res, req, next) {
-  if (!req.body.data) {
-    return next({
-      status: 400,
-      message: "Body has no data",
-    });
-  }
-
   for (const field of requiredFields) {
-    if (!request.body.data.hasOwnProperty(field) || request.body.data === "") {
-      return next({ status: 400, message: `${field} field is required` });
+    if (!req.body.data.hasOwnProperty(field) || req.body.data === "") {
+      next({ status: 400, message: `${field} field is required` });
     }
   }
   //mobile number must be in correct format
@@ -35,7 +27,7 @@ async function hasValidFields(res, req, next) {
   //res time must be between certain hours
 }
 
-//check if reservation exists
+//check if reservation exists for read
 async function reservationExists(req, res, next) {
   const { reservationId } = req.params;
   const foundReservation = await reservationsService.read(reservationId);
@@ -49,48 +41,37 @@ async function reservationExists(req, res, next) {
   return next;
 }
 
-const dateFormat = /^\d\d\d\d-\d\d-\d\d$/;
-const timeFormat = /^\d\d:\d\d$/;
+function hasValidFields(req, res, next) {
 
-function checkReservation(req, res, next) {
-  const {
-    data: { requiredFields },
-  } = req.body;
-  if (!first_name || first_name === "") {
-    return next({ status: 400, message: "Please enter your first name." });
+  const { reservation_date, reservation_time, people, status } = req.body.data;
+
+  const presentTime = Date.now();
+  const requestedTime = new Date(`${reservation_date} ${reservation_time}`)
+  const dateFormat = /^\d\d\d\d-\d\d-\d\d$/;
+
+ //validate that reservation time is in the future
+  if(requestedTime < presentTime){
+    return next({ status: 400, message: "Reservation must be in the future." });
   }
-  if (!last_name || last_name === "") {
-    return next({ status: 400, message: "Please enter your last name." });
-  }
-  if (!mobile_number || mobile_number === "") {
-    return next({ status: 400, message: "A mobile number is required." });
-  }
-  if (!reservation_date || reservation_date === "") {
+  //validate date is in correct format
+  if (!reservation_date.match(dateFormat)) {
     return next({
       status: 400,
-      message: "Please enter your desired reservation date.",
+      message: "Date format must be DD-MM-YYYY.",
     });
   }
-  if (!reservation_time || reservation_time === "") {
+  //validate that reservation is made during business hours
+  if (reservation_time <= "21:30" && reservation_time >= "10:30" ) {
     return next({
       status: 400,
-      message: "Please enter your desired reservation time.",
+      message: "The reservation time must be between 10:30 AM and 9:30 PM",
     });
   }
-  if (!people || people === "") {
-    return next({ status: 400, message: "Please enter number of guests." });
-  } else {
-    res.locals.foundReservation = {
-      reservation_id: nextId(),
-      first_name: first_name,
-      last_name: last_name,
-      mobile_number: mobile_number,
-      reservation_date: reservation_date,
-      reservation_time: reservation_time,
-      people: people,
-    };
+  //validate that party size is greater than zero
+  if (!people || people < 1) {
+    return next({ status: 400, message: "Please enter number of guests. Must be a number greater than zero." });
+  }
     next();
-  }
 }
 
 async function read(req, res) {
@@ -103,14 +84,14 @@ async function list(req, res) {
   res.json({ data: await reservationsService.list(date) });
 }
 
+
 async function create(req, res) {
-  res
-    .status(201)
-    .json({ data: await reservationsService.create(req.body.data) });
+  //console.log("Request Body",req.body.data) testing***
+  res.status(201).json({ data: await reservationsService.create(req.body.data) });
 }
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  create: [asyncErrorBoundary(create)],
-  read: [asyncErrorBoundary(reservationExists),asyncErrorBoundary(read)],
+  create: [hasValidFields, asyncErrorBoundary(create)],
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
 };

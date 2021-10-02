@@ -36,7 +36,7 @@ function Dashboard({ date }) {
     <>
       <h1>Dashboard</h1>
       <NavigationBtns date={date}/>
-      <table className="table">
+      <table className="table align-middle">
         <thead>
           <tr>
             <td>First name</td>

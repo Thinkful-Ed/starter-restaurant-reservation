@@ -11,7 +11,8 @@ function ReservationList({ reservations }) {
       people,
       reservation_id,
     }) => (
-      <table className="table" key={reservation_id}>
+      
+      <table className="table align-middle" key={reservation_id}>
         <thead>
           <tr>
             <td>{first_name}</td>
@@ -27,7 +28,7 @@ function ReservationList({ reservations }) {
   );
 
   return (
-    <div className="d-flex flex-wrap justify-content-between">
+    <>
       <ul>
       {reservations.length > 0 ? (
         reservationsList
@@ -35,7 +36,7 @@ function ReservationList({ reservations }) {
         <p>There are no reservations for this date.</p>
       )}
       </ul>
-    </div>
+    </>
   );
 }
 
