@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import {
-  createReservation,
-  editReservation,
-  listReservations,
-} from "../utils/api";
-//here goes nothing
+import { createReservation } from "../utils/api";
+
 export default function NewReservation({ reservations }) {
   const history = useHistory();
   //useState hook to implement change on reservation information
@@ -28,22 +24,46 @@ export default function NewReservation({ reservations }) {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    //variable with an empty array to hold all of the errors made if someone tries to book for Tuesday
+    const foundErrors = [];
     await createReservation(formData)
       .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
       .catch(console.log);
     // if there are errors, we don't want to push the user onto a different page, we want them to stay on this page until the issue is resolved.
-    if (validateDate()) {
+    if (validateDate(foundErrors) && validateFields(foundErrors)) {
       history.push(`/dashboard?date=${formData.reservation_date}`);
+    }
+    setErrorsArray(foundErrors);
+    //use foundErrors array to see if there is any problems
+  }
+
+  function validateFields(foundErrors) {
+    for (let field in formData) {
+      //looped through the formData and if any of them are blank the message below will show
+      if (formData[field] === "") {
+        foundErrors.push({
+          message: `${field.split("_").join(" ")} cannot be left blank`,
+        });
+      }
+      if (formData.people <= 0) {
+        foundErrors.push({ message: "Party must be a size of at least 1." });
+      }
+      if (foundErrors.length > 0) {
+        return false;
+      }
+      // if returned true that means our reservations is valid
+      return true;
     }
   }
 
-  function validateDate() {
-    const reserveDate = new Date(formData.reservation_date);
+  function validateDate(foundErrors) {
+    //constructor has the date and time included
+    const reserveDate = new Date(
+      `${formData.reservation_date}T${formData.reservation_time}:00.000`
+    );
     //comparing the reservation to todays date
     const todaysDate = new Date();
-    //const todaysDate = new Date(reserveDate.split("-").join("/"));
-    //variable with an empty array to hold all of the errors made if someone tries to book for Tuesday
-    const foundErrors = [];
+
     //checking the condition to see if the person is booking for Tuesday
     if (reserveDate.getDay() === 1) {
       //The restaurant is closed Tuesday, so any reservations made for that day will present an error
@@ -57,13 +77,31 @@ export default function NewReservation({ reservations }) {
         message: "Reservation cannot be made: Date is in the past.",
       });
     }
-    setErrorsArray(foundErrors);
-    //use foundErrors array to see if there is any problems
-    if (foundErrors.length > 0) {
-      return false;
+    // Below we are checking the time the person is trying to book a reservation, if they book outside the restaurant hours or 1 hour before they close a error message with pop up
+    if (
+      reserveDate.getHours() < 10 ||
+      (reserveDate.getHours() === 10 && reserveDate.getMinutes() < 30)
+    ) {
+      foundErrors.push({
+        message:
+          "Reservation cannot be made: Restaurant is not open until 10:30AM.",
+      });
+    } else if (
+      reserveDate.getHours() > 22 ||
+      (reserveDate.getHours() === 22 && reserveDate.getMinutes() >= 30)
+    ) {
+      foundErrors.push({
+        message: "Reservation cannot be made: Restaurant closes at 10:30PM.",
+      });
+    } else if (
+      reserveDate.getHours() > 21 ||
+      (reserveDate.getHours() === 21 && reserveDate.getMinutes() > 30)
+    ) {
+      foundErrors.push({
+        message:
+          "Reservation cannot be made: Reservation must be made at least an hour before closing (10:30PM).",
+      });
     }
-    // if returned true that means our reservations is valid
-    return true;
   }
 
   const errors = () => {
@@ -72,6 +110,7 @@ export default function NewReservation({ reservations }) {
     ));
   };
   //put errors right at the top of the customer ingformation form so the user will notice it
+
   return (
     <main>
       <div className="header">
