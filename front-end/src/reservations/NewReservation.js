@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import ErrorAlert from "../layout/ErrorAlert";
 
 import {
   createReservation,
   editReservation,
   listReservations,
 } from "../utils/api";
+
 //import Reservations from "./Reservations";
 
 export default function NewReservation({ reservations }) {
@@ -21,7 +23,7 @@ export default function NewReservation({ reservations }) {
   });
   //new state that contains errors
   //if no errors are found it will remain an empty array
-  const [errors, setErrors] = useState([]);
+  const [errorsArray, setErrorsArray] = useState([]);
 
   function handleChange({ target }) {
     setFormData({ ...formData, [target.name]: target.value });
@@ -57,7 +59,7 @@ export default function NewReservation({ reservations }) {
         message: "Reservation cannot be made: Date is in the past.",
       });
     }
-    setErrors(foundErrors);
+    setErrorsArray(foundErrors);
     //use foundErrors array to see if there is any problems
     if (foundErrors.length > 0) {
       return false;
@@ -66,6 +68,10 @@ export default function NewReservation({ reservations }) {
     return true;
   }
 
+  const errors = () => {
+    return errorsArray.map((error, index) => <ErrorAlert key={index} error={error} />)
+  }
+  //put errors right at the top of the customer ingformation form so the user will notice it
   return (
     <main>
       <div className="header">
@@ -77,6 +83,7 @@ export default function NewReservation({ reservations }) {
             <legend>Customer Information:</legend>
             <div className="name_info">
               <div className="form-group">
+                {errors()}
                 <label htmlFor="first_name">First Name:&nbsp;</label>
                 <input
                   name="first_name"
