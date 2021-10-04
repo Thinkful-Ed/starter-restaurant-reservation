@@ -16,16 +16,30 @@ const hasRequiredProperties = hasProperties(
   "people"
 );
 
-function validateDateAndTime(req, res, next) {
+function validateDate(req, res, next) {
   const date = req.body.data.reservation_date;
   const time = req.body.data.reservation_time;
-  if (Date.parse(`${date} ${time}`)) {
-    return next();
+  const tuesday = new Date(`${date} ${time}`);
+  const current = new Date();
+  //Check if reservation_time and reservation_date is valid
+  if (!Date.parse(`${date} ${time}`)) {
+    return next({
+      status: 400,
+      message: `reservation_date and reservation_time must be valid`,
+    });
   }
-  next({
-    status: 400,
-    message: `reservation_date and reservation_time must be valid`,
-  });
+  //Check if trying to set reservation on a Tuesday
+  if (tuesday.getDay() === 2) {
+    return next({ status: 400, message: "Restaurant is closed on Tuesdays" });
+  }
+  //Check if setting reservation date before today's date
+  if (Date.parse(`${date} ${time}`) < current) {
+    return next({
+      status: 400,
+      message: "reservation_date and reservation_time must be in the future",
+    });
+  }
+  next();
 }
 
 function peopleIsNumber(req, res, next) {
@@ -35,29 +49,7 @@ function peopleIsNumber(req, res, next) {
   }
   next({ status: 400, message: `people must be number` });
 }
-
-function dateInFuture(req, res, next) {
-  const date = req.body.data.reservation_date;
-  const time = req.body.data.reservation_time;
-  const current = new Date();
-  if (Date.parse(`${date} ${time}`) > current) {
-    return next();
-  }
-  next({
-    status: 400,
-    message: "reservation_date and reservation_time must be in the future",
-  });
-}
-
-function dateNotTuesday(req, res, next) {
-  const date = req.body.data.reservation_date;
-  const time = req.body.data.reservation_time;
-  const current = new Date(`${date} ${time}`);
-  if (current.getDay() === 2) {
-    return next({ status: 400, message: "Restaurant is closed on Tuesdays" });
-  }
-  next();
-}
+ 
 
 async function list(req, res) {
   const date = req.query.date;
@@ -76,9 +68,7 @@ module.exports = {
   list: asyncErrorBoundary(list),
   create: [
     hasRequiredProperties,
-    validateDateAndTime,
-    dateNotTuesday,
-    dateInFuture,
+    validateDate,
     peopleIsNumber,
     asyncErrorBoundary(create),
   ],
