@@ -39,7 +39,9 @@ export default function NewReservation({ reservations }) {
 
   function validateDate() {
     //constructor has the date and time included
-    const reserveDate = new Date(`${formData.reservation_date}T${formData.reservation_time}:00.000`);
+    const reserveDate = new Date(
+      `${formData.reservation_date}T${formData.reservation_time}:00.000`
+    );
     //comparing the reservation to todays date
     const todaysDate = new Date();
     //const todaysDate = new Date(reserveDate.split("-").join("/"));
@@ -56,6 +58,34 @@ export default function NewReservation({ reservations }) {
     if (reserveDate < todaysDate) {
       foundErrors.push({
         message: "Reservation cannot be made: Date is in the past.",
+      });
+    }
+    // Below we are checking the time the person is trying to book a reservation, if they book outside the restaurant hours or 1 hour before they close a error message with pop up
+    if (
+      reserveDate.getHours() < 10 ||
+      (reserveDate.getHours() === 10 && reserveDate.getMinutes() < 30)
+    ) {
+      foundErrors.push({
+        message:
+          "Reservation cannot be made: Restaurant is not open until 10:30AM.",
+      });
+    }
+    else if (
+      reserveDate.getHours() < 22 ||
+      (reserveDate.getHours() === 22 && reserveDate.getMinutes() >= 30)
+    ) {
+      foundErrors.push({
+        message:
+          "Reservation cannot be made: Restaurant closes at 10:30PM.",
+      });
+    }
+    else if (
+      reserveDate.getHours() < 21 ||
+      (reserveDate.getHours() === 21 && reserveDate.getMinutes() > 30)
+    ) {
+      foundErrors.push({
+        message:
+          "Reservation cannot be made: Reservation must be made at least an hour before closing (10:30PM).",
       });
     }
     setErrorsArray(foundErrors);
