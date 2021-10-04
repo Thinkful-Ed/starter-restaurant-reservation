@@ -2,3 +2,10 @@
   background-color: #393a44;
   min-width: 200px;
 }
+
+.container{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
