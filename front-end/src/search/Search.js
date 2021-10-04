@@ -5,9 +5,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 
 function Search() {
   const [mobileNumber, setMobileNumber] = useState("");
-
   const [reservations, setReservations] = useState([]);
-
   const [error, setError] = useState(null);
 
   const handleChange = ({ target }) => {
@@ -45,7 +43,7 @@ function Search() {
 
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <ErrorAlert error={error} />
         <label className="form-label" htmlFor="mobile_number">
           Enter a customer's phone number:
@@ -59,11 +57,7 @@ function Search() {
           value={mobileNumber}
           required
         />
-        <button
-          className="btn btn-primary m-1"
-          type="submit"
-          onClick={handleSubmit}
-        >
+        <button className="btn btn-primary m-1" type="submit">
           Find
         </button>
       </form>
@@ -74,6 +68,7 @@ function Search() {
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
             <th scope="col">Mobile Number</th>
+            <th scope="col">Date</th>
             <th scope="col">Time</th>
             <th scope="col">People</th>
             <th scope="col">Status</th>

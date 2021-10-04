@@ -10,20 +10,21 @@ import {
 function Reservation({ loadDashboard, edit }) {
   const history = useHistory();
   const { reservation_id } = useParams();
-  const initialFormState = {
-    first_name: null,
-    last_name: null,
-    mobile_number: null,
-    reservation_date: null,
-    reservation_time: null,
-    people: null,
-  };
 
   const [reservationError, setReservationError] = useState(null);
   const [apiError, setApiError] = useState(null);
   const [errors, setErrors] = useState([]);
-  const [formData, setFormData] = useState({ ...initialFormState });
+  const [formData, setFormData] = useState({
+    //initial (default data)
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    reservation_date: "",
+    reservation_time: "",
+    people: "",
+  });
 
+  //Makes API call to get all reservations if we are editing, filling out the form
   useEffect(() => {
     if (edit) {
       if (!reservation_id) return null;
@@ -67,6 +68,7 @@ function Reservation({ loadDashboard, edit }) {
     }
   }, [edit, reservation_id]);
 
+  //whenever user makes change to form, update the state
   const handleChange = ({ target }) => {
     setFormData({
       ...formData,
@@ -75,11 +77,12 @@ function Reservation({ loadDashboard, edit }) {
     });
   };
 
+  //whenever user submits form, validate then make API call
   const handleSubmit = (event) => {
     event.preventDefault();
-    const foundErrors = [];
     const abortController = new AbortController();
 
+    const foundErrors = [];
     if (validateFields(foundErrors) && validateDate(foundErrors)) {
       if (edit) {
         editReservation(reservation_id, formData, abortController.signal)
@@ -102,6 +105,7 @@ function Reservation({ loadDashboard, edit }) {
     return () => abortController.abort();
   };
 
+  //make sure all fields exist and are filled out correctly
   function validateFields(foundErrors) {
     for (const field in formData) {
       if (formData[field] === "") {
@@ -113,6 +117,7 @@ function Reservation({ loadDashboard, edit }) {
     return foundErrors.length === 0;
   }
 
+  //make sure date and time of reservation work with restaurant schedule
   function validateDate(foundErrors) {
     const reserveDate = new Date(
       `${formData.reservation_date}T${formData.reservation_time}:00.000`
@@ -165,11 +170,12 @@ function Reservation({ loadDashboard, edit }) {
   };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       {errorsJSX()}
       <ErrorAlert error={apiError} />
+      <ErrorAlert error={reservationError} />
       <div className="form-group">
-        <label htmlFor="name">First Name:</label>
+        <label htmlFor="name">First Name:&nbsp;</label>
         <input
           className="form-control"
           id="name"
@@ -182,7 +188,7 @@ function Reservation({ loadDashboard, edit }) {
         />
       </div>
       <div className="form-group">
-        <label htmlFor="name">Last Name:</label>
+        <label htmlFor="name">Last Name:&nbsp;</label>
         <input
           className="form-control"
           id="name"
@@ -194,7 +200,7 @@ function Reservation({ loadDashboard, edit }) {
         ></input>
       </div>
       <div className="form-group">
-        <label htmlFor="tel">Mobile Number:</label>
+        <label htmlFor="tel">Mobile Number:&nbsp;</label>
         <input
           className="form-control"
           id="tel"
@@ -208,7 +214,7 @@ function Reservation({ loadDashboard, edit }) {
         />
       </div>
       <div className="form-group">
-        <label htmlFor="date">Date of Reservation:</label>
+        <label htmlFor="date">Date of Reservation:&nbsp;</label>
         <input
           className="form-control"
           id="date"
@@ -220,7 +226,7 @@ function Reservation({ loadDashboard, edit }) {
         />
       </div>
       <div className="form-group">
-        <label htmlFor="time">Time of Reservation:</label>
+        <label htmlFor="time">Time of Reservation:&nbsp;</label>
         <input
           className="form-control"
           id="time"
@@ -232,7 +238,7 @@ function Reservation({ loadDashboard, edit }) {
         />
       </div>
       <div className="form-group">
-        <label htmlFor="tel">Party Size:</label>
+        <label htmlFor="tel">Party Size:&nbsp;</label>
         <input
           className="form-control"
           id="size"
@@ -253,7 +259,7 @@ function Reservation({ loadDashboard, edit }) {
       >
         Cancel
       </button>
-      <button className="btn btn-primary" type="submit" onClick={handleSubmit}>
+      <button className="btn btn-primary" type="submit">
         Submit
       </button>
     </form>

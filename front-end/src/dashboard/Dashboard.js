@@ -48,8 +48,8 @@ function Dashboard({
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      <table className="table">
-        <thead>
+      <table className="table table-hover m-1">
+        <thead className="thead-light">
           <tr>
             <th scope="col">ID</th>
             <th scope="col">First Name</th>
@@ -70,8 +70,8 @@ function Dashboard({
 
       <ErrorAlert error={tablesError} />
 
-      <table className="table">
-        <thead>
+      <table className="table table-hover m-1">
+        <thead className="thead-light">
           <tr>
             <th scope="col">ID</th>
             <th scope="col">Table Name</th>
@@ -83,18 +83,21 @@ function Dashboard({
       </table>
 
       <button
+        className="btn btn-secondary m-1"
         type="button"
         onClick={() => history.push(`/dashboard?date=${previous(date)}`)}
       >
         Previous
       </button>
       <button
+        className="btn btn-primary m-1"
         type="button"
         onClick={() => history.push(`/dashboard?date=${today()}`)}
       >
         Today
       </button>
       <button
+        className="btn btn-secondary m-1"
         type="button"
         onClick={() => history.push(`/dashboard?date=${next(date)}`)}
       >
