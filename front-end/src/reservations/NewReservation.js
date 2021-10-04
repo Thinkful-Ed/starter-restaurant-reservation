@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
-//import Reservations from "./Reservations";
-
+import ErrorAlert from "../layout/ErrorAlert";
+import {
+  createReservation,
+  editReservation,
+  listReservations,
+} from "../utils/api";
+//here goes nothing
 export default function NewReservation({ reservations }) {
   const history = useHistory();
   //useState hook to implement change on reservation information
@@ -14,6 +18,9 @@ export default function NewReservation({ reservations }) {
     reservation_time: "",
     people: 0,
   });
+  //new state that contains errors
+  //if no errors are found it will remain an empty array
+  const [errorsArray, setErrorsArray] = useState([]);
 
   function handleChange({ target }) {
     setFormData({ ...formData, [target.name]: target.value });
@@ -24,8 +31,47 @@ export default function NewReservation({ reservations }) {
     await createReservation(formData)
       .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
       .catch(console.log);
+    // if there are errors, we don't want to push the user onto a different page, we want them to stay on this page until the issue is resolved.
+    if (validateDate()) {
+      history.push(`/dashboard?date=${formData.reservation_date}`);
+    }
   }
 
+  function validateDate() {
+    const reserveDate = new Date(formData.reservation_date);
+    //comparing the reservation to todays date
+    const todaysDate = new Date();
+    //const todaysDate = new Date(reserveDate.split("-").join("/"));
+    //variable with an empty array to hold all of the errors made if someone tries to book for Tuesday
+    const foundErrors = [];
+    //checking the condition to see if the person is booking for Tuesday
+    if (reserveDate.getDay() === 1) {
+      //The restaurant is closed Tuesday, so any reservations made for that day will present an error
+      foundErrors.push({
+        message:
+          "Reservations cannot be made on a Tuesday (Restaurant is closed).",
+      });
+    }
+    if (reserveDate < todaysDate) {
+      foundErrors.push({
+        message: "Reservation cannot be made: Date is in the past.",
+      });
+    }
+    setErrorsArray(foundErrors);
+    //use foundErrors array to see if there is any problems
+    if (foundErrors.length > 0) {
+      return false;
+    }
+    // if returned true that means our reservations is valid
+    return true;
+  }
+
+  const errors = () => {
+    return errorsArray.map((error, index) => (
+      <ErrorAlert key={index} error={error} />
+    ));
+  };
+  //put errors right at the top of the customer ingformation form so the user will notice it
   return (
     <main>
       <div className="header">
@@ -37,6 +83,7 @@ export default function NewReservation({ reservations }) {
             <legend>Customer Information:</legend>
             <div className="name_info">
               <div className="form-group">
+                {errors()}
                 <label htmlFor="first_name">First Name:&nbsp;</label>
                 <input
                   name="first_name"
