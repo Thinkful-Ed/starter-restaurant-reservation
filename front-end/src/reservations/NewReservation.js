@@ -6,7 +6,7 @@ import {
   editReservation,
   listReservations,
 } from "../utils/api";
-
+//here goes nothing
 export default function NewReservation({ reservations }) {
   const history = useHistory();
   //useState hook to implement change on reservation information
