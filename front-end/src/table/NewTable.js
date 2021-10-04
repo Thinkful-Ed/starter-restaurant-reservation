@@ -7,14 +7,18 @@ function NewTable({ loadDashboard }) {
   const history = useHistory();
   const initialFormState = {
     table_name: "",
-    capacity: 1,
+    capacity: "",
   };
 
   const [error, setError] = useState([]);
   const [formData, setFormData] = useState({ ...initialFormState });
 
   const handleChange = ({ target }) => {
-    setFormData({ ...formData, [target.name]: target.value });
+    setFormData({
+      ...formData,
+      [target.name]:
+        target.value === "capacity" ? Number(target.value) : target.value,
+    });
   };
 
   const handleSubmit = (event) => {
@@ -25,7 +29,7 @@ function NewTable({ loadDashboard }) {
     if (validateFields()) {
       createTable(formData, abortController.signal)
         .then(loadDashboard)
-        .then(() => history.push(`/dashboard`).catch(error));
+        .then(() => history.push(`/dashboard`).catch(setError));
     }
 
     return () => abortController.abort();
@@ -52,10 +56,11 @@ function NewTable({ loadDashboard }) {
         Table Name:&nbsp;
       </label>
       <input
+        className="form-control"
         name="table_name"
         id="table_name"
         type="text"
-        minLength="2"
+        minLength={2}
         onChange={handleChange}
         value={formData.table_name}
         required
@@ -65,10 +70,11 @@ function NewTable({ loadDashboard }) {
         Capacity:&nbsp;
       </label>
       <input
+        className="form-control"
         name="capacity"
         id="capacity"
         type="number"
-        min="1"
+        min={1}
         onChange={handleChange}
         value={formData.capacity}
         required

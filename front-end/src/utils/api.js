@@ -60,14 +60,12 @@ async function fetchJson(url, options, onCancel) {
 
 export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
-
-  if (params) {
-    Object.entries(params).forEach(([key, value]) =>
-      url.searchParams.append(key, value.toString())
-    );
-  }
-
-  return await fetchJson(url, { headers, signal, method: "GET" }, []);
+  Object.entries(params).forEach(([key, value]) =>
+    url.searchParams.append(key, value.toString())
+  );
+  return await fetchJson(url, { headers, signal, method: "GET" }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
 }
 
 // create a new reservation
@@ -85,7 +83,11 @@ export async function editReservation(reservation_id, reservation, signal) {
   return await fetchJson(url, { headers, signal, method: "PUT", body }, []);
 }
 
-export async function updateReservation(reservation_id, reservation, signal) {
+export async function updateReservationStatus(
+  reservation_id,
+  reservation,
+  signal
+) {
   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
 
   // eslint-disable-next-line no-restricted-globals

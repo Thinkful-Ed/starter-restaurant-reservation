@@ -1,8 +1,8 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { finishTable } from "../utils/api";
 
-function TableRow({ table }) {
-  const history = useHistory();
+function TableRow({ table, loadDashboard }) {
+  if (!table) return null;
 
   const handleFinish = () => {
     if (
@@ -10,11 +10,13 @@ function TableRow({ table }) {
         "Is this table ready to seat new guests? This cannot be undone"
       )
     ) {
-      history.push(`/dashboard`);
+      const abortController = new AbortController();
+
+      finishTable(table.table_id, abortController.signal).then(loadDashboard);
+
+      return () => abortController.abort();
     }
   };
-
-  if (!table) return null;
 
   return (
     <tr>
@@ -22,9 +24,15 @@ function TableRow({ table }) {
       <td>{table.table_name}</td>
       <td>{table.capacity}</td>
       <td data-table-id-status={table.table_id}>{table.status}</td>
+      <td>{table.reservation_id ? table.reservation_id : "--"}</td>
+
       {table.status === "occupied" && (
-        <td data-table-id-finish={table.table_id}>
-          <button onClick={handleFinish} type="button">
+        <td>
+          <button
+            data-table-id-finish={table.table_id}
+            onClick={handleFinish}
+            type="button"
+          >
             Finish
           </button>
         </td>
