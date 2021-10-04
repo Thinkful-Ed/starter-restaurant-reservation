@@ -26,6 +26,20 @@ export default function NewReservation({ reservations }) {
       .catch(console.log);
   }
 
+  function validateDate() {
+    const reserveDate = new Date(formData.reservation_date);
+    //variable with an empty array to hold all of the errors made if someone tries to book for Tuesday
+    const foundErrors = [];
+    //checking the condition to see if the person is booking for Tuesday
+    if (reserveDate.getDay() === 2) {
+      //The restaurant is closed Tuesday, so any reservations made for that day will present an error
+      foundErrors.push({
+        message:
+          "Reservations cannot be made on a Tuesday (Restaurant is closed).",
+      });
+    }
+  }
+
   return (
     <main>
       <div className="header">
