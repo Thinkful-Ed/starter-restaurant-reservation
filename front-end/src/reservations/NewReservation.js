@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
+
+import {
+  createReservation,
+  editReservation,
+  listReservations,
+} from "../utils/api";
 //import Reservations from "./Reservations";
 
 export default function NewReservation({ reservations }) {
@@ -14,6 +19,9 @@ export default function NewReservation({ reservations }) {
     reservation_time: "",
     people: 0,
   });
+  //new state that contains errors
+  //if no errors are found it will remain an empty array
+  const [errors, setErrors] = useState([]);
 
   function handleChange({ target }) {
     setFormData({ ...formData, [target.name]: target.value });
@@ -24,10 +32,16 @@ export default function NewReservation({ reservations }) {
     await createReservation(formData)
       .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
       .catch(console.log);
+    // if there are errors, we don't want to push the user onto a different page, we want them to stay on this page until the issue is resolved.
+    if (validateDate()) {
+      history.push(`/dashboard?date=${formData.reservation_date}`);
+    }
   }
 
   function validateDate() {
     const reserveDate = new Date(formData.reservation_date);
+    //comparing the reservation to todays date
+    const todaysDate = new Date();
     //variable with an empty array to hold all of the errors made if someone tries to book for Tuesday
     const foundErrors = [];
     //checking the condition to see if the person is booking for Tuesday
@@ -38,6 +52,18 @@ export default function NewReservation({ reservations }) {
           "Reservations cannot be made on a Tuesday (Restaurant is closed).",
       });
     }
+    if (todaysDate > reserveDate) {
+      foundErrors.push({
+        message: "Reservation cannot be made: Date is in the past.",
+      });
+    }
+    setErrors(foundErrors);
+    //use foundErrors array to see if there is any problems
+    if (foundErrors.length > 0) {
+      return false;
+    }
+    // if returned true that means our reservations is valid
+    return true;
   }
 
   return (
