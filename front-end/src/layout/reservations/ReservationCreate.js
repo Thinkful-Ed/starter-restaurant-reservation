@@ -52,16 +52,23 @@ function ReservationCreate() {
       newErrors.push({ message: "You can't make reservations in the past." });
     }
 
-    else if (reservedDate.getHours() <= 10 && reservedDate.getMinutes() < 30) {
-      newErrors.push({ message: "The restaurant is closed before 10:30AM" })
-    }
-
-    else if (reservedDate.getHours() <= 22 && reservedDate.getMinutes() >= 30) {
-      newErrors.push({message: "The restaurant is closed after 10:30PM"})
-    }
-
-    else if (reservedDate.getHours() >= 21 && reservedDate.getMinutes() > 30) {
-      newErrors.push({message: "Reservation must be made an hour before restaurant closes"})
+    else if (
+      reservedDate.getHours() < 10 ||
+      (reservedDate.getHours() === 10 && reservedDate.getMinutes() < 30)
+    ) {
+      newErrors.push({ message: "The restaurant is closed before 10:30AM" });
+    } else if (
+      reservedDate.getHours() > 22 ||
+      (reservedDate.getHours() === 22 && reservedDate.getMinutes() >= 30)
+    ) {
+      newErrors.push({ message: "The restaurant is closed after 10:30PM" });
+    } else if (
+      reservedDate.getHours() > 21 ||
+      (reservedDate.getHours() === 21 && reservedDate.getMinutes() > 30)
+    ) {
+      newErrors.push({
+        message: "Reservation must be made an hour before restaurant closes",
+      });
     }
 
     setErrors(newErrors);
