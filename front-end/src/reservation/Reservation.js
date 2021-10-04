@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import { createReservation } from "../utils/api";
+import {
+  createReservation,
+  editReservation,
+  listReservations,
+} from "../utils/api";
 
-function Reservation({ loadDashboard, reservations, edit }) {
+function Reservation({ loadDashboard, edit }) {
   const history = useHistory();
   const { reservation_id } = useParams();
   const initialFormState = {
@@ -15,31 +19,53 @@ function Reservation({ loadDashboard, reservations, edit }) {
     people: null,
   };
 
+  const [reservationError, setReservationError] = useState(null);
   const [apiError, setApiError] = useState(null);
-  const [formData, setFormData] = useState({ ...initialFormState });
   const [errors, setErrors] = useState([]);
+  const [formData, setFormData] = useState({ ...initialFormState });
 
-  if (edit) {
-    if (!reservations || !reservations.id) return null;
+  useEffect(() => {
+    if (edit) {
+      if (!reservation_id) return null;
 
-    const foundReservation = reservations.find(
-      (reservation) => reservation.reservation_id === Number(reservation_id)
-    );
-
-    if (!foundReservation || foundReservation.status !== "booked") {
-      return <p>Only booked reservations can be edited.</p>;
+      loadReservations()
+        .then((response) =>
+          response.find(
+            (reservation) =>
+              reservation.reservation_id === Number(reservation_id)
+          )
+        )
+        .then(fillFields);
     }
 
-    setFormData({
-      first_name: foundReservation.first_name,
-      last_name: foundReservation.last_name,
-      mobile_number: foundReservation.mobile_number,
-      reservation_date: foundReservation.reservation_date,
-      reservation_time: foundReservation.reservation_time,
-      people: foundReservation.people,
-      reservation_id: foundReservation.reservation_id,
-    });
-  }
+    function fillFields(foundReservation) {
+      if (!foundReservation || foundReservation.status !== "booked") {
+        return <p>Only booked reservations can be edited.</p>;
+      }
+
+      const date = new Date(foundReservation.reservation_date);
+      const dateString = `${date.getFullYear()}-${(
+        "0" +
+        (date.getMonth() + 1)
+      ).slice(-2)}-${("0" + date.getDate()).slice(-2)}`;
+
+      setFormData({
+        first_name: foundReservation.first_name,
+        last_name: foundReservation.last_name,
+        mobile_number: foundReservation.mobile_number,
+        reservation_date: dateString,
+        reservation_time: foundReservation.reservation_time,
+        people: foundReservation.people,
+      });
+    }
+
+    async function loadReservations() {
+      const abortController = new AbortController();
+      return await listReservations(null, abortController.signal).catch(
+        setReservationError
+      );
+    }
+  }, [edit, reservation_id]);
 
   const handleChange = ({ target }) => {
     setFormData({
@@ -55,15 +81,25 @@ function Reservation({ loadDashboard, reservations, edit }) {
     const abortController = new AbortController();
 
     if (validateFields(foundErrors) && validateDate(foundErrors)) {
-      createReservation(formData, abortController.signal)
-        .then(loadDashboard)
-        .then(() =>
-          history.push(`/dashboard?date=${formData.reservation_date}`)
-        )
-        .catch(setApiError);
+      if (edit) {
+        editReservation(reservation_id, formData, abortController.signal)
+          .then(loadDashboard)
+          .then(() =>
+            history.push(`/dashboard?date=${formData.reservation.date}`)
+          )
+          .catch(setApiError);
+      } else {
+        createReservation(formData, abortController.signal)
+          .then(loadDashboard)
+          .then(() =>
+            history.push(`/dashboard?date=${formData.reservation_date}`)
+          )
+          .catch(setApiError);
+      }
     }
-
     setErrors(foundErrors);
+
+    return () => abortController.abort();
   };
 
   function validateFields(foundErrors) {
@@ -73,8 +109,8 @@ function Reservation({ loadDashboard, reservations, edit }) {
           message: `${field.split("_").join(" ")} cannot be left blank.`,
         });
       }
-      return foundErrors.length === 0;
     }
+    return foundErrors.length === 0;
   }
 
   function validateDate(foundErrors) {
@@ -124,13 +160,13 @@ function Reservation({ loadDashboard, reservations, edit }) {
       return foundErrors.length === 0;
     }
   }
-  const reserveErrors = () => {
+  const errorsJSX = () => {
     return errors.map((error, id) => <ErrorAlert key={id} error={error} />);
   };
 
   return (
     <form>
-      {reserveErrors()}
+      {errorsJSX()}
       <ErrorAlert error={apiError} />
       <div className="form-group">
         <label htmlFor="name">First Name:</label>

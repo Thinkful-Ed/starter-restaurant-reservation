@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
+import { createTable } from "../utils/api";
 
-function NewTable() {
+function NewTable({ loadDashboard }) {
   const history = useHistory();
   const initialFormState = {
     table_name: "",
@@ -19,9 +20,15 @@ function NewTable() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    const abortController = new AbortController();
+
     if (validateFields()) {
-      history.push(`/dashboard`);
+      createTable(formData, abortController.signal)
+        .then(loadDashboard)
+        .then(() => history.push(`/dashboard`).catch(error));
     }
+
+    return () => abortController.abort();
   };
 
   function validateFields() {
@@ -41,7 +48,9 @@ function NewTable() {
     <form>
       <ErrorAlert error={error} />
 
-      <label htmlFor="table_name">Table Name:&nbsp;</label>
+      <label className="form-label" htmlFor="table_name">
+        Table Name:&nbsp;
+      </label>
       <input
         name="table_name"
         id="table_name"
@@ -52,7 +61,9 @@ function NewTable() {
         required
       />
 
-      <label htmlFor="capacity">Capacity:&nbsp;</label>
+      <label className="form-label" htmlFor="capacity">
+        Capacity:&nbsp;
+      </label>
       <input
         name="capacity"
         id="capacity"
@@ -63,10 +74,18 @@ function NewTable() {
         required
       />
 
-      <button type="submit" onClick={handleSubmit}>
+      <button
+        className="btn btn-primary m-1"
+        type="submit"
+        onClick={handleSubmit}
+      >
         Submit
       </button>
-      <button type="button" onClick={history.goBack}>
+      <button
+        className="btn btn-danger m-1"
+        type="button"
+        onClick={history.goBack}
+      >
         Cancel
       </button>
     </form>
