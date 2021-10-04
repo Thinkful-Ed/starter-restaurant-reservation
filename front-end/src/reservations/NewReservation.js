@@ -6,7 +6,7 @@ import {
   editReservation,
   listReservations,
 } from "../utils/api";
-//here goes nothing
+
 export default function NewReservation({ reservations }) {
   const history = useHistory();
   //useState hook to implement change on reservation information
@@ -38,7 +38,8 @@ export default function NewReservation({ reservations }) {
   }
 
   function validateDate() {
-    const reserveDate = new Date(formData.reservation_date);
+    //constructor has the date and time included
+    const reserveDate = new Date(`${formData.reservation_date}T${formData.reservation_time}:00.000`);
     //comparing the reservation to todays date
     const todaysDate = new Date();
     //const todaysDate = new Date(reserveDate.split("-").join("/"));
