@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-
 import {
   createReservation,
   editReservation,
   listReservations,
 } from "../utils/api";
-
-//import Reservations from "./Reservations";
 
 export default function NewReservation({ reservations }) {
   const history = useHistory();
@@ -44,17 +41,18 @@ export default function NewReservation({ reservations }) {
     const reserveDate = new Date(formData.reservation_date);
     //comparing the reservation to todays date
     const todaysDate = new Date();
+    //const todaysDate = new Date(reserveDate.split("-").join("/"));
     //variable with an empty array to hold all of the errors made if someone tries to book for Tuesday
     const foundErrors = [];
     //checking the condition to see if the person is booking for Tuesday
-    if (reserveDate.getDay() === 2) {
+    if (reserveDate.getDay() === 1) {
       //The restaurant is closed Tuesday, so any reservations made for that day will present an error
       foundErrors.push({
         message:
           "Reservations cannot be made on a Tuesday (Restaurant is closed).",
       });
     }
-    if (todaysDate > reserveDate) {
+    if (reserveDate < todaysDate) {
       foundErrors.push({
         message: "Reservation cannot be made: Date is in the past.",
       });
@@ -69,8 +67,10 @@ export default function NewReservation({ reservations }) {
   }
 
   const errors = () => {
-    return errorsArray.map((error, index) => <ErrorAlert key={index} error={error} />)
-  }
+    return errorsArray.map((error, index) => (
+      <ErrorAlert key={index} error={error} />
+    ));
+  };
   //put errors right at the top of the customer ingformation form so the user will notice it
   return (
     <main>
