@@ -83,6 +83,7 @@ function Reservation({ loadDashboard, edit }) {
     const abortController = new AbortController();
 
     const foundErrors = [];
+
     if (validateFields(foundErrors) && validateDate(foundErrors)) {
       if (edit) {
         editReservation(reservation_id, formData, abortController.signal)
@@ -119,6 +120,7 @@ function Reservation({ loadDashboard, edit }) {
 
   //make sure date and time of reservation work with restaurant schedule
   function validateDate(foundErrors) {
+    console.log("starting validate date");
     const reserveDate = new Date(
       `${formData.reservation_date}T${formData.reservation_time}:00.000`
     );
@@ -136,7 +138,7 @@ function Reservation({ loadDashboard, edit }) {
         message: "Reservations cannot be made in the past.",
       });
     }
-
+    console.log("line 145");
     if (
       reserveDate.getHours() < 10 ||
       (reserveDate.getHours() === 10 && reserveDate.getMinutes() < 30)
@@ -161,9 +163,9 @@ function Reservation({ loadDashboard, edit }) {
         message:
           "Reservation cannot be made: Reservation must be made at least an hour before closing (10:30PM).",
       });
-
-      return foundErrors.length === 0;
+      console.log(foundErrors);
     }
+    return foundErrors.length === 0;
   }
   const errorsJSX = () => {
     return errors.map((error, id) => <ErrorAlert key={id} error={error} />);
