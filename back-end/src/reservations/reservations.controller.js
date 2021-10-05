@@ -176,7 +176,7 @@ async function list(req, res) {
 }
 
 async function create(req, res) {
-  req.body.data.status = "booked";
+  // req.body.data.status = "booked";
   const response = await service.create(req.body.data);
   res.status(201).json({ data: response });
 }

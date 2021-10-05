@@ -77,7 +77,7 @@ function Search() {
             <th scope="col">Seat</th>
           </tr>
         </thead>
-        <tbody>{searchResultsJSX}</tbody>
+        <tbody>{searchResultsJSX()}</tbody>
       </table>
     </div>
   );
