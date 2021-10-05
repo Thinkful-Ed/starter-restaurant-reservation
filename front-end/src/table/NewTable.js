@@ -20,23 +20,20 @@ function NewTable({ loadDashboard }) {
     setFormData({
       ...formData,
       [target.name]:
-        target.value === "capacity" ? Number(target.value) : target.value,
+        target.name === "capacity" ? Number(target.value) : target.value,
     });
   };
 
   //whenever a user submits the form, validate and make the API call
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Submitting");
     const abortController = new AbortController();
 
     if (validateFields()) {
       createTable(formData, abortController.signal)
-        .then((data) => {
-          console.log("Testing", data);
-          return loadDashboard(data);
-        })
-        .then(() => history.push(`/dashboard`).catch(setError));
+        .then(loadDashboard)
+        .then(() => history.push(`/dashboard`))
+        .catch(setError);
     }
 
     return () => abortController.abort();

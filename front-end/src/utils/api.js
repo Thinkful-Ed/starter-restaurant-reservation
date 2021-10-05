@@ -60,9 +60,12 @@ async function fetchJson(url, options, onCancel) {
 
 export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
-  Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.append(key, value.toString())
-  );
+
+  if (params) {
+    Object.entries(params).forEach(([key, value]) =>
+      url.searchParams.append(key, value.toString())
+    );
+  }
   return await fetchJson(url, { headers, signal, method: "GET" }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
@@ -83,14 +86,11 @@ export async function editReservation(reservation_id, reservation, signal) {
   return await fetchJson(url, { headers, signal, method: "PUT", body }, []);
 }
 
-export async function updateReservationStatus(
-  reservation_id,
-  reservation,
-  signal
-) {
+export async function updateReservationStatus(reservation_id, status, signal) {
+  console.log(reservation_id);
+  console.log(status);
   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
-
-  // eslint-disable-next-line no-restricted-globals
+  console.log(url);
   const body = JSON.stringify({ data: { status: status } });
 
   return await fetchJson(url, { headers, signal, method: "PUT", body }, []);
@@ -111,6 +111,8 @@ export async function createTable(table, signal) {
 }
 
 export async function seatTable(reservation_id, table_id, signal) {
+  console.log("res", reservation_id);
+  console.log("table", table_id);
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
 
   const body = JSON.stringify({ data: { reservation_id: reservation_id } });

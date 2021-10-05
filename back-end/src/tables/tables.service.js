@@ -1,7 +1,7 @@
 const knex = require("../db/connection");
 
 function list() {
-  return knex("tables").select("*");
+  return knex("tables").select("*").orderBy("table_name", "asc");
 }
 
 function create(table) {
@@ -32,7 +32,9 @@ function free(table_id) {
 }
 
 function updateReservation(reservation_id, status) {
-  return knex("reservations").where({ reservation_id }).update({ status });
+  return knex("reservations")
+    .where({ reservation_id })
+    .update({ status: status });
 }
 
 module.exports = {

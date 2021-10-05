@@ -2,9 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { updateReservationStatus } from "../utils/api";
 
+//This represents a row of data representing a reservation for a table
 function ReservationRow({ reservation, loadDashboard }) {
   if (!reservation || reservation.status === "finished") return null;
 
+  //Function is called if user wants to cancel a reservation
   const handleCancel = () => {
     if (
       window.confirm(
@@ -15,7 +17,7 @@ function ReservationRow({ reservation, loadDashboard }) {
 
       updateReservationStatus(
         reservation.reservation_id,
-        "canceled",
+        "cancelled",
         abortController.status
       ).then(loadDashboard);
 

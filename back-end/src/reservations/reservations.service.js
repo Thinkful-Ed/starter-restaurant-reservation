@@ -2,7 +2,10 @@ const knex = require("../db/connection");
 
 function list(date, mobile_number) {
   if (date) {
-    return knex("reservations").select("*").where({ reservation_date: date });
+    return knex("reservations")
+      .select("*")
+      .where({ reservation_date: date })
+      .orderBy("reservation_time", "asc");
   }
   if (mobile_number) {
     return knex("reservations")
@@ -31,7 +34,8 @@ function edit(reservation_id, reservation) {
   return knex("reservations")
     .where({ reservation_id })
     .update({ ...reservation })
-    .returning("*");
+    .returning("*")
+    .then((editedRecords) => editedRecords[0]);
 }
 
 module.exports = {

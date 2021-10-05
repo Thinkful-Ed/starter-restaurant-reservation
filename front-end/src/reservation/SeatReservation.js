@@ -3,6 +3,7 @@ import { useHistory, useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { listReservations, seatTable } from "../utils/api";
 
+//On this page, the user chooses a table to seat a reservation at.
 function SeatReservation({ loadDashboard, tables }) {
   const history = useHistory();
 
@@ -22,6 +23,8 @@ function SeatReservation({ loadDashboard, tables }) {
     listReservations(null, abortController.signal)
       .then(setReservations)
       .catch(setReservationError);
+
+    return () => abortController.abort();
   }, []);
 
   if (!tables || !reservations) return null;
@@ -30,11 +33,16 @@ function SeatReservation({ loadDashboard, tables }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log("Test 1");
     const abortController = new AbortController();
 
     if (validateSeat()) {
+      console.log("Validated");
       seatTable(reservation_id, table_id, abortController.signal)
-        .then(loadDashboard)
+        .then((data) => {
+          console.log("Test 2", data);
+          return loadDashboard(data);
+        })
         .then(() => history.push(`/dashboard`))
         .catch(setApiError);
     }
@@ -85,7 +93,7 @@ function SeatReservation({ loadDashboard, tables }) {
 
   return (
     <form className="form-select">
-      {errorsJSX}
+      {errorsJSX()}
       <ErrorAlert error={apiError} />
       <ErrorAlert error={reservationError} />
 
@@ -100,7 +108,7 @@ function SeatReservation({ loadDashboard, tables }) {
         onChange={handleChange}
       >
         <option value={0}>Choose A Table</option>
-        {tableOptionsJSX}
+        {tableOptionsJSX()}
       </select>
       <button
         className="btn btn-primary m-1"

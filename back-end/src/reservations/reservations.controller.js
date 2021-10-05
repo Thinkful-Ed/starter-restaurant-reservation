@@ -127,11 +127,13 @@ async function validateReservationId(req, res, next) {
   }
 
   res.locals.reservation = reservation;
-
+  console.log(reservation);
   next();
+  console.log("Validate ResID end");
 }
 
 async function validateUpdateBody(req, res, next) {
+
   if (!req.body.data.status) {
     return next({ status: 400, message: "Body must include a 'status' field" });
   }
@@ -140,7 +142,7 @@ async function validateUpdateBody(req, res, next) {
     req.body.data.status !== "booked" &&
     req.body.data.status !== "seated" &&
     req.body.data.status !== "finished" &&
-    req.body.data.status !== "canceled"
+    req.body.data.status !== "cancelled"
   ) {
     return next({
       status: 400,
@@ -148,12 +150,13 @@ async function validateUpdateBody(req, res, next) {
     });
   }
 
-  if (req.locals.reservation.status === "finished") {
+  if (res.locals.reservation.status === "finished") {
     return next({
       status: 400,
       message: "A finished reservation cannot be updated",
     });
   }
+
   next();
 }
 
@@ -176,12 +179,15 @@ async function list(req, res) {
 }
 
 async function create(req, res) {
-  // req.body.data.status = "booked";
+  req.body.data.status = "booked";
   const response = await service.create(req.body.data);
   res.status(201).json({ data: response });
 }
 
 async function update(req, res) {
+  
+  console.log(res.locals.reservation);
+  console.log(req.body.data);
   await service.update(
     res.locals.reservation.reservation_id,
     req.body.data.status

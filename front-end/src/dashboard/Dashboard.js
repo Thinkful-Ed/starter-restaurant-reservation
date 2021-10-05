@@ -55,6 +55,7 @@ function Dashboard({
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
             <th scope="col">Mobile Number</th>
+            <th scope="col">Date</th>
             <th scope="col">Time</th>
             <th scope="col">People</th>
             <th scope="col">Status</th>
@@ -77,6 +78,8 @@ function Dashboard({
             <th scope="col">Table Name</th>
             <th scope="col">Capacity</th>
             <th scope="col">Status</th>
+            <th scope="col">Reservation ID</th>
+            <th scope="col">Finish</th>
           </tr>
         </thead>
         <tbody>{tablesJSX()}</tbody>
