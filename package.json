@@ -49,6 +49,7 @@
   "author": "Thinkful, Inc.",
   "license": "UNLICENSED",
   "dependencies": {
+    "caniuse-lite": "^1.0.30001264",
     "knex": "^0.95.11",
     "pg": "^8.7.1"
   }
