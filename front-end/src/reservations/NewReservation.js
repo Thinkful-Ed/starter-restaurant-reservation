@@ -28,7 +28,7 @@ export default function NewReservation() {
     const foundErrors = [];
     // if there are errors, we don't want to push the user onto a different page, we want them to stay on this page until the issue is resolved.
     if (validateDate(foundErrors) && validateFields(foundErrors)) {
-      //history.push(`/dashboard?date=${formData.reservation_date}`);
+      history.push(`/dashboard?date=${formData.reservation_date}`);
     }
     await createReservation(formData)
       .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
