@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { createReservation } from "../utils/api";
 
-export default function NewReservation({ reservations }) {
+export default function NewReservation() {
   const history = useHistory();
   //useState hook to implement change on reservation information
   const [formData, setFormData] = useState({
@@ -26,20 +26,22 @@ export default function NewReservation({ reservations }) {
     event.preventDefault();
     //variable with an empty array to hold all of the errors made if someone tries to book for Tuesday
     const foundErrors = [];
+    // if there are errors, we don't want to push the user onto a different page, we want them to stay on this page until the issue is resolved.
+    if (validateDate(foundErrors) && validateFields(foundErrors)) {
+      //history.push(`/dashboard?date=${formData.reservation_date}`);
+    }
     await createReservation(formData)
       .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
       .catch(console.log);
-    // if there are errors, we don't want to push the user onto a different page, we want them to stay on this page until the issue is resolved.
-    if (validateDate(foundErrors) && validateFields(foundErrors)) {
-      history.push(`/dashboard?date=${formData.reservation_date}`);
-    }
+
     setErrorsArray(foundErrors);
     //use foundErrors array to see if there is any problems
   }
 
   function validateFields(foundErrors) {
-    for (let field in formData) {
+    for (const field in formData) {
       //looped through the formData and if any of them are blank the message below will show
+      console.log("formData ====>", formData);
       if (formData[field] === "") {
         foundErrors.push({
           message: `${field.split("_").join(" ")} cannot be left blank`,
@@ -48,12 +50,8 @@ export default function NewReservation({ reservations }) {
       if (formData.people <= 0) {
         foundErrors.push({ message: "Party must be a size of at least 1." });
       }
-      if (foundErrors.length > 0) {
-        return false;
-      }
-      // if returned true that means our reservations is valid
-      return true;
     }
+    return foundErrors.length === 0;
   }
 
   function validateDate(foundErrors) {
@@ -65,7 +63,7 @@ export default function NewReservation({ reservations }) {
     const todaysDate = new Date();
 
     //checking the condition to see if the person is booking for Tuesday
-    if (reserveDate.getDay() === 1) {
+    if (reserveDate.getDay() === 2) {
       //The restaurant is closed Tuesday, so any reservations made for that day will present an error
       foundErrors.push({
         message:
@@ -102,6 +100,7 @@ export default function NewReservation({ reservations }) {
           "Reservation cannot be made: Reservation must be made at least an hour before closing (10:30PM).",
       });
     }
+    return foundErrors.length === 0;
   }
 
   const errors = () => {
