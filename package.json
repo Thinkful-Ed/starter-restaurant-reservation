@@ -45,8 +45,8 @@
     "test:e2e": "npm run test:e2e --prefix ./front-end",
     "test:frontend:watch": "npm test --prefix ./front-end",
     "deploy": "npx concurrently \"npm run deploy:backend\" \"npm run deploy:client\" ",
-    "deploy:backend": "git subtree push --prefix back-end back-end heroku-backend main",
-    "deploy:frontend": "git subtree push --prefix front-end front-end heroku-frontend main"
+    "deploy:backend": "git subtree push --prefix back-end heroku-backend main",
+    "deploy:frontend": "git subtree push --prefix front-end heroku-frontend main"
   },
   "keywords": [],
   "author": "Thinkful, Inc.",
