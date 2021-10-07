@@ -23,18 +23,9 @@ function Dashboard({ date }) {
     date = dateInUrl;
   }
 
-  //  useEffect(()=> {
-  //    if(!dateInUrl){
-  //      history.push(`/dashboard?date=${date}`)
-  //    }
-  //  }, [query, history, dateInUrl, date])
-
-  
-
   const reservationDate = formatReadableDate(date)
   console.log(reservationDate)
  
-
   //const readableDate = dateObject.toDateString();
   //useEffect(loadDashboard, [date])
   
@@ -55,29 +46,19 @@ function Dashboard({ date }) {
     return ()=> abortController.abort();
   }, [date])
   
-  
-  
-  // function loadDashboard() {
-  //   if(dateInUrl !== date){
-  //     history.push(`/dashboard?date=${date}`)
-  //   }
-  //   const abortController = new AbortController();
-  //   setReservationsError(null);
-  //   listReservations({ date }, abortController.signal)
-  //     .then(setReservations)
-  //     .catch(setReservationsError);
-  //   return () => abortController.abort();
-  // }
-  
+  const errorList = () => {
+    return dashboardError.map((err, index) => <ErrorAlert key={index} error={err} />);
+  };
+
   return (
     <main>
       <h1>Dashboard</h1>
+      {errorList()}
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {reservationDate}</h4>
           <DashboardDateNavigation date = {date}/>
           <ReservationsList reservations = {reservations}/>
       </div>
-      <ErrorAlert error={dashboardError} />
       {/* {JSON.stringify(reservations)} */}
     </main>
   );

@@ -3,76 +3,92 @@ import { useHistory}
     //useParams} 
     from "react-router-dom"
 import {postReservation} from "../utils/api"
+//import {formatAsTime, today} from "../utils/date-time"
 import ErrorAlert from "../layout/ErrorAlert";
 
 function ReservationForm(){
     //const {reservation_id} = useParams()
-    const [reservationsError, setReservationsError] = useState([]);
-    const history= useHistory();
-
-
     const initialFormState= {
         first_name: "",
         last_name: "",
         mobile_number: "",
         reservation_date: "",
         reservation_time: "",
-        people: "",
+        people: 1,
     }
 
     const [form, setForm] = useState({...initialFormState})
-    
-    //make reservations error
+    const [reservationsError, setReservationsError] = useState([]);
+    const history= useHistory();
+
 
 
     const handleChange = ({target}) => {
         let value = target.value;
-        if(target.name==="people" && typeof value === "string"){
+        let name =target.name;
+
+        if(name==="people" && typeof value === "string"){
             value = +value
         }
-
-        if(target.name==="reservation_date"){
-        const date = new Date(form.reservation_date);
-        const today = new Date();
-        const dayOfReservation = date.getUTCDay();
-      
-        if(dayOfReservation===2 && date < today){
-          setReservationsError([
-              "The restaurant is closed on Tuesdays.",
-              "Reservations must be made for a future date."
-         ]) 
-        } else if(dayOfReservation === 2){
-            setReservationsError(["The restaurant is closed on Tuesdays."])
-        } else if(date < today){
-            setReservationsError(["Reservations must be made for a future date."])
-        } else {
-            setReservationsError([])
-        }
-      }
         setForm({
             ...form, 
             [target.name]: target.value,
         })
-        console.log(target.value)
     }
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const abortController = new AbortController();
-        setReservationsError([]);
-
-        postReservation(form, abortController.signal)
-        .then(()=> history.push(`/dashboard?date=${form.reservation_date}`))
-        .catch(setReservationsError)      
-        
-        return ()=> abortController.abort();
+        if(businessHours() !== false){
+            try{
+                postReservation(form)
+                .then(()=> history.push(`/dashboard?date=${form.reservation_date}`))
+            }
+            catch(error){
+                console.log(error)
+            }
+        } 
     }
 
+    const businessHours = async()=> {
+        const reservationDate = new Date(`${form.reservation_date}T${form.reservation_time}:00.000`);
+        const today = new Date();
+        const allErrors = [];
+
+        if(reservationDate < today){
+            allErrors.push({message: "Reservations must be made for a future date" })
+        }
+        if(reservationDate.getDay()===2){
+            allErrors.push({message: "The restaurant is closed on Tuesdays"})
+        }
+        setReservationsError(allErrors)
+        return allErrors.length===0
+        // const reservationDayTime = date.getTime();
+        // const dayOfWeek = date.getUTCDay();
+        
+    //     if(dayOfWeek===2 && reservationDayTime < now){
+    //       setReservationsError([
+    //           "The restaurant is closed on Tuesdays.",
+    //           "Reservations must be made for a future date."
+    //      ]) 
+    //     } else if(dayOfWeek === 2){
+    //         setReservationsError(["The restaurant is closed on Tuesdays."])
+    //     } else if(reservationDayTime < now){
+    //         setReservationsError(["Reservations must be made for a future date."])
+    //     } else {
+    //         setReservationsError([])
+    //     }
+       }
+
+    const errorList = () => {
+        return reservationsError.map((err, index) => <ErrorAlert key={index} error={err} />);
+      };
+       
+      
     return (
         <>
-        <ErrorAlert error = {reservationsError}/>
         <h1>Make a Reservation</h1>
         <form onSubmit = {handleSubmit}>
+            {errorList()}
             <div className="container">
             <div className="form-group">
                 <label htmlFor="first_name">
@@ -173,5 +189,6 @@ function ReservationForm(){
  any error messages returned from API
 */
 }
+
 
 export default ReservationForm;
