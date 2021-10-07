@@ -14,7 +14,7 @@ function read(reservationId) {
 }
 
 function list(date) {
-  return knex("reservations").select("*").where({ reservation_date: date });
+  return knex("reservations").select("*").where({ reservation_date: date }).orderBy('reservation_time', 'asc');
 }
 
 module.exports = { list, create, read };
