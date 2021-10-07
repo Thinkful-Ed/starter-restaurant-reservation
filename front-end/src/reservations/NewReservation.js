@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import ErrorAlert from "../layout/ErrorAlert";
 //import ErrorAlert from "../layout/ErrorAlert";
 import { postReservation } from "../utils/api";
 import { today } from "../utils/date-time";
@@ -16,6 +17,7 @@ function NewReservation() {
     people: "",
   };
 
+  const [errorMessage, setErrorMessage] = useState("");
   const [inputData, setInputData] = useState({ ...initialFormState });
   console.log(inputData);
 
@@ -28,10 +30,9 @@ function NewReservation() {
   function submitHandler(event) {
     event.preventDefault();
     //have to validate (separate fxn)
-    postReservation(inputData).then(() =>
-      history.push(`/dashboard?date=${inputData.reservation_date}`)
-    )//.catch(error)
-
+    postReservation(inputData)
+      .then(() => history.push(`/dashboard?date=${inputData.reservation_date}`))
+      .catch(setErrorMessage);
   }
 
   function cancelHandler(event) {
@@ -115,7 +116,7 @@ function NewReservation() {
             Number of guests:
             <br />
             <input
-            id="people"
+              id="people"
               name="people"
               type="number"
               onChange={changeHandler}
@@ -146,6 +147,7 @@ function NewReservation() {
           </div>
         </form>
       </div>
+      <ErrorAlert error={errorMessage} />
     </>
   );
 }
