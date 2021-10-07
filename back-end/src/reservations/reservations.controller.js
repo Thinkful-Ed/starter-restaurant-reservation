@@ -52,7 +52,7 @@ function businessHours(reservation_time) {
 
 
 function hasValidFields(req, res, next) {
-  const { reservation_date, reservation_time, people, status } = req.body.data;
+  const { first_name, last_name, mobile_number, reservation_date, reservation_time, people, status } = req.body.data;
 console.log("Look for people", req.body.data)
   const presentTime = Date.now();
   const requestedTime = new Date(`${reservation_date} ${reservation_time}`);
@@ -66,7 +66,7 @@ console.log("Look for people", req.body.data)
   if (!reservation_date.match(dateFormat)) {
     return next({
       status: 400,
-      message: "Date format must be DD-MM-YYYY.",
+      message: "Please enter a date. Date format must be DD-MM-YYYY.",
     });
   }
   //validate that reservation is made during business hours
@@ -90,6 +90,18 @@ console.log("Look for people", req.body.data)
       message:
         "The restaurant is closed on Tuesdays",
     });
+  }
+  if (!first_name || !last_name){
+    next({
+      status: 400,
+      message: "Please enter your first and last name.",
+    })
+  }
+  if (!mobile_number){
+    next({
+      status: 400,
+      message: "Please enter your phone number.",
+    })
   }
   next();
 }
