@@ -120,6 +120,12 @@ async function list(req, res) {
   res.json({ data });
 }
 
+async function read(req, res) {
+  const { reservation_Id } = req.params;
+  const data = await service.read(reservation_Id);
+  res.status(200).res.json({ data });
+}
+
 async function create(req, res) {
   req.body.data.status = "booked";
   const data = await service.create(req.body.data);

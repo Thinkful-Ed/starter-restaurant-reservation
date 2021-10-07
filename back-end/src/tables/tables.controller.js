@@ -2,10 +2,10 @@ const service = require("./tables.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 const validateData = (req, res, next) => {
-  if (!req.body.data) {
-    return next({ status: 400, message: "Body must include a data object" });
+  const data = req.body.data;
+  if (!data) {
+    next({ status: 400, message: "Body must include a data object" });
   }
-
   next();
 };
 
@@ -134,7 +134,7 @@ async function list(req, res) {
 async function create(req, res) {
   req.body.data.status = "free";
   const data = await service.create(req.body.data);
-  res.status(201).json({ data: data[0] });
+  res.status(201).json({ data });
 }
 
 //Seats a Table
@@ -162,8 +162,8 @@ async function destroy(req, res) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
-    asyncErrorBoundary(validateBody),
     asyncErrorBoundary(validateData),
+    asyncErrorBoundary(validateBody),
     asyncErrorBoundary(create),
   ],
   update: [

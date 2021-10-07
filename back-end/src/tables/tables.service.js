@@ -4,7 +4,7 @@ const tableName = "tables";
 const reservName = "reservations";
 
 const list = () => {
-  return knex(tableName).select("*");
+  return knex(tableName).select("*").orderBy("table_name");
 };
 
 const create = (table) => {
