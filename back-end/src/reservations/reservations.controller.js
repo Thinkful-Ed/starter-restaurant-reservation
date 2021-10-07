@@ -116,14 +116,14 @@ async function validateDate(req, res, next) {
 
 async function list(req, res) {
   const date = req.query.date;
-  const response = await service.list(date);
-  res.json({ data: response });
+  const data = await service.list(date);
+  res.json({ data });
 }
 
 async function create(req, res) {
-  //req.body.data.status = "booked";
-  const response = await service.create(req.body.data);
-  res.status(201).json({ data: response[0] });
+  req.body.data.status = "booked";
+  const data = await service.create(req.body.data);
+  res.status(201).json({ data: data[0] });
 }
 
 module.exports = {
