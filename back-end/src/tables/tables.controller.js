@@ -40,11 +40,58 @@ const validateBody = (req, res, next) => {
   next();
 };
 
+//checking to see if the reservation exist
+async function reservationExists(req, res, next) {
+  const { reservation_id } = req.body.data;
+  if (!reservation_id) {
+    next({
+      status: 400,
+      message: `A reservation_id is required`,
+    });
+  }
+  const reservation = await resService.read(reservation_id);
+  if (reservation) {
+    res.locals.res = reservation;
+    next();
+  } else {
+    next({
+      status: 404,
+      message: `A reservation with the id ${reservation_id} was not found.`,
+    });
+  }
+}
+//checking to see if the table exist
+async function tableExists(req, res, next) {
+  const table_id = Number(req.params.table_id);
+  const table = await service.readTable(table_id);
+  if (table) {
+    res.locals.table = table;
+    next();
+  } else {
+    next({
+      status: 404,
+      message: `Table with id ${table_id} does not exist.`,
+    });
+  }
+}
+
+const tableIsAvailable = (req, res, next) => {
+  const occupied = res.locals.table.reservation_id;
+  if (occupied) {
+    next({
+      status: 400,
+      message: `Table ${res.locals.table.table_id} is currently not available. Please use another table.`,
+    });
+  }
+  next();
+};
+
 async function list(req, res) {
   const data = await service.list();
   res.json({ data });
 }
 
+//create a available table
 async function create(req, res) {
   req.body.data.status = "free";
   const data = await service.create(req.body.data);
@@ -75,7 +122,17 @@ async function destroy(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [validateBody, validateData, asyncErrorBoundary(create)],
-  update: [asyncErrorBoundary(update)],
-  destroy: [asyncErrorBoundary(destroy)],
+  create: [
+    asyncErrorBoundary(validateBody),
+    asyncErrorBoundary(validateData),
+    asyncErrorBoundary(create),
+  ],
+  update: [
+    asyncErrorBoundary(validateData),
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(tableExists),
+    asyncErrorBoundary(tableIsAvailable),
+    asyncErrorBoundary(update),
+  ],
+  destroy: [asyncErrorBoundary(tableExists), asyncErrorBoundary(destroy)],
 };
