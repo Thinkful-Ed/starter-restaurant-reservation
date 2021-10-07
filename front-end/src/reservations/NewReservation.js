@@ -55,7 +55,7 @@ function NewReservation() {
               type="text"
               onChange={changeHandler}
               value={inputData.first_name}
-              required
+              required={true}
             />
           </label>
           <br />
@@ -68,7 +68,7 @@ function NewReservation() {
               type="text"
               onChange={changeHandler}
               value={inputData.last_name}
-              required
+              required={true}
             />
           </label>
           <br />
@@ -81,7 +81,7 @@ function NewReservation() {
               type="text"
               onChange={changeHandler}
               value={inputData.mobile_number}
-              required
+              required={true}
             />
           </label>
           <br />
@@ -94,7 +94,7 @@ function NewReservation() {
               type="date"
               onChange={changeHandler}
               value={inputData.reservation_date}
-              required
+              required={true}
             />
           </label>
           <br />
@@ -107,7 +107,7 @@ function NewReservation() {
               type="time"
               onChange={changeHandler}
               value={inputData.reservation_time}
-              required
+              required={true}
             />
           </label>
           <br />
@@ -115,11 +115,14 @@ function NewReservation() {
             Number of guests:
             <br />
             <input
+            id="people"
               name="people"
               type="number"
               onChange={changeHandler}
               value={inputData.people}
-              required
+              pattern="[0-9]+"
+              min="1"
+              required={true}
             />
           </label>
           <div>
@@ -128,6 +131,7 @@ function NewReservation() {
               className="btn btn-primary mr-2"
               type="submit"
               onClick={submitHandler}
+              value="Submit"
             >
               Submit
             </button>
@@ -135,6 +139,7 @@ function NewReservation() {
               className="btn btn-danger"
               type="button"
               onClick={cancelHandler}
+              value="Cancel"
             >
               Cancel
             </button>
