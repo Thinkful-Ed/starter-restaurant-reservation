@@ -75,12 +75,51 @@ async function tableExists(req, res, next) {
   }
 }
 
+//checeking availability =====>>>>>>
 const tableIsAvailable = (req, res, next) => {
-  const occupied = res.locals.table.reservation_id;
-  if (occupied) {
+  const available = res.locals.table.reservation_id;
+  if (available) {
     next({
       status: 400,
       message: `Table ${res.locals.table.table_id} is currently not available. Please use another table.`,
+    });
+  }
+  next();
+};
+//=====>>>>>>>>
+async function validateAvailability(req, res, next) {
+  const table_id = Number(req.params.table_id);
+  const table = await service.readTable(table_id);
+
+  if (table.reservation_id) {
+    res.locals.table = table;
+    next();
+  } else {
+    next({
+      status: 400,
+      message: `Table is not available.`,
+    });
+  }
+}
+
+const validateSeatedTable = (req, res, next) => {
+  const { status } = res.locals.res;
+  if (status === "seated") {
+    next({
+      status: 400,
+      message: `This reservation is already at a table!`,
+    });
+  }
+  next();
+};
+
+const validateTableSeating = (req, res, next) => {
+  const partySize = res.locals.partySize;
+  const capacity = res.locals.table.capacity;
+  if (partySize > capacity) {
+    next({
+      status: 400,
+      message: `The party size is greater than the table capacity. Please select another table.`,
     });
   }
   next();
@@ -132,7 +171,13 @@ module.exports = {
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(tableIsAvailable),
+    asyncErrorBoundary(validateSeatedTable),
+    asyncErrorBoundary(validateTableSeating),
     asyncErrorBoundary(update),
   ],
-  destroy: [asyncErrorBoundary(tableExists), asyncErrorBoundary(destroy)],
+  destroy: [
+    asyncErrorBoundary(tableExists),
+    asyncErrorBoundary(validateAvailability),
+    asyncErrorBoundary(destroy),
+  ],
 };
