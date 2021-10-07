@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
 
 function ReservationList({ reservations }) {
+
   const reservationsList = reservations.map(
     ({
       first_name,
@@ -11,8 +11,7 @@ function ReservationList({ reservations }) {
       people,
       reservation_id,
     }) => (
-      <table className="table" key={reservation_id}>
-        <thead>
+        <tbody key={reservation_id}>
           <tr>
             <td>{first_name}</td>
             <td>{last_name}</td>
@@ -20,29 +19,36 @@ function ReservationList({ reservations }) {
             <td>{reservation_date.substr(0, 10)}</td>
             <td>{reservation_time.substr(0, 5)}</td>
             <td>{people}</td>
-            <td>
-              <a
-                href={`/reservations/${reservation_id}/seat`}
-                className="btn btn-success"
-              >
-                Seat
-              </a>
-            </td>
+            <td><a href={`/reservations/${reservation_id}/seat`} className="btn btn-success">
+          Seat
+        </a></td>
           </tr>
-        </thead>
-      </table>
+        </tbody>
     )
   );
 
   return (
     <>
-      <ul>
+    <div>
+    <table className="table">
+        <thead>
+          <tr>
+            <td>First name</td>
+            <td>Last name</td>
+            <td>Phone</td>
+            <td>Reservation date</td>
+            <td>Reservation time</td>
+            <td>Party size</td>
+            <td></td>
+          </tr>
+        </thead>
         {reservations.length > 0 ? (
           reservationsList
         ) : (
           <p>There are no reservations for this date.</p>
         )}
-      </ul>
+      </table>
+      </div>
     </>
   );
 }

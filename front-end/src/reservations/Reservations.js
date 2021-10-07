@@ -4,7 +4,7 @@ import NotFound from "../layout/NotFound";
 import NewReservation from "./NewReservation";
 import SeatReservation from "../tables/SeatReservation";
 
-//{/*<Edit />*/}
+//{/*/}
 
 function Reservations() {
     return (

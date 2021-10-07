@@ -5,6 +5,7 @@ import { listReservations } from "../utils/api";
 //import formatDisplayDate from "../utils/date-time";
 import ReservationList from "../reservations/ReservationList";
 import NavigationBtns from "./NavigationBtns"
+import TableList from "../tables/TableList";
 
 /**
  * Defines the dashboard page.
@@ -36,21 +37,15 @@ function Dashboard({ date }) {
     <>
       <h1>Dashboard</h1>
       <NavigationBtns date={date}/>
-      <table className="table">
-        <thead>
-          <tr>
-            <td>First name</td>
-            <td>Last name</td>
-            <td>Phone</td>
-            <td>Reservation date</td>
-            <td>Reservation time</td>
-            <td>Party size</td>
-            <td></td>
-          </tr>
-        </thead>
-      </table>
-      <ErrorAlert error={reservationsError} />
+      <div className="d-flex flex-row">
+        <div className="d-flex col-8">
       <ReservationList reservations={reservations}/>
+      </div>
+      <div className="d-flex col-5">
+      <TableList />
+      </div>
+      </div>
+      <ErrorAlert error={reservationsError} />
     </>
   );
 }

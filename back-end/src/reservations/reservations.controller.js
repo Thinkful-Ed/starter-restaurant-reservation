@@ -58,6 +58,9 @@ console.log("Look for people", req.body.data)
   const requestedTime = new Date(`${reservation_date} ${reservation_time}`);
   const dateFormat = /^\d\d\d\d-\d\d-\d\d$/;
 
+  if(!reservation_time){
+    return next({ status: 400, message: "Please enter a reservation time." });
+  }
   //validate that reservation time is in the future
   if (requestedTime < presentTime) {
     return next({ status: 400, message: "Reservation must be in the future." });
@@ -66,7 +69,7 @@ console.log("Look for people", req.body.data)
   if (!reservation_date.match(dateFormat)) {
     return next({
       status: 400,
-      message: "Please enter a date. Date format must be DD-MM-YYYY.",
+      message: "Please enter a reservation date. Date format must be MM-DD-YYYY.",
     });
   }
   //validate that reservation is made during business hours

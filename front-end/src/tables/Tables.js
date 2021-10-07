@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import NewTable from "./NewTable";
 import NotFound from "../layout/NotFound";
 

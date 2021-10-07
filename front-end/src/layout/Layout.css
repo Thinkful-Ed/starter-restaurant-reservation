@@ -22,8 +22,13 @@ p {
 }
 
 table {
-  table-layout: fixed;
+  table-layout: auto;
   font-family: "Montserrat", sans-serif;
+}
+
+
+ul {
+  padding: 0;
 }
 
 
