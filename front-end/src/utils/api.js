@@ -77,9 +77,7 @@ export async function listTables(signal) {
 
 export async function createTable(table, signal) {
   const url = `${API_BASE_URL}/tables`;
-
   const body = JSON.stringify({ data: table });
-
   return await fetchJson(url, { headers, signal, method: "POST", body }, []);
 }
 

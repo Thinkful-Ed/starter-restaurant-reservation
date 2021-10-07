@@ -17,8 +17,8 @@ const validateBody = (req, res, next) => {
     return next({ status: 400, message: "'capacity' field cannot be empty" });
   }
 
-  //   if (typeof req.body.data.capacity !== "number") {
-  if (!Number(req.body.data.capacity)) {
+  //if (!Number(req.body.data.capacity)) {
+  if (typeof req.body.data.capacity !== "number") {
     return next({ status: 400, message: "'capacity' field must be a number" });
   }
 
@@ -35,13 +35,13 @@ const validateBody = (req, res, next) => {
 async function list(req, res) {
   const data = await service.list();
   res.json({ data });
-}
+};
 
 async function create(req, res) {
   req.body.data.status = "free";
   const data = await service.create(req.body.data);
   res.status(201).json({ data: data[0] });
-}
+};
 
 module.exports = {
   list: asyncErrorBoundary(list),
