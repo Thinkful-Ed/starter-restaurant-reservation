@@ -21,13 +21,12 @@ function ReservationList({ reservations }) {
             <td>{reservation_time.substr(0, 5)}</td>
             <td>{people}</td>
             <td>
-              <Link href = 'reservations/`${reservation_id}/seat`'>
-                <div>
-                  <button type="button" className="btn btn-success">
-                    Seat
-                  </button>
-                </div>
-              </Link>
+              <a
+                href={`/reservations/${reservation_id}/seat`}
+                className="btn btn-success"
+              >
+                Seat
+              </a>
             </td>
           </tr>
         </thead>
