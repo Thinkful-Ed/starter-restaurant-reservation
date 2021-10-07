@@ -1,25 +1,23 @@
+import { Redirect, Route, Switch } from "react-router-dom";
+import NewTable from "./NewTable";
+import NotFound from "../layout/NotFound";
 
+function Tables(inputData) {
 
-// function Tables(inputData) {
-
-//     const [inputData, setInputData] = useState()
-
-//     function changeHandler({ target }) {
-//         setInputData({ ...inputData, [target.name]: target.value });
-//       }
-//   return (
-//   <>
-//   <form>
-// <input 
-//    name="table name"
-//    id="table name"
-//    type="text"
-//    onChange={changeHandler}
-//    value={table}
-//    required={true}
-// />
-//   </form>
-//   </>
-//   );
-// }
-// export default Tables;
+  
+  return (
+  <>
+    <main>
+      <Switch>
+        <Route path={"/tables/new"}>
+          <NewTable />
+        </Route>
+        <Route>
+          <NotFound />
+        </Route>
+      </Switch>
+    </main>
+  </>
+  );
+}
+export default Tables;

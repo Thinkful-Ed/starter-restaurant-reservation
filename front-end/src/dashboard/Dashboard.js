@@ -3,7 +3,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import { listReservations } from "../utils/api";
 //import formatDisplayDate from "../utils/date-time";
-import ReservationList from "./ReservationList";
+import ReservationList from "../reservations/ReservationList";
 import NavigationBtns from "./NavigationBtns"
 
 /**
@@ -36,7 +36,7 @@ function Dashboard({ date }) {
     <>
       <h1>Dashboard</h1>
       <NavigationBtns date={date}/>
-      <table className="table align-middle">
+      <table className="table">
         <thead>
           <tr>
             <td>First name</td>
@@ -45,6 +45,7 @@ function Dashboard({ date }) {
             <td>Reservation date</td>
             <td>Reservation time</td>
             <td>Party size</td>
+            <td></td>
           </tr>
         </thead>
       </table>

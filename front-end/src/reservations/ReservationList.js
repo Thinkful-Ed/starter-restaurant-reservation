@@ -1,6 +1,6 @@
+import { Link } from "react-router-dom";
 
 function ReservationList({ reservations }) {
-
   const reservationsList = reservations.map(
     ({
       first_name,
@@ -11,8 +11,7 @@ function ReservationList({ reservations }) {
       people,
       reservation_id,
     }) => (
-      
-      <table className="table align-middle" key={reservation_id}>
+      <table className="table" key={reservation_id}>
         <thead>
           <tr>
             <td>{first_name}</td>
@@ -21,6 +20,15 @@ function ReservationList({ reservations }) {
             <td>{reservation_date.substr(0, 10)}</td>
             <td>{reservation_time.substr(0, 5)}</td>
             <td>{people}</td>
+            <td>
+              <Link href = 'reservations/`${reservation_id}/seat`'>
+                <div>
+                  <button type="button" className="btn btn-success">
+                    Seat
+                  </button>
+                </div>
+              </Link>
+            </td>
           </tr>
         </thead>
       </table>
@@ -30,11 +38,11 @@ function ReservationList({ reservations }) {
   return (
     <>
       <ul>
-      {reservations.length > 0 ? (
-        reservationsList
-      ) : (
-        <p>There are no reservations for this date.</p>
-      )}
+        {reservations.length > 0 ? (
+          reservationsList
+        ) : (
+          <p>There are no reservations for this date.</p>
+        )}
       </ul>
     </>
   );
