@@ -9,3 +9,7 @@
   flex-direction: column;
 }
 
+.cardStyle {
+  display: flex;
+}
+

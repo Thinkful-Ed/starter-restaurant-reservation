@@ -1,10 +1,13 @@
 import React, {useState} from "react";
-import { useHistory, useParams} from "react-router-dom"
-import {createReservation} from "../utils/api"
+import { useHistory} 
+    //useParams} 
+    from "react-router-dom"
+import {postReservation} from "../utils/api"
+import ErrorAlert from "../layout/ErrorAlert";
 
 function ReservationForm(){
-    const {reservation_id} = useParams()
-    const [reservationsError, setReservationsError] = useState(null);
+    //const {reservation_id} = useParams()
+    const [reservationsError, setReservationsError] = useState([]);
     const history= useHistory();
 
 
@@ -28,6 +31,24 @@ function ReservationForm(){
             value = +value
         }
 
+        if(target.name==="reservation_date"){
+        const date = new Date(form.reservation_date);
+        const today = new Date();
+        const dayOfReservation = date.getUTCDay();
+      
+        if(dayOfReservation===2 && date < today){
+          setReservationsError([
+              "The restaurant is closed on Tuesdays.",
+              "Reservations must be made for a future date."
+         ]) 
+        } else if(dayOfReservation === 2){
+            setReservationsError(["The restaurant is closed on Tuesdays."])
+        } else if(date < today){
+            setReservationsError(["Reservations must be made for a future date."])
+        } else {
+            setReservationsError([])
+        }
+      }
         setForm({
             ...form, 
             [target.name]: target.value,
@@ -38,9 +59,9 @@ function ReservationForm(){
     const handleSubmit = (event) => {
         event.preventDefault();
         const abortController = new AbortController();
-        setReservationsError(null);
+        setReservationsError([]);
 
-        createReservation(form, abortController.signal)
+        postReservation(form, abortController.signal)
         .then(()=> history.push(`/dashboard?date=${form.reservation_date}`))
         .catch(setReservationsError)      
         
@@ -49,6 +70,7 @@ function ReservationForm(){
 
     return (
         <>
+        <ErrorAlert error = {reservationsError}/>
         <h1>Make a Reservation</h1>
         <form onSubmit = {handleSubmit}>
             <div className="container">
