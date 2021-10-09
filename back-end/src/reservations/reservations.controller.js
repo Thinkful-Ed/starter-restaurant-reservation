@@ -117,7 +117,31 @@ function dayNotInThePast(req, res, next){
     next()
   }
 
-   
+function duringBusinessHours(req, res, next){
+  const {reservation_date, reservation_time} = req.body.data;
+  const reservationDate = new Date(`${reservation_date}T${reservation_time}:00`);
+  if(reservationDate.getHours() < 10 || 
+    (reservationDate.getHours() === 10 && reservationDate.getMinutes() <30)){
+      return next({
+      status: 400, 
+      message: "The restaurant opens at 10:30am"
+      })
+    } else if(reservationDate.getHours() >=23 || 
+    (reservationDate.getHours()===22 && reservationDate.getMinutes() >=30)){
+    return next({
+      status: 400, 
+      message: "The restaurant is closed after 10:30pm"
+    })
+  } else if((reservationDate.getHours()===21 && reservationDate.getMinutes()>=30) ||
+  (reservationDate.getHours()===22 && reservationDate.getMinutes()<30)){
+    return next({
+      status: 400, 
+      message: "Reservation must be made at least an hour before closing time."
+    })
+  }
+    next()
+}
+
 /**
  * List handler for reservation resources
  */
@@ -139,7 +163,14 @@ async function createNew(req, res){
 }
 
 module.exports = {
-  create: [hasOnlyValidProperties, hasRequiredProperties, isValidTime, isValidDate, dayNotTuesday, dayNotInThePast,
+  create: [
+    hasOnlyValidProperties, 
+    hasRequiredProperties, 
+    isValidTime, 
+    isValidDate, 
+    dayNotTuesday, 
+    dayNotInThePast,
+    duringBusinessHours,
     peopleIsNumber, 
     asyncErrorBoundary(createNew),],
   list: asyncErrorBoundary(list),

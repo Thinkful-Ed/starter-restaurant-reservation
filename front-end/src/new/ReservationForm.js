@@ -22,7 +22,6 @@ function ReservationForm(){
     const history= useHistory();
 
 
-
     const handleChange = ({target}) => {
         let value = target.value;
         let name =target.name;
@@ -32,9 +31,10 @@ function ReservationForm(){
         }
         setForm({
             ...form, 
-            [target.name]: target.value,
+            [name]: value,
         })
     }
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -49,6 +49,7 @@ function ReservationForm(){
         } 
     }
 
+
     const businessHours = async()=> {
         const reservationDate = new Date(`${form.reservation_date}T${form.reservation_time}:00.000`);
         const today = new Date();
@@ -57,27 +58,26 @@ function ReservationForm(){
         if(reservationDate < today){
             allErrors.push({message: "Reservations must be made for a future date" })
         }
+
         if(reservationDate.getDay()===2){
             allErrors.push({message: "The restaurant is closed on Tuesdays"})
         }
+
+        if(reservationDate.getHours() < 10 || 
+        (reservationDate.getHours() === 10 && reservationDate.getMinutes()<30) ||
+        reservationDate.getHours() >= 23 || 
+        (reservationDate.getHours()===22 && reservationDate.getMinutes() >= 30))
+            {allErrors.push({message: "The restaurant opens at 10:30am"})
+        } 
+        else if((reservationDate.getHours()===21 && reservationDate.getMinutes() >=30) ||
+        (reservationDate.getHours()===22 && reservationDate.getMinutes() <30))
+            {allErrors.push({message: "No reservations available after 9:30pm."})
+        }
+
         setReservationsError(allErrors)
         return allErrors.length===0
-        // const reservationDayTime = date.getTime();
-        // const dayOfWeek = date.getUTCDay();
-        
-    //     if(dayOfWeek===2 && reservationDayTime < now){
-    //       setReservationsError([
-    //           "The restaurant is closed on Tuesdays.",
-    //           "Reservations must be made for a future date."
-    //      ]) 
-    //     } else if(dayOfWeek === 2){
-    //         setReservationsError(["The restaurant is closed on Tuesdays."])
-    //     } else if(reservationDayTime < now){
-    //         setReservationsError(["Reservations must be made for a future date."])
-    //     } else {
-    //         setReservationsError([])
-    //     }
-       }
+    }
+
 
     const errorList = () => {
         return reservationsError.map((err, index) => <ErrorAlert key={index} error={err} />);

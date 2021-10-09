@@ -24,7 +24,7 @@ function Dashboard({ date }) {
   }
 
   const reservationDate = formatReadableDate(date)
-  console.log(reservationDate)
+  
  
   //const readableDate = dateObject.toDateString();
   //useEffect(loadDashboard, [date])
