@@ -1,9 +1,7 @@
 const reservationsService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const missingFields = require("../errors/missingFields");
 
-/**
- * List handler for reservation resources
- */
 //========validation========//
 const requiredFields = [
   "first_name",
@@ -14,31 +12,27 @@ const requiredFields = [
   "people",
 ];
 
+//regex for date format
+const dateFormat = /^\d\d\d\d-\d\d-\d\d$/;
+
 //validate that alll fields are filled and entered correctly
-// async function hasValidFields(res, req, next) {
-//   for (const field of requiredFields) {
-//     if (!req.body.data.hasOwnProperty(field) || req.body.data === "") {
-//       next({ status: 400, message: `${field} field is required` });
-//     }
-//   }
-//   //mobile number must be in correct format
-//   //date must be a future date
-//   //number of people must be a number greater than 0
-//   //res time must be between certain hours
-// }
+const hasRequiredFields = missingFields(...requiredFields);
 
 //check if reservation exists for read
 async function reservationExists(req, res, next) {
   const { reservationId } = req.params;
+  //console.log("RESID", typeof reservationId);
   const foundReservation = await reservationsService.read(reservationId);
-  if (!foundReservation) {
+  if (foundReservation.length > 0) {
+    console.log("FOUNDRES", foundReservation)
+  res.locals.foundReservation = foundReservation;
+  return next();
+  }else{
     return next({
       status: 404,
       message: `Reservation with id: ${reservationId} was not found`,
     });
   }
-  res.locals.foundReservation = foundReservation;
-  return next;
 }
 
 function dateNotTuesday(reservation_date) {
@@ -51,60 +45,60 @@ function businessHours(reservation_time) {
 }
 
 
+
+function dateIsValid(date) {
+  return date.match(dateFormat);
+}
+
+
 function hasValidFields(req, res, next) {
-  const { first_name, last_name, mobile_number, reservation_date, reservation_time, people, status } = req.body.data;
-console.log("Look for people", req.body.data)
+  const { reservation_date, reservation_time, people } = req.body.data;
+  const partySize = Number.isInteger(people);
+  console.log(typeof reservation_date)
+  console.log("Look for people", req.body.data); //test
   const presentTime = Date.now();
   const requestedTime = new Date(`${reservation_date} ${reservation_time}`);
-  const dateFormat = /^\d\d\d\d-\d\d-\d\d$/;
 
-  if(!reservation_time){
-    return next({ status: 400, message: "Please enter a reservation time." });
-  }
   //validate that reservation time is in the future
   if (requestedTime < presentTime) {
-    return next({ status: 400, message: "Reservation must be in the future." });
-  }
-  //validate date is in correct format
-  if (!reservation_date.match(dateFormat)) {
     return next({
       status: 400,
-      message: "Please enter a reservation date. Date format must be MM-DD-YYYY.",
+      message: "reservation_time must be in the future.",
+    });
+  }
+  // if(reservation_date === ""){
+  //   return next({
+  //     status: 400,
+  //     message: "reservation_date required.",
+  //   });
+  // }
+    //validate date is in correct format
+  if (!dateIsValid(reservation_date)) {
+    return next({
+      status: 400,
+      message: "reservation_date format must be YYYY-MM-DD.",
     });
   }
   //validate that reservation is made during business hours
   if (!businessHours(reservation_time)) {
     return next({
       status: 400,
-      message: "The reservation time must be between 10:30 AM and 9:30 PM",
+      message: "reservation_time must be between 10:30 AM and 9:30 PM",
     });
   }
   //validate that party size is greater than zero
-  if (people < 1) {
+  if (people < 1 || !partySize) {
     return next({
       status: 400,
       message:
-        "Please enter number of guests. Must be a number greater than zero.",
+        "Please enter number of people.",
     });
   }
   if (!dateNotTuesday(reservation_date)) {
     return next({
       status: 400,
-      message:
-        "The restaurant is closed on Tuesdays",
+      message: "The restaurant is closed on Tuesdays",
     });
-  }
-  if (!first_name || !last_name){
-    next({
-      status: 400,
-      message: "Please enter your first and last name.",
-    })
-  }
-  if (!mobile_number){
-    next({
-      status: 400,
-      message: "Please enter your phone number.",
-    })
   }
   next();
 }
@@ -127,7 +121,7 @@ async function create(req, res) {
 }
 
 module.exports = {
-  list: [asyncErrorBoundary(list)],
-  create: [hasValidFields, asyncErrorBoundary(create)],
+  list: [ asyncErrorBoundary(list)],
+  create: [hasRequiredFields, hasValidFields, asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
 };

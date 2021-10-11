@@ -14,12 +14,12 @@ function NewReservation() {
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: "",
+    people: 1,
   };
 
   const [errorMessage, setErrorMessage] = useState("");
   const [inputData, setInputData] = useState({ ...initialFormState });
-  console.log(inputData);
+  // console.log(inputData);
 
   //changeHandler to make inputs controlled
   //get access to the values in the inputs
@@ -121,7 +121,6 @@ function NewReservation() {
               type="number"
               onChange={changeHandler}
               value={inputData.people}
-              pattern="[0-9]+"
               min="1"
               required={true}
             />

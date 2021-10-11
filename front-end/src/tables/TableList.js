@@ -20,6 +20,7 @@ function TableList() {
       <tr>
         <td>{table_name}</td>
         <td>{capacity}</td>
+        <td>Free</td>
       </tr>
     </tbody>
   ));
@@ -32,6 +33,7 @@ function TableList() {
             <tr>
               <td>Table Number</td>
               <td>Capacity</td>
+              <td>Status</td>
             </tr>
           </thead>
           {tableList}

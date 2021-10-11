@@ -2,7 +2,7 @@
 import { Switch, Route } from "react-router";
 import NotFound from "../layout/NotFound";
 import NewReservation from "./NewReservation";
-import SeatReservation from "../tables/SeatReservation";
+import SeatReservation from "./SeatReservation";
 
 //{/*/}
 
