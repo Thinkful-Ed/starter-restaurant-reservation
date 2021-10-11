@@ -6,8 +6,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 //required fields table name capacity
 
 async function list(req, res){
-    const tables = await tablesService.list()
-    res.json({data: tables})
+    res.json({data: await tablesService.list()})
 }
 
 module.exports = {
