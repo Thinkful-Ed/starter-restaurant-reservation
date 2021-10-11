@@ -19,12 +19,12 @@ function NewReservation() {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [inputData, setInputData] = useState({ ...initialFormState });
-  // console.log(inputData);
+  console.log(inputData);
 
   //changeHandler to make inputs controlled
   //get access to the values in the inputs
   function changeHandler({ target }) {
-    setInputData({ ...inputData, [target.name]: target.value });
+    setInputData({ ...inputData, [target.name]: target.name === "people" ? Number(target.value) : target.value });
   }
 
   function submitHandler(event) {
