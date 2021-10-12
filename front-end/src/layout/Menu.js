@@ -17,7 +17,7 @@ function Menu() {
           to="/"
         >
           <div className="sidebar-brand-text text-wrap">
-            Periodic Tables
+          <span className="oi oi-beaker"></span> Periodic Tables
           </div>
         </Link>
         <ul className="nav navbar-nav text-light" id="accordionSidebar">
