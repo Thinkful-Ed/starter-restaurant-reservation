@@ -45,7 +45,7 @@ function ReservationList({ reservations }) {
         {reservations.length > 0 ? (
           reservationsList
         ) : (
-          <p>There are no reservations for this date.</p>
+          <td>There are no reservations for this date.</td>
         )}
       </table>
       </div>

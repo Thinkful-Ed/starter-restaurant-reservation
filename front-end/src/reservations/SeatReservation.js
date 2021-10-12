@@ -56,9 +56,10 @@ const chooseTable = tables.map(({ table_id, table_name, capacity }) => (
   return (
     <>
       <h1>Seat Reservation</h1>
-      <div className="d-flex">
+      <div>
+      <label for="table-select">Table# - Capacity</label>
+      <br />
       <select name="table_id">
-      <option defaultValue>Table: # - Capacity: #</option>
  {chooseTable}
  </select>
 </div>
