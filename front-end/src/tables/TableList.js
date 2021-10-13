@@ -25,6 +25,7 @@ function TableList() {
     </tbody>
   ));
 
+  //JSX
   return (
     <>
       <div>

@@ -33,6 +33,7 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  //JSX
   return (
     <>
       <h1>Dashboard</h1>

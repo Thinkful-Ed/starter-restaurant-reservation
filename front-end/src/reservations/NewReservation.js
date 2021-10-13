@@ -19,7 +19,7 @@ function NewReservation() {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [inputData, setInputData] = useState({ ...initialFormState });
-  console.log(inputData);
+  console.log("NewReservation", inputData);
 
   //changeHandler to make inputs controlled
   //get access to the values in the inputs
@@ -40,12 +40,14 @@ function NewReservation() {
     history.push(`/dashboard?date=${today()}`);
   }
 
+  //JSX
   return (
     <>
       <div>
         <h1>New Reservation</h1>
+        <ErrorAlert error={errorMessage} />
       </div>
-      <div className="d-flex">
+      <div className="d-flex justify-content-center">
         <form>
           <label htmlFor="first_name">
             First name:
@@ -146,7 +148,7 @@ function NewReservation() {
           </div>
         </form>
       </div>
-      <ErrorAlert error={errorMessage} />
+      
     </>
   );
 }

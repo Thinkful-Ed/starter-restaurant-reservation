@@ -10,6 +10,7 @@ function ReservationList({ reservations }) {
       reservation_time,
       people,
       reservation_id,
+      status
     }) => (
         <tbody key={reservation_id}>
           <tr>
@@ -19,6 +20,7 @@ function ReservationList({ reservations }) {
             <td>{reservation_date.substr(0, 10)}</td>
             <td>{reservation_time.substr(0, 5)}</td>
             <td>{people}</td>
+            <td>{status}</td>
             <td><a href={`/reservations/${reservation_id}/seat`} className="btn btn-success">
           Seat
         </a></td>
@@ -27,6 +29,7 @@ function ReservationList({ reservations }) {
     )
   );
 
+  //JSX
   return (
     <>
     <div>
@@ -39,6 +42,7 @@ function ReservationList({ reservations }) {
             <td>Reservation date</td>
             <td>Reservation time</td>
             <td>Party size</td>
+            <td>Status</td>
             <td></td>
           </tr>
         </thead>

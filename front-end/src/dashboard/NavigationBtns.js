@@ -19,6 +19,8 @@ const history = useHistory();
     history.push(`/dashboard?date=${today()}`);
   }
 
+
+  //JSX
   return (
   <>
   <h2>Reservations for {date}</h2>

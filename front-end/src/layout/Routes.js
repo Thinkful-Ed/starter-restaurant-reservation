@@ -20,33 +20,31 @@ import NewTable from "../tables/NewTable";
 function Routes() {
   return (
     <Switch>
+
       <Route exact={true} path="/">
         <Redirect to={"/dashboard"} />
       </Route>
-      <Route exact={true} path="/reservations/new">
-        <NewReservation />
-      </Route>
-      <Route exact={true} path="/tables">
-        <Tables />
-      </Route>
-      <Route exact={true} path="/tables/new">
-        <NewTable />
-      </Route>
+    
       <Route exact={true} path="/reservations">
         <Redirect to={"/dashboard"} />
       </Route>
+
       <Route path="/reservations">
         <Reservations />
       </Route>
+
+      <Route path="/tables/new">
+        <NewTable />
+      </Route>
+
       <Route path="/dashboard">
         <Dashboard date={today()} />
       </Route>
-      <Route exact={true} path="/reservations/:reservation_id/seat">
-        <SeatReservation />
-        </Route>
+
       <Route>
         <NotFound />
       </Route>
+
     </Switch>
   );
 }

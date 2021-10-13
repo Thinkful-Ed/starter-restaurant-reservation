@@ -103,18 +103,35 @@ function hasValidFields(req, res, next) {
   next();
 }
 
+async function updateStatus(req, res) {
+  const newStatus = req.body.data.status;
+  console.log(newStatus);
+  const { foundReservation } = res.locals.foundReservation;
+  const resObject = foundReservation.find((reservation)=> reservation)
+  console.log("RESOBJID", resObject)
+  let data = await reservationsService.updateStatus(resObject.reservation_id, newStatus);
+  res.status(200).json({ data: { status: newStatus } });
+}
+
 async function read(req, res) {
   const { reservationId } = req.params;
   res.json({ data: await reservationsService.read(reservationId) });
 }
 
+async function update(req, res) {
+  const resObject = res.locals.foundReservation.find((reservation)=> reservation)
+  res.json({data: await reservationsService.update(
+    resObject.reservation_id,
+    req.body.data.status)});
+  }
+
 async function list(req, res) {
-  const date = req.query.date;
-  res.json({ data: await reservationsService.list(date) });
+  const resDate = req.query.date;
+  res.json({ data: await reservationsService.list(resDate) });
 }
 
 async function create(req, res) {
-  //console.log("Request Body",req.body.data) testing***
+  //console.log("req.body.data",req.body.data)
   res
     .status(201)
     .json({ data: await reservationsService.create(req.body.data) });
@@ -124,4 +141,8 @@ module.exports = {
   list: [ asyncErrorBoundary(list)],
   create: [hasRequiredFields, hasValidFields, asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
+  update: [asyncErrorBoundary(update)],
+  updateReservationStatus: [
+    asyncErrorBoundary(updateStatus),
+  ],
 };

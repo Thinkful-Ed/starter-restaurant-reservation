@@ -20,4 +20,15 @@ function list(date) {
     .orderBy("reservation_time", "asc");
 }
 
-module.exports = { list, create, read };
+function update(reservation_id, updatedReservation) {
+  return knex("reservations")
+    .where({ reservation_id })
+    .update(updatedReservation, "*")
+    .then((result) => result[0]);
+}
+
+function updateStatus(reservation_id, status) {
+  return knex("reservations").where({ reservation_id }).update({ status }, "*");
+}
+
+module.exports = { list, create, read, update, updateStatus };

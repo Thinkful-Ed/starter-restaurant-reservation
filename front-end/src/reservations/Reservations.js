@@ -10,13 +10,13 @@ function Reservations() {
     return (
       <main>
         <Switch>
-          <Route path={"/reservations/new"}>
+          <Route exact={true} path={"/reservations/new"}>
             <NewReservation />
           </Route>
-          <Route path={"/reservations/:reservation_id/edit"}>
-            {/*<Edit />*/}
+          <Route exact={true} path={"/reservations/:reservation_id/edit"}>
+            {/*<EditReservation />*/}
           </Route>
-          <Route path={"/reservations/:reservation_id/seat"}>
+          <Route exact={true} path={"/reservations/:reservation_id/seat"}>
             <SeatReservation />
           </Route>
           <Route>
