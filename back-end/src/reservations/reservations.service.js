@@ -10,7 +10,7 @@ function create(reservation) {
 function read(reservationId) {
   return knex("reservations")
     .select("*")
-    .where({ reservation_id: reservationId }); //left db --- right param
+    .where({ reservation_id: reservationId }).first(); //left db --- right param
 }
 
 function list(date) {

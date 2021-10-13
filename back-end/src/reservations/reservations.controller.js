@@ -23,7 +23,7 @@ async function reservationExists(req, res, next) {
   const { reservationId } = req.params;
   //console.log("RESID", typeof reservationId);
   const foundReservation = await reservationsService.read(reservationId);
-  if (foundReservation.length > 0) {
+  if (foundReservation) {
     console.log("FOUNDRES", foundReservation)
   res.locals.foundReservation = foundReservation;
   return next();
@@ -109,7 +109,7 @@ async function updateStatus(req, res) {
   const { foundReservation } = res.locals.foundReservation;
   const resObject = foundReservation.find((reservation)=> reservation)
   console.log("RESOBJID", resObject)
-  let data = await reservationsService.updateStatus(resObject.reservation_id, newStatus);
+  //let data = await reservationsService.updateStatus(resObject.reservation_id, newStatus);
   res.status(200).json({ data: { status: newStatus } });
 }
 

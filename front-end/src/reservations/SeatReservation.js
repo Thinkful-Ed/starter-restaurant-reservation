@@ -6,13 +6,13 @@ import { today } from "../utils/date-time";
 import { assignTable } from "../utils/api";
 
 function SeatReservation() {
-  const [tableId, setTableId] = useState({ table_id: null });
+  const [tableId, setTableId] = useState( null );
   console.log(tableId)
 
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState("");
 
-  const [reservations, setReservations] = useState([]);
+  const [reservation, setReservation] = useState({});
   const [reservationError, setReservationError] = useState(null);
 
   const { reservation_id } = useParams();
@@ -22,7 +22,12 @@ function SeatReservation() {
   useEffect(() => {
     const abortController = new AbortController();
     setTablesError(null);
-    listTables(abortController.signal).then(setTables).catch(setTablesError);
+    listTables(abortController.signal)
+    .then((tables) => {
+      setTables(tables)
+      setTableId(tables[0].table_id)
+    })
+    .catch(setTablesError);
     return () => abortController.abort();
   }, []);
 
@@ -32,13 +37,13 @@ function SeatReservation() {
     setReservationError(null);
 
     getReservation(reservation_id, abortController.signal)
-      .then(setReservations)
+      .then(setReservation)
       .catch(setReservationError);
 
     return () => abortController.abort();
   }, [reservation_id]);
 
-  console.log("reservations", reservations);
+  console.log("reservations", reservation);
 
   //change handler
   function changeHandler({ target }) {
@@ -70,12 +75,6 @@ function SeatReservation() {
     </option>
   ));
 
-  //variable to show name and party size
-  const info = reservations.map(({ people, last_name, reservation_id }) => (
-    <h2 key={reservation_id}>
-      {last_name}: Party of {people}
-    </h2>
-  ));
 
   //variable to render submit and cancel buttons
   const buttons = () => {
@@ -103,7 +102,9 @@ function SeatReservation() {
   return (
     <>
       <h1>Seat Reservation</h1>
-      {info}
+      <h2 key={reservation.reservation_id}>
+      {reservation.last_name}: Party of {reservation.people}
+    </h2>
       <div className="d-flex flex-col mt-4">
         <form>
           <label className="">Table# - Capacity</label>

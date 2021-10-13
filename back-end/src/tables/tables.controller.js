@@ -4,7 +4,6 @@ const reservationsService = require("../reservations/reservations.service");
 const hasProperties = require("../errors/missingFields");
 
 
-
 async function hasReservationId(req, res, next) {
   const {reservation_id} = req.body.data
   if (reservation_id) {
@@ -19,14 +18,14 @@ async function hasReservationId(req, res, next) {
 //reservation is an object in an array
 async function reservationExists(req, res, next) {
   const { reservation_id } = req.body.data;
-  console.log("reservation_id from params",reservation_id)
+  //console.log("reservation_id from params",reservation_id)
   const foundReservation = await reservationsService.read(reservation_id);
-  console.log("foundReservation", foundReservation)
+  //console.log("foundReservation", foundReservation)
   if (foundReservation) {
     res.locals.foundReservation = foundReservation;
-    console.log("res.locals.foundReservation", foundReservation)
-    const resObject = res.locals.foundReservation.find((reservation)=> reservation)
-console.log("RESERVATION OBJECT", resObject)
+    //console.log("res.locals.foundReservation", foundReservation)
+    //const resObject = res.locals.foundReservation.find((reservation)=> reservation[0])
+//console.log("RESERVATION OBJECT", resObject)
     return next();
   }
   next({
@@ -36,14 +35,11 @@ console.log("RESERVATION OBJECT", resObject)
 }
 
 
-
-
-
 async function reservationIsBooked(req, res, next) {
   const { foundReservation } = res.locals;
-  const resObject = foundReservation.find((reservation)=> reservation)
-  if (resObject.status !== "seated") {
-    console.log("foundReservation.status", resObject.status)
+  //const resObject = foundReservation.find((reservation)=> reservation[0])
+  if (foundReservation.status !== "seated") {
+    console.log("foundReservation.status", foundReservation.status)
     return next();
   }
   next({
@@ -69,16 +65,15 @@ async function tableExists(req, res, next) {
 
 function hasValidTableSize(req, res, next) {
   const { foundTable } = res.locals;
-  console.log("res.locals.foundTable",foundTable) //test
+  //console.log("res.locals.foundTable",foundTable) //test
   const { foundReservation }  = res.locals;
-  const resObject = foundReservation.find((reservation)=> reservation)
-  if (foundTable.capacity >= resObject.people) {
-    console.log("capacity", foundTable.capacity)
+  if (foundTable.capacity >= foundReservation.people) {
+    //console.log("capacity", foundTable.capacity)
     return next();
   }
   next({
     status: 400,
-    message: `Table with id: ${foundTable.table_id} does not have the capacity to seat this reservation: capacity must be at least ${resObject.people}`,
+    message: `Table with id: ${foundTable.table_id} does not have the capacity to seat this reservation`,
   });
 }
 
@@ -193,9 +188,11 @@ async function read(req, res) {
 
 //U
 async function update(req, res) {
-  const { foundTable, reservationId, reservationStatus } = res.locals;
-  const newTable = { ...foundTable };
-  res.json({ data: await tablesService.updateReservation(newTable, reservationId, reservationStatus)})
+  const { foundTable } = res.locals;
+  const { reservation_id } = req.body.data;
+  const data = await tablesService.updateReservation(reservation_id, "seated");
+  const x = await tablesService.occupied(foundTable.table_id, reservation_id);
+  res.json({data});
 }
 
 //L
@@ -217,6 +214,6 @@ module.exports = {
     asyncErrorBoundary(tableExists),
     hasValidTableSize,
     tableIsFree,
-    occupyTable,
+   // occupyTable,
     asyncErrorBoundary(update)],
 };

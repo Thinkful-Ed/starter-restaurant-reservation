@@ -32,13 +32,13 @@ function readReservation(reservation_id) {
   function occupied(table_id, reservation_id) {
     return knex("tables")
       .where({ table_id: table_id })
-      .update({ reservation_id: reservation_id, status: "booked" });
+      .update({ reservation_id: reservation_id });
   }
   
   function free(table_id) {
     return knex("tables")
       .where({ table_id: table_id })
-      .update({ reservation_id: null, status: "free" });
+      .update({ reservation_id: null });
   }
   
   module.exports = {
