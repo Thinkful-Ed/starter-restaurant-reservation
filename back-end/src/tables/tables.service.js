@@ -1,8 +1,10 @@
 const knex = require("../db/connection");
 
-
 function create(table) {
-  return knex("tables").insert(table).returning("*");
+  return knex("tables")
+    .insert(table)
+    .returning("*")
+    .then((tablesArray) => tablesArray[0]);
 }
 
 function read(table_id) {
@@ -15,38 +17,35 @@ function updateReservation(reservation_id, status) {
     .update({ status: status });
 }
 
-
-function list(){
-    return knex("tables")
-      .select("*")
-      .orderBy("table_name");
-};
+function list() {
+  return knex("tables").select("*").orderBy("table_name");
+}
 
 function readReservation(reservation_id) {
-    return knex("reservations")
-      .select("*")
-      .where({ reservation_id: reservation_id })
-      .first();
-  }
-  
-  function occupied(table_id, reservation_id) {
-    return knex("tables")
-      .where({ table_id: table_id })
-      .update({ reservation_id: reservation_id });
-  }
-  
-  function free(table_id) {
-    return knex("tables")
-      .where({ table_id: table_id })
-      .update({ reservation_id: null });
-  }
-  
-  module.exports = {
-    list,
-    create,
-    read,
-    occupied,
-    free,
-    readReservation,
-    updateReservation,
-  };
+  return knex("reservations")
+    .select("*")
+    .where({ reservation_id: reservation_id })
+    .first();
+}
+
+function occupied(table_id, reservation_id) {
+  return knex("tables")
+    .where({ table_id: table_id })
+    .update({ reservation_id: reservation_id });
+}
+
+function free(table_id) {
+  return knex("tables")
+    .where({ table_id: table_id })
+    .update({ reservation_id: null });
+}
+
+module.exports = {
+  list,
+  create,
+  read,
+  occupied,
+  free,
+  readReservation,
+  updateReservation,
+};

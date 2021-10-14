@@ -2,6 +2,7 @@ import {useHistory} from "react-router-dom";
 import {useState} from "react";
 import {createTable} from "../utils/api"
 import ErrorAlert from "../layout/ErrorAlert"
+import { today } from "../utils/date-time"
 
 function NewTable() {
   const [tablesError, setTablesError] = useState(null);
@@ -17,30 +18,30 @@ function NewTable() {
   const changeHandler = ({ target }) => {
     let value = target.value;
     if (target.name === "capacity" && typeof value === "string") {
-      value = +value;
+      value = Number(value);
     }
-
+console.log("val", value)
     setInputData({
       ...inputData,
       [target.name]: value,
     });
   };
-
+  console.log("Input29", inputData)
   const submitHandler = (event) => {
     event.preventDefault();
 
     const abortController = new AbortController();
     setTablesError(null);
-
+    console.log("Input", inputData)
     createTable(inputData, abortController.signal)
-      .then(() => history.push(`/dashboard`))
+      .then(() => history.push(`/dashboard?date=${today()}`))
       .catch(setTablesError);
     return () => abortController.abort();
   };
 
   const cancelHandler = (event) => {
     event.preventDefault();
-    history.push(`/dashboard`);
+    history.goBack();
   };
 
   const newTableBtns = () => (
@@ -48,7 +49,6 @@ function NewTable() {
       <button
         type="submit"
         className="col btn btn-primary mb-2 mt-2"
-        onSubmit={submitHandler}
       >
         Submit
       </button>
@@ -61,13 +61,13 @@ function NewTable() {
       </button>
     </>
   );
-
+//onSubmit always on form
   return (
     <>
       <h1 className="mt-3 mb-4">New Table</h1>
       <ErrorAlert error={tablesError}/>
       <div className="d-flex justify-content-center">
-        <form>
+        <form onSubmit={submitHandler}>  
           <label className="row">Table Name:</label>
           <input
             onChange={changeHandler}
@@ -83,7 +83,7 @@ function NewTable() {
             className="row"
             type="number"
             id="capacity"
-            name="table_name"
+            name="capacity"
             required={true}
             min="1"
           ></input>

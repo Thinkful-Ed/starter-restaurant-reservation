@@ -4,6 +4,8 @@ const reservationsService = require("../reservations/reservations.service");
 const hasProperties = require("../errors/missingFields");
 
 
+
+
 async function hasReservationId(req, res, next) {
   const {reservation_id} = req.body.data
   if (reservation_id) {
@@ -14,18 +16,12 @@ async function hasReservationId(req, res, next) {
     message: `reservation_id is missing`,
   });
 }
-//this is where its going all wrong!!
-//reservation is an object in an array
+
 async function reservationExists(req, res, next) {
   const { reservation_id } = req.body.data;
-  //console.log("reservation_id from params",reservation_id)
   const foundReservation = await reservationsService.read(reservation_id);
-  //console.log("foundReservation", foundReservation)
   if (foundReservation) {
     res.locals.foundReservation = foundReservation;
-    //console.log("res.locals.foundReservation", foundReservation)
-    //const resObject = res.locals.foundReservation.find((reservation)=> reservation[0])
-//console.log("RESERVATION OBJECT", resObject)
     return next();
   }
   next({
@@ -51,10 +47,8 @@ async function reservationIsBooked(req, res, next) {
 async function tableExists(req, res, next) {
   const { table_id } = req.params;
   const foundTable = await tablesService.read(table_id);
-  //console.log("found Table", foundTable)
   if (foundTable) {
     res.locals.foundTable = foundTable;
-    //console.log("foundTable", foundTable) //test
     return next();
   }
   next({
@@ -65,10 +59,8 @@ async function tableExists(req, res, next) {
 
 function hasValidTableSize(req, res, next) {
   const { foundTable } = res.locals;
-  //console.log("res.locals.foundTable",foundTable) //test
   const { foundReservation }  = res.locals;
   if (foundTable.capacity >= foundReservation.people) {
-    //console.log("capacity", foundTable.capacity)
     return next();
   }
   next({
@@ -88,20 +80,20 @@ function tableIsFree(req, res, next) {
   });
 }
 
-function occupyTable(req, res, next) {
-  const { foundTable } = res.locals;
-  const { reservation_id } = req.body.data;
-  foundTable.reservation_id = reservation_id;
-  res.locals.reservationId = reservation_id;
-  res.locals.reservationStatus = "seated";
-  if (foundTable.reservation_id) {
-    return next();
-  }
-  next({
-    status: 400,
-    message: `Table with id: ${foundTable.table_id} could not be assigned reservation id ${foundTable.reservation_id}.`,
-  });
-}
+// function occupyTable(req, res, next) {
+//   const { foundTable } = res.locals;
+//   const { reservation_id } = req.body.data;
+//   foundTable.reservation_id = reservation_id;
+//   res.locals.reservationId = reservation_id;
+//   res.locals.reservationStatus = "seated";
+//   if (foundTable.reservation_id) {
+//     return next();
+//   }
+//   next({
+//     status: 400,
+//     message: `Table with id: ${foundTable.table_id} could not be assigned reservation id ${foundTable.reservation_id}.`,
+//   });
+// }
 
 function tableIsOccupied(req, res, next) {
   const { foundTable } = res.locals;
@@ -147,6 +139,8 @@ function hasOnlyValidProperties(req, res, next) {
 
 const hasRequiredProperties = hasProperties(...["table_name", "capacity"]);
 
+
+
 function hasValidTableName(tableName) {
   return tableName.length > 1;
 }
@@ -154,6 +148,8 @@ function hasValidTableName(tableName) {
 function isValidCapacity(capacity) {
   return Number.isInteger(capacity) && capacity >= 1;
 }
+
+
 
 function hasValidValues(req, res, next) {
   const { table_name, capacity } = req.body.data;
@@ -187,12 +183,20 @@ async function read(req, res) {
 }
 
 //U
-async function update(req, res) {
+async function update(req, res, next) {
   const { foundTable } = res.locals;
   const { reservation_id } = req.body.data;
+  if(foundTable.table_name){
   const data = await tablesService.updateReservation(reservation_id, "seated");
   const x = await tablesService.occupied(foundTable.table_id, reservation_id);
   res.json({data});
+  }
+  else{
+    return next({
+      status: 400,
+      message: "table_name required",
+    });
+  }
 }
 
 //L
@@ -203,9 +207,14 @@ async function list(req, res) {
   res.json({ data: data });
 }
 
+function hasData(){
+return (!req.body.data !== null)
+}
+
+
 
 module.exports = {
-  create: [asyncErrorBoundary(create)],
+  create: [hasValidValues, asyncErrorBoundary(create)],
   list: [asyncErrorBoundary(list)],
   updateReservation: [
     asyncErrorBoundary(hasReservationId),
@@ -214,6 +223,5 @@ module.exports = {
     asyncErrorBoundary(tableExists),
     hasValidTableSize,
     tableIsFree,
-   // occupyTable,
     asyncErrorBoundary(update)],
 };

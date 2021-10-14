@@ -6,6 +6,10 @@ function TableList() {
   const [tables, setTables] = useState([]);
 
   const [tablesError, setTablesError] = useState("");
+
+  //const [reservation, setReservation] = useState({});
+
+
  
 
   useEffect(() => {
@@ -15,12 +19,23 @@ function TableList() {
     return () => abortController.abort();
   }, []);
 
-  const tableList = tables.map(({ table_name, capacity, table_id }) => (
+  // useEffect(() => {
+  //   const abortController = new AbortController();
+  //   setReservationError(null);
+
+  //   getReservation(reservation_id, abortController.signal)
+  //     .then(setReservation)
+  //     .catch(setReservationError);
+
+  //   return () => abortController.abort();
+  // }, [reservation_id]);
+
+  const tableList = tables.map(({ reservation_id, table_name, capacity, table_id }) => (
     <tbody key={table_id}>
       <tr>
         <td>{table_name}</td>
         <td>{capacity}</td>
-        <td>Free</td>
+        <td>{reservation_id ? (<td>occupied</td>) : (<td>free</td>)}</td>
       </tr>
     </tbody>
   ));
