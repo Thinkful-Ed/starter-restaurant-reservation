@@ -12,12 +12,9 @@ function Menu() {
   return (
     <nav className="navbar navbar-dark align-items-start p-0">
       <div className="container-fluid d-flex flex-column p-0">
-        <Link
-          className="navbar-brand d-flex sidebar-brand m-auto"
-          to="/"
-        >
+        <Link className="navbar-brand d-flex sidebar-brand" to="/">
           <div className="sidebar-brand-text text-wrap">
-          <span className="oi oi-beaker"></span> Periodic Tables
+            <span className="oi oi-beaker"></span> Periodic Tables
           </div>
         </Link>
         <ul className="nav navbar-nav text-light" id="accordionSidebar">

@@ -13,24 +13,24 @@ function ReservationList({ reservations }) {
       status
     }) => (
         <tbody key={reservation_id}>
-          <tr>
+        { status === "finished" ? null : (<tr>
             <td>{first_name}</td>
             <td>{last_name}</td>
             <td>{mobile_number}</td>
             <td>{reservation_date.substr(0, 10)}</td>
             <td>{reservation_time.substr(0, 5)}</td>
             <td>{people}</td>
-            <td>{status}</td>
-            <td><a href={`/reservations/${reservation_id}/seat`} className="btn btn-success">
+            <td data-reservation-id-status={reservation_id}>{status}</td>
+            <td>{status === "seated" ? null:  (<a href={`/reservations/${reservation_id}/seat`} className="btn btn-success mb-1 mr-1">
           Seat
-        </a></td>
-        <td><a href={`/reservations/${reservation_id}/edit`} className="btn btn-secondary">
+        </a>)}
+        <a href={`/reservations/${reservation_id}/edit`} className="btn btn-secondary mb-1">
           Edit
-        </a></td>
-        <td><a href={`/reservations/${reservation_id}`} className="btn btn-danger">
+        </a>
+        <a href={`/reservations/${reservation_id}`} className="btn btn-danger">
           Cancel
         </a></td>
-          </tr>
+          </tr>)}
         </tbody>
     )
   );
@@ -49,8 +49,6 @@ function ReservationList({ reservations }) {
             <td>Reservation time</td>
             <td>Party size</td>
             <td>Status</td>
-            <td></td>
-            <td></td>
             <td></td>
           </tr>
         </thead>

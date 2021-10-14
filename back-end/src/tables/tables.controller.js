@@ -114,6 +114,14 @@ function cancelTable(req, res, next) {
   });
 }
 
+async function validateData(request, response, next) {
+  if (!request.body.data) {
+    return next({ status: 400, message: "Body must include a data object" });
+  }
+
+  next();
+}
+
 const VALID_PROPERTIES = ["table_name", "capacity", "reservation_id"];
 
 function hasOnlyValidProperties(req, res, next) {
@@ -188,7 +196,7 @@ async function update(req, res, next) {
       "seated"
     );
     const x = await tablesService.occupied(foundTable.table_id, reservation_id);
-    res.json({ data });
+    res.status(200).json({ data });
   } else {
     return next({
       status: 400,
@@ -206,7 +214,7 @@ async function list(req, res) {
 }
 
 module.exports = {
-  create: [hasValidValues, asyncErrorBoundary(create)],
+  create: [asyncErrorBoundary(validateData), hasValidValues, asyncErrorBoundary(create)],
   list: [asyncErrorBoundary(list)],
   deleteReservation: [
     asyncErrorBoundary(tableExists),
@@ -214,6 +222,7 @@ module.exports = {
     asyncErrorBoundary(finishTable),
   ],
   updateReservation: [
+    asyncErrorBoundary(validateData),
     asyncErrorBoundary(hasReservationId),
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(reservationIsBooked),

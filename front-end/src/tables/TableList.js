@@ -6,6 +6,7 @@ import { listTables, finishTable } from "../utils/api";
 function TableList() {
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState("");
+
   const [finishTableError, setFinishTableError] = useState(null);
 
   const history = useHistory();
@@ -17,7 +18,7 @@ function TableList() {
     return () => abortController.abort();
   }, []);
 
-  const handleFinish = (tableid) => {
+  const handleFinish = (tableId) => {
     if (
       window.confirm(
         "Is this table ready to seat new guests? This cannot be undone."
@@ -25,13 +26,12 @@ function TableList() {
     ) {
       const abortController = new AbortController();
       setFinishTableError(null);
-      finishTable(tableid, abortController.signal)
+      finishTable(tableId, abortController.signal)
         .then(() => history.go(0))
         .catch(setFinishTableError);
       return () => abortController.abort();
     }
   };
-
 
   const tableList = tables.map(
     ({ reservation_id, table_name, capacity, table_id }) => (
@@ -39,10 +39,10 @@ function TableList() {
         <tr>
           <td>{table_name}</td>
           <td>{capacity}</td>
-          <td>{reservation_id ? "occupied" : "free"}</td>
+          <td data-table-id-status={table_id}>{reservation_id ? "occupied" : "free"}</td>
           <td>
             {reservation_id ? (
-              <button type="button" onClick={() => handleFinish(table_id)}>
+              <button  data-table-id-finish={table_id} type="button" onClick={() => handleFinish(table_id)}>
                 Finish
               </button>
             ) : null}
@@ -56,6 +56,8 @@ function TableList() {
   return (
     <>
       <div>
+      <ErrorAlert error={tablesError} />
+      <ErrorAlert error={finishTableError} />
         <table className="table">
           <thead>
             <tr>
@@ -67,8 +69,7 @@ function TableList() {
           {tableList}
         </table>
       </div>
-      <ErrorAlert error={tablesError} />
-      <ErrorAlert error={finishTableError} />
+      
     </>
   );
 }

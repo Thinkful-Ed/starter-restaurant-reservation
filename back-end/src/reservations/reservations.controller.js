@@ -49,6 +49,14 @@ function dateIsValid(date) {
 }
 
 
+async function validateData(req, res, next) {
+  if (!req.body.data) {
+    return next({ status: 400, message: "Body must include a data object" });
+  }else{
+  next();
+  }
+}
+
 function hasValidFields(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
   const partySize = Number.isInteger(people);
@@ -131,9 +139,9 @@ async function create(req, res) {
 
 module.exports = {
   list: [ asyncErrorBoundary(list)],
-  create: [hasRequiredFields, hasValidFields, asyncErrorBoundary(create)],
+  create: [asyncErrorBoundary(validateData), hasRequiredFields, hasValidFields, asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
-  update: [asyncErrorBoundary(update)],
+  update: [asyncErrorBoundary(validateData), asyncErrorBoundary(update)],
   updateReservationStatus: [
     asyncErrorBoundary(updateStatus),
   ],
