@@ -10,15 +10,25 @@ function create(reservation) {
 function read(reservationId) {
   return knex("reservations")
     .select("*")
-    .where({ reservation_id: reservationId }).first(); //left db --- right param
+    .where({ reservation_id: reservationId })
+    .first(); //left db --- right param
 }
 
-function list(date) {
-  return knex("reservations")
-    .select("*")
-    .where({ reservation_date: date })
-    .whereNotIn('status', ['finished', 'cancelled'])
-    .orderBy("reservation_time", "asc");
+function list(date, mobile_number) {
+  if (date) {
+    return knex("reservations")
+      .select("*")
+      .where({ reservation_date: date })
+      .whereNotIn("status", ["finished", "cancelled"])
+      .orderBy("reservation_time", "asc");
+  }
+  if (mobile_number) {
+    return knex("reservations")
+      .select("*")
+      .where("mobile_number", "like", `${mobile_number}%`);
+  }
+
+  return knex("reservations").select("*");
 }
 
 function update(reservation_id, updatedReservation) {

@@ -156,9 +156,19 @@ async function update(req, res) {
     req.body.data.status)});
   }
 
-async function list(req, res) {
-  const resDate = req.query.date;
-  res.json({ data: await reservationsService.list(resDate) });
+// async function list(req, res) {
+//   const resDate = req.query.date;
+//   res.json({ data: await reservationsService.list(resDate) });
+// }
+
+async function list(request, response) {
+  const date = request.query.date;
+  const mobile_number = request.query.mobile_number;
+  const reservations = await reservationsService.list(date, mobile_number);
+  const res = reservations.filter(
+    (reservation) => reservation.status !== "finished"
+  );
+  response.json({ data: res });
 }
 
 async function create(req, res) {
