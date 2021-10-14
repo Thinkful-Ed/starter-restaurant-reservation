@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-//import ErrorAlert from "../layout/ErrorAlert";
 import { postReservation } from "../utils/api";
 import { today } from "../utils/date-time";
 
@@ -19,12 +18,15 @@ function NewReservation() {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [inputData, setInputData] = useState({ ...initialFormState });
-  console.log("NewReservation", inputData);
 
   //changeHandler to make inputs controlled
   //get access to the values in the inputs
   function changeHandler({ target }) {
-    setInputData({ ...inputData, [target.name]: target.name === "people" ? Number(target.value) : target.value });
+    setInputData({
+      ...inputData,
+      [target.name]:
+        target.name === "people" ? Number(target.value) : target.value,
+    });
   }
 
   function submitHandler(event) {
@@ -44,7 +46,7 @@ function NewReservation() {
   return (
     <>
       <div>
-        <h1>New Reservation</h1>
+        <h1 className="mt-3 mb-4">New Reservation</h1>
         <ErrorAlert error={errorMessage} />
       </div>
       <div className="d-flex justify-content-center">
@@ -148,7 +150,6 @@ function NewReservation() {
           </div>
         </form>
       </div>
-      
     </>
   );
 }

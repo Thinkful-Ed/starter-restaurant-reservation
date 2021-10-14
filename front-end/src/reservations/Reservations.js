@@ -3,6 +3,8 @@ import { Switch, Route } from "react-router";
 import NotFound from "../layout/NotFound";
 import NewReservation from "./NewReservation";
 import SeatReservation from "./SeatReservation";
+import EditReservation from "./EditReservation";
+
 
 //{/*/}
 
@@ -14,7 +16,7 @@ function Reservations() {
             <NewReservation />
           </Route>
           <Route exact={true} path={"/reservations/:reservation_id/edit"}>
-            {/*<EditReservation />*/}
+            <EditReservation />
           </Route>
           <Route exact={true} path={"/reservations/:reservation_id/seat"}>
             <SeatReservation />

@@ -3,11 +3,8 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const reservationsService = require("../reservations/reservations.service");
 const hasProperties = require("../errors/missingFields");
 
-
-
-
 async function hasReservationId(req, res, next) {
-  const {reservation_id} = req.body.data
+  const { reservation_id } = req.body.data;
   if (reservation_id) {
     return next();
   }
@@ -30,12 +27,9 @@ async function reservationExists(req, res, next) {
   });
 }
 
-
 async function reservationIsBooked(req, res, next) {
   const { foundReservation } = res.locals;
-  //const resObject = foundReservation.find((reservation)=> reservation[0])
   if (foundReservation.status !== "seated") {
-    console.log("foundReservation.status", foundReservation.status)
     return next();
   }
   next({
@@ -45,7 +39,6 @@ async function reservationIsBooked(req, res, next) {
 }
 
 async function tableExists(req, res, next) {
-  console.log("PARAMS", req.params);
   const { table_id } = req.params;
   const foundTable = await tablesService.read(table_id);
   if (foundTable) {
@@ -60,7 +53,7 @@ async function tableExists(req, res, next) {
 
 function hasValidTableSize(req, res, next) {
   const { foundTable } = res.locals;
-  const { foundReservation }  = res.locals;
+  const { foundReservation } = res.locals;
   if (foundTable.capacity >= foundReservation.people) {
     return next();
   }
@@ -140,8 +133,6 @@ function hasOnlyValidProperties(req, res, next) {
 
 const hasRequiredProperties = hasProperties(...["table_name", "capacity"]);
 
-
-
 function hasValidTableName(tableName) {
   return tableName.length > 1;
 }
@@ -149,8 +140,6 @@ function hasValidTableName(tableName) {
 function isValidCapacity(capacity) {
   return Number.isInteger(capacity) && capacity >= 1;
 }
-
-
 
 function hasValidValues(req, res, next) {
   const { table_name, capacity } = req.body.data;
@@ -170,6 +159,12 @@ function hasValidValues(req, res, next) {
   next();
 }
 
+async function finishTable(req, res) {
+  const { foundTable } = res.locals;
+  await tablesService.updateReservation(foundTable.reservation_id, "finished");
+  await tablesService.unseatTable(foundTable.table_id);
+  res.status(200).json({ data: { status: "free" } });
+}
 
 // C
 async function create(req, res) {
@@ -187,12 +182,14 @@ async function read(req, res) {
 async function update(req, res, next) {
   const { foundTable } = res.locals;
   const { reservation_id } = req.body.data;
-  if(foundTable.table_name){
-  const data = await tablesService.updateReservation(reservation_id, "seated");
-  const x = await tablesService.occupied(foundTable.table_id, reservation_id);
-  res.json({data});
-  }
-  else{
+  if (foundTable.table_name) {
+    const data = await tablesService.updateReservation(
+      reservation_id,
+      "seated"
+    );
+    const x = await tablesService.occupied(foundTable.table_id, reservation_id);
+    res.json({ data });
+  } else {
     return next({
       status: 400,
       message: "table_name required",
@@ -208,26 +205,14 @@ async function list(req, res) {
   res.json({ data: data });
 }
 
-function hasData(){
-return (!req.body.data !== null)
-}
-
-async function finishTable(req, res) {
-  console.log("DESTROY", req.body.data)
-  const { foundTable } = res.locals;
-  // const { reservation_id } = req.body.data;
-  await tablesService.updateReservation(foundTable.reservation_id,"finished");
-  await tablesService.unseatTable(foundTable.table_id);
-  res.status(200).json({ data: { status: "free" } });
-}
-
-
-
-
 module.exports = {
   create: [hasValidValues, asyncErrorBoundary(create)],
   list: [asyncErrorBoundary(list)],
-  deleteReservation:[asyncErrorBoundary(tableExists), asyncErrorBoundary(finishTable)],
+  deleteReservation: [
+    asyncErrorBoundary(tableExists),
+    tableIsOccupied,
+    asyncErrorBoundary(finishTable),
+  ],
   updateReservation: [
     asyncErrorBoundary(hasReservationId),
     asyncErrorBoundary(reservationExists),
@@ -235,5 +220,6 @@ module.exports = {
     asyncErrorBoundary(tableExists),
     hasValidTableSize,
     tableIsFree,
-    asyncErrorBoundary(update)],
+    asyncErrorBoundary(update),
+  ],
 };

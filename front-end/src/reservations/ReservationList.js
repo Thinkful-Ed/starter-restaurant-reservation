@@ -24,6 +24,12 @@ function ReservationList({ reservations }) {
             <td><a href={`/reservations/${reservation_id}/seat`} className="btn btn-success">
           Seat
         </a></td>
+        <td><a href={`/reservations/${reservation_id}/edit`} className="btn btn-secondary">
+          Edit
+        </a></td>
+        <td><a href={`/reservations/${reservation_id}`} className="btn btn-danger">
+          Cancel
+        </a></td>
           </tr>
         </tbody>
     )
@@ -43,6 +49,8 @@ function ReservationList({ reservations }) {
             <td>Reservation time</td>
             <td>Party size</td>
             <td>Status</td>
+            <td></td>
+            <td></td>
             <td></td>
           </tr>
         </thead>

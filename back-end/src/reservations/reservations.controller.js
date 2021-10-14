@@ -21,10 +21,8 @@ const hasRequiredFields = missingFields(...requiredFields);
 //check if reservation exists for read
 async function reservationExists(req, res, next) {
   const { reservationId } = req.params;
-  //console.log("RESID", typeof reservationId);
   const foundReservation = await reservationsService.read(reservationId);
   if (foundReservation) {
-    console.log("FOUNDRES", foundReservation)
   res.locals.foundReservation = foundReservation;
   return next();
   }else{
@@ -54,8 +52,6 @@ function dateIsValid(date) {
 function hasValidFields(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
   const partySize = Number.isInteger(people);
-  console.log(typeof reservation_date)
-  console.log("Look for people", req.body.data); //test
   const presentTime = Date.now();
   const requestedTime = new Date(`${reservation_date} ${reservation_time}`);
 
@@ -105,11 +101,8 @@ function hasValidFields(req, res, next) {
 
 async function updateStatus(req, res) {
   const newStatus = req.body.data.status;
-  console.log(newStatus);
   const { foundReservation } = res.locals.foundReservation;
   const resObject = foundReservation.find((reservation)=> reservation)
-  console.log("RESOBJID", resObject)
-  //let data = await reservationsService.updateStatus(resObject.reservation_id, newStatus);
   res.status(200).json({ data: { status: newStatus } });
 }
 
@@ -131,7 +124,6 @@ async function list(req, res) {
 }
 
 async function create(req, res) {
-  //console.log("req.body.data",req.body.data)
   res
     .status(201)
     .json({ data: await reservationsService.create(req.body.data) });

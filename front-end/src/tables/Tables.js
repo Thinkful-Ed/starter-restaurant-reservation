@@ -3,20 +3,20 @@ import NewTable from "./NewTable";
 import NotFound from "../layout/NotFound";
 
 function Tables() {
-//JSX
+  //JSX
   return (
-  <>
-    <main>
-      <Switch>
-        <Route exact={true} path={"/tables/new"}>
-          <NewTable />
-        </Route>
-        <Route>
-          <NotFound />
-        </Route>
-      </Switch>
-    </main>
-  </>
+    <>
+      <main>
+        <Switch>
+          <Route exact={true} path={"/tables/new"}>
+            <NewTable />
+          </Route>
+          <Route>
+            <NotFound />
+          </Route>
+        </Switch>
+      </main>
+    </>
   );
 }
 export default Tables;

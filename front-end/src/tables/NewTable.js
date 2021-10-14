@@ -1,8 +1,8 @@
-import {useHistory} from "react-router-dom";
-import {useState} from "react";
-import {createTable} from "../utils/api"
-import ErrorAlert from "../layout/ErrorAlert"
-import { today } from "../utils/date-time"
+import { useHistory } from "react-router-dom";
+import { useState } from "react";
+import { createTable } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
+import { today } from "../utils/date-time";
 
 function NewTable() {
   const [tablesError, setTablesError] = useState(null);
@@ -13,27 +13,25 @@ function NewTable() {
     capacity: "",
   };
 
-  const [inputData, setInputData] = useState({ ...initialFormState });
+  const [newTable, setNewTable] = useState({ ...initialFormState });
 
   const changeHandler = ({ target }) => {
     let value = target.value;
     if (target.name === "capacity" && typeof value === "string") {
       value = Number(value);
     }
-console.log("val", value)
-    setInputData({
-      ...inputData,
+    setNewTable({
+      ...newTable,
       [target.name]: value,
     });
   };
-  console.log("Input29", inputData)
+
   const submitHandler = (event) => {
     event.preventDefault();
 
     const abortController = new AbortController();
     setTablesError(null);
-    console.log("Input", inputData)
-    createTable(inputData, abortController.signal)
+    createTable(newTable, abortController.signal)
       .then(() => history.push(`/dashboard?date=${today()}`))
       .catch(setTablesError);
     return () => abortController.abort();
@@ -46,10 +44,7 @@ console.log("val", value)
 
   const newTableBtns = () => (
     <>
-      <button
-        type="submit"
-        className="col btn btn-primary mb-2 mt-2"
-      >
+      <button type="submit" className="col btn btn-primary mb-2 mt-2">
         Submit
       </button>
       <button
@@ -61,13 +56,13 @@ console.log("val", value)
       </button>
     </>
   );
-//onSubmit always on form
+  //onSubmit always on form
   return (
     <>
       <h1 className="mt-3 mb-4">New Table</h1>
-      <ErrorAlert error={tablesError}/>
+      <ErrorAlert error={tablesError} />
       <div className="d-flex justify-content-center">
-        <form onSubmit={submitHandler}>  
+        <form onSubmit={submitHandler}>
           <label className="row">Table Name:</label>
           <input
             onChange={changeHandler}

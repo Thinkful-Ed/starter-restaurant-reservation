@@ -6,8 +6,7 @@ import { today } from "../utils/date-time";
 import { assignTable } from "../utils/api";
 
 function SeatReservation() {
-  const [tableId, setTableId] = useState( null );
-  console.log(tableId)
+  const [tableId, setTableId] = useState(null);
 
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState("");
@@ -23,11 +22,11 @@ function SeatReservation() {
     const abortController = new AbortController();
     setTablesError(null);
     listTables(abortController.signal)
-    .then((tables) => {
-      setTables(tables)
-      setTableId(tables[0].table_id)
-    })
-    .catch(setTablesError);
+      .then((tables) => {
+        setTables(tables);
+        setTableId(tables[0].table_id);
+      })
+      .catch(setTablesError);
     return () => abortController.abort();
   }, []);
 
@@ -42,8 +41,6 @@ function SeatReservation() {
 
     return () => abortController.abort();
   }, [reservation_id]);
-
-  console.log("reservations", reservation);
 
   //change handler
   function changeHandler({ target }) {
@@ -75,7 +72,6 @@ function SeatReservation() {
     </option>
   ));
 
-
   //variable to render submit and cancel buttons
   const buttons = () => {
     return (
@@ -103,8 +99,8 @@ function SeatReservation() {
     <>
       <h1>Seat Reservation</h1>
       <h2 key={reservation.reservation_id}>
-      {reservation.last_name}: Party of {reservation.people}
-    </h2>
+        {reservation.last_name}: Party of {reservation.people}
+      </h2>
       <div className="d-flex flex-col mt-4">
         <form>
           <label className="">Table# - Capacity</label>
