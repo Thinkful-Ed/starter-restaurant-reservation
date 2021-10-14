@@ -34,7 +34,7 @@ function occupied(table_id, reservation_id) {
     .update({ reservation_id: reservation_id });
 }
 
-function free(table_id) {
+function unseatTable(table_id) {
   return knex("tables")
     .where({ table_id: table_id })
     .update({ reservation_id: null });
@@ -45,7 +45,7 @@ module.exports = {
   create,
   read,
   occupied,
-  free,
+  unseatTable,
   readReservation,
   updateReservation,
 };

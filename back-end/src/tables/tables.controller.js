@@ -45,6 +45,7 @@ async function reservationIsBooked(req, res, next) {
 }
 
 async function tableExists(req, res, next) {
+  console.log("PARAMS", req.params);
   const { table_id } = req.params;
   const foundTable = await tablesService.read(table_id);
   if (foundTable) {
@@ -211,11 +212,22 @@ function hasData(){
 return (!req.body.data !== null)
 }
 
+async function finishTable(req, res) {
+  console.log("DESTROY", req.body.data)
+  const { foundTable } = res.locals;
+  // const { reservation_id } = req.body.data;
+  await tablesService.updateReservation(foundTable.reservation_id,"finished");
+  await tablesService.unseatTable(foundTable.table_id);
+  res.status(200).json({ data: { status: "free" } });
+}
+
+
 
 
 module.exports = {
   create: [hasValidValues, asyncErrorBoundary(create)],
   list: [asyncErrorBoundary(list)],
+  deleteReservation:[asyncErrorBoundary(tableExists), asyncErrorBoundary(finishTable)],
   updateReservation: [
     asyncErrorBoundary(hasReservationId),
     asyncErrorBoundary(reservationExists),

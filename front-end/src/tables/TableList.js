@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
+import {useHistory} from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import { listTables } from "../utils/api";
+import { listTables, finishTable } from "../utils/api";
 
 function TableList() {
   const [tables, setTables] = useState([]);
 
   const [tablesError, setTablesError] = useState("");
 
-  //const [reservation, setReservation] = useState({});
+  const [finishTableError, setFinishTableError] = useState(null);
 
+  const history = useHistory();
 
  
 
@@ -19,23 +21,27 @@ function TableList() {
     return () => abortController.abort();
   }, []);
 
-  // useEffect(() => {
-  //   const abortController = new AbortController();
-  //   setReservationError(null);
 
-  //   getReservation(reservation_id, abortController.signal)
-  //     .then(setReservation)
-  //     .catch(setReservationError);
 
-  //   return () => abortController.abort();
-  // }, [reservation_id]);
+  const handleFinish = (id) => {
+    if (
+      window.confirm(
+        "Is this table ready to seat new guests? This cannot be undone."
+      )
+    ) {
+      const abortController = new AbortController();
+      finishTable(id, abortController.signal).then(() => history.go(0));
+      return () => abortController.abort();
+    }
+  }
 
   const tableList = tables.map(({ reservation_id, table_name, capacity, table_id }) => (
     <tbody key={table_id}>
       <tr>
         <td>{table_name}</td>
         <td>{capacity}</td>
-        <td>{reservation_id ? (<td>occupied</td>) : (<td>free</td>)}</td>
+        <td>{reservation_id ? ("occupied") : ("free")}</td>
+        <td>{reservation_id ? (<button type="button" onClick={()=> handleFinish(table_id)}>Finish</button>) : null}</td>
       </tr>
     </tbody>
   ));
