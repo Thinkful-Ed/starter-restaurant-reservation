@@ -58,7 +58,7 @@ async function validateData(req, res, next) {
 }
 
 function hasValidFields(req, res, next) {
-  const { reservation_date, reservation_time, people } = req.body.data;
+  const { reservation_date, reservation_time, people, status } = req.body.data;
   const partySize = Number.isInteger(people);
   const presentTime = Date.now();
   const requestedTime = new Date(`${reservation_date} ${reservation_time}`);
@@ -70,12 +70,18 @@ function hasValidFields(req, res, next) {
       message: "reservation_time must be in the future.",
     });
   }
-  // if(reservation_date === ""){
-  //   return next({
-  //     status: 400,
-  //     message: "reservation_date required.",
-  //   });
-  // }
+  if(status === "seated"){
+    return next({
+      status: 400,
+      message: "seated",
+    });
+  }
+  if(status === "finished"){
+    return next({
+      status: 400,
+      message: "finished",
+    });
+  }
     //validate date is in correct format
   if (!dateIsValid(reservation_date)) {
     return next({
@@ -107,10 +113,34 @@ function hasValidFields(req, res, next) {
   next();
 }
 
+function isValidReservation(req, res, next){
+  const {foundReservation} = res.locals;
+  const validStatus = ["booked","seated", "finished", "cancelled"]
+  console.log("FOUNDRESSTATUS", foundReservation.status)
+  if(!foundReservation.reservation_id){
+return next({
+  status: 404,
+  message: `reservation_id ${foundReservation.reservation_id} not found`
+});
+  }
+  if(foundReservation.status === "finished"){
+    return next({
+      status: 400,
+      message: "a finished reservation cannot be updated"
+    });
+      }
+      if(!validStatus.includes(req.body.data.status)){
+        return next({
+          status: 400,
+          message: `status ${req.body.data.status} unknown`
+        });
+          }
+  next();
+}
+
 async function updateStatus(req, res) {
   const newStatus = req.body.data.status;
-  const { foundReservation } = res.locals.foundReservation;
-  const resObject = foundReservation.find((reservation)=> reservation)
+ 
   res.status(200).json({ data: { status: newStatus } });
 }
 
@@ -120,9 +150,9 @@ async function read(req, res) {
 }
 
 async function update(req, res) {
-  const resObject = res.locals.foundReservation.find((reservation)=> reservation)
+  const {foundReservation}= res.locals;
   res.json({data: await reservationsService.update(
-    resObject.reservation_id,
+    foundReservation.reservation_id,
     req.body.data.status)});
   }
 
@@ -143,6 +173,6 @@ module.exports = {
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   update: [asyncErrorBoundary(validateData), asyncErrorBoundary(update)],
   updateReservationStatus: [
-    asyncErrorBoundary(updateStatus),
+    asyncErrorBoundary(reservationExists), isValidReservation, asyncErrorBoundary(updateStatus),
   ],
 };
