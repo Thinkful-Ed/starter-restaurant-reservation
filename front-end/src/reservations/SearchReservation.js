@@ -8,15 +8,12 @@ function SearchReservation(){
     const [reservations, setReservations] = useState([]);
     const [error, setError] = useState(null);
   
-    /**
-     * updates the state of mobileNumber when the user makes any changes to it
-     */
-    function handleChange({ target }) {
+  
+    function changeHandler({ target }) {
       setMobileNumber(target.value);
     }
   
-    /** makes a get request to list all reservations under the given mobileNumber when the "submit" button is clicked */
-    function handleSubmit(event) {
+    function submitHandler(event) {
       event.preventDefault();
       const abortController = new AbortController();
       setError(null);
@@ -28,18 +25,18 @@ function SearchReservation(){
       return () => abortController.abort();
     }
   
-    /** returns all reservation(s), if any */
-    const searchResultsJSX = () => {
+    const matchingReservations = () => {
       return reservations.length > 0 ? (
-        reservations.map((reservation) => (
+        reservations.map(() => (
           <ReservationList reservations={reservations}/>
         ))
       ) : (
         <tr>
-          <td>No reservations found</td>
+          <td><span className="oi oi-warning"></span>No reservations found</td>
         </tr>
       );
     };
+
     return (
         <>
         <h1 className="mt-3 mb-4">Search for a Reservation</h1>
@@ -47,21 +44,21 @@ function SearchReservation(){
         <form>
           <ErrorAlert error={error} />
           <label htmlFor="mobile_number">
-            Enter a customer's phone number:
+            Enter customer's phone number:
           </label>
           <input
           className="mx-2"
             name="mobile_number"
             id="mobile_number"
             type="tel"
-            onChange={handleChange}
+            onChange={changeHandler}
             value={FormData.mobile_number}
-            required
+            required={true}
           />
           <button
             className="btn btn-primary m-1"
             type="submit"
-            onClick={handleSubmit}
+            onClick={submitHandler}
           >
             Find
           </button>
@@ -72,7 +69,7 @@ function SearchReservation(){
             Found reservations
             </tr>
           </thead>
-          <tbody>{searchResultsJSX()}</tbody>
+          <tbody>{matchingReservations()}</tbody>
         </table>
       </div>
       </>

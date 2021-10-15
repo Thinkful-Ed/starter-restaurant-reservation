@@ -6,7 +6,7 @@ import { listTables, finishTable } from "../utils/api";
 function TableList() {
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState("");
-
+  
   const [finishTableError, setFinishTableError] = useState(null);
 
   const history = useHistory();
@@ -39,10 +39,16 @@ function TableList() {
         <tr>
           <td>{table_name}</td>
           <td>{capacity}</td>
-          <td data-table-id-status={table_id}>{reservation_id ? "occupied" : "free"}</td>
+          <td data-table-id-status={table_id}>
+            {reservation_id ? "occupied" : "free"}
+          </td>
           <td>
             {reservation_id ? (
-              <button  data-table-id-finish={table_id} type="button" onClick={() => handleFinish(table_id)}>
+              <button
+                data-table-id-finish={table_id}
+                type="button"
+                onClick={() => handleFinish(table_id)}
+              >
                 Finish
               </button>
             ) : null}
@@ -56,8 +62,8 @@ function TableList() {
   return (
     <>
       <div>
-      <ErrorAlert error={tablesError} />
-      <ErrorAlert error={finishTableError} />
+        <ErrorAlert error={tablesError} />
+        <ErrorAlert error={finishTableError} />
         <table className="table">
           <thead>
             <tr>
@@ -69,7 +75,6 @@ function TableList() {
           {tableList}
         </table>
       </div>
-      
     </>
   );
 }
