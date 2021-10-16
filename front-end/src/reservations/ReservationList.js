@@ -1,4 +1,29 @@
+import { updateReservationStatus } from "../utils/api";
+import {useHistory} from "react-router-dom"
+
+
 function ReservationList({ reservations }) {
+
+  const history = useHistory();
+
+    function cancelHandler(reservation_id) {
+
+      if (
+        window.confirm(
+          "Do you want to cancel this reservation? This cannot be undone."
+        )
+      ) {
+        const abortController = new AbortController();
+  
+        updateReservationStatus(
+          reservation_id,
+          "cancelled",
+          abortController.status
+        ).then(() => history.push("/dashboard"))
+  
+        return () => abortController.abort();
+      }
+    } 
   
   const reservationsList = reservations.map(
     ({
@@ -12,7 +37,7 @@ function ReservationList({ reservations }) {
       status,
     }) => (
       <tbody key={reservation_id}>
-        {status === "finished" ? null : (
+        {status === "finished" || status === "cancelled" ? null : (
           <tr>
             <td>{first_name}</td>
             <td>{last_name}</td>
@@ -30,18 +55,20 @@ function ReservationList({ reservations }) {
                   Seat
                 </a>
               )}
-              <a
+              <button
                 href={`/reservations/${reservation_id}/edit`}
                 className="btn btn-secondary mb-1"
               >
                 Edit
-              </a>
-              <a
-                href={`/reservations/${reservation_id}`}
+              </button>
+              <button 
+              data-reservation-id-cancel={reservation_id}
+              type="button"
                 className="btn btn-danger"
+                onClick={()=> cancelHandler(reservation_id)}
               >
                 Cancel
-              </a>
+              </button>
             </td>
           </tr>
         )}

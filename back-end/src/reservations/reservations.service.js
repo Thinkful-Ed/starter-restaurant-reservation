@@ -31,15 +31,12 @@ function list(date, mobile_number) {
   return knex("reservations").select("*");
 }
 
-function update(reservation_id, updatedReservation) {
+function update(reservation_id, status) {
   return knex("reservations")
-    .where({ reservation_id })
-    .update(updatedReservation, "*")
-    .then((result) => result[0]);
+    .where({ reservation_id: reservation_id })
+    .update({ status: status });
 }
 
-function updateStatus(reservation_id, status) {
-  return knex("reservations").where({ reservation_id }).update({ status }, "*");
-}
 
-module.exports = { list, create, read, update, updateStatus };
+
+module.exports = { list, create, read, update };

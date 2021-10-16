@@ -128,3 +128,10 @@ export async function finishTable(table_id, signal) {
   };
   return await fetchJson(url, options);
 }
+
+
+export async function updateReservationStatus(reservation_id, status, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+  const body = JSON.stringify({ data: { status: status } });
+  return await fetchJson(url, { headers, signal, method: "PUT", body }, []);
+}

@@ -33,12 +33,6 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
-  // useEffect(() => {
-  //   const abortController = new AbortController();
-  //   setTableError(null);
-  //   readTable(table_id, abortController.signal).then(setTable).catch(setTableError);
-  //   return () => abortController.abort();
-  // }, []);
 
   //JSX
   return (
@@ -47,7 +41,7 @@ function Dashboard({ date }) {
       <NavigationBtns date={date}/>
       <div className="d-flex flex-row">
         <div className="d-flex col-8">
-      <ReservationList reservations={reservations}/>
+      <ReservationList reservations={reservations} />
       </div>
       <div className="d-flex col-5">
       <TableList />

@@ -144,28 +144,30 @@ async function read(req, res) {
 
 async function update(req, res) {
   const { foundReservation } = res.locals;
-  res.json({
-    data: await reservationsService.update(
-      foundReservation.reservation_id,
-      req.body.data.status
-    ),
-  });
+  console.log("Found", foundReservation);
+  await reservationsService.update(
+    foundReservation.reservation_id,
+    req.body.data.status
+  );
+  res.status(200).json({ data: { status: req.body.data.status } });
 }
 
-async function updateStatus(req, res) {
-  const newStatus = req.body.data.status;
-
-  res.status(200).json({ data: { status: newStatus } });
+async function edit(req, res) {
+  const edited = await reservationsService.edit(
+    res.locals.reservation.reservation_id,
+    req.body.data
+  );
+  res.status(200).json({ data: edited[0] });
 }
 
-async function list(request, response) {
-  const date = request.query.date;
-  const mobile_number = request.query.mobile_number;
+async function list(req, res) {
+  const date = req.query.date;
+  const mobile_number = req.query.mobile_number;
   const reservations = await reservationsService.list(date, mobile_number);
-  const res = reservations.filter(
+  const result = reservations.filter(
     (reservation) => reservation.status !== "finished"
   );
-  response.json({ data: res });
+  res.json({ data: result });
 }
 
 module.exports = {
@@ -177,10 +179,15 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
-  update: [asyncErrorBoundary(validateData), asyncErrorBoundary(update)],
+  update: [
+    asyncErrorBoundary(validateData),
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(isValidReservation),
+    asyncErrorBoundary(update),
+  ],
   updateReservationStatus: [
     asyncErrorBoundary(reservationExists),
     isValidReservation,
-    asyncErrorBoundary(updateStatus),
+    asyncErrorBoundary(update),
   ],
 };
