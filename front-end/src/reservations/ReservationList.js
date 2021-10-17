@@ -57,14 +57,14 @@ function ReservationList({ reservations }) {
               >
                 Edit
               </a>
-              <a
+              <button
                 data-reservation-id-cancel={reservation_id}
                 type="button"
                 className="btn btn-danger mb-1"
                 onClick={() => cancelHandler(reservation_id)}
               >
                 Cancel
-              </a>
+              </button>
             </td>
           </tr>
         )}
