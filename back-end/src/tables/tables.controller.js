@@ -114,36 +114,26 @@ function cancelTable(req, res, next) {
   });
 }
 
-async function validateData(request, response, next) {
-  if (!request.body.data) {
+async function validateData(req, res, next) {
+  if (!req.body.data) {
     return next({ status: 400, message: "Body must include a data object" });
   }
-
   next();
 }
-
-const VALID_PROPERTIES = ["table_name", "capacity", "reservation_id"];
-
-function hasOnlyValidProperties(req, res, next) {
-  const { data = {} } = req.body;
-  const invalidFields = Object.keys(data).filter(
-    (field) => !VALID_PROPERTIES.includes(field)
-  );
-
-  if (invalidFields.length) {
-    return next({
-      status: 400,
-      message: `Invalid field(s): ${invalidFields.join(", ")}`,
-    });
-  }
-  next();
-}
-
-const hasRequiredProperties = hasProperties(...["table_name", "capacity"]);
 
 function hasValidTableName(tableName) {
   return tableName.length > 1;
 }
+
+// function hasTableName(req, res, next){
+//   if(!req.body.table_name){
+//     return next({
+//       status: 400,
+//       message: "a table_name is required",
+//     })
+//   }
+//   next();
+// }
 
 function isValidCapacity(capacity) {
   return Number.isInteger(capacity) && capacity >= 1;
@@ -158,12 +148,19 @@ function hasValidValues(req, res, next) {
       message: "capacity must be greater than or equal to 1",
     });
   }
+  if(!table_name){
+    return next({
+      status: 400,
+      message: "a table_name is required",
+    })
+  }
   if (!hasValidTableName(table_name)) {
     return next({
       status: 400,
       message: "table_name must be at least 2 characters long",
     });
   }
+ 
   next();
 }
 
@@ -214,7 +211,12 @@ async function list(req, res) {
 }
 
 module.exports = {
-  create: [asyncErrorBoundary(validateData), hasValidValues, asyncErrorBoundary(create)],
+  create: [
+    asyncErrorBoundary(validateData),
+    hasValidValues,
+
+    asyncErrorBoundary(create),
+  ],
   list: [asyncErrorBoundary(list)],
   deleteReservation: [
     asyncErrorBoundary(tableExists),
