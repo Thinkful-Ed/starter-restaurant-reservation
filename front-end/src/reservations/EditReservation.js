@@ -119,7 +119,9 @@ function EditReservation() {
             required={true}
           />
 
-          <label htmlFor="mobile_number" className=" mt-1">Mobile number:</label>
+          <label htmlFor="mobile_number" className=" mt-1">
+            Mobile number:
+          </label>
 
           <input
             id="mobile_number"
@@ -131,7 +133,9 @@ function EditReservation() {
             required={true}
           />
 
-          <label htmlFor="reservation_date" className=" mt-1">Reservation date:</label>
+          <label htmlFor="reservation_date" className=" mt-1">
+            Reservation date:
+          </label>
 
           <input
             id="reservation_date"
@@ -143,7 +147,9 @@ function EditReservation() {
             required={true}
           />
 
-          <label htmlFor="reservation_time" className=" mt-1">Reservation time:</label>
+          <label htmlFor="reservation_time" className=" mt-1">
+            Reservation time:
+          </label>
 
           <input
             id="reservation_time"
@@ -154,7 +160,9 @@ function EditReservation() {
             value={formData.reservation_time}
             required={true}
           />
-          <label htmlFor="people" className=" mt-1">Number of guests: </label>
+          <label htmlFor="people" className=" mt-1">
+            Number of guests:{" "}
+          </label>
           <input
             id="people"
             type="number"

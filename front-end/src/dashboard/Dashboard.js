@@ -4,7 +4,7 @@ import useQuery from "../utils/useQuery";
 import { listReservations } from "../utils/api";
 //import formatDisplayDate from "../utils/date-time";
 import ReservationList from "../reservations/ReservationList";
-import NavigationBtns from "./NavigationBtns"
+import NavigationBtns from "./NavigationBtns";
 import TableList from "../tables/TableList";
 
 /**
@@ -33,18 +33,17 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
-
   //JSX
   return (
     <>
-    <div>
-      <h1 className="mt-3 mb-4">Dashboard</h1>
-      <NavigationBtns date={date}/>
       <div>
-      <ReservationList reservations={reservations} />
-      <TableList />
-      </div>
-      <ErrorAlert error={reservationsError} />
+        <h1 className="mt-3 mb-4">Dashboard</h1>
+        <NavigationBtns date={date} />
+        <div>
+          <ReservationList reservations={reservations} />
+          <TableList />
+        </div>
+        <ErrorAlert error={reservationsError} />
       </div>
     </>
   );

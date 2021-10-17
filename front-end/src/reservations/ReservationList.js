@@ -71,7 +71,7 @@ function ReservationList({ reservations }) {
       </tbody>
     )
   );
-//{/**/}
+  //{/**/}
   //JSX
   return (
     <>
