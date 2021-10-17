@@ -154,7 +154,7 @@ async function update(req, res) {
 
 async function edit(req, res) {
   const edited = await reservationsService.edit(
-    res.locals.reservation.reservation_id,
+    res.locals.foundReservation.reservation_id,
     req.body.data
   );
   res.status(200).json({ data: edited[0] });
@@ -190,4 +190,5 @@ module.exports = {
     isValidReservation,
     asyncErrorBoundary(update),
   ],
+  edit:[asyncErrorBoundary(validateData),asyncErrorBoundary(reservationExists), hasRequiredFields, hasValidFields, asyncErrorBoundary(edit)]
 };

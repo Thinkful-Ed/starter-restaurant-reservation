@@ -1,30 +1,26 @@
 import { updateReservationStatus } from "../utils/api";
-import {useHistory} from "react-router-dom"
-
+import { useHistory } from "react-router-dom";
 
 function ReservationList({ reservations }) {
-
   const history = useHistory();
 
-    function cancelHandler(reservation_id) {
+  function cancelHandler(reservation_id) {
+    if (
+      window.confirm(
+        "Do you want to cancel this reservation? This cannot be undone."
+      )
+    ) {
+      const abortController = new AbortController();
+      updateReservationStatus(
+        reservation_id,
+        "cancelled",
+        abortController.status
+      ).then(() => history.push("/dashboard"));
 
-      if (
-        window.confirm(
-          "Do you want to cancel this reservation? This cannot be undone."
-        )
-      ) {
-        const abortController = new AbortController();
-  
-        updateReservationStatus(
-          reservation_id,
-          "cancelled",
-          abortController.status
-        ).then(() => history.push("/dashboard"))
-  
-        return () => abortController.abort();
-      }
-    } 
-  
+      return () => abortController.abort();
+    }
+  }
+
   const reservationsList = reservations.map(
     ({
       first_name,
@@ -55,17 +51,17 @@ function ReservationList({ reservations }) {
                   Seat
                 </a>
               )}
-              <button
+              <a
                 href={`/reservations/${reservation_id}/edit`}
                 className="btn btn-secondary mb-1"
               >
                 Edit
-              </button>
-              <button 
-              data-reservation-id-cancel={reservation_id}
-              type="button"
+              </a>
+              <button
+                data-reservation-id-cancel={reservation_id}
+                type="button"
                 className="btn btn-danger"
-                onClick={()=> cancelHandler(reservation_id)}
+                onClick={() => cancelHandler(reservation_id)}
               >
                 Cancel
               </button>
