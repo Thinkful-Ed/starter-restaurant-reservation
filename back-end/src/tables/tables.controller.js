@@ -148,11 +148,11 @@ function hasValidValues(req, res, next) {
       message: "capacity must be greater than or equal to 1",
     });
   }
-  if(!table_name){
+  if (!table_name) {
     return next({
       status: 400,
       message: "a table_name is required",
-    })
+    });
   }
   if (!hasValidTableName(table_name)) {
     return next({
@@ -160,7 +160,7 @@ function hasValidValues(req, res, next) {
       message: "table_name must be at least 2 characters long",
     });
   }
- 
+
   next();
 }
 

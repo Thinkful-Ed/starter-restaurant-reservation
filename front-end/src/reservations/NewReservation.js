@@ -59,6 +59,7 @@ function NewReservation() {
               id="last_name"
               type="text"
               onChange={changeHandler}
+              className="form-control"
               value={inputData.first_name}
               required={true}
             />
@@ -72,6 +73,7 @@ function NewReservation() {
               id="last_name"
               type="text"
               onChange={changeHandler}
+              className="form-control"
               value={inputData.last_name}
               required={true}
             />
@@ -85,6 +87,7 @@ function NewReservation() {
               id="mobile_number"
               type="text"
               onChange={changeHandler}
+              className="form-control"
               value={inputData.mobile_number}
               required={true}
             />
@@ -98,6 +101,7 @@ function NewReservation() {
               id="reservation_date"
               type="date"
               onChange={changeHandler}
+              className="form-control"
               value={inputData.reservation_date}
               required={true}
             />
@@ -111,6 +115,7 @@ function NewReservation() {
               id="reservation_time"
               type="time"
               onChange={changeHandler}
+              className="form-control"
               value={inputData.reservation_time}
               required={true}
             />
@@ -124,6 +129,7 @@ function NewReservation() {
               name="people"
               type="number"
               onChange={changeHandler}
+              className="form-control"
               value={inputData.people}
               min="1"
               required={true}

@@ -1,8 +1,8 @@
 import { useHistory } from "react-router-dom";
-import { previous, today, next } from "../utils/date-time"
+import { previous, today, next } from "../utils/date-time";
 
-function NavigationBtns({date}) {
-const history = useHistory();
+function NavigationBtns({ date }) {
+  const history = useHistory();
 
   function prevDayHandler(event) {
     event.preventDefault();
@@ -19,24 +19,37 @@ const history = useHistory();
     history.push(`/dashboard?date=${today()}`);
   }
 
-
   //JSX
   return (
-  <>
-  <h2>Reservations for {date}</h2>
-  <br/>
-    <div className="d-flex justify-content-between ">
-      <button className= "btn btn-secondary" type="button" onClick={prevDayHandler}>
+    <>
+    <div>
+      <h2>Reservations for {date}</h2>
+      <br />
+      <div className="d-flex justify-content-between ">
+        <button
+          className="btn btn-secondary"
+          type="button"
+          onClick={prevDayHandler}
+        >
           Prev
-      </button>
-      <button className= "btn btn-primary" type="button" onClick={currentDayHandler}>
+        </button>
+        <button
+          className="btn btn-primary"
+          type="button"
+          onClick={currentDayHandler}
+        >
           Today
-      </button>
-      <button className= "btn btn-secondary" type="button" onClick={nextDayHandler}>
+        </button>
+        <button
+          className="btn btn-secondary"
+          type="button"
+          onClick={nextDayHandler}
+        >
           Next
-      </button>
+        </button>
       </div>
-      <br/>
+      <br />
+      </div>
     </>
   );
 }

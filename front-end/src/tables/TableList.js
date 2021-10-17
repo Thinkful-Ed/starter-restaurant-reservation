@@ -6,7 +6,7 @@ import { listTables, finishTable } from "../utils/api";
 function TableList() {
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState("");
-  
+
   const [finishTableError, setFinishTableError] = useState(null);
 
   const history = useHistory();
@@ -64,7 +64,7 @@ function TableList() {
       <div>
         <ErrorAlert error={tablesError} />
         <ErrorAlert error={finishTableError} />
-        <table className="table">
+        <table className="table table-info">
           <thead>
             <tr>
               <td>Table Number</td>

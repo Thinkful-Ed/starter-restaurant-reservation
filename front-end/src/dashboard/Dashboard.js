@@ -37,17 +37,15 @@ function Dashboard({ date }) {
   //JSX
   return (
     <>
+    <div>
       <h1 className="mt-3 mb-4">Dashboard</h1>
       <NavigationBtns date={date}/>
-      <div className="d-flex flex-row">
-        <div className="d-flex col-8">
+      <div>
       <ReservationList reservations={reservations} />
-      </div>
-      <div className="d-flex col-5">
       <TableList />
       </div>
-      </div>
       <ErrorAlert error={reservationsError} />
+      </div>
     </>
   );
 }

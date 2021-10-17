@@ -53,30 +53,30 @@ function ReservationList({ reservations }) {
               )}
               <a
                 href={`/reservations/${reservation_id}/edit`}
-                className="btn btn-secondary mb-1"
+                className="btn btn-secondary mb-1 mr-1"
               >
                 Edit
               </a>
-              <button
+              <a
                 data-reservation-id-cancel={reservation_id}
                 type="button"
-                className="btn btn-danger"
+                className="btn btn-danger mb-1"
                 onClick={() => cancelHandler(reservation_id)}
               >
                 Cancel
-              </button>
+              </a>
             </td>
           </tr>
         )}
       </tbody>
     )
   );
-
+//{/**/}
   //JSX
   return (
     <>
-      <div>
-        <table className="table">
+      <div className="table-responsive">
+        <table className="table table-hover">
           <thead>
             <tr>
               <td>First name</td>
@@ -86,7 +86,7 @@ function ReservationList({ reservations }) {
               <td>Reservation time</td>
               <td>Party size</td>
               <td>Status</td>
-              <td></td>
+              <td>Action</td>
             </tr>
           </thead>
           {reservations.length > 0 ? (

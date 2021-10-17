@@ -22,9 +22,13 @@ p {
 }
 
 table {
-  table-layout: auto;
   font-family: "Montserrat", sans-serif;
 }
+
+tr{
+  overflow: auto;
+}
+
 
 
 ul {
@@ -32,11 +36,4 @@ ul {
 }
 
 
-@media all and (max-width: 102px) {
-  table {
-    width: auto;
-    table-layout: fixed;
-    font-family: "Montserrat", sans-serif;
-    font-size: 50%;
-  }
-}
+

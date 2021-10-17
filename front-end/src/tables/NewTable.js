@@ -43,47 +43,50 @@ function NewTable() {
   };
 
   const newTableBtns = () => (
-    <>
-      <button type="submit" className="col btn btn-primary mb-2 mt-2">
+    <div className="text-center">
+      <button type="submit" className="btn btn-primary mr-2">
         Submit
       </button>
       <button
         type="cancel"
-        className="col btn btn-danger mt-2"
+        className="btn btn-danger"
         onClick={cancelHandler}
       >
         Cancel
       </button>
-    </>
+    </div>
   );
   //onSubmit always on form
   return (
     <>
+    <div>
       <h1 className="mt-3 mb-4">New Table</h1>
       <ErrorAlert error={tablesError} />
       <div className="d-flex justify-content-center">
         <form onSubmit={submitHandler}>
-          <label className="row">Table Name:</label>
+          <label>Table Name:</label>
           <input
             onChange={changeHandler}
-            className="row"
+            className="form-control"
             type="text"
             id="table_name"
             name="table_name"
             required={true}
           ></input>
-          <label className="row">Capacity:</label>
+          <label className="mt-1">Capacity:</label>
           <input
             onChange={changeHandler}
-            className="row"
+            className="form-control"
             type="number"
             id="capacity"
             name="capacity"
             required={true}
             min="1"
           ></input>
-          <div className="mt-3 text-center">{newTableBtns()}</div>
+          <br />
+            {newTableBtns()}
         </form>
+      </div>
       </div>
     </>
   );
