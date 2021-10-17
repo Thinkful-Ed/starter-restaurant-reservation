@@ -67,3 +67,33 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+//ADDING THE BELOW APIS ALLOWS THE FRONTEND TO CONNECT TO THE BACKEND
+
+export async function listTables(signal) {
+  const url = `${API_BASE_URL}/table`;
+  return await fetchJson(url, { headers, signal }, []);
+}
+
+export async function createTable(table, signal) {
+  const url = `${API_BASE_URL}/tables`;
+  const body = JSON.stringify({ data: table });
+  return await fetchJson(url, { headers, signal, method: "POST", body }, []);
+}
+
+export async function createReservation(reservation, signal) {
+  const url = `${API_BASE_URL}/reservations`;
+  reservation.people = Number(reservation.people);
+  return await fetchJson(
+    url,
+    {
+      body: JSON.stringify({ data: reservation }),
+      headers,
+      method: "POST",
+      signal,
+    },
+    []
+  )
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}
