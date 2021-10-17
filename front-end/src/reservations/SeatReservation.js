@@ -79,7 +79,7 @@ function SeatReservation() {
         <button
           type="submit"
           onClick={submitHandler}
-          className="btn btn-primary mr-5"
+          className="btn btn-primary mr-4"
         >
           Submit
         </button>
