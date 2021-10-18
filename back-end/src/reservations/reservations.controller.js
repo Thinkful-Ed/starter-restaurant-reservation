@@ -1,6 +1,7 @@
 const reservationsService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const missingFields = require("../errors/missingFields");
+const moment = require('moment-timezone');
 
 //========middleware========//
 
@@ -64,14 +65,14 @@ async function validateData(req, res, next) {
 function hasValidFields(req, res, next) {
   const { reservation_date, reservation_time, people, status } = req.body.data;
   const partySize = Number.isInteger(people);
-  const presentTime = Date.now();
+  const presentTime = Date.now(moment().tz('America/Chicago').format());
   const requestedTime = new Date(`${reservation_date} ${reservation_time}`);
 
   //validate that reservation time is in the future
   if (requestedTime < presentTime) {
     return next({
       status: 400,
-      message: "reservation_time must be in the future.",
+      message: "reservation_time must be in the future. Reservations are in CST.",
     });
   }
   //is status is seated do not allow edit or update
@@ -102,18 +103,18 @@ function hasValidFields(req, res, next) {
       message: "reservation_time must be between 10:30 AM and 9:30 PM",
     });
   }
+   //do not allow reservations on Tuesdays when restaurant is closed
+   if (!dateNotTuesday(reservation_date)) {
+    return next({
+      status: 400,
+      message: "The restaurant is closed on Tuesdays",
+    });
+  }
   //validate that party size is greater than zero
   if (people < 1 || !partySize) {
     return next({
       status: 400,
       message: "Please enter number of people.",
-    });
-  }
-  //do not allow reservations on Tuesdays when restaurant is closed
-  if (!dateNotTuesday(reservation_date)) {
-    return next({
-      status: 400,
-      message: "The restaurant is closed on Tuesdays",
     });
   }
   next();
