@@ -2,6 +2,7 @@ import { Route, Switch } from "react-router-dom";
 import NewTable from "./NewTable";
 import NotFound from "../layout/NotFound";
 
+/*component routes requests made to /tables/new*/
 function Tables() {
   //JSX
   return (

@@ -4,6 +4,7 @@ import { createTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today } from "../utils/date-time";
 
+/*component is used to render and adds functionality to create a new table*/
 function NewTable() {
   const [tablesError, setTablesError] = useState(null);
   const history = useHistory();
@@ -15,6 +16,8 @@ function NewTable() {
 
   const [newTable, setNewTable] = useState({ ...initialFormState });
 
+
+  /*makes form controlled and considers edge case that capacity may be a string*/
   const changeHandler = ({ target }) => {
     let value = target.value;
     if (target.name === "capacity" && typeof value === "string") {
@@ -26,6 +29,8 @@ function NewTable() {
     });
   };
 
+
+  /*submit handler creates a new table when submit btn is clicked*/
   const submitHandler = (event) => {
     event.preventDefault();
 
@@ -42,6 +47,7 @@ function NewTable() {
     history.goBack();
   };
 
+  /*renders the submit and cancel buttons*/
   const newTableBtns = () => (
     <div className="text-center">
       <button type="submit" className="btn btn-primary mr-2">
@@ -52,7 +58,9 @@ function NewTable() {
       </button>
     </div>
   );
-  //onSubmit always on form
+
+
+  /*JSX renders form for NewTable */
   return (
     <>
       <div>

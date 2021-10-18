@@ -3,6 +3,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { listReservations } from "../utils/api";
 import ReservationList from "./ReservationList";
 
+/*component renders and adds functionality to search for a reservation*/
 function SearchReservation({ reservation }) {
   const [mobileNumber, setMobileNumber] = useState("");
   const [reservations, setReservations] = useState([]);
@@ -23,7 +24,7 @@ function SearchReservation({ reservation }) {
 
     return () => abortController.abort();
   }
-
+/*map through reservations to render those whose mobile numbers match the query */
   const matchingReservations = () => {
     return reservations.length > 0 ? (
       reservations.map(() => <ReservationList reservations={reservations} />)
@@ -34,6 +35,7 @@ function SearchReservation({ reservation }) {
     );
   };
 
+  /*JSK renders the form for SearchReservation*/
   return (
     <>
       <div>

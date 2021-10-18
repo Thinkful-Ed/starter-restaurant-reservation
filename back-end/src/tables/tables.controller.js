@@ -1,8 +1,8 @@
 const tablesService = require("./tables.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const reservationsService = require("../reservations/reservations.service");
-const hasProperties = require("../errors/missingFields");
 
+//check if table is occupied by looking for a reservation_id 
 async function hasReservationId(req, res, next) {
   const { reservation_id } = req.body.data;
   if (reservation_id) {
@@ -14,6 +14,7 @@ async function hasReservationId(req, res, next) {
   });
 }
 
+//check to make sure the reservation exist in API
 async function reservationExists(req, res, next) {
   const { reservation_id } = req.body.data;
   const foundReservation = await reservationsService.read(reservation_id);
@@ -27,7 +28,8 @@ async function reservationExists(req, res, next) {
   });
 }
 
-async function reservationIsBooked(req, res, next) {
+//check if reservation is seated
+async function reservationIsSeated(req, res, next) {
   const { foundReservation } = res.locals;
   if (foundReservation.status !== "seated") {
     return next();
@@ -38,6 +40,7 @@ async function reservationIsBooked(req, res, next) {
   });
 }
 
+//check if table exist in API
 async function tableExists(req, res, next) {
   const { table_id } = req.params;
   const foundTable = await tablesService.read(table_id);
@@ -51,6 +54,7 @@ async function tableExists(req, res, next) {
   });
 }
 
+//check that reservation_people is equal to or less than table capacity
 function hasValidTableSize(req, res, next) {
   const { foundTable } = res.locals;
   const { foundReservation } = res.locals;
@@ -63,6 +67,7 @@ function hasValidTableSize(req, res, next) {
   });
 }
 
+//check that table status if free or occupied
 function tableIsFree(req, res, next) {
   const { foundTable } = res.locals;
   if (!foundTable.reservation_id) {
@@ -74,21 +79,7 @@ function tableIsFree(req, res, next) {
   });
 }
 
-// function occupyTable(req, res, next) {
-//   const { foundTable } = res.locals;
-//   const { reservation_id } = req.body.data;
-//   foundTable.reservation_id = reservation_id;
-//   res.locals.reservationId = reservation_id;
-//   res.locals.reservationStatus = "seated";
-//   if (foundTable.reservation_id) {
-//     return next();
-//   }
-//   next({
-//     status: 400,
-//     message: `Table with id: ${foundTable.table_id} could not be assigned reservation id ${foundTable.reservation_id}.`,
-//   });
-// }
-
+//check to not allow deletion of occupied table
 function tableIsOccupied(req, res, next) {
   const { foundTable } = res.locals;
   if (foundTable.reservation_id) {
@@ -100,20 +91,7 @@ function tableIsOccupied(req, res, next) {
   });
 }
 
-function cancelTable(req, res, next) {
-  const { foundTable } = res.locals;
-  res.locals.reservationId = foundTable.reservation_id;
-  foundTable.reservation_id = null;
-  res.locals.reservationStatus = "finished";
-  if (!foundTable.reservation_id) {
-    return next();
-  }
-  next({
-    status: 400,
-    message: `Table with id: ${foundTable.table_id} could not remove reservation id ${foundTable.reservation_id}  for some reason. Please contact backend engineer for assistance`,
-  });
-}
-
+//check that request body has data
 async function validateData(req, res, next) {
   if (!req.body.data) {
     return next({ status: 400, message: "Body must include a data object" });
@@ -121,39 +99,34 @@ async function validateData(req, res, next) {
   next();
 }
 
+//check that newly created table name length is greater than 2 characters
 function hasValidTableName(tableName) {
   return tableName.length > 1;
 }
 
-// function hasTableName(req, res, next){
-//   if(!req.body.table_name){
-//     return next({
-//       status: 400,
-//       message: "a table_name is required",
-//     })
-//   }
-//   next();
-// }
-
+//check that newly created table has a capacity of at least one
 function isValidCapacity(capacity) {
   return Number.isInteger(capacity) && capacity >= 1;
 }
 
+//check to make sure that newly created table has valid values
 function hasValidValues(req, res, next) {
   const { table_name, capacity } = req.body.data;
-
+//if table capacity doesnt exist send error dont allow create
   if (!isValidCapacity(capacity)) {
     return next({
       status: 400,
       message: "capacity must be greater than or equal to 1",
     });
   }
+  //if table name doesnt exist send error dont allow create
   if (!table_name) {
     return next({
       status: 400,
       message: "a table_name is required",
     });
   }
+   //if table name is not valid send error dont allow create
   if (!hasValidTableName(table_name)) {
     return next({
       status: 400,
@@ -164,6 +137,7 @@ function hasValidValues(req, res, next) {
   next();
 }
 
+//sets reservation sata table to "finished" when finish button is clicked
 async function finishTable(req, res) {
   const { foundTable } = res.locals;
   await tablesService.updateReservation(foundTable.reservation_id, "finished");
@@ -171,17 +145,13 @@ async function finishTable(req, res) {
   res.status(200).json({ data: { status: "free" } });
 }
 
+/*CRUDL*/
 // C
 async function create(req, res) {
   const data = await tablesService.create(req.body.data);
   res.status(201).json({ data });
 }
 
-// R
-async function read(req, res) {
-  const { foundTable } = res.locals;
-  res.json({ data: foundTable });
-}
 
 //U
 async function update(req, res, next) {
@@ -227,7 +197,7 @@ module.exports = {
     asyncErrorBoundary(validateData),
     asyncErrorBoundary(hasReservationId),
     asyncErrorBoundary(reservationExists),
-    asyncErrorBoundary(reservationIsBooked),
+    asyncErrorBoundary(reservationIsSeated),
     asyncErrorBoundary(tableExists),
     hasValidTableSize,
     tableIsFree,

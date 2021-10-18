@@ -42,7 +42,7 @@ function NewReservation() {
     history.push(`/dashboard?date=${today()}`);
   }
 
-  //JSX
+  /*JSX renders new reservation form*/
   return (
     <>
       <div>

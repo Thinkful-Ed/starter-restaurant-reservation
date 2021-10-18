@@ -3,7 +3,11 @@ import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { listTables, finishTable } from "../utils/api";
 
+/*compnent renders the list of tables with their names and capacity where reservations may be seated on the dashboard. 
+It is also used in the selector in SeatReservation*/
 function TableList() {
+
+  /*state holds all returned data from api call to "tables" table*/
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState("");
 
@@ -18,6 +22,7 @@ function TableList() {
     return () => abortController.abort();
   }, []);
 
+  /*when "finish" button is clicked and confirmed reservation status is changed to "finished"*/
   const handleFinish = (tableId) => {
     if (
       window.confirm(
@@ -33,6 +38,7 @@ function TableList() {
     }
   };
 
+  /*map through all tables to render as a table*/
   const tableList = tables.map(
     ({ reservation_id, table_name, capacity, table_id }) => (
       <tbody key={table_id}>
@@ -58,7 +64,7 @@ function TableList() {
     )
   );
 
-  //JSX
+  /*JSX renders TableList*/
   return (
     <>
       <div>

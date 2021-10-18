@@ -1,6 +1,8 @@
 import { updateReservationStatus } from "../utils/api";
 import { useHistory } from "react-router-dom";
 
+/*this component renders reservations with statuses of "booked" or "seated" 
+for speciific dates onto the dashboard and in the SearchReservation.*/
 function ReservationList({ reservations }) {
   const history = useHistory();
 
@@ -21,6 +23,8 @@ function ReservationList({ reservations }) {
     }
   }
 
+  /*map of reservations to render each one in a table*/
+  /*also renders button to seat, edit, or cancel a reservation*/
   const reservationsList = reservations.map(
     ({
       first_name,

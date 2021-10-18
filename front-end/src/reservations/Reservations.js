@@ -6,7 +6,7 @@ import SeatReservation from "./SeatReservation";
 import EditReservation from "./EditReservation";
 
 //{/*/}
-
+/*component routes requests made to /reservations with other params*/
 function Reservations() {
   return (
     <main>

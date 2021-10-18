@@ -5,6 +5,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { today } from "../utils/date-time";
 import { assignTable } from "../utils/api";
 
+
 function SeatReservation() {
   const [tableId, setTableId] = useState(null);
 
@@ -42,12 +43,12 @@ function SeatReservation() {
     return () => abortController.abort();
   }, [reservation_id]);
 
-  //change handler
+  /*change handler*/
   function changeHandler({ target }) {
     setTableId(target.value);
   }
 
-  //submit handler to assign table
+  /*submit handler to assign a reservation id to a table*/
   const submitHandler = (event) => {
     event.preventDefault();
     const abortController = new AbortController();
@@ -59,20 +60,20 @@ function SeatReservation() {
     return () => abortController.abort();
   };
 
-  //cancel Handler
+  /*cancel handler*/
   function cancelHandler(event) {
     event.preventDefault();
     history.push(`/dashboard?date=${today()}`);
   }
 
-  //map and list the table names and capacity
+  /*map and list the table names and capacity*/
   const chooseTable = tables.map(({ table_id, table_name, capacity }) => (
     <option key={table_id} value={table_id}>
       {table_name} - {capacity}
     </option>
   ));
 
-  //variable to render submit and cancel buttons
+  /*variable to render submit and cancel buttons*/
   const buttons = () => {
     return (
       <>
@@ -94,7 +95,7 @@ function SeatReservation() {
     );
   };
 
-  //JSX
+  /*JSX*/
   return (
     <>
       <h1>Seat Reservation</h1>

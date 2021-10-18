@@ -51,6 +51,7 @@ function EditReservation() {
     });
   };
 
+/*Callback function for submit button action.*/
   const submitHandler = (event) => {
     event.preventDefault();
     submitEdit();
@@ -62,10 +63,11 @@ function EditReservation() {
     return () => abortController.abort();
   };
 
+  /*Function makes a POST request to the API to update a reservation data.*/
   const submitEdit = () => {
     const abortController = new AbortController();
     setReservationError(null);
-
+   /* this data is trims the reservation_id from the data so that an attempt to update the primary key is not made*/
     const trimmedFormData = {
       first_name: formData.first_name,
       last_name: formData.last_name,
@@ -74,7 +76,7 @@ function EditReservation() {
       reservation_date: formData.reservation_date,
       reservation_time: formData.reservation_time,
     };
-
+  /*found in utils*/
     updateReservation(reservation_id, trimmedFormData, abortController.signal)
       .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
       .catch(setReservationError);
@@ -82,12 +84,14 @@ function EditReservation() {
     return () => abortController.abort();
   };
 
+  /*Callback function for cancel button action.*/
   const cancelHandler = (event) => {
     event.preventDefault();
     // cancelling a new reservation while in progress sends user back to previous page.
     history.goBack();
   };
-
+  
+/*JSX renders edit reservation form*/
   return (
     <>
       <h1 className="mt-3 mb-4">Edit Reservation</h1>
