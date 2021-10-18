@@ -9,6 +9,10 @@ function create(table) {
 }
 
 //R
+function read(table_id) {
+  return knex("tables").select("*").where({ table_id: table_id }).first();
+}
+
 function readReservation(reservation_id) {
   return knex("reservations")
     .select("*")
@@ -45,6 +49,7 @@ function unseatTable(table_id) {
 module.exports = {
   list,
   create,
+  read,
   occupied,
   unseatTable,
   readReservation,
