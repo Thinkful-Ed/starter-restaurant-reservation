@@ -1,3 +1,4 @@
+import asyncErrorBoundary from "../errors/asyncErrorBoundary";
 /**
  * List handler for reservation resources
  */
