@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 export default function Reservations() {
   const history = useHistory();
+  const [reservationsError, setReservationsError] = useState(null);
   const initialFormData = {
     first_name: "",
     last_name: "",
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: "",
+    people: 0,
   };
+
   const [formData, setFormData] = useState({ ...initialFormData });
 
   const handleFormChange = (e) => {
@@ -23,13 +26,24 @@ export default function Reservations() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const controller = new AbortController();
+    try {
+      formData.people = Number(formData.people);
+      await createReservation(formData, controller.signal);
+      const date = formData.reservation_date;
+      history.push(`/dashboard?date=${date}`);
+    } catch (error) {
+      setReservationsError(error);
+    }
   };
+
   const handleCancel = () => {
     history.goBack();
   };
 
   return (
     <>
+      <ErrorAlert error={reservationsError} />
       <form onSubmit={handleSubmit}>
         <input
           type="text"
