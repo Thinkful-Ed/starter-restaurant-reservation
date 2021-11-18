@@ -25,6 +25,7 @@ export default function Reservations() {
   };
 
   const handleSubmit = async (e) => {
+    console.log("Submitting form....");
     e.preventDefault();
     const controller = new AbortController();
     try {
@@ -35,6 +36,7 @@ export default function Reservations() {
     } catch (error) {
       setReservationsError(error);
     }
+    return () => controller.abort();
   };
 
   const handleCancel = () => {
@@ -74,7 +76,6 @@ export default function Reservations() {
           value={formData.mobile_number}
           onChange={handleFormChange}
           required
-          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
         />
         <input
           type="number"
