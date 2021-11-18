@@ -56,6 +56,26 @@ function isValidReservation(req, res, next) {
 
   next();
 }
+
+function isNotOnTuesday(req, res, next) {
+  const { reservation_date } = req.body.data;
+  const [year, month, day] = reservation_date.split("-");
+  const date = new Date(`${month} ${day}, ${year}`);
+  res.locals.date = date;
+  if (date.getDay() === 2) {
+    return next({ status: 400, message: "Location is closed on Tuesdays" });
+  }
+  next();
+}
+
+function isInTheFuture(req, res, next) {
+  const date = res.locals.date;
+  const today = new Date();
+  if (date < today) {
+    return next({ status: 400, message: "Must be a future date" });
+  }
+  next();
+}
 /**
  * List handler for reservation resources
  */
@@ -77,5 +97,10 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [asyncErrorBoundary(isValidReservation), asyncErrorBoundary(create)],
+  create: [
+    asyncErrorBoundary(isValidReservation),
+    isNotOnTuesday,
+    isInTheFuture,
+    asyncErrorBoundary(create),
+  ],
 };
