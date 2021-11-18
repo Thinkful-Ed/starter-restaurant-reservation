@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ReservationTable from "./reservationTable/ReservationTable";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { useHistory } from "react-router-dom";
@@ -57,7 +58,7 @@ function Dashboard({ date }) {
         </button>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      <ReservationTable reservations={reservations} />
     </main>
   );
 }
