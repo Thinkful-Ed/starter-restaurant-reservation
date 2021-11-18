@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { createReservation } from "../utils/api";
+import { isNotOnTuesday } from "../utils/date-time";
+import { isInTheFuture } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 
 export default function Reservations() {
@@ -24,10 +26,20 @@ export default function Reservations() {
     });
   };
 
+  const findErrors = (date, errors) => {
+    isNotOnTuesday(date, errors);
+    isInTheFuture(date, errors);
+  };
+
   const handleSubmit = async (e) => {
-    console.log("Submitting form....");
     e.preventDefault();
     const controller = new AbortController();
+    const errors = [];
+    findErrors(formData.reservation_date, errors);
+    if (errors.length) {
+      setReservationsError({ message: errors });
+      return;
+    }
     try {
       formData.people = Number(formData.people);
       await createReservation(formData, controller.signal);
