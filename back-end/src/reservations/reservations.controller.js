@@ -12,6 +12,7 @@ const VALID_RESERVATION_FIELDS = [
 
 function _validateTime(str) {
   const [hour, minute] = str.split(":");
+
   if (hour.length > 2 || minute.length > 2) {
     return false;
   }
@@ -76,6 +77,24 @@ function isInTheFuture(req, res, next) {
   }
   next();
 }
+
+function isWithinOpenHours(req, res, next) {
+  const reservation = req.body.data;
+  const [hour, minute] = reservation.reservation_time.split(":");
+  if (hour < 10 || hour > 21) {
+    return next({
+      status: 400,
+      message: "Reservation must be made within business hours",
+    });
+  }
+  if ((hour < 11 && minute < 30) || (hour > 20 && minute > 30)) {
+    return next({
+      status: 400,
+      message: "Reservation must be made within business hours",
+    });
+  }
+  next();
+}
 /**
  * List handler for reservation resources
  */
@@ -101,6 +120,7 @@ module.exports = {
     asyncErrorBoundary(isValidReservation),
     isNotOnTuesday,
     isInTheFuture,
+    isWithinOpenHours,
     asyncErrorBoundary(create),
   ],
 };
