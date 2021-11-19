@@ -29,6 +29,14 @@ function isValid(req, res, next) {
     });
   }
 
+  if (parsedDate < Date.now()) {
+    next({ status: 400, message: `Reservation_date must be in the future.`})
+  }
+
+  if (new Date(date).getUTCDay() === 2) {
+    next({ status: 400, message: `Restaurant is closed on Tuesday.`})
+  }
+
   if (!time.match(timeRegex)) {
     next({
       status: 400,
@@ -39,6 +47,8 @@ function isValid(req, res, next) {
   if (typeof people !== "number" || !people.length > 1) {
     next({ status: 400, message: `people must be a number.` });
   }
+
+  if (date )
 
   next();
 }
