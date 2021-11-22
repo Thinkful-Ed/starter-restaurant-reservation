@@ -1,4 +1,3 @@
-const { KnexTimeoutError } = require("knex");
 const knex = require("../db/connection");
 
 function list() {
@@ -9,4 +8,8 @@ function create(table) {
   return knex("tables").insert(table);
 }
 
-module.exports = { list, create };
+function read(table_id) {
+  return knex("tables").select("*").where({ table_id }).first();
+}
+
+module.exports = { list, create, read };

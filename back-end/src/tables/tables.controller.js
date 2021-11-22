@@ -46,4 +46,5 @@ async function create(req, res, next) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [isValidTable, asyncErrorBoundary(create)],
+  isValidTable,
 };
