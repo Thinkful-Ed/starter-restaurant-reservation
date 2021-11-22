@@ -114,6 +114,12 @@ async function create(req, res) {
   res.status(201).json({ data: reservation });
 }
 
+async function read(req, res) {
+  const { reservation_Id } = req.params;
+  const reservation = await service.read(reservation_Id);
+  res.json({ data: reservation });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -123,4 +129,5 @@ module.exports = {
     isWithinOpenHours,
     asyncErrorBoundary(create),
   ],
+  read: asyncErrorBoundary(read),
 };

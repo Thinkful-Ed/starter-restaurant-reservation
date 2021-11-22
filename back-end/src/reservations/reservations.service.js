@@ -17,8 +17,16 @@ function listByDate(reservation_date) {
     .orderBy("reservations.reservation_time");
 }
 
+function read(reservation_id) {
+  return knex("reservations as r")
+    .select("*")
+    .where({ "r.reservation_id": reservation_id })
+    .first();
+}
+
 module.exports = {
   list,
   create,
   listByDate,
+  read,
 };
