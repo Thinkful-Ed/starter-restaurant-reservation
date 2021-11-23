@@ -42,11 +42,29 @@ async function tableIsValid(req, res, next) {
   next();
 }
 
+async function tableIsOccupied(req, res, next) {
+  const { table_id } = req.params;
+  const table = await tableService.read(table_id);
+  if (!table) {
+    return next({ status: 404, message: `Table ${table_id} not found` });
+  }
+  if (!table.reservation_id) {
+    return next({ status: 400, message: "Table is not occupied" });
+  }
+  next();
+}
+
 async function update(req, res, next) {
   const { reservation_id } = req.body.data;
   const { table_id } = req.params;
   await service.update(table_id, reservation_id);
   res.status(200).json({ data: reservation_id });
+}
+
+async function unassign(req, res, next) {
+  const { table_id } = req.params;
+  await service.update(table_id, null);
+  res.sendStatus(200);
 }
 
 module.exports = {
@@ -56,4 +74,5 @@ module.exports = {
     asyncErrorBoundary(tableIsValid),
     asyncErrorBoundary(update),
   ],
+  unassign: [asyncErrorBoundary(tableIsOccupied), asyncErrorBoundary(unassign)],
 };
