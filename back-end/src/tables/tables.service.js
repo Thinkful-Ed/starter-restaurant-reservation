@@ -5,7 +5,10 @@ function list() {
 }
 
 function create(table) {
-  return knex("tables").insert(table);
+  return knex("tables")
+    .insert(table)
+    .returning("*")
+    .then((newTables) => newTables[0]);
 }
 
 function read(table_id) {
