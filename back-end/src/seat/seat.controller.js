@@ -46,7 +46,7 @@ async function update(req, res, next) {
   const { reservation_id } = req.body.data;
   const { table_id } = req.params;
   await service.update(table_id, reservation_id);
-  res.status(200).send();
+  res.status(200).json({ data: reservation_id });
 }
 
 module.exports = {
