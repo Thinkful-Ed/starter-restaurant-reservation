@@ -63,8 +63,8 @@ async function update(req, res, next) {
 
 async function unassign(req, res, next) {
   const { table_id } = req.params;
-  await service.update(table_id, null);
-  res.sendStatus(200);
+  const table = await service.update(table_id, null);
+  res.json(table);
 }
 
 module.exports = {
