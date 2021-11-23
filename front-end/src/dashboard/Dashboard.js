@@ -18,21 +18,6 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
   const history = useHistory();
 
-  useEffect(() => {
-    async function loadTables() {
-      const c = new AbortController();
-      setReservationsError(null);
-      try {
-        const response = await listTables(c.signal);
-        setTables((prev) => response);
-      } catch (error) {
-        setReservationsError(error);
-      }
-      return () => c.abort();
-    }
-    loadTables();
-  }, []);
-
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
@@ -40,6 +25,8 @@ function Dashboard({ date }) {
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
+      .then(listTables)
+      .then(setTables)
       .catch(setReservationsError);
     return () => abortController.abort();
   }
@@ -77,7 +64,7 @@ function Dashboard({ date }) {
       <ErrorAlert error={reservationsError} />
       <ReservationTable reservations={reservations} />
       <div>
-        <TableList tables={tables} />
+        <TableList tables={tables} loadDashboard={loadDashboard} />
       </div>
     </main>
   );
