@@ -10,7 +10,7 @@ export default function ReservationTable({ reservations }) {
     return (
       <ReservationRow
         key={res.reservation_id}
-        num={res.reservation_id}
+        reservation_id={res.reservation_id}
         first_name={res.first_name}
         last_name={res.last_name}
         mobile_number={res.mobile_number}
@@ -31,6 +31,7 @@ export default function ReservationTable({ reservations }) {
             <th scope="col">Number</th>
             <th scope="col">Guests</th>
             <th scope="col">Time</th>
+            <th scope="col">Seat</th>
           </tr>
         </thead>
         <tbody>{formatted}</tbody>
