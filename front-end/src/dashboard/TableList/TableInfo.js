@@ -11,7 +11,6 @@ export default function TableInfo({ table, loadDashboard }) {
         <td>{table.capacity}</td>
         <td data-table-id-status={table.table_id}>{status}</td>
         <FinishButton
-          data-table-id-finish={table.table_id}
           status={status}
           table={table}
           loadDashboard={loadDashboard}

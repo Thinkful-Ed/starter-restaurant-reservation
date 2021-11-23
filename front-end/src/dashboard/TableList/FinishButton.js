@@ -22,11 +22,12 @@ export default function FinishButton({ status, table, loadDashboard }) {
 
   return (
     status === "Occupied" && (
-      <td data-table-id-finish={table.table_id}>
+      <td>
         <button
           data-table-id-finish={table.table_id}
+          type="button"
           onClick={handleClick}
-          className="btn btn-primary"
+          className="btn btn-sm btn-primary"
         >
           Finish
         </button>
