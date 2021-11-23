@@ -95,6 +95,20 @@ function isWithinOpenHours(req, res, next) {
   }
   next();
 }
+
+const reservationExists = async (req, res, next) => {
+  const { reservation_Id } = req.params;
+  const reservation = await service.read(reservation_Id);
+
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({
+    status: 404,
+    message: `Reservation_id ${reservation_Id} does not exist.`,
+  });
+};
 /**
  * List handler for reservation resources
  */
@@ -110,13 +124,13 @@ async function list(req, res) {
 
 async function create(req, res) {
   const reservation = req.body.data;
-  await service.create(reservation);
+  const { reservation_id } = await service.create(reservation);
+  reservation.reservation_id = reservation_id;
   res.status(201).json({ data: reservation });
 }
 
 async function read(req, res) {
-  const { reservation_Id } = req.params;
-  const reservation = await service.read(reservation_Id);
+  const reservation = res.locals.reservation;
   res.json({ data: reservation });
 }
 
@@ -129,5 +143,5 @@ module.exports = {
     isWithinOpenHours,
     asyncErrorBoundary(create),
   ],
-  read: asyncErrorBoundary(read),
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
 };

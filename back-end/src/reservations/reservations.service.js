@@ -7,7 +7,10 @@ function list() {
 }
 
 function create(reservation) {
-  return knex("reservations as r").insert(reservation);
+  return knex("reservations as r")
+    .insert(reservation)
+    .returning("*")
+    .then((newReservation) => newReservation[0]);
 }
 
 function listByDate(reservation_date) {
@@ -18,10 +21,8 @@ function listByDate(reservation_date) {
 }
 
 function read(reservation_id) {
-  return knex("reservations as r")
-    .select("*")
-    .where({ "r.reservation_id": reservation_id })
-    .first();
+  console.log(`Service ${reservation_id}`);
+  return knex("reservations").select("*").where({ reservation_id }).first();
 }
 
 module.exports = {
