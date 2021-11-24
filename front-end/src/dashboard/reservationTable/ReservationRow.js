@@ -7,6 +7,7 @@ export default function ReservationRow({
   mobile_number,
   people,
   reservation_time,
+  reservation,
 }) {
   return (
     <tr>
@@ -16,14 +17,19 @@ export default function ReservationRow({
       <td>{mobile_number}</td>
       <td>{people}</td>
       <td>{reservation_time}</td>
+      <td data-reservation-id-status={reservation.reservation_id}>
+        {reservation.status}
+      </td>
       <td>
-        <a
-          className="btn btn-secondary"
-          role="button"
-          href={`/reservations/${reservation_id}/seat`}
-        >
-          Seat
-        </a>
+        {reservation.status === "booked" ? (
+          <a
+            className="btn btn-secondary"
+            role="button"
+            href={`/reservations/${reservation_id}/seat`}
+          >
+            Seat
+          </a>
+        ) : null}
       </td>
     </tr>
   );

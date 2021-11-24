@@ -10,12 +10,12 @@ export default function FinishButton({ status, table, loadDashboard }) {
     return window.confirm(
       "Is this table ready to seat new guests? This cannot be undone."
     )
-      ? await handleFinish(table.table_id)
+      ? await handleFinish(table.table_id, table.reservation_id)
       : null;
   }
 
-  async function handleFinish(table_id) {
-    await unassignTable(table_id);
+  async function handleFinish(table_id, reservation_id) {
+    await unassignTable(table_id, reservation_id);
     loadDashboard();
     history.push("/dashboard");
   }

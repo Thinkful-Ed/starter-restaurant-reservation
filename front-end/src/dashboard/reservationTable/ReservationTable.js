@@ -16,6 +16,7 @@ export default function ReservationTable({ reservations }) {
         mobile_number={res.mobile_number}
         people={res.people}
         reservation_time={res.reservation_time}
+        reservation={res}
       />
     );
   });
@@ -31,6 +32,7 @@ export default function ReservationTable({ reservations }) {
             <th scope="col">Number</th>
             <th scope="col">Guests</th>
             <th scope="col">Time</th>
+            <th scope="col">Status</th>
             <th scope="col">Seat</th>
           </tr>
         </thead>
