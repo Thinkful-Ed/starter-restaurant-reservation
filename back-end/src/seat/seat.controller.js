@@ -59,6 +59,7 @@ async function tableIsOccupied(req, res, next) {
   if (!table.reservation_id) {
     return next({ status: 400, message: "Table is not occupied" });
   }
+  res.locals.reservation_id = table.reservation_id;
   next();
 }
 
@@ -72,7 +73,7 @@ async function update(req, res, next) {
 async function unassign(req, res, next) {
   const { table_id } = req.params;
   const reservation = await reservationService.finish(
-    req.body.data.reservation_id
+    res.locals.reservation_id
   );
   const table = await service.update(table_id, null);
   res.json({ data: table });
