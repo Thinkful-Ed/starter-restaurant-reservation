@@ -3,72 +3,78 @@ import { useHistory } from "react-router-dom";
 import Cancel from "../buttons/Cancel";
 import Submit from "../buttons/Submit";
 import { createReservation } from "../utils/api";
-import ErrorHandler from "./ErrorHandler";
+import ErrorAlert from "../layout/ErrorAlert";
 
-function Form({ date }) {
-  const history = useHistory();
-  const [formData, setFormData] = useState([]);
-
+function Form() {
   const initialFormState = {
     first_name: "",
     last_name: "",
     mobile_number: "",
-    reservation_date: null,
-    reservation_time: null,
-    people: null,
+    reservation_date: "",
+    reservation_time: "",
+    people: "",
   };
 
-  const handleChange = ({ target }) => {
-    setFormData({
-      ...formData,
-      [target.name]: target.value,
-    });
-  };
+  const history = useHistory();
+
+  const [reservation, setReservation] = useState({ ...initialFormState });
+  const [errors, setErrors] = useState(null);
 
   const handleSubmit = async function (e) {
     e.preventDefault();
-    const reservation = await createReservation(formData);
-    const reservationDate = reservation.reservation_date;
-    const date = new Date(reservationDate);
-    // Set up query param for reservation date
-    history.push(`/dashboard/?date=${date}`);
-    setFormData({ ...initialFormState });
+    try {
+      let savedReservation = await createReservation(reservation);
+      let reservationDate = savedReservation.data.reservation_date;
+      // Set up query param for reservation date
+      history.push(`/dashboard/?date=${reservationDate.slice(0, 10)}`);
+      setReservation({ ...initialFormState });
+    } catch (err) {
+      setErrors(err);
+    }
+  };
+
+  const handleChange = ({ target }) => {
+    setReservation({
+      ...reservation,
+      [target.name]:
+        target.name === "people" ? Number(target.value) : target.value,
+    });
   };
 
   return (
     <div>
       <h1>Create Reservation</h1>
-      <ErrorHandler />
+      <ErrorAlert error={errors}/>
       <form onSubmit={handleSubmit}>
         <fieldset>
-          <label for="first_name">First Name</label>
+          <label>First Name</label>
           <input
             className="form-control"
             id="first_name"
             name="first_name"
             placeholder="First Name"
             onChange={handleChange}
-            value={formData.first_name}
+            value={reservation.first_name}
           />
-          <label for="last_name">Last Name</label>
+          <label>Last Name</label>
           <input
             className="form-control"
             id="last_name"
             name="last_name"
             placeholder="Last Name"
             onChange={handleChange}
-            value={formData.last_name}
+            value={reservation.last_name}
           />
-          <label for="mobile_number">Mobile Name</label>
+          <label>Mobile Number</label>
           <input
             className="form-control"
             id="mobile_number"
             name="mobile_number"
             placeholder="Mobile Number"
             onChange={handleChange}
-            value={formData.mobile_number}
+            value={reservation.mobile_number}
           />
-          <label for="reservation_date">Date</label>
+          <label>Date</label>
           <input
             type="date"
             className="form-control"
@@ -77,9 +83,9 @@ function Form({ date }) {
             placeholder="YYYY-MM-DD"
             pattern="\d{4}-\d{2}-\d{2}"
             onChange={handleChange}
-            value={date}
+            value={reservation.reservation_date}
           />
-          <label for="reservation_time">Time</label>
+          <label>Time</label>
           <input
             type="time"
             className="form-control"
@@ -88,15 +94,15 @@ function Form({ date }) {
             placeholder="HH:MM"
             pattern="[0-9]{2}:[0-9]{2}"
             onChange={handleChange}
-            value={formData.reservation_time}
+            value={reservation.reservation_time}
           />
-          <label for="people">People</label>
+          <label>People</label>
           <input
             className="form-control"
             id="people"
             name="people"
             onChange={handleChange}
-            value={formData.people}
+            value={Number(reservation.people)}
           />
         </fieldset>
         <Cancel />

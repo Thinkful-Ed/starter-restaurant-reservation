@@ -14,13 +14,11 @@ const hasRequiredProperties = hasProperties(
  */
 
 // It's in the middle; makes appropriate checks then returns next() to proceed to next step;
-function isValid(req, res, next) {
+function isValidDate(req, res, next) {
   const date = req.body.data.reservation_date;
-  const time = req.body.data.reservation_time;
   const { people } = req.body.data;
   const parsedDate = Date.parse(date);
   const dateRegex = /\d{4}-\d{2}-\d{2}/;
-  const timeRegex = /[0-9]{2}:[0-9]{2}/;
 
   if (isNaN(parsedDate) || !date.match(dateRegex)) {
     next({
@@ -30,42 +28,88 @@ function isValid(req, res, next) {
   }
 
   if (parsedDate < Date.now()) {
-    next({ status: 400, message: `Reservation_date must be in the future.`})
-  }
-
-  if (new Date(date).getUTCDay() === 2) {
-    next({ status: 400, message: `Restaurant is closed on Tuesday.`})
-  }
-
-  if (!time.match(timeRegex)) {
     next({
       status: 400,
-      message: `Invalid reservation_time.`,
+      message: `Reservation date must be placed in the future.`,
     });
   }
 
-  if (typeof people !== "number" || !people.length > 1) {
-    next({ status: 400, message: `people must be a number.` });
+  if (new Date(date).getUTCDay() === 2) {
+    next({ status: 400, message: `Restaurant is closed on Tuesday.` });
   }
 
-  if (date )
+  if (typeof people !== "number" || people.length < 2) {
+    next({
+      status: 400,
+      message: `You submitted ${people.length} people in your party. There must be at least 2 people per party.`,
+    });
+  }
 
   next();
 }
 
-async function list(req, res) {
+function isValidTime(req, res, next) {
+  const time = req.body.data.reservation_time;
+  const timeRegex = /[0-9]{2}:[0-9]{2}/;
+  const [hours, minutes] = time.split(":");
+
+  if (!time.match(timeRegex)) {
+    next({
+      status: 400,
+      message: "Invalid reservation_time.",
+    });
+  }
+
+  if (hours <= 10 && minutes < 30) {
+    next({
+      status: 400,
+      message: `Restaurant opens at 10:30 AM.`,
+    });
+  }
+
+  if (hours >= 21 || (hours === 20 && minutes >= 30)) {
+    next({
+      status: 400,
+      message: `Reservations close at 9:30 PM.`,
+    });
+  }
+  next();
+}
+
+async function list(req, res, next) {
   const { date } = req.query;
   const data = await service.list(date);
   res.json({ data });
 }
 
-async function create(req, res) {
+async function create(req, res, next) {
   const reservation = req.body.data;
+  const reservationTime = req.body.data.reservation_time;
   const data = await service.create(reservation);
-  return res.status(201).json({ data });
+  if (reservationTime.length > 1) {
+    next({
+      status: 400,
+      message: "Reservation_time is not available.",
+    });
+  }
+  res.status(201).json({ data });
 }
+
+async function read(req, res) {
+	const data = res.locals.reservation;
+	res.json({ data });
+}
+
+
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  create: [hasRequiredProperties, isValid, asyncErrorBoundary(create)],
+  create: [
+    hasRequiredProperties,
+    isValidDate,
+    isValidTime,
+    asyncErrorBoundary(create),
+  ],
+  read: [asyncErrorBoundary(read)],
+  
 };

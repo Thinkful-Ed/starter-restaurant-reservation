@@ -7,6 +7,7 @@ import { today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 import Form from "../reservations/Form";
 import Table from "../tables/Table";
+import Search from "../search/Search";
 
 /**
  * Defines all the routes for the application.
@@ -33,8 +34,14 @@ function Routes() {
       <Route path="/reservations/new">
         <Form date={date}/>
       </Route>
+      <Route path="/reservations/:reservation_id/seat">
+        <Table date={date}/>
+      </Route>
       <Route path="/tables/new">
-        <Table />
+        <Table date={date}/>
+      </Route>
+      <Route path="/search">
+        <Search />
       </Route>
       <Route>
         <NotFound />
