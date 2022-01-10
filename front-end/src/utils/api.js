@@ -5,6 +5,7 @@
 import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-date";
 
+
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
 
@@ -13,6 +14,21 @@ const API_BASE_URL =
  */
 const headers = new Headers();
 headers.append("Content-Type", "application/json");
+
+// Since the route in the backend does not exists I use an array for now
+
+export async function createReservation(reservation, signal){
+  const url=`${API_BASE_URL}/reservations`;
+  const options={
+    method : "POST",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  }
+  const newReservation = await fetchJson(url, options);
+  return newReservation;
+}
+
 
 /**
  * Fetch `json` from the specified URL and handle error status codes and ignore `AbortError`s
@@ -61,9 +77,59 @@ async function fetchJson(url, options, onCancel) {
 export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
   Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.append(key, value.toString())
+    value && url.searchParams.append(key, value.toString())
   );
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
+    .then(formatReservationTime)
+    .then( (result) => {
+      return result;
+    });
+}
+
+export async function createTable(table, signal){
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method : "POST",
+    headers,
+    body : JSON.stringify({ data : table }), 
+    signal : signal,
+  }
+  const newTable = await fetchJson(url, options);
+  return newTable;
+}
+  
+export async function listTables(signal){
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method : "GET",
+    headers,
+    signal : signal,
+  }
+  const tables = await fetchJson(url, options);
+  return tables;
+}
+
+export async function updateTable(tableId, reservation_id){
+  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
+  const options = {
+    method : "PUT",
+    headers,
+    body : JSON.stringify({ data : {reservation_id,} }),
+  }
+  const updated = await fetchJson(url, options);
+  return updated;
+}
+
+export async function readReservation(reservation_id, signal){
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+  const options = {
+    method : "GET",
+    headers,
+    signal,
+  }
+  const reservation = await fetchJson(url, options)
+    .then(formatReservationDate)
     .then(formatReservationTime);
+  return reservation;
 }
