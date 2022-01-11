@@ -152,7 +152,7 @@ describe("US-04 - Seat reservation - E2E", () => {
       reservation = await createReservation({
         first_name: "Seat",
         last_name: Date.now().toString(10),
-        mobile_number: "555-1212",
+        mobile_number: "800-555-1212",
         reservation_date: "2035-01-03",
         reservation_time: "13:45",
         people: 4,
@@ -233,7 +233,7 @@ describe("US-04 - Seat reservation - E2E", () => {
       reservation = await createReservation({
         first_name: "Seat",
         last_name: Date.now().toString(10),
-        mobile_number: "555-1313",
+        mobile_number: "800-555-1313",
         reservation_date: "2035-01-01",
         reservation_time: "13:45",
         people: 4,
