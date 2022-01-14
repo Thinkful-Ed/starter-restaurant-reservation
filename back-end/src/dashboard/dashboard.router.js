@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const controller = require("./dashboard.controller");
+const reservationRouter = require("../reservations/reservations.router");
 
-router.route("/:date").get(controller.list);
-router.route("/").get(controller.list);
+router.use("/:date", reservationRouter);
+router.use("/", reservationRouter);
 
 module.exports = router;
