@@ -11,6 +11,11 @@
   "scripts": {
     "start": "node src/server.js",
     "start:dev": "nodemon src/server.js",
+    "knex": "knex",
+    "migrate": "knex migrate:latest",
+    "reset": "npm run rollback && npm run migrate && npm run seed",
+    "rollback": "knex migrate:rollback",
+    "seed": "knex seed:run",
     "test": "npx cross-env LOG_LEVEL=warn jest --runInBand --detectOpenHandles --forceExit",
     "test:1": "npm run test -- us-01",
     "test:2": "npm run test -- us-02",
