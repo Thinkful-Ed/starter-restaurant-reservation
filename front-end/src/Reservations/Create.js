@@ -14,9 +14,8 @@ function ReservationCreate() {
         history.push(`/dashboard?date=${reservation.reservation_date}`)
     }
 
-    function cancel() {
-        history.goBack();
-    }
+    const cancel = () => history.goBack();
+    
     // let error = {
     //     message: "Whoa!"
     // }
@@ -27,8 +26,8 @@ function ReservationCreate() {
     return (
         <div>
             <h1>Create a new reservation</h1>
-            <ErrorAlert error={createError}></ErrorAlert>
-            <ReservationForm onCancel={cancel} onSubmit={submitHandler} />
+            {/* <ErrorAlert error={createError}></ErrorAlert> */}
+            <ReservationForm onCancel={cancel} submitHandler={submitHandler} />
         </div>
     )
 }

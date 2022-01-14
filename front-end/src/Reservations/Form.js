@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { today } from "../utils/date-time"
 
 function ReservationForm({
-  onSubmit,
+  submitHandler,
   onCancel,
   initialState = {
     first_name: "",
@@ -22,15 +22,15 @@ function ReservationForm({
     }));
   }
 
-  function submitHandler(event) {
+  function handleSubmit(event) {
     event.preventDefault();
     event.stopPropagation();
-    onSubmit(reservation);
+    submitHandler(reservation);
   }
 
   return (
     <div>
-      <form onSubmit={submitHandler} className="deck-edit">
+      <form onSubmit={handleSubmit} className="deck-edit">
         <fieldset>
           <div className="form-group">
             <label htmlFor="first_name">First Name</label>
@@ -61,11 +61,11 @@ function ReservationForm({
           <div className="form-group">
             <label htmlFor="mobile_number">Mobile number</label>
             <input
-              type="tel"
+              type="text"
               id="mobile_number"
               name="mobile_number"
               className="form-control"
-              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              // pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
               value={reservation.mobile_number}
               required={true}
               placeholder="000-000-0000"

@@ -39,7 +39,6 @@ function Dashboard({ date }) {
 
   const previousDate = previous(date);
   const nextDate = next(date);
-  console.log(previousDate, date, nextDate)
 
   function pushDate(dateToMove) {
     history.push(`/dashboard?date=${dateToMove}`)
@@ -48,7 +47,7 @@ function Dashboard({ date }) {
   const display = reservations.map(reservation => {
     return (
       
-      <tr>
+    <tr key={reservation.reservation_id}>
       <td>{reservation.reservation_id}</td>
       <td>{reservation.first_name}</td>
       <td>{reservation.last_name}</td>
@@ -68,7 +67,7 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for {displayDate}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      <div class="btn-group" role="group" aria-label="Pick a date">
+      <div className="btn-group" role="group" aria-label="Pick a date">
         <button onClick={() => pushDate(previousDate)}>Back</button>
         <button onClick={() => history.push("/dashboard")}>Today</button>
         <button onClick={() => pushDate(nextDate)}>Forward</button>
@@ -84,9 +83,10 @@ function Dashboard({ date }) {
             <th scope="col">Party size</th>
           </tr>
         </thead>
-      {reservations.length ? display : `No reservations on this date`}
+      {reservations.length > 0 && display}
 
       </table>
+      {!reservations.length && <h3>No reservations on this date</h3>}
     </main>
   );
 }

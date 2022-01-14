@@ -11,7 +11,9 @@ async function list(req, res) {
 }
 
 async function create(req, res) {
+  console.log(req.data);
   const newReservation = await service.create(req.body.data);
+  console.log(newReservation);
   res.status(201).json({data: newReservation});
 }
 
@@ -34,7 +36,7 @@ function validateReservation(req, res, next) {
       })
     }
   })
-  if (!Number.isInteger(data.people)) {
+  if (!Number.isInteger(parseInt(data.people))) {
     next({
       status: 400,
       message: "people must be a number",
