@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import queryString from 'query-string'
+import {useHistory} from "react-router-dom";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import {formatAsTime, formatAsDate} from "../utils/date-time";
+import {formatAsTime, formatAsDate, previous, next} from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 
 /**
@@ -13,10 +12,8 @@ import useQuery from "../utils/useQuery";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
-  let query = useQuery();
+  const query = useQuery();
   const getDate = query.get("date");
-  // let {search} = useLocation();
-  // const values = queryString.parse(search);
 
   if (getDate) {
     date = getDate;
@@ -37,6 +34,16 @@ function Dashboard({ date }) {
   }
   
   const displayDate = formatAsDate(date);
+
+  const history = useHistory();
+
+  const previousDate = previous(date);
+  const nextDate = next(date);
+  console.log(previousDate, date, nextDate)
+
+  function pushDate(dateToMove) {
+    history.push(`/dashboard?date=${dateToMove}`)
+  }
   
   const display = reservations.map(reservation => {
     return (
@@ -52,11 +59,7 @@ function Dashboard({ date }) {
     )
   })
 
-  // let buildTable = `<table class="table">${display}</table>`
 
-  // `<table class="table">
-  
-  // </table>`
   
   return (
     <main>
@@ -65,6 +68,11 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for {displayDate}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
+      <div class="btn-group" role="group" aria-label="Pick a date">
+        <button onClick={() => pushDate(previousDate)}>Back</button>
+        <button onClick={() => history.push("/dashboard")}>Today</button>
+        <button onClick={() => pushDate(nextDate)}>Forward</button>
+      </div>
       <table className="table">
         <thead>
           <tr>

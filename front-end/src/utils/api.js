@@ -76,7 +76,6 @@ export async function createReservation(reservation, signal) {
     method: 'POST',
     body: JSON.stringify({data: reservation}),
   });
-  
 }
 
 // Need to give it 
