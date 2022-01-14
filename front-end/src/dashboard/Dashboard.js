@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useParams, useLocation } from "react-router-dom";
+import queryString from 'query-string'
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
@@ -9,6 +11,14 @@ import ErrorAlert from "../layout/ErrorAlert";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  let {search} = useLocation();
+  const values = queryString.parse(search);
+
+  if (values.date) {
+    date = values.date;
+  }
+  console.log(date);
+  
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 

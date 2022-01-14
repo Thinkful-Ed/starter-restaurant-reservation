@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link, useHistory, useParams } from "react-router-dom"
+import { useHistory, } from "react-router-dom"
 import ReservationForm from "./Form";
 
 
 function ReservationCreate() {
     const history = useHistory();
-    const { date } = useParams;
 
     function submitHandler(reservation) {
         // call API function on the reservation
-        //history.push()
-        console.log("Hi, mom")
+        history.push(`/dashboard?date=${reservation.reservation_date}`)
     }
 
     function cancel() {
@@ -20,7 +18,7 @@ function ReservationCreate() {
     return (
         <div>
             <h1>Create a new reservation</h1>
-            <ReservationForm onCancel={cancel} onSubmit={submitHandler}/>
+            <ReservationForm onCancel={cancel} onSubmit={submitHandler} />
         </div>
     )
 
