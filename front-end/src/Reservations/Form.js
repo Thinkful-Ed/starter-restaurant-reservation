@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { today } from "../utils/date-time"
-// import { Link, useHistory, useParams } from "react-router-dom";
 
 function ReservationForm({
   onSubmit,

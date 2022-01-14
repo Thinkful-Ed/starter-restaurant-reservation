@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import queryString from 'query-string'
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import {formatAsTime} from "../utils/date-time";
 
 /**
  * Defines the dashboard page.
@@ -33,6 +34,19 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  let display = reservations.map(reservation => {
+    return (
+
+    <tr>
+      <td>{reservation.first_name}</td>
+      <td>{reservation.last_name}</td>
+      <td>{reservation.mobile_number}</td>
+      <td>{formatAsTime(reservation.reservation_time)}</td>
+      <td>{reservation.people}</td>
+    </tr>
+    )
+  })
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -40,7 +54,8 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      {reservations.length ? display : `No reservations on this date`}
+      {console.log(reservations, display)}
     </main>
   );
 }
