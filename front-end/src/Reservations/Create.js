@@ -1,13 +1,15 @@
 // import React, { useEffect, useState } from "react";
 import { useHistory, } from "react-router-dom"
 import ReservationForm from "./Form";
+import {createReservation} from "../utils/api";
 
 
 function ReservationCreate() {
     const history = useHistory();
 
-    function submitHandler(reservation) {
+    async function submitHandler(reservation) {
         // call API function on the reservation
+        await createReservation(reservation);
         history.push(`/dashboard?date=${reservation.reservation_date}`)
     }
 
@@ -21,7 +23,6 @@ function ReservationCreate() {
             <ReservationForm onCancel={cancel} onSubmit={submitHandler} />
         </div>
     )
-
 }
 
 export default ReservationCreate;
