@@ -4,7 +4,7 @@ import queryString from 'query-string'
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import {formatAsTime, formatAsDate} from "../utils/date-time";
-import {useQuery} from "../utils/useQuery";
+import useQuery from "../utils/useQuery";
 
 /**
  * Defines the dashboard page.
@@ -13,13 +13,13 @@ import {useQuery} from "../utils/useQuery";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
-  let hey = useQuery();
-  console.log(hey);
-  let {search} = useLocation();
-  const values = queryString.parse(search);
+  let query = useQuery();
+  const getDate = query.get("date");
+  // let {search} = useLocation();
+  // const values = queryString.parse(search);
 
-  if (values.date) {
-    date = values.date;
+  if (getDate) {
+    date = getDate;
   }
   
   const [reservations, setReservations] = useState([]);
