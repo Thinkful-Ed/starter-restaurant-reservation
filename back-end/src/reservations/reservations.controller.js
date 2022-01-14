@@ -37,7 +37,7 @@ function validateReservation(req, res, next) {
   if (!Number.isInteger(data.people)) {
     next({
       status: 400,
-      message: "Party size must be a number of people",
+      message: "people must be a number",
     })
   }
   // if (data.reservation_date.length != 10 || data.reservation_date[4] != "-") {
@@ -46,14 +46,23 @@ function validateReservation(req, res, next) {
   //     message: "reservation_date must be a date"
   //   })
   // }
-  try {
-    new Date(data.reservation_date)
-  } catch {
+  const dateFormat = /\d\d\d\d-\d\d-\d\d/;
+  const timeFormat = /\d\d:\d\d/;
+
+  if(!data.reservation_date.match(dateFormat)) {
     next({
       status: 400,
       message: "reservation_date must be a date"
     })
   }
+
+  if (!data.reservation_time.match(timeFormat)) {
+    next({
+      status: 400,
+      message: "reservation_time must be a time"
+    })
+  }
+  
   next();
 }
 
