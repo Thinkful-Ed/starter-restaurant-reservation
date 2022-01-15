@@ -10,6 +10,7 @@ function ReservationCreate() {
     const history = useHistory();
 
     async function submitHandler(reservation) {
+        reservation.people = Number(reservation.people);
         await createReservation(reservation);
         history.push(`/dashboard?date=${reservation.reservation_date}`)
     }
@@ -21,7 +22,6 @@ function ReservationCreate() {
     // }
     // let mess = () => setCreateError({message: "Whoa"});
     // // mess();
-    // console.log(createError);
 
     return (
         <div>
