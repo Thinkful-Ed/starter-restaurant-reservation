@@ -9,10 +9,17 @@ function ReservationCreate() {
     const [createError, setCreateError] = useState(null);
     const history = useHistory();
 
+    function checkTuesday(date) {
+        let d = new Date(date);
+        if (d.getDay() === 1) return true;
+        return false;
+    }
+
     async function submitHandler(reservation) {
         reservation.people = Number(reservation.people);
-        await createReservation(reservation);
-        history.push(`/dashboard?date=${reservation.reservation_date}`)
+        console.log(checkTuesday(reservation.reservation_date));
+        // await createReservation(reservation);
+        // history.push(`/dashboard?date=${reservation.reservation_date}`)
     }
 
     const cancel = () => history.goBack();
@@ -26,7 +33,7 @@ function ReservationCreate() {
     return (
         <div>
             <h1>Create a new reservation</h1>
-            {/* <ErrorAlert error={createError}></ErrorAlert> */}
+            {/* <ErrorAlert error={} /> */}
             <ReservationForm onCancel={cancel} submitHandler={submitHandler} />
         </div>
     )
