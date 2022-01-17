@@ -32,7 +32,7 @@ function ReservationForm({
     <div>
       <form onSubmit={handleSubmit} className="deck-edit">
         <fieldset>
-          <div className="form-group">
+          <div className="form-group col">
             <label htmlFor="first_name">First Name</label>
             <input
               type="text"
@@ -45,7 +45,7 @@ function ReservationForm({
               onChange={changeHandler}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group col">
             <label htmlFor="last_name">Last Name</label>
             <input
               type="text"
@@ -58,14 +58,13 @@ function ReservationForm({
               onChange={changeHandler}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group col">
             <label htmlFor="mobile_number">Mobile number</label>
             <input
               type="text"
               id="mobile_number"
               name="mobile_number"
               className="form-control"
-              // pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
               value={reservation.mobile_number}
               required={true}
               placeholder="000-000-0000"
@@ -73,7 +72,7 @@ function ReservationForm({
               onChange={changeHandler}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group col">
             <label htmlFor="reservation_date">Reservation date</label>
             <input
               type="date"
@@ -86,7 +85,7 @@ function ReservationForm({
             />
             <small>Note: we are closed on Tuesdays</small>
           </div>
-          <div className="form-group">
+          <div className="form-group col">
             <label htmlFor="reservation_time">Reservation time</label>
             <input
               type="time"
@@ -99,7 +98,7 @@ function ReservationForm({
               onChange={changeHandler}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group col">
             <label htmlFor="people">Number in your party</label>
             <input
               type="number"

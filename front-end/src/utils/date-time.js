@@ -80,3 +80,15 @@ export function next(currentDate) {
   date.setDate(date.getDate() + 1);
   return asDateString(date);
 }
+
+export function checkTuesday(date) {
+  let d = new Date(date);
+  if (d.getDay() === 2) return true;
+  return false;
+}
+
+export function isDatePast(date) {
+  let today = new Date();
+  let checkedDate = new Date(date);
+  return today > checkedDate;
+}
