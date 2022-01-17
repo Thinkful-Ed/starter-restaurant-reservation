@@ -3,7 +3,7 @@ import { useHistory, } from "react-router-dom"
 import ReservationForm from "./Form";
 import {createReservation} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import {checkTuesday, isDatePast} from "../utils/date-time"
+import {checkTuesday, isDatePast, isClosed} from "../utils/date-time"
 
 
 function ReservationCreate() {
@@ -29,8 +29,14 @@ function ReservationCreate() {
             })
             )
         }
-        await createReservation(reservation);
-        history.push(`/dashboard?date=${reservation.reservation_date}`)
+        if (isClosed(checkDate)) {
+            setCreateError((prevState) => ({
+                ...prevState,
+                message: "The restaurant is closed at that time"
+            }))
+        }
+        // await createReservation(reservation);
+        // history.push(`/dashboard?date=${reservation.reservation_date}`)
     }
     console.log(createError);
 
