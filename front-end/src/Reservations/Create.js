@@ -29,8 +29,8 @@ function ReservationCreate() {
             })
             )
         }
-        // await createReservation(reservation);
-        // history.push(`/dashboard?date=${reservation.reservation_date}`)
+        await createReservation(reservation);
+        history.push(`/dashboard?date=${reservation.reservation_date}`)
     }
     console.log(createError);
 
