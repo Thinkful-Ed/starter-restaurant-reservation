@@ -12,6 +12,7 @@ function validReservation(req, res, next) {
         acc.push(field);
     } else if (field === "people" && !Number.isInteger(reservation[field])) {
       acc.push(field);
+      acc.push(`type ${typeof field}`)
     } else if (!reservation[field]) {
       acc.push(field);
     }

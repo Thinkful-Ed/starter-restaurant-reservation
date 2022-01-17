@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
@@ -11,7 +12,9 @@ import ErrorAlert from "../layout/ErrorAlert";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-
+  const dateQuery = useLocation().search.split("=")
+  date = dateQuery && dateQuery[0].match(/\?date/) ? dateQuery[1] : date;
+  console.log(useLocation().search, date)
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
