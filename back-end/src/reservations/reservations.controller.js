@@ -11,8 +11,8 @@ async function list(req, res) {
 }
 
 async function create(req, res) {
-  const newReservation = await service.create(req.body.data);
-  res.status(201).json({data: newReservation});
+  const data = await service.create(req.body.data);
+  res.status(201).json({data});
 }
 
 function validateReservation(req, res, next) {
@@ -34,6 +34,7 @@ function validateReservation(req, res, next) {
       })
     }
   })
+  
   if (!Number.isInteger(data.people)) {
     next({
       status: 400,
@@ -60,6 +61,34 @@ function validateReservation(req, res, next) {
     next({
       status: 400,
       message: "reservation_time must be a time"
+    })
+  }
+
+  function checkTuesday(date) {
+    let d = new Date(date);
+    if (d.getDay() === 2) return true;
+    return false;
+  }
+
+  function isDatePast(date) {
+    let today = new Date();
+    let checkedDate = new Date(date);
+    return today > checkedDate;
+  }
+
+  let checkData = `${data.reservation_date} ${data.reservation_time}`
+
+  if (checkTuesday(checkData)) {
+    next({
+      status: 400,
+      message: "reservation_date cannot be a Tuesday, restaurant is closed"
+    })
+  }
+
+  if (isDatePast(checkData)) {
+    next({
+      status:400,
+      message: "Date must be in the future"
     })
   }
   

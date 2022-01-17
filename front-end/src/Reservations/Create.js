@@ -1,35 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, } from "react-router-dom"
 import ReservationForm from "./Form";
 import {createReservation} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import {checkTuesday, isDatePast} from "../utils/date-time"
 
 
 function ReservationCreate() {
     const [createError, setCreateError] = useState(null);
     const history = useHistory();
 
+    
+
     async function submitHandler(reservation) {
         reservation.people = Number(reservation.people);
+        let checkDate = `${reservation.reservation_date} ${reservation.reservation_time}`
+        if (checkTuesday(checkDate)) {
+            setCreateError((prevState) => ({
+                ...prevState,
+                message: "We are closed Tuesdays"
+            })
+            )
+        }
+        if (isDatePast(checkDate)) {
+            setCreateError((prevState) => ({
+                ...prevState,
+                message: "Please select a date in the future"
+            })
+            )
+        }
         await createReservation(reservation);
         history.push(`/dashboard?date=${reservation.reservation_date}`)
     }
+    console.log(createError);
 
     const cancel = () => history.goBack();
     
-    // let error = {
-    //     message: "Whoa!"
-    // }
-    // let mess = () => setCreateError({message: "Whoa"});
-    // // mess();
+
+    // const displayErrors = (<div className="alert alert-danger">{createError.map(error => <ErrorAlert error={error} />)}</div>)
 
     return (
         <div>
             <h1>Create a new reservation</h1>
-            {/* <ErrorAlert error={createError}></ErrorAlert> */}
+            {/* {createError.length > 1 && displayErrors} */}
+            <ErrorAlert error={createError} />
             <ReservationForm onCancel={cancel} submitHandler={submitHandler} />
         </div>
     )
+    
 }
 
 export default ReservationCreate;
