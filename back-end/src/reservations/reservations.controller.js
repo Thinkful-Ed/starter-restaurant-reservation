@@ -76,6 +76,19 @@ function validateReservation(req, res, next) {
     return today > checkedDate;
   }
 
+  function isClosed(time) {
+    time = new Date(time);
+    if (time.getHours() < 10) return true;
+    if (time.getHours() == 10) {
+      return time.getMinutes() < 30;
+    }
+    if (time.getHours() > 9) return true;
+    if (time.getHours() == 9) {
+      return time.getMinutes() > 30;
+    }
+    return false;
+  }
+
   let checkData = `${data.reservation_date} ${data.reservation_time}`
 
   if (checkTuesday(checkData)) {
@@ -89,6 +102,13 @@ function validateReservation(req, res, next) {
     next({
       status:400,
       message: "Date must be in the future"
+    })
+  }
+
+  if (isClosed(checkData)) {
+    next({
+      status: 400,
+      message: "Restaurant is closed at that time"
     })
   }
   
