@@ -13,6 +13,12 @@ function list() {
         .orderBy("table_name");
 }
 
+function read(table_id) {
+    return knex("tables")
+        .select("*")
+        .where({"table_id": table_id})
+}
+
 function seat() {
 
 }
@@ -21,4 +27,5 @@ module.exports = {
     create,
     list,
     seat,
+    read,
 }

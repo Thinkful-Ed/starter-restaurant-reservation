@@ -8,4 +8,9 @@ router
     .post(controller.create)
     .all(methodNotAllowed);
 
+router
+    .route("/:table/seat")
+    .put(controller.seat)
+    .all(methodNotAllowed);
+
 module.exports = router;

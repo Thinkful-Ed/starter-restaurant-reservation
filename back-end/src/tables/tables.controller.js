@@ -13,6 +13,24 @@ async function create(req, res) {
 }
 
 async function seat(req, res) {
+    console.log(req.params);
+    console.log(req.body.data);
+    // let reservation = req.body.data;
+    let {table} = req.params;
+    console.log(table);
+}
+
+async function tableExists(req, res, next) {
+    const {table_id} = req.params;
+    const table = await service.read(table_id);
+    console.log(table)
+    next();
+}
+
+function validateSeating(req, res, next) {
+    let reservation = req.body.data;
+    let {table} = req.params;
+
 
 }
 
@@ -49,5 +67,5 @@ function validateTable(req, res, next) {
 module.exports = {
     list: asyncErrorBoundary(list),
     create: [validateTable, asyncErrorBoundary(create)],
-    seat: asyncErrorBoundary(seat),
+    seat: [tableExists, validateSeating, asyncErrorBoundary(seat)],
 }
