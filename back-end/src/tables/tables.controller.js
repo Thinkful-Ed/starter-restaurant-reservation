@@ -23,7 +23,7 @@ function validateTable(req, res, next) {
     ]
 
     requiredFields.forEach(field => {
-        if (!data[field]) {
+        if (!Object.keys(data).includes(field)) {
             errors.push(`Table must include a ${field}`);
         }
     })

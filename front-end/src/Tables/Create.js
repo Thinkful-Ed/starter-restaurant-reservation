@@ -1,12 +1,15 @@
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { createTable } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function TableCreate() {
   const [table, setTable] = useState({
     table_name: "",
     capacity: 1,
   });
+
+  const [tableError, setTableError] = useState(null)
 
   function changeHandler({ target: { name, value } }) {
     setTable((prevState) => ({
@@ -18,16 +21,18 @@ function TableCreate() {
   const history = useHistory();
 
   async function handleSubmit(evt) {
-    evt.preventDefault();
-    evt.stopPropagation();
-    table.capacity = Number(table.capacity);
-    await createTable(table);
-    history.push("/dashboard");
+      evt.preventDefault();
+      evt.stopPropagation();
+      table.capacity = Number(table.capacity);
+      console.log(table);
+    // await createTable(table).catch(setTableError);
+    // history.push("/dashboard");
   }
 
   return (
     <div>
       <h1>Create a new table</h1>
+      <ErrorAlert error={tableError} />
       <form onSubmit={handleSubmit}>
         <fieldset>
           <div className="row">

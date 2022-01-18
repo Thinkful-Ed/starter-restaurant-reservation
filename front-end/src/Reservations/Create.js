@@ -32,8 +32,10 @@ function ReservationCreate() {
     //         message: "The restaurant is closed at that time"
     //     }))
     // }
-    await createReservation(reservation).catch(setCreateError);
-    // history.push(`/dashboard?date=${reservation.reservation_date}`)
+    await createReservation(reservation)
+        .then(response => history.push(`/dashboard?date=${reservation.reservation_date}`))
+        .catch(setCreateError);
+    // console.log(createError);
   }
   console.log(createError);
 

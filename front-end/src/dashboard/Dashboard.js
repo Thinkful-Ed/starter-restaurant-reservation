@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import {useHistory} from "react-router-dom";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import {formatAsTime, formatAsDate, previous, next} from "../utils/date-time";
+import {formatAsTime, formatAsDate, previous, next, today} from "../utils/date-time";
 import useQuery from "../utils/useQuery";
+import SeatButton from "./SeatButton";
+import TableList from "./TableList";
 
 /**
  * Defines the dashboard page.
@@ -16,7 +18,7 @@ function Dashboard({ date }) {
   const query = useQuery();
   const getDate = query.get("date");
 
-  if (getDate) {
+  if (getDate && getDate !== today()) {
     date = getDate;
     isToday = false;
   }
@@ -45,6 +47,7 @@ function Dashboard({ date }) {
   function pushDate(dateToMove) {
     history.push(`/dashboard?date=${dateToMove}`)
   }
+
   
   const display = reservations.map(reservation => {
     return (
@@ -56,7 +59,7 @@ function Dashboard({ date }) {
       <td>{reservation.mobile_number}</td>
       <td>{formatAsTime(reservation.reservation_time)}</td>
       <td>{reservation.people}</td>
-      {/* {isToday && } */}
+      {isToday && <SeatButton reservation_id={reservation.reservation_id}/>}
     </tr>
     )
   })
@@ -71,9 +74,9 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={reservationsError} />
       <div className="btn-group" role="group" aria-label="Pick a date">
-        <button onClick={() => pushDate(previousDate)}>Back</button>
-        <button onClick={() => history.push("/dashboard")}>Today</button>
-        <button onClick={() => pushDate(nextDate)}>Forward</button>
+        <button className="btn btn-primary" onClick={() => pushDate(previousDate)}>Back</button>
+        <button className="btn btn-primary" onClick={() => history.push("/dashboard")}>Today</button>
+        <button className="btn btn-primary" onClick={() => pushDate(nextDate)}>Forward</button>
       </div>
       <table className="table">
         <thead>
@@ -84,12 +87,16 @@ function Dashboard({ date }) {
             <th scope="col">Mobile number</th>
             <th scope="col">Reservation time</th>
             <th scope="col">Party size</th>
+            <th scope="col">Seat party</th>
           </tr>
         </thead>
-      {reservations.length > 0 && display}
+        <tbody>
+          {reservations.length > 0 && display}
+        </tbody>
 
       </table>
       {!reservations.length && <h3>No reservations on this date</h3>}
+      <TableList />
     </main>
   );
 }
