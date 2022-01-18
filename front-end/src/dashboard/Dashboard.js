@@ -12,11 +12,13 @@ import useQuery from "../utils/useQuery";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  let isToday = true;
   const query = useQuery();
   const getDate = query.get("date");
 
   if (getDate) {
     date = getDate;
+    isToday = false;
   }
   
   const [reservations, setReservations] = useState([]);
@@ -54,6 +56,7 @@ function Dashboard({ date }) {
       <td>{reservation.mobile_number}</td>
       <td>{formatAsTime(reservation.reservation_time)}</td>
       <td>{reservation.people}</td>
+      {/* {isToday && } */}
     </tr>
     )
   })
