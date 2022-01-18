@@ -6,7 +6,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 function TableCreate() {
   const [table, setTable] = useState({
     table_name: "",
-    capacity: 1,
+    capacity: "",
   });
 
   const [tableError, setTableError] = useState(null)
@@ -24,9 +24,9 @@ function TableCreate() {
       evt.preventDefault();
       evt.stopPropagation();
       table.capacity = Number(table.capacity);
-      console.log(table);
-    // await createTable(table).catch(setTableError);
-    // history.push("/dashboard");
+    await createTable(table)
+        .then(res => history.push("/dashboard"))
+        .catch(setTableError);
   }
 
   return (
@@ -55,6 +55,7 @@ function TableCreate() {
               <input
                 type="number"
                 id="capacity"
+                min="1"
                 name="capacity"
                 className="form-control"
                 value={table.capacity}

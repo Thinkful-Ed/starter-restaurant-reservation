@@ -13,7 +13,12 @@ function list() {
         .orderBy("table_name");
 }
 
+function seat() {
+
+}
+
 module.exports = {
     create,
     list,
+    seat,
 }

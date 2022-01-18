@@ -46,12 +46,8 @@ function validateReservation(req, res, next) {
     // })
     errors.push("people must be a number");
   }
-  // if (data.reservation_date.length != 10 || data.reservation_date[4] != "-") {
-  //   next({
-  //     status: 400,
-  //     message: "reservation_date must be a date"
-  //   })
-  // }
+
+  
   const dateFormat = /\d\d\d\d-\d\d-\d\d/;
   const timeFormat = /\d\d:\d\d/;
 
@@ -85,12 +81,13 @@ function validateReservation(req, res, next) {
 
   function isClosed(time) {
     time = new Date(time);
+    console.log(time.getHours());
     if (time.getHours() < 10) return true;
     if (time.getHours() == 10) {
       return time.getMinutes() < 30;
     }
-    if (time.getHours() > 9) return true;
-    if (time.getHours() == 9) {
+    if (time.getHours() > 21) return true;
+    if (time.getHours() == 21) {
       return time.getMinutes() > 30;
     }
     return false;

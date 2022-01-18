@@ -12,6 +12,10 @@ async function create(req, res) {
     res.status(201).json({data});
 }
 
+async function seat(req, res) {
+
+}
+
 function validateTable(req, res, next) {
     let errors = [];
     const { data } = req.body;
@@ -44,5 +48,6 @@ function validateTable(req, res, next) {
 
 module.exports = {
     list: asyncErrorBoundary(list),
-    create: [validateTable, asyncErrorBoundary(create)]
+    create: [validateTable, asyncErrorBoundary(create)],
+    seat: asyncErrorBoundary(seat),
 }

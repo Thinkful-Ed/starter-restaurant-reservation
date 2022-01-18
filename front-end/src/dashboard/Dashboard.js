@@ -4,7 +4,6 @@ import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import {formatAsTime, formatAsDate, previous, next, today} from "../utils/date-time";
 import useQuery from "../utils/useQuery";
-import SeatButton from "./SeatButton";
 import TableList from "./TableList";
 
 /**
@@ -48,7 +47,6 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${dateToMove}`)
   }
 
-  
   const display = reservations.map(reservation => {
     return (
       
@@ -59,7 +57,12 @@ function Dashboard({ date }) {
       <td>{reservation.mobile_number}</td>
       <td>{formatAsTime(reservation.reservation_time)}</td>
       <td>{reservation.people}</td>
-      {isToday && <SeatButton reservation_id={reservation.reservation_id}/>}
+      
+
+      <a className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a>
+    
+
+      
     </tr>
     )
   })
