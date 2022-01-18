@@ -77,5 +77,3 @@ export async function createReservation(reservation, signal) {
     body: JSON.stringify({data: reservation}),
   });
 }
-
-// Need to give it 

@@ -16,6 +16,7 @@ async function create(req, res) {
 }
 
 function validateReservation(req, res, next) {
+  let errors = [];
   const { data } = req.body;
   if (!data) return next({status:400, message: "Data is missing"});
   const requiredFields = [
@@ -36,10 +37,11 @@ function validateReservation(req, res, next) {
   })
   
   if (!Number.isInteger(data.people)) {
-    next({
-      status: 400,
-      message: "people must be a number",
-    })
+    // next({
+    //   status: 400,
+    //   message: "people must be a number",
+    // })
+    errors.push("people must be a number");
   }
   // if (data.reservation_date.length != 10 || data.reservation_date[4] != "-") {
   //   next({
@@ -51,17 +53,19 @@ function validateReservation(req, res, next) {
   const timeFormat = /\d\d:\d\d/;
 
   if(!data.reservation_date.match(dateFormat)) {
-    next({
-      status: 400,
-      message: "reservation_date must be a date"
-    })
+    // next({
+    //   status: 400,
+    //   message: "reservation_date must be a date"
+    // })
+    errors.push("reservation_date must be a date")
   }
 
   if (!data.reservation_time.match(timeFormat)) {
-    next({
-      status: 400,
-      message: "reservation_time must be a time"
-    })
+    // next({
+    //   status: 400,
+    //   message: "reservation_time must be a time"
+    // })
+    errors.push("reservation_time must be a time")
   }
 
   function checkTuesday(date) {
@@ -92,23 +96,33 @@ function validateReservation(req, res, next) {
   let checkData = `${data.reservation_date} ${data.reservation_time}`
 
   if (checkTuesday(checkData)) {
-    next({
-      status: 400,
-      message: "reservation_date cannot be a Tuesday, restaurant is closed"
-    })
+    // next({
+    //   status: 400,
+    //   message: "The restaurant is closed on Tuesdays"
+    // })
+    errors.push("The restaurant is closed on Tuesdays")
   }
 
   if (isDatePast(checkData)) {
-    next({
-      status:400,
-      message: "Date must be in the future"
-    })
+    // next({
+    //   status:400,
+    //   message: "Date must be in the future"
+    // })
+    errors.push("Date must be in the future")
   }
 
   if (isClosed(checkData)) {
+    // next({
+    //   status: 400,
+    //   message: "Restaurant is closed at that time"
+    // })
+    errors.push("The restaurant is closed at that time")
+  }
+
+  if (errors.length) {
     next({
       status: 400,
-      message: "Restaurant is closed at that time"
+      message: errors.join(", "),
     })
   }
   
