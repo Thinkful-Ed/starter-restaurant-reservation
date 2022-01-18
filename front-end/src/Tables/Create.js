@@ -1,5 +1,6 @@
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
+import { createTable } from "../utils/api";
 
 function TableCreate() {
   const [table, setTable] = useState({
@@ -15,9 +16,12 @@ function TableCreate() {
   }
 
   const history = useHistory();
-  
-  function handleSubmit() {
-    // Build out API call here
+
+  async function handleSubmit(evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    table.capacity = Number(table.capacity);
+    await createTable(table);
     history.push("/dashboard");
   }
 
@@ -31,7 +35,7 @@ function TableCreate() {
               <label htmlFor="table_name">Table name</label>
               <input
                 type="text"
-                minlength="2"
+                minLength="2"
                 id="table_name"
                 name="table_name"
                 className="form-control"

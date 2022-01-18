@@ -19,7 +19,7 @@ function validateReservation(req, res, next) {
   let errors = [];
   const { data } = req.body;
   if (!data) return next({status:400, message: "Data is missing"});
-  
+
   const requiredFields = [
     "first_name", 
     "last_name", 
@@ -31,10 +31,11 @@ function validateReservation(req, res, next) {
 
   requiredFields.forEach(field => {
     if(!data[field]) {
-      return next({
-        status: 400,
-        message: `Reservation must include a ${field}`
-      })
+      // return next({
+      //   status: 400,
+      //   message: `Reservation must include a ${field}`
+      // })
+      errors.push(`Reservation must include a ${field}`);
     }
   })
   
