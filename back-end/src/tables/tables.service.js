@@ -29,9 +29,17 @@ function seat(table_id, reservation) {
         .then(res => res[0]);
 }
 
+function clear(table_id) {
+    return knex("tables")
+        .select("*")
+        .where({table_id})
+        .update({reservation_id: null})
+}
+
 module.exports = {
     create,
     list,
     seat,
     read,
+    clear,
 }
