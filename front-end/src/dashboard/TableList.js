@@ -27,6 +27,7 @@ function TableList() {
   });
   return (
     <div>
+        <h1>Tables</h1>
       <ErrorAlert error={tablesError} />
       <table className="table">
         <thead>
@@ -36,7 +37,7 @@ function TableList() {
             <th scope="col">Occupied</th>
           </tr>
         </thead>
-        <tbody>{display}</tbody>
+        <tbody>{tables.length ? display : "Please add at least 1 table"}</tbody>
       </table>
     </div>
   );
