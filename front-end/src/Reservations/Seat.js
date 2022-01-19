@@ -33,6 +33,7 @@ function Seat() {
     evt.preventDefault();
     evt.stopPropagation();
     await seatReservation(reservation_id, formData.table_id, ac.signal)
+        .then(() => history.push("/dashboard"))
         .catch(setError)
   }
 

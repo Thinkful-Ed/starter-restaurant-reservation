@@ -17,7 +17,7 @@ async function seat(req, res, next) {
     let table = res.locals.table.table_id;
     let reservation = res.locals.reservation.reservation_id;
     await service.seat(table, reservation)
-        .then(res.status(200).json());
+    res.status(200).json({});
 }
 
 async function tableExists(req, res, next) {
