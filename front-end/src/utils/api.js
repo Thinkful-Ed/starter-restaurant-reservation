@@ -97,12 +97,12 @@ export async function listTables(signal) {
   })
 }
 
-export async function seatReservation(reservation, table_id, signal) {
+export async function seatReservation(reservation_id, table_id, signal) {
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   return await fetchJson(url, {
     headers, 
     signal,
     method: 'PUT',
-    body: JSON.stringify({data: {reservation}})
+    body: JSON.stringify({data: {reservation_id}})
   })
 }

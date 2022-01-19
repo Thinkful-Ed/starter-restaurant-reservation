@@ -87,7 +87,6 @@ function validateReservation(req, res, next) {
 
   function isClosed(time) {
     time = new Date(time);
-    console.log(time.getHours());
     if (time.getHours() < 10) return true;
     if (time.getHours() == 10) {
       return time.getMinutes() < 30;
