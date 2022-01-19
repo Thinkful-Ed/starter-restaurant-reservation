@@ -13,11 +13,22 @@ async function create(req, res) {
     res.status(201).json({data});
 }
 
-async function seat(req, res, next) {
+async function seat(req, res) {
     let table = res.locals.table.table_id;
     let reservation = res.locals.reservation.reservation_id;
     await service.seat(table, reservation)
     res.status(200).json({});
+}
+
+async function destroy(req, res, next) {
+    if(!res.locals.table.reservation_id) {
+        next({
+            status: 400,
+            message: "table_id is not occupied"
+        })
+    }
+    await service.clear(res.locals.table.table_id)
+    res.status(200).json({})
 }
 
 async function tableExists(req, res, next) {
@@ -25,8 +36,8 @@ async function tableExists(req, res, next) {
     res.locals.table = await service.read(table);
     if (!res.locals.table) {
         next({
-            status: 400,
-            message: "Table does not exist"
+            status: 404,
+            message: `Table ${table} does not exist`
         });
     }
     next();
@@ -57,7 +68,6 @@ function validateSeating(req, res, next) {
     next();
 }
 
-// function validateFields()
 
 function validateNewTable(req, res, next) {
     let errors = [];
@@ -96,4 +106,5 @@ module.exports = {
     list: asyncErrorBoundary(list),
     create: [validateNewTable, asyncErrorBoundary(create)],
     seat: [asyncErrorBoundary(tableExists), asyncErrorBoundary(loadReservation), validateSeating, asyncErrorBoundary(seat)],
+    delete: [asyncErrorBoundary(tableExists), asyncErrorBoundary(destroy)] ,
 }

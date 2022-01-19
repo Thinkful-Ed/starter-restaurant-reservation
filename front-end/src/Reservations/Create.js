@@ -11,7 +11,7 @@ function ReservationCreate() {
   async function submitHandler(reservation) {
     reservation.people = Number(reservation.people);
     await createReservation(reservation)
-        .then(response => history.push(`/dashboard?date=${reservation.reservation_date}`))
+        .then(() => history.push(`/dashboard?date=${reservation.reservation_date}`))
         .catch(setCreateError);
   }
 

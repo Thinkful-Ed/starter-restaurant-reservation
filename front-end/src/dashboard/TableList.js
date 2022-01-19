@@ -1,6 +1,7 @@
 import { listTables } from "../utils/api";
 import { useState, useEffect } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
+import ClearButton from "./ClearButton";
 
 function TableList() {
   const [tables, setTables] = useState([]);
@@ -14,17 +15,24 @@ function TableList() {
     return () => abortController.abort();
   }
 
-  let display = tables.map((table) => {
-    return (
-      <tr key={table.table_id}>
-        <td>{table.table_name}</td>
-        <td>{table.capacity}</td>
-        <td data-table-id-status={table.table_id}>
-          {table.reservation_id ? "Occupied" : "Free"}
-        </td>
-      </tr>
-    );
-  });
+  let display;
+  if (tables.length) {
+
+      display = tables.map((table) => {
+        return (
+          <tr key={table.table_id}>
+            <td>{table.table_name}</td>
+            <td>{table.capacity}</td>
+            <td data-table-id-status={table.table_id}>
+              {table.reservation_id ? "Occupied" : "Free"}
+            </td>
+            <td>
+                {table.reservation_id ? <ClearButton table_id={table.table_id}/> : null}
+            </td>
+          </tr>
+        );
+      });
+  }
   return (
     <div>
         <h1>Tables</h1>
@@ -37,8 +45,11 @@ function TableList() {
             <th scope="col">Occupied</th>
           </tr>
         </thead>
-        <tbody>{tables.length ? display : "Please add at least 1 table"}</tbody>
+        <tbody>
+            {tables.length&&display}
+        </tbody>
       </table>
+      {!tables.length && "Please add at least 1 table"}
     </div>
   );
 }
