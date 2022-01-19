@@ -20,6 +20,10 @@ async function seat(req, res, next) {
     res.status(200).json({});
 }
 
+async function destroy(req, res, next) {
+
+}
+
 async function tableExists(req, res, next) {
     const {table} = req.params;
     res.locals.table = await service.read(table);
@@ -96,4 +100,5 @@ module.exports = {
     list: asyncErrorBoundary(list),
     create: [validateNewTable, asyncErrorBoundary(create)],
     seat: [asyncErrorBoundary(tableExists), asyncErrorBoundary(loadReservation), validateSeating, asyncErrorBoundary(seat)],
+    delete: [asyncErrorBoundary(tableExists), asyncErrorBoundary(destroy)] ,
 }
