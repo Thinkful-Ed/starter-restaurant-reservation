@@ -13,13 +13,14 @@ import TableList from "./TableList";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
-  let isToday = true;
+  // let isToday = true; // Sometime in the future I want the seat button 
+  // to only display if the date is today
   const query = useQuery();
   const getDate = query.get("date");
 
   if (getDate && getDate !== today()) {
     date = getDate;
-    isToday = false;
+    // isToday = false;
   }
   
   const [reservations, setReservations] = useState([]);
