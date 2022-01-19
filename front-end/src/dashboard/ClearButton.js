@@ -19,7 +19,7 @@ function ClearButton({ table_id }) {
       <button
         onClick={handleClick}
         data-table-id-finish={table_id}
-        className="btn btn-outline"
+        className="btn btn-outline-secondary"
       >
         Finish
       </button>
