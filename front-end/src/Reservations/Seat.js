@@ -6,7 +6,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 function Seat() {
   const [tables, setTables] = useState([]);
   const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({table_id: ""})
+  const [formData, setFormData] = useState({ table_id: "" });
 
   const { reservation_id } = useParams();
 
@@ -20,21 +20,20 @@ function Seat() {
 
   useEffect(loadTables, []);
 
-  function handleChange({target}) {
+  function handleChange({ target }) {
     setFormData({
-        ...formData,
-        [target.name]: target.value,
-    })
+      ...formData,
+      [target.name]: target.value,
+    });
   }
 
   async function submitHandler(evt) {
-      console.log(formData);
-      const ac = new AbortController();
+    const ac = new AbortController();
     evt.preventDefault();
     evt.stopPropagation();
     await seatReservation(reservation_id, formData.table_id, ac.signal)
-        .then(() => history.push("/dashboard"))
-        .catch(setError)
+      .then(() => history.push("/dashboard"))
+      .catch(setError);
   }
 
   let tableSelect = tables.map((table) => (
@@ -47,14 +46,15 @@ function Seat() {
     <div>
       <ErrorAlert error={error} />
       <form onSubmit={submitHandler}>
-        <label htmlFor="table_id">Please select a table
-          <select 
-            onChange={handleChange} 
-            className="form-select form-select-lg" 
+        <label htmlFor="table_id">
+          Please select a table
+          <select
+            onChange={handleChange}
+            className="form-select form-select-lg"
             id="table_id"
             name="table_id"
             value={formData.table_id}
-            >
+          >
             <option value="">--Select a table--</option>
             {tables.length && tableSelect}
           </select>
