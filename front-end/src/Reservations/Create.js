@@ -14,7 +14,6 @@ function ReservationCreate() {
         .then(response => history.push(`/dashboard?date=${reservation.reservation_date}`))
         .catch(setCreateError);
   }
-  console.log(createError);
 
   const cancel = () => history.goBack();
 
