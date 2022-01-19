@@ -92,3 +92,16 @@ export function isDatePast(date) {
   let checkedDate = new Date(date);
   return today > checkedDate;
 }
+
+export function isClosed(time) {
+  time = new Date(time);
+  if (time.getHours() < 10) return true;
+  if (time.getHours() === 10) {
+    return time.getMinutes() < 30;
+  }
+  if (time.getHours() > 9) return true;
+  if (time.getHours() === 9) {
+    return time.getMinutes() > 30;
+  }
+  return false;
+}

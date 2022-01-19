@@ -15,9 +15,18 @@ async function create(req, res) {
   res.status(201).json({data});
 }
 
+async function read(req, res) {
+  const {reservation_id} = req.params;
+  console.log(typeof(reservation_id))
+  const data = await service.read(reservation_id)
+  res.status(200).json({data})
+}
+
 function validateReservation(req, res, next) {
+  let errors = [];
   const { data } = req.body;
   if (!data) return next({status:400, message: "Data is missing"});
+
   const requiredFields = [
     "first_name", 
     "last_name", 
@@ -26,42 +35,43 @@ function validateReservation(req, res, next) {
     "reservation_time",
     "people",
   ]
+
   requiredFields.forEach(field => {
     if(!data[field]) {
-      return next({
-        status: 400,
-        message: `Reservation must include a ${field}`
-      })
+      // return next({
+      //   status: 400,
+      //   message: `Reservation must include a ${field}`
+      // })
+      errors.push(`Reservation must include a ${field}`);
     }
   })
   
   if (!Number.isInteger(data.people)) {
-    next({
-      status: 400,
-      message: "people must be a number",
-    })
+    // next({
+    //   status: 400,
+    //   message: "people must be a number",
+    // })
+    errors.push("people must be a number");
   }
-  // if (data.reservation_date.length != 10 || data.reservation_date[4] != "-") {
-  //   next({
-  //     status: 400,
-  //     message: "reservation_date must be a date"
-  //   })
-  // }
+
+  
   const dateFormat = /\d\d\d\d-\d\d-\d\d/;
   const timeFormat = /\d\d:\d\d/;
 
   if(!data.reservation_date.match(dateFormat)) {
-    next({
-      status: 400,
-      message: "reservation_date must be a date"
-    })
+    // next({
+    //   status: 400,
+    //   message: "reservation_date must be a date"
+    // })
+    errors.push("reservation_date must be a date")
   }
 
   if (!data.reservation_time.match(timeFormat)) {
-    next({
-      status: 400,
-      message: "reservation_time must be a time"
-    })
+    // next({
+    //   status: 400,
+    //   message: "reservation_time must be a time"
+    // })
+    errors.push("reservation_time must be a time")
   }
 
   function checkTuesday(date) {
@@ -76,19 +86,49 @@ function validateReservation(req, res, next) {
     return today > checkedDate;
   }
 
+  function isClosed(time) {
+    time = new Date(time);
+    if (time.getHours() < 10) return true;
+    if (time.getHours() == 10) {
+      return time.getMinutes() < 30;
+    }
+    if (time.getHours() > 21) return true;
+    if (time.getHours() == 21) {
+      return time.getMinutes() > 30;
+    }
+    return false;
+  }
+
   let checkData = `${data.reservation_date} ${data.reservation_time}`
 
   if (checkTuesday(checkData)) {
-    next({
-      status: 400,
-      message: "reservation_date cannot be a Tuesday, restaurant is closed"
-    })
+    // next({
+    //   status: 400,
+    //   message: "The restaurant is closed on Tuesdays"
+    // })
+    errors.push("The restaurant is closed on Tuesdays")
   }
 
   if (isDatePast(checkData)) {
+    // next({
+    //   status:400,
+    //   message: "Date must be in the future"
+    // })
+    errors.push("Date must be in the future")
+  }
+
+  if (isClosed(checkData)) {
+    // next({
+    //   status: 400,
+    //   message: "Restaurant is closed at that time"
+    // })
+    errors.push("The restaurant is closed at that time")
+  }
+
+  if (errors.length) {
     next({
-      status:400,
-      message: "Date must be in the future"
+      status: 400,
+      message: errors.join(", "),
     })
   }
   
@@ -98,4 +138,5 @@ function validateReservation(req, res, next) {
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [validateReservation, asyncErrorBoundary(create)],
+  read: asyncErrorBoundary(read),
 };
