@@ -1,5 +1,6 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./tables.service");
+const reservationService = require("../reservations/reservations.service");
 
 async function list(req, res) {
     res.json({
@@ -12,29 +13,53 @@ async function create(req, res) {
     res.status(201).json({data});
 }
 
-async function seat(req, res) {
-    console.log(req.params);
-    console.log(req.body.data);
-    // let reservation = req.body.data;
-    let {table} = req.params;
-    console.log(table);
+async function seat(req, res, next) {
+    let table = res.locals.table.table_id;
+    let reservation = res.locals.reservation.reservation_id;
+    await service.seat(table, reservation)
+        .then(res.status(200).json());
 }
 
 async function tableExists(req, res, next) {
-    const {table_id} = req.params;
-    const table = await service.read(table_id);
-    console.log(table)
+    const {table} = req.params;
+    res.locals.table = await service.read(table);
+    if (!res.locals.table) {
+        next({
+            status: 400,
+            message: "Table does not exist"
+        });
+    }
+    next();
+}
+
+async function loadReservation(req, res, next) {
+    if (!req.body.data) next({status: 400, message: "data is missing"})
+    let reservation = req.body.data.reservation_id;
+    if (!reservation) next({status: 400, message: "reservation_id is missing"})
+    res.locals.reservation = await reservationService.read(reservation);
+    if(!res.locals.reservation) next({status: 404, message: `${reservation} does not exist`});
     next();
 }
 
 function validateSeating(req, res, next) {
-    let reservation = req.body.data;
-    let {table} = req.params;
-
-
+    let errors = [];
+    let table = res.locals.table;
+    if (table.reservation_id) errors.push("table is occupied")
+    if (table.capacity < res.locals.reservation.people) {
+        errors.push("That table lacks the capacity")
+    }
+    if (errors.length) {
+        next({
+            status: 400,
+            message: errors.join(", "),
+        })
+    }
+    next();
 }
 
-function validateTable(req, res, next) {
+// function validateFields()
+
+function validateNewTable(req, res, next) {
     let errors = [];
     const { data } = req.body;
     if (!data) return next({status:400, message: "Data is missing"});
@@ -50,7 +75,10 @@ function validateTable(req, res, next) {
         }
     })
 
-    if (data.table_name && data.table_name.length < 2) errors.push("table_name must be at least 2 characters long");
+    if (!data.table_name) errors.push("table_name cannot be empty")
+    if (data.table_name && data.table_name.length < 2) {
+        errors.push("table_name must be at least 2 characters long");
+    }
 
     if (!Number.isInteger(data.capacity) || data.capacity < 1) errors.push(`capacity must be a number of at least 1`);
 
@@ -66,6 +94,6 @@ function validateTable(req, res, next) {
 
 module.exports = {
     list: asyncErrorBoundary(list),
-    create: [validateTable, asyncErrorBoundary(create)],
-    seat: [tableExists, validateSeating, asyncErrorBoundary(seat)],
+    create: [validateNewTable, asyncErrorBoundary(create)],
+    seat: [asyncErrorBoundary(tableExists), asyncErrorBoundary(loadReservation), validateSeating, asyncErrorBoundary(seat)],
 }

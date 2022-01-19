@@ -6,7 +6,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 function Seat() {
   const [tables, setTables] = useState([]);
   const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({table_id: null})
+  const [formData, setFormData] = useState({table_id: ""})
 
   const { reservation_id } = useParams();
 
@@ -21,7 +21,6 @@ function Seat() {
   useEffect(loadTables, []);
 
   function handleChange({target}) {
-      console.log(target.value.capacity)
     setFormData({
         ...formData,
         [target.name]: target.value,
@@ -29,15 +28,16 @@ function Seat() {
   }
 
   async function submitHandler(evt) {
-      console.log(JSON.stringify(formData));
+      console.log(formData);
       const ac = new AbortController();
     evt.preventDefault();
     evt.stopPropagation();
-    await seatReservation(reservation_id, formData, ac.signal)
+    await seatReservation(reservation_id, formData.table_id, ac.signal)
+        .catch(setError)
   }
 
   let tableSelect = tables.map((table) => (
-    <option key={table.table_id} value={table}>
+    <option key={table.table_id} value={table.table_id}>
       {table.table_name} - {table.capacity}
     </option>
   ));

@@ -15,6 +15,12 @@ async function create(req, res) {
   res.status(201).json({data});
 }
 
+async function read(req, res) {
+  const {reservation_id} = req.params;
+  const data = await service.read(reservation_id)
+  res.status(200).json({data})
+}
+
 function validateReservation(req, res, next) {
   let errors = [];
   const { data } = req.body;
@@ -132,4 +138,5 @@ function validateReservation(req, res, next) {
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [validateReservation, asyncErrorBoundary(create)],
+  read: asyncErrorBoundary(read),
 };

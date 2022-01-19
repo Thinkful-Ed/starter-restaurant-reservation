@@ -16,11 +16,17 @@ function list() {
 function read(table_id) {
     return knex("tables")
         .select("*")
-        .where({"table_id": table_id})
+        .where({table_id})
+        .first();
 }
 
-function seat() {
-
+function seat(table_id, reservation) {
+    return knex("tables")
+        .select("*")
+        .where({table_id})
+        .update({reservation_id: reservation })
+        .returning("*")
+        .then(res => res[0]);
 }
 
 module.exports = {
