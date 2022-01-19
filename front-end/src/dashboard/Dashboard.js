@@ -59,7 +59,9 @@ function Dashboard({ date }) {
       <td>{reservation.people}</td>
       
 
+      <td>
       <a className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a>
+      </td>
     
 
       
