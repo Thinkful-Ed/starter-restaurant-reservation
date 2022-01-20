@@ -11,7 +11,7 @@ async function checkQuery(req, res, next) {
     if (!data) {
       next({
         status: 404,
-        message: `${mobile_phone} not found`
+        message: `No reservations found`
       })
     }
     return res.status(200).json({data})
