@@ -14,15 +14,8 @@ async function checkQuery(req, res, next) {
         message: `${mobile_phone} not found`
       })
     }
-    // If this is needed
-    // next({
-    //   status: 200,
-    //   data
-    // })
-    // Would have rather used this
     return res.status(200).json({data})
   }
-  // Even if it returns 
   next();
 }
 
