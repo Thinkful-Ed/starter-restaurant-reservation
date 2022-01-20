@@ -9,6 +9,7 @@ function ReservationCreate() {
   const history = useHistory();
 
   async function submitHandler(reservation) {
+    reservation.mobile_number = (reservation.mobile_number).replace(/[^0-9.]/g, '')
     reservation.people = Number(reservation.people);
     await createReservation(reservation)
         .then(() => history.push(`/dashboard?date=${reservation.reservation_date}`))

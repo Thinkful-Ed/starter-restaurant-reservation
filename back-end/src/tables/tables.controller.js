@@ -50,8 +50,8 @@ async function loadReservation(req, res, next) {
     let reservation = req.body.data.reservation_id;
     if (!reservation) next({status: 400, message: "reservation_id is missing"})
     res.locals.reservation = await reservationService.read(reservation);
-    if(res.locals.reservation.status === "seated") next({status: 400, message: "reservation is already seated"})
     if(!res.locals.reservation) next({status: 404, message: `${reservation} does not exist`});
+    if(res.locals.reservation.status === "seated") next({status: 400, message: "reservation is already seated"})
     next();
 }
 

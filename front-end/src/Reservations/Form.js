@@ -11,6 +11,7 @@ function ReservationForm({
     reservation_date: today(),
     reservation_time: "",
     people: "1",
+    status: "booked",
   },
 }) {
   const [reservation, setReservation] = useState(initialState);

@@ -15,9 +15,21 @@ async function create(req, res) {
   res.status(201).json({data});
 }
 
-async function read(req, res) {
+async function reservationExists(req, res, next) {
   const {reservation_id} = req.params;
   const data = await service.read(reservation_id)
+  if (!data) {
+    next({
+      status: 404,
+      message: `${reservation_id} not found`,
+    })
+  }
+  res.locals.reservation = data;
+  next();
+}
+
+function read(req, res) {
+  const data = res.locals.reservation;
   res.status(200).json({data})
 }
 
@@ -79,13 +91,13 @@ function validateNewReservation(req, res, next) {
     errors.push("people must be a number");
   }
 
-  if (data.status !== "booked") errors.push(`${data.status} must be "booked"`)
+  if (data.status && data.status !== "booked") errors.push(`${data.status} must be "booked"`)
 
   
   const dateFormat = /\d\d\d\d-\d\d-\d\d/;
   const timeFormat = /\d\d:\d\d/;
 
-  if(!data.reservation_date.match(dateFormat)) {
+  if(data.reservation_date && !data.reservation_date.match(dateFormat)) {
     // next({
     //   status: 400,
     //   message: "reservation_date must be a date"
@@ -93,7 +105,7 @@ function validateNewReservation(req, res, next) {
     errors.push("reservation_date must be a date")
   }
 
-  if (!data.reservation_time.match(timeFormat)) {
+  if (data.reservation_time && !data.reservation_time.match(timeFormat)) {
     // next({
     //   status: 400,
     //   message: "reservation_time must be a time"
@@ -165,6 +177,6 @@ function validateNewReservation(req, res, next) {
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [validateNewReservation, asyncErrorBoundary(create)],
-  read: asyncErrorBoundary(read),
+  read: [asyncErrorBoundary(reservationExists), read],
   updateStatus: [asyncErrorBoundary(validateExistingReservation), asyncErrorBoundary(updateStatus)],
 };

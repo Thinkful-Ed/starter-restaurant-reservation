@@ -17,7 +17,6 @@ function TableList() {
 
   let display;
   if (tables.length) {
-
       display = tables.map((table) => {
         return (
           <tr key={table.table_id}>
@@ -46,7 +45,7 @@ function TableList() {
           </tr>
         </thead>
         <tbody>
-            {tables.length&&display}
+            {tables.length ? display : null}
         </tbody>
       </table>
       {!tables.length && "Please add at least 1 table"}
