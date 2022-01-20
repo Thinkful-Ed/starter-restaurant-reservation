@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {useHistory} from "react-router-dom";
-import { listReservations } from "../utils/api";
+import { listReservations, updateStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import {formatAsTime, formatAsDate, previous, next, today} from "../utils/date-time";
 import useQuery from "../utils/useQuery";
@@ -48,8 +48,12 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${dateToMove}`)
   }
 
+  async function changeStatus(reservation_id) {
+    await updateStatus(reservation_id, "seated")
+  }
+
   const display = reservations.map(reservation => {
-    return (
+    if (reservation.status !== "finished") return (
       
     <tr key={reservation.reservation_id}>
       <td>{reservation.reservation_id}</td>
@@ -58,10 +62,10 @@ function Dashboard({ date }) {
       <td>{reservation.mobile_number}</td>
       <td>{formatAsTime(reservation.reservation_time)}</td>
       <td>{reservation.people}</td>
-      
+      <td>{reservation.status}</td>
 
       <td>
-      <a className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a>
+      {reservation.status==="booked" ? <a onClick={() => changeStatus(reservation.reservation_id)}className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a> : null}
       </td>
     
 
@@ -93,6 +97,7 @@ function Dashboard({ date }) {
             <th scope="col">Mobile number</th>
             <th scope="col">Reservation time</th>
             <th scope="col">Party size</th>
+            <th scope="col">Status</th>
             <th scope="col">Seat party</th>
           </tr>
         </thead>

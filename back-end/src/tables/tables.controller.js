@@ -17,6 +17,7 @@ async function seat(req, res) {
     let table = res.locals.table.table_id;
     let reservation = res.locals.reservation.reservation_id;
     await service.seat(table, reservation)
+    await reservationService.updateStatus(reservation, "seated")
     res.status(200).json({});
 }
 
@@ -28,6 +29,7 @@ async function destroy(req, res, next) {
         })
     }
     await service.clear(res.locals.table.table_id)
+    await reservationService.updateStatus(res.locals.table.reservation_id, "finished")
     res.status(200).json({})
 }
 
@@ -48,6 +50,7 @@ async function loadReservation(req, res, next) {
     let reservation = req.body.data.reservation_id;
     if (!reservation) next({status: 400, message: "reservation_id is missing"})
     res.locals.reservation = await reservationService.read(reservation);
+    if(res.locals.reservation.status === "seated") next({status: 400, message: "reservation is already seated"})
     if(!res.locals.reservation) next({status: 404, message: `${reservation} does not exist`});
     next();
 }

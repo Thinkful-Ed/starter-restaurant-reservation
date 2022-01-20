@@ -21,7 +21,33 @@ async function read(req, res) {
   res.status(200).json({data})
 }
 
-function validateReservation(req, res, next) {
+async function updateStatus(req, res) {
+  const {reservation_id} = req.params;
+  const data = await service.updateStatus(reservation_id, req.body.data.status);
+  res.status(200).json({data})
+}
+
+async function validateExistingReservation(req, res, next) {
+  let errors = [];
+  const {data} = req.body;
+  const {reservation_id} = req.params;
+  const exists = await service.read(reservation_id);
+  if (!exists) next({status: 404, message: `${reservation_id} does not exist`});
+  const acceptableStatuses = ["booked", "seated", "finished"];
+  if (!acceptableStatuses.includes(data.status)) errors.push(`${data.status} not allowed`)
+  if (exists.status == "finished") errors.push("A finished reservation cannot be updated")
+  
+  if (errors.length) {
+    next({
+      status: 400,
+      message: errors.join(", ")
+    })
+  }
+
+  next();
+}
+
+function validateNewReservation(req, res, next) {
   let errors = [];
   const { data } = req.body;
   if (!data) return next({status:400, message: "Data is missing"});
@@ -52,6 +78,8 @@ function validateReservation(req, res, next) {
     // })
     errors.push("people must be a number");
   }
+
+  if (data.status !== "booked") errors.push(`${data.status} must be "booked"`)
 
   
   const dateFormat = /\d\d\d\d-\d\d-\d\d/;
@@ -136,6 +164,7 @@ function validateReservation(req, res, next) {
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  create: [validateReservation, asyncErrorBoundary(create)],
+  create: [validateNewReservation, asyncErrorBoundary(create)],
   read: asyncErrorBoundary(read),
+  updateStatus: [asyncErrorBoundary(validateExistingReservation), asyncErrorBoundary(updateStatus)],
 };

@@ -116,3 +116,13 @@ export async function clearTable(table_id, signal) {
     body: JSON.stringify({data: {}})
   })
 }
+
+export async function updateStatus(reservation_id, newStatus, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+ return await fetchJson(url, {
+   headers,
+   signal,
+   method: 'PUT',
+   body: JSON.stringify({data: {status: {newStatus}}})
+ })
+}
