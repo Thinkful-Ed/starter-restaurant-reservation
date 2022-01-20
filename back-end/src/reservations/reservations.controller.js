@@ -4,7 +4,23 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./reservations.service")
 
-async function list(req, res) {
+async function checkQuery(req, res, next) {
+  // const {mobile_phone} = req.query;
+  if (req.query.mobile_phone) {
+    const {mobile_phone} = req.query;
+    const data = await service.search(mobile_phone);
+    if (!data) {
+      next({
+        status: 404,
+        message: `${mobile_phone} not found`
+      })
+    }
+    res.status(200).json({data})
+  }
+  next();
+}
+
+async function list(req, res, next) {
   res.json({
     data: await service.list(req.query.date),
   });
@@ -58,6 +74,8 @@ async function validateExistingReservation(req, res, next) {
 
   next();
 }
+
+
 
 function validateNewReservation(req, res, next) {
   let errors = [];
@@ -175,7 +193,7 @@ function validateNewReservation(req, res, next) {
 }
 
 module.exports = {
-  list: [asyncErrorBoundary(list)],
+  list: [asyncErrorBoundary(checkQuery), asyncErrorBoundary(list)],
   create: [validateNewReservation, asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), read],
   updateStatus: [asyncErrorBoundary(validateExistingReservation), asyncErrorBoundary(updateStatus)],

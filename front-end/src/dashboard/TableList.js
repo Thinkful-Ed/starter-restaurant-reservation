@@ -42,6 +42,7 @@ function TableList() {
             <th scope="col">Table</th>
             <th scope="col">Capacity</th>
             <th scope="col">Occupied</th>
+            <th scope="col">Clear table</th>
           </tr>
         </thead>
         <tbody>
