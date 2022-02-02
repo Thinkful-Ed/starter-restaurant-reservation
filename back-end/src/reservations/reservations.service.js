@@ -12,7 +12,15 @@ function list() {
         .select("*")
 }
 
+function listReservationsByDate(date) {
+    return knex("reservations")
+        .select("*")
+        .where({ reservation_date: date })
+        .orderBy("reservation_time")
+}
+
 module.exports = {
     create,
     list,
+    listReservationsByDate,
 }
