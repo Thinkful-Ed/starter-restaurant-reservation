@@ -11,8 +11,8 @@ function NewReservation() {
         first_name:"",
         last_name:"",
         mobile_number:"",
-        reservation_date:asDateString(date),
-        reservation_time:date.toTimeString().slice(0,5),
+        reservation_date:"",
+        reservation_time:"",
         people:"",
     }
 
@@ -31,7 +31,7 @@ function NewReservation() {
         });
         // console.log( typeof Number(e.target.value))
       };
-      const handleSubmission =async (e)=>{
+      const handleSubmission = (e)=>{
           e.preventDefault()
           const AC = new AbortController()
           createReservation(form,AC.signal)
