@@ -3,7 +3,7 @@
  * The default values is overridden by the `API_BASE_URL` environment variable.
  */
 import formatReservationDate from "./format-reservation-date";
-import formatReservationTime from "./format-reservation-date";
+import formatReservationTime from "./format-reservation-time";
 
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
@@ -67,3 +67,39 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+export async function createReservation(newReservation, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/new`)
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    signal,
+    body: { data: newReservation },
+  })
+  return response
+}
+
+
+/* try {
+  const url = new URL(`${API_BASE_URL}/reservations/new`)
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    signal,
+    body: newReservation,
+  })
+  if (response.status === 204) {
+    return null;
+  }
+  const payload = await response.json();
+  if (payload.error) {
+    return Promise.reject({ message: payload.error });
+  }
+  return payload.data;
+} catch (error) {
+  if (error.name !== "AbortError") {
+    console.error(error.stack);
+    throw error;
+  }
+  return Promise.resolve(signal);
+} */

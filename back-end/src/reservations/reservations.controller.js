@@ -2,10 +2,13 @@ const service = require("./reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 const moment = require("moment") // used to validate date input
 
-function hasData(req, res, next) {
-  const methodName = "hasData"
-  if (req.body.data) {
+console.log("controller loaded")
+
+async function hasData(req, res, next) {
+  console.log("request in server:", req.body)
+  if (req.body) {
     res.locals.reservation = req.body.data
+    console.log("req body data:", req.body.data)
     return next();
   }
   const message = "body must have data property"
@@ -13,6 +16,7 @@ function hasData(req, res, next) {
 }
 
 function dataHas(propertyName) {
+  console.log(`data has ${propertyName}`)
   const methodName = `dataHas('${propertyName}')`
   return (req, res, next) => {
     const reservation = res.locals.reservation
@@ -25,14 +29,15 @@ function dataHas(propertyName) {
   }
 }
 
-const hasFirstName = dataHas("first_name")
+/* const hasFirstName = dataHas("first_name")
 const hasLastName = dataHas("last_name")
 const hasMobileNumber = dataHas("mobile_number")
 const hasReservationDate = dataHas("reservation_date")
 const hasReservationTime = dataHas("reservation_time")
-const hasPeople = dataHas("people")
+const hasPeople = dataHas("people") */
 
-function hasValidDate (req, res, next) {
+async function hasValidDate (req, res, next) {
+  console.log("has valid date")
   const reservation = res.locals.reservation
   const result = moment(reservation.reservation_date, "YYYY-MM-DD", true).isValid()
   if (result) {
@@ -52,8 +57,9 @@ function hasValidTime(req, res, next) {
   next({ status: 400, message: message })
 }
 
-function reservationHasValidNumberOfPeople(req, res, next) {
+function hasValidPeople(req, res, next) {
   const reservation = res.locals.reservation
+  console.log("people", reservation.people)
   if ( reservation.people <= 0 ) {
     const message = `Property 'people' must be an integer greater than 0.`
     next({ status: 400, message: message })
@@ -79,7 +85,7 @@ async function list(req, res, next) {
 
 async function create(req, res, next) {
   const newReservation = await service.create(res.locals.reservation)
-  
+  console.log("create method in controller")
   res.status(201).json({
     data: newReservation,
   })
@@ -88,16 +94,16 @@ async function create(req, res, next) {
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [
-    hasData, 
-    hasFirstName,
+    asyncErrorBoundary(hasData), 
+    /* hasFirstName,
     hasLastName,
     hasMobileNumber,
-    hasReservationDate,
-    hasValidDate,
-    hasReservationTime,
+    hasReservationDate, */
+    asyncErrorBoundary(hasValidDate),
+    //hasReservationTime,
     hasValidTime,
-    hasPeople,
-    reservationHasValidNumberOfPeople,
+    //hasPeople,
+    hasValidPeople,
     asyncErrorBoundary(create)
   ],
 }
