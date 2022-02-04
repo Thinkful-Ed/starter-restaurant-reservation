@@ -91,12 +91,12 @@
  }
  //handles both general reservation editing as well as cancelling reservations
  export async function updateReservation(dataToUpdate,statusChange = false, signal) {
-   let url
-   if(!statusChange){
-     url = `${API_BASE_URL}/reservations/${dataToUpdate.reservation_id}`;
-   }else{
-     url = `${API_BASE_URL}/reservations/${dataToUpdate.reservation_id}/status`
-   }
+  //  let url
+   //if(!statusChange){
+     let url = `${API_BASE_URL}/reservations/${dataToUpdate.reservation_id}`;
+  //  }else{
+  //    url = `${API_BASE_URL}/reservations/${dataToUpdate.reservation_id}/status`
+  //  }
    const options = {
      method: "PUT",
      headers,

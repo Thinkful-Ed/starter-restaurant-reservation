@@ -41,7 +41,7 @@ function EditReservation() {
           [e.target.id]: Number(e.target.value),
         });
       };
-      const handleSubmission =async (e)=>{
+      const handleSubmission =(e)=>{
           e.preventDefault()
           const AC = new AbortController()
           updateReservation(form,AC.signal)
