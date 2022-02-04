@@ -20,4 +20,6 @@ router
   .put(controller.updateStatus)
   .all(methodNotAllowed);
 
+;
+
 module.exports = router;

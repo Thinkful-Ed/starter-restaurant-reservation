@@ -76,20 +76,7 @@ async function reservationExists(req, res, next) {
   }
 }
 
-function hasValidName(req, res, next) {
-  const {
-    data: { first_name, last_name },
-  } = req.body;
 
-  if (/^[0-9]+$/.test(first_name) || /^[0-9]+$/.test(last_name)) {
-    return next({
-      status: 400,
-      message: "Name must include only letters A-Z.",
-    });
-  }
-
-  return next();
-}
 
 function hasValidDate(req, res, next) {
   const { reservation_date } = req.body.data;
@@ -267,7 +254,7 @@ module.exports = {
     hasOnlyValidProperties,
     hasRequiredProperties,
     checkBooked,
-    hasValidName,
+    
     hasValidTime,
     hasValidDate,
     hasValidPhoneNumber,
@@ -278,7 +265,7 @@ module.exports = {
     asyncErrorBoundary(reservationExists),
     hasRequiredProperties,
     checkBooked,
-    hasValidName,
+    
     hasValidTime,
     hasValidDate,
     hasValidPhoneNumber,

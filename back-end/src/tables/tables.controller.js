@@ -28,7 +28,7 @@ async function destroy(req, res) {
   const { table_id } = req.params;
   const { table } = res.locals;
 
-  await tablesService.clearTable(table_id, table.reservation_id);
+  await tablesService.deleteTable(table_id, table.reservation_id);
   res.status(200).json({});
 }
 
