@@ -4,12 +4,12 @@ const { listReservations, createReservation } = require("../utils/api")
 export default function NewReservation() {
 
     const initialFormData = {
-        first_name: null,
-        last_name: null,
-        mobile_number: null,
-        reservation_date: null,
-        reservation_time: null,
-        people: null,
+        first_name: "",
+        last_name: "",
+        mobile_number: "",
+        reservation_date: "",
+        reservation_time: "",
+        people: 0,
     }
 
     const [formData, setFormData] = useState({ ...initialFormData })
@@ -36,7 +36,8 @@ export default function NewReservation() {
     }
 
     return (
-        <form className="" onSubmit={handleSubmit}>
+        <form className="new-res-form" onSubmit={handleSubmit}>
+            <h1>New Reservation</h1>
             <div className="form-group">
                 <label htmlFor="first_name">First Name</label>
                 <input

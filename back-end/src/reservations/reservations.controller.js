@@ -29,12 +29,12 @@ function dataHas(propertyName) {
   }
 }
 
-/* const hasFirstName = dataHas("first_name")
+const hasFirstName = dataHas("first_name")
 const hasLastName = dataHas("last_name")
 const hasMobileNumber = dataHas("mobile_number")
 const hasReservationDate = dataHas("reservation_date")
 const hasReservationTime = dataHas("reservation_time")
-const hasPeople = dataHas("people") */
+const hasPeople = dataHas("people")
 
 async function hasValidDate (req, res, next) {
   console.log("has valid date")
@@ -95,14 +95,14 @@ module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [
     asyncErrorBoundary(hasData), 
-    /* hasFirstName,
+    hasFirstName,
     hasLastName,
     hasMobileNumber,
-    hasReservationDate, */
+    hasReservationDate,
     asyncErrorBoundary(hasValidDate),
-    //hasReservationTime,
+    hasReservationTime,
     hasValidTime,
-    //hasPeople,
+    hasPeople,
     hasValidPeople,
     asyncErrorBoundary(create)
   ],

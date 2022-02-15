@@ -70,13 +70,19 @@ export async function listReservations(params, signal) {
 
 export async function createReservation(newReservation, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/new`)
-  const response = await fetch(url, {
-    method: 'POST',
-    headers,
-    signal,
-    body: { data: newReservation },
-  })
-  return response
+  try {
+
+    const response = await fetchJson(url, {
+      method: 'POST',
+      headers,
+      signal,
+      body: JSON.stringify({ data: newReservation }),
+    }, [])
+    return response
+  } catch (error) {
+    console.error(error)
+    return error
+  }
 }
 
 

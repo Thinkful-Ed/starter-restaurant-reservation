@@ -23,14 +23,33 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  const content = reservations.map((res, index) => (
+    <tr key={index}>
+      <td>{res.first_name}</td>
+      <td>{res.last_name}</td>
+      <td>{res.mobile_number}</td>
+      <td>{res.reservation_date}</td>
+      <td>{res.reservation_time}</td>
+    </tr>
+  ))
+
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      <table className="table">
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Mobile Number</th>
+          <th>Reservation Date</th>
+          <th>Reservation Time</th>
+        </tr>
+        {content}
+      </table>
     </main>
   );
 }
