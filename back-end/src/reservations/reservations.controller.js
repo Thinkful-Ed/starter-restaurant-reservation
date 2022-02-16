@@ -2,13 +2,9 @@ const service = require("./reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 const moment = require("moment") // used to validate date input
 
-console.log("controller loaded")
-
 async function hasData(req, res, next) {
-  console.log("request in server:", req.body)
   if (req.body) {
     res.locals.reservation = req.body.data
-    console.log("req body data:", req.body.data)
     return next();
   }
   const message = "body must have data property"
@@ -16,7 +12,6 @@ async function hasData(req, res, next) {
 }
 
 function dataHas(propertyName) {
-  console.log(`data has ${propertyName}`)
   const methodName = `dataHas('${propertyName}')`
   return (req, res, next) => {
     const reservation = res.locals.reservation
@@ -37,7 +32,6 @@ const hasReservationTime = dataHas("reservation_time")
 const hasPeople = dataHas("people")
 
 async function hasValidDate (req, res, next) {
-  console.log("has valid date")
   const reservation = res.locals.reservation
   const result = moment(reservation.reservation_date, "YYYY-MM-DD", true).isValid()
   if (result) {
@@ -59,7 +53,6 @@ function hasValidTime(req, res, next) {
 
 function hasValidPeople(req, res, next) {
   const reservation = res.locals.reservation
-  console.log("people", reservation.people)
   if ( reservation.people <= 0 ) {
     const message = `Property 'people' must be an integer greater than 0.`
     next({ status: 400, message: message })
@@ -85,7 +78,6 @@ async function list(req, res, next) {
 
 async function create(req, res, next) {
   const newReservation = await service.create(res.locals.reservation)
-  console.log("create method in controller")
   res.status(201).json({
     data: newReservation,
   })

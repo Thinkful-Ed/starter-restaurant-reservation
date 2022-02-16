@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import { useParams, useLocation } from "react-router-dom"
 
 /**
  * Defines the dashboard page.
@@ -9,14 +10,26 @@ import ErrorAlert from "../layout/ErrorAlert";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+
+  /**
+   * The following code gets the query from the URL and if a date is provided,
+   * sets the date fetched from the API.
+   */
+  const { search } = useLocation();
+  const query = React.useMemo(() => new URLSearchParams(search), [search]).get('date')
+  if (query) {
+    date = query
+  }
 
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
+    
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
@@ -41,13 +54,13 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={reservationsError} />
       <table className="table">
-        <tr>
+        <thead>
           <th>First Name</th>
           <th>Last Name</th>
           <th>Mobile Number</th>
           <th>Reservation Date</th>
           <th>Reservation Time</th>
-        </tr>
+        </thead>
         {content}
       </table>
     </main>

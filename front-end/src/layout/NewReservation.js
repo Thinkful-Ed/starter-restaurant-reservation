@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react"
+import { useHistory } from "react-router-dom"
+import ErrorAlert from "./ErrorAlert"
 const { listReservations, createReservation } = require("../utils/api")
 
 export default function NewReservation() {
+
+    const history = useHistory()
 
     const initialFormData = {
         first_name: "",
@@ -13,6 +17,7 @@ export default function NewReservation() {
     }
 
     const [formData, setFormData] = useState({ ...initialFormData })
+    const [error, setError] = useState(null)
 
     const handleChange = ({ target }) => {
         setFormData({
@@ -27,12 +32,19 @@ export default function NewReservation() {
 
     async function handleSubmit(event) {
         event.preventDefault()
-        console.log("Submitted form with data:", formData)
         const abortController = new AbortController()
         const newReservation = { ...formData }
-        console.log("new reservation inside handlesubmit", newReservation)
         const response = await createReservation(newReservation, abortController.signal)
-        console.log("response in handleSubmit", response)
+        console.log(response)
+        if (response.message) {
+            setError(response)
+            return
+        }
+        history.push("/")
+    }
+
+    function handleCancel() {
+        history.go(-1)
     }
 
     return (
@@ -104,11 +116,13 @@ export default function NewReservation() {
                     value={formData.people}
                 />
             </div>
+            <ErrorAlert error={error} />
             <label htmlFor="submit">
                 <input 
                     type="submit"
                     id="submit"
                     name="submit"
+                    className="btn btn-primary"
                 />
             </label>
             <label htmlFor="reset">
@@ -117,7 +131,19 @@ export default function NewReservation() {
                     id="reset"
                     name="reset"
                     onClick={handleReset}
+                    className="btn btn-primary"
                 />
+            </label>
+            <label htmlFor="cancel">
+                <button
+                    type="button"
+                    id="cancel"
+                    name="cancel"
+                    onClick={handleCancel}
+                    className="btn btn-primary"
+                >
+                    Cancel
+                </button>
             </label>
         </form>
     )
