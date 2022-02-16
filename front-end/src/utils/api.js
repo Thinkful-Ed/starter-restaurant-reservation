@@ -69,7 +69,7 @@ export async function listReservations(params, signal) {
 }
 
 export async function createReservation(newReservation, signal) {
-  const url = new URL(`${API_BASE_URL}/reservations/new`)
+  const url = new URL(`${API_BASE_URL}/reservations`)
   try {
 
     const response = await fetchJson(url, {

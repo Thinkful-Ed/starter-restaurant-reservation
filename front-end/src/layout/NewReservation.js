@@ -40,7 +40,7 @@ export default function NewReservation() {
             setError(response)
             return
         }
-        history.push("/")
+        history.push(`/dashboard/?date=${formData.date}`)
     }
 
     function handleCancel() {

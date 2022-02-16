@@ -3,7 +3,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 const moment = require("moment") // used to validate date input
 
 async function hasData(req, res, next) {
-  if (req.body) {
+  if (req.body.data) {
     res.locals.reservation = req.body.data
     return next();
   }
