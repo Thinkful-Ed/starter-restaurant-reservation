@@ -35,6 +35,18 @@ async function hasValidDate (req, res, next) {
   const reservation = res.locals.reservation
   const result = moment(reservation.reservation_date, "YYYY-MM-DD", true).isValid()
   if (result) {
+    // Restaurant is closed on Tuesdays
+    if (moment(reservation.reservation_date).format('dddd') === 'Tuesday') {
+      const message = 'Date provided is a Tuesday, restaurant is closed.'
+      next({ status: 400, message: message })
+    }
+    if (moment(reservation.reservation_date) < moment()) {
+      /* console.log("date", reservation.reservation_date)
+      console.log("today", moment())
+      console.log("fromnow", moment(reservation.reservation_date).fromNow()) */
+      const message = 'Reservation must be for a future date.'
+      next({ status: 400, message: message })
+    }
     return next()
   }
   const message = `reservation_date is invalid.`

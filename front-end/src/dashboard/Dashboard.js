@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import { useParams, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
 /**
  * Defines the dashboard page.
@@ -37,13 +37,15 @@ function Dashboard({ date }) {
   }
 
   const content = reservations.map((res, index) => (
-    <tr key={index}>
-      <td>{res.first_name}</td>
-      <td>{res.last_name}</td>
-      <td>{res.mobile_number}</td>
-      <td>{res.reservation_date}</td>
-      <td>{res.reservation_time}</td>
-    </tr>
+    <tbody>
+      <tr key={index}>
+        <td>{res.first_name}</td>
+        <td>{res.last_name}</td>
+        <td>{res.mobile_number}</td>
+        <td>{res.reservation_date}</td>
+        <td>{res.reservation_time}</td>
+      </tr>
+    </tbody>
   ))
 
   return (
@@ -55,11 +57,13 @@ function Dashboard({ date }) {
       <ErrorAlert error={reservationsError} />
       <table className="table">
         <thead>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Mobile Number</th>
-          <th>Reservation Date</th>
-          <th>Reservation Time</th>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Mobile Number</th>
+            <th>Reservation Date</th>
+            <th>Reservation Time</th>
+          </tr>
         </thead>
         {content}
       </table>

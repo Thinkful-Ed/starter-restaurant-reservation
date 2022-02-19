@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react"
+import React, { useState } from "React"
 import { useHistory } from "react-router-dom"
 import ErrorAlert from "./ErrorAlert"
-const { listReservations, createReservation } = require("../utils/api")
+const moment = require("moment")
+const { createReservation } = require("../utils/api")
 
 export default function NewReservation() {
 
@@ -34,6 +35,10 @@ export default function NewReservation() {
         event.preventDefault()
         const abortController = new AbortController()
         const newReservation = { ...formData }
+        if (!moment(formDate.reservation_date, 'YYYY-MM-DD', true).isValid()) {
+            setError('Invalid date.')
+            return
+        }
         const response = await createReservation(newReservation, abortController.signal)
         console.log(response)
         if (response.message) {
