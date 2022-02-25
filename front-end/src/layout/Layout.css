@@ -1,4 +1,10 @@
 .side-bar {
   background-color: #393a44;
   min-width: 200px;
+  min-height: 100vh;
+  height: 100%;
+}
+
+.max-height {
+  max-height: 100vh;
 }

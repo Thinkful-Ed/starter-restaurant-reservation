@@ -40,7 +40,9 @@ async function hasValidDate (req, res, next) {
       const message = 'Date provided is a Tuesday, restaurant is closed.'
       next({ status: 400, message: message })
     }
-    if (moment(reservation.reservation_date) < moment()) {
+    if (moment(reservation.reservation_date, "YYYY-MM-DD").isBefore(moment().format("HH:mm").add(1, 'hours'))) {
+      console.log("date", reservation.reservation_date)
+      console.log("moment", moment())
       /* console.log("date", reservation.reservation_date)
       console.log("today", moment())
       console.log("fromnow", moment(reservation.reservation_date).fromNow()) */
@@ -55,8 +57,20 @@ async function hasValidDate (req, res, next) {
 
 function hasValidTime(req, res, next) {
   const reservation = res.locals.reservation
-  const result = moment(reservation.reservation_time, "kk:mm", true).isValid()
+  const resTime = moment(reservation.reservation_time, "kk:mm", true)
+  const result = resTime.isValid()
   if (result) {
+    const openTime = moment("10:30", "HH:mm")
+    const latestResTime = moment("21:30", "HH:mm")
+    if (resTime.isBefore(openTime)) {
+      next({ status: 400, message: "Restaurant opens at 10:30."})
+    }
+    if (latestResTime.isBefore(resTime)) {
+      next({ status: 400, message: "Latest reservation time is 9:30 PM."})
+    }
+
+    // console.log("res time before open:", resTime.isBefore(openTime))
+    // console.log("reservation time", reservation.reservation_time)
     return next()
   }
   const message = `reservation_time is invalid.`

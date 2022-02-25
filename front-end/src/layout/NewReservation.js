@@ -1,4 +1,4 @@
-import React, { useState } from "React"
+import React, { useState } from "react"
 import { useHistory } from "react-router-dom"
 import ErrorAlert from "./ErrorAlert"
 const moment = require("moment")
@@ -35,17 +35,16 @@ export default function NewReservation() {
         event.preventDefault()
         const abortController = new AbortController()
         const newReservation = { ...formData }
-        if (!moment(formDate.reservation_date, 'YYYY-MM-DD', true).isValid()) {
+        /* if (!moment(formData.reservation_date, 'YYYY-MM-DD', true).isValid()) {
             setError('Invalid date.')
             return
-        }
+        } */
         const response = await createReservation(newReservation, abortController.signal)
-        console.log(response)
         if (response.message) {
             setError(response)
             return
         }
-        history.push(`/dashboard/?date=${formData.date}`)
+        history.push(`/dashboard/?date=${formData.reservation_date}`)
     }
 
     function handleCancel() {
@@ -154,3 +153,11 @@ export default function NewReservation() {
     )
 
 }
+
+/**
+ * a way to keep track of sessions (manually or express.sessions) req.session property
+ * (req.session.user)
+ * 
+ * bcrypt library (will encode passwords)
+ * 
+ */

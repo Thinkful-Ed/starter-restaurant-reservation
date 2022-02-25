@@ -48,5 +48,7 @@
   "keywords": [],
   "author": "Thinkful, Inc.",
   "license": "UNLICENSED",
-  "dependencies": {}
+  "dependencies": {
+    "moment": "^2.29.1"
+  }
 }

@@ -41,6 +41,7 @@ function Dashboard({ date }) {
       <tr key={index}>
         <td>{res.first_name}</td>
         <td>{res.last_name}</td>
+        <td>{res.people}</td>
         <td>{res.mobile_number}</td>
         <td>{res.reservation_date}</td>
         <td>{res.reservation_time}</td>
@@ -60,6 +61,7 @@ function Dashboard({ date }) {
           <tr>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>People</th>
             <th>Mobile Number</th>
             <th>Reservation Date</th>
             <th>Reservation Time</th>
