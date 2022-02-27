@@ -1,15 +1,20 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useHistory } from "react-router-dom"
+import { createTable, listTables } from "../utils/api"
 import ErrorAlert from "./ErrorAlert"
 
 export default function NewTable() {
     // form with table name at least 2 characters and capacity 
     //which must be at least 1
 
+    const history = useHistory()
+
     const initialFormData = {
         table_name: "",
         capacity: 1
     }
 
+    const [tables, setTables] = useState([])
     const [error, setError] = useState(null)
     const [formData, setFormData] = useState({ ...initialFormData })
 
@@ -22,8 +27,22 @@ export default function NewTable() {
 
     async function handleSubmit(event) {
         event.preventDefault()
-        return
+        const abortController = new AbortController()
+        const newTable = { ...formData }
+        const response = await createTable(newTable, abortController.signal)
+        if (response.message) {
+            setError(response)
+            return
+        }
     }
+
+    function handleCancel() {
+        history.push("/")
+    }
+
+    
+
+    
 
     return (
         <div>
@@ -59,6 +78,17 @@ export default function NewTable() {
                         name="submit"
                         className="btn btn-primary"
                     />
+                </label>
+                <label htmlFor="cancel">
+                    <button 
+                        type="cancel"
+                        id="cancel"
+                        name="cancel"
+                        className="btn btn-primary"
+                        onClick={handleCancel}
+                    >
+                        Cancel
+                    </button>
                 </label>
             </form>
         </div>

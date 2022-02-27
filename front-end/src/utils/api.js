@@ -71,12 +71,42 @@ export async function listReservations(params, signal) {
 export async function createReservation(newReservation, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`)
   try {
-
     const response = await fetchJson(url, {
       method: 'POST',
       headers,
       signal,
       body: JSON.stringify({ data: newReservation }),
+    }, [])
+    return response
+  } catch (error) {
+    console.error(error)
+    return error
+  }
+}
+
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`)
+  try {
+    const response = await fetchJson(url, {
+      method: 'GET',
+      headers,
+      signal,
+    }, [])
+    return response
+  } catch(error) {
+    console.error(error)
+    return error
+  }
+}
+
+export async function createTable(newTable, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`)
+  try {
+    const response = await fetchJson(url, {
+      method: 'POST',
+      headers,
+      signal,
+      body: JSON.stringify({ data: newTable }),
     }, [])
     return response
   } catch (error) {

@@ -35,10 +35,6 @@ export default function NewReservation() {
         event.preventDefault()
         const abortController = new AbortController()
         const newReservation = { ...formData }
-        /* if (!moment(formData.reservation_date, 'YYYY-MM-DD', true).isValid()) {
-            setError('Invalid date.')
-            return
-        } */
         const response = await createReservation(newReservation, abortController.signal)
         if (response.message) {
             setError(response)

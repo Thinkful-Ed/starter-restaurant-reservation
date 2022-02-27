@@ -40,7 +40,8 @@ async function hasValidDate (req, res, next) {
       const message = 'Date provided is a Tuesday, restaurant is closed.'
       next({ status: 400, message: message })
     }
-    if (moment(reservation.reservation_date, "YYYY-MM-DD").isBefore(moment().format("HH:mm").add(1, 'hours'))) {
+    //moment(reservation.reservation_date, "YYYY-MM-DD") < moment()
+    if (reservation.reservation_date < new Date()) {
       console.log("date", reservation.reservation_date)
       console.log("moment", moment())
       /* console.log("date", reservation.reservation_date)
