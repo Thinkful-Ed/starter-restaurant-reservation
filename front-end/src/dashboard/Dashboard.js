@@ -25,6 +25,7 @@ function Dashboard({ date }) {
 		date = query
 	}
 
+	
 	useEffect(loadDashboard, [date]);
 
 	function loadDashboard() {
@@ -42,71 +43,76 @@ function Dashboard({ date }) {
         async function loadTablesFromApi() {
             try {
                 const response = await listTables(abortController.signal)
-                setTables(response)
+                const tables = response.map((table) => (
+					{ ...table, isOccupied: false }
+				))
+				setTables(tables)
             } catch(error) {
                 setError(error)
             }
         }
         loadTablesFromApi()
-    }, [])
+    }, [reservations])
 
-	const tablesContent = tables.map((table, index) => (
-		<tbody>
-			<tr key={index}>
-				<td>{table.table_name}</td>
-				<td>{table.capacity}</td>
-			</tr>
-		</tbody>
-	))
-
-
-  const reservationsContent = reservations.map((reservation, index) => (
-    <tbody>
-      <tr key={index}>
-        <td>{reservation.first_name}</td>
-        <td>{reservation.last_name}</td>
-        <td>{reservation.people}</td>
-        <td>{reservation.mobile_number}</td>
-        <td>{reservation.reservation_date}</td>
-        <td>{reservation.reservation_time}</td>
-        <td><Link to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link></td>
-      </tr>
-    </tbody>
-  ))
+	
+	
+	const reservationsContent = reservations.map((reservation, index) => (		
+		<tr key={index}>
+			<td>{reservation.first_name}</td>
+			<td>{reservation.last_name}</td>
+			<td>{reservation.people}</td>
+			<td>{reservation.mobile_number}</td>
+			<td>{reservation.reservation_date}</td>
+			<td>{reservation.reservation_time}</td>
+			<td><Link className="btn btn-dark" to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link></td>
+      	</tr>
+  	))
+  
+  	const tablesContent = tables.map((table, index) => (  
+		<tr key={index}>
+			<td>{table.table_name}</td>
+			<td>{table.capacity}</td>
+			{
+				table.isOccupied
+					? <td className="text-danger">Occupied</td> 
+					: <td className="text-success">Open</td>
+			}
+		</tr>
+  	))
 
   	return (
 		<main>
 			<h1>Dashboard</h1>
-			<div className="d-md-flex mb-3">
-				<h4 className="mb-0">Reservations for date {date}</h4>
+			<div className="">
+				<h4 className="mb-0">Reservations for {date}</h4>
 			</div>
 			<ErrorAlert error={error} />
-			<div>
-				<table className="table">
-					<thead>
-						<tr>
-							<th>First Name</th>
-							<th>Last Name</th>
-							<th>People</th>
-							<th>Mobile Number</th>
-							<th>Reservation Date</th>
-							<th>Reservation Time</th>
-						</tr>
-					</thead>
-					{reservationsContent}
-				</table>
+			<div className="row">
+				<div className="col-8 m-0">
+					<table className="table table-striped">
+						<thead className="thead-dark">
+								<th>First Name</th>
+								<th>Last Name</th>
+								<th>People</th>
+								<th>Mobile Number</th>
+								<th>Reservation Date</th>
+								<th>Reservation Time</th>
+								<th></th>
+						</thead>						
+						{reservationsContent}						
+					</table>
+				</div>
+				<div className="col-4 m-0">
+					<table className="table table-striped">
+						<thead className="thead-dark">
+								<th>Table Name</th>
+								<th>Capacity</th>
+								<th>Status</th>							
+						</thead>						
+						{tablesContent}						
+					</table>
+				</div>
 			</div>
-			<div>
-                <table className="table overflow-auto">
-                    <thead>
-                        <tr>
-                            <th>Table Name</th>
-                            <th>Capacity</th>
-                        </tr>
-                    </thead>
-                    {tablesContent}
-                </table>
-            </div>
 		</main>
   	);
 }
