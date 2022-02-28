@@ -15,15 +15,6 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
 
   useEffect(loadDashboard, [date]);
-  useEffect(() => {
-
-    fetch('https://name-generator-backend.herokuapp.com/generate')
-  
-      .then((res) => res.json())
-  
-      .then((nme) => setReservations([nme]))
-  
-  }, [])
 
   function loadDashboard() {
     const abortController = new AbortController();
