@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
+
+
 /**
  * Defines the dashboard page.
  * @param date
@@ -13,6 +15,15 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
 
   useEffect(loadDashboard, [date]);
+  useEffect(() => {
+
+    fetch('https://name-generator-backend.herokuapp.com/generate')
+  
+      .then((res) => res.json())
+  
+      .then((nme) => setReservations([nme]))
+  
+  }, [])
 
   function loadDashboard() {
     const abortController = new AbortController();
