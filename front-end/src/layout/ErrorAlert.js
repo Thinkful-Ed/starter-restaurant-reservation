@@ -9,11 +9,10 @@ import React from "react";
  */
 
 function ErrorAlert({ error }) {
-  return (
-    error && (
-      <div className="alert alert-danger m-2">Error: {error.message}</div>
-    )
-  );
+  // If there's no error, the error is not an array, or the error has no length, there's no problem.
+  if (!error || !Array.isArray(error) || !error.length) return null;
+  // Otherwise, return each error in it's own error message box.
+  else return (error.map((err, index) => {return <div key={index} className="alert alert-danger m-2">Error: {err}</div>}));
 }
 
 export default ErrorAlert;
