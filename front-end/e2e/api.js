@@ -47,7 +47,7 @@ async function fetchJson(url, options, onCancel) {
 }
 
 /**
- * Creates a new reservation
+ * Creates a new reservation 
  * @returns {Promise<[reservation]>}
  *  a promise that resolves to the newly created reservation.
  */
