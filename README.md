@@ -10,7 +10,7 @@ There are no user stories for logging: it is expected that you will add logging 
 
 ## Existing files
 
-This repository is set up as a *monorepo*, meaning that the frontend and backend projects are in one repository. This allows you to open both projects in the same editor.
+This repository is set up as a _monorepo_, meaning that the frontend and backend projects are in one repository. This allows you to open both projects in the same editor.
 
 As you work through the user stories listed later in this document, you will be writing code that allows your frontend and backend applications to talk to each other. You will also write code to allow your controllers and services to connect to, and query, your PostgreSQL database via [Knex](http://knexjs.org/).
 
@@ -216,8 +216,8 @@ Use in controllers as part of `module.exports`. For example:
 
 ```javascript
 module.exports = {
-	create: asyncErrorBoundary(create)
-}
+  create: asyncErrorBoundary(create),
+};
 ```
 
 ### US-02 Create reservation on a future, working date
@@ -338,7 +338,7 @@ so that I can see which reservation parties are seated, and finished reservation
    - clicking the Finish button associated with the table changes the reservation status to "finished" and removes the reservation from the dashboard.
    - to set the status, PUT to `/reservations/:reservation_id/status` with a body of `{data: { status: "<new-status>" } }` where `<new-status>` is one of booked, seated, or finished. Please note that this is only tested in the back-end for now.
 
-> **Hint** You can add a field to a table in a migration `up` method by defining a new column. E.g. `table.string("last_name", null).notNullable();` will create a new last_name column.  Be sure to remove the column in the `down` function using `dropColumn()`. E.g. `table.dropColumn("last_name");`
+> **Hint** You can add a field to a table in a migration `up` method by defining a new column. E.g. `table.string("last_name", null).notNullable();` will create a new last_name column. Be sure to remove the column in the `down` function using `dropColumn()`. E.g. `table.dropColumn("last_name");`
 
 > **Hint** Use [`Knex.transaction()`](http://knexjs.org/#Transactions) to make sure the `tables` and `reservations` records are always in sync with each other.
 
