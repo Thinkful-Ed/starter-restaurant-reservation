@@ -1,6 +1,10 @@
-const knex = require("../db/connection");
-const tableName = "reservations"
+const knex = require('../db/connection')
+const tableName = 'reservations'
 
 function list() {
-    return knex(tableName).select("*");
-  }
+  return knex(tableName).select('*')
+}
+
+module.exports = {
+  list,
+}
