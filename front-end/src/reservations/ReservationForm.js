@@ -11,7 +11,7 @@ export default function ReservationForm({ formData, handleSubmit, handleChange, 
                 <label htmlFor="last_name">First Name</label>
                 <input required name="last_name" type="text" className="form-control" value={formData.last_name} placeholder="Last Name" onChange={handleChange} />
                 <label htmlFor="mobile_number">Mobile Phone</label>
-                <input required name="mobile_number" type="text" className="form-control" value={formData.mobile_number} placeholder="555-555-5555" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" onChange={handleChange} />
+                <input required name="mobile_number" type="text" className="form-control" value={formData.mobile_number} placeholder="555-555-5555" onChange={handleChange} />
             </div>
             <div className="form-group">
                 <label htmlFor="reservation_date">Date</label>
