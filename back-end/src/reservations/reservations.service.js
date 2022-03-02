@@ -5,16 +5,16 @@ function list(date) {
   return knex(tableName)
     .select('*')
     .where({ reservation_date: date })
-    .orderBy("reservation_time")
+    .orderBy('reservation_time')
 }
 
 function create(reservation) {
-    return knex(tableName)
-      .insert(reservation)
-      .returning("*")
-      .then((createdReservations) => createdReservations[0]);
-  
-  }
+  return knex(tableName)
+    .insert(reservation)
+    .returning('*')
+    .then((createdReservations) => createdReservations[0])
+}
+
 module.exports = {
   list,
   create,

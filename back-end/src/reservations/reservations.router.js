@@ -15,7 +15,6 @@ router.route("/new").post(controller.create).all(methodNotAllowed);
 router
   .route('/')
   .get(controller.list)
-  .post(controller.create)
   .all(methodNotAllowed)
 
 module.exports = router
