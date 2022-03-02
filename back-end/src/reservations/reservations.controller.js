@@ -14,8 +14,12 @@ const exists = (key) => {
 // Checks that the reservation's date and time are not an invalid date or time.
 const dateTimeValid = (req, res, next) => {
   const { data: { reservation_date, reservation_time } = {} } = req.body;
+  const reservation = new Date(`${reservation_date}T${reservation_time}Z`);
+  const now = new Date();
   if (reservation_date === "not-a-date") next({status: 400, message:`reservation_date not a valid date.`});
   else if (reservation_time === "not-a-time") next({status: 400, message:`reservation_time not a valid time.`})
+  else if (reservation.getUTCDay() === 2) next({status: 400, message:`Your reservation cannot be on a Tuesday (closed).`})
+  else if (reservation < now) next({status: 400, message:`Your reservation must be in the future.`})
   else next();
 }
 
