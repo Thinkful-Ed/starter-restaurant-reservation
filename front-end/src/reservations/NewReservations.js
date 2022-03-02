@@ -39,7 +39,7 @@ function NewReservation() {
             if (reservation.getUTCDay() === 2 && reservation < now) SetError(["The restaurant is closed on Tuesdays!", "Your reservation cannot be in the past!"])
             else if (reservation.getUTCDay() === 2) SetError(["The restaurant is closed on Tuesdays!"])
             else if (reservation < now) SetError(["Your reservation cannot be in the past!"])
-            else SetError(null)
+            else SetError(null);
         }
         if (event.target.name === "people") setFormData({ ...formData, [event.target.name]: Number(event.target.value)})
         else setFormData({ ...formData, [event.target.name]: event.target.value})
@@ -48,11 +48,17 @@ function NewReservation() {
     // Once submitted, create the reservation and return to the dashboard on that reservation's date. Otherwise show an error.
     async function handleSubmit(event) {
         event.preventDefault();
-        try {
-            await createReservation(formData);
-            history.push(`/dashboard?date=${formData.reservation_date}`)
-        } catch (err) {
-            SetError([err.message]);
+        const splitTime = formData.reservation_time.split(":");
+        const hour = splitTime[0];
+        const minute = splitTime[1];
+        if (hour < 10 || hour > 21 || (hour == 10 && minute < 30) || (hour == 21 && minute > 30)) SetError(["Your reservation time must be between 10:30 AM and 9:30 PM"]);
+        if (!error) {
+            try {
+                await createReservation(formData);
+                history.push(`/dashboard?date=${formData.reservation_date}`)
+            } catch (err) {
+                SetError([err.message]);
+            }
         }
     }
 
