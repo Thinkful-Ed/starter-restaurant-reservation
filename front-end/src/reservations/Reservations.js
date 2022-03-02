@@ -19,12 +19,12 @@ const Reservations = () => {
   let api = `${API_BASE_URL}/reservations/new`
   const history = useHistory()
 
-  useEffect(() => {
-    ;(async function () {
-      let data = await fetch(api).then((res) => res.json())
-      updateFetchedData(data)
-    })()
-  }, [api])
+//   useEffect(() => {
+//     ;(async function () {
+//       let data = await fetch(api).then((res) => res.json())
+//       updateFetchedData(data)
+//     })()
+//   }, [api])
 
   const handleChange = ({ target }) => {
     setFormData({
@@ -37,6 +37,9 @@ const Reservations = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     console.log('Submitted:', formData)
+
+//Post data here
+
     setFormData({ ...initialFormState })
     history.push(`/dashboard?date=${formData.reservation_date}`)
   }

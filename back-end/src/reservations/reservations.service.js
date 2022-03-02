@@ -8,6 +8,14 @@ function list(date) {
     .orderBy("reservation_time")
 }
 
+function create(reservation) {
+    return knex(tableName)
+      .insert(reservation)
+      .returning("*")
+      .then((createdReservations) => createdReservations[0]);
+  
+  }
 module.exports = {
   list,
+  create,
 }
