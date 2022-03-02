@@ -36,11 +36,9 @@ const Reservations = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-
     console.log('Submitted:', formData)
-
     setFormData({ ...initialFormState })
-    history.push(`/dashboard`)
+    history.push(`/dashboard?date=${formData.reservation_date}`)
   }
 
   const handleCancel = (event) => {
@@ -97,11 +95,11 @@ const Reservations = () => {
       <br />
 
       <label htmlFor="reservation_date">
-        Time of Reservation:
+        Date of Reservation:
         <input
-          id="date"
+          id="reservation_date"
           type="date"
-          name="date"
+          name="reservation_date"
           onChange={handleChange}
           value={formData.reservation_date}
           //   required
@@ -113,9 +111,9 @@ const Reservations = () => {
       <label htmlFor="reservation_time">
         Time of Reservation:
         <input
-          id="date"
-          type="date"
-          name="date"
+          id="reservation_time"
+          type="text"
+          name="reservation_time"
           onChange={handleChange}
           value={formData.reservation_time}
           //   required
@@ -127,9 +125,9 @@ const Reservations = () => {
       <label htmlFor="people">
         Number of People:
         <input
-          id="number"
+          id="people"
           type="text"
-          name="number"
+          name="people"
           onChange={handleChange}
           value={formData.people}
           //   required
@@ -139,12 +137,7 @@ const Reservations = () => {
       <br />
 
       <button type="submit">Submit</button>
-      <button
-        bsSize="small"
-        style={{ width: '48%' }}
-        type="button"
-        onClick={handleCancel}
-      >
+      <button type="button" onClick={handleCancel}>
         Cancel
       </button>
     </form>
