@@ -31,6 +31,22 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
+      <br />
+      <button
+        onClick={()=>{}}
+      >
+        Previous
+      </button>
+      <button
+        onClick={()=>{}}
+      >
+        Today
+      </button>
+      <button
+        onClick={()=>{}}
+      >
+        Next
+      </button>
     </main>
   );
 }

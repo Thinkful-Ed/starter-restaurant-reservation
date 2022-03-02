@@ -11,14 +11,17 @@ const reservationsRouter = require("./reservations/reservations.router");
 
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
+//Routers
 app.use("/reservations", reservationsRouter);
 app.use("/tables", reservationsRouter);
 app.use("/search", reservationsRouter);
 app.use("/dashboard", reservationsRouter);
 
+//Error handling
 app.use(notFound);
 app.use(errorHandler);
 
