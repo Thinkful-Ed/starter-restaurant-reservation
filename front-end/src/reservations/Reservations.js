@@ -120,7 +120,6 @@ const Reservations = () => {
         </div>
         <div className="row">
           <label htmlFor="reservation_date">
-            Date of Reservation:
             <br/>
             <input
               id="reservation_date"
