@@ -21,8 +21,10 @@ export default function ReservationForm({ formData, handleSubmit, handleChange, 
                 <label htmlFor="people">Number of People:</label>
                 <input required name="people" type="number" className="form-control" value={formData.people} onChange={handleChange} min="1"/>
             </div>
-            { error ? <button type="submit" className="btn btn-primary mr-2" disabled>Submit</button> : <button type="submit" className="btn btn-primary mr-2">Submit</button>}
+            <button type="submit" className="btn btn-primary mr-2">Submit</button>
             <button className="btn btn-secondary" type="button" onClick={() => history.goBack()}>Cancel</button>
         </form>
     )
 }
+
+//{ error ? <button type="submit" className="btn btn-primary mr-2" disabled>Submit</button> : <button type="submit" className="btn btn-primary mr-2">Submit</button>}

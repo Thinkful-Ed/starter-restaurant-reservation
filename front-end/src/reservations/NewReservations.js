@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationForm from "./ReservationForm";
-import { today, formatAsDate } from "../utils/date-time";
+import { today, formatAsDate, formatAsTime } from "../utils/date-time";
 import { createReservation } from "../utils/api";
 import { useHistory } from "react-router-dom";
-
 /**
  * Defines the dashboard page.
  * @param date
@@ -33,14 +32,6 @@ function NewReservation() {
 
     // Every time information is changed, update and check for errors or inconsistencies.
     const handleChange = (event) => {
-        if(event.target.name === "reservation_date") {
-            const reservation = new Date(`${event.target.value}`);
-            const now = new Date(formatAsDate(today()));
-            if (reservation.getUTCDay() === 2 && reservation < now) SetError(["The restaurant is closed on Tuesdays!", "Your reservation cannot be in the past!"])
-            else if (reservation.getUTCDay() === 2) SetError(["The restaurant is closed on Tuesdays!"])
-            else if (reservation < now) SetError(["Your reservation cannot be in the past!"])
-            else SetError(null);
-        }
         if (event.target.name === "people") setFormData({ ...formData, [event.target.name]: Number(event.target.value)})
         else setFormData({ ...formData, [event.target.name]: event.target.value})
     }
@@ -48,18 +39,30 @@ function NewReservation() {
     // Once submitted, create the reservation and return to the dashboard on that reservation's date. Otherwise show an error.
     async function handleSubmit(event) {
         event.preventDefault();
+        const errors = [];
+
+        // Handle Validation of Date
+        const reservation = new Date(`${formData.reservation_date}T${formData.reservation_time}Z`);
+        const now = new Date();
+        if (reservation.getUTCDay() === 2 && reservation < now) errors.push("The restaurant is closed on Tuesdays!", "Your reservation cannot be in the past!");
+        else if (reservation.getUTCDay() === 2) errors.push("The restaurant is closed on Tuesdays!");
+        else if (reservation < now) errors.push("Your reservation cannot be in the past!");
+
+        // Handle Validation of Time
         const splitTime = formData.reservation_time.split(":");
         const hour = splitTime[0];
         const minute = splitTime[1];
-        if (hour < 10 || hour > 21 || (hour == 10 && minute < 30) || (hour == 21 && minute > 30)) SetError(["Your reservation time must be between 10:30 AM and 9:30 PM"]);
-        if (!error) {
+        if (hour < 10 || hour > 21 || (hour == 10 && minute < 30) || (hour == 21 && minute > 30)) errors.push("Your reservation time must be between 10:30 AM and 9:30 PM");
+
+        if (!errors.length) {
             try {
                 await createReservation(formData);
                 history.push(`/dashboard?date=${formData.reservation_date}`)
             } catch (err) {
-                SetError([err.message]);
+                errors.push(err.message);
+                SetError(errors);
             }
-        }
+        } else SetError(errors);
     }
 
     return (
