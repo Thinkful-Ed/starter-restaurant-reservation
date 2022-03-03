@@ -16,15 +16,15 @@ const Reservations = () => {
   const [fetchedData, updateFetchedData] = useState([])
   const { data } = fetchedData
 
-  let api = `${API_BASE_URL}/reservations/new`
+  let api = `${API_BASE_URL}/reservations`
   const history = useHistory()
 
-//   useEffect(() => {
-//     ;(async function () {
-//       let data = await fetch(api).then((res) => res.json())
-//       updateFetchedData(data)
-//     })()
-//   }, [api])
+  useEffect(() => {
+    ;(async function () {
+      let data = await fetch(api).then((res) => res.json())
+      updateFetchedData(data)
+    })()
+  }, [api])
 
   const handleChange = ({ target }) => {
     setFormData({
@@ -38,17 +38,33 @@ const Reservations = () => {
     event.preventDefault()
     console.log('Submitted:', formData)
 
-//Post data here
+    //Must be in the future.Cannot be scheduled on a Tuesday.
+    dateValidation()
+
+    //Post data here
 
     setFormData({ ...initialFormState })
     history.push(`/dashboard?date=${formData.reservation_date}`)
+  }
+
+  const dateValidation = async () => {
+    // if (console.error) {
+    //   return (
+    //     <div className="alert danger-alert">
+    //       Please fix...
+    //       <ul>
+    //         <li>Must be in the future.</li>
+    //         <li>Cannot be scheduled on a Tuesday.</li>
+    //       </ul>
+    //     </div>
+    //   )
+    // }
   }
 
   const handleCancel = (event) => {
     event.preventDefault()
 
     console.log('Canceled')
-
     setFormData({ ...initialFormState })
     history.goBack()
   }
@@ -139,10 +155,10 @@ const Reservations = () => {
 
       <br />
 
-      <button type="submit">Submit</button>
       <button type="button" onClick={handleCancel}>
         Cancel
       </button>
+      <button type="submit">Submit</button>
     </form>
   )
 }

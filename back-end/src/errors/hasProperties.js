@@ -4,6 +4,7 @@ function hasProperties(...properties) {
 
     try {
       properties.forEach((property) => {
+        console.log(data)
         if (!data[property]) {
           const error = new Error(`A '${property}' property is required.`)
 
