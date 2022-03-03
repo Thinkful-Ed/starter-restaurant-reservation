@@ -1,9 +1,11 @@
 const knex = require("../db/connection");
 
 function list(reservation_date) {
-  return knex("reservations")
-    .where({ reservation_date })
-    .orderBy("reservation_time");
+  if (reservation_date)
+    return knex("reservations")
+      .where({ reservation_date })
+      .orderBy("reservation_time");
+  return knex("reservations").select();
 }
 
 function create(formData) {
