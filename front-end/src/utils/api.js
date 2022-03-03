@@ -10,7 +10,7 @@ const API_BASE_URL =
 
 /**
  * Defines the default headers for these functions to work with `json-server`
- */
+ */ 
 const headers = new Headers();
 headers.append("Content-Type", "application/json");
 
@@ -66,4 +66,16 @@ export async function listReservations(params, signal) {
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
+}
+
+export async function createReservation(reservation, signal) {
+  reservation.people = parseInt(reservation.people);
+  const url = `${API_BASE_URL}/reservations`;
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  };
+  return await fetchJson(url, options, reservation);
 }

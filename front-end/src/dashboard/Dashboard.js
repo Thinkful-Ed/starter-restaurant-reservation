@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useLocation, useHistory } from "react-router-dom";
 import { listReservations } from "../utils/api";
+import { previous, next } from "../utils/date-time";
+import { today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 
 /**
@@ -9,8 +12,13 @@ import ErrorAlert from "../layout/ErrorAlert";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  const history = useHistory();
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const { search } = useLocation();
+  const newDate = new URLSearchParams(search).get("date");
+
+  if (search) date = newDate;
 
   useEffect(loadDashboard, [date]);
 
@@ -23,6 +31,18 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  const handlePrevious = () => {
+    history.push(`/dashboard?date=${previous(date)}`);
+  };
+
+  const handleToday = () => {
+    history.push(`/dashboard?date=${today()}`);
+  };
+
+  const handleNext = () => {
+    history.push(`/dashboard?date=${next(date)}`);
+  };
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -30,7 +50,20 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <ErrorAlert error={reservationsError} />
+
       {JSON.stringify(reservations)}
+
+      <div className="mt-3">
+        <button className="btn btn-secondary mr-2" onClick={handlePrevious}>
+          Previous
+        </button>
+        <button className="btn btn-primary mr-2" onClick={handleToday}>
+          Today
+        </button>
+        <button className="btn btn-secondary" onClick={handleNext}>
+          Next
+        </button>
+      </div>
     </main>
   );
 }
