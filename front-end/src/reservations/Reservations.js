@@ -87,98 +87,101 @@ const Reservations = () => {
     <form onSubmit={handleSubmit}>
       <div className="container">
         <div className="row">
-          <div className="col-4">
-            <label htmlFor="first_name">
-              First Name:
-              <input
-                id="first_name"
-                type="text"
-                name="first_name"
-                onChange={handleChange}
-                value={formData.first_name}
-                //   required
-              />
-            </label>
+          <label htmlFor="first_name">
+            First Name:
+            <br/>
+            <input
+              id="first_name"
+              type="text"
+              name="first_name"
+              onChange={handleChange}
+              value={formData.first_name}
+              //   required
+            />
+          </label>
 
-            <br />
-          </div>
-          <div className="col-4">
-            <label htmlFor="mobile_number">
-              Phone Number:
-              <input
-                id="mobile_number"
-                type="text"
-                name="mobile_number"
-                onChange={handleChange}
-                value={formData.mobile_number}
-                //   required
-              />
-            </label>
-
-            <br />
-          </div>
-          <div className="col-4">
-            <label htmlFor="reservation_date">
-              Date of Reservation:
-              <input
-                id="reservation_date"
-                type="date"
-                name="reservation_date"
-                onChange={handleChange}
-                value={formData.reservation_date}
-                //   required
-              />
-            </label>
-
-            <br />
-          </div>
+          <br />
         </div>
         <div className="row">
-          <div className="col-4">
-            <label htmlFor="last_name">
-              Last Name:
-              <input
-                id="last_name"
-                type="text"
-                name="last_name"
-                onChange={handleChange}
-                value={formData.last_name}
-                //   required
-              />
-            </label>
+          <label htmlFor="mobile_number">
+            Phone Number:
+            <br/>
+            <input
+              id="mobile_number"
+              type="text"
+              name="mobile_number"
+              onChange={handleChange}
+              value={formData.mobile_number}
+              //   required
+            />
+          </label>
 
-            <br />
-          </div>
-          <div className="col-4">
-            <label htmlFor="people">
-              Number of People:
-              <input
-                id="people"
-                type="text"
-                name="people"
-                onChange={handleChange}
-                value={formData.people}
-                //   required
-              />
-            </label>
+          <br />
+        </div>
+        <div className="row">
+          <label htmlFor="reservation_date">
+            Date of Reservation:
+            <br/>
+            <input
+              id="reservation_date"
+              type="date"
+              name="reservation_date"
+              onChange={handleChange}
+              value={formData.reservation_date}
+              //   required
+            />
+          </label>
 
-            <br />
-          </div>
-          <div className="col-4">
-            <label htmlFor="reservation_time">
-              Time of Reservation:
-              <input
-                id="reservation_time"
-                type="text"
-                name="reservation_time"
-                onChange={handleChange}
-                value={formData.reservation_time}
-                //   required
-              />
-            </label>
+          <br />
+        </div>
 
-            <br />
-          </div>
+        <div className="row">
+          <label htmlFor="last_name">
+            Last Name:
+            <br/>
+            <input
+              id="last_name"
+              type="text"
+              name="last_name"
+              onChange={handleChange}
+              value={formData.last_name}
+              //   required
+            />
+          </label>
+
+          <br />
+        </div>
+        <div className="row">
+          <label htmlFor="people">
+            Number of People:
+            <br/>
+            <input
+              id="people"
+              type="text"
+              name="people"
+              onChange={handleChange}
+              value={formData.people}
+              //   required
+            />
+          </label>
+
+          <br />
+        </div>
+        <div className="row">
+          <label htmlFor="reservation_time">
+            Time of Reservation:
+            <br/>
+            <input
+              id="reservation_time"
+              type="text"
+              name="reservation_time"
+              onChange={handleChange}
+              value={formData.reservation_time}
+              //   required
+            />
+          </label>
+
+          <br />
         </div>
       </div>
 
