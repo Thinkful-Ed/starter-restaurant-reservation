@@ -105,9 +105,11 @@ function NewReservation() {
             <button className="btn btn-primary mr-2" type="submit">
               Submit
             </button>
-            <button className="btn btn-secondary" onClick={handleCancel}>
+            {/* <button className="btn btn-secondary" onClick={handleCancel}>
               Cancel
-            </button>
+            </button> */}
+            <button type="button" onClick={() => history.goBack()}>Cancel</button>
+
           </div>
         </form>
       </div>
