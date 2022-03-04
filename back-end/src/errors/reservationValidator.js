@@ -50,7 +50,6 @@ function reservationValidator(req, res, next) {
   const reserveDate = new Date(data.reservation_date);
   const today = new Date();
   const reserveDay = reserveDate.getUTCDay();
-  console.log(reserveDay)
 
   if (reserveDay === 2)
     next({
