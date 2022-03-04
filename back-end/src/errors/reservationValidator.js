@@ -46,6 +46,25 @@ function reservationValidator(req, res, next) {
       message: "reservation_time property should be a time",
     });
 
+  // US-02
+  const reserveDate = new Date(data.reservation_date);
+  const today = new Date();
+  const reserveDay = reserveDate.getUTCDay();
+
+  if (reserveDay === 2)
+    next({
+      status: 400,
+      message:
+        "The restaurant is closed on Tuesdays. Please select another day.",
+    });
+
+  if (reserveDate <= today)
+    next({
+      status: 400,
+      message:
+        "Reservation must be set in the future. Please select another date.",
+    });
+
   next();
 }
 
