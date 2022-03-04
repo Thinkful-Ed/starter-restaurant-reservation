@@ -26,22 +26,48 @@ function NewReservation() {
   function validate(reservation) {
     const errors = [];
 
-    function isFutureDate({ reservation_date }) {
-      const resDate = new Date(reservation_date);
-      if (resDate < new Date()) {
-        errors.push(new Error("Reservation must be set in the future. Please select another date."));
-      }
+    function isFutureDate({ reservation_date, reservation_time }) {
+      const resDate = new Date(`${reservation_date}T${reservation_time}`);
+      if (resDate < new Date())
+        errors.push(
+          new Error(
+            "Reservation must be set in the future. Please select another date or time."
+          )
+        );
     }
 
     function isTuesday({ reservation_date }) {
       const day = new Date(reservation_date).getUTCDay();
-      if (day === 2) {
-        errors.push(new Error("The restaurant is closed on Tuesdays. Please select another day."));
-      }
+      if (day === 2)
+        errors.push(
+          new Error(
+            "The restaurant is closed on Tuesdays. Please select another day."
+          )
+        );
+    }
+
+    function isBusinessHours({ reservation_time }) {
+      const hour = parseInt(reservation_time.split(":")[0]);
+      const mins = parseInt(reservation_time.split(":")[1]);
+
+      if (hour <= 10 && mins <= 30)
+        errors.push(
+          new Error(
+            "The restaurant opens at 10:30 AM. Please select another time."
+          )
+        );
+
+      if (hour >= 22 || (hour === 21 && mins >= 30))
+        errors.push(
+          new Error(
+            "The restaurant closes at 10:30 PM. Please select a time before 9:30 PM."
+          )
+        );
     }
 
     isFutureDate(reservation);
     isTuesday(reservation);
+    isBusinessHours(reservation);
 
     return errors;
   }
@@ -145,7 +171,6 @@ function NewReservation() {
             <button
               className="btn btn-primary mr-2"
               type="submit"
-              // disabled={reservationsError ? true : false}
             >
               Submit
             </button>
