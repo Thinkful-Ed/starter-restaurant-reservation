@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import { formatAsDate } from "../utils/date-time";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function NewReservation() {
   const history = useHistory();
+  const [reservationsError, setReservationsError] = useState(null);
 
   let initialFormState = {
     first_name: "",
@@ -14,25 +16,63 @@ function NewReservation() {
     reservation_time: "",
     people: "",
   };
+
   const [formData, setFormData] = useState(initialFormState);
 
-  const handleChange = (event) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
+  const handleChange = ({ target: { name, value } }) => {
+    setFormData({ ...formData, [name]: value });
   };
+
+  function validate(reservation) {
+    const errors = [];
+
+    function isFutureDate({ reservation_date }) {
+      const resDate = new Date(reservation_date);
+      if (resDate < new Date()) {
+        errors.push(new Error("Reservation must be set in the future. Please select another date."));
+      }
+    }
+
+    function isTuesday({ reservation_date }) {
+      const day = new Date(reservation_date).getUTCDay();
+      if (day === 2) {
+        errors.push(new Error("The restaurant is closed on Tuesdays. Please select another day."));
+      }
+    }
+
+    isFutureDate(reservation);
+    isTuesday(reservation);
+
+    return errors;
+  }
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const { reservation_date } = await createReservation(formData);
-    const url = `/dashboard?date=${formatAsDate(reservation_date)}`;
-    history.push(url);
+
+    const formErrors = validate(formData);
+    if (formErrors.length) {
+      console.error(formErrors);
+      return setReservationsError(formErrors);
+    }
+
+    try {
+      const { reservation_date } = await createReservation(formData);
+      const url = `/dashboard?date=${formatAsDate(reservation_date)}`;
+      history.push(url);
+    } catch (err) {
+      console.error(err);
+      setReservationsError(err);
+    }
   }
 
   const handleCancel = () => {
     history.goBack();
   };
+
   return (
     <>
       <div className="d-flex flex-column">
+        <ErrorAlert error={reservationsError} />
         <h2>heading</h2>
         <form className="d-flex flex-column h5" onSubmit={handleSubmit}>
           <label htmlFor="first_name">First Name</label>
@@ -102,7 +142,11 @@ function NewReservation() {
             required
           />
           <div className="mt-3">
-            <button className="btn btn-primary mr-2" type="submit">
+            <button
+              className="btn btn-primary mr-2"
+              type="submit"
+              // disabled={reservationsError ? true : false}
+            >
               Submit
             </button>
             <button className="btn btn-secondary" onClick={handleCancel}>
