@@ -9,9 +9,22 @@ import React from "react";
  */
 
 function ErrorAlert({ error }) {
+  if (Array.isArray(error))
+    return (
+      error && (
+        <div className="alert alert-danger m-2">
+          Error:{" "}
+          <li>
+            {error.map((err, index) => (
+              <ul key={index}>{err.message}</ul>
+            ))}
+          </li>
+        </div>
+      )
+    );
   return (
     error && (
-      <div className="alert alert-danger m-2">Error: <li>{error.map((err, index) => <ul key={index}>{err.message}</ul>)}</li></div>
+      <div className="alert alert-danger m-2">Error: {error.message}</div>
     )
   );
 }
