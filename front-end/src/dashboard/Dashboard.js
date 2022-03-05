@@ -18,6 +18,7 @@ function Dashboard({ date }) {
   const history = useHistory();
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
+  const [tableUnassigned, setTableUnassigned] = useState(false);
   const [reservationsError, setReservationsError] = useState(null);
   const [tablesError, setTablesError] = useState(null);
   const { search } = useLocation();
@@ -25,7 +26,7 @@ function Dashboard({ date }) {
 
   if (search) date = newDate;
 
-  useEffect(loadDashboard, [date]);
+  useEffect(loadDashboard, [date, tableUnassigned]);
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -57,7 +58,11 @@ function Dashboard({ date }) {
   ));
   const tablesList = tables.map((table, index) => (
     <li key={index}>
-      <TablesTable table={table} />
+      <TablesTable
+        table={table}
+        reloadVal={tableUnassigned}
+        reload={setTableUnassigned}
+      />
     </li>
   ));
 

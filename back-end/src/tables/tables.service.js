@@ -23,4 +23,12 @@ async function addReservation(reservation_id, table_id) {
     .then((updatedRecords) => updatedRecords[0]);
 }
 
-module.exports = { list, create, read, addReservation };
+async function removeReservation(table_id) {
+  return knex("tables")
+    .select()
+    .where({ table_id })
+    .update({ reservation_id: null }, "*")
+    .then((updatedRecords) => updatedRecords[0]);
+}
+
+module.exports = { list, create, read, addReservation, removeReservation };

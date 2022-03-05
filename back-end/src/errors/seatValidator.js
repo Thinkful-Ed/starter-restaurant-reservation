@@ -13,7 +13,7 @@ async function seatValidator(req, res, next) {
   const { capacity, reservation_id } = await tablesService.read(table_id);
   const seatData = await reservationsService.read(seatId);
   if (!seatData)
-    next({ status: 404, message: `Reservation id ${seatId} does not exit` });
+    next({ status: 404, message: `Reservation id ${seatId} does not exist` });
 
   if (capacity < seatData.people) {
     next({
