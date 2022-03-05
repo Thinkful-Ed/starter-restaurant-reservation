@@ -48,9 +48,9 @@ function reservationValidator(req, res, next) {
     });
 
   // US-02
-  const reserveDate = new Date(reservation_date);
+  const reserveDate = new Date(`${reservation_date}T${reservation_time}`);
   const today = new Date();
-  const reserveDay = reserveDate.getUTCDay();
+  const reserveDay = new Date(reservation_date).getUTCDay();
 
   if (reserveDay === 2)
     next({

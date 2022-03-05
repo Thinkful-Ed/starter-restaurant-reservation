@@ -7,8 +7,19 @@ const reservationValidator = require("../errors/reservationValidator");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 async function list(req, res) {
-  const { date } = req.query;
+  const { date = null } = req.query;
   res.json({ data: await service.list(date) });
+}
+
+async function read(req, res, next) {
+  const { reservation_id } = req.params;
+  const data = await service.read(reservation_id);
+  if (!data)
+    next({
+      status: 404,
+      message: `Reservation id ${reservation_id} does not exit`,
+    });
+  res.json({ data });
 }
 
 async function create(req, res) {
@@ -19,8 +30,6 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [
-    reservationValidator,
-    asyncErrorBoundary(create),
-  ],
+  create: [reservationValidator, asyncErrorBoundary(create)],
+  read: asyncErrorBoundary(read),
 };
