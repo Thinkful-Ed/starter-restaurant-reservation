@@ -8,6 +8,10 @@ function list(reservation_date) {
   return knex("reservations").select();
 }
 
+function read(reservation_id) {
+  return knex("reservations").select().where({ reservation_id }).first();
+}
+
 function create(formData) {
   return knex("reservations")
     .insert(formData)
@@ -15,4 +19,4 @@ function create(formData) {
     .then((createdRecords) => createdRecords[0]);
 }
 
-module.exports = { list, create };
+module.exports = { list, create, read };

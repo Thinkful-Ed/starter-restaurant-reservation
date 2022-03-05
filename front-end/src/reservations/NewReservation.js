@@ -4,6 +4,8 @@ import { createReservation } from "../utils/api";
 import { formatAsDate } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 
+import Form from "../form/Form";
+
 function NewReservation() {
   const history = useHistory();
   const [reservationsError, setReservationsError] = useState(null);
@@ -95,90 +97,65 @@ function NewReservation() {
     history.goBack();
   };
 
+  const firstName = {
+    type: "text",
+    id: "first_name",
+    name: "first_name",
+    required: true,
+  };
+  const lastName = {
+    type: "text",
+    id: "last_name",
+    name: "last_name",
+    required: true,
+  };
+  const mobileNumber = {
+    type: "text",
+    id: "phone_number",
+    name: "mobile_number",
+    required: true,
+  };
+  const reservationDate = {
+    type: "date",
+    id: "date",
+    name: "reservation_date",
+    required: true,
+  };
+  const reservationTime = {
+    type: "time",
+    id: "time",
+    name: "reservation_time",
+    required: true,
+  };
+  const people = {
+    type: "number",
+    id: "number_of_people",
+    name: "people",
+    min: "1",
+    required: true,
+  };
+
+  const inputs = [
+    firstName,
+    lastName,
+    mobileNumber,
+    reservationDate,
+    reservationTime,
+    people,
+  ];
+
   return (
     <>
       <div className="d-flex flex-column">
         <ErrorAlert error={reservationsError} />
-        <h2>heading</h2>
-        <form className="d-flex flex-column h5" onSubmit={handleSubmit}>
-          <label htmlFor="first_name">First Name</label>
-          <input
-            type="text"
-            id="first_name"
-            name="first_name"
-            className="mb-3 form-control"
-            onChange={handleChange}
-            value={formData["first_name"]}
-            required
-          />
-
-          <label htmlFor="last_name">Last Name</label>
-          <input
-            type="text"
-            id="last_name"
-            name="last_name"
-            className="mb-3 form-control"
-            onChange={handleChange}
-            value={formData["last_name"]}
-            required
-          />
-
-          <label htmlFor="mobile_number">Mobile Number</label>
-          <input
-            type="text"
-            id="mobile_number"
-            name="mobile_number"
-            className="mb-3 form-control"
-            onChange={handleChange}
-            value={formData["mobile_number"]}
-            required
-          />
-
-          <label htmlFor="reservation_date">Reservation Date</label>
-          <input
-            type="date"
-            id="reservation_date"
-            name="reservation_date"
-            className="mb-3 form-control"
-            onChange={handleChange}
-            value={formData["reservation_date"]}
-            required
-          />
-
-          <label htmlFor="reservation_time">Reservation Time</label>
-          <input
-            type="time"
-            id="reservation_time"
-            name="reservation_time"
-            className="mb-3 form-control"
-            onChange={handleChange}
-            value={formData["reservation_time"]}
-            required
-          />
-
-          <label htmlFor="people">People</label>
-          <input
-            type="number"
-            id="people"
-            name="people"
-            className="mb-3 form-control"
-            onChange={handleChange}
-            value={formData.people}
-            min="1"
-            required
-          />
-          <div className="mt-3">
-            <button
-              className="btn btn-primary mr-2"
-              type="submit"
-            >
-              Submit
-            </button>
-            <button className="btn btn-secondary" onClick={handleCancel}>
-              Cancel
-            </button>
-          </div>
-        </form>
+        <h2>Create New Reservation</h2>
+        <Form
+          inputs={inputs}
+          formData={formData}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          handleCancel={handleCancel}
+        />
       </div>
     </>
   );

@@ -10,7 +10,7 @@ const API_BASE_URL =
 
 /**
  * Defines the default headers for these functions to work with `json-server`
- */ 
+ */
 const headers = new Headers();
 headers.append("Content-Type", "application/json");
 
@@ -78,4 +78,41 @@ export async function createReservation(reservation, signal) {
     signal,
   };
   return await fetchJson(url, options, reservation);
+}
+
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return await fetchJson(url, { headers, signal }, []);
+}
+
+export async function createTable(table, signal) {
+  table.capacity = parseInt(table.capacity);
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: table }),
+    signal,
+  };
+  return await fetchJson(url, options, table);
+}
+
+export async function seatReservation(reservation_id, table_id) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = {
+    method: "PUT",
+    body: JSON.stringify({ data: { reservation_id } }),
+    headers,
+  };
+  return await fetchJson(url, options, {});
+}
+
+export async function loadTable(table_id, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}`);
+  return await fetchJson(url, { headers, signal }, []);
+}
+
+export async function loadReservation(reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  return await fetchJson(url, { headers, signal }, []);
 }
