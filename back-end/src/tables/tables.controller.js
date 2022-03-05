@@ -1,6 +1,7 @@
 const service = require("./tables.service");
 const tableValidator = require("../errors/tableValidator");
 const seatValidator = require("../errors/seatValidator");
+const removeSeatValidator = require("../errors/removeSeatValidator");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 async function list(req, res) {
@@ -19,7 +20,7 @@ async function read(req, res, next) {
   if (!data)
     next({
       status: 404,
-      message: `Table id ${table_id} does not exit`,
+      message: `Table id ${table_id} does not exist.`,
     });
   res.json({ data });
 }
@@ -29,6 +30,11 @@ async function addReservation(req, res) {
   res.json({ data: await service.addReservation(req.body.data, table_id) });
 }
 
+async function removeReservation(req, res) {
+  const { table_id } = req.params;
+  res.json({ data: await service.removeReservation(table_id) });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [tableValidator, asyncErrorBoundary(create)],
@@ -36,5 +42,9 @@ module.exports = {
   addReservation: [
     asyncErrorBoundary(seatValidator),
     asyncErrorBoundary(addReservation),
+  ],
+  removeReservation: [
+    asyncErrorBoundary(removeSeatValidator),
+    asyncErrorBoundary(removeReservation),
   ],
 };

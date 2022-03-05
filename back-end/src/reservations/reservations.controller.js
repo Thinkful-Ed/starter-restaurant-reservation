@@ -17,7 +17,7 @@ async function read(req, res, next) {
   if (!data)
     next({
       status: 404,
-      message: `Reservation id ${reservation_id} does not exit`,
+      message: `Reservation id ${reservation_id} does not exist`,
     });
   res.json({ data });
 }
