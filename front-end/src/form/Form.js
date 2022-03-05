@@ -16,8 +16,9 @@ export default function Form({
       required = false,
       min = "0",
       minLength = "0",
-    }) => (
+    }, key) => (
       <Input
+        key={key}
         type={type}
         id={id}
         name={name}
