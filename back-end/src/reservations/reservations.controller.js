@@ -4,11 +4,18 @@
 
 const service = require("./reservations.service");
 const reservationValidator = require("../errors/reservationValidator");
+const seatResValidator = require("../errors/seatResValidator");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 async function list(req, res) {
   const { date = null } = req.query;
   res.json({ data: await service.list(date) });
+}
+
+async function create(req, res) {
+  const data = await service.create(req.body.data);
+  data.people = parseInt(data.people);
+  res.status(201).json({ data });
 }
 
 async function read(req, res, next) {
@@ -22,14 +29,16 @@ async function read(req, res, next) {
   res.json({ data });
 }
 
-async function create(req, res) {
-  const data = await service.create(req.body.data);
+async function update(req, res) {
+  const { reservation_id } = req.params;
+  const data = await service.update(req.body.data, reservation_id);
   data.people = parseInt(data.people);
-  res.status(201).json({ data });
+  res.json({ data });
 }
 
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [reservationValidator, asyncErrorBoundary(create)],
   read: asyncErrorBoundary(read),
+  update: [asyncErrorBoundary(seatResValidator), asyncErrorBoundary(update)],
 };
