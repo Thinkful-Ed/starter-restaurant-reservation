@@ -16,6 +16,8 @@ function create(formData) {
 }
 
 async function addReservation(reservation_id, table_id) {
+  await knex("reservations_tables").insert({ reservation_id: reservation_id.reservation_id, table_id });
+  await knex("reservations").where(reservation_id).update({ status: "seated" });
   return knex("tables")
     .select()
     .where({ table_id })
@@ -24,6 +26,8 @@ async function addReservation(reservation_id, table_id) {
 }
 
 async function removeReservation(table_id) {
+  const {reservation_id} = await read(table_id);
+  await knex("reservations").where({reservation_id}).update({ status: "finished" });
   return knex("tables")
     .select()
     .where({ table_id })

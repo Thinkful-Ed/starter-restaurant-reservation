@@ -10,7 +10,7 @@ const properties = [
 function reservationValidator(req, res, next) {
   const { data = null } = req.body;
   if (!data) return next({ status: 400, message: "data is required." });
-  const { reservation_date, reservation_time, people } = data;
+  const { reservation_date, reservation_time, people, status } = data;
   const missing = [];
   properties.forEach((property) => {
     const value = data[property];
@@ -81,6 +81,14 @@ function reservationValidator(req, res, next) {
       status: 400,
       message:
         "The restaurant closes at 10:30 PM. Please select a time before 9:30 PM.",
+    });
+
+  // US -06
+  if (status && status !== "booked")
+    next({
+      status: 400,
+      message:
+        "The reservation status can't be seated or finished. Please change the status to booked.",
     });
 
   next();

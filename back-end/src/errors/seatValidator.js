@@ -15,20 +15,23 @@ async function seatValidator(req, res, next) {
   if (!seatData)
     next({ status: 404, message: `Reservation id ${seatId} does not exist` });
 
-  if (capacity < seatData.people) {
+  const { people, status } = seatData;
+
+  if (capacity < people)
     next({
       status: 400,
       message:
         "The number of people reserved exceeds the seating capacity of this table. Please select another table.",
     });
-  }
 
-  if (reservation_id) {
+  if (reservation_id)
     next({
       status: 400,
       message: "The table is occupied. Please select another table.",
     });
-  }
+
+  if (status === "seated")
+    next({ status: 400, message: "Reservation is already seated." });
 
   next();
 }

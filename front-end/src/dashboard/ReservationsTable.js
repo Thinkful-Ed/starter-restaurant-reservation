@@ -7,6 +7,7 @@ export default function ReservationsTable({
     reservation_date,
     reservation_time,
     people,
+    status,
   },
 }) {
   return (
@@ -18,9 +19,10 @@ export default function ReservationsTable({
       <p>Date: {reservation_date}</p>
       <p>Time: {reservation_time}</p>
       <p>People: {people}</p>
-      <a href={`/reservations/${reservation_id}/seat`}>
+      <p data-reservation-id-status={reservation_id}>Status: {status}</p>
+      {status === "booked" && (<a href={`/reservations/${reservation_id}/seat`}>
         <button className="btn btn-primary mr-2">Seat</button>
-      </a>
+      </a>)}
     </div>
   );
 }
