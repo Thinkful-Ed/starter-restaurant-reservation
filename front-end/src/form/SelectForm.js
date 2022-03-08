@@ -1,7 +1,7 @@
 export default function SelectForm({
   id,
   name,
-  required,
+  required = false,
   formData,
   handleChange,
   optionsList,
