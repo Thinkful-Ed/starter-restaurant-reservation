@@ -2,9 +2,10 @@ export default function InputForm({
   type,
   id,
   name,
-  min,
-  minLength,
-  required,
+  min = "0",
+  minLength = "0",
+  required = false,
+  placeholder = "",
   formData,
   handleChange,
 }) {
@@ -19,6 +20,7 @@ export default function InputForm({
       min={min}
       minLength={minLength}
       required={required}
+      placeholder={placeholder}
     />
   );
 }
