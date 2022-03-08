@@ -8,8 +8,14 @@ const seatResValidator = require("../errors/seatResValidator");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 async function list(req, res) {
-  const { date = null } = req.query;
-  res.json({ data: await service.list(date) });
+  const { date = null, mobile_number = null } = req.query;
+  let data;
+  if (mobile_number) {
+    data = await service.listQueryNumbers(mobile_number);
+  } else {
+    data = await service.list(date);
+  }
+  res.json({ data });
 }
 
 async function create(req, res) {

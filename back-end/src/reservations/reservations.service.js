@@ -9,6 +9,14 @@ function list(reservation_date) {
   return knex("reservations").select();
 }
 
+function listQueryNumbers(mobile_number) {
+  return knex("reservations").where(
+    "mobile_number",
+    "ilike",
+    `%${mobile_number}%`
+  );
+}
+
 function create(formData) {
   return knex("reservations")
     .insert(formData)
@@ -28,4 +36,4 @@ function update(status, reservation_id) {
     .then((updatedRecords) => updatedRecords[0]);
 }
 
-module.exports = { list, create, read, update };
+module.exports = { list, listQueryNumbers, create, read, update };
