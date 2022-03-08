@@ -5,16 +5,18 @@ function list(reservation_date) {
     return knex("reservations")
       .where({ reservation_date })
       .whereNot({ status: "finished" })
+      .andWhereNot({ status: "cancelled" })
       .orderBy("reservation_time");
   return knex("reservations").select();
 }
 
 function listQueryNumbers(mobile_number) {
-  return knex("reservations").where(
-    "mobile_number",
-    "ilike",
-    `%${mobile_number}%`
-  );
+  return knex("reservations")
+    .whereRaw(
+      "translate(mobile_number, '() -', '') like ?",
+      `%${mobile_number.replace(/\D/g, "")}%`
+    )
+    .orderBy("reservation_date");
 }
 
 function create(formData) {
@@ -28,7 +30,15 @@ function read(reservation_id) {
   return knex("reservations").select().where({ reservation_id }).first();
 }
 
-function update(status, reservation_id) {
+function update(formData, reservation_id) {
+  return knex("reservations")
+    .select()
+    .where({ reservation_id })
+    .update(formData, "*")
+    .then((updatedRecords) => updatedRecords[0]);
+}
+
+function updateStatus(status, reservation_id) {
   return knex("reservations")
     .select()
     .where({ reservation_id })
@@ -36,4 +46,4 @@ function update(status, reservation_id) {
     .then((updatedRecords) => updatedRecords[0]);
 }
 
-module.exports = { list, listQueryNumbers, create, read, update };
+module.exports = { list, listQueryNumbers, create, read, update, updateStatus };

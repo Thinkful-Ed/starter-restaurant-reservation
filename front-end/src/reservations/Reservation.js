@@ -1,16 +1,20 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
-import { formatAsDate } from "../utils/date-time";
+import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import {
+  loadReservation,
+  createReservation,
+  updateReservation,
+} from "../utils/api";
+import { formatAsDate, formatAsTime } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 
 import Form from "../form/Form";
 
-function NewReservation() {
+function Reservation({ type = "create" }) {
   const history = useHistory();
   const [reservationsError, setReservationsError] = useState(null);
-
-  let initialFormState = {
+  const params = useParams();
+  const initialFormState = {
     first_name: "",
     last_name: "",
     mobile_number: "",
@@ -20,6 +24,22 @@ function NewReservation() {
   };
 
   const [formData, setFormData] = useState(initialFormState);
+
+  useEffect(loadInitialFormState, [params.reservation_id, type]);
+
+  function loadInitialFormState() {
+    if (type === "update") {
+      const abortController = new AbortController();
+      loadReservation(params.reservation_id, abortController.signal).then((data) => {
+        setFormData({
+          ...data,
+          reservation_date: formatAsDate(data.reservation_date),
+          reservation_time: formatAsTime(data.reservation_time),
+        });
+      });
+      return () => abortController.abort();
+    }
+  }
 
   const handleChange = ({ target: { name, value } }) => {
     setFormData({ ...formData, [name]: value });
@@ -67,15 +87,22 @@ function NewReservation() {
         );
     }
 
+    function isNotBooked({ status }) {
+      if (status !== "booked")
+        errors.push(new Error("Only booked reservations can be edited."));
+    }
+
     isFutureDate(reservation);
     isTuesday(reservation);
     isBusinessHours(reservation);
+    if (type === "update") isNotBooked(reservation);
 
     return errors;
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
+    event.stopPropagation();
 
     const formErrors = validate(formData);
     if (formErrors.length) {
@@ -84,9 +111,17 @@ function NewReservation() {
     }
 
     try {
-      const { reservation_date } = await createReservation(formData);
-      const url = `/dashboard?date=${formatAsDate(reservation_date)}`;
-      history.push(url);
+      if (type === "create") {
+        const { reservation_date } = await createReservation(formData);
+        const url = `/dashboard?date=${formatAsDate(reservation_date)}`;
+        history.push(url);
+      } else if (type === "update") {
+        delete formData["reservation_id"];
+        delete formData["created_at"];
+        delete formData["updated_at"];
+        await updateReservation(formData, params.reservation_id);
+        document.referrer ? window.location = document.referrer : history.goBack()
+      }
     } catch (err) {
       console.error(err);
       setReservationsError(err);
@@ -148,7 +183,9 @@ function NewReservation() {
     <>
       <div className="d-flex flex-column">
         <ErrorAlert error={reservationsError} />
-        <h2>Create New Reservation</h2>
+        <h2>
+          {type === "create" ? "Create New Reservation" : "Edit Reservation"}
+        </h2>
         <Form
           inputs={inputs}
           formData={formData}
@@ -161,4 +198,4 @@ function NewReservation() {
   );
 }
 
-export default NewReservation;
+export default Reservation;

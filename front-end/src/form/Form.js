@@ -7,30 +7,14 @@ export default function Form({
   handleSubmit,
   handleCancel,
 }) {
-  const inputList = inputs.map(
-    ({
-      type,
-      id,
-      name,
-      options = null,
-      required = false,
-      min = "0",
-      minLength = "0",
-    }, key) => (
-      <Input
-        key={key}
-        type={type}
-        id={id}
-        name={name}
-        options={options}
-        required={required}
-        min={min}
-        minLength={minLength}
-        formData={formData}
-        handleChange={handleChange}
-      />
-    )
-  );
+  const inputList = inputs.map((input, key) => (
+    <Input
+      key={key}
+      inputs={input}
+      formData={formData}
+      handleChange={handleChange}
+    />
+  ));
   return (
     <form className="d-flex flex-column h5" onSubmit={handleSubmit}>
       <div>{inputList}</div>
@@ -38,7 +22,11 @@ export default function Form({
         <button className="btn btn-primary mr-2" type="submit">
           Submit
         </button>
-        <button className="btn btn-secondary" onClick={handleCancel}>
+        <button
+          className="btn btn-secondary"
+          onClick={handleCancel}
+          type="button"
+        >
           Cancel
         </button>
       </div>

@@ -1,5 +1,5 @@
 export default function InputForm({
-  type,
+  type = "text",
   id,
   name,
   min = "0",

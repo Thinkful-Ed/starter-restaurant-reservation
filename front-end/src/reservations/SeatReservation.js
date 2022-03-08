@@ -78,7 +78,6 @@ function SeatReservation() {
     history.goBack();
   };
 
-  console.log(tables);
   const options = tables.map(({ table_id, table_name, capacity }) => [
     table_id,
     `${table_name} - ${capacity}`,

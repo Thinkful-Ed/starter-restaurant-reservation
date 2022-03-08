@@ -1,17 +1,8 @@
 import InputForm from "./InputForm";
 import SelectForm from "./SelectForm";
 
-export default function Input({
-  type,
-  id,
-  name,
-  min,
-  minLength,
-  options,
-  required,
-  formData,
-  handleChange,
-}) {
+export default function Input({ inputs, formData, handleChange }) {
+  const { type, id, name, min, minLength, options = null, required } = inputs;
   let optionsList;
   if (options) {
     optionsList = options.map((option, index) => {

@@ -42,9 +42,17 @@ async function update(req, res) {
   res.json({ data });
 }
 
+async function updateStatus(req, res) {
+  const { reservation_id } = req.params;
+  const data = await service.updateStatus(req.body.data, reservation_id);
+  data.people = parseInt(data.people);
+  res.json({ data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [reservationValidator, asyncErrorBoundary(create)],
   read: asyncErrorBoundary(read),
-  update: [asyncErrorBoundary(seatResValidator), asyncErrorBoundary(update)],
+  update: [asyncErrorBoundary(seatResValidator), reservationValidator, asyncErrorBoundary(update)],
+  updateStatus: [asyncErrorBoundary(seatResValidator), asyncErrorBoundary(updateStatus)],
 };

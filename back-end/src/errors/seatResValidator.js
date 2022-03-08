@@ -1,6 +1,6 @@
 const service = require("../reservations/reservations.service");
 
-const statuses = new Set(["booked", "seated", "finished"]);
+const statuses = new Set(["booked", "seated", "finished", "cancelled"]);
 
 async function seatResValidator(req, res, next) {
   const { reservation_id } = req.params;
@@ -13,13 +13,13 @@ async function seatResValidator(req, res, next) {
       message: `Reservation id ${reservation_id} does not exist`,
     });
 
-  if (!statuses.has(status))
+  if (status && !statuses.has(status))
     next({
       status: 400,
       message: `Reservation status "${status}" is unknown`,
     });
 
-  if (data.status === "finished")
+  if (status && data.status === "finished")
     next({
       status: 400,
       message: `Reservation is already finished. A finished reservation can not be updated.`,

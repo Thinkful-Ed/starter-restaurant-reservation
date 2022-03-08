@@ -1,32 +1,38 @@
 import React, { useEffect, useState } from "react";
+import { useLocation, useHistory } from "react-router";
 import { findNumber } from "../utils/api";
-import ErrorAlert from "../layout/ErrorAlert";
 
 import InputForm from "../form/InputForm";
 import ReservationsTable from "../dashboard/ReservationsTable";
 
 function Search() {
-  const [reservations, setReservations] = useState(null);
+  const history = useHistory();
   const [reservationsList, setReservationsList] = useState(null);
   const [reservationsError, setReservationsError] = useState(null);
+  const { search } = useLocation();
+  const mobile_number = new URLSearchParams(search).get("mobile_number");
 
-  useEffect(loadReservations, [reservations]);
-
-  function loadReservations() {
-    if (reservations && reservations.length === 0) {
-      setReservationsError({ message: "No reservations found" });
-      setReservationsList(null);
-    } else if (reservations) {
-      setReservationsError(null);
-      setReservationsList(
-        reservations.map((res, index) => (
-          <li key={index}>
-            <ReservationsTable reservation={res} />
-          </li>
-        ))
-      );
+  useEffect(() => {
+    async function loadReservations() {
+      if (mobile_number) {
+        const abortController = new AbortController();
+        setReservationsError(null);
+        try {
+          const data = await findNumber(mobile_number, abortController.signal);
+          if (!data.length)
+            setReservationsError(new Error("No reservations found."));
+            setReservationsList(data);
+        } catch (err) {
+          setReservationsError(err);
+        }
+        return () => abortController.abort();
+      } else {
+        setReservationsList(null);
+        setReservationsError(null);
+      }
     }
-  }
+    loadReservations();
+  }, [mobile_number]);
 
   let initialFormState = {
     mobile_number: "",
@@ -40,12 +46,7 @@ function Search() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    try {
-      const data = await findNumber(formData);
-      setReservations(data);
-    } catch (err) {
-      setReservationsError(err);
-    }
+    history.push(`/search?mobile_number=${formData.mobile_number}`);
   }
 
   return (
@@ -70,8 +71,12 @@ function Search() {
             </button>
           </div>
           <div>
-            <ErrorAlert error={reservationsError} />
-            <ul>{reservationsList && reservationsList}</ul>
+            {reservationsList && (
+              <ReservationsTable
+                reservations={reservationsList}
+                error={reservationsError}
+              />
+            )}
           </div>
         </form>
       </div>
