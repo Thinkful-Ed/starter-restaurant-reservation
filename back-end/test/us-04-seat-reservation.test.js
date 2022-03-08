@@ -5,6 +5,8 @@ const knex = require("../src/db/connection");
 
 describe("US-04 - Seat reservation", () => {
   beforeAll(() => {
+    jest.useFakeTimers();
+    jest.setTimeout(100000);
     return knex.migrate
       .forceFreeMigrationsLock()
       .then(() => knex.migrate.rollback(null, true))
@@ -16,6 +18,7 @@ describe("US-04 - Seat reservation", () => {
   });
 
   afterAll(async () => {
+    jest.clearAllTimers();
     return await knex.migrate.rollback(null, true).then(() => knex.destroy());
   });
 

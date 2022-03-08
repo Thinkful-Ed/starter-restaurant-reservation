@@ -5,6 +5,8 @@ const knex = require("../src/db/connection");
 
 describe("US-03 - Create reservations eligible timeframe", () => {
   beforeAll(() => {
+    jest.useFakeTimers();
+    jest.setTimeout(100000);
     return knex.migrate
       .forceFreeMigrationsLock()
       .then(() => knex.migrate.rollback(null, true))
@@ -16,6 +18,7 @@ describe("US-03 - Create reservations eligible timeframe", () => {
   });
 
   afterAll(async () => {
+    jest.clearAllTimers();
     return await knex.migrate.rollback(null, true).then(() => knex.destroy());
   });
 

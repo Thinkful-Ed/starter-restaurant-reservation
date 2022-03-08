@@ -4,7 +4,7 @@ const statuses = new Set(["booked", "seated", "finished", "cancelled"]);
 
 async function seatResValidator(req, res, next) {
   const { reservation_id } = req.params;
-  const { status } = req.body.data;
+  const { status = null } = req.body.data;
 
   const data = await service.read(reservation_id);
   if (!data)

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useHistory } from "react-router";
+import { useHistory } from "react-router";
 import { findNumber } from "../utils/api";
+import useQuery from "../utils/useQuery";
 
 import InputForm from "../form/InputForm";
 import ReservationsTable from "../dashboard/ReservationsTable";
 
 function Search() {
   const history = useHistory();
-  const [reservationsList, setReservationsList] = useState(null);
+  const [reservations, setReservations] = useState(null);
   const [reservationsError, setReservationsError] = useState(null);
-  const { search } = useLocation();
-  const mobile_number = new URLSearchParams(search).get("mobile_number");
+  const query = useQuery();
+  const mobile_number = query.get("mobile_number");
 
   useEffect(() => {
     async function loadReservations() {
@@ -21,20 +22,20 @@ function Search() {
           const data = await findNumber(mobile_number, abortController.signal);
           if (!data.length)
             setReservationsError(new Error("No reservations found."));
-            setReservationsList(data);
+          setReservations(data);
         } catch (err) {
           setReservationsError(err);
         }
         return () => abortController.abort();
       } else {
-        setReservationsList(null);
+        setReservations(null);
         setReservationsError(null);
       }
     }
     loadReservations();
   }, [mobile_number]);
 
-  let initialFormState = {
+  const initialFormState = {
     mobile_number: "",
   };
 
@@ -44,8 +45,9 @@ function Search() {
     setFormData({ ...formData, [name]: value });
   };
 
-  async function handleSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault();
+    event.stopPropagation();
     history.push(`/search?mobile_number=${formData.mobile_number}`);
   }
 
@@ -71,9 +73,9 @@ function Search() {
             </button>
           </div>
           <div>
-            {reservationsList && (
+            {reservations && (
               <ReservationsTable
-                reservations={reservationsList}
+                reservations={reservations}
                 error={reservationsError}
               />
             )}

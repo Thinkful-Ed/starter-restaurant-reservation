@@ -12,7 +12,7 @@ async function list(req, res) {
   let data;
   if (mobile_number) {
     data = await service.listQueryNumbers(mobile_number);
-  } else {
+  } else if (date) {
     data = await service.list(date);
   }
   res.json({ data });

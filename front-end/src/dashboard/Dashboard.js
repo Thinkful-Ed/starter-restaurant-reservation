@@ -52,7 +52,7 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for {date}</h4>
         <div className="mt-3">
           <button className="btn btn-secondary mr-2" onClick={handlePrevious}>
             Previous

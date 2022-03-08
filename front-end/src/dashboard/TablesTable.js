@@ -25,16 +25,15 @@ export default function TablesTable({ tables, error }) {
         </td>
         <td>
           {reservation_id && (
-          <button
-            className="btn btn-primary mr-2"
-            data-table-id-finish={table_id}
-            onClick={() => handleClick(reservation_id, table_id)}
-          >
-            Finish
-          </button>
-        )}
+            <button
+              className="btn btn-primary mr-2"
+              data-table-id-finish={table_id}
+              onClick={() => handleClick(reservation_id, table_id)}
+            >
+              Finish
+            </button>
+          )}
         </td>
-        
       </tr>
     )
   );
@@ -45,15 +44,13 @@ export default function TablesTable({ tables, error }) {
       <table>
         <thead>
           <tr>
-          <th>#</th>
-          <th>Table Name</th>
-          <th>Capacity</th>
-          <th>Status</th>
-        </tr>
+            <th>#</th>
+            <th>Table Name</th>
+            <th>Capacity</th>
+            <th>Status</th>
+          </tr>
         </thead>
-        <tbody>
-          {tablesList}
-        </tbody>
+        <tbody>{tablesList}</tbody>
       </table>
     </div>
   );

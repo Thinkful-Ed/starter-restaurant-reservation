@@ -27,12 +27,11 @@ function create(formData) {
 }
 
 function read(reservation_id) {
-  return knex("reservations").select().where({ reservation_id }).first();
+  return knex("reservations").where({ reservation_id }).first();
 }
 
 function update(formData, reservation_id) {
   return knex("reservations")
-    .select()
     .where({ reservation_id })
     .update(formData, "*")
     .then((updatedRecords) => updatedRecords[0]);
@@ -40,7 +39,6 @@ function update(formData, reservation_id) {
 
 function updateStatus(status, reservation_id) {
   return knex("reservations")
-    .select()
     .where({ reservation_id })
     .update(status, "*")
     .then((updatedRecords) => updatedRecords[0]);

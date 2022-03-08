@@ -24,7 +24,7 @@ function tableValidator(req, res, next) {
   if (typeof capacity !== "number")
     next({
       status: 400,
-      message: "capacity property should be a number",
+      message: "capacity field should be a number",
     });
 
   if (capacity <= 0)

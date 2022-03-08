@@ -26,7 +26,7 @@ function SeatReservation() {
     return () => abortController.abort();
   }
 
-  let initialFormState = {
+  const initialFormState = {
     table_id: "",
   };
 
@@ -57,6 +57,7 @@ function SeatReservation() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    event.stopPropagation();
 
     const formErrors = validate(formData);
     if (formErrors.length) {
@@ -66,8 +67,7 @@ function SeatReservation() {
 
     try {
       await seatReservation(reservation_id, Number(formData.table_id));
-      const url = "/dashboard";
-      history.push(url);
+      history.push("/dashboard");
     } catch (err) {
       console.error(err);
       setSeatError(err);
@@ -96,7 +96,6 @@ function SeatReservation() {
   return (
     <>
       <div className="d-flex flex-column">
-        <ErrorAlert error={seatError} />
         <h2>Seat Reservation</h2>
         <ErrorAlert error={tablesError} />
         <Form
@@ -106,6 +105,7 @@ function SeatReservation() {
           handleSubmit={handleSubmit}
           handleCancel={handleCancel}
         />
+        <ErrorAlert error={seatError} />
       </div>
     </>
   );

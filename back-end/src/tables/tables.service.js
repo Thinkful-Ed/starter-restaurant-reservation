@@ -5,7 +5,7 @@ function list() {
 }
 
 function read(table_id) {
-  return knex("tables").select().where({ table_id }).first();
+  return knex("tables").where({ table_id }).first();
 }
 
 function create(formData) {
@@ -16,20 +16,19 @@ function create(formData) {
 }
 
 async function addReservation(reservation_id, table_id) {
-  await knex("reservations_tables").insert({ reservation_id: reservation_id.reservation_id, table_id });
   await knex("reservations").where(reservation_id).update({ status: "seated" });
   return knex("tables")
-    .select()
     .where({ table_id })
     .update(reservation_id, "*")
     .then((updatedRecords) => updatedRecords[0]);
 }
 
 async function removeReservation(table_id) {
-  const {reservation_id} = await read(table_id);
-  await knex("reservations").where({reservation_id}).update({ status: "finished" });
+  const { reservation_id } = await read(table_id);
+  await knex("reservations")
+    .where({ reservation_id })
+    .update({ status: "finished" });
   return knex("tables")
-    .select()
     .where({ table_id })
     .update({ reservation_id: null }, "*")
     .then((updatedRecords) => updatedRecords[0]);

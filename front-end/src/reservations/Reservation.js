@@ -30,13 +30,15 @@ function Reservation({ type = "create" }) {
   function loadInitialFormState() {
     if (type === "update") {
       const abortController = new AbortController();
-      loadReservation(params.reservation_id, abortController.signal).then((data) => {
-        setFormData({
-          ...data,
-          reservation_date: formatAsDate(data.reservation_date),
-          reservation_time: formatAsTime(data.reservation_time),
-        });
-      });
+      loadReservation(params.reservation_id, abortController.signal).then(
+        (data) => {
+          setFormData({
+            ...data,
+            reservation_date: formatAsDate(data.reservation_date),
+            reservation_time: formatAsTime(data.reservation_time),
+          });
+        }
+      );
       return () => abortController.abort();
     }
   }
@@ -119,8 +121,12 @@ function Reservation({ type = "create" }) {
         delete formData["reservation_id"];
         delete formData["created_at"];
         delete formData["updated_at"];
-        await updateReservation(formData, params.reservation_id);
-        document.referrer ? window.location = document.referrer : history.goBack()
+        const { reservation_date } = await updateReservation(
+          formData,
+          params.reservation_id
+        );
+        const url = `/dashboard?date=${formatAsDate(reservation_date)}`;
+        history.push(url);
       }
     } catch (err) {
       console.error(err);

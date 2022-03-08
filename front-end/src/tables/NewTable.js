@@ -7,7 +7,7 @@ import Form from "../form/Form";
 function NewTable() {
   const history = useHistory();
 
-  let initialFormState = {
+  const initialFormState = {
     table_name: "",
     capacity: "",
   };
@@ -20,9 +20,9 @@ function NewTable() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    event.stopPropagation();
     await createTable(formData);
-    const url = "/dashboard";
-    history.push(url);
+    history.push("/dashboard");
   }
 
   const handleCancel = () => {

@@ -88,7 +88,7 @@ function reservationValidator(req, res, next) {
     next({
       status: 400,
       message:
-        "The reservation status can't be seated or finished. Please change the status to booked.",
+        "The reservation status can't be seated or finished. Please create a new reservation.",
     });
 
   next();
