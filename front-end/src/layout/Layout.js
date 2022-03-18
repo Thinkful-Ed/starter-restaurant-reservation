@@ -1,7 +1,6 @@
 import React from "react";
 import Menu from "./Menu";
 import Routes from "./Routes";
-
 import "./Layout.css";
 
 /**
@@ -13,9 +12,9 @@ import "./Layout.css";
  */
 function Layout() {
   return (
-    <div className="container-fluid">
-      <div className="row h-100">
-        <div className="col-md-2 side-bar">
+    <div className="container-fluid" style={{backgroundColor:"#D3D3D3"}}>
+      <div className="row" style={{minHeight:"1000px"}}>
+        <div className="col-lg-2 side-bar" style={{ paddingTop:"75px"}}>
           <Menu />
         </div>
         <div className="col">
