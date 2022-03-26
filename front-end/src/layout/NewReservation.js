@@ -48,7 +48,7 @@ export default function NewReservation() {
     }
 
     return (
-        <form className="new-res-form" onSubmit={handleSubmit}>
+        <form className="new-res-form needs-validation" novalidate onSubmit={handleSubmit}>
             <h1>New Reservation</h1>
             <div className="form-group">
                 <label htmlFor="first_name">First Name</label>
@@ -59,10 +59,11 @@ export default function NewReservation() {
                     name="first_name"
                     onChange={handleChange}
                     value={formData.first_name}
+                    required
                 />
             </div>
             <div className="form-group">
-                <label htmlFor="last_name">Last Name</label>
+                <label htmlFor="last_name" className="form-label">Last Name</label>
                 <input
                     id="last_name"
                     className="form-control"
@@ -70,10 +71,11 @@ export default function NewReservation() {
                     name="last_name"
                     onChange={handleChange}
                     value={formData.last_name}
+                    required
                 />
             </div>
             <div className="form-group">
-                <label htmlFor="mobile_number">Mobile Number</label>
+                <label htmlFor="mobile_number" className="form-label">Mobile Number</label>
                 <input 
                     id="mobile_number"
                     className="form-control"
@@ -84,7 +86,7 @@ export default function NewReservation() {
                 />
             </div>
             <div className="form-group">
-                <label htmlFor="reservation_date">Date</label>
+                <label htmlFor="reservation_date" className="form-label">Date</label>
                 <input 
                     id="reservation_date"
                     className="form-control"
@@ -95,7 +97,7 @@ export default function NewReservation() {
                 />
             </div>
             <div className="form-group">
-               <label htmlFor="reservation_time">Time</label>
+               <label htmlFor="reservation_time" className="form-label">Time</label>
                <input
                     id="reservation_time"
                     className="form-control"
@@ -106,7 +108,7 @@ export default function NewReservation() {
                 />
             </div>
             <div className="form-group">
-                <label htmlFor="people">Party Size</label>
+                <label htmlFor="people" className="form-label">Party Size</label>
                 <input 
                     id="people"
                     className="form-control"
@@ -117,7 +119,7 @@ export default function NewReservation() {
                 />
             </div>
             <ErrorAlert error={error} />
-            <label htmlFor="submit">
+            <label htmlFor="submit" className="form-label">
                 <input 
                     type="submit"
                     id="submit"
@@ -125,7 +127,7 @@ export default function NewReservation() {
                     className="btn btn-primary"
                 />
             </label>
-            <label htmlFor="reset">
+            <label htmlFor="reset" className="form-label">
                 <input 
                     type="reset"
                     id="reset"
@@ -134,7 +136,7 @@ export default function NewReservation() {
                     className="btn btn-primary"
                 />
             </label>
-            <label htmlFor="cancel">
+            <label htmlFor="cancel" className="form-label">
                 <button
                     type="button"
                     id="cancel"

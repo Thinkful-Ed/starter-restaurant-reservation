@@ -44,9 +44,6 @@ async function hasValidDate (req, res, next) {
     if (reservation.reservation_date < new Date()) {
       console.log("date", reservation.reservation_date)
       console.log("moment", moment())
-      /* console.log("date", reservation.reservation_date)
-      console.log("today", moment())
-      console.log("fromnow", moment(reservation.reservation_date).fromNow()) */
       const message = 'Reservation must be for a future date.'
       next({ status: 400, message: message })
     }
@@ -89,7 +86,13 @@ function hasValidPeople(req, res, next) {
   } else {
     return next()
   }
-  
+}
+
+async function read(req, res, next) {
+  const reservation = await service.read(req.params.reservation_id)
+  res.status(201).json({
+    data: reservation,
+  })
 }
 
 async function list(req, res, next) {
@@ -110,6 +113,14 @@ async function create(req, res, next) {
   })
 }
 
+async function update(req, res, next) {
+  const reservation = res.locals.reservation
+  const updatedReservation = {
+    
+  }
+
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [
@@ -125,4 +136,6 @@ module.exports = {
     hasValidPeople,
     asyncErrorBoundary(create)
   ],
+  read: [asyncErrorBoundary(read)],
+  update: [asyncErrorBoundary(hasData), asyncErrorBoundary(update)]
 }
