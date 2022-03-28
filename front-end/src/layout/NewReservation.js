@@ -9,12 +9,12 @@ export default function NewReservation() {
     const history = useHistory()
 
     const initialFormData = {
-        first_name: "",
-        last_name: "",
-        mobile_number: "",
-        reservation_date: "",
-        reservation_time: "",
-        people: 0,
+        first_name: "Reggie",
+        last_name: "Farnquist",
+        mobile_number: "517-555-5555",
+        reservation_date: "2022-03-28",
+        reservation_time: "12:00",
+        people: 4,
     }
 
     const [formData, setFormData] = useState({ ...initialFormData })
