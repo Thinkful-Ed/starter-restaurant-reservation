@@ -21,6 +21,7 @@ export default function SeatReservation() {
     }
 
     const handleSubmit = () => {
+        
         // check to make sure you aren't overseating the table
         // make a call to API assigning table to reservation
         // return to dashboard

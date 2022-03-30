@@ -23,7 +23,16 @@ async function list(req, res, next) {
     res.json({ data })
 }
 
+async function seatTable(req, res, next) {
+    const { tableId } = req.params
+    const reservationId = req.body.data
+    console.log("update method called, req.body.data:", req.body.data)
+    // fetch the table from the database and change the reservation_id to the one passed as the body
+
+}
+
 module.exports = {
     create: [asyncErrorBoundary(hasData), asyncErrorBoundary(create)],
+    seatTable: asyncErrorBoundary(seatTable),
     list,
 }

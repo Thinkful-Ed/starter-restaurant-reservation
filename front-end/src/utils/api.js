@@ -126,6 +126,25 @@ export async function createTable(newTable, signal) {
   }
 }
 
+export async function seatTable(reservationId, tableId, signal) {
+    //PUT to /tables/:table_id/seat/ in order to save the table assignment. The body of the request must be { data: { reservation_id: x } } where X is the reservation_id of the reservation being seated. The tests do not check the body returned by this request.
+    //display a Cancel button that, when clicked, returns the user to the previous page
+  
+  const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`)
+  try {
+    const reponse = await fetchJson(url, {
+      method: 'PUT',
+      headers,
+      signal,
+      body: JSON.stringify({ data: { reservation_id: reservationId } })
+    }, [])
+  } catch (error) {
+    console.error(error)
+    return error
+  }
+}
+
+
 
 /* try {
   const url = new URL(`${API_BASE_URL}/reservations/new`)

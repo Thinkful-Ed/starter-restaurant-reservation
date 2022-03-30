@@ -115,9 +115,9 @@ async function create(req, res, next) {
 
 async function update(req, res, next) {
   const reservation = res.locals.reservation
-  const updatedReservation = {
-    
-  }
+  res.status(201).json({
+    data: "response data"
+  })
 
 }
 

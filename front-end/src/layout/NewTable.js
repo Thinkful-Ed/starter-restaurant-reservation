@@ -27,12 +27,22 @@ export default function NewTable() {
 
     async function handleSubmit(event) {
         event.preventDefault()
+        
+        // validate input
+        if (formData.table_name.length < 2) {
+            // set little error thingy below the table name form field
+            // to be red text that says it needs to be 2 characters.
+            return
+        }
+
         const abortController = new AbortController()
         const newTable = { ...formData }
         const response = await createTable(newTable, abortController.signal)
         if (response.message) {
             setError(response)
             return
+        } else {
+            setError(null)
         }
     }
 
@@ -57,6 +67,7 @@ export default function NewTable() {
                         name="table_name"
                         onChange={handleChange}
                         value={formData.table_name}
+                        required
                     />
                 </div>
                 <div className="form-group">
@@ -69,6 +80,9 @@ export default function NewTable() {
                         onChange={handleChange}
                         value={formData.capacity}
                     />
+                    <div className="invalid-feedback">
+                        Table name must be 2 characters minimum.
+                    </div>
                 </div>
                 <ErrorAlert error={error} />
                 <label htmlFor="submit">
