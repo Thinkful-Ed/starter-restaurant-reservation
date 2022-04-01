@@ -7,6 +7,12 @@ function create(newTable) {
         .then((createdTables) => createdTables[0])
 }
 
+function read(table_name) {
+    return knex("tables")
+        .select("*")
+        .where({ table_name: table_name })
+}
+
 function list() {
     return knex("tables")
         .select("*")
@@ -15,7 +21,7 @@ function list() {
 function update(updatedTable) {
     return knex("tables")
         .select("*")
-        .where({ table_id: updatedTable.table_id })
+        .where({ table_name: updatedTable.table_name })
         .update(updatedTable, "*")
 }
 
