@@ -7,10 +7,11 @@ function create(newTable) {
         .then((createdTables) => createdTables[0])
 }
 
-function read(table_name) {
+function read(tableName) {
     return knex("tables")
         .select("*")
-        .where({ table_name: table_name })
+        .where({ table_name: tableName })
+        .first()
 }
 
 function list() {
@@ -20,7 +21,6 @@ function list() {
 
 function update(updatedTable) {
     return knex("tables")
-        .select("*")
         .where({ table_name: updatedTable.table_name })
         .update(updatedTable, "*")
 }
@@ -29,4 +29,7 @@ module.exports = {
     create,
     list,
     update,
+    read,
 }
+
+// when selecting, always returns an array

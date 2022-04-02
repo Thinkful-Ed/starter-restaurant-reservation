@@ -113,13 +113,7 @@ async function create(req, res, next) {
   })
 }
 
-async function update(req, res, next) {
-  const reservation = res.locals.reservation
-  res.status(201).json({
-    data: "response data"
-  })
 
-}
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
@@ -137,5 +131,5 @@ module.exports = {
     asyncErrorBoundary(create)
   ],
   read: [asyncErrorBoundary(read)],
-  update: [asyncErrorBoundary(hasData), asyncErrorBoundary(update)]
+  //update: [asyncErrorBoundary(hasData), asyncErrorBoundary(update)]
 }

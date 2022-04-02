@@ -8,6 +8,11 @@ export default function NewReservation() {
 
     const history = useHistory()
 
+    const [inputValid, setInputValid] = useState({
+        first_name: false,
+        last_name: false,
+    })
+
     const initialFormData = {
         first_name: "Reggie",
         last_name: "Farnquist",
@@ -21,6 +26,11 @@ export default function NewReservation() {
     const [error, setError] = useState(null)
 
     const handleChange = ({ target }) => {
+        /**
+         * add logic/switch to handle validation based on target
+         */
+        
+        setInputValid({ ...inputValid, [target.name]: !target.value })
         setFormData({
             ...formData,
             [target.name]: target.value,
@@ -61,6 +71,7 @@ export default function NewReservation() {
                     value={formData.first_name}
                     required
                 />
+                { inputValid.first_name ? <div className="text-danger">First name is required.</div> : null }
             </div>
             <div className="form-group">
                 <label htmlFor="last_name" className="form-label">Last Name</label>

@@ -127,9 +127,11 @@ export async function createTable(newTable, signal) {
 }
 
 export async function seatTable(reservationId, tableId, signal) {
-    //PUT to /tables/:table_id/seat/ in order to save the table assignment. The body of the request must be { data: { reservation_id: x } } where X is the reservation_id of the reservation being seated. The tests do not check the body returned by this request.
-    //display a Cancel button that, when clicked, returns the user to the previous page
-  
+    // PUT to /tables/:table_id/seat/ in order to save the table assignment. 
+    // The body of the request must be { data: { reservation_id: x } } 
+    // where X is the reservation_id of the reservation being seated. 
+    // The tests do not check the body returned by this request.
+
   const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`)
   try {
     const reponse = await fetchJson(url, {

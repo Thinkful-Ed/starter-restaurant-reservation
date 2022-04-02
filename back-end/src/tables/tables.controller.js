@@ -28,12 +28,13 @@ async function reservationExists(req, res, next) {
 }
 
 async function tableExists(req, res, next) {
-    const table = await service.read(req.params.table_id)
+    const table = await service.read(req.params.table_name)
     if (table) {
         res.locals.table = table
         return next()
     }
     next({ status: 404, message: `Table not found` })
+    return next()
 }
 
 async function list(req, res, next) {
@@ -42,11 +43,13 @@ async function list(req, res, next) {
 }
 
 async function seatTable(req, res, next) {
+    console.log('res locals table', res.locals.table)
+    console.log("req body data res id", req.body.data.reservation_id)
     const updatedTable = {
-        reservation_id: req.params.reservation_id,
         ...res.locals.table,
+        reservation_id: req.body.data.reservation_id,
     }
-    const response = await service.update(updatedTable)
+    const data = await service.update(updatedTable)
     res.json({ data })
 }
 
