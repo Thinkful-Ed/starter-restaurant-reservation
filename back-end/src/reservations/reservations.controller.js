@@ -1,3 +1,6 @@
+const service = require("./reservations.service")
+const asyncErrorBoundary = require("../errors/")
+
 /**
  * List handler for reservation resources
  */
