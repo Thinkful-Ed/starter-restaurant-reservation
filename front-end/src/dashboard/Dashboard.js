@@ -43,16 +43,13 @@ function Dashboard({ date }) {
         async function loadTablesFromApi() {
             try {
                 const response = await listTables(abortController.signal)
-                const tables = response.map((table) => (
-					{ ...table, isOccupied: false }
-				))
-				setTables(tables)
+				setTables(() => response)
             } catch(error) {
                 setError(error)
             }
         }
         loadTablesFromApi()
-    }, [reservations])
+    }, [])
 
 	
 	
@@ -73,7 +70,7 @@ function Dashboard({ date }) {
 			<td>{table.table_name}</td>
 			<td>{table.capacity}</td>
 			{
-				table.isOccupied
+				table.reservation_id
 					? <td className="text-danger">Occupied</td> 
 					: <td className="text-success">Open</td>
 			}

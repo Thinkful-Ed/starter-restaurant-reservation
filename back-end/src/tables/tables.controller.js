@@ -43,8 +43,6 @@ async function list(req, res, next) {
 }
 
 async function seatTable(req, res, next) {
-    console.log('res locals table', res.locals.table)
-    console.log("req body data res id", req.body.data.reservation_id)
     const updatedTable = {
         ...res.locals.table,
         reservation_id: req.body.data.reservation_id,

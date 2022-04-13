@@ -13,7 +13,10 @@ export default function SeatReservation() {
     const { reservation_id } = useParams()
 
     const handleChange = ({ target }) => {
-        // set tableBeingAssigned
+        console.log("target value in seat reservation:", target.value)
+        //console.log("tables in seatreservation", tables)
+        setTableBeingAssigned(() => tables.find(table => table.table_id == target.value))
+        console.log("tableBeingAssigned", tableBeingAssigned)
     }
 
     const handleCancel = () => {
@@ -64,8 +67,8 @@ export default function SeatReservation() {
                 const response = await listTables(abortController.signal)
                 const tables = response.map((table) => (
                     { ...table, isOccupied: false }
-                    ))
-                    setTables(tables)
+                ))
+                setTables(tables)
                 } catch(error) {
                     setError(error)
                 }
@@ -75,7 +78,7 @@ export default function SeatReservation() {
         
     // Map out tables from API to populate select
     const content = tables.map((table, index) => (
-        <option value={`${table.table_name}`}>{`${table.table_name} - ${table.capacity}`}</option>
+        <option value={`${table.table_id}`}>{`${table.table_name} - ${table.capacity}`}</option>
     ))
 
     return (
