@@ -28,8 +28,60 @@ const VALID_PROPERTIES = [
   next();
 }
 
+function isANumber(req, res, next) {
+  let {people} = req.body.data
+  people = Number(people)
+  if(!Number.isInteger(people)) {
+    next({
+      status: 400,
+      message: "Input for 'people' is not a valid number"
+    })
+  } else {
+    next()
+  }
+}
+
+// function isValidPhoneNumber(req, res, next) {
+//   const data = req.body.data
+//   const regex = /[0-9]{3}-[0-9]{3}-[0-9]{4}/
+//   if (!data.mobile_number.match(regex)) {
+//     next({
+//       status: 400,
+//       message: "Mobile number is not in a valid format."
+//     })
+//   } else {
+//     next()
+//   }
+// }
+
+function isValidDate(req, res, next) {
+  const {reservation_date} = req.body.data
+  const validDateRegex = /[0-9]{4}-[0-9]{2}-[0-9]{2}/
+  if(!reservation_date.match(validDateRegex)) {
+    next({
+      status: 400,
+      message: `reservation_date '${reservation_date}' is invalid`
+    })
+  } else {
+    next()
+  }
+}
+
+function isValidTime(req, res, next) {
+  const {reservation_time} = req.body.data
+  const validTimeRegex = /[0-2]{1}[0-9]{1}:[0-5]{1}[0-9]{1}/
+  if(!reservation_time.match(validTimeRegex)) {
+    next({
+      status: 400,
+      message: `reservation_time '${reservation_time}' is invalid`
+    })
+  } else {
+    next()
+  }
+}
+
 async function list(req, res) {
-  const data = await service.list()
+  const data = await service.listReservationsForCurrentDate(req.query.date)
   res.json({data})
 }
 
@@ -40,5 +92,5 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [hasOnlyValidProperties, hasRequiredProperties, asyncErrorBoundary(create)]
+  create: [hasOnlyValidProperties, hasRequiredProperties, isValidDate, isValidTime, isANumber, asyncErrorBoundary(create)]
 };

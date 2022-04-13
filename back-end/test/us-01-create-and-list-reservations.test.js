@@ -321,7 +321,7 @@ describe("US-01 - Create and list reservations", () => {
         mobile_number: "800-555-1212",
         reservation_date: "2025-01-01",
         reservation_time: "17:30",
-        people: "2",
+        people: "poop",
       };
 
       const response = await request(app)

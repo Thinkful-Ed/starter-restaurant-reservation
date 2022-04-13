@@ -22,7 +22,7 @@ export default function CreateReservation() {
     const handleCreateReservationSubmission = (event) => {
         event.preventDefault()
         setReservationsError(null)
-        createReservation(formData).then(() => history.push("/dashboard")).catch(setReservationsError)        
+        createReservation(formData).then(() => history.push(`/dashboard?date=${formData.reservation_date}`)).catch(setReservationsError)        
     }
 
     return (
