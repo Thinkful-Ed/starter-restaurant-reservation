@@ -67,6 +67,33 @@ function isValidDate(req, res, next) {
   }
 }
 
+function dateIsNotInPast(req, res, next) {
+  const {reservation_date} = req.body.data
+  let current = new Date()
+  let userReservationDate = new Date(reservation_date)
+  if (current > userReservationDate) {
+    next({
+      status: 400,
+      message: `Reservation date must be a future date than the current date.`
+    })
+  } else {
+    next()
+  }
+}
+
+function isDateTuesday(req, res, next) {
+  const {reservation_date} = req.body.data
+  let userReservationDate = new Date(reservation_date)
+  if(userReservationDate.getUTCDay() === 2) {
+    next({
+      status: 400,
+      message: "Restaurant is closed on Tuesday. Please select another day."
+    })
+  } else {
+    next()
+  }
+}
+
 function isValidTime(req, res, next) {
   const {reservation_time} = req.body.data
   const validTimeRegex = /[0-2]{1}[0-9]{1}:[0-5]{1}[0-9]{1}/
@@ -92,5 +119,5 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [hasOnlyValidProperties, hasRequiredProperties, isValidDate, isValidTime, isANumber, asyncErrorBoundary(create)]
+  create: [hasOnlyValidProperties, hasRequiredProperties, isValidDate, dateIsNotInPast, isDateTuesday, isValidTime, isANumber, asyncErrorBoundary(create)]
 };

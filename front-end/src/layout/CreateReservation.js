@@ -3,6 +3,8 @@ import {useHistory} from 'react-router-dom'
 import ReservationFormPage from "./ReservationFormPage"
 import {createReservation} from "../utils/api"
 import ErrorAlert from "./ErrorAlert"
+import {isDateTuesday, isDateInPast} from "../utils/validateDate"
+import InvalidDateErrors from "./InvalidDateErrors"
 
 export default function CreateReservation() {
     const initialFormState = {
@@ -18,9 +20,16 @@ export default function CreateReservation() {
 
     const [formData, setFormData] = useState({...initialFormState})
     const [reservationsError, setReservationsError] = useState(null);
+    const [dateErrors, setDateErrors] = useState(null)
 
     const handleCreateReservationSubmission = (event) => {
         event.preventDefault()
+        const tuesday = isDateTuesday(formData.reservation_date)
+        const past = isDateInPast(formData.reservation_date)
+        if(tuesday || past) {
+            setDateErrors([tuesday ? tuesday : null, past ? past : null])
+            return
+        }
         setReservationsError(null)
         createReservation(formData).then(() => history.push(`/dashboard?date=${formData.reservation_date}`)).catch(setReservationsError)        
     }
@@ -29,6 +38,7 @@ export default function CreateReservation() {
         <div>
             <h1>New Reservation</h1>
             <ErrorAlert error={reservationsError} />
+            <InvalidDateErrors errors={dateErrors}/>
             <ReservationFormPage 
                 onSubmit={handleCreateReservationSubmission}
                 onCancel={() => history.goBack()}
