@@ -42,7 +42,7 @@ export default function FormPage({onSubmit, onCancel, formData, setFormData}) {
                     type="tel"
                     name="mobile_number"
                     placeholder="XXX-XXX-XXXX"
-                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                    // pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                     onChange={handleChange}
                     value={formData.mobile_number}
                     className="form-control"
