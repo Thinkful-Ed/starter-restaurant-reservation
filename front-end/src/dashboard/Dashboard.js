@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import {previous, next} from "../utils/date-time"
+import {today, previous, next} from "../utils/date-time"
 
 /**
  * Defines the dashboard page.
@@ -10,25 +10,24 @@ import {previous, next} from "../utils/date-time"
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date }) {
+function Dashboard() {
+  const [date, setDate] = useState(today())
   const [reservations, setReservations] = useState([]);
-  const [params, setParams] = useState(null);
   const [reservationsError, setReservationsError] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const singleValue = queryParams.get("date");
-    setParams(singleValue);
+    setDate(singleValue);
   }, []);
 
-  useEffect(loadDashboard, [params, date]);
+  useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations(
-      params ? { date: params } : { date },
+    listReservations({ date },
       abortController.signal
     )
       .then(setReservations)
@@ -49,17 +48,17 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {params ? params : date}</h4>
+        <h4 className="mb-0">Reservations for {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
       <div class="btn-group" role="group">
-        <button type="button" class="btn btn-primary" onClick={() => setParams(previous(date))}>
+        <button type="button" class="btn btn-primary" onClick={() => setDate(previous(date))}>
           Previous
         </button>
-        <button type="button" class="btn btn-primary" onClick={() => setParams(date)}>
+        <button type="button" class="btn btn-primary" onClick={() => setDate(today())}>
           Today
         </button>
-        <button type="button" class="btn btn-primary" onClick={() => setParams(next(date))}>
+        <button type="button" class="btn btn-primary" onClick={() => setDate(next(date))}>
           Next
         </button>
       </div>
