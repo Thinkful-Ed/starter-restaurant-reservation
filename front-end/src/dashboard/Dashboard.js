@@ -16,13 +16,17 @@ function Dashboard() {
   const [reservationsError, setReservationsError] = useState(null);
   const location = useLocation();
 
+  useEffect(loadDashboard, [date]);
+
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const singleValue = queryParams.get("date");
-    setDate(singleValue);
+    if (singleValue) {
+      setDate(singleValue);
+    }   
   }, []);
 
-  useEffect(loadDashboard, [date]);
+ 
 
   function loadDashboard() {
     const abortController = new AbortController();
