@@ -24,13 +24,14 @@ export default function CreateReservation() {
 
     const handleCreateReservationSubmission = (event) => {
         event.preventDefault()
+        setReservationsError(null)
         const tuesday = isDateTuesday(formData.reservation_date)
         const past = isDateInPast(formData)
         if(tuesday || past) {
             setDateErrors([tuesday ? tuesday : null, past ? past : null])
             return
         }
-        setReservationsError(null)
+        setDateErrors(null)
         createReservation(formData).then(() => history.push(`/dashboard?date=${formData.reservation_date}`)).catch(setReservationsError)        
     }
 
