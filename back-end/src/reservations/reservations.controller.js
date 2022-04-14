@@ -68,13 +68,13 @@ function isValidDate(req, res, next) {
 }
 
 function dateIsNotInPast(req, res, next) {
-  const {reservation_date} = req.body.data
+  const {reservation_date, reservation_time} = req.body.data
   let current = new Date()
-  let userReservationDate = new Date(reservation_date)
+  let userReservationDate = new Date(`${reservation_date} ${reservation_time}`)
   if (current > userReservationDate) {
     next({
       status: 400,
-      message: `Reservation date must be a future date than the current date.`
+      message: `Reservation date must be a future date and time than the current date and time.`
     })
   } else {
     next()
@@ -97,10 +97,21 @@ function isDateTuesday(req, res, next) {
 function isValidTime(req, res, next) {
   const {reservation_time} = req.body.data
   const validTimeRegex = /[0-2]{1}[0-9]{1}:[0-5]{1}[0-9]{1}/
+  const timeNumber = Number(reservation_time.split(":").join(""))
   if(!reservation_time.match(validTimeRegex)) {
     next({
       status: 400,
       message: `reservation_time '${reservation_time}' is invalid`
+    })
+  } else if(timeNumber < 1030) {
+    next({
+      status: 400,
+      message: `Restaurant opens at 10:30 AM.`
+    })
+  } else if(timeNumber > 2130) {
+    next({
+      status: 400,
+      message: `Restaurant does not accept reservations after 9:30 PM`
     })
   } else {
     next()

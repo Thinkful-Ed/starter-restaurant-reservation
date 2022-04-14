@@ -25,7 +25,7 @@ export default function CreateReservation() {
     const handleCreateReservationSubmission = (event) => {
         event.preventDefault()
         const tuesday = isDateTuesday(formData.reservation_date)
-        const past = isDateInPast(formData.reservation_date)
+        const past = isDateInPast(formData)
         if(tuesday || past) {
             setDateErrors([tuesday ? tuesday : null, past ? past : null])
             return
