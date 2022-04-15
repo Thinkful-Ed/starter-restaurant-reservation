@@ -74,15 +74,21 @@ function Dashboard() {
       </div>
       <ErrorAlert error={reservationsError} />
       <div class="btn-group" role="group">
+        <Link to={`/dashboard?date=${previous(date)}`}>
         <button type="button" class="btn btn-primary" onClick={() => setDate(previous(date))}>
           Previous
         </button>
+        </Link>
+        <Link to={`/dashboard?date=${today()}`}>
         <button type="button" class="btn btn-primary" onClick={() => setDate(today())}>
           Today
         </button>
+        </Link>
+        <Link to={`/dashboard?date=${next(date)}`}>
         <button type="button" class="btn btn-primary" onClick={() => setDate(next(date))}>
           Next
         </button>
+        </Link>
       </div>
       <div className="d-flex justify-content-between">
         <table className="table table-bordered border-dark table-hover mr-2">
