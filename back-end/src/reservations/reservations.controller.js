@@ -1,4 +1,4 @@
-const service = require("./reservations.service")
+const reservationsService = require("./reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 const hasProperties = require("../errors/hasProperties")
 const hasRequiredProperties = hasProperties("first_name", "last_name", "mobile_number", "reservation_date", "reservation_time", "people")
@@ -120,7 +120,7 @@ function isValidTime(req, res, next) {
 
 async function reservationExists(req, res, next) {
   const reservationId = Number(req.params.reservationId)
-  const foundReservation = await service.read(reservationId)
+  const foundReservation = await reservationsService.read(reservationId)
   if (foundReservation) {
     res.locals.reservation = foundReservation
     next()
@@ -133,12 +133,12 @@ async function reservationExists(req, res, next) {
 }
 
 async function list(req, res) {
-  const data = await service.listReservationsForCurrentDate(req.query.date)
+  const data = await reservationsService.listReservationsForCurrentDate(req.query.date)
   res.json({data})
 }
 
 async function create(req, res) {
-  const data = await service.create(req.body.data)
+  const data = await reservationsService.create(req.body.data)
   res.status(201).json({data})
 }
 

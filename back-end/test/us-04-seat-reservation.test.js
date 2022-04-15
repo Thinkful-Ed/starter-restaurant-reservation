@@ -7,6 +7,7 @@ describe("US-04 - Seat reservation", () => {
   beforeAll(() => {
     return knex.migrate
       .forceFreeMigrationsLock()
+      
       .then(() => knex.migrate.rollback(null, true))
       .then(() => knex.migrate.latest());
   });
