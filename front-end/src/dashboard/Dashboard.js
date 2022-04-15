@@ -45,6 +45,7 @@ function Dashboard() {
       <td>{reservation.mobile_number}</td>
       <td>{reservation.reservation_time}</td>
       <td>{reservation.people}</td>
+      <td><button type="button" className="btn btn-secondary">Seat</button></td>
     </tr>
   ));
 
@@ -66,17 +67,29 @@ function Dashboard() {
           Next
         </button>
       </div>
-      <table className="table table-bordered border-dark table-hover">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Mobile Number</th>
-            <th>Reservation Time</th>
-            <th>Number of People in Party</th>
-          </tr>
-        </thead>
-        <tbody>{reservationRows}</tbody>
-      </table>
+      <div className="d-flex justify-content-between">
+        <table className="table table-bordered border-dark table-hover mr-2">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Mobile Number</th>
+              <th>Reservation Time</th>
+              <th>Number of People in Party</th>
+            </tr>
+          </thead>
+          <tbody>{reservationRows}</tbody>
+        </table>
+        <table className="table table-bordered border-dark table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Table Name</th>
+              <th>Capacity</th>
+              <th>Occupied?</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
     </main>
   );
 }
