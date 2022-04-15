@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 import {useHistory} from 'react-router-dom'
+import {createTable} from '../utils/api'
+import ErrorAlert from "./ErrorAlert"
 
 export default function CreateTable() {
 
@@ -11,6 +13,7 @@ export default function CreateTable() {
     }
 
     const [formData, setFormData] = useState({...initialFormState})
+    const [tableError, setTableError] = useState(null)
 
     const handleChange = ({target}) => {
         setFormData({
@@ -21,12 +24,13 @@ export default function CreateTable() {
 
     const handleCreateTableSubmission = (event) => {
         event.preventDefault()
-        history.push("/dashboard")
+        createTable(formData).then(() => history.push("/dashboard")).catch(setTableError)
     }
 
     return (
         <div>
             <h1>Create Table</h1>
+            <ErrorAlert error={tableError} />
             <form onSubmit={handleCreateTableSubmission}>
                 <label htmlFor="table_name" className="form-label">
                     Table Name

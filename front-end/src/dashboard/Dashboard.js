@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { listReservations } from "../utils/api";
+import { useLocation, Link } from "react-router-dom";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import {today, previous, next} from "../utils/date-time"
 
@@ -13,6 +13,7 @@ import {today, previous, next} from "../utils/date-time"
 function Dashboard() {
   const [date, setDate] = useState(today())
   const [reservations, setReservations] = useState([]);
+  const [tables, setTables] = useState([])
   const [reservationsError, setReservationsError] = useState(null);
   const location = useLocation();
 
@@ -26,7 +27,14 @@ function Dashboard() {
     }   
   }, []);
 
- 
+  useEffect(() => {
+    const ac = new AbortController()
+    listTables(ac.signal)
+    .then(setTables)
+    .catch(setReservationsError)
+
+    return () => ac.abort()
+  }, [])
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -45,9 +53,18 @@ function Dashboard() {
       <td>{reservation.mobile_number}</td>
       <td>{reservation.reservation_time}</td>
       <td>{reservation.people}</td>
-      <td><button type="button" className="btn btn-secondary">Seat</button></td>
+      <td><Link to={`/reservations/${reservation.reservation_id}/seat`}><button type="button" className="btn btn-secondary">Seat</button></Link></td>
     </tr>
   ));
+
+  const tableRows = tables.map((table) => (
+    <tr key={table.table_id}>
+      <td>{table.table_id}</td>
+      <td>{table.table_name}</td>
+      <td>{table.capacity}</td>
+      <td data-table-id-status={`${table.table_id}`}>{table.occupied ? 'Occupied' : 'Free'}</td>
+    </tr>
+  ))
 
   return (
     <main>
@@ -88,6 +105,7 @@ function Dashboard() {
               <th>Occupied?</th>
             </tr>
           </thead>
+          <tbody>{tableRows}</tbody>
         </table>
       </div>
     </main>
