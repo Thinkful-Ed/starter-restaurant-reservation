@@ -1,5 +1,6 @@
 import {today} from "./date-time"
 
+//TODO: need to add a frontend error if time is too early or too late
 export function isDateTuesday(date) {
     const userReservationDate = new Date(date)
     if (userReservationDate.getUTCDay() === 2) {
