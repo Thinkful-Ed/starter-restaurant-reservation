@@ -11,7 +11,12 @@ function create(reservation) {
         .then(createdRow => createdRow[0])
 }
 
+function read(reservation_id) {
+    return knex("reservations").select("*").where({reservation_id}).first()
+}
+
 module.exports = {
     listReservationsForCurrentDate,
-    create
+    create,
+    read
 }

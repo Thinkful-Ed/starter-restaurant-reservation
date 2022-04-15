@@ -118,6 +118,20 @@ function isValidTime(req, res, next) {
   }
 }
 
+async function reservationExists(req, res, next) {
+  const reservationId = Number(req.params.reservationId)
+  const foundReservation = await service.read(reservationId)
+  if (foundReservation) {
+    res.locals.reservation = foundReservation
+    next()
+  } else {
+    next({
+      status: 400,
+      message: `Reservation '${reservationId}' does not exist` 
+    })
+  }
+}
+
 async function list(req, res) {
   const data = await service.listReservationsForCurrentDate(req.query.date)
   res.json({data})
@@ -128,7 +142,12 @@ async function create(req, res) {
   res.status(201).json({data})
 }
 
+function read(req, res, next) {
+  res.json({data: res.locals.reservation})
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [hasOnlyValidProperties, hasRequiredProperties, isValidDate, dateIsNotInPast, isDateTuesday, isValidTime, isANumber, asyncErrorBoundary(create)]
+  create: [hasOnlyValidProperties, hasRequiredProperties, isValidDate, dateIsNotInPast, isDateTuesday, isValidTime, isANumber, asyncErrorBoundary(create)],
+  read: [asyncErrorBoundary(reservationExists), read]
 };
