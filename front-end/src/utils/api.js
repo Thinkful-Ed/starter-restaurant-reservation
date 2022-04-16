@@ -134,16 +134,18 @@ export async function seatTable(reservationId, tableId, signal) {
 
   const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`)
   try {
-    const reponse = await fetchJson(url, {
+    const response = await fetchJson(url, {
       method: 'PUT',
       headers,
       signal,
       body: JSON.stringify({ data: { reservation_id: reservationId } })
     }, [])
+    return response
   } catch (error) {
     console.error(error)
     return error
   }
+
 }
 
 
