@@ -9,7 +9,7 @@ export default function CreateTable() {
 
     const initialFormState = {
         table_name: "",
-        capacity: 1
+        capacity: null
     }
 
     const [formData, setFormData] = useState({...initialFormState})
