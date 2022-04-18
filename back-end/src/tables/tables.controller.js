@@ -1,6 +1,9 @@
 const tablesService = require("./tables.service")
 const reservationsService = require("../reservations/reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
+const hasProperties = require("../errors/hasProperties")
+const hasRequiredUpdateProperties = hasProperties("reservation_id")
+const hasRequiredCreateProperties = hasProperties("table_name", "capacity")
 
 async function listTables(req, res, next) {
     const data = await tablesService.listTables()
@@ -9,6 +12,31 @@ async function listTables(req, res, next) {
 async function create(req, res, next) {
     const data = await tablesService.create(req.body.data)
     res.status(201).json({data})
+}
+
+function tableNameIsMoreThanOneCharacter(req, res, next) {
+    const {table_name} = req.body.data
+    if(table_name.length < 2) {
+        next({
+            status: 400,
+            message: `table_name must be atleast 2 characters or longer`
+        })
+    } else {
+        next()
+    }
+}
+
+function capacityIsANumber(req, res, next) {
+    let {capacity} = req.body.data
+    capacity = Number(capacity)
+    if(!Number.isInteger(capacity)) {
+        next({
+            status: 400,
+            message: 'capacity is not a valid number'
+        })
+    } else {
+        next()
+    }
 }
 
 async function tableExists(req, res, next) {
@@ -25,8 +53,34 @@ async function tableExists(req, res, next) {
     }
 }
 
-function partyIsSmallerThanCapacity(req, res, next) {
+async function partyIsSmallerThanCapacity(req, res, next) {
     const {reservation_id} = req.body.data
+    const reservationPartySize = await reservationsService.read(reservation_id)
+    if(!reservationPartySize) {
+        next({
+            status: 404,
+            message: `Reservation id '${reservation_id}' does not exist`
+        })
+    }
+    if(Number(res.locals.table.capacity) < Number(reservationPartySize.people)) {
+        next({
+            status: 400,
+            message: "Party size cannot be greater than table capacity. Please select another table."
+        })
+    } else {
+        next()
+    }
+}
+
+function isTableOccupied(req, res, next) {
+    if(res.locals.table.occupied) {
+        next({
+            status: 400,
+            message: 'Table is currently occupied, please select another table.'
+        })
+    } else {
+        next()
+    } 
 }
 
 async function updateTable(req, res, next) {
@@ -41,6 +95,6 @@ async function updateTable(req, res, next) {
 
 module.exports = {
     listTables: asyncErrorBoundary(listTables),
-    create: asyncErrorBoundary(create),
-    update: [asyncErrorBoundary(tableExists), asyncErrorBoundary(updateTable)]
+    create: [hasRequiredCreateProperties, tableNameIsMoreThanOneCharacter, capacityIsANumber, asyncErrorBoundary(create)],
+    update: [asyncErrorBoundary(tableExists), hasRequiredUpdateProperties, asyncErrorBoundary(partyIsSmallerThanCapacity), isTableOccupied, asyncErrorBoundary(updateTable)]
 }
