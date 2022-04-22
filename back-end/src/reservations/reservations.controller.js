@@ -55,13 +55,13 @@ function validateDate(req, res, next) {
   if (!isfutureDate(reservation_date)) {
     return next({
       status: 400,
-      message: "reservation_date must be in the future",
+      message: "reservation date must be in the future",
     });
   }
   if (dayOfWeek === 2) {
     return next({
       status: 400,
-      message: "reservation_date cannot be tuesday because we are closed",
+      message: "reservation date cannot be Tuesday because we are closed",
     });
   }
   if (!/^\d{4}\-\d{2}\-\d{2}$/.test(reservation_date)) {

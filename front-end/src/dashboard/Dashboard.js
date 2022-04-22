@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import Buttons from "./Buttons";
+import Reservations from "./Reservations";
 
 /**
  * Defines the dashboard page.
@@ -23,14 +25,32 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  const allFinishedReservations = reservations.filter(
+    (reservation) =>
+      reservation.status === "finished" || reservation.status === "cancelled"
+  );
+
   return (
-    <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+    <main className=".bg-secondary">
+      <h1 className="d-flex justify-content-center">Reservations</h1>
+      <div className="d-flex justify-content-center mb-3">
+        <h4 className="mb-0">Date: {date}</h4>
       </div>
+      <Buttons date={date} />
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      {allFinishedReservations.length === reservations.length &&
+        reservations.length > 0 && (
+          <h3 className="my-3 d-flex justify-content-center">
+            No reservations for this date.
+          </h3>
+        )}
+      {reservations.length > 0 ? (
+        <Reservations reservations={reservations} />
+      ) : (
+        <h3 className="my-3 d-flex justify-content-center">
+          No reservations for this date.
+        </h3>
+      )}
     </main>
   );
 }
