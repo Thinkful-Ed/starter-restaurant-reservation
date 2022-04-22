@@ -49,6 +49,8 @@
   "author": "Thinkful, Inc.",
   "license": "UNLICENSED",
   "dependencies": {
+    "concurrently": "^7.1.0",
+    "dotenv": "^16.0.0",
     "moment": "^2.29.1"
   }
 }

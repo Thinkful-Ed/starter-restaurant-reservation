@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
-const { listTables, getReservation } = require("../utils/api")
+const { listTables, getReservation, seatTable } = require("../utils/api")
 
 export default function SeatReservation() {
     
@@ -13,29 +13,42 @@ export default function SeatReservation() {
     const { reservation_id } = useParams()
 
     const handleChange = ({ target: {value} }) => {
-        console.log("target value in seat reservation:", value)
-        //console.log("tables in seatreservation", tables)
+        
         setTableBeingAssigned(tables.find(({table_id}) => table_id == value))
-        console.log("tableBeingAssigned", tableBeingAssigned)
+        
     }
 
     const handleCancel = () => {
         history.push(-1)
     }
 
-    const handleSubmit = () => {
+
+    async function handleSubmit(event) {
         
+        event.preventDefault()
         // check to make sure you aren't overseating the table
         // make a call to API assigning table to reservation
         // return to dashboard
-        
+    
         /**
          * PUT to /tables/:table_id/seat/ in order to save the table assignment. 
          * The body of the request must be { data: { reservation_id: x } } 
          * where X is the reservation_id of the reservation being seated. 
          * The tests do not check the body returned by this request.
          */
+
+        const abortController = new AbortController()
+        console.log("reservation id", reservation_id, "table id", tableBeingAssigned.table_id)
+        const response = await seatTable(reservation_id, `${tableBeingAssigned.table_id}`, abortController.signal)
+        if (response.message) {
+            setError(response)
+            return
+        } else {
+            setError(null)
+        }
     }
+    
+
 
     /**
      * Loads reservations from API
@@ -91,7 +104,7 @@ export default function SeatReservation() {
                         {content}
                     </select>
                 </label>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" onClick={handleSubmit} className="btn btn-primary">
                     Submit
                 </button>
                 <button type="cancel" onClick={handleCancel} className="btn btn-primary">

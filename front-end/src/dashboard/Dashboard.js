@@ -43,7 +43,7 @@ function Dashboard({ date }) {
         async function loadTablesFromApi() {
             try {
                 const response = await listTables(abortController.signal)
-				setTables(() => response)
+				setTables(response)
             } catch(error) {
                 setError(error)
             }
