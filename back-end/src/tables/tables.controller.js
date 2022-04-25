@@ -12,6 +12,7 @@ async function hasData(req, res, next) {
 }
 
 async function create(req, res, next) {
+    const tableFromRequest = req.body.data
     const newTable = await service.create(req.body.data)
     res.status(201)
         .json({

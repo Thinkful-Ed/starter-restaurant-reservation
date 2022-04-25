@@ -26,10 +26,17 @@ export default function SeatReservation() {
     async function handleSubmit(event) {
         
         event.preventDefault()
+        
         // check to make sure you aren't overseating the table
+        if (reservation.people > tableBeingAssigned.capactiy) {
+            setError("Table isn't big enough for party.")
+            return
+        }
+        
         // make a call to API assigning table to reservation
         // return to dashboard
     
+        
         /**
          * PUT to /tables/:table_id/seat/ in order to save the table assignment. 
          * The body of the request must be { data: { reservation_id: x } } 

@@ -11,6 +11,10 @@ export default function NewReservation() {
     const [inputValid, setInputValid] = useState({
         first_name: false,
         last_name: false,
+        mobile_number: false,
+        reservation_date: false,
+        reservation_time: false,
+        people: false,
     })
 
     const initialFormData = {
@@ -29,8 +33,19 @@ export default function NewReservation() {
         /**
          * add logic/switch to handle validation based on target
          */
-        
-        setInputValid({ ...inputValid, [target.name]: !target.value })
+        //console.log("target ID", target.id)
+        /* switch (target.id) {
+            case "first_name":
+                if (target.first_name === "") {
+                    setInputValid(() => inputValid.first_name = false)
+                }
+            case "last_name":
+                if (target.last_name === "") {
+                    setInputValid(inputValid.last_name = false)
+                }
+        } */
+
+        //setInputValid({ ...inputValid, [target.name]: !target.value })
         setFormData({
             ...formData,
             [target.name]: target.value,
@@ -43,6 +58,16 @@ export default function NewReservation() {
 
     async function handleSubmit(event) {
         event.preventDefault()
+        /* switch (event.target.id) {
+            case "first_name":
+                if (event.target.first_name === "") {
+                    setInputValid(inputValid.first_name = false)
+                }
+            case "last_name":
+                if (event.target.last_name === "") {
+                    setInputValid(inputValid.last_name = false)
+                }
+        } */
         const abortController = new AbortController()
         const newReservation = { ...formData }
         const response = await createReservation(newReservation, abortController.signal)
@@ -69,7 +94,6 @@ export default function NewReservation() {
                     name="first_name"
                     onChange={handleChange}
                     value={formData.first_name}
-                    required
                 />
                 { inputValid.first_name ? <div className="text-danger">First name is required.</div> : null }
             </div>
@@ -82,8 +106,8 @@ export default function NewReservation() {
                     name="last_name"
                     onChange={handleChange}
                     value={formData.last_name}
-                    required
                 />
+                { inputValid.last_name ? <div className="text-danger">Last name is required.</div> : null }
             </div>
             <div className="form-group">
                 <label htmlFor="mobile_number" className="form-label">Mobile Number</label>

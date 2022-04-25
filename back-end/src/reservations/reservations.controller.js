@@ -2,13 +2,27 @@ const service = require("./reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 const moment = require("moment") // used to validate date input
 
+async function reservationExists(req, res, next) {
+  if (req.body.data) {
+    if (req.body.data.reservation_id) {
+      const reservation = await service.read(req.body.data.reservation_id)
+      if (reservation.reservation_id) {
+        res.locals.reservation = reservation
+        return next()
+      }
+      next({ status: 404, message: `Reservation ${reservation.reservation_id} not found.`})
+    }
+    
+  }
+  next({ status: 404, message: `Reservation not found.` })
+}
+
 async function hasData(req, res, next) {
   if (req.body.data) {
     res.locals.reservation = req.body.data
     return next();
   }
-  const message = "body must have data property"
-  next({ status: 400, message: message })
+  next({ status: 400, message: "body must have data property" })
 }
 
 function dataHas(propertyName) {
@@ -89,7 +103,7 @@ function hasValidPeople(req, res, next) {
 }
 
 async function read(req, res, next) {
-  const reservation = await service.read(req.params.reservation_id)
+  const reservation = res.locals.reservation
   res.status(201).json({
     data: reservation,
   })
@@ -130,6 +144,9 @@ module.exports = {
     hasValidPeople,
     asyncErrorBoundary(create)
   ],
-  read: [asyncErrorBoundary(read)],
+  read: [
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(read)
+  ],
   //update: [asyncErrorBoundary(hasData), asyncErrorBoundary(update)]
 }
