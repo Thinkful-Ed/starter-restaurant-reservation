@@ -79,7 +79,7 @@ function SeatReservation({ date }) {
                   name={table_id}
                   value={`${table_name} - ${capacity}`}
                 >
-                  {table_name} - {capacity}
+                  {table_name} - Seats: {capacity}
                 </option>
               );
             })}

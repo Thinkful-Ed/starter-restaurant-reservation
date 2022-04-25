@@ -37,14 +37,14 @@ function Reservations({ reservations }) {
             {status === "booked" && (
               <Link
                 to={`/reservations/${reservation_id}/seat`}
-                className="btn btn-primary mr-3"
+                className="btn btn-info btn-lg mr-3"
               >
                 Seat
               </Link>
             )}
             <Link to={`/reservations/${reservation_id}/edit`}>
               <button
-                className="btn btn-secondary mr-3"
+                className="btn btn-secondary btn-lg mr-3"
                 disabled={status !== "booked" ? true : false}
               >
                 Edit
@@ -52,7 +52,7 @@ function Reservations({ reservations }) {
             </Link>
             <button
               type="button"
-              className="btn btn-danger"
+              className="btn btn-dark btn-lg "
               data-reservation-id-cancel={reservation_id}
               disabled={status !== "booked" ? true : false}
             >

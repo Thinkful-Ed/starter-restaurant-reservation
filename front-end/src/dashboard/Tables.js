@@ -31,7 +31,7 @@ function Tables({ tables }) {
           </p>
           {status === "occupied" && (
             <button
-              className="btn btn-warning"
+              className="btn btn-info btn-lg"
               data-table-id-finish={table_id}
               onClick={() => handleFinish(table_id)}
             >

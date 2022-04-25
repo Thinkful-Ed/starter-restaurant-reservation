@@ -42,6 +42,7 @@ function TableForm() {
             className="form-control"
             onChange={handleChange}
             value={formData.table_name}
+            placeholder="Table Name"
             required
           />
         </div>

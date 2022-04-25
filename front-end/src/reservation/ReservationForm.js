@@ -68,6 +68,7 @@ function ReservationForm({ reservation }) {
             className="form-control"
             onChange={handleChange}
             value={formData.first_name}
+            placeholder="First Name"
             required
           />
         </div>
@@ -82,6 +83,7 @@ function ReservationForm({ reservation }) {
             className="form-control"
             onChange={handleChange}
             value={formData.last_name}
+            placeholder="Last Name"
             required
           />
         </div>
@@ -96,6 +98,7 @@ function ReservationForm({ reservation }) {
             className="form-control"
             onChange={handleChange}
             value={formData.mobile_number}
+            placeholder="Phone Number"
             required
           />
         </div>
