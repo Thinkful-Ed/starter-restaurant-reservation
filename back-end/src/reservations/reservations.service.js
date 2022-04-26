@@ -54,6 +54,7 @@ function update({ status }, { reservation_id }) {
     .returning("*")
     .then((rows) => rows[0]);
 }
+
 function updateReservation(data, reservation_id) {
   const {
     first_name,
