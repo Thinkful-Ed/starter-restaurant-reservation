@@ -74,6 +74,11 @@ function Dashboard({ date }) {
 					? <td className="text-danger">Occupied</td> 
 					: <td className="text-success">Open</td>
 			}
+			<td>
+				<button className="btn btn-primary">
+					Finish
+				</button>
+			</td>
 		</tr>
   	))
 
@@ -104,7 +109,8 @@ function Dashboard({ date }) {
 						<thead className="thead-dark">
 								<th>Table Name</th>
 								<th>Capacity</th>
-								<th>Status</th>							
+								<th>Status</th>
+								<th></th>					
 						</thead>						
 						{tablesContent}						
 					</table>

@@ -83,7 +83,7 @@ export default function NewReservation() {
     }
 
     return (
-        <form className="new-res-form needs-validation" novalidate onSubmit={handleSubmit}>
+        <form className="new-res-form needs-validation" onSubmit={handleSubmit}>
             <h1>New Reservation</h1>
             <div className="form-group">
                 <label htmlFor="first_name">First Name</label>
@@ -155,21 +155,25 @@ export default function NewReservation() {
             </div>
             <ErrorAlert error={error} />
             <label htmlFor="submit" className="form-label">
-                <input 
+                <button
                     type="submit"
                     id="submit"
                     name="submit"
                     className="btn btn-primary"
-                />
+                >
+                    Submit
+                </button>
             </label>
             <label htmlFor="reset" className="form-label">
-                <input 
+                <button
                     type="reset"
                     id="reset"
                     name="reset"
                     onClick={handleReset}
                     className="btn btn-primary"
-                />
+                >
+                    Reset
+                </button>
             </label>
             <label htmlFor="cancel" className="form-label">
                 <button

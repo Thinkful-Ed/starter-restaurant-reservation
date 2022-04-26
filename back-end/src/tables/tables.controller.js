@@ -20,21 +20,38 @@ async function create(req, res, next) {
         })
 }
 
+function tableNameValid(req, res, next) {
+    if (res.locals.table.table_name.length < 2) {
+        const message = `Table name must be 2 or more characters.`
+        next({ status: 400, message })
+    }
+    return next()
+}
+
+function tableCapacityValid(req, res, next) {
+    if (!res.locals.table.capacity) {
+        const message = `Capacity must not be blank.`
+        next ({ status: 400, message })
+    }
+    return next()
+}
+
 async function reservationExists(req, res, next) {
     const reservation = await resService.read(req.body.data.reservation_id)
-    if (reservation) {
-        return next()
+    if (!reservation) {
+        next({ status: 404, message: `Reservation not found.` })
     }
-    next({ status: 404, message: `Reservation not found.` })
+    res.locals.reservation = reservation
+    return next()
 }
 
 async function tableExists(req, res, next) {
     const table = await service.read(req.params.table_id)
-    if (table) {
-        res.locals.table = table
+    if (!table) {
+        next({ status: 404, message: `Table not found` })
         return next()
     }
-    next({ status: 404, message: `Table not found` })
+    res.locals.table = table
     return next()
 }
 
@@ -44,6 +61,16 @@ async function list(req, res, next) {
 }
 
 async function seatTable(req, res, next) {
+    // Check for table capacity
+    console.log("res locals reservation", res.locals.reservation)
+    console.log("people", res.locals.reservation.reservation_date)
+    console.log("capacity:", res.locals.table.capacity)
+    if (Number.parseInt(res.locals.table.capacity) < Number.parseInt(res.locals.reservation.people)) {
+        next({ status: 400, message: `Table capacity too small to seat reservation.`})
+    }
+    if (res.locals.table.reservation_id) {
+        next({ status: 400, message: `Table is occupied.` })
+    }
     const updatedTable = {
         ...res.locals.table,
         reservation_id: req.body.data.reservation_id,
@@ -55,11 +82,13 @@ async function seatTable(req, res, next) {
 module.exports = {
     create: [
         asyncErrorBoundary(hasData), 
+        asyncErrorBoundary(tableNameValid),
+        asyncErrorBoundary(tableCapacityValid),
         asyncErrorBoundary(create)
     ],
     seatTable: [
-        asyncErrorBoundary(reservationExists), 
         asyncErrorBoundary(tableExists), 
+        asyncErrorBoundary(reservationExists),
         asyncErrorBoundary(seatTable)
     ],
     list,

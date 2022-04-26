@@ -55,9 +55,7 @@ async function hasValidDate (req, res, next) {
       next({ status: 400, message: message })
     }
     //moment(reservation.reservation_date, "YYYY-MM-DD") < moment()
-    if (reservation.reservation_date < new Date()) {
-      console.log("date", reservation.reservation_date)
-      console.log("moment", moment())
+    if (moment(reservation.reservation_date) < new Date()) {
       const message = 'Reservation must be for a future date.'
       next({ status: 400, message: message })
     }

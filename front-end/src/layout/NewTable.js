@@ -11,7 +11,7 @@ export default function NewTable() {
 
     const initialFormData = {
         table_name: "",
-        capacity: 1
+        capacity: null
     }
 
     const [tables, setTables] = useState([])
@@ -30,8 +30,7 @@ export default function NewTable() {
         
         // validate input
         if (formData.table_name.length < 2) {
-            // set little error thingy below the table name form field
-            // to be red text that says it needs to be 2 characters.
+            setError({ message: `Table name must be at least 2 characters.` })
             return
         }
 
@@ -47,7 +46,7 @@ export default function NewTable() {
     }
 
     function handleCancel() {
-        history.push("/")
+        history.push(-1)
     }
 
     
