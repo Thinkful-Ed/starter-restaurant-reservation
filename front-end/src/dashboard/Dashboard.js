@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import { listReservations, listTables, seatTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { useLocation, Link } from "react-router-dom"
 
@@ -14,6 +14,7 @@ function Dashboard({ date }) {
 	const [reservations, setReservations] = useState([]);
 	const [tables, setTables] = useState([])
 	const [error, setError] = useState(null)
+	const [trigger, setTrigger] = useState(true)
 
 	/**
 	 * The following code gets the query from the URL and if a date is provided,
@@ -49,8 +50,17 @@ function Dashboard({ date }) {
             }
         }
         loadTablesFromApi()
-    }, [])
+    }, [trigger])
 
+	async function unseatTable({ target }) {
+		const abortController = new AbortController()
+        const response = await seatTable(true, null, `${target.id}`, abortController.signal)
+        if (response.message) {
+            setError(response)
+            return
+        }
+		setTrigger((prev) => !prev)
+	}
 	
 	
 	const reservationsContent = reservations.map((reservation, index) => (		
@@ -75,7 +85,7 @@ function Dashboard({ date }) {
 					: <td className="text-success">Open</td>
 			}
 			<td>
-				<button className="btn btn-primary">
+				<button id={table.table_id} className="btn btn-primary" onClick={unseatTable}>
 					Finish
 				</button>
 			</td>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
+import ErrorAlert from "../layout/ErrorAlert"
 const { listTables, getReservation, seatTable } = require("../utils/api")
 
 export default function SeatReservation() {
@@ -13,50 +14,31 @@ export default function SeatReservation() {
     const { reservation_id } = useParams()
 
     const handleChange = ({ target: {value} }) => {
-        
         setTableBeingAssigned(tables.find(({table_id}) => table_id == value))
-        
     }
 
-    const handleCancel = () => {
-        history.push(-1)
-    }
-
-
-    async function handleSubmit(event) {
-        
+    function handleCancel(event) {
         event.preventDefault()
-        
-        // check to make sure you aren't overseating the table
+        history.go(-1)
+    }
+
+    async function handleSubmit(event) {  
+        event.preventDefault()
         if (reservation.people > tableBeingAssigned.capactiy) {
             setError("Table isn't big enough for party.")
             return
         }
-        
-        // make a call to API assigning table to reservation
-        // return to dashboard
-    
-        
-        /**
-         * PUT to /tables/:table_id/seat/ in order to save the table assignment. 
-         * The body of the request must be { data: { reservation_id: x } } 
-         * where X is the reservation_id of the reservation being seated. 
-         * The tests do not check the body returned by this request.
-         */
-
         const abortController = new AbortController()
-        console.log("reservation id", reservation_id, "table id", tableBeingAssigned.table_id)
-        const response = await seatTable(reservation_id, `${tableBeingAssigned.table_id}`, abortController.signal)
+        //console.log("reservation id", reservation_id, "table id", tableBeingAssigned.table_id)
+        const response = await seatTable(false, reservation_id, `${tableBeingAssigned.table_id}`, abortController.signal)
         if (response.message) {
             setError(response)
             return
-        } else {
-            setError(null)
         }
+        setError(null)
+        history.go(-1)
     }
     
-
-
     /**
      * Loads reservations from API
      */
@@ -73,7 +55,7 @@ export default function SeatReservation() {
             }
         }
         loadReservationFromApi()
-        console.log("reservation", reservation)
+        
     }, [])
     
     /**
@@ -114,10 +96,11 @@ export default function SeatReservation() {
                 <button type="submit" onClick={handleSubmit} className="btn btn-primary">
                     Submit
                 </button>
-                <button type="cancel" onClick={handleCancel} className="btn btn-primary">
+                <button onClick={handleCancel} className="btn btn-primary">
                     Cancel
                 </button>
             </form>
+            <ErrorAlert error={error} />
         </div>
     )
 }

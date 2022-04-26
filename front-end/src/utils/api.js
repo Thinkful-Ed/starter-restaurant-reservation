@@ -126,13 +126,27 @@ export async function createTable(newTable, signal) {
   }
 }
 
-export async function seatTable(reservationId, tableId, signal) {
-    // PUT to /tables/:table_id/seat/ in order to save the table assignment. 
-    // The body of the request must be { data: { reservation_id: x } } 
-    // where X is the reservation_id of the reservation being seated. 
-    // The tests do not check the body returned by this request.
-
+export async function seatTable(unseat, reservationId, tableId, signal) {
+  // PUT to /tables/:table_id/seat/ in order to save the table assignment. 
+  // The body of the request must be { data: { reservation_id: x } } 
+  // where X is the reservation_id of the reservation being seated. 
+  // The tests do not check the body returned by this request.
   const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`)
+  if (unseat) {
+    try {
+      const response = await fetchJson(url, {
+        method: 'DELETE',
+        headers,
+        signal,
+        body: JSON.stringify({ data: { reservation_id: reservationId } })
+      }, [])
+      return response
+    } catch (error) {
+      console.error(error)
+      return error
+    }
+  }
+  
   try {
     const response = await fetchJson(url, {
       method: 'PUT',
@@ -147,6 +161,7 @@ export async function seatTable(reservationId, tableId, signal) {
   }
 
 }
+
 
 
 

@@ -61,10 +61,8 @@ async function list(req, res, next) {
 }
 
 async function seatTable(req, res, next) {
+    
     // Check for table capacity
-    console.log("res locals reservation", res.locals.reservation)
-    console.log("people", res.locals.reservation.reservation_date)
-    console.log("capacity:", res.locals.table.capacity)
     if (Number.parseInt(res.locals.table.capacity) < Number.parseInt(res.locals.reservation.people)) {
         next({ status: 400, message: `Table capacity too small to seat reservation.`})
     }
@@ -77,6 +75,23 @@ async function seatTable(req, res, next) {
     }
     const data = await service.update(updatedTable)
     res.json({ data })
+
+}
+
+async function finishTable(req, res, next) {
+    
+    if (res.locals.table.reservation_id) {
+        const updatedTable = {
+            ...res.locals.table,
+            reservation_id: null,
+        }
+        const data = await service.update(updatedTable)
+        res.json({ data })
+
+    } else {
+        next({ message: `Table not currently seated.`})
+    }
+
 }
 
 module.exports = {
@@ -92,4 +107,8 @@ module.exports = {
         asyncErrorBoundary(seatTable)
     ],
     list,
+    finishTable: [
+        asyncErrorBoundary(tableExists),
+        asyncErrorBoundary(finishTable),
+    ],
 }
