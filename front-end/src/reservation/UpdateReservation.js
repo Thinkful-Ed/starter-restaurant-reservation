@@ -8,7 +8,6 @@ function UpdateReservation() {
   const { reservation_id } = useParams();
   const [reservation, setReservation] = useState({});
   const [readError, setReadError] = useState(null);
-  console.log(reservation_id);
 
   useEffect(() => {
     function getReservation() {
@@ -22,14 +21,13 @@ function UpdateReservation() {
     getReservation();
   }, [reservation_id]);
 
-  console.log(reservation);
   return (
-    <>
+    <div>
       <h1 className="my-3">Update Existing reservation</h1>
       <ErrorAlert error={readError} />
       <hr></hr>
       <ReservationForm reservation={reservation} />
-    </>
+    </div>
   );
 }
 
