@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
+import { createReservation, updateReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 function ReservationForm({ reservation }) {
   const history = useHistory();
 
   const [createError, setCreateError] = useState(null);
+
   const initialFormState = {
     first_name: "",
     last_name: "",
@@ -15,7 +16,9 @@ function ReservationForm({ reservation }) {
     reservation_time: "",
     people: 0,
   };
+
   const [formData, setFormData] = useState({ ...initialFormState });
+
   const handleChange = ({ target }) => {
     setFormData({ ...formData, [target.name]: target.value });
   };
@@ -25,6 +28,18 @@ function ReservationForm({ reservation }) {
     formData.people = parseInt(formData.people);
     try {
       await createReservation(formData);
+      setFormData({ ...initialFormState });
+      history.push(`/dashboard?date=${formData.reservation_date}`);
+    } catch (error) {
+      setCreateError(error);
+    }
+  };
+
+  const handleUpdate = async (event) => {
+    event.preventDefault();
+    formData.people = parseInt(formData.people);
+    try {
+      await updateReservation(formData, reservation.reservation_id);
       setFormData({ ...initialFormState });
       history.push(`/dashboard?date=${formData.reservation_date}`);
     } catch (error) {
@@ -55,7 +70,7 @@ function ReservationForm({ reservation }) {
   }
 
   return (
-    <div>
+    <>
       <form>
         <div className="form-group">
           <label htmlFor="first_name">
@@ -147,13 +162,23 @@ function ReservationForm({ reservation }) {
       </form>
       <ErrorAlert error={createError} />
       <div className="my-5">
-        <button
-          type="submit"
-          className="btn btn-info btn-block btn-lg"
-          onClick={handleSubmit}
-        >
-          Submit
-        </button>
+        {reservation ? (
+          <button
+            type="submit"
+            className="btn btn-info btn-block btn-lg"
+            onClick={handleUpdate}
+          >
+            Submit
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className="btn btn-info btn-block btn-lg"
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
+        )}
 
         <button
           type="button"
@@ -163,7 +188,7 @@ function ReservationForm({ reservation }) {
           Cancel
         </button>
       </div>
-    </div>
+    </>
   );
 }
 

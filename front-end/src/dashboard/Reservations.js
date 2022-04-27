@@ -1,7 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { updateReservationStatus } from "../utils/api";
+import { Link, useHistory } from "react-router-dom";
 
 function Reservations({ reservations }) {
+  const history = useHistory();
+  const handleCancel = async (reservation_id) => {
+    const body = { data: { status: "cancelled" } };
+    if (
+      window.confirm(
+        "Do you want to cancel this reservation? This cannot be undone."
+      )
+    ) {
+      await updateReservationStatus(body, reservation_id);
+      history.go(0);
+    }
+  };
+
   return reservations.map((reservation, index) => {
     const {
       reservation_id,
@@ -55,6 +69,7 @@ function Reservations({ reservations }) {
               className="btn btn-dark btn-lg "
               data-reservation-id-cancel={reservation_id}
               disabled={status !== "booked" ? true : false}
+              onClick={() => handleCancel(reservation_id)}
             >
               Cancel
             </button>
