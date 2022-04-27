@@ -44,7 +44,6 @@ export default function SeatReservation() {
      */
     useEffect(() => {
         const abortController = new AbortController()
-        setError(null)
         async function loadReservationFromApi() {
             try {
                 const response = await getReservation(abortController.signal, reservation_id)
