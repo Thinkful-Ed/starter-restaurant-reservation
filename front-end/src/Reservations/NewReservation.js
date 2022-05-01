@@ -64,7 +64,6 @@ function NewReservation() {
           type="tel"
           id="mobile_number"
           name="mobile_number"
-          //pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
           onChange={changeHandle}
           value={form?.mobile_number}
         />
