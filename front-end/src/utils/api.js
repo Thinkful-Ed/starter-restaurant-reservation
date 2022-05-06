@@ -105,5 +105,15 @@ export async function updateTable(updatedTable, signal) {
     }),
     signal,
   };
-  return await fetchJson(url, options, updatedTable);
+  return await fetchJson(url, options);
+}
+
+export async function clearTable(tableId, signal) {
+  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
+  const options = {
+    method: "DELETE",
+    headers,
+    signal,
+  };
+  return await fetchJson(url, options);
 }

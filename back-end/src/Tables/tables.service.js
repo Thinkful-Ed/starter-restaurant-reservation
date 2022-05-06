@@ -6,10 +6,7 @@ function listTables() {
 }
 
 function readTable(tableId) {
-    return knex(table)
-    .select("*")
-    .where({ table_id: tableId })
-    .first();
+  return knex(table).select("*").where({ table_id: tableId }).first();
 }
 
 function readReservation(reservationId) {
@@ -33,4 +30,18 @@ function update(tableId, reservationId) {
     .then((reservation) => reservation[0]);
 }
 
-module.exports = { listTables, create, update, readReservation, readTable };
+function removeReservation(tableId) {
+  return knex(table)
+    .where({ table_id: tableId })
+    .update({ reservation_id: null }, "*")
+    .then((reservation) => reservation[0]);
+}
+
+module.exports = {
+  listTables,
+  create,
+  update,
+  readReservation,
+  readTable,
+  removeReservation,
+};

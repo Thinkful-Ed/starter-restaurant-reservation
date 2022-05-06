@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { listReservations, listTables } from "../utils/api";
+import { clearTable, listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import { today, next, previous } from "../utils/date-time";
@@ -66,6 +66,16 @@ function Dashboard({ date }) {
     );
   });
 
+  async function finishHandle(tableId) {
+    const confirm = window.confirm(
+      "Is this table ready to seat new guests? This cannot be undone."
+    );
+    if (confirm) {
+      await clearTable(tableId);
+      history.go(0)
+    }
+  }
+
   const formatedTables = tables.map((table) => {
     return (
       <div key={table.table_id}>
@@ -74,7 +84,11 @@ function Dashboard({ date }) {
           {table.reservation_id ? "occupied" : "free"}
         </span>
         {table.reservation_id ? (
-          <button data-table-id-finish={table.table_id} type="button">
+          <button
+            data-table-id-finish={table.table_id}
+            type="button"
+            onClick={() => finishHandle(table.table_id)}
+          >
             Finish
           </button>
         ) : (
