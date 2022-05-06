@@ -160,7 +160,7 @@ function checkTimeFormat(req, res, next) {
 
 function checkPeople(req, res, next) {
   const { people } = req.body.data;
-  if (typeof people === "number") {
+  if (!isNaN(people)) {
     next();
   } else {
     next({ status: 400, message: "people must be a number" });
@@ -169,6 +169,25 @@ function checkPeople(req, res, next) {
 
 async function create(req, res) {
   res.status(201).json({ data: await service.create(req.body.data) });
+}
+
+async function update(req, res) {
+  res.json({ data: await service.update(req.body.data.reservation_id) });
+}
+
+async function checkReservation(req,res,next) {
+  const targetReservation = await service.readReservation( req.params.reservationId)
+  if(targetReservation) {
+    res.locals.reservation = targetReservation
+    next()
+  }
+  else {
+    next({status: 404, message: `Reservation ${req.params.reservation_id} does not exist`})
+  }
+}
+
+async function read(req, res) {
+  res.json({data: res.locals.reservation})
 }
 
 module.exports = {
@@ -185,4 +204,6 @@ module.exports = {
     isOpen,
     asyncErrorBoundary(create),
   ],
+  update: [asyncErrorBoundary(update)],
+  read: [asyncErrorBoundary(checkReservation), read]
 };

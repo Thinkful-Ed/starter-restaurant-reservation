@@ -12,7 +12,6 @@ function NewReservation() {
     reservation_time: "",
     people: "",
   });
-
   const [error, setError] = useState(null);
   const history = useHistory();
 
@@ -40,7 +39,6 @@ function NewReservation() {
 
   return (
     <div>
-      
       <form onSubmit={submitHandle}>
         <ErrorAlert error={error} />
         <label htmlFor="first_name">First Name</label>
@@ -91,8 +89,8 @@ function NewReservation() {
           onChange={changeHandle}
           value={form?.people}
         />
-        <button type="submit">Submit</button>
-        <button onClick={cancelHandle}>Cancel</button>
+        <input type="submit" value='Submit' />
+        <input type="button" value='Cancel' onClick={cancelHandle} />
       </form>
     </div>
   );

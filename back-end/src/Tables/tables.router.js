@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const controller = require("./reservations.controller");
+const controller = require("./tables.controller");
 
 router.route("/").get(controller.list).post(controller.create);
-router.route('/:reservationId').put(controller.update).get(controller.read)
+router.route("/:tableId/seat").put(controller.update);
 
 module.exports = router;
