@@ -24,17 +24,37 @@ function create(newTable) {
 }
 
 function update(tableId, reservationId) {
-  return knex(table)
-    .where({ table_id: tableId })
-    .update({ reservation_id: reservationId }, "*")
-    .then((reservation) => reservation[0]);
+  return knex.transaction((trx) => {
+    knex(table)
+      .where({ table_id: tableId })
+      .update({ reservation_id: reservationId }, "*")
+      .transacting(trx)
+      .then(() => {
+        return knex("reservations")
+          .where({ reservation_id: reservationId })
+          .update({ status: "seated" }, "*")
+          .then((reservation) => reservation[0]);
+      })
+      .then(trx.commit)
+      .catch(trx.rollback);
+  });
 }
 
-function removeReservation(tableId) {
-  return knex(table)
-    .where({ table_id: tableId })
-    .update({ reservation_id: null }, "*")
-    .then((reservation) => reservation[0]);
+function removeReservation(tableId, reservationId) {
+  return knex.transaction((trx) => {
+    knex(table)
+      .where({ table_id: tableId })
+      .update({ reservation_id: null }, "*")
+      .transacting(trx)
+      .then(() => {
+        return knex("reservations")
+          .where({ reservation_id: reservationId })
+          .update({ status: "finished" }, "*")
+          .then((reservation) => reservation[0]);
+      })
+      .then(trx.commit)
+      .catch(trx.rollback);
+  });
 }
 
 module.exports = {

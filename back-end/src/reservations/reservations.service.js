@@ -1,8 +1,12 @@
+const { where } = require("../db/connection");
 const knex = require("../db/connection");
 const table = "reservations";
 
 function listReservations(date) {
-  return knex(table).select("*").where({ reservation_date: date });
+  return knex(table)
+    .select("*")
+    .where({ reservation_date: date })
+    .whereNot({ status: "finished" });
 }
 
 function readReservation(reservationId) {
@@ -20,10 +24,39 @@ function create(newReservation) {
 }
 
 function update(updatedReservation) {
-  return knex('posts')
-    .where({reservation_id : updatedReservation.reservation_id})
-    .update(updatedReservation, '*')
-    .then((reservation) => reservation[0])
+  return knex(table)
+    .where({ reservation_id: updatedReservation.reservation_id })
+    .update(updatedReservation, "*")
+    .then((reservation) => reservation[0]);
 }
 
-module.exports = { listReservations, create, update, readReservation };
+function updateStatus(reservationId, newStatus) {
+  return knex(table)
+    .where({ reservation_id: reservationId })
+    .update({ status: newStatus }, "*")
+    .then((reservation) => reservation[0]);
+}
+
+function finishReservation(reservationId) {
+  knex(table)
+    .where({ reservation_id: reservationId })
+    .update({ status: "finish" })
+    .transacting(trx)
+    .then(() => {
+      return knex("tables")
+        .where({ reservation_id: reservationId })
+        .update({ reservation_id: null }, "*")
+        .then((tableData) => tableData[0]);
+    })
+    .then(trx.commit)
+    .catch(trx.rollback);
+}
+
+module.exports = {
+  listReservations,
+  create,
+  update,
+  readReservation,
+  updateStatus,
+  finishReservation,
+};

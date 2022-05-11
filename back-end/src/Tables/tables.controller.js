@@ -135,7 +135,7 @@ async function checkTableId(req, res, next) {
   const { tableId } = req.params;
   const tableData = await service.readTable(tableId);
   if (tableData) {
-    res.locals.targetTable = tableData
+    res.locals.targetTable = tableData;
     next();
   } else {
     next({ status: 404, message: `${tableId} does not exist` });
@@ -151,7 +151,22 @@ function checkIfOccupied(req, res, next) {
 }
 
 async function removeReservation(req, res) {
-  res.json({ body: await service.removeReservation(req.params.tableId) });
+  const data = await service.removeReservation(
+    req.params.tableId,
+    res.locals.targetTable.reservation_id
+  );
+  res.json({
+    body: data,
+  });
+}
+
+function checkStatus(req, res, next) {
+  if(res.locals.targetReservation.status !== 'seated') {
+    next()
+  }
+  else {
+    next({status: 400, message: `Table is already seated`})
+  }
 }
 
 module.exports = {
@@ -169,6 +184,7 @@ module.exports = {
     hasReservationId,
     checkReservation,
     hasContent,
+    checkStatus,
     checkIfTableCanFit,
     checkIfFree,
     asyncErrorBoundary(update),

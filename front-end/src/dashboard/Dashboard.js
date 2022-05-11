@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { clearTable, listReservations, listTables } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
-import { today, next, previous } from "../utils/date-time";
+import { today } from "../utils/date-time";
+import ReservationList from "./ReservationList";
+import TableList from "./TableList";
+import DateNav from "./DateNav";
 
 /**
  * Defines the dashboard page.
@@ -11,12 +13,10 @@ import { today, next, previous } from "../utils/date-time";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date }) {
+function Dashboard() {
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const url = "/dashboard";
-  const history = useHistory();
   let queryDate = useQuery().get("date");
 
   if (!queryDate) {
@@ -51,53 +51,6 @@ function Dashboard({ date }) {
     return loadDashboard();
   }, [queryDate]);
 
-  const formatedReservations = reservations.map((reservation, index) => {
-    return (
-      <div key={index}>
-        <h3>
-          {reservation.first_name} {reservation.last_name}
-        </h3>
-        <h5>{reservation.reservation_date}</h5>
-        <h5>{reservation.reservation_time}</h5>
-        <a href={`/reservations/${reservation.reservation_id}/seat`}>
-          <button type="button">Seat</button>
-        </a>
-      </div>
-    );
-  });
-
-  async function finishHandle(tableId) {
-    const confirm = window.confirm(
-      "Is this table ready to seat new guests? This cannot be undone."
-    );
-    if (confirm) {
-      await clearTable(tableId);
-      history.go(0)
-    }
-  }
-
-  const formatedTables = tables.map((table) => {
-    return (
-      <div key={table.table_id}>
-        <h3>{table.table_name}</h3>
-        <span data-table-id-status={table.table_id} value={table.table_id}>
-          {table.reservation_id ? "occupied" : "free"}
-        </span>
-        {table.reservation_id ? (
-          <button
-            data-table-id-finish={table.table_id}
-            type="button"
-            onClick={() => finishHandle(table.table_id)}
-          >
-            Finish
-          </button>
-        ) : (
-          ""
-        )}
-      </div>
-    );
-  });
-
   return (
     <main>
       <h1>Dashboard</h1>
@@ -105,21 +58,13 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <div>
-        {formatedReservations}
+        <ReservationList reservationData={reservations} />
         <ErrorAlert error={reservationsError} />
-        <button
-          onClick={() => history.push(`${url}?date=${previous(queryDate)}`)}
-        >
-          Previous Date
-        </button>
-        <button onClick={() => history.push(`${url}?date=${today()}`)}>
-          Current Date
-        </button>
-        <button onClick={() => history.push(`${url}?date=${next(queryDate)}`)}>
-          Next Date
-        </button>
+        <DateNav queryDate={queryDate} />
       </div>
-      <div>{formatedTables}</div>
+      <div>
+        <TableList tableData={tables} />
+      </div>
     </main>
   );
 }

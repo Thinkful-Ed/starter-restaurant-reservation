@@ -175,19 +175,66 @@ async function update(req, res) {
   res.json({ data: await service.update(req.body.data.reservation_id) });
 }
 
-async function checkReservation(req,res,next) {
-  const targetReservation = await service.readReservation( req.params.reservationId)
-  if(targetReservation) {
-    res.locals.reservation = targetReservation
-    next()
-  }
-  else {
-    next({status: 404, message: `Reservation ${req.params.reservation_id} does not exist`})
+async function checkReservation(req, res, next) {
+  const targetReservation = await service.readReservation(
+    req.params.reservationId
+  );
+  if (targetReservation) {
+    res.locals.reservation = targetReservation;
+    next();
+  } else {
+    next({
+      status: 404,
+      message: `Reservation ${req.params.reservationId} does not exist`,
+    });
   }
 }
 
+async function updateStatus(req, res) {
+  const {
+    data: { status },
+  } = req.body;
+  res.json({
+    data: await service.updateStatus(req.params.reservationId, status),
+  });
+}
+
 async function read(req, res) {
-  res.json({data: res.locals.reservation})
+  res.json({ data: res.locals.reservation });
+}
+
+function checkStatus(req, res, next) {
+  const {
+    data: { status },
+  } = req.body;
+  const badStatus = ['seated', 'finished']
+  if (!badStatus.includes(status)) {
+    next();
+  } else {
+    next({ status: 400, message: `Status cannot be ${req.body.data.status}` });
+  }
+}
+
+function checkStatusChange(req, res, next) {
+  const {
+    data: { status },
+  } = req.body;
+  const correctStatus = ["booked", "seated", "finished"];
+  if (correctStatus.includes(status)) {
+    next();
+  } else {
+    next({ status: 400, message: `Status cannot be ${status}` });
+  }
+}
+
+function checkIfFinished(req, res, next) {
+  const {reservation} = res.locals
+  if(reservation.status !== 'finished') {
+    next()
+  }
+  else {
+    next({status:400, message: `Cannot change status if reservation is already finished`})
+  }
 }
 
 module.exports = {
@@ -196,6 +243,7 @@ module.exports = {
     checkData,
     hasRequiredProps,
     hasContent,
+    checkStatus,
     checkDateFormat,
     checkTimeFormat,
     checkPeople,
@@ -205,5 +253,11 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   update: [asyncErrorBoundary(update)],
-  read: [asyncErrorBoundary(checkReservation), read]
+  read: [asyncErrorBoundary(checkReservation), read],
+  updateStatus: [
+    asyncErrorBoundary(checkReservation),
+    checkIfFinished,
+    checkStatusChange,
+    asyncErrorBoundary(updateStatus),
+  ],
 };

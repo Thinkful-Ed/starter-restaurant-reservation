@@ -1,7 +1,7 @@
 
 exports.up = function(knex) {
     return knex.schema.table('reservations', (table) => {
-        table.string('status');
+        table.string('status').defaultTo('booked');
       })
 };
 
