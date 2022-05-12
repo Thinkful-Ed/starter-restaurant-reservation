@@ -29,8 +29,7 @@ function NewReservation() {
     }
   }
 
-  function cancelHandle(event) {
-    event.preventDefault
+  function cancelHandle() {
     history.goBack();
   }
 
