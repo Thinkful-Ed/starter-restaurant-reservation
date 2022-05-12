@@ -1,4 +1,3 @@
-const { where } = require("../db/connection");
 const knex = require("../db/connection");
 const table = "reservations";
 
@@ -7,6 +6,16 @@ function listReservations(date) {
     .select("*")
     .where({ reservation_date: date })
     .whereNot({ status: "finished" });
+}
+
+function listResByMobileNumber(mobileNumber) {
+  console.log(mobileNumber)
+  return knex(table)
+    .whereRaw(
+      "translate(mobile_number, '() -', '') like ?",
+      `%${mobileNumber.replace(/\D/g, "")}%`
+    )
+    .orderBy("reservation_date");
 }
 
 function readReservation(reservationId) {
@@ -54,6 +63,7 @@ function finishReservation(reservationId) {
 
 module.exports = {
   listReservations,
+  listResByMobileNumber,
   create,
   update,
   readReservation,

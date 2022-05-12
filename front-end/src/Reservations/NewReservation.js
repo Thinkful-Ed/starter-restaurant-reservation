@@ -16,9 +16,9 @@ function NewReservation() {
   const history = useHistory();
 
   async function submitHandle(event) {
-    console.log("qwer");
     event.preventDefault();
     try {
+      form.people = parseInt(form.people)
       const newPost = await postReservation(form);
       if (newPost.error) {
         throw newPost.error;
@@ -29,7 +29,8 @@ function NewReservation() {
     }
   }
 
-  function cancelHandle() {
+  function cancelHandle(event) {
+    event.preventDefault
     history.goBack();
   }
 
@@ -89,8 +90,10 @@ function NewReservation() {
           onChange={changeHandle}
           value={form?.people}
         />
-        <input type="submit" value='Submit' />
-        <input type="button" value='Cancel' onClick={cancelHandle} />
+        <button type="submit">Submit</button>
+        <button type="button" onClick={cancelHandle}>
+          Cancel
+        </button>
       </form>
     </div>
   );

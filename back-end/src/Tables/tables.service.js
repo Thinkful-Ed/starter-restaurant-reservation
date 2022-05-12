@@ -28,7 +28,6 @@ function update(tableId, reservationId) {
     knex(table)
       .where({ table_id: tableId })
       .update({ reservation_id: reservationId }, "*")
-      .transacting(trx)
       .then(() => {
         return knex("reservations")
           .where({ reservation_id: reservationId })
@@ -45,7 +44,6 @@ function removeReservation(tableId, reservationId) {
     knex(table)
       .where({ table_id: tableId })
       .update({ reservation_id: null }, "*")
-      .transacting(trx)
       .then(() => {
         return knex("reservations")
           .where({ reservation_id: reservationId })

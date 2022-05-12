@@ -2,9 +2,17 @@ const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 async function list(req, res) {
-  const { date } = req.query;
+  const { date, mobile_number } = req.query;
+  console.log(mobile_number);
   if (date) {
     const data = await service.listReservations(date);
+    const sortedReservations = data.sort(sortReservations);
+    res.json({
+      data: sortedReservations,
+    });
+  }
+  if (mobile_number) {
+    const data = await service.listResByMobileNumber(mobile_number);
     const sortedReservations = data.sort(sortReservations);
     res.json({
       data: sortedReservations,
@@ -160,7 +168,7 @@ function checkTimeFormat(req, res, next) {
 
 function checkPeople(req, res, next) {
   const { people } = req.body.data;
-  if (!isNaN(people)) {
+  if (typeof people === "number") {
     next();
   } else {
     next({ status: 400, message: "people must be a number" });
@@ -207,7 +215,7 @@ function checkStatus(req, res, next) {
   const {
     data: { status },
   } = req.body;
-  const badStatus = ['seated', 'finished']
+  const badStatus = ["seated", "finished"];
   if (!badStatus.includes(status)) {
     next();
   } else {
@@ -228,17 +236,19 @@ function checkStatusChange(req, res, next) {
 }
 
 function checkIfFinished(req, res, next) {
-  const {reservation} = res.locals
-  if(reservation.status !== 'finished') {
-    next()
-  }
-  else {
-    next({status:400, message: `Cannot change status if reservation is already finished`})
+  const { reservation } = res.locals;
+  if (reservation.status !== "finished") {
+    next();
+  } else {
+    next({
+      status: 400,
+      message: `Cannot change status if reservation is already finished`,
+    });
   }
 }
 
 module.exports = {
-  list: asyncErrorBoundary(list),
+  list: [asyncErrorBoundary(list)],
   create: [
     checkData,
     hasRequiredProps,

@@ -56,8 +56,6 @@ function checkData(req, res, next) {
 
 function checkCapacity(req, res, next) {
   const { capacity } = req.body.data;
-  console.log(typeof capacity);
-  console.log(capacity);
   if (typeof capacity === "number") {
     next();
   } else {
