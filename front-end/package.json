@@ -38,7 +38,7 @@
     "test:7": "run-p -l -r test:start:* \"test:e2e:run -- us-07\"",
     "test:8": "run-p -l -r test:start:* \"test:e2e:run -- us-08\"",
     "test:e2e": "run-p -l -r test:start:* test:e2e:run",
-    "test:e2e:run": "wait-on http://localhost:5000/reservations?date=2020-01-01 && jest --detectOpenHandles --forceExit --config ./e2e/jest.config.js",
+    "test:e2e:run": "wait-on http://localhost:5001/reservations?date=2020-01-01 && jest --detectOpenHandles --forceExit --config ./e2e/jest.config.js",
     "test:start:backend": "npm run test:start --prefix ./../back-end",
     "test:start:frontend": "npx cross-env BROWSER=none NODE_ENV=test react-scripts start",
     "test:unit": "react-scripts test"
