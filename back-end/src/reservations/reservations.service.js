@@ -5,11 +5,13 @@ function listReservations(date) {
   return knex(table)
     .select("*")
     .where({ reservation_date: date })
-    .whereNot({ status: "finished" });
+    .whereNot({ status: "finished" })
+    .andWhereNot({ status: "cancelled" })
+    .orderBy('reservation_time');
 }
 
 function listResByMobileNumber(mobileNumber) {
-  console.log(mobileNumber)
+  console.log(mobileNumber);
   return knex(table)
     .whereRaw(
       "translate(mobile_number, '() -', '') like ?",
@@ -46,10 +48,10 @@ function updateStatus(reservationId, newStatus) {
     .then((reservation) => reservation[0]);
 }
 
-function finishReservation(reservationId) {
+function finishReservation(reservationId, reservationStatus) {
   knex(table)
     .where({ reservation_id: reservationId })
-    .update({ status: "finish" })
+    .update({ status: reservationStatus })
     .transacting(trx)
     .then(() => {
       return knex("tables")

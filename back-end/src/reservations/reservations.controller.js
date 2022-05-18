@@ -3,19 +3,14 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 async function list(req, res) {
   const { date, mobile_number } = req.query;
-  console.log(mobile_number);
   if (date) {
-    const data = await service.listReservations(date);
-    const sortedReservations = data.sort(sortReservations);
     res.json({
-      data: sortedReservations,
+      data: await service.listReservations(date),
     });
   }
   if (mobile_number) {
-    const data = await service.listResByMobileNumber(mobile_number);
-    const sortedReservations = data.sort(sortReservations);
     res.json({
-      data: sortedReservations,
+      data: await service.listResByMobileNumber(mobile_number),
     });
   } else {
     const currentDate = new Date();
@@ -27,22 +22,10 @@ async function list(req, res) {
       .getDate()
       .toString(10)
       .padStart(2, "0")}`;
-    const data = await service.listReservations(currentDateString);
-    const sortedReservations = data.sort(sortReservations);
     res.json({
-      data: sortedReservations,
+      data: await service.listReservations(currentDateString),
     });
   }
-}
-
-function sortReservations(reservation1, reservation2) {
-  const [hour1, min1] = reservation1.reservation_time.split(":");
-  const [hour2, min2] = reservation2.reservation_time.split(":");
-  if (Number(hour1) > Number(hour2)) return 1;
-  if (Number(hour1) === Number(hour2) && Number(min1) > Number(min2)) return 1;
-  if (Number(hour1) === Number(hour2) && Number(min1) === Number(min2))
-    return 0;
-  return -1;
 }
 
 function hasContent(req, res, next) {
@@ -180,7 +163,7 @@ async function create(req, res) {
 }
 
 async function update(req, res) {
-  res.json({ data: await service.update(req.body.data.reservation_id) });
+  res.json({ data: await service.update(req.body.data) });
 }
 
 async function checkReservation(req, res, next) {
@@ -227,7 +210,7 @@ function checkStatusChange(req, res, next) {
   const {
     data: { status },
   } = req.body;
-  const correctStatus = ["booked", "seated", "finished"];
+  const correctStatus = ["booked", "seated", "finished", "cancelled"];
   if (correctStatus.includes(status)) {
     next();
   } else {
@@ -262,7 +245,17 @@ module.exports = {
     isOpen,
     asyncErrorBoundary(create),
   ],
-  update: [asyncErrorBoundary(update)],
+  update: [
+    asyncErrorBoundary(checkReservation),
+    checkData,
+    hasRequiredProps,
+    hasContent,
+    checkStatus,
+    checkDateFormat,
+    checkTimeFormat,
+    checkPeople,
+    asyncErrorBoundary(update),
+  ],
   read: [asyncErrorBoundary(checkReservation), read],
   updateStatus: [
     asyncErrorBoundary(checkReservation),
