@@ -1,8 +1,10 @@
 import React from "react";
+import CancelButton from "../utils/CancelButton";
+import EditButton from "../utils/EditButton";
 
-function ReservationList({ reservationData }) {
+function ReservationList({ reservationData, setError }) {
   function SeatButton({ reservation }) {
-    if (reservation.status !== 'seated') {
+    if (reservation.status !== "seated") {
       return (
         <a href={`/reservations/${reservation.reservation_id}/seat`}>
           <button type="button">Seat</button>
@@ -25,6 +27,8 @@ function ReservationList({ reservationData }) {
           {reservation.status}
         </h5>
         <SeatButton reservation={reservation} />
+        <EditButton reservation={reservation} />
+        <CancelButton reservation={reservation} setError={setError} />
       </div>
     );
   });

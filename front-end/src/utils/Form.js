@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import { postReservation } from "../utils/api";
+import React, { useEffect, useState } from "react";
+import {
+  postReservation,
+  updateReservation,
+  readReservation,
+} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 
-function NewReservation() {
+function Form() {
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -14,16 +18,47 @@ function NewReservation() {
   });
   const [error, setError] = useState(null);
   const history = useHistory();
+  const { path } = useRouteMatch();
+  const { reservationId } = useParams();
+  const editting = path.includes("edit");
+
+  useEffect(() => {
+    if (editting) {
+      async function readRes() {
+        const abortController = new AbortController();
+        try {
+          const reservationData = await readReservation(
+            reservationId,
+            abortController.signal
+          );
+          console.log(reservationData);
+          if (reservationData.error) {
+            throw reservationData.error;
+          }
+          setForm(reservationData);
+        } catch (err) {
+          setError(err);
+        }
+        return () => abortController.abort();
+      }
+      return readRes();
+    }
+  }, [editting, reservationId]);
 
   async function submitHandle(event) {
     event.preventDefault();
     try {
-      form.people = parseInt(form.people)
-      const newPost = await postReservation(form);
+      form.people = parseInt(form.people);
+      let newPost = null;
+      if (editting) {
+        newPost = await updateReservation(form);
+      } else {
+        newPost = await postReservation(form);
+      }
       if (newPost.error) {
         throw newPost.error;
       }
-      history.push(`/dashboard?date=${form.reservation_date}`);
+        history.push(`/dashboard?date=${form.reservation_date}`);
     } catch (err) {
       setError(err);
     }
@@ -98,4 +133,4 @@ function NewReservation() {
   );
 }
 
-export default NewReservation;
+export default Form;
