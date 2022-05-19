@@ -11,7 +11,7 @@
   "scripts": {
     "start": "node src/server.js",
     "start:dev": "nodemon src/server.js",
-    "test": "npx cross-env LOG_LEVEL=warn jest --runInBand --detectOpenHandles --forceExit",
+    "test": "npx cross-env LOG_LEVEL=warn jest --runInBand --detectOpenHandles --forceExit --config ./test/jest.config.js",
     "test:1": "npm run test -- us-01",
     "test:2": "npm run test -- us-02",
     "test:3": "npm run test -- us-03",
