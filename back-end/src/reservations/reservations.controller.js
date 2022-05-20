@@ -8,7 +8,7 @@ async function list(req, res) {
       data: await service.listReservations(date),
     });
   }
-  if (mobile_number) {
+  else if (mobile_number) {
     res.json({
       data: await service.listResByMobileNumber(mobile_number),
     });

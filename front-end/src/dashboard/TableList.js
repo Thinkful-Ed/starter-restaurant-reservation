@@ -22,6 +22,7 @@ function TableList({ tableData }) {
           data-table-id-finish={table.table_id}
           type="button"
           onClick={() => finishHandle(table.table_id)}
+          className="btn btn-success"
         >
           Finish
         </button>
@@ -33,12 +34,14 @@ function TableList({ tableData }) {
 
   const formatedTables = tableData.map((table) => {
     return (
-      <div key={table.table_id}>
-        <h3>{table.table_name}</h3>
+      <div key={table.table_id} className="border-bottom border-dark">
+        <h4>Table Name : {table.table_name}</h4>
         <span data-table-id-status={table.table_id} value={table.table_id}>
-          {table.reservation_id ? "occupied" : "free"}
+          Status : {table.reservation_id ? "occupied" : "free"}
         </span>
-        <FinishButton table={table} />
+        <div>
+          <FinishButton table={table} />
+        </div>
       </div>
     );
   });

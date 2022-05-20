@@ -41,7 +41,6 @@ function Dashboard() {
         if (tableData.error) {
           throw tableData.error;
         }
-        console.log(tableData);
         setTables(tableData);
       } catch (err) {
         setError(err.message);
@@ -57,13 +56,28 @@ function Dashboard() {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
       </div>
-      <div>
-        <ReservationList reservationData={reservations} setError={setError} />
-        <ErrorAlert error={error} />
-        <DateNav queryDate={queryDate} />
-      </div>
-      <div>
-        <TableList tableData={tables} />
+      <div className="m-auto">
+        <div>
+          <ErrorAlert error={error} />
+          <DateNav queryDate={queryDate} />
+        </div>
+        <div className="row d-flex m-auto text-center font-weight-bolder">
+          <div className="col w-auto flex border border-dark rounded-lg p-0 ">
+            <div className="bg-info text-white border-bottom border-dark">
+              <h5 className="text-center ">Reservation List</h5>
+            </div>
+            <ReservationList
+              reservationData={reservations}
+              setError={setError}
+            />
+          </div>
+          <div className="col  flex border border-dark rounded-lg p-0">
+            <div className="w-auto bg-info text-white border-bottom border-dark">
+              <h5 className="text-center">Table List</h5>
+            </div>
+            <TableList tableData={tables} />
+          </div>
+        </div>
       </div>
     </main>
   );

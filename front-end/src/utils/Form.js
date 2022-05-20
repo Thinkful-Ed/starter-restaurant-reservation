@@ -31,7 +31,6 @@ function Form() {
             reservationId,
             abortController.signal
           );
-          console.log(reservationData);
           if (reservationData.error) {
             throw reservationData.error;
           }
@@ -58,7 +57,7 @@ function Form() {
       if (newPost.error) {
         throw newPost.error;
       }
-        history.push(`/dashboard?date=${form.reservation_date}`);
+      history.push(`/dashboard?date=${form.reservation_date}`);
     } catch (err) {
       setError(err);
     }
@@ -72,62 +71,111 @@ function Form() {
     setForm({ ...form, [event.target.name]: event.target.value });
   }
 
+  function FormTitle() {
+    if (editting) {
+      return <h2>Edit Reservation</h2>;
+    } else {
+      return <h2>Create Reservation</h2>;
+    }
+  }
+
   return (
     <div>
-      <form onSubmit={submitHandle}>
+      <form
+        onSubmit={submitHandle}
+        className="d-flex flex-column col-6 text-center m-auto font-weight-bolder"
+      >
+        <FormTitle />
         <ErrorAlert error={error} />
-        <label htmlFor="first_name">First Name</label>
-        <input
-          type="text"
-          name="first_name"
-          id="firstName"
-          onChange={changeHandle}
-          value={form?.first_name}
-        />
-        <label htmlFor="last_name">Last Name</label>
-        <input
-          type="text"
-          name="last_name"
-          id="lastName"
-          onChange={changeHandle}
-          value={form?.last_name}
-        />
-        <label htmlFor="mobile_number">Mobile Number</label>
-        <input
-          type="tel"
-          id="mobile_number"
-          name="mobile_number"
-          onChange={changeHandle}
-          value={form?.mobile_number}
-        />
-        <label htmlFor="reservation_date">Reservation Date</label>
-        <input
-          type="date"
-          name="reservation_date"
-          id="reservationDate"
-          onChange={changeHandle}
-          value={form?.reservation_date}
-        />
-        <label htmlFor="reservation_time">Reservation Time</label>
-        <input
-          type="time"
-          name="reservation_time"
-          id="reservationTime"
-          onChange={changeHandle}
-          value={form?.reservation_time}
-        />
-        <label htmlFor="people">Number of People</label>
-        <input
-          type="number"
-          name="people"
-          id="people"
-          onChange={changeHandle}
-          value={form?.people}
-        />
-        <button type="submit">Submit</button>
-        <button type="button" onClick={cancelHandle}>
-          Cancel
-        </button>
+        <div className="my-2">
+          <div className="bg-info text-white border-bottom border-dark">
+            <label htmlFor="first_name">First Name</label>
+          </div>
+          <input
+            className="w-100 text-center"
+            type="text"
+            name="first_name"
+            id="firstName"
+            onChange={changeHandle}
+            value={form?.first_name}
+          />
+        </div>
+
+        <div className="my-2">
+          <div className="bg-info text-white border-bottom border-dark">
+            <label htmlFor="last_name">Last Name</label>
+          </div>
+          <input
+            className="w-100 text-center"
+            type="text"
+            name="last_name"
+            id="lastName"
+            onChange={changeHandle}
+            value={form?.last_name}
+          />
+        </div>
+
+        <div className="my-2">
+          <div className="bg-info text-white border-bottom border-dark">
+            <label htmlFor="mobile_number">Mobile Number</label>
+          </div>
+          <input
+            className="w-100 text-center"
+            type="tel"
+            id="mobile_number"
+            name="mobile_number"
+            onChange={changeHandle}
+            value={form?.mobile_number}
+          />
+        </div>
+
+        <div className="my-2">
+          <div className="bg-info text-white border-bottom border-dark">
+            <label htmlFor="reservation_date">Reservation Date</label>
+          </div>
+          <input
+            className="w-100 text-center"
+            type="date"
+            name="reservation_date"
+            id="reservationDate"
+            onChange={changeHandle}
+            value={form?.reservation_date}
+          />
+        </div>
+
+        <div className="my-2">
+          <div className="bg-info text-white border-bottom border-dark">
+            <label htmlFor="reservation_time">Reservation Time</label>
+          </div>
+          <input
+            className="w-100 text-center"
+            type="time"
+            name="reservation_time"
+            id="reservationTime"
+            onChange={changeHandle}
+            value={form?.reservation_time}
+          />
+        </div>
+
+        <div className="my-4">
+          <div className="bg-info text-white border-bottom border-dark">
+            <label htmlFor="people">Number of People</label>
+          </div>
+          <input
+            className="w-100 text-center"
+            type="number"
+            name="people"
+            id="people"
+            onChange={changeHandle}
+            value={form?.people}
+          />
+        </div>
+        <div className="btn-group border border-dark rounded-lg">
+          <button type="submit" className="btn btn-success">Submit</button>
+          <button type="button" onClick={cancelHandle} className="btn btn-danger">
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

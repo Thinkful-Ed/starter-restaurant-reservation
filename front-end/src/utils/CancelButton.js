@@ -18,15 +18,19 @@ function CancelButton({ reservation, setError }) {
       }
     }
   }
-
-  return (
-    <button
-      onClick={() => cancelHandle(reservation.reservation_id)}
-      data-reservation-id-cancel={reservation.reservation_id}
-    >
-      Cancel
-    </button>
-  );
+  if (reservation.status !== "finished" && reservation.status !== "cancelled") {
+    return (
+      <button
+        onClick={() => cancelHandle(reservation.reservation_id)}
+        data-reservation-id-cancel={reservation.reservation_id}
+        className="btn btn-danger"
+      >
+        Cancel
+      </button>
+    );
+  } else {
+    return "";
+  }
 }
 
 export default CancelButton;

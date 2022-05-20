@@ -34,28 +34,50 @@ function NewTable() {
   return (
     <div>
       <ErrorAlert error={error} />
-      <form onSubmit={submitHandle}>
-        <label htmlFor="table_name">Table Name</label>
-        <input
-          type="text"
-          name="table_name"
-          id="table_name"
-          onChange={changeHandle}
-          value={form?.table_name}
-        />
-        <label htmlFor="capacity" name="capacity">
-          Capacity
-        </label>
-        <input
-          type="number"
-          name="capacity"
-          id="capacity"
-          onChange={changeHandle}
-          value={form?.capacity}
-        />
-        <div>
-          <button type="submit">Submit</button>
-          <button type="button" onClick={cancelHandle}>
+      <form
+        onSubmit={submitHandle}
+        className="d-flex flex-column col-6 text-center m-auto font-weight-bolder"
+      >
+        <h2>Create Table</h2>
+        <div className="my-2">
+          <div className="bg-info text-white border-bottom border-dark">
+            <label htmlFor="table_name">Table Name</label>
+          </div>
+          <input
+            className="w-100"
+            type="text"
+            name="table_name"
+            id="table_name"
+            onChange={changeHandle}
+            value={form?.table_name}
+          />
+        </div>
+
+        <div className="my-2">
+          <div className="bg-info text-white border-bottom border-dark">
+            <label htmlFor="capacity" name="capacity">
+              Capacity
+            </label>
+          </div>
+          <input
+            className="w-100"
+            type="number"
+            name="capacity"
+            id="capacity"
+            onChange={changeHandle}
+            value={form?.capacity}
+          />
+        </div>
+
+        <div className="btn-group border border-dark rounded-lg">
+          <button type="submit" className="btn btn-success">
+            Submit
+          </button>
+          <button
+            type="button"
+            onClick={cancelHandle}
+            className="btn btn-danger"
+          >
             Cancel
           </button>
         </div>

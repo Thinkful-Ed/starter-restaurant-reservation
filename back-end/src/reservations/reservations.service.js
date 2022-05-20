@@ -11,7 +11,6 @@ function listReservations(date) {
 }
 
 function listResByMobileNumber(mobileNumber) {
-  console.log(mobileNumber);
   return knex(table)
     .whereRaw(
       "translate(mobile_number, '() -', '') like ?",

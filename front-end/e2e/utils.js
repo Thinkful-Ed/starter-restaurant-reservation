@@ -1,6 +1,4 @@
 async function selectOptionByText(page, name, optionText) {
-  console.log('name', name)
-  console.log('option', optionText)
   const optionWaned = (
     await page.$x(`//*[@name = "${name}"]/option[text() = "${optionText}"]`)
   )[0];
