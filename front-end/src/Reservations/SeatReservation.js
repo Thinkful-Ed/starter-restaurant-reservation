@@ -19,7 +19,7 @@ function SeatReservation() {
     return () => abortController.abort();
   }
 
-  const tableOptions = tables.map(({table_id, table_name, capacity}) => {
+  const tableOptions = tables.map(({ table_id, table_name, capacity }) => {
     return (
       <option key={table_id} name={table_id} value={table_id}>
         {table_name} - {capacity}
@@ -53,18 +53,31 @@ function SeatReservation() {
   }
 
   return (
-    <div>
+    <div className="text-center">
+      <h2>Seat Reservation</h2>
       <ErrorAlert error={error} />
-      <form onSubmit={submitHandle}>
-        <label htmlFor="table_name">Table Name</label>
-        <select name="table_id" id="table_name" onChange={changeHandle}>
-          <option value="">--Please choose a table--</option>
-          {tableOptions}
-        </select>
-        <button type="submit">Submit</button>
-        <button type="button" onClick={cancelHandle}>
-          Cancel
-        </button>
+      <form
+        onSubmit={submitHandle}
+        className="d-flex flex-column col-6 text-center m-auto font-weight-bolder"
+      >
+        <div className="my-2">
+          <div className="bg-info text-white border-bottom border-dark">
+            <label htmlFor="table_name">Table Name</label>
+          </div>
+          <div className='border border-dark'>
+<select name="table_id" id="table_name" onChange={changeHandle} >
+            <option value="">--Please choose a table--</option>
+            {tableOptions}
+          </select>
+          </div>
+          
+        </div>
+        <div className="btn-group border border-dark rounded-lg">
+          <button type="submit" className="btn btn-success">Submit</button>
+          <button type="button" onClick={cancelHandle} className='btn btn-danger'>
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

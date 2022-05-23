@@ -3,8 +3,8 @@ import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import { today } from "../utils/date-time";
-import ReservationList from "./ReservationList";
-import TableList from "./TableList";
+import ReservationList from "../Reservations/ReservationList";
+import TableList from "../Table/TableList";
 import DateNav from "./DateNav";
 
 /**

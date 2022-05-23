@@ -1,25 +1,16 @@
 import React from "react";
-import CancelButton from "../utils/CancelButton";
-import EditButton from "../utils/EditButton";
+import CancelButton from "../Buttons/CancelButton";
+import EditButton from "../Buttons/EditButton";
+import SeatButton from "../Buttons/SeatButton";
 
 function ReservationList({ reservationData, setError }) {
-  function SeatButton({ reservation }) {
-    if (reservation.status !== "seated") {
-      return (
-        <a href={`/reservations/${reservation.reservation_id}/seat`}>
-          <button type="button" className="btn btn-success">
-            Seat
-          </button>
-        </a>
-      );
-    } else {
-      return "";
-    }
-  }
 
-  const formatedReservations = reservationData.map((reservation, index) => {
+  const formatedReservations = reservationData.map((reservation) => {
     return (
-      <div key={index} className="border-bottom border-dark">
+      <div
+        key={reservation.reservation_id}
+        className="border-bottom border-dark"
+      >
         <h3>
           {reservation.first_name} {reservation.last_name}
         </h3>
