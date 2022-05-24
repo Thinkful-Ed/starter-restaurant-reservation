@@ -1,0 +1,75 @@
+name: Capstone CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13-alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-test-${{ env.cache-name }}-
+            ${{ runner.os }}-test-
+            ${{ runner.os }}-
+
+      - name: npm install
+        if: steps.frontend-node-cache.outputs.cache-hit != 'true'
+        run: npm install
+
+      - run: npm run build --if-present
+
+      - name: Test frontend
+        run: npm run test:frontend
+        env:
+          DATABASE_URL_TEST: postgresql://postgres:postgres@127.0.0.1:5432
+          NODE_ENV: test
+
+      - name: Archive screenshots
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: screenshots
+          path: |
+            front-end/.screenshots
+
+      - name: Test backend
+        if: always()
+        run: npm run test:backend
+        env:
+          DATABASE_URL_TEST: postgresql://postgres:postgres@127.0.0.1:5432
+          NODE_ENV: test
