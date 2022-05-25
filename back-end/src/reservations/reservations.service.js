@@ -7,8 +7,7 @@ function list(){
 function read(date){
     return knex("reservations")
         .select("*")
-        .where({reservation_date: date})
-        .first();
+        .where({reservation_date: date});
 }
 
 function create(newReservation){
