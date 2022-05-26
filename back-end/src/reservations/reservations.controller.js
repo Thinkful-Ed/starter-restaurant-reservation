@@ -1,20 +1,17 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const bodyDataHas = require("../errors/bodyDataHas");
 
 
 /*
 *** VALIDATION ***
 */
 
-function validateNumOfPeople(req, res, next) {
-  const { data } = req.body;
+async function reservationExists(req, res, next){
+  const {data} = req.body;
+  const {date} = req.query;
+  const reservation = await service.list();
 
-  if (!data.people || data.people < 1) {
-    
-    return next({ status: 400, message: "Party must be of at least one person" });
-  }
-
-  next();
 }
 
 /**
@@ -39,5 +36,12 @@ async function create(req, res) {
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  create: [validateNumOfPeople, asyncErrorBoundary(create)],
+  create: [
+    bodyDataHas("first_name"),
+    bodyDataHas("last_name"),
+    bodyDataHas("mobile_number"),
+    bodyDataHas("reservation_date"),
+    bodyDataHas("reservation_time"),
+    bodyDataHas("people"),
+    asyncErrorBoundary(create)],
 };
