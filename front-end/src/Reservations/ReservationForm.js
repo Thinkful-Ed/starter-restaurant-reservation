@@ -24,8 +24,9 @@ function ReservationForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Submitted", formData);
-    //setFormData({ ...initialFormState });
-    createReservation(formData)
+    let {people} = formData;
+    people = Number(people)
+    createReservation({...formData, people})
     .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
   };
 
