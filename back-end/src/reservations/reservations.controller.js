@@ -38,6 +38,25 @@ function validDate(req, res, next) {
       message: `reservation_date must be a valid date`,
     });
   }
+  const today = new Date();
+  const reservationDate = new Date(data["reservation_date"]);
+  if (today > reservationDate.getTime() && reservationDate.getDay() == 1) {
+    return next({
+      status: 400,
+      message:
+        "Reservation date/time must occur in the future|The restaurant is closed on Tuesday",
+    });
+  } else if (today > reservationDate) {
+    return next({
+      status: 400,
+      message: "Reservation date/time must occur in the future",
+    });
+  } else if (reservationDate.getDay() == 1) {
+    return next({
+      status: 400,
+      message: "The restaurant is closed on Tuesday",
+    });
+  }
   next();
 }
 
