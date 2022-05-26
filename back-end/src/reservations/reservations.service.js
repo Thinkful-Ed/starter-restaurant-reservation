@@ -1,13 +1,14 @@
 const knex = require("../db/connection");
 
 function list(){
-    return knex("reservations").select("*");
+    return knex("reservations").select("*").orderBy("reservation_time");
 }
 
 function read(date){
     return knex("reservations")
         .select("*")
-        .where({reservation_date: date});
+        .where({reservation_date: date})
+        .orderBy("reservation_time");
 }
 
 function create(newReservation){

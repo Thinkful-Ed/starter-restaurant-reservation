@@ -127,8 +127,8 @@ function ReservationForm() {
                     </div>
                 </div>
             </div>
+            <button className="btn btn-danger mr-2" type="cancel" onClick={() => history.go(-1)}>Cancel</button>
             <button className="btn btn-primary" type="submit">Submit</button>
-            <button className="btn btn-danger" type="cancel" onClick={() => history.go(-1)}>Cancel</button>
         </form>
     )
 }

@@ -7,11 +7,42 @@ const bodyDataHas = require("../errors/bodyDataHas");
 *** VALIDATION ***
 */
 
-async function reservationExists(req, res, next){
-  const {data} = req.body;
-  const {date} = req.query;
-  const reservation = await service.list();
+// async function reservationExists(req, res, next){
+//   const {data} = req.body;
+//   const {date} = req.query;
+//   if(date){
+//     const reservations = await service.read(date);
+//     res.json({data: reservations});
+//   }else{
+//     const reservations = await service.list();
+//     res.json({data: reservations});
+//   }
 
+// }
+
+function validatePeople(req, res, next){
+  const {data} = req.body;
+  return typeof data.people !== "number" ? next({status: 400, message: `people must be a number`}) : next();
+}
+
+function validDate(req, res, next){
+  const {data} = req.body;
+  const regexDate = /^\d{4}-\d{2}-\d{2}$/;
+  if(data.reservation_date.match(regexDate) === null){
+    return next({status: 400, message: `reservation_date must be a valid date`})
+  }
+  next();
+}
+
+function validateTime(req, res, next){
+  const {data} = req.body;
+  const time = data.reservation_time;
+  const regexTime = /([0-1]?\d|2[0-3]):([0-5]?\d):?([0-5]?\d)/;
+
+  if(time.match(regexTime) === null){
+    return next({status: 400, message: `reservation_time must be a valid time`});
+  }
+  next();
 }
 
 /**
@@ -43,5 +74,8 @@ module.exports = {
     bodyDataHas("reservation_date"),
     bodyDataHas("reservation_time"),
     bodyDataHas("people"),
+    validatePeople,
+    validDate,
+    validateTime,
     asyncErrorBoundary(create)],
 };
