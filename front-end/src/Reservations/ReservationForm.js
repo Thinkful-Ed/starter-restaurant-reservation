@@ -27,17 +27,34 @@ function ReservationForm() {
     const handleSubmit = event => {
         event.preventDefault();
         console.log(formData);
-        let {people} = formData;
+        let { people } = formData;
         people = Number(people);
-        createReservation({...formData, people}).then(() => {
-            //setFormData({ ...INITIAL_FORM_STATE });
-            history.push(`/dashboard?date=${formData.reservation_date}`);
-        })
+        createReservation({ ...formData, people })
+            .then(() => {
+                //setFormData({ ...INITIAL_FORM_STATE });
+                history.push(`/dashboard?date=${formData.reservation_date}`);
+            })
+            .catch((error) => {
+                const splitError = error.message.split("|");
+                setErrors(splitError);}
+            );
     }
+
+    const errorMessage = (
+        <div className="alert alert-danger">
+            Please fix the following errors:
+            <ul>
+                {errors.map((error, index) => {
+                    return <li key={index}>{error}</li>;
+                })}
+            </ul>
+        </div>
+    )
 
     return (
         <form name="reservation" onSubmit={(handleSubmit)}>
             <h1>Create Reservation</h1>
+            {errors.length ? errorMessage : null}
             <div className="form-group">
                 <div className="row">
                     <div className="col">

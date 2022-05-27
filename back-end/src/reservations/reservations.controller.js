@@ -20,27 +20,42 @@ const bodyDataHas = require("../errors/bodyDataHas");
 
 // }
 
-function validatePeople(req, res, next){
-  const {data} = req.body;
-  return typeof data.people !== "number" ? next({status: 400, message: `people must be a number`}) : next();
+function validatePeople(req, res, next) {
+  const { data } = req.body;
+  return typeof data.people !== "number" ? next({ status: 400, message: `people must be a number` }) : next();
 }
 
-function validDate(req, res, next){
-  const {data} = req.body;
+function validDate(req, res, next) {
+  const { data } = req.body;
   const regexDate = /^\d{4}-\d{2}-\d{2}$/;
-  if(data.reservation_date.match(regexDate) === null){
-    return next({status: 400, message: `reservation_date must be a valid date`})
+  const today = new Date();
+  const reservationDate = new Date(data["reservation_date"]);
+
+  if (data.reservation_date.match(regexDate) === null) {
+    return next({ status: 400, message: `reservation_date must be a valid date` })
+  }
+  if (today > reservationDate.getTime() && reservationDate.getDay() === 1) {
+    return next({
+      status: 400,
+      message: `Reservation date/time must occur in the future|The restaurant is closed on Tuesday.`
+    });
+  } else if (today > reservationDate) {
+    return next({ status: 400, message: "Reservation date/time must occur in the future" })
+  } else if (reservationDate.getDay() == 1) {
+    return next({
+      status: 400, message: `The restaurant is closed on Tuesday`
+    })
   }
   next();
 }
 
-function validateTime(req, res, next){
-  const {data} = req.body;
+function validateTime(req, res, next) {
+  const { data } = req.body;
   const time = data.reservation_time;
   const regexTime = /([0-1]?\d|2[0-3]):([0-5]?\d):?([0-5]?\d)/;
 
-  if(time.match(regexTime) === null){
-    return next({status: 400, message: `reservation_time must be a valid time`});
+  if (time.match(regexTime) === null) {
+    return next({ status: 400, message: `reservation_time must be a valid time` });
   }
   next();
 }
