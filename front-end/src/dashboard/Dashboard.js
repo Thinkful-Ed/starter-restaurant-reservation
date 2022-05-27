@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
+import { listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationList from "./ReservationList";
 import TablesList from "./TablesList";
@@ -13,6 +14,8 @@ import TablesList from "./TablesList";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
 
   useEffect(loadDashboard, [date]);
 
@@ -22,6 +25,11 @@ function Dashboard({ date }) {
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+
+    setTablesError(null);
+    listTables({ date }, abortController.signal)
+      .then(setTables)
+      .catch(setTablesError);
     return () => abortController.abort();
   }
 
@@ -38,10 +46,10 @@ function Dashboard({ date }) {
         </div>
       </div>
       <div className="row">
-      <ErrorAlert error={reservationsError} />
-      {/* {JSON.stringify(reservations)} */}
-      <ReservationList reservations={reservations} date={date} />
-      <TablesList/>
+        <ErrorAlert error={reservationsError} />
+        {/* {JSON.stringify(reservations)} */}
+        <ReservationList reservations={reservations} date={date} />
+        <TablesList tables={tables} />
       </div>
     </main>
   );

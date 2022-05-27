@@ -5,6 +5,7 @@ import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
 import ReservationForm from "../Reservations/ReservationForm";
+import TableForm from "../Tables/TableForm";
 import useQuery from "../utils/useQuery";
 
 
@@ -31,6 +32,9 @@ function Routes() {
       </Route>
       <Route path="/dashboard">
         <Dashboard date={date ? date : today()} />
+      </Route>
+      <Route exact={true} path="/tables/new">
+        <TableForm />
       </Route>
       <Route>
         <NotFound />

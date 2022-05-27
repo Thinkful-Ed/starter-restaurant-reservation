@@ -84,3 +84,30 @@ export async function createReservation(reservation, signal){
   };  
   return await fetchJson(url, options, reservation);
 }
+
+
+/**
+ * Creates a new table.
+ * @returns {Promise<[table]>}
+ *  a promise that resolves to a newly created table
+ */
+
+export async function createTable(table, signal){
+  const url = new URL(`${API_BASE_URL}/tables`);
+  const options = {
+    method: "POST",
+    headers, 
+    body: JSON.stringify({data: table}),
+    signal
+  };  
+  return await fetchJson(url, options, table);
+}
+
+
+export async function listTables(params, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  Object.entries(params).forEach(([key, value]) =>
+    url.searchParams.append(key, value.toString())
+  );
+  return await fetchJson(url, { headers, signal }, [])
+}
