@@ -54,8 +54,17 @@ function validateTime(req, res, next) {
   const time = data.reservation_time;
   const regexTime = /([0-1]?\d|2[0-3]):([0-5]?\d):?([0-5]?\d)/;
 
+  const date = new Date(`${data.reservation_date}, ${data.reservation_time}`);
+  const minutes = date.getHours() * 60 + date.getMinutes();
+  const startingMinutes = 630;
+  const endingMinutes = 1290;
+
+
   if (time.match(regexTime) === null) {
     return next({ status: 400, message: `reservation_time must be a valid time` });
+  }
+  if (minutes < startingMinutes || minutes > endingMinutes) {
+    return next({ status: 400, message: `Please select a time between 10:30 AM and 9:30 PM` })
   }
   next();
 }
