@@ -9,7 +9,7 @@ function ReservationForm() {
         mobile_number: "",
         reservation_date: "",
         reservation_time: "",
-        people: 0
+        people: ""
     }
 
     const [formData, setFormData] = useState({ ...INITIAL_FORM_STATE });
@@ -27,7 +27,9 @@ function ReservationForm() {
     const handleSubmit = event => {
         event.preventDefault();
         console.log(formData);
-        createReservation(formData).then(() => {
+        let {people} = formData;
+        people = Number(people);
+        createReservation({...formData, people}).then(() => {
             //setFormData({ ...INITIAL_FORM_STATE });
             history.push(`/dashboard?date=${formData.reservation_date}`);
         })
