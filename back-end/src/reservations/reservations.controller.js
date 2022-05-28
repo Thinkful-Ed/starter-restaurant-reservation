@@ -7,19 +7,6 @@ const bodyDataHas = require("../errors/bodyDataHas");
 *** VALIDATION ***
 */
 
-// async function reservationExists(req, res, next){
-//   const {data} = req.body;
-//   const {date} = req.query;
-//   if(date){
-//     const reservations = await service.read(date);
-//     res.json({data: reservations});
-//   }else{
-//     const reservations = await service.list();
-//     res.json({data: reservations});
-//   }
-
-// }
-
 async function reservationExists(req, res, next) {
   const { reservation_id } = req.params;
   const reservation = await service.read(reservation_id);

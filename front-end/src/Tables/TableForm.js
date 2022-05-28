@@ -64,7 +64,8 @@ function TableForm() {
                             placeholder="Table Name"
                             onChange={handleChange}
                             value={formData.table_name}
-                            pattern="^[a-zA-Z0-9]{2,}$"
+                            minLength="2"
+                            // pattern="^[a-zA-Z0-9]{2,}$"
                             // pattern="/(.*[a-z]){2}/i"
                             className="form-control"
                         />

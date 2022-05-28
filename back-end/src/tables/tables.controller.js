@@ -21,7 +21,7 @@ function validCapacity(req, res, next) {
 // for "/:table_id/seat"
 function tableHasCapacity(req, res, next) {
     const { table } = res.locals;
-    return table.capacity >= res.locals.reservation.people ? next() : next({status: 400, message: `table has no capacity`});
+    return table.capacity >= res.locals.reservation.people ? next() : next({status: 400, message: `Table does not have enough capacity`});
 }
 
 // for "/:table_id/seat"

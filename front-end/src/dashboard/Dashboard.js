@@ -46,7 +46,12 @@ function Dashboard({ date }) {
         </div>
       </div>
       <div className="row">
-        <ErrorAlert error={reservationsError} />
+        <div className="col">
+          <ErrorAlert error={reservationsError} />
+          <ErrorAlert error={tablesError} />
+        </div>
+      </div>
+      <div className="row">
         {/* {JSON.stringify(reservations)} */}
         <ReservationList reservations={reservations} date={date} />
         <TablesList tables={tables} />

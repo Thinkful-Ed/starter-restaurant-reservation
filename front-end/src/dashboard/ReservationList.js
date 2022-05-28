@@ -9,7 +9,7 @@ function ReservationList({ reservations, date }) {
     console.log("component", reservations);
     return (
         <div className="col col-md-6">
-            <section className="datesNav">
+            <section className="datesNav mb-2">
                 <button className="btn btn-secondary reservationNav" onClick={() => history.push(`/dashboard?date=${previous(date)}`)}>Previous</button>
                 <button className="btn btn-secondary reservationNav" onClick={() => history.push(`/dashboard?date=${today()}`)}>Today</button>
                 <button className="btn btn-secondary reservationNav" onClick={() => history.push(`/dashboard?date=${next(date)}`)}>Next</button>
