@@ -18,16 +18,19 @@ function validCapacity(req, res, next) {
     return typeof data.capacity !== "number" ? next({ status: 400, message: `capacity must be a number` }) : next();
 }
 
+// for "/:table_id/seat"
 function tableHasCapacity(req, res, next) {
     const { table } = res.locals;
     return table.capacity >= res.locals.reservation.people ? next() : next({status: 400, message: `table has no capacity`});
 }
 
+// for "/:table_id/seat"
 async function tableIsOccupied(req, res, next) {
     const { table } = res.locals;
     return table.free ? next() : next({ status: 400, message: `This table is currently occupied.` })
 }
 
+// for "/:table_id/seat"
 async function reservationExists(req, res, next) {
     const { data } = req.body;
     const { reservation_id } = data;
@@ -42,6 +45,7 @@ async function reservationExists(req, res, next) {
     next({ status: 404, message: `Reservation with ID: ${reservation_id} cannot be found` });
 }
 
+// for "/:table_id/seat"
 async function tableExists(req, res, next) {
     const { table_id } = req.params;
     const table = await service.read(table_id);
@@ -66,6 +70,7 @@ async function create(req, res) {
     res.status(201).json({ data });
 }
 
+// for "/:table_id/seat"
 async function update(req, res) {
     const updatedTable = {
         table_id: res.locals.table.table_id,
