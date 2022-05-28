@@ -7,18 +7,18 @@ const bodyDataHas = require("../errors/bodyDataHas");
 *** VALIDATION ***
 */
 
-// async function reservationExists(req, res, next){
-//   const {data} = req.body;
-//   const {date} = req.query;
-//   if(date){
-//     const reservations = await service.read(date);
-//     res.json({data: reservations});
-//   }else{
-//     const reservations = await service.list();
-//     res.json({data: reservations});
-//   }
+async function reservationExists(req, res, next) {
+  const { reservation_id } = req.params;
+  const reservation = await service.read(reservation_id);
 
-// }
+  console.log(reservation_id);
+
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({ status: 404, message: `Reservation with ID: ${reservation_id} cannot be found` });
+}
 
 function validatePeople(req, res, next) {
   const { data } = req.body;
@@ -76,7 +76,7 @@ async function list(req, res) {
   const { date } = req.query;
 
   if (date) {
-    const data = await service.read(date);
+    const data = await service.readDate(date);
     res.json({ data });
   } else {
     const data = await service.list();
@@ -87,6 +87,10 @@ async function list(req, res) {
 async function create(req, res) {
   const data = await service.create(req.body.data);
   res.status(201).json({ data });
+}
+
+function read(req, res) {
+  res.status(200).json({data: res.locals.reservation});
 }
 
 module.exports = {
@@ -102,4 +106,8 @@ module.exports = {
     validDate,
     validateTime,
     asyncErrorBoundary(create)],
+  read: [
+    asyncErrorBoundary(reservationExists),
+    read
+  ]
 };
