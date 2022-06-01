@@ -1,6 +1,6 @@
 import React from "react";
 
-function TablesList({ tables }) {
+function TablesList({ tables, handleFinish }) {
     console.log("component tables:", tables);
 
     let mappedTables;
@@ -10,8 +10,8 @@ function TablesList({ tables }) {
             <td>{table.table_id}</td>
             <td>{table.table_name}</td>
             <td>{table.capacity}</td>
-            <td data-table-id-status={table.table_id}>{table.free ? "free" : "occupied"}</td>
-            <td>{!table.free && (<button className="btn btn-light btn-sm btn-outline-secondary">Finish</button>)}</td>
+            <td data-table-id-status={table.table_id}>{!table.reservation_id ? "free" : "occupied"}</td>
+            <td>{table.reservation_id && (<button className="btn btn-light btn-sm btn-outline-secondary" data-table-id-finish={table.table_id} data-reservation-id-finish={table.reservation_id} onClick={handleFinish}>Finish</button>)}</td>
         </tr>)
     });
 

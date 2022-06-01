@@ -21,7 +21,7 @@ function validCapacity(req, res, next) {
 // for "/:table_id/seat"
 function tableHasCapacity(req, res, next) {
     const { table } = res.locals;
-    return table.capacity >= res.locals.reservation.people ? next() : next({status: 400, message: `Table does not have enough capacity`});
+    return table.capacity >= res.locals.reservation.people ? next() : next({ status: 400, message: `Table does not have enough capacity` });
 }
 
 // for "/:table_id/seat"
@@ -30,15 +30,27 @@ async function tableIsOccupied(req, res, next) {
     return table.free ? next() : next({ status: 400, message: `This table is currently occupied.` })
 }
 
+function tableIsNotOccupied(req, res, next){
+    const {table} = res.locals;
+    console.log("********** REQ BODY DATA:", req.body)
+    // if(!req.body.data){
+    //     return next({status: 400, message: `Table with ID: ${table.table_id} is not occupied`});
+    // }
+    return !table.reservation_id || !req.body.data ? next({status: 400, message: `Table with ID: ${table.table_id} is not occupied`}) : next() ;
+}
+
+async function tableIsNotOccupied2(req, res, next){
+
+}
 // for "/:table_id/seat"
 async function reservationExists(req, res, next) {
     const { data } = req.body;
     const { reservation_id } = data;
     const reservation = await reservationService.read(reservation_id);
 
-    console.log(data);
+    console.log("*** RESERVATION EXISTS DATA: ", data);
 
-    if (reservation) {
+    if (data && reservation) {
         res.locals.reservation = reservation;
         return next();
     }
@@ -73,12 +85,35 @@ async function create(req, res) {
 // for "/:table_id/seat"
 async function update(req, res) {
     const updatedTable = {
+        ...res.locals.table,
         table_id: res.locals.table.table_id,
-        free: !res.locals.table.free
+        free: !res.locals.table.free,
+        reservation_id: req.body.data.reservation_id
     }
-    
+
     const data = await service.update(updatedTable);
     res.json({ data });
+}
+
+// for "/:table_id/seat"
+async function destroy(req, res, next) {
+    await reservationService.destroy(res.locals.table.reservation_id);
+    next();
+}
+
+// for "/:table_id/seat"
+async function removeReservationId(req, res) {
+    
+    const updatedTable = {
+        ...res.locals.table,
+        table_id: res.locals.table.table_id,
+        // free: !res.locals.table.free,
+        free: true,
+        reservation_id: null
+    }
+
+    const data = await service.create(updatedTable);
+    res.json({data});
 }
 
 module.exports = {
@@ -97,5 +132,12 @@ module.exports = {
         tableIsOccupied,
         tableHasCapacity,
         asyncErrorBoundary(update)
+    ],
+    delete: [
+        asyncErrorBoundary(tableExists),
+        tableIsNotOccupied,
+        // asyncErrorBoundary(reservationExists),
+        asyncErrorBoundary(destroy),
+        asyncErrorBoundary(removeReservationId)
     ]
 }

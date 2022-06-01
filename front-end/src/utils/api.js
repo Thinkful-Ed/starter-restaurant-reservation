@@ -98,6 +98,28 @@ export async function createReservation(reservation, signal) {
   return await fetchJson(url, options, reservation);
 }
 
+/**
+ * Deletes an existing reservation.
+ * @returns {Promise<[{}]>}
+ *  a promise that resolves to a an empty object received after a reservation is deleted.
+ */
+
+export async function deleteReservation(reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  const options = {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify({ data: reservation_id }),
+    signal
+  }
+  return await fetchJson(url, options, reservation_id);
+}
+
+
+
+/*
+  TABLES API CALLS 
+*/
 
 /**
  * Creates a new table.
@@ -131,15 +153,36 @@ export async function listTables(params, signal) {
   return await fetchJson(url, { headers, signal }, [])
 }
 
-export async function updateTable(tableAndReservationIDs, signal){
-  const {table_id, reservation_id} = tableAndReservationIDs;
+
+/**
+ * Updates an existing existing table.
+ * @returns {Promise<[table]>}
+ *  a promise that resolves to a possibly empty array of tables saved in the database.
+ */
+
+export async function updateTable(tableAndReservationIDs, signal) {
+  const { table_id, reservation_id } = tableAndReservationIDs;
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({data: {reservation_id}}),
+    body: JSON.stringify({ data: { reservation_id } }),
     signal
   };
 
   return await fetchJson(url, options, tableAndReservationIDs);
+}
+
+
+export async function freeTableAndDeleteReservation(tableAndReservationIDs, signal) {
+  const { tableIdFinish, reservationIdFinish } = tableAndReservationIDs;
+  const url = new URL(`${API_BASE_URL}/tables/${tableIdFinish}/seat`);
+  const options = {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify({ data: { reservationIdFinish } }),
+    signal
+  }
+
+  return await fetchJson(url, options, tableIdFinish);
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
-import { listTables } from "../utils/api";
+import { listReservations, listTables, freeTableAndDeleteReservation } from "../utils/api";
+import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationList from "./ReservationList";
 import TablesList from "./TablesList";
@@ -16,6 +16,7 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
+  const history = useHistory();
 
   useEffect(loadDashboard, [date]);
 
@@ -31,6 +32,25 @@ function Dashboard({ date }) {
       .then(setTables)
       .catch(setTablesError);
     return () => abortController.abort();
+  }
+
+  async function handleFinish(event) {
+    const finishMessage = `Is this table ready to seat new guests? This cannot be undone.`
+    const {target} = event;
+    const abortController = new AbortController();
+    console.log("target",event.target.dataset)
+    if (window.confirm(finishMessage)) {
+        try{
+          await freeTableAndDeleteReservation(target.dataset);
+          const tablesData = await listTables({date}, abortController.signal);
+          setTables(tablesData);
+
+          const reservationsData = await listReservations({date}, abortController.signal);
+          setReservations(reservationsData);
+        }catch(error){
+          setTablesError(error);
+        }
+    }
   }
 
   console.log(reservations);
@@ -54,7 +74,7 @@ function Dashboard({ date }) {
       <div className="row">
         {/* {JSON.stringify(reservations)} */}
         <ReservationList reservations={reservations} date={date} />
-        <TablesList tables={tables} />
+        <TablesList tables={tables} handleFinish={handleFinish} />
       </div>
     </main>
   );
