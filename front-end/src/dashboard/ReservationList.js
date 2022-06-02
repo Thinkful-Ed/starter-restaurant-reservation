@@ -50,8 +50,8 @@ function ReservationList({ reservations, date }) {
                                         >Seat</a>
                                     )}
                                 </td>
-                                <td><button className="btn btn-secondary">Edit</button></td>
-                                <td><button className="btn btn-secondary">Cancel</button></td>
+                                <td>{reservation.status === "booked" && (<button className="btn btn-secondary">Edit</button>)}</td>
+                                <td>{reservation.status === "booked" && (<button className="btn btn-secondary">Cancel</button>)}</td>
                             </tr>)
                         })}
                     </tbody>
