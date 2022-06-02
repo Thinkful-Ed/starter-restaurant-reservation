@@ -11,10 +11,11 @@ function read(reservation_id){
         .then(rows => rows[0]);
 }
 
-function readDate(date){
+function readByDate(date){
     return knex("reservations")
         .select("*")
         .where({reservation_date: date})
+        .andWhere('status','!=','finished')
         .orderBy("reservation_time");
 }
 
@@ -30,7 +31,7 @@ function update(updatedRes){
     .select("*")
     .where({reservation_id: updatedRes.reservation_id})
     .update(updatedRes, "*")
-    .then(records => records);
+    .then(records => records[0]);
 }
 
 function destroy(reservation_id){
@@ -42,7 +43,7 @@ function destroy(reservation_id){
 module.exports = {
     list,
     read,
-    readDate,
+    readByDate,
     create,
     update,
     destroy

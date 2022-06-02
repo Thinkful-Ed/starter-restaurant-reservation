@@ -98,21 +98,15 @@ export async function createReservation(reservation, signal) {
   return await fetchJson(url, options, reservation);
 }
 
-/**
- * Deletes an existing reservation.
- * @returns {Promise<[{}]>}
- *  a promise that resolves to a an empty object received after a reservation is deleted.
- */
-
-export async function deleteReservation(reservation_id, signal) {
-  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+export async function updateReservationStatus(reservation_id, status, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
   const options = {
-    method: "DELETE",
+    method: "PUT",
     headers,
-    body: JSON.stringify({ data: reservation_id }),
+    body: JSON.stringify({ data: { status } }),
     signal
   }
-  return await fetchJson(url, options, reservation_id);
+  return await fetchJson(url, options, { reservation_id, status });
 }
 
 
@@ -147,7 +141,7 @@ export async function createTable(table, signal) {
 
 export async function listTables(signal) {
   const url = `${API_BASE_URL}/tables`;
-   return await fetchJson(url, { headers, signal }, []);
+  return await fetchJson(url, { headers, signal }, []);
 }
 
 

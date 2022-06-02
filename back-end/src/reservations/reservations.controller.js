@@ -11,7 +11,7 @@ async function reservationExists(req, res, next) {
   const { reservation_id } = req.params;
   const reservation = await service.read(reservation_id);
 
-  console.log(reservation_id);
+  console.log("reservations.controller resser id: ",reservation_id);
 
   if (reservation) {
     res.locals.reservation = reservation;
@@ -23,6 +23,18 @@ async function reservationExists(req, res, next) {
 function validatePeople(req, res, next) {
   const { data } = req.body;
   return typeof data.people !== "number" ? next({ status: 400, message: `people must be a number` }) : next();
+}
+
+function validStatusChange(req, res, next){
+  const statuses = ["booked", "seated", "finished"];
+  const {status} = req.body.data;
+  const currentStatus = res.locals.reservation.status;
+  return statuses.includes(status) && currentStatus !== "finished" ? next() : next({status: 400, message: `Current status must not be finished. Status must not be unknown and must be one of the following valid statuses: ${statuses.join(", ")}`});
+}
+
+function validInitialStatus(req, res, next){
+  const {data} = req.body;
+  return data.status && data.status !== "booked" ? next({status: 400, message:`Initial status may not be 'finished' nor 'seated'.`}) : next();
 }
 
 function validDate(req, res, next) {
@@ -76,7 +88,7 @@ async function list(req, res) {
   const { date } = req.query;
 
   if (date) {
-    const data = await service.readDate(date);
+    const data = await service.readByDate(date);
     res.json({ data });
   } else {
     const data = await service.list();
@@ -93,6 +105,18 @@ function read(req, res) {
   res.status(200).json({data: res.locals.reservation});
 }
 
+async function updateStatus(req, res){
+  console.log("reservations.controller req.body.data:", req.body.data);
+  const {status} = req.body.data;
+  const updatedReservation = {
+    ...res.locals.reservation,
+    status
+  }
+  const data = await service.update(updatedReservation);
+  // res.json({data: {status: data.status}});
+  res.json({data});
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [
@@ -105,9 +129,16 @@ module.exports = {
     validatePeople,
     validDate,
     validateTime,
+    validInitialStatus,
     asyncErrorBoundary(create)],
   read: [
     asyncErrorBoundary(reservationExists),
     read
+  ],
+  updateStatus: [
+    bodyDataHas("status"),
+    asyncErrorBoundary(reservationExists),
+    validStatusChange,
+    asyncErrorBoundary(updateStatus)
   ]
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { readReservation, updateTable, listTables } from "../utils/api";
+import { readReservation, updateTable, listTables, updateReservationStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 function SeatReservationForm() {
@@ -36,9 +36,9 @@ function SeatReservationForm() {
     }
     // handlers
     const handleChange = event => {
-        const {target} = event;
+        const { target } = event;
         setFormData({
-            ...formData, 
+            ...formData,
             [target.name]: target.value,
             reservation_id: reservation.reservation_id
         })
@@ -47,18 +47,22 @@ function SeatReservationForm() {
 
     const handleSubmit = event => {
         event.preventDefault();
-        // const value = event.target.table_id.value;
-        // console.log("dropdown value", event.target.table_id.value);
-        console.log("form data", formData);
-        // if (reservation.people < value) {
-        // }
+
         updateTable({ ...formData })
             .then(() => {
-                history.push(`/dashboard?date=${reservation.reservation_date}`);
+                history.push(`/dashboard?date=${reservation.reservation_date}`)
             })
             .catch(error => {
                 setTablesError(error);
             });
+        // updateTable({ ...formData })
+        //     .then(() => {
+        //         updateReservationStatus(reservation.reservation_id, "seated")
+        //             .then(() => history.push(`/dashboard?date=${reservation.reservation_date}`))
+        //     })
+        //     .catch(error => {
+        //         setTablesError(error);
+        //     });
     }
 
 
