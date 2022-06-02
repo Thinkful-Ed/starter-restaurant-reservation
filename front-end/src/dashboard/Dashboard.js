@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
-import { listTables } from "../utils/api";
+import { listReservations, listTables, finishTable } from "../utils/api";
+// import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationList from "./ReservationList";
 import TablesList from "./TablesList";
@@ -16,6 +16,7 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
+  // const history = useHistory();
 
   useEffect(loadDashboard, [date]);
 
@@ -27,10 +28,16 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
 
     setTablesError(null);
-    listTables({ date }, abortController.signal)
+    listTables(abortController.signal)
       .then(setTables)
       .catch(setTablesError);
     return () => abortController.abort();
+  }
+
+  function onFinish(table_id, reservation_id) {
+    // loadDashboard();
+    finishTable(table_id, reservation_id)
+      .then(loadDashboard);
   }
 
   console.log(reservations);
@@ -54,7 +61,7 @@ function Dashboard({ date }) {
       <div className="row">
         {/* {JSON.stringify(reservations)} */}
         <ReservationList reservations={reservations} date={date} />
-        <TablesList tables={tables} />
+        <TablesList tables={tables} onFinish={onFinish} loadDashboard={loadDashboard}/>
       </div>
     </main>
   );

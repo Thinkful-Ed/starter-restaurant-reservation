@@ -29,7 +29,7 @@ function SeatReservationForm() {
             .catch(setReservationError);
 
         setTablesError(null);
-        listTables({}, abortController.signal)
+        listTables(abortController.signal)
             .then(setTables)
             .catch(setTablesError);
         return () => abortController.abort();
@@ -62,8 +62,8 @@ function SeatReservationForm() {
     }
 
 
-    console.log("tables", tables);
-    console.log("reservation", reservation);
+    console.log("tables (seat reservation page)", tables);
+    console.log("reservation (seat reservation page)", reservation);
     // error message
 
     let mappedTables;

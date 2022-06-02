@@ -1,7 +1,23 @@
 import React from "react";
 
-function TablesList({ tables }) {
+function TablesList({ tables, onFinish, loadDashboard }) {
     console.log("component tables:", tables);
+
+    async function finishHandler({
+        target: { dataset: { tableIdFinish, reservationIdFinish } } = {},
+    }) {
+        if (
+            tableIdFinish && reservationIdFinish &&
+            window.confirm(
+                "Is this table ready to seat new guests?\n\nThis cannot be undone."
+            )
+        ) {
+            //finishTable(tableIdFinish, reservationIdFinish);
+            // loadDashboard();
+            onFinish(tableIdFinish, reservationIdFinish);
+
+        }
+    }
 
     let mappedTables;
 
@@ -10,8 +26,16 @@ function TablesList({ tables }) {
             <td>{table.table_id}</td>
             <td>{table.table_name}</td>
             <td>{table.capacity}</td>
-            <td data-table-id-status={table.table_id}>{table.free ? "free" : "occupied"}</td>
-            <td>{!table.free && (<button className="btn btn-light btn-sm btn-outline-secondary">Finish</button>)}</td>
+            <td data-table-id-status={table.table_id}>{!table.reservation_id ? "free" : "occupied"}</td>
+            <td>{table.reservation_id &&
+                (<button
+                    type="button"
+                    className="btn btn-light btn-sm btn-outline-secondary"
+                    data-table-id-finish={table.table_id}
+                    data-reservation-id-finish={table.reservation_id}
+                    onClick={finishHandler}
+                >Finish</button>)}
+            </td>
         </tr>)
     });
 

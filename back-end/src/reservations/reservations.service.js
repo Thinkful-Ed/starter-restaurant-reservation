@@ -33,10 +33,17 @@ function update(updatedRes){
     .then(records => records);
 }
 
+function destroy(reservation_id){
+    return knex("reservations")
+        .where({reservation_id})
+        .del();
+}
+
 module.exports = {
     list,
     read,
     readDate,
     create,
-    update
+    update,
+    destroy
 }
