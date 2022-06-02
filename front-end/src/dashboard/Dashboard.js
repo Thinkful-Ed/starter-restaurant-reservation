@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables, freeTableAndDeleteReservation } from "../utils/api";
-import { useHistory } from "react-router-dom";
+import { listReservations, listTables, finishTable } from "../utils/api";
+// import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationList from "./ReservationList";
 import TablesList from "./TablesList";
@@ -16,7 +16,7 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
-  const history = useHistory();
+  // const history = useHistory();
 
   useEffect(loadDashboard, [date]);
 
@@ -28,29 +28,16 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
 
     setTablesError(null);
-    listTables({ date }, abortController.signal)
+    listTables(abortController.signal)
       .then(setTables)
       .catch(setTablesError);
     return () => abortController.abort();
   }
 
-  async function handleFinish(event) {
-    const finishMessage = `Is this table ready to seat new guests? This cannot be undone.`
-    const {target} = event;
-    const abortController = new AbortController();
-    console.log("target",event.target.dataset)
-    if (window.confirm(finishMessage)) {
-        try{
-          await freeTableAndDeleteReservation(target.dataset);
-          const tablesData = await listTables({date}, abortController.signal);
-          setTables(tablesData);
-
-          const reservationsData = await listReservations({date}, abortController.signal);
-          setReservations(reservationsData);
-        }catch(error){
-          setTablesError(error);
-        }
-    }
+  function onFinish(table_id, reservation_id) {
+    // loadDashboard();
+    finishTable(table_id, reservation_id)
+      .then(loadDashboard);
   }
 
   console.log(reservations);
@@ -74,7 +61,7 @@ function Dashboard({ date }) {
       <div className="row">
         {/* {JSON.stringify(reservations)} */}
         <ReservationList reservations={reservations} date={date} />
-        <TablesList tables={tables} handleFinish={handleFinish} />
+        <TablesList tables={tables} onFinish={onFinish} loadDashboard={loadDashboard}/>
       </div>
     </main>
   );

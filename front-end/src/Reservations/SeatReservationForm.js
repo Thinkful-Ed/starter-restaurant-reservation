@@ -29,7 +29,7 @@ function SeatReservationForm() {
             .catch(setReservationError);
 
         setTablesError(null);
-        listTables({}, abortController.signal)
+        listTables(abortController.signal)
             .then(setTables)
             .catch(setTablesError);
         return () => abortController.abort();

@@ -145,12 +145,9 @@ export async function createTable(table, signal) {
  *  a promise that resolves to a possibly empty array of tables saved in the database.
  */
 
-export async function listTables(params, signal) {
-  const url = new URL(`${API_BASE_URL}/tables`);
-  Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.append(key, value.toString())
-  );
-  return await fetchJson(url, { headers, signal }, [])
+export async function listTables(signal) {
+  const url = `${API_BASE_URL}/tables`;
+   return await fetchJson(url, { headers, signal }, []);
 }
 
 
@@ -174,15 +171,12 @@ export async function updateTable(tableAndReservationIDs, signal) {
 }
 
 
-export async function freeTableAndDeleteReservation(tableAndReservationIDs, signal) {
-  const { tableIdFinish, reservationIdFinish } = tableAndReservationIDs;
-  const url = new URL(`${API_BASE_URL}/tables/${tableIdFinish}/seat`);
+export async function finishTable(table_id, reservation_id) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
   const options = {
     method: "DELETE",
     headers,
-    body: JSON.stringify({ data: { reservationIdFinish } }),
-    signal
-  }
-
-  return await fetchJson(url, options, tableIdFinish);
+    body: JSON.stringify({ data: { reservation_id } })
+  };
+  return await fetchJson(url, options, {});
 }
