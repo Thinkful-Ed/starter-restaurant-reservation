@@ -32,19 +32,26 @@ function ReservationList({ reservations, date }) {
                     </thead>
                     <tbody>
                         {Array.isArray(reservations) && reservations.map((reservation) => {
-                            const {reservation_id} = reservation;
+                            const { reservation_id } = reservation;
                             return (<tr key={reservation_id}>
                                 <td>{reservation_id}</td>
-                                <td>{`${reservation.first_name}, ${reservation.last_name}`}</td>
+                                <td>{`${reservation.last_name}, ${reservation.first_name}`}</td>
                                 <td>{reservation.mobile_number}</td>
                                 <td>{reservation.reservation_date}</td>
                                 <td>{reservation.reservation_time}</td>
                                 <td>{reservation.people}</td>
-                                <td>booked</td>
-                                {/* <td><button className="btn btn-secondary" onClick={() => history.push(`/reservations/${reservation.reservation_id}/seat`)}>Seat</button></td> */}
-                                <td><a className="btn btn-secondary" href={`/reservations/${reservation_id}/seat`} role="button">Seat</a></td>
-                                <td><button className="btn btn-secondary">Edit</button></td>
-                                <td><button className="btn btn-secondary">Cancel</button></td>
+                                <td data-reservation-id-status={reservation_id}>{reservation.status}</td>
+                                <td>
+                                    {reservation.status === "booked" && (
+                                        <a
+                                            className="btn btn-secondary"
+                                            href={`/reservations/${reservation_id}/seat`}
+                                            role="button"
+                                        >Seat</a>
+                                    )}
+                                </td>
+                                <td>{reservation.status === "booked" && (<button className="btn btn-secondary">Edit</button>)}</td>
+                                <td>{reservation.status === "booked" && (<button className="btn btn-secondary">Cancel</button>)}</td>
                             </tr>)
                         })}
                     </tbody>

@@ -35,7 +35,6 @@ function Dashboard({ date }) {
   }
 
   function onFinish(table_id, reservation_id) {
-    // loadDashboard();
     finishTable(table_id, reservation_id)
       .then(loadDashboard);
   }
