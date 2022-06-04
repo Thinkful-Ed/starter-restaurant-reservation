@@ -11,7 +11,7 @@ async function reservationExists(req, res, next) {
   const { reservation_id } = req.params;
   const reservation = await service.read(reservation_id);
 
-  console.log("reservations.controller resser id: ",reservation_id);
+  console.log("reservations.controller resser id: ", reservation_id);
 
   if (reservation) {
     res.locals.reservation = reservation;
@@ -25,16 +25,16 @@ function validatePeople(req, res, next) {
   return typeof data.people !== "number" ? next({ status: 400, message: `people must be a number` }) : next();
 }
 
-function validStatusChange(req, res, next){
+function validStatusChange(req, res, next) {
   const statuses = ["booked", "seated", "finished"];
-  const {status} = req.body.data;
+  const { status } = req.body.data;
   const currentStatus = res.locals.reservation.status;
-  return statuses.includes(status) && currentStatus !== "finished" ? next() : next({status: 400, message: `Current status must not be finished. Status must not be unknown and must be one of the following valid statuses: ${statuses.join(", ")}`});
+  return statuses.includes(status) && currentStatus !== "finished" ? next() : next({ status: 400, message: `Current status must not be finished. Status must not be unknown and must be one of the following valid statuses: ${statuses.join(", ")}` });
 }
 
-function validInitialStatus(req, res, next){
-  const {data} = req.body;
-  return data.status && data.status !== "booked" ? next({status: 400, message:`Initial status may not be 'finished' nor 'seated'.`}) : next();
+function validInitialStatus(req, res, next) {
+  const { data } = req.body;
+  return data.status && data.status !== "booked" ? next({ status: 400, message: `Initial status may not be 'finished' nor 'seated'.` }) : next();
 }
 
 function validDate(req, res, next) {
@@ -81,16 +81,21 @@ function validateTime(req, res, next) {
   next();
 }
 
+
 /**
  * List handler for reservation resources
  */
 async function list(req, res) {
-  const { date } = req.query;
+  const { date, mobile_number } = req.query;
 
   if (date) {
     const data = await service.readByDate(date);
     res.json({ data });
-  } else {
+  } else if (mobile_number) {
+    const data = await service.readByMobileNumber(mobile_number);
+    res.json({ data });
+  }
+  else {
     const data = await service.list();
     res.json({ data });
   }
@@ -102,19 +107,19 @@ async function create(req, res) {
 }
 
 function read(req, res) {
-  res.status(200).json({data: res.locals.reservation});
+  res.status(200).json({ data: res.locals.reservation });
 }
 
-async function updateStatus(req, res){
+async function updateStatus(req, res) {
   console.log("reservations.controller req.body.data:", req.body.data);
-  const {status} = req.body.data;
+  const { status } = req.body.data;
   const updatedReservation = {
     ...res.locals.reservation,
     status
   }
   const data = await service.update(updatedReservation);
   // res.json({data: {status: data.status}});
-  res.json({data});
+  res.json({ data });
 }
 
 module.exports = {

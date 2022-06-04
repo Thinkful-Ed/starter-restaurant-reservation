@@ -1,6 +1,6 @@
 import React from "react";
 
-function TablesList({ tables, onFinish, loadDashboard }) {
+function TablesList({ tables, onFinish }) {
     console.log("component tables:", tables);
 
     async function finishHandler({

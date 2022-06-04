@@ -1,14 +1,14 @@
 import React from "react";
 
 import { Redirect, Route, Switch } from "react-router-dom";
+import { today } from "../utils/date-time";
+import useQuery from "../utils/useQuery";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
-import { today } from "../utils/date-time";
 import ReservationForm from "../Reservations/ReservationForm";
 import TableForm from "../Tables/TableForm";
 import SeatReservationForm from "../Reservations/SeatReservationForm";
-import useQuery from "../utils/useQuery";
-
+import SearchPage from "../Search/SearchPage";
 
 /**
  * Defines all the routes for the application.
@@ -20,6 +20,7 @@ import useQuery from "../utils/useQuery";
 function Routes() {
   const query = useQuery();
   const date = query.get("date");
+
   return (
     <Switch>
       <Route exact={true} path="/">
@@ -39,6 +40,9 @@ function Routes() {
       </Route>
       <Route exact={true} path="/tables/new">
         <TableForm />
+      </Route>
+      <Route path="/search">
+        <SearchPage />
       </Route>
       <Route>
         <NotFound />
