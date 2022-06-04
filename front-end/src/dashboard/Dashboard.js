@@ -13,8 +13,8 @@ import TablesList from "./TablesList";
  */
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([]);
+  const [reservationsError, setReservationsError] = useState(null);
   const [tablesError, setTablesError] = useState(null);
   // const history = useHistory();
 
@@ -60,7 +60,7 @@ function Dashboard({ date }) {
       <div className="row">
         {/* {JSON.stringify(reservations)} */}
         <ReservationList reservations={reservations} date={date} />
-        <TablesList tables={tables} onFinish={onFinish} loadDashboard={loadDashboard}/>
+        <TablesList tables={tables} onFinish={onFinish}/>
       </div>
     </main>
   );
