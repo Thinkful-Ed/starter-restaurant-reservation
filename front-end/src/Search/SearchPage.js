@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import ReservationList from "../dashboard/ReservationList";
-import { listReservations } from "../utils/api";
+import { listReservations, cancelReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 function SearchPage() {
@@ -11,6 +11,15 @@ function SearchPage() {
     const [reservations, setReservations] = useState([]);
     const [errors, setErrors] = useState(null);
     const history = useHistory();
+
+    function onCancel(reservation_id) {
+        cancelReservation(reservation_id)
+            .then(() => {
+                listReservations({ mobile_number: mobileNumber })
+                    .then(setReservations);
+            })
+            .catch(setErrors);
+    }
 
     function handleChange(event) {
         setMobileNumber(event.target.value);
@@ -37,7 +46,7 @@ function SearchPage() {
             <ErrorAlert error={errors} />
             <SearchBar handleChange={handleChange} handleSubmit={handleSubmit} mobileNumber={mobileNumber} />
             <div className="row">
-                <ReservationList reservations={reservations} onSearchPage={true} />
+                <ReservationList reservations={reservations} onSearchPage={true} onCancel={onCancel} />
             </div>
         </main>
     )

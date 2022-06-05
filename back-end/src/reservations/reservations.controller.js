@@ -26,7 +26,7 @@ function validatePeople(req, res, next) {
 }
 
 function validStatusChange(req, res, next) {
-  const statuses = ["booked", "seated", "finished"];
+  const statuses = ["booked", "seated", "finished", "cancelled"];
   const { status } = req.body.data;
   const currentStatus = res.locals.reservation.status;
   return statuses.includes(status) && currentStatus !== "finished" ? next() : next({ status: 400, message: `Current status must not be finished. Status must not be unknown and must be one of the following valid statuses: ${statuses.join(", ")}` });

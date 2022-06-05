@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables, finishTable } from "../utils/api";
+import { listReservations, listTables, finishTable, cancelReservation } from "../utils/api";
 // import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationList from "./ReservationList";
@@ -39,8 +39,10 @@ function Dashboard({ date }) {
       .then(loadDashboard);
   }
 
-  function onCancel(reservation_id){
-    
+  function onCancel(reservation_id) {
+    cancelReservation(reservation_id)
+      .then(loadDashboard)
+      .catch(setReservationsError);
   }
 
   console.log(reservations);
@@ -63,8 +65,8 @@ function Dashboard({ date }) {
       </div>
       <div className="row">
         {/* {JSON.stringify(reservations)} */}
-        <ReservationList reservations={reservations} date={date} />
-        <TablesList tables={tables} onFinish={onFinish}/>
+        <ReservationList reservations={reservations} date={date} onCancel={onCancel} />
+        <TablesList tables={tables} onFinish={onFinish} />
       </div>
     </main>
   );

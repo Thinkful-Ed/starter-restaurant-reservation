@@ -4,9 +4,9 @@ import { today, previous, next } from "../utils/date-time";
 
 function ReservationList({ reservations, date, onSearchPage, onCancel }) {
 
-    function cancelHandler(event){
-        if(window.confirm(`Do you want to cancel this reservation?\n\nThis cannot be undone.`)){
-            
+    function cancelHandler({ target: { dataset: { reservationIdCancel } } = {} }) {
+        if (window.confirm(`Do you want to cancel this reservation?\n\nThis cannot be undone.`)) {
+            onCancel(reservationIdCancel);
         }
     }
 
