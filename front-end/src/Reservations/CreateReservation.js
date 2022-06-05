@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 
-function ReservationForm() {
+function CreateReservation() {
     const INITIAL_FORM_STATE = {
         first_name: "",
         last_name: "",
@@ -24,6 +24,7 @@ function ReservationForm() {
             [target.name]: target.value
         })
     }
+
     const handleSubmit = event => {
         event.preventDefault();
         console.log(formData);
@@ -152,4 +153,4 @@ function ReservationForm() {
     )
 }
 
-export default ReservationForm;
+export default CreateReservation;

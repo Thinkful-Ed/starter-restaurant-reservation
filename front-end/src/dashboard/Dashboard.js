@@ -39,6 +39,10 @@ function Dashboard({ date }) {
       .then(loadDashboard);
   }
 
+  function onCancel(reservation_id){
+    
+  }
+
   console.log(reservations);
 
   return (
