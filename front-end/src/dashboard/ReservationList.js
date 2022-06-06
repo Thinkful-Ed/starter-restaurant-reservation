@@ -1,8 +1,14 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { today, previous, next } from "../utils/date-time";
 
-function ReservationList({ reservations, date, onSearchPage }) {
+function ReservationList({ reservations, date, onSearchPage, onCancel }) {
+
+    function cancelHandler({ target: { dataset: { reservationIdCancel } } = {} }) {
+        if (window.confirm(`Do you want to cancel this reservation?\n\nThis cannot be undone.`)) {
+            onCancel(reservationIdCancel);
+        }
+    }
 
     const history = useHistory();
 
@@ -51,8 +57,8 @@ function ReservationList({ reservations, date, onSearchPage }) {
                                             >Seat</a>
                                         )}
                                     </td>
-                                    <td>{reservation.status === "booked" && (<button className="btn btn-secondary">Edit</button>)}</td>
-                                    <td>{reservation.status === "booked" && (<button className="btn btn-secondary">Cancel</button>)}</td>
+                                    <td>{reservation.status === "booked" && (<Link to={`/reservations/${reservation_id}/edit`} type="button" className="btn btn-secondary">Edit</Link>)}</td>
+                                    <td>{reservation.status === "booked" && (<button data-reservation-id-cancel={reservation_id} type="button" className="btn btn-secondary" onClick={cancelHandler}>Cancel</button>)}</td>
                                 </tr>
                             )
                         })) : <tr><td colSpan="6">No reservations found.</td></tr>}

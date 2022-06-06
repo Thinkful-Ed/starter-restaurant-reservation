@@ -1,59 +1,8 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
+import React from "react";
 
-function ReservationForm() {
-    const INITIAL_FORM_STATE = {
-        first_name: "",
-        last_name: "",
-        mobile_number: "",
-        reservation_date: "",
-        reservation_time: "",
-        people: ""
-    }
-
-    const [formData, setFormData] = useState({ ...INITIAL_FORM_STATE });
-    const [errors, setErrors] = useState([]);
-    const history = useHistory();
-
-
-    const handleChange = event => {
-        const { target } = event;
-        setFormData({
-            ...formData,
-            [target.name]: target.value
-        })
-    }
-    const handleSubmit = event => {
-        event.preventDefault();
-        console.log(formData);
-        let { people } = formData;
-        people = Number(people);
-        createReservation({ ...formData, people })
-            .then(() => {
-                //setFormData({ ...INITIAL_FORM_STATE });
-                history.push(`/dashboard?date=${formData.reservation_date}`);
-            })
-            .catch((error) => {
-                const splitError = error.message.split("|");
-                setErrors(splitError);}
-            );
-    }
-
-    const errorMessage = (
-        <div className="alert alert-danger">
-            Please fix the following errors:
-            <ul>
-                {errors.map((error, index) => {
-                    return <li key={index}>{error}</li>;
-                })}
-            </ul>
-        </div>
-    )
-
+function ReservationForm({handleChange, handleSubmit, errors, errorMessage, formData, cancelHandler}) {
     return (
         <form name="reservation" onSubmit={(handleSubmit)}>
-            <h1>Create Reservation</h1>
             {errors.length ? errorMessage : null}
             <div className="form-group">
                 <div className="row">
@@ -146,10 +95,10 @@ function ReservationForm() {
                     </div>
                 </div>
             </div>
-            <button className="btn btn-danger mr-2" type="cancel" onClick={() => history.go(-1)}>Cancel</button>
+            <button className="btn btn-danger mr-2" type="cancel" onClick={cancelHandler}>Cancel</button>
             <button className="btn btn-primary" type="submit">Submit</button>
         </form>
-    )
+    );
 }
 
 export default ReservationForm;

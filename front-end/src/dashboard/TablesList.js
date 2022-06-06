@@ -3,17 +3,13 @@ import React from "react";
 function TablesList({ tables, onFinish }) {
     console.log("component tables:", tables);
 
-    async function finishHandler({
-        target: { dataset: { tableIdFinish, reservationIdFinish } } = {},
-    }) {
+    function finishHandler({ target: { dataset: { tableIdFinish, reservationIdFinish } } = {}, }) {
         if (
             tableIdFinish && reservationIdFinish &&
             window.confirm(
                 "Is this table ready to seat new guests?\n\nThis cannot be undone."
             )
         ) {
-            //finishTable(tableIdFinish, reservationIdFinish);
-            // loadDashboard();
             onFinish(tableIdFinish, reservationIdFinish);
 
         }

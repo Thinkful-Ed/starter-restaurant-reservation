@@ -26,15 +26,23 @@ function validatePeople(req, res, next) {
 }
 
 function validStatusChange(req, res, next) {
-  const statuses = ["booked", "seated", "finished"];
+  const statuses = ["booked", "seated", "finished", "cancelled"];
   const { status } = req.body.data;
   const currentStatus = res.locals.reservation.status;
-  return statuses.includes(status) && currentStatus !== "finished" ? next() : next({ status: 400, message: `Current status must not be finished. Status must not be unknown and must be one of the following valid statuses: ${statuses.join(", ")}` });
+  return statuses.includes(status) && currentStatus !== "finished" ? next() : next({ status: 400, message: `Current status must not be finished, cancelled, nor unknown. Only reservations with current status of 'booked' may be updated. New status must be one of the following valid statuses: ${statuses.join(", ")}` });
 }
 
 function validInitialStatus(req, res, next) {
   const { data } = req.body;
-  return data.status && data.status !== "booked" ? next({ status: 400, message: `Initial status may not be 'finished' nor 'seated'.` }) : next();
+  return data.status && data.status !== "booked" ? next({ status: 400, message: `Reservation status may not be 'finished', 'seated', nor 'cancelled.` }) : next();
+}
+
+function validUpdateStatus(req, res, next) {
+  const { status } = res.locals.reservation;
+  return status !== "booked" ?
+    next({ status: 400, message: "Only reservations with current status of 'booked' may be updated." })
+    :
+    next();
 }
 
 function validDate(req, res, next) {
@@ -122,6 +130,15 @@ async function updateStatus(req, res) {
   res.json({ data });
 }
 
+async function updateReservation(req, res) {
+  const updatedReservation = {
+    ...req.body.data,
+    reservation_id: res.locals.reservation.reservation_id
+  }
+  const data = await service.update(updatedReservation);
+  res.json({ data });
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [
@@ -145,5 +162,20 @@ module.exports = {
     asyncErrorBoundary(reservationExists),
     validStatusChange,
     asyncErrorBoundary(updateStatus)
+  ],
+  update: [
+    bodyDataHas("first_name"),
+    bodyDataHas("last_name"),
+    bodyDataHas("mobile_number"),
+    bodyDataHas("reservation_date"),
+    bodyDataHas("reservation_time"),
+    bodyDataHas("people"),
+    asyncErrorBoundary(reservationExists),
+    validatePeople,
+    validDate,
+    validateTime,
+    validUpdateStatus,
+    // validStatusChange,
+    asyncErrorBoundary(updateReservation)
   ]
 };
