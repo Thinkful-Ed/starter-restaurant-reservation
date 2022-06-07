@@ -28,10 +28,15 @@ function CreateReservation() {
 
     const handleSubmit = event => {
         event.preventDefault();
+        createRes();
+    }
+
+    function createRes(){
+        const ac = new AbortController();
         console.log(formData);
         let { people } = formData;
         people = Number(people);
-        createReservation({ ...formData, people })
+        createReservation({ ...formData, people }, ac.signal)
             .then(() => {
                 //setFormData({ ...INITIAL_FORM_STATE });
                 history.push(`/dashboard?date=${formData.reservation_date}`);
@@ -40,6 +45,8 @@ function CreateReservation() {
                 const splitError = error.message.split("|");
                 setErrors(splitError);
             });
+
+        return () => ac.abort();
     }
 
     const cancelHandler = () => {
@@ -49,11 +56,9 @@ function CreateReservation() {
     const errorMessage = (
         <div className="alert alert-danger">
             Please fix the following errors:
-            <ul>
-                {errors.map((error, index) => {
-                    return <li key={index}>{error}</li>;
+                {errors.map((error) => {
+                    return <p>{error}</p>;
                 })}
-            </ul>
         </div>
     )
 
