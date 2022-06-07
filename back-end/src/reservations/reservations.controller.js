@@ -175,7 +175,6 @@ module.exports = {
     validDate,
     validateTime,
     validUpdateStatus,
-    // validStatusChange,
     asyncErrorBoundary(updateReservation)
   ]
 };
