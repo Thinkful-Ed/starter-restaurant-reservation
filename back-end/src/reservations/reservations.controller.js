@@ -155,7 +155,7 @@ module.exports = {
     asyncErrorBoundary(create)],
   read: [
     asyncErrorBoundary(reservationExists),
-    read
+    asyncErrorBoundary(read)
   ],
   updateStatus: [
     bodyDataHas("status"),
