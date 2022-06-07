@@ -16,6 +16,7 @@ function readByDate(date) {
         .select("*")
         .where({ reservation_date: date })
         .andWhere('status', '!=', 'finished')
+        // .andWhere('status', '!=', 'cancelled')
         .orderBy("reservation_time");
 }
 
