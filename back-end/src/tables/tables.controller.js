@@ -25,12 +25,12 @@ function tableHasCapacity(req, res, next) {
 }
 
 // for "/:table_id/seat"
-async function tableIsOccupied(req, res, next) {
+function tableIsOccupied(req, res, next) {
     const { table } = res.locals;
     return table.free ? next() : next({ status: 400, message: `This table is currently occupied.` })
 }
 
-async function tableIsNotOccupied(req, res, next) {
+function tableIsNotOccupied(req, res, next) {
     const { table } = res.locals;
     return !table.reservation_id ? next({ status: 400, message: `Table with ID: ${table.table_id} is not occupied` }) : next();
     // return table.free ? next({status: 400, message: `Table with ID: ${table.table_id} is not occupied`}) : next();
