@@ -30,12 +30,14 @@ function SearchPage() {
         setErrors(null);
         setReservations([]);
 
+        const abortController = new AbortController();
         // call listReservations
-        listReservations({ mobile_number: mobileNumber })
+        listReservations({ mobile_number: mobileNumber }, abortController.signal)
             .then((response) => {
                 setReservations(response);
             })
             .catch(setErrors);
+        return () => abortController.abort();
     }
 
     return (
