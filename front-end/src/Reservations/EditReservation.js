@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { readReservation, updateReservation } from "../utils/api";
 import ReservationForm from "./ReservationForm";
+import ErrorAlert from "../layout/ErrorAlert";
 
 
 function EditReservation() {
@@ -59,8 +60,8 @@ function EditReservation() {
         <div className="alert alert-danger">
             Please fix the following errors:
             <ul>
-                {errors.map((error, index) => {
-                    return <li key={index}>{error}</li>;
+                {errors.map((error) => {
+                    return <li key={error}>{error}</li>;
                 })}
             </ul>
         </div>

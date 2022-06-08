@@ -56,9 +56,11 @@ function CreateReservation() {
     const errorMessage = (
         <div className="alert alert-danger">
             Please fix the following errors:
+            <ul>
                 {errors.map((error) => {
-                    return <p>{error}</p>;
+                    return <li key={error}>{error}</li>;
                 })}
+            </ul>
         </div>
     )
 
