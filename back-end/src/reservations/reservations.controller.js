@@ -15,19 +15,15 @@ function checkValidFields(req, res, next) {
 		"people",
 	];
   const {data} = req.body
-	console.log(data);
-	if (!data) {
-		res.sendStatus(400);
-	}
 
 	if (data) {
 		for (let field of validFields) {
 			if (!data[field]) {
-				res.sendStatus(400);
+				next({status:400,message:`${field} does not exist`})
 			}
 		}
 	} else {
-		res.sendStatus(400);
+		next({status:400,message:"Data does not exists"});
 	}
 	return next();
 }
