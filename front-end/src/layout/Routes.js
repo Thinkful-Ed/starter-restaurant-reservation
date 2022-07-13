@@ -5,6 +5,7 @@ import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
 import AddReservation from "./AddReservation";
+import useQuery from "../utils/useQuery"
 
 /**
  * Defines all the routes for the application.
@@ -14,6 +15,12 @@ import AddReservation from "./AddReservation";
  * @returns {JSX.Element}
  */
 function Routes() {
+  const query = useQuery() //initialize the useQuery hook
+  console.log(query)
+  const date = query.get("date")
+  console.log(date)
+  const limit = query.get("limit")
+  console.log(limit)
   return (
     <Switch>
       <Route exact={true} path="/">
