@@ -10,6 +10,13 @@ async function list(req, res) {
   });
 }
 
+async function create(req,res,next){
+  const {data} = req.body
+  const responseData = await service.create(data)
+  res.send({data:responseData})
+}
+
 module.exports = {
   list,
+  create,
 };
