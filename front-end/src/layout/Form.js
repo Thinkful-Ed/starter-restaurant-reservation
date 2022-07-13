@@ -1,7 +1,11 @@
 import React from "react"
+import { useHistory } from "react-router-dom"
 
 
 function Form({handleSubmit, handleChange, reservationForm}){
+    const history = useHistory()
+
+
     return (
         <>
         <h2>
@@ -69,6 +73,7 @@ function Form({handleSubmit, handleChange, reservationForm}){
                             onChange={handleChange}
                             value={reservationForm.reservation_date}
                             required
+                            
                             />
                         </div>
                     </div>
@@ -99,14 +104,18 @@ function Form({handleSubmit, handleChange, reservationForm}){
                         onChange={handleChange}
                         value={reservationForm.people}
                         required
+                        min="1"
                         />
                     </div>
                 </div>
                 </div> 
             <div className="row">
                 <div className="col-sm">
-                    <button type="cancel" className="btn btn-secondary">Cancel</button>
-                    <button type="submit" className="btn btn-primary">Submit</button>
+
+                        <button type="cancel" className="btn btn-secondary" onClick={()=> history.goBack()}>Cancel</button>
+
+                    
+                    <button type="submit" className="btn btn-primary" value="submit">Submit</button>
                 </div>
                 
             </div>

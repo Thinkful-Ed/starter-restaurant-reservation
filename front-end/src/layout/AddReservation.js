@@ -1,4 +1,5 @@
 import React, {useState} from "react"
+import { createReservations } from "../utils/api"
 import Form from "./Form"
 
 function AddReservation(){
@@ -8,16 +9,9 @@ function AddReservation(){
         mobile_number: "",
         reservation_date: "",
         reservation_time: "",
-        people: "",
+        people: 0,
     }
 
-    
-    // const [firstName, setFirstName] = useState("")
-    // const [lastName, setLastName] = useState("")
-    // const [mobileNumber, setMobileNumber] = useState("")
-    // const [date, setDate] = useState("")
-    // const [time, setTime] = useState("")
-    // const [numPeople, setNumPeople] = useState(1)
     const [reservationForm, setReservationForm] = useState(initialFormState)
     const handleChange = ({ target }) =>{
         setReservationForm({
@@ -26,17 +20,22 @@ function AddReservation(){
         })
     }
 
-    // const handleFirstNameChange = (event)=> setFirstName(event.target.value)
-    // const handleLastNameChange = (event)=> setLastName(event.target.value)
-    // const handleMobileNumberChange = (event)=> setMobileNumber(event.target.value)
 
     const handleSubmit = async (event)=>{
         event.preventDefault()
+        const ac = new AbortController()
+        try{
+            // I don't understand how to do this part where you save the information upon clicking submit
+            // const data = await 
+            const newReservation = await createReservations(reservationForm, ac.signal)
+            setReservationForm(newReservation)
+        }catch(error){
+            console.log(error)
+        }
+        return () => ac.abort()
     }
 
-    // console.log(firstName)
-    // console.log(lastName)
-    // console.log(mobileNumber)
+
     console.log(reservationForm.first_name)
     return (
         <>
