@@ -25,7 +25,7 @@ function Routes() {
       <Route path="/dashboard">
         <Dashboard date={today()} />
       </Route>
-      <Route>
+      <Route path={"/reservations/new"}>
         <NewRes />
       </Route>
       <Route>

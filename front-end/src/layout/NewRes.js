@@ -25,10 +25,11 @@ export default function NewRes() {
         <div className="row mt-3">
           <div className="col">
             <input
-              type="number"
+              type="tel"
               name="mobile_number"
               className="form-control"
               placeholder="Mobile number"
+              pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
             />
           </div>
           <div className="col">
@@ -46,6 +47,23 @@ export default function NewRes() {
               name="reservation_time"
               className="form-control"
             />
+          </div>
+          <div className="col">
+            <input
+              type="number"
+              name="people"
+              className="form-control"
+              min="1"
+              placeholder="1"
+            />
+          </div>
+        </div>
+        <div className="form-group row mt-3">
+          <div className="col-sm-10">
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+            <button className="btn btn-secondary ml-2">Cancel</button>
           </div>
         </div>
       </form>
