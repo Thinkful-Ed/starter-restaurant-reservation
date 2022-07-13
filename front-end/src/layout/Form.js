@@ -1,6 +1,7 @@
 import React from "react"
 
-function Form({handleSubmit}){
+
+function Form({handleSubmit, handleFirstNameChange, handleLastNameChange, handleMobileNumberChange, firstName, lastName, mobileNumber}){
     return (
         <form onSubmit = {handleSubmit}>
             <div>
@@ -11,7 +12,8 @@ function Form({handleSubmit}){
                 name = "first_name"
                 id = "first_name"
                 className = "form-control"
-                
+                onChange={handleFirstNameChange}
+                value={firstName}
                 required
                 />
             </div>
@@ -23,7 +25,8 @@ function Form({handleSubmit}){
                 name = "last_name"
                 id = "last_name"
                 className = "form-control"
-                
+                onChange={handleLastNameChange}
+                value={lastName}
                 required
                 />
             </div>
@@ -35,6 +38,8 @@ function Form({handleSubmit}){
                 name = "mobile_number"
                 id = "mobile_number"
                 className = "form-control"
+                onChange={handleMobileNumberChange}
+                value={mobileNumber}
                 required
                 />
             </div>
@@ -42,7 +47,7 @@ function Form({handleSubmit}){
                 <label htmlFor="reservation_date">
                     Date
                 </label>
-                <input
+                <input type="date"
                 name = "reservation_date"
                 id = "reservation_date"
                 className = "form-control"
@@ -53,7 +58,7 @@ function Form({handleSubmit}){
                 <label htmlFor="reservation_time">
                     Time
                 </label>
-                <input
+                <input type="time"
                 name = "reservation_time"
                 id = "reservation_time"
                 className = "form-control"
@@ -64,7 +69,7 @@ function Form({handleSubmit}){
                 <label htmlFor="people">
                     Number of people in the party
                 </label>
-                <input
+                <input type="number"
                 name = "people"
                 id = "people"
                 className = "form-control"
