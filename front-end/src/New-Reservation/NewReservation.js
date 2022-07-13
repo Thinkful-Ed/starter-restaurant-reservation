@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, Link } from "react-router-dom";
-import {createReservation} from "../utils/api"
-import {today} from "../utils/date-time"
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { createReservation } from "../utils/api"
+import { today } from "../utils/date-time"
+import ErrorAlert from "../layout/ErrorAlert";
 
 
 function NewReservation() {
@@ -16,15 +17,25 @@ function NewReservation() {
 	};
 
 	const [reservation, setReservation] = useState(initReservation);
+	const [reservationError,setReservationError] = useState(null)
 
     const submitHandler = async (event)=>{
         event.preventDefault()
+        try{
+			const abortController = new AbortController()
+        	await createReservation({data:reservation}, abortController.signal)
+		}catch(error){
+			setReservationError(error)
+		}
+		if(!reservationError){
+			history.push(`/dashboard?=${reservation.reservation_date}`)
+		}
         
-        const abortController = new AbortController()
-        await createReservation({data:reservation}, abortController.signal)
-        
-        history.push("/")
     }
+	
+	const cancelButtonHandler = (event)=>{
+		history.goBack()
+	}
     
 	const formChangeHandler = (event) => {
 		const resKey = event.target.name;
@@ -33,7 +44,12 @@ function NewReservation() {
 	};
     
 	return (
-		<div>
+		<div className="card">
+			<div class="card-body">
+				
+			
+			<h1>New Reservation</h1>
+			<ErrorAlert error={reservationError} />
 			<form onSubmit={submitHandler}>
 				<div className="mb-3">
 					<label for="first_name" className="form-label">
@@ -123,11 +139,16 @@ function NewReservation() {
 				</div>
 
 				<div>
-					<button type="submit" className="btn btn-primary">
+					<button type="button" onClick={cancelButtonHandler} className="btn btn-danger">
+						Cancel
+					</button>
+					
+					<button type="submit"  className="btn btn-primary">
 						Submit
 					</button>
 				</div>
 			</form>
+			</div>
 		</div>
 	);
 }

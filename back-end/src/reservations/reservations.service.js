@@ -6,8 +6,11 @@ const knex = require("../db/connection.js")
 
 //-------------CRUD FUNCTIONS----------------
 
-function list(){
-    return knex("reservations").select("*")
+function list(date){
+    return knex("reservations as rs")
+        .select("*")
+        .where("rs.reservation_date", date)
+        .orderBy("rs.reservation_time")
 }
 
 function create(reservation){
