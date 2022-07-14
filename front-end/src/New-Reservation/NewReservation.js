@@ -24,13 +24,10 @@ function NewReservation() {
         try{
 			const abortController = new AbortController()
         	await createReservation({data:reservation}, abortController.signal)
+			history.push(`/dashboard?date=${reservation.reservation_date}`)
 		}catch(error){
 			setReservationError(error)
 		}
-		if(!reservationError){
-			history.push(`/dashboard?=${reservation.reservation_date}`)
-		}
-        
     }
 	
 	const cancelButtonHandler = (event)=>{
@@ -39,20 +36,23 @@ function NewReservation() {
     
 	const formChangeHandler = (event) => {
 		const resKey = event.target.name;
-		const resValue = event.target.value;
+		let resValue = event.target.value;
+		if(resKey === "people" && resValue){
+			resValue = parseInt(resValue)
+		}
 		setReservation({ ...reservation, [resKey]: resValue });
 	};
-    
+    console.log(reservation)
 	return (
 		<div className="card">
-			<div class="card-body">
+			<div className="card-body">
 				
 			
 			<h1>New Reservation</h1>
 			<ErrorAlert error={reservationError} />
 			<form onSubmit={submitHandler}>
 				<div className="mb-3">
-					<label for="first_name" className="form-label">
+					<label htmlFor="first_name" className="form-label">
 						First Name
 					</label>
 					<input
@@ -66,7 +66,7 @@ function NewReservation() {
 					/>
 				</div>
 				<div className="mb-3">
-					<label for="last_name" className="form-label">
+					<label htmlFor="last_name" className="form-label">
 						Last Name
 					</label>
 					<input
@@ -80,7 +80,7 @@ function NewReservation() {
 					/>
 				</div>
 				<div className="mb-3">
-					<label for="mobile_number" className="form-label">
+					<label htmlFor="mobile_number" className="form-label">
 						Mobile Number
 					</label>
 					<input
@@ -91,10 +91,12 @@ function NewReservation() {
 						name="mobile_number"
 						id="mobile_number"
 						value={reservation.mobile_number}
+						placeholder="xxx-xxx-xxxx"
+						pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
 					/>
 				</div>
 				<div className="mb-3">
-					<label for="reservation_date" className="form-label">
+					<label htmlFor="reservation_date" className="form-label">
 						Date of Reservation
 					</label>
 					<input
@@ -109,7 +111,7 @@ function NewReservation() {
 					/>
 				</div>
 				<div className="mb-3">
-					<label for="reservation_time" className="form-label">
+					<label htmlFor="reservation_time" className="form-label">
 						Time of Reservation
 					</label>
 					<input
@@ -123,7 +125,7 @@ function NewReservation() {
 					/>
 				</div>
 				<div className="mb-3">
-					<label for="people" className="form-label">
+					<label htmlFor="people" className="form-label">
 						Party Size
 					</label>
 					<input
