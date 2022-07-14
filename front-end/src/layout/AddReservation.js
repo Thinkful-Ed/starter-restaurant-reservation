@@ -1,8 +1,12 @@
 import React, {useState} from "react"
+import { useHistory } from "react-router"
 import { createReservations } from "../utils/api"
 import Form from "./Form"
 
 function AddReservation(){
+
+    const history = useHistory()
+
     const initialFormState = {
         first_name: "",
         last_name: "",
@@ -29,14 +33,19 @@ function AddReservation(){
             // const data = await 
             const newReservation = await createReservations(reservationForm, ac.signal)
             setReservationForm(newReservation)
+            history.push(`/dashboard?date=${newReservation.date}`)
         }catch(error){
+            // setResError(error) // state update happens here if error
+            //re-render so alert box pops up if error not empty
             console.log(error)
         }
         return () => ac.abort()
     }
 
+    
 
-    console.log(reservationForm.first_name)
+
+    // console.log(reservationForm.first_name)
     return (
         <>
             <Form 

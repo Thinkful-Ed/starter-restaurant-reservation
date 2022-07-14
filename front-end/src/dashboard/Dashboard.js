@@ -28,6 +28,14 @@ function Dashboard({ date }) {
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {date}</h4>
+
+
+        
+      </div>
+      <div>
+        <button className="btn btn-secondary">Yesterday</button>
+        <button className="btn btn-primary">Tomorrow</button>
+        <button className="btn btn-success">Today</button>
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}

@@ -21,18 +21,24 @@ function Routes() {
   console.log(date)
   const limit = query.get("limit")
   console.log(limit)
+
+  const myDate = new Date("2022-07-14")
+  console.log("my date: ", myDate.getDay() + 1)
   return (
     <Switch>
       <Route exact={true} path="/">
-        <Redirect to={"/dashboard"} />
-      </Route>
-      <Route exact={true} path="/reservations">
         <Redirect to={"/dashboard"} />
       </Route>
 
       <Route path="/reservations/new">
         <AddReservation />
       </Route>
+      
+      <Route exact={true} path="/reservations">
+        <Redirect to={"/dashboard"} />
+      </Route>
+
+
 
       <Route path="/dashboard">
         <Dashboard date={today()} />
