@@ -1,11 +1,11 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import {today, previous, next} from "../utils/date-time"
+import { previous, next} from "../utils/date-time"
 
 export default function DashboardDateNav({date}) {
     const history = useHistory()
     
-    const priorDayClickHandler = (event)=>{
+    const priorDayClickHandler = ()=>{
         let prevDay = previous(date)
         history.push(`/dashboard?date=${prevDay}`)
     }
