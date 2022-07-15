@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { createReservation } from "../utils/api";
+import { formatAsDate, formatAsTime } from "../utils/date-time";
 
-export default function NewRes() {
+export default function NewRes({ today }) {
+  const history = useHistory();
+
   const initialFormState = {
     first_name: "",
     last_name: "",
@@ -11,7 +16,26 @@ export default function NewRes() {
   };
 
   const [formData, setFormData] = useState(initialFormState);
-  console.log(formData);
+  const [newRes, setNewRes] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  useEffect(() => {
+    const abort = new AbortController();
+
+    if (!newRes) {
+      return;
+    } else {
+      async function uploadRes() {
+        try {
+          await createReservation(newRes, abort.signal);
+        } catch (error) {
+          setErrorMessage(error);
+        }
+      }
+      uploadRes();
+      return () => abort.abort();
+    }
+  }, [newRes]);
 
   const changeHandler = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -19,12 +43,33 @@ export default function NewRes() {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    console.log("submitted!");
+    setFormData({
+      ...formData,
+      people: Number(formData.people),
+      reservation_date: formatAsDate(formData.reservation_date),
+      reservation_time: formatAsTime(formData.reservation_time),
+    });
+    setNewRes(formData);
+    setFormData(initialFormState);
+  };
+
+  const cancelHandler = (event) => {
+    event.preventDefault();
+    history.goBack();
+  };
+
+  const errorElement = () => {
+    return (
+      <>
+        <p>ERROR: {errorMessage.message}</p>
+      </>
+    );
   };
 
   return (
     <>
-      <h1>New Reservation</h1>
+      <h1>Create Reservation</h1>
+      {errorMessage && errorElement()}
       <form onSubmit={submitHandler}>
         <div className="row mt-3">
           <div className="col">
@@ -33,6 +78,7 @@ export default function NewRes() {
               name="first_name"
               className="form-control"
               placeholder="First name"
+              required={true}
               onChange={changeHandler}
               value={formData.first_name}
             />
@@ -43,6 +89,7 @@ export default function NewRes() {
               name="last_name"
               className="form-control"
               placeholder="Last name"
+              required={true}
               onChange={changeHandler}
               value={formData.last_name}
             />
@@ -55,6 +102,7 @@ export default function NewRes() {
               name="mobile_number"
               className="form-control"
               placeholder="Mobile number"
+              required={true}
               onChange={changeHandler}
               value={formData.mobile_number}
             />
@@ -64,6 +112,7 @@ export default function NewRes() {
               type="date"
               name="reservation_date"
               className="form-control"
+              required={true}
               onChange={changeHandler}
               value={formData.reservation_date}
             />
@@ -75,6 +124,7 @@ export default function NewRes() {
               type="time"
               name="reservation_time"
               className="form-control"
+              required={true}
               onChange={changeHandler}
               value={formData.reservation_time}
             />
@@ -85,7 +135,8 @@ export default function NewRes() {
               name="people"
               className="form-control"
               min="1"
-              placeholder="1"
+              placeholder="Number of people in party"
+              required={true}
               onChange={changeHandler}
               value={formData.people}
             />
@@ -96,7 +147,9 @@ export default function NewRes() {
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
-            <button className="btn btn-secondary ml-2">Cancel</button>
+            <button onClick={cancelHandler} className="btn btn-secondary ml-2">
+              Cancel
+            </button>
           </div>
         </div>
       </form>
