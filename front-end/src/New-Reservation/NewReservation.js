@@ -42,7 +42,7 @@ function NewReservation() {
 		}
 		setReservation({ ...reservation, [resKey]: resValue });
 	};
-    console.log(reservation)
+    
 	return (
 		<div className="card">
 			<div className="card-body">

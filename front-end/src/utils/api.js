@@ -72,7 +72,7 @@ export async function createReservation(dataObj,signal){
   const url = new URL(`${API_BASE_URL}/reservations`);
   const options = {
     headers,
-    signal,
+    signal:signal,
     method: "POST",
     body: JSON.stringify(dataObj)
   }
