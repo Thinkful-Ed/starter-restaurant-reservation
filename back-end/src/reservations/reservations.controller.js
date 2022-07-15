@@ -108,7 +108,8 @@ function validateDay(date) {
 	}
 	return true;
 }
-
+// checks to see if the date is not in the past.
+// returns a boolean of true if passed validation for present/future date
 function validateIfFuturePresentDate(date) {
 	date = date.split("-");
 	date = [date[1], date[2], date[0]].join("-");
