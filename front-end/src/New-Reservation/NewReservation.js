@@ -92,7 +92,7 @@ function NewReservation() {
 						id="mobile_number"
 						value={reservation.mobile_number}
 						placeholder="xxx-xxx-xxxx"
-						pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+						// pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
 					/>
 				</div>
 				<div className="mb-3">
@@ -106,7 +106,7 @@ function NewReservation() {
 						className="form-control"
 						name="reservation_date"
 						id="reservation_date"
-						min={today()}
+						// min={today()}
 						value={reservation.reservation_date}
 					/>
 				</div>

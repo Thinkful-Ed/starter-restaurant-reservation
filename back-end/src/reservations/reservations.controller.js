@@ -19,21 +19,45 @@ function checkValidFields(req, res, next) {
 	if (data) {
 		for (let field of validFields) {
 			if (!data[field]) {
-				return next({ status: 400, message: `${field} does not exist` });
+				return next({
+					status: 400,
+					message: `${field} does not exist.`,
+				});
 			}
 			if (field === "reservation_date") {
 				if (!validateDate(data[field])) {
-					return next({ status: 400, message: `${field} is not valid.` });
+					return next({
+						status: 400,
+						message: `${field} is not valid.`,
+					});
+				}
+				if (!validateDay(data[field])) {
+					return next({
+						status: 400,
+						message: `Restaurant is closed on Tuesdays.`,
+					});
+				}
+				if (!validateIfFuturePresentDate(data[field])) {
+					return next({
+						status: 400,
+						message: `The reservation date is in the past. Only future reservations are allowed.`,
+					});
 				}
 			}
-			if (field === "reservation_time"){
-				if(!validateTime(data[field])){
-					return next({ status: 400, message: `${field} is not valid.` });
+			if (field === "reservation_time") {
+				if (!validateTime(data[field])) {
+					return next({
+						status: 400,
+						message: `${field} is not valid.`,
+					});
 				}
 			}
-			if (field === "people"){
-				if(!validatePeople(data[field])){
-					return next({ status: 400, message: `${field} is not valid.` });
+			if (field === "people") {
+				if (!validatePeople(data[field])) {
+					return next({
+						status: 400,
+						message: `${field} is not valid.`,
+					});
 				}
 			}
 		}
@@ -53,22 +77,70 @@ function validateDate(date) {
 }
 
 function validateTime(time) {
-	time = time.split(":").map(value=>{return parseInt(value)})
-	if (!time[0]){return false}
-	if (time[0] < 0 || time[0] > 23){
-		return false
+	time = time.split(":").map((value) => {
+		return parseInt(value);
+	});
+	if (!time[0]) {
+		return false;
 	}
-	if ((time[1] < 0 || time[1] > 59)||(time[2] < 0 || time[2] > 59)){
-		return false
+	if (time[0] < 0 || time[0] > 23) {
+		return false;
 	}
-	return true
+	if (time[1] < 0 || time[1] > 59 || time[2] < 0 || time[2] > 59) {
+		return false;
+	}
+	return true;
 }
 
 function validatePeople(peopleCount) {
-	if (typeof peopleCount === "string" || peopleCount <= 0){
-		return false
+	if (typeof peopleCount === "string" || peopleCount <= 0) {
+		return false;
 	}
-	return true
+	return true;
+}
+
+function validateDay(date) {
+	date = date.split("-");
+	date = [date[1], date[2], date[0]].join("-");
+	let newDate = new Date(date);
+	if (newDate.getDay() === 2) {
+		return false;
+	}
+	return true;
+}
+
+function validateIfFuturePresentDate(date) {
+	date = date.split("-");
+	date = [date[1], date[2], date[0]].join("-");
+	let checkDate = new Date(date);
+	let currentDate = new Date();
+	checkDate = {
+		year: checkDate.getFullYear(),
+		month: checkDate.getMonth() + 1,
+		day: checkDate.getDate(),
+	};
+	currentDate = {
+		year: currentDate.getFullYear(),
+		month: currentDate.getMonth() + 1,
+		day: currentDate.getDate(),
+	};
+
+	if (checkDate.year < currentDate.year) {
+		return false;
+	} else if (
+		checkDate.year === currentDate.year &&
+		checkDate.month < currentDate.month
+	) {
+		return false;
+	} else if (
+		checkDate.year === currentDate.year &&
+		checkDate.month === currentDate.month &&
+		checkDate.day < currentDate.day
+	) {
+		return false;
+	}
+
+	return true;
 }
 
 //-----------------CRUD FUNCTIONS-----------------
