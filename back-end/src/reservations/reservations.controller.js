@@ -111,8 +111,8 @@ function validateTime(time) {
 
 function validateBookingTimeInOperatingHours(time) {
 	let checkTime = time;
-
-	if (checkTime[0] < 10 && checkTime[1] < 30) {
+	
+	if (checkTime[0] < 10 || (checkTime[0] === 10 && checkTime[1] < 30)) {
 		return false;
 	}
 	if (checkTime[0] > 21 || (checkTime[0] === 21 && checkTime[1] > 30)) {
