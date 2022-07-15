@@ -31,6 +31,13 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
+      
+      {reservations.map((reservation) =>{
+        return (
+          
+          <h1>{reservation.first_name}</h1>
+        )
+      })}
     </main>
   );
 }
