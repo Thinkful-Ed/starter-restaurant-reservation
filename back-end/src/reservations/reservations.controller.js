@@ -64,8 +64,22 @@ const hasReservationDate = (req, res, next) => {
 
 const hasReservationTime = (req, res, next) => {
   const { data: { reservation_time } = {} } = req.body;
+  console.log("time is", reservation_time);
   if (reservation_time && !containsAnyLetter(reservation_time)) {
-    return next();
+    console.log("reservation_time", reservation_time.replace(":", ""));
+    if (
+      reservation_time.replace(":", "") >= 1030 &&
+      reservation_time.replace(":", "") <= 2130
+    ) {
+      // const hour = now.getHours();
+      // const minutes = now.getMinutes();
+      // if (hour >= 10 && hour <= 21)
+      return next();
+    } else
+      next({
+        status: 400,
+        message: "Sorry, reservations can not be made at these hours!",
+      });
   }
   return next({ status: 400, message: "a reservation_time is required" });
 };
