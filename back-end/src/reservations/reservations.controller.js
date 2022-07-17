@@ -10,17 +10,6 @@ async function list(req, res) {
   res.json({ data });
 }
 
-// async function postExists(req, res, next) {
-//   const { postId } = req.params;
-
-//   const post = await service.read(postId);
-//   if (post) {
-//     res.locals.post = post;
-//     return next();
-//   }
-//   return next({ status: 404, message: `Post cannot be found.` });
-// }
-
 function hasData(req, res, next) {
   if (!req.body.data) {
     next({ status: 400, message: "Reservation lacks required data." });
@@ -53,9 +42,22 @@ const hasMobileNumber = (req, res, next) => {
 
 const hasReservationDate = (req, res, next) => {
   const { data: { reservation_date } = {} } = req.body;
-  console.log(reservation_date);
   if (reservation_date && !containsAnyLetter(reservation_date)) {
+    const date = new Date(reservation_date);
+    console.log("Day Number is", date.getDay());
+    if (date.getDay() === 1) {
+      next({ status: 400, message: "Sorry! We're closed on this day!" });
+    }
+    if (new Date() > date) {
+      next({
+        status: 400,
+        message:
+          "Sorry! We don't have a time machine! Try booking a reservation in the future!",
+      });
+    }
     return next();
+    // } else
+    //   return next({ status: 400, message: "a reservation_date is required" });
   }
   return next({ status: 400, message: "a reservation_date is required" });
 };
