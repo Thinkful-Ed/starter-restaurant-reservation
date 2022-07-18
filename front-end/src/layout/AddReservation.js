@@ -17,7 +17,8 @@ function AddReservation(){
     }
 
     const [reservationForm, setReservationForm] = useState(initialFormState)
-    // const [errors, setErrors] = useState([])
+    const [errors, setErrors] = useState([])
+
 
 
     const handleChange = ({ target }) =>{
@@ -45,10 +46,11 @@ function AddReservation(){
         //     // console.log("reservation form: ", reservationForm)
         history.push(`/dashboard?date=${newReservation.reservation_date}`)
             // history.push(`/dashboard?date=${Date()}`)
-        }catch(error){
+        }catch(e){
         //     // setResError(error) // state update happens here if error
         //     //re-render so alert box pops up if error not empty
-            console.log(error)
+        setErrors([...errors, e])
+        console.log(e)
         //     setErrors(error)
             
         }
@@ -64,16 +66,27 @@ function AddReservation(){
     // console.log(reservationForm.first_name)
     return (
         <>
+        {errors.length > 0 && (
+            <div className = "alert alert-danger">
+                <ul>
+                {errors.map((error)=>{
+                    return <li>{error.message} </li>
+                        
+                })}
+                </ul>
+            </div>
+        )}
             <Form 
                 handleSubmit = {handleSubmit}
                 handleChange = {handleChange}
                 reservationForm = {reservationForm}
+                
                 />
                 {/* {errors.length > 0 &&  (
                     <div className = "alert alert-danger">
                         <ul>
-                            {errors.map((errMesssage)=>(
-                                <li key={i}>{errMessage}</li>
+                            {errors.map((error)=>(
+                                <li>{error.message}</li>
                             ))}
                         </ul>
                 </div>

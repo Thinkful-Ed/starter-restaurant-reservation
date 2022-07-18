@@ -11,7 +11,8 @@ import { today } from "../utils/date-time";
  */
 
 //add default parameter of today()
-function Dashboard({ date=today() }) {
+let presentDay = today()
+function Dashboard({ date = presentDay }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 

@@ -51,6 +51,8 @@ async function create(req, res){
   }
   console.log("You did it! Great job!")
   //then push the newReserve into somewhere?
+  const response = await service.create(newReserve)
+  console.log("response: ", response)
   res.status(201).json({ data: newReserve })
 
   // res.json({ data: await service.create(req.body.data)})

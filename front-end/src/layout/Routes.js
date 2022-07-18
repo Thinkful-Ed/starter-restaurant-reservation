@@ -18,7 +18,7 @@ function Routes() {
   const query = useQuery() //initialize the useQuery hook
   // console.log(query)
   const date = query.get("date")
-  // console.log("date: ", date)
+  console.log("date: ", date)
   // const limit = query.get("limit")
   // console.log("limit: ", limit)
 
@@ -41,7 +41,8 @@ function Routes() {
 
 
       <Route path="/dashboard">
-        <Dashboard date={today()} />
+        {/* <Dashboard date={date} /> */}
+        <Dashboard date={date ? date : today()} />
       </Route>
       <Route>
         <NotFound />
