@@ -11,7 +11,14 @@ function create (reservation) {
       .then(result => result[0])
   }
 
+  function listByDate (date) {
+    return knex('reservations')
+      .where({ reservation_date: date })
+      .orderBy('reservation_time')
+  }
+
 module.exports = {
     list,
     create,
+    listByDate
 }
