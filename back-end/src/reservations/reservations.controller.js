@@ -259,3 +259,8 @@ module.exports = {
 	create: [checkValidFields, create],
 	read: [verifyReservationId, read],
 };
+
+
+// complete Read function to meet testing unit
+// generate new componenent for seating route
+// finish all us 04 endpoints
