@@ -44,7 +44,6 @@ const hasReservationDate = (req, res, next) => {
   const { data: { reservation_date } = {} } = req.body;
   if (reservation_date && !containsAnyLetter(reservation_date)) {
     const date = new Date(reservation_date);
-    console.log("Day Number is", date.getDay());
     if (date.getDay() === 1) {
       next({ status: 400, message: "Sorry! We're closed on this day!" });
     }
@@ -56,8 +55,6 @@ const hasReservationDate = (req, res, next) => {
       });
     }
     return next();
-    // } else
-    //   return next({ status: 400, message: "a reservation_date is required" });
   }
   return next({ status: 400, message: "a reservation_date is required" });
 };
@@ -65,14 +62,26 @@ const hasReservationDate = (req, res, next) => {
 const hasReservationTime = (req, res, next) => {
   const { data: { reservation_time } = {} } = req.body;
   if (reservation_time && !containsAnyLetter(reservation_time)) {
-    return next();
+    if (
+      reservation_time.replace(":", "") >= 1030 &&
+      reservation_time.replace(":", "") <= 2130
+    ) {
+      // const hour = now.getHours();
+      // const minutes = now.getMinutes();
+      // if (hour >= 10 && hour <= 21)
+      return next();
+    } else
+      next({
+        status: 400,
+        message: "Sorry, reservations can not be made at these hours!",
+      });
   }
   return next({ status: 400, message: "a reservation_time is required" });
 };
 
 const hasPeople = (req, res, next) => {
   const { data: { people } = {} } = req.body;
-  if (people && people !== 0 && typeof people === "number") {
+  if (people && people > 0 && typeof people === "number") {
     return next();
   }
   return next({ status: 400, message: "people are required" });
