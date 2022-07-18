@@ -103,8 +103,8 @@ function Form({handleSubmit, handleChange, reservationForm}){
                         className = "form-control"
                         onChange={handleChange}
                         value={reservationForm.people}
-                        // required
-                        // min="1"
+                        required
+                        min="1"
                         />
                     </div>
                 </div>
