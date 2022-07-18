@@ -4,7 +4,9 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 
+import DashboardTablesList from "./DashboardTablesList"
 import DashboardDateNav from "./DashboardDateNav"
+import DashboardReservationsList from "./DashboardReservationsList";
 /**
  * Defines the dashboard page.
  * @param date
@@ -23,7 +25,6 @@ function Dashboard() {
 	
 	useEffect(()=>{
 		const queryDateCheck = query.get("date")
-		console.log(queryDateCheck)
 		if(queryDateCheck){
 			setDate(queryDateCheck)
 		}else{setDate(today())}
@@ -46,7 +47,7 @@ function Dashboard() {
 			try{
 			const abortController = new AbortController();
 			let response = await listTables(abortController.signal)
-			console.log(response)
+			setTables(response)
 			
 		} catch (error){
 			setTablesError(error)
@@ -54,49 +55,26 @@ function Dashboard() {
 			
 		}
 		fetchTablesData()
-	},[tables])
+	},[])
 
-
-	
-	const reservationsList = reservations.map((res, index) => {
-		return (
-			<tr key={index}>
-				<td>{`${res.reservation_date} @ ${res.reservation_time}`}</td>
-				<td>{res.people}</td>
-				<td>{res.last_name}</td>
-				<td>{res.first_name}</td>
-				<td>{res.mobile_number}</td>
-				<td>
-					<button> cancel </button>
-				</td>
-			</tr>
-		);
-	});
 
 	return (
 		<main>
 			<h1>Dashboard</h1>
 			<div className="d-md-flex mb-3">
-				<h4 className="mb-0">Reservations for {`${date}`}</h4>
+				<h4 className="mb-0">{`Reservation Date: ${date}`}</h4>
 			</div>
 				<DashboardDateNav date={date} />
 			<ErrorAlert error={reservationsError} />
 			<ErrorAlert error={tablesError} />
 			<div className="card">
-				{/* <div className="card-body"> */}
-				<table className="table table-hover">
-					<thead>
-						<tr>
-							<th scope="col">Reservation Date &amp; Time</th>
-							<th scope="col">Party Size</th>
-							<th scope="col">Last Name</th>
-							<th scope="col">First Name</th>
-							<th scope="col">Phone</th>
-						</tr>
-					</thead>
-					<tbody>{reservationsList}</tbody>
-				</table>
-				{/* </div> */}
+				<h3>Reservations</h3>
+				<DashboardReservationsList reservations={reservations} />
+			</div>
+			
+			<div className = "card">
+				<h3>Table List</h3>
+				<DashboardTablesList tables={tables} />
 			</div>
 		</main>
 	);

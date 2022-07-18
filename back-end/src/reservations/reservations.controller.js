@@ -5,6 +5,20 @@ const service = require("./reservations.service");
 
 //----------------HELPER FUNCTIONS----------------
 
+async function verifyReservationId(req, res, next) {
+	const { reservation_Id } = req.params;
+	const reservation = await service.read(reservation_Id);
+	if (!reservation) {
+		return next({
+			status: 400,
+			message: `Reservation ID: ${reservation_Id} - Not Found`,
+		});
+	} else {
+		res.locals.reservation = reservation;
+		return next();
+	}
+}
+
 function checkValidFields(req, res, next) {
 	const validFields = [
 		"first_name",
@@ -111,7 +125,7 @@ function validateTime(time) {
 
 function validateBookingTimeInOperatingHours(time) {
 	let checkTime = time;
-	
+
 	if (checkTime[0] < 10 || (checkTime[0] === 10 && checkTime[1] < 30)) {
 		return false;
 	}
@@ -131,9 +145,9 @@ function validateBookingTimeFuture(time, date) {
 		if (checkTime[0] < currentTime[0]) {
 			return false;
 		}
-		if(checkTime[0] === currentTime[0] && checkTime[1] < currentTime[1]){
-			console.log("136 validation failed")
-			return false
+		if (checkTime[0] === currentTime[0] && checkTime[1] < currentTime[1]) {
+			console.log("136 validation failed");
+			return false;
 		}
 	}
 
@@ -229,13 +243,19 @@ async function list(req, res) {
 	});
 }
 
+async function read(req, res, next) {
+	const responseData = res.locals.reservation;
+	res.status(200).json({ data: responseData });
+}
+
 async function create(req, res, next) {
 	const { data } = req.body;
 	const responseData = await service.create(data);
-	res.status(201).send({ data: responseData });
+	res.status(201).json({ data: responseData });
 }
 
 module.exports = {
 	list,
 	create: [checkValidFields, create],
+	read: [verifyReservationId, read],
 };
