@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
@@ -13,7 +13,9 @@ import DashboardDateNav from "./DashboardDateNav"
  */
 function Dashboard() {
 	const [reservations, setReservations] = useState([]);
+	const [tables,setTables] = useState([])
 	const [reservationsError, setReservationsError] = useState(null);
+	const [tablesError,setTablesError] = useState(null)
 
 	const query = useQuery()
 	const [date, setDate] = useState(today());
@@ -38,6 +40,21 @@ function Dashboard() {
 		return () => abortController.abort();
 		
 	}, [date]);
+	
+	useEffect(()=>{
+		const fetchTablesData = async ()=>{
+			try{
+			const abortController = new AbortController();
+			let response = await listTables(abortController.signal)
+			console.log(response)
+			
+		} catch (error){
+			setTablesError(error)
+		}
+			
+		}
+		fetchTablesData()
+	},[tables])
 
 
 	
@@ -64,6 +81,7 @@ function Dashboard() {
 			</div>
 				<DashboardDateNav date={date} />
 			<ErrorAlert error={reservationsError} />
+			<ErrorAlert error={tablesError} />
 			<div className="card">
 				{/* <div className="card-body"> */}
 				<table className="table table-hover">
