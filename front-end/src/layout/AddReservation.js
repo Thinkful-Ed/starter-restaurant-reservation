@@ -17,6 +17,9 @@ function AddReservation(){
     }
 
     const [reservationForm, setReservationForm] = useState(initialFormState)
+    // const [errors, setErrors] = useState([])
+
+
     const handleChange = ({ target }) =>{
         setReservationForm({
             ...reservationForm,
@@ -25,24 +28,37 @@ function AddReservation(){
     }
 
 
+    console.log({...reservationForm})
     const handleSubmit = async (event)=>{
         event.preventDefault()
         const ac = new AbortController()
         try{
-            // I don't understand how to do this part where you save the information upon clicking submit
-            // const data = await 
-            const newReservation = await createReservations(reservationForm, ac.signal)
-            setReservationForm(newReservation)
-            history.push(`/dashboard?date=${newReservation.date}`)
+        //     // const data = await 
+        // console.log(reservationForm)
+        const newReservation = await createReservations({...reservationForm, people: Number(reservationForm.people)}, ac.signal)
+        // console.log("new Reservation: ", newReservation)
+        console.log("new Reservation date: ", newReservation.reservation_date)
+        setReservationForm(initialFormState)
+        
+            // console.log("newReservation: ", newReservation)
+        //     setReservationForm(newReservation)
+        //     // console.log("reservation form: ", reservationForm)
+        history.push(`/dashboard?date=${newReservation.reservation_date}`)
+            // history.push(`/dashboard?date=${Date()}`)
         }catch(error){
-            // setResError(error) // state update happens here if error
-            //re-render so alert box pops up if error not empty
+        //     // setResError(error) // state update happens here if error
+        //     //re-render so alert box pops up if error not empty
             console.log(error)
+        //     setErrors(error)
+            
         }
         return () => ac.abort()
     }
 
-    
+    // const submit = async() => {
+    //     const response = await createReservations({ message: "some data being sent"})
+    //     console.log(response)
+    // }
 
 
     // console.log(reservationForm.first_name)
@@ -52,7 +68,16 @@ function AddReservation(){
                 handleSubmit = {handleSubmit}
                 handleChange = {handleChange}
                 reservationForm = {reservationForm}
-/>
+                />
+                {/* {errors.length > 0 &&  (
+                    <div className = "alert alert-danger">
+                        <ul>
+                            {errors.map((errMesssage)=>(
+                                <li key={i}>{errMessage}</li>
+                            ))}
+                        </ul>
+                </div>
+                )} */}
         </>
     )
 }

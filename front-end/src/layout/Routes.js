@@ -16,14 +16,14 @@ import useQuery from "../utils/useQuery"
  */
 function Routes() {
   const query = useQuery() //initialize the useQuery hook
-  console.log(query)
+  // console.log(query)
   const date = query.get("date")
-  console.log(date)
-  const limit = query.get("limit")
-  console.log(limit)
+  // console.log("date: ", date)
+  // const limit = query.get("limit")
+  // console.log("limit: ", limit)
 
-  const myDate = new Date("2022-07-14")
-  console.log("my date: ", myDate.getDay() + 1)
+  // const myDate = new Date("2022-07-14")
+  // console.log("my date: ", myDate.getDay() + 1)
   return (
     <Switch>
       <Route exact={true} path="/">

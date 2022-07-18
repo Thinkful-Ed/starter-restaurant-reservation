@@ -1,3 +1,5 @@
+// load in knex connection
+
 function list(){
     return knex('reservations').select("*")
 }

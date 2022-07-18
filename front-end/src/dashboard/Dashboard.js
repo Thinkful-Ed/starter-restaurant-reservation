@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import { today } from "../utils/date-time";
 
 /**
  * Defines the dashboard page.
@@ -8,7 +9,9 @@ import ErrorAlert from "../layout/ErrorAlert";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date }) {
+
+//add default parameter of today()
+function Dashboard({ date=today() }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -34,8 +37,9 @@ function Dashboard({ date }) {
       </div>
       <div>
         <button className="btn btn-secondary">Yesterday</button>
-        <button className="btn btn-primary">Tomorrow</button>
         <button className="btn btn-success">Today</button>
+        <button className="btn btn-primary">Tomorrow</button>
+
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
