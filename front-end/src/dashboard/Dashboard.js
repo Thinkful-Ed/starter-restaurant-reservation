@@ -22,15 +22,32 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
     return () => abortController.abort();
   }
-
+// make buttons change date
+// make table to display resevraiton content
   return (
     <main>
       <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+    
+      <div class="btn-group btn-group-toggle mb-3" data-toggle="buttons">
+  <label class="btn btn-info">
+    <input type="radio" name="options" id="option1" checked/> Previous
+  </label>
+  <label class="btn btn-info active">
+    <input type="radio" name="options" id="option2"/> Today
+  </label>
+  <label class="btn btn-info">
+    <input type="radio" name="options" id="option3"/> Next
+  </label>
+</div>
+<div className="d-md-flex mb-3">
+        <h4 className="mb-0">Reservations for {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      {/* {JSON.stringify(reservations)} */}
+
+      {reservations.map((reservation) => {
+        return <h1>{reservation.first_name}</h1>;
+      })}
     </main>
   );
 }
