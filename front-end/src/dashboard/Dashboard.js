@@ -29,6 +29,7 @@ function Dashboard({ date = presentDay }) {
 
   return (
     <main>
+     
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {date}</h4>
@@ -36,6 +37,7 @@ function Dashboard({ date = presentDay }) {
 
         
       </div>
+      
       <div>
         <button className="btn btn-secondary">Yesterday</button>
         <button className="btn btn-success">Today</button>

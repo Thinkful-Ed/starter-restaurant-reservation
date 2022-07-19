@@ -22,11 +22,22 @@ function AddReservation(){
 
 
     const handleChange = ({ target }) =>{
+        console.log("target: ", target)
         setReservationForm({
             ...reservationForm,
             [target.name]: target.value,
+            
         })
+
+        // console.log("today is: ", new Date())
+        //pseudocode: try to get the date's day of the week as a number. 
+        // if it's a 2 (aka tuesday), give an error
+        // same with reserv_time: if target.name === "reservation_time" && target.value less/greater than?
+        // give an error saying you cant do that
+        
     }
+
+    
 
 
     console.log({...reservationForm})
@@ -34,16 +45,8 @@ function AddReservation(){
         event.preventDefault()
         const ac = new AbortController()
         try{
-        //     // const data = await 
-        // console.log(reservationForm)
         const newReservation = await createReservations({...reservationForm, people: Number(reservationForm.people)}, ac.signal)
-        // console.log("new Reservation: ", newReservation)
-        console.log("new Reservation date: ", newReservation.reservation_date)
         setReservationForm(initialFormState)
-        
-            // console.log("newReservation: ", newReservation)
-        //     setReservationForm(newReservation)
-        //     // console.log("reservation form: ", reservationForm)
         history.push(`/dashboard?date=${newReservation.reservation_date}`)
             // history.push(`/dashboard?date=${Date()}`)
         }catch(e){
@@ -64,6 +67,15 @@ function AddReservation(){
 
 
     // console.log(reservationForm.first_name)
+    function noPastDate(){
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, "0");
+        const mm = String(today.getMonth() + 1).padStart(2, "0");
+        const yyyy = today.getFullYear();
+        return yyyy + "-" + mm + "-" + dd;
+    }
+    
+
     return (
         <>
         {errors.length > 0 && (
@@ -80,6 +92,7 @@ function AddReservation(){
                 handleSubmit = {handleSubmit}
                 handleChange = {handleChange}
                 reservationForm = {reservationForm}
+                noPastDate = {noPastDate}
                 
                 />
                 {/* {errors.length > 0 &&  (

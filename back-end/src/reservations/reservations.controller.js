@@ -37,12 +37,24 @@ function validateData(payload){
 
 function bodyHasData(propertyName){
   return function (req, res, next){
+    // console.log("request: ", req.body)
     const { data = {} } = req.body
     data[propertyName] && propertyName.length > 0 ? next() : next({ status: 400, message: `Reservation must have: ${propertyName}.`})
   }
 }
 
-//get the service
+function reservationDayIsNotTuesday(req, res, next) {
+  const { reservation_date, reservation_time } = req.body.data;
+  let day = new Date(`${reservation_date} ${reservation_time}`);
+  if (day.getDay() !== 2) {
+    next();
+  } else {
+    return next({
+      status: 400,
+      message: "Restaurant is closed on Tuesdays, please select another day.",
+    });
+  }
+}
 
 async function create(req, res){
   const {data: { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = {} } = req.body
@@ -87,6 +99,7 @@ module.exports = {
     asyncErrorBoundary(bodyHasData("reservation_date")),
     asyncErrorBoundary(bodyHasData("reservation_time")),
     asyncErrorBoundary(bodyHasData("people")),
+    reservationDayIsNotTuesday,
     asyncErrorBoundary(create)
   ]
 };
