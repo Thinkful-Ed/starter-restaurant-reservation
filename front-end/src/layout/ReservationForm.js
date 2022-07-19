@@ -1,11 +1,11 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
- function ReservationForm({handleSubmit, handleChange, formData}){
-    const history = useHistory();
+function ReservationForm({ handleSubmit, handleChange, formData }) {
+  const history = useHistory();
 
-    return(
-        <div>
+  return (
+    <div>
       <h1>Create Reservation</h1>
 
       <form onSubmit={handleSubmit}>
@@ -105,7 +105,7 @@ import { useHistory } from "react-router-dom";
         </button>
       </form>
     </div>
-    )
+  );
 }
 
 export default ReservationForm;
