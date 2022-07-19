@@ -1,6 +1,21 @@
 const service = require("./tables.service");
 
 //----------HELPER FUNCTIONS-------
+
+async function verifyTableId(req, res, next) {
+	const { table_id } = req.params;
+	const table = await service.read(table_id);
+	if (!table) {
+		return next({
+			status: 400,
+			message: `Table ID: ${table_id} -- Not Found`,
+		});
+	} else {
+		res.locals.table = table;
+		return next();
+	}
+}
+
 function validateNewTableData(req, res, next) {
 	const { data } = req.body;
 	const validFields = ["table_name", "capacity"];
@@ -64,7 +79,18 @@ async function create(req, res, next) {
 	res.status(201).json({ data: response });
 }
 
+async function updateTableReservation(req,res,next){
+	const updatedTable = {...res.locals.table,...req.body.data}
+	const response = await service.update(updatedTable)
+	return res.status(200).json({data:response})
+}
+
+async function read(req,res,next){
+	return res.json({data:res.locals.data})
+}
+
 module.exports = {
 	list,
 	create: [validateNewTableData, create],
+	update: [verifyTableId,updateTableReservation]
 };

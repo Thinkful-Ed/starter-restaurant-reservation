@@ -91,14 +91,24 @@ export async function createReservation(dataObj,signal){
   
 }
 
-export async function createTable(dataObj,signal){
+export async function createTable(data,signal){
   const url = new URL(`${API_BASE_URL}/tables`);
   const options = {
     headers,
     signal:signal,
     method: "POST",
-    body: JSON.stringify(dataObj)
+    body: JSON.stringify(data)
   }
-  
+  return await fetchJson(url,options,[])
+}
+
+export async function updateTable(table_id,data,signal){
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const options = {
+    headers,
+    signal:signal,
+    method: "PUT",
+    body: JSON.stringify(data)
+  }
   return await fetchJson(url,options,[])
 }

@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-const { listTables, readReservation } = require("../utils/api");
+const { listTables, readReservation, updateTable } = require("../utils/api");
 
 export default function SeatReservation() {
 	const [tables, setTables] = useState([]);
-	const [tablesError, setTablesError] = useState(null);
-	const [reservation, setReservation] = useState({});
+    const [selectedTable,setSelectedTable] = useState(null)
+	const [reservation, setReservation] = useState(null);
+    
+    const [tablesError, setTablesError] = useState(null);
 	const [reservationError, setReservationError] = useState(null);
-
+    const [seatReservationError,setSeatReservationError] = useState(null)
+    
 	const { reservation_id } = useParams();
+	const history = useHistory();
 
 	useEffect(() => {
 		async function getTables() {
@@ -39,6 +43,24 @@ export default function SeatReservation() {
 		getReservation();
 	}, [reservation_id]);
 
+	const cancelHandler = () => {
+		history.goBack();
+	};
+
+    const submitHandler = async (event) =>{
+        event.preventDefault();
+        const data = {reservation_id}
+        try{
+            const abortController = new AbortController();
+            await updateTable(selectedTable,{data},abortController.signal);
+            history.push("/dashboard")
+            
+        }catch(error){
+            setSeatReservationError(error)
+        }
+        
+    }
+    
 	const tableListOptions = tables.map((table, index) => {
 		return (
 			<option
@@ -48,36 +70,46 @@ export default function SeatReservation() {
 			>{`${table.table_name} - ${table.capacity}`}</option>
 		);
 	});
+    
 	return (
 		<div>
 			<h1>Seat Reservation</h1>
-			<h3>
-				{`ID: ${
-					reservation.reservation_id
-				} -- Party of: ${`${reservation.people}`}`}
-			</h3>
-			<h4>
-				{`Name: ${reservation.last_name}, ${reservation.first_name}`}
-			</h4>
-			<h4>
-				{`${reservation.reservation_date.split("T")[0]} @ ${
-					reservation.reservation_time
-				}`}
-			</h4>
-			<ErrorAlert error={tablesError} />
-			<ErrorAlert error={reservationError} />
+            <ErrorAlert error={seatReservationError} />
 			<div>
-				<form>
+				{reservation ? (
+					<React.Fragment>
+						<h3>{`ID: ${reservation.reservation_id}`}</h3>
+						<h4>{`Party of: ${reservation.people}`}</h4>
+						<h4>
+							{`Name: ${reservation.last_name}, ${reservation.first_name}`}
+						</h4>
+						<h4>
+							{`${reservation.reservation_date.split("T")[0]} @ ${
+								reservation.reservation_time
+							}`}
+						</h4>
+					</React.Fragment>
+				) : reservationError ? (
+					<ErrorAlert error={reservationError} />
+				) : (
+					<p>Loading...</p>
+				)}
+			</div>
+
+			<div>
+				<ErrorAlert error={tablesError} />
+				<form onSubmit={submitHandler}>
 					<select
+                        onChange={(event)=>setSelectedTable(event.target.value)}
 						className="form-select form-select-lg mb-3"
 						aria-label=".form-select-lg example"
 						name="table_id"
 					>
-						<option selected>Select A Table</option>
+						<option value="invalid">Tables List</option>
 						{tableListOptions}
 					</select>
 					<div>
-						<button className="btn btn-danger">Cancel</button>
+						<button onClick={cancelHandler} className="btn btn-danger">Cancel</button>
 						<button className="btn btn-primary">Submit</button>
 					</div>
 				</form>
