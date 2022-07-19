@@ -11,10 +11,10 @@ function list(date) {
 		.orderBy("rs.reservation_time");
 }
 
-function read(reservationId) {
-	return knex("reservations as rs")
+function read(reservation_id) {
+	return knex("reservations")
 		.select("*")
-		.where("rs.reservation_id", reservationId)
+		.where({reservation_id})
 		.first();
 }
 

@@ -4,8 +4,8 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 
-import DashboardTablesList from "./DashboardTablesList"
-import DashboardDateNav from "./DashboardDateNav"
+import DashboardTablesList from "./DashboardTablesList";
+import DashboardDateNav from "./DashboardDateNav";
 import DashboardReservationsList from "./DashboardReservationsList";
 /**
  * Defines the dashboard page.
@@ -15,48 +15,45 @@ import DashboardReservationsList from "./DashboardReservationsList";
  */
 function Dashboard() {
 	const [reservations, setReservations] = useState([]);
-	const [tables,setTables] = useState([])
+	const [tables, setTables] = useState([]);
 	const [reservationsError, setReservationsError] = useState(null);
-	const [tablesError,setTablesError] = useState(null)
+	const [tablesError, setTablesError] = useState(null);
 
-	const query = useQuery()
+	const query = useQuery();
 	const [date, setDate] = useState(today());
 
-	
-	useEffect(()=>{
-		const queryDateCheck = query.get("date")
-		if(queryDateCheck){
-			setDate(queryDateCheck)
-		}else{setDate(today())}
-	},[query])
-	
-	useEffect(()=>{
-		
+	useEffect(() => {
+		const queryDateCheck = query.get("date");
+		if (queryDateCheck) {
+			setDate(queryDateCheck);
+		} else {
+			setDate(today());
+		}
+	}, [query]);
+
+	useEffect(() => {
 		const abortController = new AbortController();
 		setReservationsError(null);
 		listReservations({ date }, abortController.signal)
-			.then((data)=>{
-				setReservations(data)})
+			.then((data) => {
+				setReservations(data);
+			})
 			.catch(setReservationsError);
 		return () => abortController.abort();
-		
 	}, [date]);
-	
-	useEffect(()=>{
-		const fetchTablesData = async ()=>{
-			try{
-			const abortController = new AbortController();
-			let response = await listTables(abortController.signal)
-			setTables(response)
-			
-		} catch (error){
-			setTablesError(error)
-		}
-			
-		}
-		fetchTablesData()
-	},[])
 
+	useEffect(() => {
+		const fetchTablesData = async () => {
+			try {
+				const abortController = new AbortController();
+				let response = await listTables(abortController.signal);
+				setTables(response);
+			} catch (error) {
+				setTablesError(error);
+			}
+		};
+		fetchTablesData();
+	}, []);
 
 	return (
 		<main>
@@ -64,15 +61,15 @@ function Dashboard() {
 			<div className="d-md-flex mb-3">
 				<h4 className="mb-0">{`Reservation Date: ${date}`}</h4>
 			</div>
-				<DashboardDateNav date={date} />
+			<DashboardDateNav date={date} />
 			<ErrorAlert error={reservationsError} />
 			<ErrorAlert error={tablesError} />
 			<div className="card">
 				<h3>Reservations</h3>
 				<DashboardReservationsList reservations={reservations} />
 			</div>
-			
-			<div className = "card">
+
+			<div className="card">
 				<h3>Table List</h3>
 				<DashboardTablesList tables={tables} />
 			</div>
