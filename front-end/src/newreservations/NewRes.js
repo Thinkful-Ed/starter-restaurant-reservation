@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import { formatAsDate, formatAsTime } from "../utils/date-time";
@@ -16,41 +16,30 @@ export default function NewRes({ today }) {
   };
 
   const [formData, setFormData] = useState(initialFormState);
-  const [newRes, setNewRes] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
-
-  useEffect(() => {
-    const abort = new AbortController();
-
-    if (!newRes) {
-      return;
-    } else {
-      async function uploadRes() {
-        try {
-          await createReservation(newRes, abort.signal);
-        } catch (error) {
-          setErrorMessage(error);
-        }
-      }
-      uploadRes();
-      return () => abort.abort();
-    }
-  }, [newRes]);
 
   const changeHandler = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
+    console.log(typeof formData.people, formData.people);
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
-    setFormData({
+    const abort = new AbortController();
+
+    const formatedData = {
       ...formData,
-      people: Number(formData.people),
+      people: parseInt(formData.people),
       reservation_date: formatAsDate(formData.reservation_date),
       reservation_time: formatAsTime(formData.reservation_time),
-    });
-    setNewRes(formData);
-    setFormData(initialFormState);
+    };
+
+    try {
+      await createReservation(formatedData, abort.signal);
+      history.push(`/dashboard?date=${formData.reservation_date}`);
+    } catch (error) {
+      setErrorMessage(error);
+    }
   };
 
   const cancelHandler = (event) => {
