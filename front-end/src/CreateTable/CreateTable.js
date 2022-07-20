@@ -31,7 +31,11 @@ export default function CreateTable() {
 
 	const formChangeHandler = (event) => {
 		const tableKey = event.target.name;
-		const tableValue = event.target.value;
+		let tableValue = event.target.value;
+		if (tableKey === "capacity" && tableValue){
+			tableValue = parseInt(tableValue)
+		}
+
 		setTable({ ...table, [tableKey]: tableValue });
 	};
 

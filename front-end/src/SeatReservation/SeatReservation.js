@@ -105,12 +105,12 @@ export default function SeatReservation() {
 						aria-label=".form-select-lg example"
 						name="table_id"
 					>
-						<option value="invalid">Tables List</option>
+						<option value="">Tables List</option>
 						{tableListOptions}
 					</select>
 					<div>
 						<button onClick={cancelHandler} className="btn btn-danger">Cancel</button>
-						<button className="btn btn-primary">Submit</button>
+						<button type="submit" className="btn btn-primary">Submit</button>
 					</div>
 				</form>
 			</div>

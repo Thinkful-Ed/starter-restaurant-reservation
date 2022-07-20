@@ -1,7 +1,6 @@
-/**
- * List handler for reservation resources
- */
+
 const service = require("./reservations.service");
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 
 //----------------HELPER FUNCTIONS----------------
 
@@ -10,7 +9,7 @@ async function verifyReservationId(req, res, next) {
 	const reservation = await service.read(reservation_Id);
 	if (!reservation) {
 		return next({
-			status: 400,
+			status: 404,
 			message: `Reservation ID: ${reservation_Id} - Not Found`,
 		});
 	} else {
@@ -256,6 +255,6 @@ async function create(req, res, next) {
 
 module.exports = {
 	list,
-	create: [checkValidFields, create],
-	read: [verifyReservationId, read],
+	create: [asyncErrorBoundary(checkValidFields), asyncErrorBoundary(create)],
+	read: [asyncErrorBoundary(verifyReservationId), asyncErrorBoundary(read)],
 };

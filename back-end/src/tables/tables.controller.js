@@ -1,13 +1,13 @@
 const service = require("./tables.service");
-
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 //----------HELPER FUNCTIONS-------
 
-function verifyTableAvailable(req,res,next){
-	const {reservation_id} = res.locals.table
-	if (reservation_id){
-		return next({status:400,message:`Table is occupied`})
+function verifyTableAvailable(req, res, next) {
+	const { reservation_id } = res.locals.table;
+	if (reservation_id) {
+		return next({ status: 400, message: `Table is occupied` });
 	}
-	return next()
+	return next();
 }
 
 async function verifyTableId(req, res, next) {
@@ -24,34 +24,43 @@ async function verifyTableId(req, res, next) {
 	}
 }
 
-async function verifyReservationId(req,res,next){
-	const {data} = req.body
-	
-	if (!data){
-		return next({status:400,message:`Data is missing.`})
+async function verifyReservationId(req, res, next) {
+	const { data } = req.body;
+
+	if (!data) {
+		return next({ status: 400, message: `Data is missing.` });
 	}
-	if (!data.reservation_id){
-		return next({status:400,message:`Data does not contain "reservation_id"`})
+	if (!data.reservation_id) {
+		return next({
+			status: 400,
+			message: `Data does not contain "reservation_id"`,
+		});
 	}
-	
-	const response = await service.readReservation(data.reservation_id)
-	
-	if (!response){
-		return next({status:404,message:`Reservation ID: ${data.reservation_id} -- Not Found`})
+
+	const response = await service.readReservation(data.reservation_id);
+
+	if (!response) {
+		return next({
+			status: 404,
+			message: `Reservation ID: ${data.reservation_id} -- Not Found`,
+		});
 	}
-	res.locals.reservation = response
-	return next()
+	res.locals.reservation = response;
+	return next();
 }
 
-function verifyCapacityOfTableAndReservation(req,res,next){
-	const {capacity} = res.locals.table;
-	const {people} = res.locals.reservation;
+function verifyCapacityOfTableAndReservation(req, res, next) {
+	const { capacity } = res.locals.table;
+	const { people } = res.locals.reservation;
 
-	if (people > capacity){
-		return next({status:400,message:`Party size of ${people} exceeds table capacity of ${capacity}`})
+	if (people > capacity) {
+		return next({
+			status: 400,
+			message: `Party size of ${people} exceeds table capacity of ${capacity}`,
+		});
 	}
 
-	return next()
+	return next();
 }
 
 function validateNewTableData(req, res, next) {
@@ -117,18 +126,27 @@ async function create(req, res, next) {
 	res.status(201).json({ data: response });
 }
 
-async function updateTableReservation(req,res,next){
-	const updatedTable = {...res.locals.table,...req.body.data}
-	const response = await service.update(updatedTable)
-	return res.status(200).json({data:response})
+async function updateTableReservation(req, res, next) {
+	const updatedTable = { ...res.locals.table, ...req.body.data };
+	const response = await service.update(updatedTable);
+	return res.status(200).json({ data: response });
 }
 
-async function read(req,res,next){
-	return res.json({data:res.locals.data})
+async function read(req, res, next) {
+	return res.json({ data: res.locals.data });
 }
 
 module.exports = {
 	list,
-	create: [validateNewTableData, create],
-	update: [verifyTableId, verifyTableAvailable, verifyReservationId, verifyCapacityOfTableAndReservation, updateTableReservation]
+	create: [
+		asyncErrorBoundary(validateNewTableData),
+		asyncErrorBoundary(create),
+	],
+	update: [
+		asyncErrorBoundary(verifyTableId),
+		verifyTableAvailable,
+		asyncErrorBoundary(verifyReservationId),
+		verifyCapacityOfTableAndReservation,
+		asyncErrorBoundary(updateTableReservation),
+	],
 };
