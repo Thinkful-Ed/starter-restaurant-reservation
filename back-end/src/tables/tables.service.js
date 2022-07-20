@@ -32,6 +32,7 @@ function update(data) {
 		.then((updatedRecords) => updatedRecords[0]);
 }
 
+
 module.exports = {
 	list,
 	create,
