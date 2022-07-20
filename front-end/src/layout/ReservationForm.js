@@ -100,7 +100,7 @@ function ReservationForm({ handleSubmit, handleChange, formData }) {
         >
           Cancel
         </button>
-        <button type="submit" class="btn btn-primary mx-3">
+        <button type="submit" class="btn btn-info mx-3">
           Submit
         </button>
       </form>

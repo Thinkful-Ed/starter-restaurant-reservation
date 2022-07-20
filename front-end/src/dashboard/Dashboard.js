@@ -30,7 +30,7 @@ function Dashboard({ date }) {
     
       <div class="btn-group btn-group-toggle mb-3" data-toggle="buttons">
   <label class="btn btn-info">
-    <input type="radio" name="options" id="option1" checked/> Previous
+    <input type="radio" name="options" id="option1"/> Previous
   </label>
   <label class="btn btn-info active">
     <input type="radio" name="options" id="option2"/> Today
@@ -46,6 +46,7 @@ function Dashboard({ date }) {
       {/* {JSON.stringify(reservations)} */}
 
       {reservations.map((reservation) => {
+        
         return <h1>{reservation.first_name}</h1>;
       })}
     </main>

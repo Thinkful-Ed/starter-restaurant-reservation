@@ -1,13 +1,13 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-function TableForm() {
+function TableForm({handleSubmit, handleChange, formData}) {
   const history = useHistory();
 
   return (
     <div>
       <h1 className="mb-2">Create a Table</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div class="form-group">
           <label for="table_name">Table Name</label>
           <input
@@ -16,6 +16,8 @@ function TableForm() {
             id="table_name"
             placeholder="Table Name"
             name="table_name"
+            onChange={handleChange}
+            value={formData.table_name}
             required
           />
         </div>
@@ -27,6 +29,8 @@ function TableForm() {
             id="capacity"
             placeholder="Capacity"
             name="capacity"
+            onChange={handleChange}
+            value={formData.capacity}
             required
           />
         </div>
@@ -38,7 +42,7 @@ function TableForm() {
         >
           Cancel
         </button>
-        <button type="submit" class="btn btn-primary mx-3">
+        <button type="submit" class="btn btn-info mx-3">
           Submit
         </button>
       </form>
