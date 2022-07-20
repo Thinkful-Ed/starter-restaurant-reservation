@@ -15,7 +15,7 @@ async function verifyTableId(req, res, next) {
 	const table = await service.read(table_id);
 	if (!table) {
 		return next({
-			status: 400,
+			status: 404,
 			message: `Table ID: ${table_id} -- Not Found`,
 		});
 	} else {
@@ -63,9 +63,18 @@ function verifyCapacityOfTableAndReservation(req, res, next) {
 	return next();
 }
 
+function verifyTableReservationStatus(req,res,next){
+	const {reservation_id} = res.locals.table
+	if (!reservation_id){
+		return next({status:400,message:"The table is not occupied"})
+	}
+	return next()
+}
+
+
 function validateNewTableData(req, res, next) {
 	const { data } = req.body;
-	const validFields = ["table_name", "capacity"];
+	const validFields = ["table_name", "capacity","reservation_id"];
 
 	if (!data) {
 		return next({ status: 400, message: "Data is missing." });
@@ -83,7 +92,7 @@ function validateNewTableData(req, res, next) {
 	}
 
 	for (let field of validFields) {
-		if (!data[field]) {
+		if (!data[field] && field !== "reservation_id") {
 			return next({ status: 400, message: `${field} is missing.` });
 		}
 		if (field === "table_name") {
@@ -136,6 +145,15 @@ async function read(req, res, next) {
 	return res.json({ data: res.locals.data });
 }
 
+//destroys reservation ID of the given table
+async function destroyTableReservation(req,res,next){
+	const currentTable = res.locals.table
+	const updatedReservation_id = {reservation_id:null}
+	const updatedTable = {...currentTable,...updatedReservation_id}
+	const response = await service.update(updatedTable)
+	res.status(200).json({data:response})
+}
+
 module.exports = {
 	list,
 	create: [
@@ -149,4 +167,5 @@ module.exports = {
 		verifyCapacityOfTableAndReservation,
 		asyncErrorBoundary(updateTableReservation),
 	],
+	destroy:[asyncErrorBoundary(verifyTableId), verifyTableReservationStatus, asyncErrorBoundary(destroyTableReservation)]
 };

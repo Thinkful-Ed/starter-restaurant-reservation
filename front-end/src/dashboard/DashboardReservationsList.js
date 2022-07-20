@@ -12,7 +12,7 @@ export default function DashboardReservationsList({ reservations }) {
 				<td>{res.mobile_number}</td>
 				<td>
 					<a
-						class="btn btn-primary"
+						className="btn btn-primary"
 						href={`/reservations/${res.reservation_id}/seat`}
 						role="button"
 					>

@@ -145,7 +145,6 @@ function validateBookingTimeFuture(time, date) {
 			return false;
 		}
 		if (checkTime[0] === currentTime[0] && checkTime[1] < currentTime[1]) {
-			console.log("136 validation failed");
 			return false;
 		}
 	}
