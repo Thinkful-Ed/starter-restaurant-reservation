@@ -1,18 +1,15 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api.js";
-import ReservationForm from "./ReservationForm";
+import TableForm from "./TableForm";
+import { createTable } from "../utils/api.js";
 import ErrorAlert from "./ErrorAlert";
+import { today } from "../utils/date-time";
 
-function NewReservation() {
+function NewTable() {
   const history = useHistory();
   const initialFormState = {
-    first_name: "",
-    last_name: "",
-    mobile_number: "",
-    reservation_date: "",
-    reservation_time: "",
-    people: "",
+    table_name: "",
+    capacity: ""
   };
 
   const [formData, setFormData] = useState({ ...initialFormState });
@@ -22,12 +19,13 @@ function NewReservation() {
     event.preventDefault();
     setErrorMessage(null);
     const ac = new AbortController();
-    formData.people = Number(formData.people);
-    createReservation({ data: formData }, ac.signal)
-      .then(() => {
-        history.push(`/dashboard?date=${formData.reservation_date}`);
-      })
-      .catch(setErrorMessage);
+    formData.capacity = Number(formData.capacity);
+     createTable({ data: formData }, ac.signal)
+     
+     .then(() => {
+      history.push(`/dashboard?date=${today()}`);
+     })
+     .catch(setErrorMessage)   
   };
 
   const handleChange = ({ target }) => {
@@ -59,7 +57,7 @@ function NewReservation() {
     );
   } else {
     return (
-      <ReservationForm
+      <TableForm
         handleSubmit={handleSubmit}
         handleChange={handleChange}
         formData={formData}
@@ -68,4 +66,4 @@ function NewReservation() {
   }
 }
 
-export default NewReservation;
+export default NewTable;

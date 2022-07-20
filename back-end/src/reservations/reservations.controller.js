@@ -1,6 +1,17 @@
 const reservationsService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
+async function reservationExists(req, res, next) {
+  const foundReservation = await reservationsService.read(
+    req.params.reservationId
+  );
+  if (foundReservation) {
+    res.locals.reservation = foundReservation;
+    return next();
+  }
+  next({ status: 404, message: `Reservation cannot be found.` });
+}
+
 function validateReservationBody(req, res, next) {
   const {
     data: {
@@ -126,7 +137,12 @@ async function create(req, res, next) {
   res.status(201).json({ data: newReservation });
 }
 
+async function read(req, res) {
+  res.status(200).json({ data: res.locals.reservation });
+}
+
 module.exports = {
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   list: asyncErrorBoundary(list),
   create: [
     validateReservationBody,

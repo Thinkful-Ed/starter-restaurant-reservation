@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import ReservationDisplay from "../layout/ReservationDisplay";
 
 /**
  * Defines the dashboard page.
@@ -12,6 +13,7 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
+
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
@@ -22,32 +24,48 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
     return () => abortController.abort();
   }
-// make buttons change date
-// make table to display resevraiton content
+
+  const seatHandler = () => {
+    window.location.reload();
+  };
+
+  // make buttons change date
   return (
     <main>
       <h1>Dashboard</h1>
-    
-      <div class="btn-group btn-group-toggle mb-3" data-toggle="buttons">
-  <label class="btn btn-info">
-    <input type="radio" name="options" id="option1" checked/> Previous
-  </label>
-  <label class="btn btn-info active">
-    <input type="radio" name="options" id="option2"/> Today
-  </label>
-  <label class="btn btn-info">
-    <input type="radio" name="options" id="option3"/> Next
-  </label>
-</div>
-<div className="d-md-flex mb-3">
+
+      <div className="btn-group btn-group-toggle mb-3" data-toggle="buttons">
+        <label className="btn btn-info">
+          <input type="radio" name="options" id="option1" /> Previous
+        </label>
+        <label className="btn btn-info active">
+          <input type="radio" name="options" id="option2" /> Today
+        </label>
+        <label className="btn btn-info">
+          <input type="radio" name="options" id="option3" /> Next
+        </label>
+      </div>
+      <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {/* {JSON.stringify(reservations)} */}
-
-      {reservations.map((reservation) => {
-        return <h1>{reservation.first_name}</h1>;
-      })}
+      <table className="table table-striped table-dark">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Reservation Date</th>
+            <th scope="col">Reservation Time</th>
+            <th scope="col">Guests</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reservations.map((reservation) => {
+            return <ReservationDisplay reservation={reservation} seatHandler={seatHandler} key={reservation.id} />;
+          })}
+        </tbody>
+      </table>
     </main>
   );
 }
