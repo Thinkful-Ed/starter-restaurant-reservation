@@ -22,7 +22,7 @@ function AddReservation(){
 
 
     const handleChange = ({ target }) =>{
-        console.log("target: ", target)
+        console.log("target: ", target.value)
         setReservationForm({
             ...reservationForm,
             [target.name]: target.value,
@@ -40,7 +40,7 @@ function AddReservation(){
     
 
 
-    console.log({...reservationForm})
+    // console.log({...reservationForm})
     const handleSubmit = async (event)=>{
         event.preventDefault()
         const ac = new AbortController()

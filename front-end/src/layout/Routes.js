@@ -18,7 +18,7 @@ function Routes() {
   const query = useQuery() //initialize the useQuery hook
   // console.log(query)
   const date = query.get("date")
-  console.log("date: ", date)
+  // console.log("date: ", date)
   // const limit = query.get("limit")
   // console.log("limit: ", limit)
 

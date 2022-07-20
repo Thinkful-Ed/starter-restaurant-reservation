@@ -1,7 +1,8 @@
 const { json } = require("express");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 const service = require("./reservations.service")
- 
+const dateFormat = /\d\d\d\d-\d\d-\d\d/;
+const timeFormat = /\d\d:\d\d/;
 
 
 
@@ -9,17 +10,41 @@ const service = require("./reservations.service")
  * List handler for reservation resources
  */
 async function list(req, res) {
-  // console.log("req qwuery", req.query.date)
+  // // console.log("req qwuery", req.query.date)
   const {date} = req.query
-  // console.log("dateasdfasdf: ", date)
-  const currentDate = await service.list()
-  // console.log("currentDate:", currentDate)
-  res.json({ data: currentDate.filter(date ? reserv => reserv.reservation_date == date : () => true )})
+  // // console.log("dateasdfasdf: ", date)
+  // const currentDate = await service.list()
+  // // console.log("currentDate:", currentDate)
+  // res.json({ data: currentDate.filter(date ? reserv => reserv.reservation_date == date : () => true )})
+  let data
+  if (date) {
+    data = await service.listByDate(date)
+  } else {
+    data = await service.list()
+  }
+  res.json({data})
 }
 
 //validate data
-function validateData(payload){
-  const errors = []
+function validateData(req, res, next){
+  const {reservation_time, reservation_date} = req.body.data
+  // let reserv_time = data["reservation_time"]
+  let day = new Date(`${reservation_date} ${reservation_time}`)
+  
+  if (day.getDay() === 2) {
+    next({
+      status: 400,
+      message: "We're closed on Tuesdays, please select another day."
+    })
+    
+  } 
+  else if(day < Date.now()){
+      next({
+        status: 400,
+        message: "You can't make reservations for the past, buddy. Pick a date in the future."
+      })
+  }
+  next()
 
   //check if there are any violations
   //if (day is a tuesday) errors.push("it's a tuesday")
@@ -28,11 +53,11 @@ function validateData(payload){
   //if (too early or too late) errors.push("not open yet")
   // console.log(errors)
 
-  if (errors.length > 0){
-    //return the errors as a response
-  } else{
-    //payload is valid, proceed to the next steps to POST to db
-  }
+  // if (errors.length > 0){
+  //   //return the errors as a response
+  // } else{
+  //   //payload is valid, proceed to the next steps to POST to db
+  // }
 }
 
 function bodyHasData(propertyName){
@@ -43,18 +68,54 @@ function bodyHasData(propertyName){
   }
 }
 
-function reservationDayIsNotTuesday(req, res, next) {
-  const { reservation_date, reservation_time } = req.body.data;
-  let day = new Date(`${reservation_date} ${reservation_time}`);
-  if (day.getDay() !== 2) {
-    next();
-  } else {
+function reservationDayIsValid(req, res, next){
+  const { reservation_date} = req.body.data
+
+
+  if(!dateFormat.test(reservation_date)){
+    return next({ status: 400, message: "reservation_date is invalid."})
+  }
+  next()
+}
+
+function reservationTimeIsValid(req, res, next){
+  const { reservation_time } = req.body.data
+  if(!timeFormat.test(reservation_time)){
+    return next({ status: 400, message: "reservation_time is invalid."})
+  }
+  next()
+}
+
+function peopleIsValidNumber(req, res, next){
+  const { people } = req.body.data
+  if (typeof people === "number"){
+    next()
+  } else{
     return next({
       status: 400,
-      message: "Restaurant is closed on Tuesdays, please select another day.",
-    });
+      message: "Please enter a valid number for number of people"
+    })
   }
+ 
 }
+
+// function reservationDayIsNotTuesday(req, res, next) {
+//   const { reservation_date, reservation_time } = req.body.data
+//   let day = new Date(`${reservation_date} ${reservation_time}`)
+//   console.log(reservation_time, "res time")
+//   console.log(reservation_date, "res date")
+//   console.log(day.getDay(), "day")
+//   if (day.getDay() !== 2) {
+//     next()
+//   } else {
+//     return next({
+//       status: 400,
+//       message: "We're closed on Tuesdays, please select another day.",
+//     })
+//   }
+// }
+
+
 
 async function create(req, res){
   const {data: { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = {} } = req.body
@@ -99,7 +160,10 @@ module.exports = {
     asyncErrorBoundary(bodyHasData("reservation_date")),
     asyncErrorBoundary(bodyHasData("reservation_time")),
     asyncErrorBoundary(bodyHasData("people")),
-    reservationDayIsNotTuesday,
+    validateData,
+    reservationDayIsValid,
+    reservationTimeIsValid,
+    peopleIsValidNumber,
     asyncErrorBoundary(create)
   ]
 };

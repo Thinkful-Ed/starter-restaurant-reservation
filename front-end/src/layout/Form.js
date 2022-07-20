@@ -66,14 +66,15 @@ function Form({handleSubmit, handleChange, reservationForm, noPastDate}){
                             <label htmlFor="reservation_date">
                                 Date
                             </label>
-                            <input type="date"
+                            <input 
+                            type="date"
                             name = "reservation_date"
                             id = "reservation_date"
                             className = "form-control"
                             onChange={handleChange}
                             value={reservationForm.reservation_date}
                             required
-                            min={noPastDate()}
+                            // min={noPastDate()}
                             
                             />
                         </div>
@@ -112,10 +113,7 @@ function Form({handleSubmit, handleChange, reservationForm, noPastDate}){
                 </div> 
             <div className="row">
                 <div className="col-sm">
-
-                        <button type="cancel" className="btn btn-secondary" onClick={()=> history.push("/")}>Cancel</button>
-
-                    
+                    <button type="cancel" className="btn btn-secondary" onClick={()=> history.push("/")}>Cancel</button>
                     <button type="submit" className="btn btn-primary" value="submit">Submit</button>
                 </div>
                 
