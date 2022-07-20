@@ -15,14 +15,15 @@ function create(table) {
 		.then((createdRecords) => createdRecords[0]);
 }
 
-function read(table_id){
-	return knex("tables")
-		.select("*")
-		.where({table_id})
-		.first()
+function read(table_id) {
+	return knex("tables").select("*").where({ table_id }).first();
 }
 
-function update(data){
+function readReservation(reservation_id) {
+	return knex("reservations").select("*").where({ reservation_id }).first();
+}
+
+function update(data) {
 	return knex("tables")
 		.select("*")
 		.where("table_id", data.table_id)
@@ -36,4 +37,5 @@ module.exports = {
 	create,
 	read,
 	update,
+	readReservation
 };

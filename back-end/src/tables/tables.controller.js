@@ -2,6 +2,14 @@ const service = require("./tables.service");
 
 //----------HELPER FUNCTIONS-------
 
+function verifyTableAvailable(req,res,next){
+	const {reservation_id} = res.locals.table
+	if (reservation_id){
+		return next({status:400,message:`Table is occupied`})
+	}
+	return next()
+}
+
 async function verifyTableId(req, res, next) {
 	const { table_id } = req.params;
 	const table = await service.read(table_id);
@@ -14,6 +22,36 @@ async function verifyTableId(req, res, next) {
 		res.locals.table = table;
 		return next();
 	}
+}
+
+async function verifyReservationId(req,res,next){
+	const {data} = req.body
+	
+	if (!data){
+		return next({status:400,message:`Data is missing.`})
+	}
+	if (!data.reservation_id){
+		return next({status:400,message:`Data does not contain "reservation_id"`})
+	}
+	
+	const response = await service.readReservation(data.reservation_id)
+	
+	if (!response){
+		return next({status:404,message:`Reservation ID: ${data.reservation_id} -- Not Found`})
+	}
+	res.locals.reservation = response
+	return next()
+}
+
+function verifyCapacityOfTableAndReservation(req,res,next){
+	const {capacity} = res.locals.table;
+	const {people} = res.locals.reservation;
+
+	if (people > capacity){
+		return next({status:400,message:`Party size of ${people} exceeds table capacity of ${capacity}`})
+	}
+
+	return next()
 }
 
 function validateNewTableData(req, res, next) {
@@ -92,5 +130,5 @@ async function read(req,res,next){
 module.exports = {
 	list,
 	create: [validateNewTableData, create],
-	update: [verifyTableId,updateTableReservation]
+	update: [verifyTableId, verifyTableAvailable, verifyReservationId, verifyCapacityOfTableAndReservation, updateTableReservation]
 };

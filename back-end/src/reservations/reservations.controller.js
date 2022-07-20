@@ -259,8 +259,3 @@ module.exports = {
 	create: [checkValidFields, create],
 	read: [verifyReservationId, read],
 };
-
-console.log("notes263,r.controller")
-// complete Read function to meet testing unit
-// generate new componenent for seating route
-// finish all us 04 endpoints
