@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import TableForm from "./TableForm";
 import { createTable } from "../utils/api.js";
 import ErrorAlert from "./ErrorAlert";
+import { today } from "../utils/date-time";
 
 function NewTable() {
   const history = useHistory();
@@ -15,7 +16,6 @@ function NewTable() {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const handleSubmit = async (event) => {
-    console.log(formData)
     event.preventDefault();
     setErrorMessage(null);
     const ac = new AbortController();
@@ -23,7 +23,7 @@ function NewTable() {
      createTable({ data: formData }, ac.signal)
      
      .then(() => {
-      history.push(`/dashboard`);
+      history.push(`/dashboard?date=${today()}`);
      })
      .catch(setErrorMessage)   
   };

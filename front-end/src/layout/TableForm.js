@@ -1,18 +1,18 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-function TableForm({handleSubmit, handleChange, formData}) {
+function TableForm({ handleSubmit, handleChange, formData }) {
   const history = useHistory();
 
   return (
     <div>
       <h1 className="mb-2">Create a Table</h1>
       <form onSubmit={handleSubmit}>
-        <div class="form-group">
-          <label for="table_name">Table Name</label>
+        <div className="form-group">
+          <label htmlFor="table_name">Table Name</label>
           <input
             type="text"
-            class="form-control"
+            className="form-control"
             id="table_name"
             placeholder="Table Name"
             name="table_name"
@@ -21,11 +21,11 @@ function TableForm({handleSubmit, handleChange, formData}) {
             required
           />
         </div>
-        <div class="form-group">
-          <label for="capacity">Capacity</label>
+        <div className="form-group">
+          <label htmlFor="capacity">Capacity</label>
           <input
             type="number"
-            class="form-control"
+            className="form-control"
             id="capacity"
             placeholder="Capacity"
             name="capacity"
@@ -36,14 +36,14 @@ function TableForm({handleSubmit, handleChange, formData}) {
         </div>
 
         <button
-          type="cancel"
-          class="btn btn-secondary"
-          onClick={() => history.push("/")}
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => history.goBack()}
         >
-          Cancel
+          <span className="oi oi-x" /> Cancel
         </button>
-        <button type="submit" class="btn btn-info mx-3">
-          Submit
+        <button type="submit" className="btn btn-info mx-3">
+        <span className="oi oi-check" /> Submit
         </button>
       </form>
     </div>
