@@ -74,7 +74,7 @@ function verifyTableReservationStatus(req,res,next){
 
 function validateNewTableData(req, res, next) {
 	const { data } = req.body;
-	const validFields = ["table_name", "capacity"];
+	const validFields = ["table_name", "capacity","reservation_id"];
 
 	if (!data) {
 		return next({ status: 400, message: "Data is missing." });
@@ -92,7 +92,7 @@ function validateNewTableData(req, res, next) {
 	}
 
 	for (let field of validFields) {
-		if (!data[field]) {
+		if (!data[field] && field !== "reservation_id") {
 			return next({ status: 400, message: `${field} is missing.` });
 		}
 		if (field === "table_name") {

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
 import { deleteTableReservation } from "../utils/api";
 
 export default function DashboardTablesList({ tables }) {
 	const [deletionError, setDeletionError] = useState(null);
+	const history = useHistory()
 
 	const finishClickHandler = async (event) => {
 		const confirm = window.confirm(
@@ -13,9 +15,8 @@ export default function DashboardTablesList({ tables }) {
 			try {
 				const tableId = event.target.dataset.tableIdFinish;
 				const abortController = new AbortController();
-                
                 await deleteTableReservation(tableId,abortController.signal)
-                
+                history.go(0)
 			} catch (error) {
 				setDeletionError(error);
 			}
