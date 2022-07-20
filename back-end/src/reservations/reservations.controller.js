@@ -66,9 +66,6 @@ const hasReservationTime = (req, res, next) => {
       reservation_time.replace(":", "") >= 1030 &&
       reservation_time.replace(":", "") <= 2130
     ) {
-      // const hour = now.getHours();
-      // const minutes = now.getMinutes();
-      // if (hour >= 10 && hour <= 21)
       return next();
     } else
       next({
@@ -109,6 +106,23 @@ async function create(req, res, next) {
   res.json({ data: result });
 }
 
+async function reservationExists(req, res, next) {
+  const reservation = await service.read(req.params.reservation_Id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  return next({
+    status: 404,
+    message: `Reservation ${req.params.reservation_Id} does not exist`,
+  });
+}
+
+async function read(req, res, next) {
+  const { reservation } = res.locals;
+  res.json({ data: reservation });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -121,4 +135,5 @@ module.exports = {
     hasPeople,
     asyncErrorBoundary(create),
   ],
+  read: [asyncErrorBoundary(reservationExists), read],
 };
