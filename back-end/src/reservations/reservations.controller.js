@@ -44,6 +44,7 @@ function validateData(req, res, next){
         message: "You can't make reservations for the past, buddy. Pick a date in the future."
       })
   }
+
   next()
 
   //check if there are any violations
@@ -83,7 +84,14 @@ function reservationTimeIsValid(req, res, next){
   if(!timeFormat.test(reservation_time)){
     return next({ status: 400, message: "reservation_time is invalid."})
   }
+  else if(reservation_time < "10:30"){
+    return next({ status: 400, message: "We're not open yet."})
+  }
+  else if(reservation_time > "19:30"){
+    return next({ status: 400, message: "We're closing soon. Please choose an earlier time or come back another day!"})
+  }
   next()
+
 }
 
 function peopleIsValidNumber(req, res, next){
@@ -99,21 +107,7 @@ function peopleIsValidNumber(req, res, next){
  
 }
 
-// function reservationDayIsNotTuesday(req, res, next) {
-//   const { reservation_date, reservation_time } = req.body.data
-//   let day = new Date(`${reservation_date} ${reservation_time}`)
-//   console.log(reservation_time, "res time")
-//   console.log(reservation_date, "res date")
-//   console.log(day.getDay(), "day")
-//   if (day.getDay() !== 2) {
-//     next()
-//   } else {
-//     return next({
-//       status: 400,
-//       message: "We're closed on Tuesdays, please select another day.",
-//     })
-//   }
-// }
+
 
 
 
