@@ -25,10 +25,16 @@ function read(table_id) {
 function readReservation(reservation_id) {
   return knex("reservations").select("*").where({ reservation_id }).first();
 }
+
+function destroy(reservation_id) {
+  return knex("tables").where({ reservation_id }).del(reservation_id);
+}
+
 module.exports = {
   list,
   create,
   read,
   update,
   readReservation,
+  destroy,
 };

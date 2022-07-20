@@ -123,6 +123,30 @@ async function read(req, res, next) {
   res.json({ data: reservation });
 }
 
+async function update(req, res) {
+  const {
+    first_name,
+    last_name,
+    mobile_number,
+    people,
+    reservation_date,
+    reservation_time,
+  } = req.body.data;
+
+  const data = await service.update(
+    {
+      first_name,
+      last_name,
+      mobile_number,
+      people,
+      reservation_date,
+      reservation_time,
+    },
+    res.locals.reservation.reservation_id
+  );
+  res.json({ data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -136,4 +160,14 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), read],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    hasFirstName,
+    hasLastName,
+    hasMobileNumber,
+    hasReservationDate,
+    hasReservationTime,
+    hasPeople,
+    asyncErrorBoundary(update),
+  ],
 };
