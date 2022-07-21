@@ -36,6 +36,7 @@ export default function DashboardTablesList({ tables }) {
 					<td>
 						<button
 							data-table-id-finish={table.table_id}
+							data-reservation-id-finish={table.reservation_id}
 							onClick={finishClickHandler}
 						>
 							Finish

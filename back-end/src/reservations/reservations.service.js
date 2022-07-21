@@ -4,18 +4,16 @@ const knex = require("../db/connection.js");
 
 //-------------CRUD FUNCTIONS----------------
 
-function list(date) {
+function list(reservation_date) {
 	return knex("reservations as rs")
 		.select("*")
-		.where("rs.reservation_date", date)
+		.where({ reservation_date })
+		.whereNot("rs.status", "finished")
 		.orderBy("rs.reservation_time");
 }
 
 function read(reservation_id) {
-	return knex("reservations")
-		.select("*")
-		.where({reservation_id})
-		.first();
+	return knex("reservations").select("*").where({ reservation_id }).first();
 }
 
 function create(reservation) {
@@ -25,8 +23,18 @@ function create(reservation) {
 		.then((createdRecords) => createdRecords[0]);
 }
 
+function updateStatus(data, reservation_id) {
+	return knex("reservations")
+		.select("*")
+		.where({reservation_id})
+		.update(data)
+		.returning("*")
+		.then((updatedRecords) => updatedRecords[0]);
+}
+
 module.exports = {
 	list,
 	create,
 	read,
+	updateStatus
 };

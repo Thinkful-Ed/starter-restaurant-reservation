@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-const { listTables, readReservation, updateTable } = require("../utils/api");
+const {
+	listTables,
+	readReservation,
+	updateTable,
+} = require("../utils/api");
 
 export default function SeatReservation() {
 	const [tables, setTables] = useState([]);
-    const [selectedTable,setSelectedTable] = useState(null)
+	const [selectedTable, setSelectedTable] = useState(null);
 	const [reservation, setReservation] = useState(null);
-    
-    const [tablesError, setTablesError] = useState(null);
+
+	const [tablesError, setTablesError] = useState(null);
 	const [reservationError, setReservationError] = useState(null);
-    const [seatReservationError,setSeatReservationError] = useState(null)
-    
+	const [seatReservationError, setSeatReservationError] = useState(null);
+
 	const { reservation_id } = useParams();
 	const history = useHistory();
 
@@ -47,20 +51,19 @@ export default function SeatReservation() {
 		history.goBack();
 	};
 
-    const submitHandler = async (event) =>{
-        event.preventDefault();
-        const data = {reservation_id}
-        try{
-            const abortController = new AbortController();
-            await updateTable(selectedTable,{data},abortController.signal);
-            history.push("/dashboard")
-            
-        }catch(error){
-            setSeatReservationError(error)
-        }
-        
-    }
-    
+	const submitHandler = async (event) => {
+		event.preventDefault();
+		const data = { reservation_id };
+		try {
+			const abortController = new AbortController();
+			await updateTable(selectedTable, { data }, abortController.signal);
+			history.push("/dashboard");
+		} catch (error) {
+			console.log(error)
+			setSeatReservationError(error);
+		}
+	};
+
 	const tableListOptions = tables.map((table, index) => {
 		return (
 			<option
@@ -70,11 +73,11 @@ export default function SeatReservation() {
 			>{`${table.table_name} - ${table.capacity}`}</option>
 		);
 	});
-    
+
 	return (
 		<div>
 			<h1>Seat Reservation</h1>
-            <ErrorAlert error={seatReservationError} />
+			<ErrorAlert error={seatReservationError} />
 			<div>
 				{reservation ? (
 					<React.Fragment>
@@ -100,7 +103,9 @@ export default function SeatReservation() {
 				<ErrorAlert error={tablesError} />
 				<form onSubmit={submitHandler}>
 					<select
-                        onChange={(event)=>setSelectedTable(event.target.value)}
+						onChange={(event) =>
+							setSelectedTable(event.target.value)
+						}
 						className="form-select form-select-lg mb-3"
 						aria-label=".form-select-lg example"
 						name="table_id"
@@ -109,8 +114,15 @@ export default function SeatReservation() {
 						{tableListOptions}
 					</select>
 					<div>
-						<button onClick={cancelHandler} className="btn btn-danger">Cancel</button>
-						<button type="submit" className="btn btn-primary">Submit</button>
+						<button
+							onClick={cancelHandler}
+							className="btn btn-danger"
+						>
+							Cancel
+						</button>
+						<button type="submit" className="btn btn-primary">
+							Submit
+						</button>
 					</div>
 				</form>
 			</div>

@@ -1,16 +1,15 @@
-
 const service = require("./reservations.service");
-const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 //----------------HELPER FUNCTIONS----------------
 
 async function verifyReservationId(req, res, next) {
-	const { reservation_Id } = req.params;
-	const reservation = await service.read(reservation_Id);
+	const { reservation_id } = req.params;
+	const reservation = await service.read(reservation_id);
 	if (!reservation) {
 		return next({
 			status: 404,
-			message: `Reservation ID: ${reservation_Id} - Not Found`,
+			message: `Reservation ID: ${reservation_id} - Not Found`,
 		});
 	} else {
 		res.locals.reservation = reservation;
@@ -26,6 +25,7 @@ function checkValidFields(req, res, next) {
 		"reservation_date",
 		"reservation_time",
 		"people",
+		"status"
 	];
 	const { data } = req.body;
 
@@ -93,11 +93,41 @@ function checkValidFields(req, res, next) {
 					});
 				}
 			}
+			if (field === "status"){
+				if (!validateBookedStatus(data[field])){
+					return next({
+						status: 400,
+						message: `${data[field]}`,
+					});
+				}
+			}
 		}
 	} else {
 		return next({ status: 400, message: "Data does not exists" });
 	}
 	return next();
+}
+// validate booked status for Post request
+function validateBookedStatus(status){
+	if (status !== "booked"){
+		return false
+	}
+	return true
+}
+
+// verify valid status for put request to /reservations/:reservation_id/status
+function verifyStatus(req,res,next){
+	const validStatusList = ["booked","seated","finished"]
+	const {status} = req.body.data
+
+	const bodyStatus = res.locals.reservation.status
+	if (!validStatusList.includes(status)){
+		return next({status:400,message:`Status:${status} is not valid`})
+	}
+	if (bodyStatus === "finished"){
+		return next({status:400,message:`Cannot change status from finished.`})
+	}
+	return next()
 }
 
 function validateDate(date) {
@@ -233,9 +263,16 @@ function checkIfSameDayBooking(date) {
 
 //-----------------CRUD FUNCTIONS-----------------
 async function list(req, res) {
-	const queryDate = req.query;
-	const data = await service.list(queryDate.date);
+	const { date } = req.query;
+	let todayDate = new Date();
+	let data;
 
+	if (!date) {
+		todayDate = [todayDate.getFullYear(),(todayDate.getMonth() + 1),todayDate.getDate()].join("-")
+		data = await service.list(todayDate)
+	}else{
+		data = await service.list(date);
+	}
 	res.json({
 		data: data,
 	});
@@ -252,8 +289,17 @@ async function create(req, res, next) {
 	res.status(201).json({ data: responseData });
 }
 
+async function updateStatus(req,res,next){
+	const currentData = res.locals.reservation
+	const updatedStatus = req.body.data
+	const updatedReservation = {...currentData,...updatedStatus}
+	const response = await service.updateStatus(updatedReservation,updatedReservation.reservation_id)
+	res.status(200).json({data:response})
+}
+
 module.exports = {
-	list,
+	list: [asyncErrorBoundary(list)],
 	create: [asyncErrorBoundary(checkValidFields), asyncErrorBoundary(create)],
 	read: [asyncErrorBoundary(verifyReservationId), asyncErrorBoundary(read)],
+	updateStatus: [asyncErrorBoundary(verifyReservationId), verifyStatus, asyncErrorBoundary(updateStatus)]
 };
