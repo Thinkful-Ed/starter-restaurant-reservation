@@ -92,7 +92,36 @@ async function create(req, res, next) {
     reservation_date,
     reservation_time,
     people,
+    status,
   } = req.body.data;
+
+  if (status === "booked") {
+    const result = await service.create({
+      first_name,
+      last_name,
+      mobile_number,
+      reservation_date,
+      reservation_time,
+      people,
+      status,
+    });
+    res.status(201);
+    res.json({ data: result });
+  }
+
+  if (status === "seated") {
+    return next({
+      status: 400,
+      message: "status incorrectly labled as seated",
+    });
+  }
+
+  if (status === "finished") {
+    return next({
+      status: 400,
+      message: "status incorrectly labled as finished",
+    });
+  }
 
   const result = await service.create({
     first_name,
@@ -107,14 +136,14 @@ async function create(req, res, next) {
 }
 
 async function reservationExists(req, res, next) {
-  const reservation = await service.read(req.params.reservation_Id);
+  const reservation = await service.read(req.params.reservation_id);
   if (reservation) {
     res.locals.reservation = reservation;
     return next();
   }
   return next({
     status: 404,
-    message: `Reservation ${req.params.reservation_Id} does not exist`,
+    message: `Reservation ${req.params.reservation_id} does not exist`,
   });
 }
 
@@ -147,6 +176,41 @@ async function update(req, res) {
   res.json({ data });
 }
 
+const hasStatus = (req, res, next) => {
+  const { data: { status } = {} } = req.body;
+
+  if (
+    status === "booked" ||
+    status === "seated" ||
+    status === "cancelled" ||
+    status === "finished"
+  ) {
+    if (res.locals.reservation.status === "finished") {
+      return next({
+        status: 400,
+        message: `The reservation has all ready finished`,
+      });
+    }
+    return next();
+  }
+  return next({
+    status: 400,
+    message: `status ${status} is unacceptable or finished`,
+  });
+};
+
+async function updateStatus(req, res, next) {
+  const { status } = req.body.data;
+
+  const data = await service.update(
+    {
+      status,
+    },
+    res.locals.reservation.reservation_id
+  );
+  res.json({ data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -169,5 +233,10 @@ module.exports = {
     hasReservationTime,
     hasPeople,
     asyncErrorBoundary(update),
+  ],
+  updateStatus: [
+    asyncErrorBoundary(reservationExists),
+    hasStatus,
+    asyncErrorBoundary(updateStatus),
   ],
 };
