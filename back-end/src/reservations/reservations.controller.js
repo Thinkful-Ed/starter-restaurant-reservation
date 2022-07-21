@@ -5,7 +5,7 @@ function containsAnyLetter(str) {
   return /[a-zA-Z]/.test(str);
 }
 
-async function list(req, res) {
+async function list(req, res, next) {
   const data = await service.list(req.query.date);
   res.json({ data });
 }

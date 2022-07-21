@@ -40,12 +40,10 @@ const hasCapacity = (req, res, next) => {
 };
 
 async function update(req, res) {
-  const updatedTable = {
-    ...res.locals.table,
-    reservation_id: res.locals.reservation.reservation_id,
-  };
-
-  const data = await service.update(updatedTable);
+  const data = await service.update(
+    res.locals.table.table_id,
+    res.locals.reservation.reservation_id
+  );
   res.json({ data });
 }
 
@@ -87,6 +85,10 @@ const hasAvailability = (req, res, next) => {
     return next({ status: 400, message: "table is occupied" });
   }
 
+  if (res.locals.reservation.status === "seated") {
+    return next({ status: 400, message: "reservation is all ready seated" });
+  }
+
   if (res.locals.table.capacity >= res.locals.reservation.people) {
     return next();
   }
@@ -94,8 +96,8 @@ const hasAvailability = (req, res, next) => {
 };
 
 async function destroy(req, res, next) {
-  if (res.locals.table.reservation_id) {
-    await service.destroy(res.locals.table.reservation_id);
+  if (res.locals.table) {
+    await service.destroy(res.locals.table);
     res.sendStatus(200);
   } else next({ status: 400, message: "table is not occupied" });
 }
