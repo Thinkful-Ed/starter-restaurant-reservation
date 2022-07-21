@@ -31,7 +31,7 @@ function checkValidFields(req, res, next) {
 
 	if (data) {
 		for (let field of validFields) {
-			if (!data[field]) {
+			if (!data[field] && field !== "status") {
 				return next({
 					status: 400,
 					message: `${field} does not exist.`,
@@ -93,7 +93,7 @@ function checkValidFields(req, res, next) {
 					});
 				}
 			}
-			if (field === "status"){
+			if (field === "status" && data[field]){
 				if (!validateBookedStatus(data[field])){
 					return next({
 						status: 400,
@@ -284,7 +284,8 @@ async function read(req, res, next) {
 }
 
 async function create(req, res, next) {
-	const { data } = req.body;
+	const data = req.body.data;
+	data["status"] = "booked"
 	const responseData = await service.create(data);
 	res.status(201).json({ data: responseData });
 }
