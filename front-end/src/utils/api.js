@@ -80,3 +80,25 @@ export async function createReservations(data, signal){
   }
   return await fetchJson(url, options, data)
 }
+
+
+//function to list tables
+export async function listTables(params, signal){
+  const url = new URL(`${API_BASE_URL}/tables`)
+  Object.entries(params).forEach(([key, value]) =>
+    url.searchParams.append(key, value.toString())
+  )
+  return await fetchJson(url, { headers, signal }, [])
+}
+
+//function to create new tables
+export async function createTables(data, signal){
+  const url = new URL(`${API_BASE_URL}/tables`);
+  const options = {
+    headers, 
+    signal,
+    method: "POST",
+    body: JSON.stringify({data})
+  }
+  return await fetchJson(url, options, data)
+}
