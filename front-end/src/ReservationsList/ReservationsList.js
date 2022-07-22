@@ -1,5 +1,5 @@
-export default function DashboardReservationsList({ reservations }) {
-	const reservationsList = reservations.map((res, index) => {
+export default function ReservationsList({ reservations }) {
+	const reservationsArray = reservations.map((res, index) => {
 		return (
 			<tr key={index}>
 				<td>{res.reservation_id}</td>
@@ -39,7 +39,7 @@ export default function DashboardReservationsList({ reservations }) {
 					<th scope="col">Phone</th>
 				</tr>
 			</thead>
-			<tbody>{reservationsList}</tbody>
+			<tbody>{reservationsArray}</tbody>
 		</table>
 	);
 }

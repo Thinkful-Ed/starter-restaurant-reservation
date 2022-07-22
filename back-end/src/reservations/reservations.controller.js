@@ -263,7 +263,15 @@ function checkIfSameDayBooking(date) {
 
 //-----------------CRUD FUNCTIONS-----------------
 async function list(req, res) {
-	const { date } = req.query;
+	const queryData = req.query;
+	
+	if (queryData["mobile_number"]){
+		const {mobile_number} = queryData;
+		const data = await service.list(null,mobile_number)
+		return res.status(200).json({data})
+	}
+	
+	const date = queryData["date"]
 	let todayDate = new Date();
 	let data;
 
@@ -273,7 +281,7 @@ async function list(req, res) {
 	}else{
 		data = await service.list(date);
 	}
-	res.json({
+	return res.json({
 		data: data,
 	});
 }

@@ -4,7 +4,18 @@ const knex = require("../db/connection.js");
 
 //-------------CRUD FUNCTIONS----------------
 
-function list(reservation_date) {
+function list(reservation_date,mobile_number = null) {
+
+	if(mobile_number){
+		return knex("reservations as rs")
+		.whereRaw(
+			"translate(mobile_number, '() -', '') like ?",
+			`%${mobile_number.replace(/\D/g, "")}%`
+		)
+		.orderBy("rs.reservation_date");
+	}
+	
+	
 	return knex("reservations as rs")
 		.select("*")
 		.where({ reservation_date })
