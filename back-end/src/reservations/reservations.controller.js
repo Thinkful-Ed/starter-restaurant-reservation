@@ -15,6 +15,7 @@ function bodyDataVerification(req, res, next) {
 
   let notValid = [];
   const { data = {} } = req.body;
+  res.locals.data = data;
 
   // checks to see is the people parameter is an integer
   if (typeof data.people !== "number") {
@@ -53,6 +54,22 @@ function bodyDataVerification(req, res, next) {
   next();
 }
 
+function dateCheck(req, res, next) {
+  const day = new Date(res.locals.data.reservation_date);
+  if (day.getDay() === 1) {
+    next({
+      status: 400,
+      message: "Restaurant is closed on Tuesdays, please choose another date.",
+    });
+  }
+
+  if (Date.parse(day) < Date.parse(new Date())) {
+    next({ status: 400, message: "Only future reservations are allowed." });
+  }
+  
+  next();
+}
+
 async function list(req, res) {
   res.json({ data: await service.list(req.query.date) });
 }
@@ -64,5 +81,5 @@ async function create(req, res) {
 
 module.exports = {
   list,
-  create: [bodyDataVerification, create],
+  create: [bodyDataVerification, dateCheck, create],
 };

@@ -20,7 +20,6 @@ export default function NewRes({ today }) {
 
   const changeHandler = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
-    console.log(typeof formData.people, formData.people);
   };
 
   const submitHandler = async (event) => {
@@ -49,9 +48,9 @@ export default function NewRes({ today }) {
 
   const errorElement = () => {
     return (
-      <>
+      <div className="alert alert-danger">
         <p>ERROR: {errorMessage.message}</p>
-      </>
+      </div>
     );
   };
 
