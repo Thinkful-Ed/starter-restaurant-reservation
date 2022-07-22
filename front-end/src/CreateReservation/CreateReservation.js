@@ -14,6 +14,7 @@ function NewReservation() {
 		reservation_date: today(),
 		reservation_time: "",
 		people: 0,
+		status:"booked"
 	};
 
 	const [reservation, setReservation] = useState(initReservation);

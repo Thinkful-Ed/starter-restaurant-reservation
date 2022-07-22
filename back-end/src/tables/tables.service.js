@@ -23,20 +23,53 @@ function readReservation(reservation_id) {
 	return knex("reservations").select("*").where({ reservation_id }).first();
 }
 
-function update(data) {
-	return knex("tables")
-		.select("*")
-		.where("table_id", data.table_id)
-		.update(data)
-		.returning("*")
-		.then((updatedRecords) => updatedRecords[0]);
+function update(data,status) {
+		return knex.transaction(async (trx )=> {
+			
+			const table = await knex("tables")
+				.where("table_id", data.table_id)
+				.update(data)
+				.returning("*")
+				.transacting(trx)
+				.then((updatedRecords) => updatedRecords[0])
+			
+			await knex("reservations")
+				.where("reservation_id", data.reservation_id)
+				.update(status)
+				.returning("*")
+				.transacting(trx)
+				.then((updatedRecords)=>updatedRecords[0])
+				
+			return table
+		})	
 }
 
+function destroy(data,status,reservation_id){
+	return knex.transaction(async (trx )=> {
+			
+		const table = await knex("tables")
+			.where("table_id", data.table_id)
+			.update(data)
+			.returning("*")
+			.transacting(trx)
+			.then((updatedRecords) => updatedRecords[0])
+		
+		await knex("reservations")
+			.where({reservation_id})
+			.update(status)
+			.returning("*")
+			.transacting(trx)
+			.then((updatedRecords)=>updatedRecords[0])
+			
+		return table
+	})	
+}
 
 module.exports = {
 	list,
 	create,
 	read,
 	update,
-	readReservation
+	destroy,
+	readReservation,
 };

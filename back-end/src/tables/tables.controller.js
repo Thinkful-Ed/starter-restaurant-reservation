@@ -71,6 +71,13 @@ function verifyTableReservationStatus(req,res,next){
 	return next()
 }
 
+function verifyTableNotSeated(req,res,next){
+	const {status} = res.locals.reservation
+	if (status === "seated"){
+		return next({status:400,message:"Reservation already seated"})
+	}
+	return next()
+}
 
 function validateNewTableData(req, res, next) {
 	const { data } = req.body;
@@ -137,7 +144,8 @@ async function create(req, res, next) {
 
 async function updateTableReservation(req, res, next) {
 	const updatedTable = { ...res.locals.table, ...req.body.data };
-	const response = await service.update(updatedTable);
+	const response = await service.update(updatedTable, {status:"seated"});
+	
 	return res.status(200).json({ data: response });
 }
 
@@ -148,9 +156,10 @@ async function read(req, res, next) {
 //destroys reservation ID of the given table
 async function destroyTableReservation(req,res,next){
 	const currentTable = res.locals.table
+	const {reservation_id} = currentTable
 	const updatedReservation_id = {reservation_id:null}
 	const updatedTable = {...currentTable,...updatedReservation_id}
-	const response = await service.update(updatedTable)
+	const response = await service.destroy(updatedTable,{status:"finished"},reservation_id)
 	res.status(200).json({data:response})
 }
 
@@ -164,6 +173,7 @@ module.exports = {
 		asyncErrorBoundary(verifyTableId),
 		verifyTableAvailable,
 		asyncErrorBoundary(verifyReservationId),
+		verifyTableNotSeated,
 		verifyCapacityOfTableAndReservation,
 		asyncErrorBoundary(updateTableReservation),
 	],
