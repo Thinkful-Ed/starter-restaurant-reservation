@@ -6,7 +6,7 @@ import useQuery from "../utils/useQuery";
 
 import DashboardTablesList from "./DashboardTablesList";
 import DashboardDateNav from "./DashboardDateNav";
-import DashboardReservationsList from "./DashboardReservationsList";
+import ReservationsList from "../ReservationsList/ReservationsList";
 
 /**
  * Defines the dashboard page.
@@ -68,7 +68,7 @@ function Dashboard() {
 			<ErrorAlert error={tablesError} />
 			<div className="card">
 				<h3>Reservations</h3>
-				<DashboardReservationsList reservations={reservations} />
+				<ReservationsList reservations={reservations} />
 			</div>
 
 			<div className="card">

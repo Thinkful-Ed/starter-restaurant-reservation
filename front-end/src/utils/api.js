@@ -73,17 +73,6 @@ export async function readReservation(reservation_id,signal){
   return await fetchJson(url, { headers, signal }, [])
 }
 
-// export async function updateReservationStatus(reservation_id,data,signal){
-//   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
-//   const options = {
-//     headers,
-//     signal:signal,
-//     method: "PUT",
-//     body: JSON.stringify(data)
-//   }
-//   return await fetchJson(url,options,[])
-// }
-
 export async function listTables(signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
   return await fetchJson(url, { headers, signal }, [])
