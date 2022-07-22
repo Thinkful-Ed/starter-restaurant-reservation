@@ -59,7 +59,6 @@ export default function SeatReservation() {
 			await updateTable(selectedTable, { data }, abortController.signal);
 			history.push("/dashboard");
 		} catch (error) {
-			console.log(error)
 			setSeatReservationError(error);
 		}
 	};
