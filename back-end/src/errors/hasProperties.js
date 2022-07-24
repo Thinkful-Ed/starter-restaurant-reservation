@@ -22,7 +22,7 @@
         if(property === "reservation_date" && value){
           const reservation_date = new Date(value)
           if(Number.isNaN(reservation_date.getTime())) {
-              errorMessages.push(`The reservation date ${property} is not valid`)
+              errorMessages.push(`The reservation date ${property} is not valid.`)
           } else {
               console.log("date is valid")
           }
@@ -31,7 +31,7 @@
         if(property === "reservation_time" && value){
           const reservation_time = new Date(`${data["reservation_date"]} ${value}`)
           if(Number.isNaN(reservation_time.getTime())) {
-              errorMessages.push(`The reservation time ${property} is not valid`)
+              errorMessages.push(`The reservation time ${property} is not valid.`)
           } else {
               console.log("Time is valid")
           }
@@ -44,7 +44,22 @@
             errorMessages.push(`The people field should be a number. ${typeof value}`)
           }
           else if(typeof value === "number" && value <= 0){
-            errorMessages.push("The people field requires at least one person")
+            errorMessages.push("The people field requires at least one person.")
+          }
+        }
+        if(property === "reservation_date" && value) {
+          console.log("value is", value)
+          const reservation_date = value
+          const date_from_string = new Date(`${reservation_date} ${data["reservation_time"]}`)
+          if(date_from_string.getDay() === 2) {
+            errorMessages.push(`Your reservation date is set for a Tuesday, and we are closed on Tuesday's.`)
+          }
+        }
+        if(property === "reservation_date" && value){
+          const reservation_date = value
+          const date_from_string = new Date(`${reservation_date} ${data["reservation_time"]}`)
+          if(date_from_string < new Date().getTime()){
+            errorMessages.push(`Your reservation date, ${reservation_date} is in the past, only future reservations are allowed.`)
           }
         }
       });
