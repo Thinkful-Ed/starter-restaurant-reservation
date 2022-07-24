@@ -62,6 +62,20 @@
             errorMessages.push(`Your reservation date, ${reservation_date} is in the past, only future reservations are allowed.`)
           }
         }
+        if(property === "reservation_time" && value){
+          let currentTime = new Date()
+          console.log("value", value)
+          if(value < '10:30'){
+            errorMessages.push(`Your reservation time for ${value} is before we open. Please choose a time when we are opened.`)
+          }
+          else if(value > '21:30'){
+            errorMessages.push(`The restaurant closes at 10:30pm. Please choose a reservation time that is not so close to closing.`)
+          }
+          else if(`${currentTime.getHours()}:${currentTime.getMinutes()}` > value){
+            console.log("this is the current time: ",`${new Date().getTime()}`, "this is the reservation time: ", value )
+            errorMessages.push(`Sorry but the reservation time has already passed for today. Please choose a time in the future. `)
+          }
+        }
       });
 
       if(errorMessages.length > 0){
