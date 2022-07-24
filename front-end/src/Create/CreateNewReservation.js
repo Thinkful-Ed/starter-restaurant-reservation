@@ -23,7 +23,7 @@ export default function CreateNewReservation(){
     async function addReservationToList(){
       try{
         await createReservation(formData);
-        history.push(`/dashboard`)
+        history.push(`/dashboard?date=${formData.reservation_date}`)
 
       }catch (error){
         if (error.name === "AbortError"){
