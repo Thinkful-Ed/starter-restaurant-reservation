@@ -20,10 +20,10 @@ export default function DashboardDateNav({date}) {
     }
     
 	return (
-		<div>
-			<button type="button" onClick={priorDayClickHandler}>Prior Day</button>
-			<button type="button" onClick={todayClickHandler}>Today</button>
-			<button type="button" onClick={nextDayClickHandler}>Next Day</button>
+		<div style={{"display":"flex","justifyContent":"center"}}>
+			<button type="button" style={{"margin":"5px"}} className="btn btn-secondary" onClick={priorDayClickHandler}>Prior Day</button>
+			<button type="button" style={{"margin":"5px"}} className="btn btn-success" onClick={todayClickHandler}>Today</button>
+			<button type="button" style={{"margin":"5px"}} className="btn btn-secondary" onClick={nextDayClickHandler}>Next Day</button>
 		</div>
 	);
 }
