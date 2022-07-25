@@ -3,10 +3,10 @@ import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
-
 import DashboardTablesList from "./DashboardTablesList";
 import DashboardDateNav from "./DashboardDateNav";
 import ReservationsList from "../ReservationsList/ReservationsList";
+import  "./Dashboard.css"
 
 /**
  * Defines the dashboard page.
@@ -58,7 +58,7 @@ function Dashboard() {
 	}, []);
 
 	return (
-		<main>
+		<main className="container-fluid">
 			<h1>Dashboard</h1>
 			<div className="d-md-flex mb-3">
 				<h4 className="mb-0">{`Reservation Date: ${date}`}</h4>
@@ -66,12 +66,12 @@ function Dashboard() {
 			<DashboardDateNav date={date} />
 			<ErrorAlert error={reservationsError} />
 			<ErrorAlert error={tablesError} />
-			<div className="card">
+			<div className="card tables">
 				<h3>Reservations</h3>
 				<ReservationsList reservations={reservations} />
 			</div>
 
-			<div className="card">
+			<div className="card tables">
 				<h3>Table List</h3>
 				<DashboardTablesList tables={tables} />
 			</div>

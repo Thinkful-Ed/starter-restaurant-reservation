@@ -6,7 +6,7 @@ import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-date";
 
 const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
+	process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
 
 /**
  * Defines the default headers for these functions to work with `json-server`
@@ -30,26 +30,26 @@ headers.append("Content-Type", "application/json");
  *  If the response is not in the 200 - 399 range the promise is rejected.
  */
 async function fetchJson(url, options, onCancel) {
-  try {
-    const response = await fetch(url, options);
+	try {
+		const response = await fetch(url, options);
 
-    if (response.status === 204) {
-      return null;
-    }
+		if (response.status === 204) {
+			return null;
+		}
 
-    const payload = await response.json();
+		const payload = await response.json();
 
-    if (payload.error) {
-      return Promise.reject({ message: payload.error });
-    }
-    return payload.data;
-  } catch (error) {
-    if (error.name !== "AbortError") {
-      console.error(error.stack);
-      throw error;
-    }
-    return Promise.resolve(onCancel);
-  }
+		if (payload.error) {
+			return Promise.reject({ message: payload.error });
+		}
+		return payload.data;
+	} catch (error) {
+		if (error.name !== "AbortError") {
+			console.error(error.stack);
+			throw error;
+		}
+		return Promise.resolve(onCancel);
+	}
 }
 
 /**
@@ -59,77 +59,90 @@ async function fetchJson(url, options, onCancel) {
  */
 
 export async function listReservations(params, signal) {
-  const url = new URL(`${API_BASE_URL}/reservations`);
-  Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.append(key, value.toString())
-  );
-  return await fetchJson(url, { headers, signal }, [])
-    .then(formatReservationDate)
-    .then(formatReservationTime);
+	const url = new URL(`${API_BASE_URL}/reservations`);
+	Object.entries(params).forEach(([key, value]) =>
+		url.searchParams.append(key, value.toString())
+	);
+	return await fetchJson(url, { headers, signal }, [])
+		.then(formatReservationDate)
+		.then(formatReservationTime);
 }
 
-export async function readReservation(reservation_id,signal){
-  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
-  return await fetchJson(url, { headers, signal }, [])
+export async function readReservation(reservation_id, signal) {
+	const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+	return await fetchJson(url, { headers, signal }, []);
 }
 
 export async function listTables(signal) {
-  const url = new URL(`${API_BASE_URL}/tables`);
-  return await fetchJson(url, { headers, signal }, [])
+	const url = new URL(`${API_BASE_URL}/tables`);
+	return await fetchJson(url, { headers, signal }, []);
 }
 
-export async function createReservation(dataObj,signal){
-  const url = new URL(`${API_BASE_URL}/reservations`);
-  const options = {
-    headers,
-    signal:signal,
-    method: "POST",
-    body: JSON.stringify(dataObj)
-  }
-  
-  return await fetchJson(url,options,[])
+export async function createReservation(dataObj, signal) {
+	const url = new URL(`${API_BASE_URL}/reservations`);
+	const options = {
+		headers,
+		signal: signal,
+		method: "POST",
+		body: JSON.stringify(dataObj),
+	};
+
+	return await fetchJson(url, options, []);
 }
 
-export async function updateReservation(dataObj,reservation_id,signal){
-  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
-  const options = {
-    headers,
-    signal:signal,
-    method: "PUT",
-    body: JSON.stringify(dataObj)
-  }
-  
-  return await fetchJson(url,options,[])
+export async function updateReservation(dataObj, reservation_id, signal) {
+	const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+	const options = {
+		headers,
+		signal: signal,
+		method: "PUT",
+		body: JSON.stringify(dataObj),
+	};
+
+	return await fetchJson(url, options, []);
 }
 
-export async function createTable(data,signal){
-  const url = new URL(`${API_BASE_URL}/tables`);
-  const options = {
-    headers,
-    signal:signal,
-    method: "POST",
-    body: JSON.stringify(data)
-  }
-  return await fetchJson(url,options,[])
+export async function updateReservationStatus(dataObj, reservation_id, signal) {
+	const url = new URL(
+		`${API_BASE_URL}/reservations/${reservation_id}/status`
+	);
+	const options = {
+		headers,
+		signal: signal,
+		method: "PUT",
+		body: JSON.stringify(dataObj),
+	};
+	return await fetchJson(url, options, []);
 }
 
-export async function updateTable(table_id,data,signal){
-  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
-  const options = {
-    headers,
-    signal:signal,
-    method: "PUT",
-    body: JSON.stringify(data)
-  }
-  return await fetchJson(url,options,[])
+export async function createTable(data, signal) {
+	const url = new URL(`${API_BASE_URL}/tables`);
+	const options = {
+		headers,
+		signal: signal,
+		method: "POST",
+		body: JSON.stringify(data),
+	};
+	return await fetchJson(url, options, []);
 }
 
-export async function deleteTableReservation(table_id,signal){
-  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
-  const options = {
-    headers,
-    signal:signal,
-    method: "DELETE",
-  }
-  return await fetchJson(url,options,[])
+export async function updateTable(table_id, data, signal) {
+	const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+	const options = {
+		headers,
+		signal: signal,
+		method: "PUT",
+		body: JSON.stringify(data),
+	};
+	return await fetchJson(url, options, []);
+}
+
+export async function deleteTableReservation(table_id, signal) {
+	const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+	const options = {
+		headers,
+		signal: signal,
+		method: "DELETE",
+	};
+	return await fetchJson(url, options, []);
 }

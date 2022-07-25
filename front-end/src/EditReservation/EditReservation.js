@@ -3,7 +3,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { updateReservation } from "../utils/api";
 import { today } from "../utils/date-time";
 import { readReservation } from "../utils/api";
-import ReservationForm from "../ReservationForm/ReservationForm"
+import ReservationForm from "../ReservationForm/ReservationForm";
 import ErrorAlert from "../layout/ErrorAlert";
 
 export default function EditReservation() {
@@ -25,7 +25,6 @@ export default function EditReservation() {
 
 	useEffect(() => {
 		async function retrieveReservation() {
-			
 			if (reservation_id) {
 				try {
 					const abortController = new AbortController();
@@ -45,16 +44,14 @@ export default function EditReservation() {
 	}, [reservation_id]);
 
 	const editSubmitHandler = async () => {
-
 		try {
 			const abortController = new AbortController();
-			console.log(reservation)
 			await updateReservation(
 				{ data: reservation },
 				reservation_id,
 				abortController.signal
 			);
-			history.goBack();
+			history.push(`/dashboard?date=${reservation.reservation_date}`);
 		} catch (error) {
 			setReservationError(error);
 		}
@@ -64,8 +61,11 @@ export default function EditReservation() {
 		<div>
 			<h1>Edit Reservation</h1>
 			<ErrorAlert error={reservationError} />
-			<ReservationForm reservation={reservation} setReservation={setReservation} submitFunction={editSubmitHandler} />
+			<ReservationForm
+				reservation={reservation}
+				setReservation={setReservation}
+				submitFunction={editSubmitHandler}
+			/>
 		</div>
 	);
 }
-
