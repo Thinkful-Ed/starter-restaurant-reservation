@@ -22,6 +22,12 @@ export default function ReservationsList({ reservations }) {
 						</a>
 					)}
 				</td>
+				<td>
+					<a className = "btn btn-warning" href={`/reservations/${res.reservation_id}/edit`}>Edit</a>
+				</td>
+				<td>
+					<button className = "btn btn-danger" data-reservation-id-cancel={res.reservation_id}>Cancel</button>
+				</td>
 			</tr>
 		);
 	});

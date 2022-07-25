@@ -25,7 +25,7 @@ function checkValidFields(req, res, next) {
 		"reservation_date",
 		"reservation_time",
 		"people",
-		"status"
+		"status",
 	];
 	const { data } = req.body;
 
@@ -93,8 +93,8 @@ function checkValidFields(req, res, next) {
 					});
 				}
 			}
-			if (field === "status" && data[field]){
-				if (!validateBookedStatus(data[field])){
+			if (field === "status" && data[field]) {
+				if (!validateBookedStatus(data[field])) {
 					return next({
 						status: 400,
 						message: `${data[field]}`,
@@ -108,26 +108,29 @@ function checkValidFields(req, res, next) {
 	return next();
 }
 // validate booked status for Post request
-function validateBookedStatus(status){
-	if (status !== "booked"){
-		return false
+function validateBookedStatus(status) {
+	if (status !== "booked") {
+		return false;
 	}
-	return true
+	return true;
 }
 
 // verify valid status for put request to /reservations/:reservation_id/status
-function verifyStatus(req,res,next){
-	const validStatusList = ["booked","seated","finished"]
-	const {status} = req.body.data
+function verifyStatus(req, res, next) {
+	const validStatusList = ["booked", "seated", "finished","cancelled"];
+	const { status } = req.body.data;
 
-	const bodyStatus = res.locals.reservation.status
-	if (!validStatusList.includes(status)){
-		return next({status:400,message:`Status:${status} is not valid`})
+	const bodyStatus = res.locals.reservation.status;
+	if (!validStatusList.includes(status)) {
+		return next({ status: 400, message: `Status:${status} is not valid` });
 	}
-	if (bodyStatus === "finished"){
-		return next({status:400,message:`Cannot change status from finished.`})
+	if (bodyStatus === "finished") {
+		return next({
+			status: 400,
+			message: `Cannot change status from finished.`,
+		});
 	}
-	return next()
+	return next();
 }
 
 function validateDate(date) {
@@ -261,24 +264,37 @@ function checkIfSameDayBooking(date) {
 	}
 }
 
+
+function verifyEditableStatus(req, res, next) {
+	const { status } = res.locals.reservation;
+	if (status !== "booked") {
+		return next({ status: 400, message: `${status}` });
+	}
+	return next();
+}
+
 //-----------------CRUD FUNCTIONS-----------------
 async function list(req, res) {
 	const queryData = req.query;
-	
-	if (queryData["mobile_number"]){
-		const {mobile_number} = queryData;
-		const data = await service.list(null,mobile_number)
-		return res.status(200).json({data})
+
+	if (queryData["mobile_number"]) {
+		const { mobile_number } = queryData;
+		const data = await service.list(null, mobile_number);
+		return res.status(200).json({ data });
 	}
-	
-	const date = queryData["date"]
+
+	const date = queryData["date"];
 	let todayDate = new Date();
 	let data;
 
 	if (!date) {
-		todayDate = [todayDate.getFullYear(),(todayDate.getMonth() + 1),todayDate.getDate()].join("-")
-		data = await service.list(todayDate)
-	}else{
+		todayDate = [
+			todayDate.getFullYear(),
+			todayDate.getMonth() + 1,
+			todayDate.getDate(),
+		].join("-");
+		data = await service.list(todayDate);
+	} else {
 		data = await service.list(date);
 	}
 	return res.json({
@@ -293,22 +309,44 @@ async function read(req, res, next) {
 
 async function create(req, res, next) {
 	const data = req.body.data;
-	data["status"] = "booked"
+	data["status"] = "booked";
 	const responseData = await service.create(data);
 	res.status(201).json({ data: responseData });
 }
 
-async function updateStatus(req,res,next){
-	const currentData = res.locals.reservation
-	const updatedStatus = req.body.data
-	const updatedReservation = {...currentData,...updatedStatus}
-	const response = await service.updateStatus(updatedReservation,updatedReservation.reservation_id)
-	res.status(200).json({data:response})
+async function updateStatus(req, res, next) {
+	const currentData = res.locals.reservation;
+	const updatedStatus = req.body.data;
+	const updatedReservation = { ...currentData, ...updatedStatus };
+	const response = await service.update(
+		updatedReservation,
+		updatedReservation.reservation_id
+	);
+	res.status(200).json({ data: response });
+}
+
+async function updateReservation(req, res, next) {
+	const updatedReservation = req.body.data;
+	const response = await service.update(
+		updatedReservation,
+		updatedReservation.reservation_id
+	);
+	res.status(200).json({ data: response });
 }
 
 module.exports = {
 	list: [asyncErrorBoundary(list)],
 	create: [asyncErrorBoundary(checkValidFields), asyncErrorBoundary(create)],
 	read: [asyncErrorBoundary(verifyReservationId), asyncErrorBoundary(read)],
-	updateStatus: [asyncErrorBoundary(verifyReservationId), verifyStatus, asyncErrorBoundary(updateStatus)]
+	updateStatus: [
+		asyncErrorBoundary(verifyReservationId),
+		verifyStatus,
+		asyncErrorBoundary(updateStatus),
+	],
+	updateReservation: [
+		asyncErrorBoundary(verifyReservationId),
+		verifyEditableStatus,
+		asyncErrorBoundary(checkValidFields),
+		asyncErrorBoundary(updateReservation),
+	],
 };
