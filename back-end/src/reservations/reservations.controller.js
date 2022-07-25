@@ -55,18 +55,66 @@ function bodyDataVerification(req, res, next) {
 }
 
 function dateCheck(req, res, next) {
-  const day = new Date(res.locals.data.reservation_date);
-  if (day.getDay() === 1) {
+  const dayIncoming = new Date(res.locals.data.reservation_date);
+  if (dayIncoming.getDay() === 1) {
     next({
       status: 400,
       message: "Restaurant is closed on Tuesdays, please choose another date.",
     });
   }
 
-  if (Date.parse(day) < Date.parse(new Date())) {
+  if (
+    res.locals.data.reservation_date.replaceAll("-", "") <
+    new Date().toISOString().slice(0, 10).replaceAll("-", "")
+  ) {
     next({ status: 400, message: "Only future reservations are allowed." });
   }
-  
+
+  next();
+}
+
+function timeCheck(req, res, next) {
+  // set variable to incoming time request
+  const incoming = parseInt(
+    res.locals.data.reservation_time.replace(/[^0-9]+/, ""),
+  );
+
+  // set new variable to the current time
+  const day = new Date();
+  const minute = day.getMinutes();
+  const hour = day.getHours();
+  const compareCurrent = parseInt(
+    `${hour.toString().length === 2 ? hour : "0" + hour}${
+      minute.toString().length === 2 ? minute : "0" + minute
+    }`,
+  );
+
+  if (
+    Date.parse(res.locals.data.reservation_date) < Date.parse(new Date()) &&
+    incoming < compareCurrent
+  ) {
+    next({
+      status: 400,
+      message: "Reservations cannot be made before the current time.",
+    });
+  }
+
+  if (incoming < 1030) {
+    next({
+      status: 400,
+      message:
+        "Reservations must be made for after restaurant opening (10:30 AM).",
+    });
+  }
+
+  if (incoming > 2130) {
+    next({
+      status: 400,
+      message:
+        "Reservations must be made for one hour prior to restaurant opening (9:30 PM).",
+    });
+  }
+
   next();
 }
 
@@ -81,5 +129,5 @@ async function create(req, res) {
 
 module.exports = {
   list,
-  create: [bodyDataVerification, dateCheck, create],
+  create: [bodyDataVerification, dateCheck, timeCheck, create],
 };
