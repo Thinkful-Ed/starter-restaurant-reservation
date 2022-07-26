@@ -101,6 +101,17 @@ function reservationTimeIsDuringBusinessHours(req, res, next) {
   }
 }
 
+function reservationIsNotSeated(req, res, next){
+  if (res.locals.reservation.status === "booked"){
+   return next();
+  } else {
+    next({
+      status: 400,
+      message: "Reservation is already seated.",
+    });
+  }
+}
+
 async function list(req, res) {
   const { date } = req.query;
   let data;
@@ -133,12 +144,17 @@ async function create(req, res, next) {
     reservation_time,
     people,
   };
-  await reservationsService.create(newReservation);
-  res.status(201).json({ data: newReservation });
+  const createdReservation = await reservationsService.create(newReservation);
+  res.status(201).json({ data: createdReservation });
 }
 
 async function read(req, res) {
   res.status(200).json({ data: res.locals.reservation });
+}
+
+async function update(req, res, next){
+await reservationsService.update(res.locals.reservation.reservation_id);
+res.status(200).json({ data: res.locals.reservation });
 }
 
 module.exports = {
@@ -151,4 +167,9 @@ module.exports = {
     reservationTimeIsDuringBusinessHours,
     asyncErrorBoundary(create),
   ],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    reservationIsNotSeated,
+    asyncErrorBoundary(update)
+  ]
 };
