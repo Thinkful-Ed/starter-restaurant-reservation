@@ -70,7 +70,7 @@ export default function SeatReservation() {
 	});
 
 	return (
-		<div>
+		<div class="container-fluid">
 			<h1>Seat Reservation</h1>
 			<ErrorAlert error={seatReservationError} />
 			<div>
@@ -103,7 +103,7 @@ export default function SeatReservation() {
 
 			<div>
 				<ErrorAlert error={tablesError} />
-				<form onSubmit={submitHandler}>
+				<form onSubmit={submitHandler} style={{ width: "300px" }}>
 					<select
 						onChange={(event) =>
 							setSelectedTable(event.target.value)
