@@ -285,7 +285,7 @@ async function list(req, res) {
 
 	if (queryData["mobile_number"]) {
 		const { mobile_number } = queryData;
-		const data = await service.list(null, mobile_number);
+		const data = await service.listByTelephoneNumber(mobile_number);
 		return res.status(200).json({ data });
 	}
 
@@ -299,9 +299,9 @@ async function list(req, res) {
 			todayDate.getMonth() + 1,
 			todayDate.getDate(),
 		].join("-");
-		data = await service.list(todayDate);
+		data = await service.listByDate(todayDate);
 	} else {
-		data = await service.list(date);
+		data = await service.listByDate(date);
 	}
 	return res.json({
 		data: data,

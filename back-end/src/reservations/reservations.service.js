@@ -4,21 +4,21 @@ const knex = require("../db/connection.js");
 
 //-------------CRUD FUNCTIONS----------------
 
-function list(reservation_date, mobile_number = null) {
-	if (mobile_number) {
-		return knex("reservations as rs")
-			.whereRaw(
-				"translate(mobile_number, '() -', '') like ?",
-				`%${mobile_number.replace(/\D/g, "")}%`
-			)
-			.orderBy("rs.reservation_date");
-	}
-
+function listByDate(reservation_date) {
 	return knex("reservations as rs")
 		.select("*")
 		.where({ reservation_date })
 		.whereNot("rs.status", "finished")
 		.orderBy("rs.reservation_time");
+}
+
+function listByTelephoneNumber(mobile_number) {
+	return knex("reservations as rs")
+		.whereRaw(
+			"translate(mobile_number, '() -', '') like ?",
+			`%${mobile_number.replace(/\D/g, "")}%`
+		)
+		.orderBy("rs.reservation_date");
 }
 
 function read(reservation_id) {
@@ -41,12 +41,11 @@ function update(data, reservation_id) {
 		.then((updatedRecords) => updatedRecords[0]);
 }
 
-function updateReservation(data,reservation_id){
-	
-}
+function updateReservation(data, reservation_id) {}
 
 module.exports = {
-	list,
+	listByDate,
+	listByTelephoneNumber,
 	create,
 	read,
 	update,
