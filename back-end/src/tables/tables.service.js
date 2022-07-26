@@ -16,7 +16,7 @@ function create (table) {
   }
 
   function setReservationId(tableId, reservationId){
-    return knex('tables').select('*').where({ table_id: tableId }).update({reservation_id: reservationId});
+    return knex('tables').select('*').where({ table_id: Number(tableId) }).update({reservation_id: Number(reservationId)});
   }
 
 module.exports = {

@@ -21,11 +21,18 @@ function create (reservation) {
       .orderBy('reservation_time')
   }
 
+  function update (reservationId){
+    return knex('reservations')
+    .where({reservation_id: reservationId})
+    .update({status: "seated"})
+  }
+
 
 
 module.exports = {
     list,
     create,
     read,
-    listByDate
+    listByDate,
+    update
 }

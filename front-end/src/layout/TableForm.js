@@ -40,10 +40,10 @@ function TableForm({ handleSubmit, handleChange, formData }) {
           className="btn btn-secondary"
           onClick={() => history.goBack()}
         >
-          <span className="oi oi-x" /> Cancel
+           Cancel
         </button>
         <button type="submit" className="btn btn-info mx-3">
-        <span className="oi oi-check" /> Submit
+         Submit
         </button>
       </form>
     </div>

@@ -6,6 +6,7 @@ exports.up = function (knex) {
     table.string("mobile_number", null).notNullable();
     table.date("reservation_date").notNullable();
     table.time("reservation_time").notNullable();
+    table.string("status").notNullable().defaultTo("booked");
     table.integer("people", null).unsigned().notNullable();
     table.timestamps(true, true);
   });

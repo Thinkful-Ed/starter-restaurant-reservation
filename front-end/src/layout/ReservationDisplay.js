@@ -1,6 +1,7 @@
 import React from "react";
 
-export default function ReservationDisplay(reservation, {seatHandler}) {
+export default function ReservationDisplay(reservation) {
+
   const {
     reservation_id,
     first_name,
@@ -9,8 +10,10 @@ export default function ReservationDisplay(reservation, {seatHandler}) {
     reservation_date,
     reservation_time,
     people,
+    status,
   } = reservation.reservation;
   return (
+    
     <tr>
       <th scope="row">{reservation_id}</th>
       <td>
@@ -20,9 +23,12 @@ export default function ReservationDisplay(reservation, {seatHandler}) {
       <td>{reservation_date}</td>
       <td>{reservation_time}</td>
       <td>{people}</td>
-      <button type="button" class="btn btn-info my-2" onClick={seatHandler}>
+      <td>{status}</td>
+      <td>
+      <a className="btn btn-info m-2" role="button" href={`/reservations/${reservation_id}/seat`}>
         Seat
-      </button>
+      </a>
+      </td>
     </tr>
   );
 }

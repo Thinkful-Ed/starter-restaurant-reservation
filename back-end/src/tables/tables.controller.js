@@ -42,6 +42,7 @@ async function isTableOpen(req, res, next) {
 
 async function tableExists(req, res, next) {
   const foundTable = await tablesService.read(req.params.tableId);
+  console.log(foundTable);
   if (foundTable) {
     res.locals.table = foundTable;
     return next();
@@ -97,6 +98,7 @@ async function list(req, res) {
 async function update(req, res, next) {
   const tableId = res.locals.table.table_id;
   const reservationId = res.locals.reservation.reservation_id;
+  console.log(tableId, reservationId);
   const updatedTable = await tablesService.setReservationId(tableId, reservationId);
   res.status(200).json({ data: updatedTable });
 }
