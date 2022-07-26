@@ -4,14 +4,16 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
+import NewRes from "../layout/NewRes";
+import { useParams } from "react-router-dom";
+//get api url from environment variables
 
-/**
- * Defines all the routes for the application.
- *
- * You will need to make changes to this file.
- *
- * @returns {JSX.Element}
- */
+
+//routes for the application
+//the dashboard is the default route
+//the 404 page is the fallback route
+//dashboard/new is the route for the create new reservation page
+//dashboard/:date is the route for the dashboard page to view reservations for a specific date
 function Routes() {
   return (
     <Switch>
@@ -23,6 +25,12 @@ function Routes() {
       </Route>
       <Route path="/dashboard">
         <Dashboard date={today()} />
+      </Route>
+      <Route path="/dashboard/:date">
+        <Dashboard date={useParams().date}/>
+      </Route>
+      <Route path="/reservations/new">
+        <NewRes/>
       </Route>
       <Route>
         <NotFound />
