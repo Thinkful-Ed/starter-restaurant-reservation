@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-const {
-	listTables,
-	readReservation,
-	updateTable,
-} = require("../utils/api");
+const { listTables, readReservation, updateTable } = require("../utils/api");
 
 export default function SeatReservation() {
 	const [tables, setTables] = useState([]);
@@ -79,7 +75,14 @@ export default function SeatReservation() {
 			<ErrorAlert error={seatReservationError} />
 			<div>
 				{reservation ? (
-					<React.Fragment>
+					<div
+						className="card"
+						style={{
+							width: "300px",
+							margin: "10px 0",
+							padding: "10px",
+						}}
+					>
 						<h3>{`ID: ${reservation.reservation_id}`}</h3>
 						<h4>{`Party of: ${reservation.people}`}</h4>
 						<h4>
@@ -90,7 +93,7 @@ export default function SeatReservation() {
 								reservation.reservation_time
 							}`}
 						</h4>
-					</React.Fragment>
+					</div>
 				) : reservationError ? (
 					<ErrorAlert error={reservationError} />
 				) : (
@@ -116,10 +119,15 @@ export default function SeatReservation() {
 						<button
 							onClick={cancelHandler}
 							className="btn btn-danger"
+							style={{ margin: "5px" }}
 						>
 							Cancel
 						</button>
-						<button type="submit" className="btn btn-primary">
+						<button
+							type="submit"
+							className="btn btn-primary"
+							style={{ margin: "5px" }}
+						>
 							Submit
 						</button>
 					</div>

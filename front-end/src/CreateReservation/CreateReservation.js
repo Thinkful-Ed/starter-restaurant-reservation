@@ -31,14 +31,24 @@ export default function CreateReservation() {
 			setReservationError(error);
 		}
 	};
-    
-    
-    console.log(reservation)
+
+	console.log(reservation);
 	return (
-		<div>
+		<div
+			style={{
+				margin: "10px",
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+			}}
+		>
 			<h1>Create Reservation</h1>
 			<ErrorAlert error={reservationError} />
-			<ReservationForm reservation={reservation} setReservation={setReservation} submitFunction={createSubmitHandler} />
+			<ReservationForm
+				reservation={reservation}
+				setReservation={setReservation}
+				submitFunction={createSubmitHandler}
+			/>
 		</div>
 	);
 }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "../ReservationsList/ReservationsList";
+import "./Search.css";
 
 export default function Search() {
 	const initPhoneNumber = { mobile_number: "" };
@@ -30,7 +31,7 @@ export default function Search() {
 	};
 
 	return (
-		<div>
+		<div className="container-fluid">
 			<h1>Search</h1>
 			<form onSubmit={findButtonHandler}>
 				<label htmlFor="mobile_number">Mobile Phone Number</label>
@@ -48,6 +49,7 @@ export default function Search() {
 						type="submit"
 						name="find"
 						className="btn btn-info"
+						style={{ margin: "0 5px", width: "100px" }}
 					>
 						Find
 					</button>
@@ -55,7 +57,9 @@ export default function Search() {
 			</form>
 			<ErrorAlert error={reservationsError} />
 			{reservations && reservations.length > 0 ? (
-				<ReservationsList reservations={reservations} />
+				<div className="card tables">
+					<ReservationsList reservations={reservations} />
+				</div>
 			) : reservations ? (
 				<h3>No reservations found</h3>
 			) : null}

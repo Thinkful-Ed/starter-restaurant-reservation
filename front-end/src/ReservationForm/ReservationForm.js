@@ -1,14 +1,17 @@
 import React from "react";
-import {useHistory} from "react-router-dom"
+import { useHistory } from "react-router-dom";
 
+export default function ReservationForm({
+	reservation,
+	setReservation,
+	submitFunction,
+}) {
+	const history = useHistory();
 
-export default function ReservationForm({reservation,setReservation,submitFunction}) {
-	const history = useHistory()
-
-	const submitHandler = (event)=>{
-		event.preventDefault()
-		submitFunction()
-	}
+	const submitHandler = (event) => {
+		event.preventDefault();
+		submitFunction();
+	};
 
 	const cancelHandler = (event) => {
 		history.goBack();
@@ -23,7 +26,7 @@ export default function ReservationForm({reservation,setReservation,submitFuncti
 		setReservation({ ...reservation, [resKey]: resValue });
 	};
 	return (
-		<div className="card">
+		<div className="card container-fluid" style={{ maxWidth: "700px" }}>
 			<div className="card-body">
 				<form onSubmit={submitHandler}>
 					<div className="mb-3">
@@ -67,7 +70,6 @@ export default function ReservationForm({reservation,setReservation,submitFuncti
 							id="mobile_number"
 							value={reservation.mobile_number}
 							placeholder="xxx-xxx-xxxx"
-							// pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
 						/>
 					</div>
 					<div className="mb-3">
@@ -84,7 +86,6 @@ export default function ReservationForm({reservation,setReservation,submitFuncti
 							className="form-control"
 							name="reservation_date"
 							id="reservation_date"
-							// min={today()}
 							value={reservation.reservation_date}
 						/>
 					</div>
@@ -126,11 +127,16 @@ export default function ReservationForm({reservation,setReservation,submitFuncti
 							type="button"
 							onClick={cancelHandler}
 							className="btn btn-danger"
+							style={{ margin: "0 5px" }}
 						>
 							Cancel
 						</button>
 
-						<button type="submit" className="btn btn-primary">
+						<button
+							type="submit"
+							className="btn btn-primary"
+							style={{ margin: "5px" }}
+						>
 							Submit
 						</button>
 					</div>
@@ -139,5 +145,3 @@ export default function ReservationForm({reservation,setReservation,submitFuncti
 		</div>
 	);
 }
-
-

@@ -6,7 +6,7 @@ import useQuery from "../utils/useQuery";
 import DashboardTablesList from "./DashboardTablesList";
 import DashboardDateNav from "./DashboardDateNav";
 import ReservationsList from "../ReservationsList/ReservationsList";
-import  "./Dashboard.css"
+import "./Dashboard.css";
 
 /**
  * Defines the dashboard page.
@@ -22,7 +22,6 @@ function Dashboard() {
 	const [date, setDate] = useState(today());
 
 	const query = useQuery();
-
 
 	useEffect(() => {
 		const queryDateCheck = query.get("date");

@@ -58,7 +58,14 @@ export default function EditReservation() {
 	};
 
 	return (
-		<div>
+		<div
+			style={{
+				margin: "10px",
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+			}}
+		>
 			<h1>Edit Reservation</h1>
 			<ErrorAlert error={reservationError} />
 			<ReservationForm

@@ -5,7 +5,7 @@ import { deleteTableReservation } from "../utils/api";
 
 export default function DashboardTablesList({ tables }) {
 	const [deletionError, setDeletionError] = useState(null);
-	const history = useHistory()
+	const history = useHistory();
 
 	const finishClickHandler = async (event) => {
 		const confirm = window.confirm(
@@ -15,8 +15,8 @@ export default function DashboardTablesList({ tables }) {
 			try {
 				const tableId = event.target.dataset.tableIdFinish;
 				const abortController = new AbortController();
-                await deleteTableReservation(tableId,abortController.signal)
-                history.go(0)
+				await deleteTableReservation(tableId, abortController.signal);
+				history.go(0);
 			} catch (error) {
 				setDeletionError(error);
 			}
@@ -38,6 +38,7 @@ export default function DashboardTablesList({ tables }) {
 							data-table-id-finish={table.table_id}
 							data-reservation-id-finish={table.reservation_id}
 							onClick={finishClickHandler}
+							className="btn btn-primary"
 						>
 							Finish
 						</button>

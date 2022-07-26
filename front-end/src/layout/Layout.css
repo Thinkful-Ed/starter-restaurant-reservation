@@ -6,6 +6,13 @@
 	align-items: center;
 }
 
-@media screen and (max-width: 997px) {
-
+@media screen and (max-width: 1075px) {
+	.body {
+		display: flex;
+		flex-direction: column;
+	}
+	.side-bar {
+		width: 100%;
+		margin-bottom: 20px;
+	}
 }
