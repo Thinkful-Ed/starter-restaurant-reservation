@@ -48,13 +48,23 @@ function NewReservation() {
     event.preventDefault();
     const abortController = new AbortController();
     const abortSignal = abortController.signal;
+    //check reservation_date is in the future, and not on a tuesday
+    let resDate = new Date(form.reservation_date);
+    let today = new Date();
+    let day = resDate.getDay();
+    if(resDate < today){
+     return setError({message:"Reservation date must be in the future! We don't serve time travelers!"});
+    }
+    if(day === 1){
+      return setError({message:"Reservations cannot be made on Tuesdays"});
+    }
     const newReservation = {
       ...form
     }
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newReservation)
+        body: {data:JSON.stringify(newReservation)}
     };
     history.push(`/dashboard?date=${newReservation.reservation_date}`);
     fetch(apiUrl + '/reservations', requestOptions)
@@ -74,6 +84,7 @@ function NewReservation() {
   return(
     <div className="NewReservation">
       <h1>New Reservation</h1>
+      <ErrorAlert error={error}/>
       <form onSubmit={create}>
         <div className="form-group">
           <label htmlFor="firstName">First Name</label>
@@ -142,6 +153,7 @@ function NewReservation() {
           />
         </div>
         <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Submit</button>
+        <button type="button" className="btn btn-secondary" onClick={() => history.goBack()}>Cancel</button>
       </form>
     </div>
   )
