@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import { useHistory } from "react-router"
 import { createReservations } from "../utils/api"
-import Form from "./Form"
+import ReservationForm from "./ReservationForm"
 
 function AddReservation(){
 
@@ -88,7 +88,7 @@ function AddReservation(){
                 </ul>
             </div>
         )}
-            <Form 
+            <ReservationForm 
                 handleSubmit = {handleSubmit}
                 handleChange = {handleChange}
                 reservationForm = {reservationForm}

@@ -41,7 +41,7 @@ function validateData(req, res, next){
   else if(day < Date.now()){
       next({
         status: 400,
-        message: "You can't make reservations for the past, buddy. Pick a date in the future."
+        message: "You can't make reservations for the past. Pick a date in the future."
       })
   }
 
@@ -107,8 +107,26 @@ function peopleIsValidNumber(req, res, next){
  
 }
 
+function reservationExists(req, res, next){
+  service.read(req.params.reservation_id)
+  .then((reservation)=>{
+      if(reservation){
+          res.locals.reservation = reservation
+          return next()
+      }
+      next({ status: 404, message: `Reservation cannot be found!`})
+  })
+  .catch(next)
+}
 
+async function read(req, res){
+  res.status(200).json({ data: res.locals.reservation })
+}
 
+async function update(req, res, next){
+  await service.update(res.locals.reservation.reservation_id)
+  res.status(200).json({ data: res.locals.reservation})
+}
 
 
 async function create(req, res){
@@ -126,7 +144,7 @@ async function create(req, res){
   //then push the newReserve into somewhere?
   const response = await service.create(newReserve)
   console.log("response: ", response)
-  res.status(201).json({ data: newReserve })
+  res.status(201).json({ data: response })
 
   // res.json({ data: await service.create(req.body.data)})
 
@@ -159,5 +177,15 @@ module.exports = {
     reservationTimeIsValid,
     peopleIsValidNumber,
     asyncErrorBoundary(create)
+  ], 
+
+  read: [
+    reservationExists,
+    asyncErrorBoundary(read)
+  ],
+
+  update: [
+    reservationExists,
+    asyncErrorBoundary(update)
   ]
 };
