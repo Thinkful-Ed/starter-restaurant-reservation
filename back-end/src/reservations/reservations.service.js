@@ -18,8 +18,24 @@ function create(res){
     .then((res)=> res[0])
 }
 
+function read(reservation_id){
+    return knex("reservations")
+    .select("*")
+    .where({reservation_id})
+    .first()
+}
+
+function update(reservationId){
+    // console.log("reservationId", reservationId)
+    // return knex("tables")
+    // .where({reservation_id: reservationId})
+    // .update({table_status: "occupied"})
+}
+
 module.exports = {
     list,
     listByDate,
-    create
+    create,
+    read,
+    update
 }

@@ -46,8 +46,8 @@ function TableForm({handleSubmitTable, handleChangeTable, tableForm}){
 
                 <div className="row">
                     <div className="col-sm">
-                        <button type="cancel" className="btn btn-secondary" onClick={()=> history.push("/")}>Cancel</button>
                         <button type="submit" className="btn btn-primary" value="submit">Submit</button>
+                        <button type="cancel" className="btn btn-secondary" onClick={()=> history.push("/reservations/new")}>Cancel</button>
                     </div>
                 </div>
             </div>
@@ -56,6 +56,8 @@ function TableForm({handleSubmitTable, handleChangeTable, tableForm}){
 
 
         </form>
+
+
         </>
     )
 }

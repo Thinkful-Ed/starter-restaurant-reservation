@@ -16,8 +16,8 @@ import TableDisplay from "../layout/TableDisplay";
  */
 
 //add default parameter of today()
-let presentDay = today()
-function Dashboard({ date = presentDay }) {
+
+function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([])
@@ -43,16 +43,16 @@ function Dashboard({ date = presentDay }) {
 
 
   function getToday(){
-    history.push(`/dashboard?date=${presentDay}`)    
+    history.push(`/dashboard`)    
   }
 
   function getYesterday(){
-    let yesterday = previous(presentDay)
+    let yesterday = previous(date)
     history.push(`/dashboard?date=${yesterday}`)    
   }
 
   function getTomorrow(){
-    let tomorrow = next(presentDay)
+    let tomorrow = next(date)
     history.push(`/dashboard?date=${tomorrow}`)    
   }
 

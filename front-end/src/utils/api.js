@@ -102,3 +102,37 @@ export async function createTables(data, signal){
   }
   return await fetchJson(url, options, data)
 }
+
+//function to get reservation information
+export async function getReservation(reservation_id, signal){
+  // console.log("asdf params:", params)
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`)
+  // Object.entries(params).forEach(([key, value]) =>
+  //   url.searchParams.append(key, value.toString())
+  // )
+  return await fetchJson(url, { headers, signal }, [])
+}
+
+//function to create a seat reservation
+export async function seatReservation(reservation_id, signal){
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/seat`);
+  const options = {
+    headers, 
+    signal,
+    method: "POST",
+    body: JSON.stringify({reservation_id})
+  }
+  return await fetchJson(url, options, reservation_id)
+}
+
+//function to update status, this url is looking for the server
+export async function statusUpdate(reservation_id, table_id, signal){
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const options = {
+    headers, 
+    signal,
+    method: "PUT",
+    body: JSON.stringify({data: {reservation_id}})
+  }
+  return await fetchJson(url, options, reservation_id)
+}
