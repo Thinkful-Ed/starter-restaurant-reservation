@@ -53,12 +53,33 @@ function NewReservation() {
     let resDate = new Date(dateCheck);
     let today = new Date();
     let day = resDate.getDay();
-    if(resDate < today){
-     return setError({message:"Reservation date must be in the future! We don't serve time travelers!"});
-    }
+    
     if(day === 1){
       return setError({message:"Reservations cannot be made on Tuesdays"});
     }
+
+    //check that time is after 10:30 am and before 9:30 pm, as well as in the future
+    let timeCheck = form.reservation_time.split(":").join("");
+    //get current time
+    let currentTime = new Date().getTime();
+    
+    console.log(timeCheck)
+    //convert currentTime to same format as timeCheck
+    currentTime = new Date(currentTime).toLocaleTimeString().split(":")
+    currentTime = currentTime[0] + currentTime[1];
+    console.log("currentTime ",currentTime);
+    if(timeCheck < 1030 || timeCheck > 2130){
+      return setError({message:"Reservation time must be between 10:30 am and 9:30 pm"});
+    }
+    // if(resTime < today){
+    //   return setError({message:"Reservation time must be in the future"});
+    // }
+    
+    if(resDate < today){
+
+      return setError({message:"Reservation day must be in the future! We don't serve time travelers!"});
+    }
+
     //ensure people is a number
     let people = parseInt(form.people);
     if(isNaN(people)){

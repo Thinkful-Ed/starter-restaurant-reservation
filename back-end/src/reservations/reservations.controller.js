@@ -90,7 +90,7 @@ async function newRes(req, res) {
 
 }
 
-function _formValidator(form){
+async function _formValidator(form){
   //internal function to validate the form data
   //returns true if the form is valid
   //returns false if the form is invalid
@@ -144,6 +144,18 @@ function _formValidator(form){
   //check that people is not a string
   if(typeof people !== "number"){
     return {isValid: false, error: "people must be a number"};
+  }
+
+  //check that the given time is not already taken
+  const reservations = await service.getAllReservations(reservation_date);
+  for(let i=0; i<reservations.length; i++){
+    let reservationTimeSplit = reservations[i].reservation_time.split(":");
+    let reservationTimeHours = reservationTimeSplit[0];
+    let reservationTimeMinutes = reservationTimeSplit[1];
+    let reservationTime = new Date(reservationTimeHours, reservationTimeMinutes);
+    if(reservationTime.getTime() === reservationTime.getTime()){
+      return {isValid: false, error: "reservation_time is already taken"};
+    }
   }
 
 
