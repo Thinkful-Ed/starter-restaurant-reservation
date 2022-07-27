@@ -62,12 +62,9 @@ function NewReservation() {
     let timeCheck = form.reservation_time.split(":").join("");
     //get current time
     let currentTime = new Date().getTime();
-    
-    console.log(timeCheck)
     //convert currentTime to same format as timeCheck
     currentTime = new Date(currentTime).toLocaleTimeString().split(":")
     currentTime = currentTime[0] + currentTime[1];
-    console.log("currentTime ",currentTime);
     if(timeCheck < 1030 || timeCheck > 2130){
       return setError({message:"Reservation time must be between 10:30 am and 9:30 pm"});
     }
