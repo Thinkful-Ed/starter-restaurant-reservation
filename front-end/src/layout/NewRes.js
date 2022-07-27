@@ -49,7 +49,8 @@ function NewReservation() {
     const abortController = new AbortController();
     const abortSignal = abortController.signal;
     //check reservation_date is in the future, and not on a tuesday
-    let resDate = new Date(form.reservation_date);
+    let dateCheck = form.reservation_date
+    let resDate = new Date(dateCheck);
     let today = new Date();
     let day = resDate.getDay();
     if(resDate < today){
@@ -58,13 +59,22 @@ function NewReservation() {
     if(day === 1){
       return setError({message:"Reservations cannot be made on Tuesdays"});
     }
-    const newReservation = {
-      ...form
+    //ensure people is a number
+    let people = parseInt(form.people);
+    if(isNaN(people)){
+      return setError({message:"People must be a number"});
     }
+      
+
+    const newReservation = {
+      ...form,
+      people
+    }
+    console.log(JSON.stringify(newReservation));
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: {data:JSON.stringify(newReservation)}
+        body: JSON.stringify({data:newReservation})
     };
     history.push(`/dashboard?date=${newReservation.reservation_date}`);
     fetch(apiUrl + '/reservations', requestOptions)

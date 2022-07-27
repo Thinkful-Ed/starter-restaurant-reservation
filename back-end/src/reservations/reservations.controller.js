@@ -9,7 +9,6 @@ async function list(req, res) {
   const date = req.query.date;
   const mobile_number = req.query.mobile_number;
   const output = await service.getAllReservations(date);
-  console.log(output);
   res.json({
     data:output
   });
@@ -19,12 +18,14 @@ async function list(req, res) {
 async function createReservation(newReservation, abortSignal) {
   //use knex to create a new reservation on the postgresql database
   //return the new reservation
-  console.log("creating reservation");
   const response = await knex("reservations")
     .insert(newReservation)
     .returning("*")
     .catch((err) => {
       console.log(err);
+      if (err.code === "22007"){
+        return { error: "reservation_date is invalid" };
+      }
     }
     );
   return response;
@@ -32,12 +33,28 @@ async function createReservation(newReservation, abortSignal) {
 }
 
 async function newRes(req, res) {
+  console.log("received")
   //send a form to create a new reservation
   //fields: firstName, lastName, phone, date, time, partySize
   //on submit, update the database with the new reservation
+  if(!req.body.data) {
+    return res.status(400).json({
+      error: "No data sent"
+    });
+  }
+  if(!req.body.data.people){
+    return res.status(400).json({
+      error: "people is required"
+    });
+  }
+  if(!req.body.data.reservation_date){
+    return res.status(400).json({
+      error: "reservation_date is required"
+    });
+  }
   let { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = req.body.data;
   console.log(req.body);
-  console.log(first_name, last_name, mobile_number, reservation_date, reservation_time, people);
+  //console.log(first_name, last_name, mobile_number, reservation_date, reservation_time, people);
   const abortController = new AbortController();
   const abortSignal = abortController.signal;
   const newReservation = {
@@ -48,27 +65,32 @@ async function newRes(req, res) {
     reservation_time,
     people,
   };
+  console.log("validating")
   let check = _formValidator(newReservation);
   if(check.isValid){
     //remove the seconds from the reservation_time
     reservation_time = reservation_time.split(":");
     reservation_time = [reservation_time[0], reservation_time[1]].join(":");
-    console.log("validated")
     const response = await createReservation(newReservation, abortSignal);
+    if(response.error){
+      return res.status(400).json({
+        error: response.error
+      });
+    }
     res.status(201);
     res.json({ data: newReservation });
     //redirect to the new reservation
   }
   else{
+    console.log(check.error);
     res.status(400);
-    res.json({ error: check.error });
+    res.json({ domain: "internal_application_error",error: check.error });
   }
   
 
 }
 
 function _formValidator(form){
-  console.log("validating");
   //internal function to validate the form data
   //returns true if the form is valid
   //returns false if the form is invalid
@@ -76,7 +98,6 @@ function _formValidator(form){
   const formMap = ["first_name", "last_name", "mobile_number", "reservation_date", "reservation_time", "people"];
   for(let i=0; i<formMap.length; i++){
     if(!form[formMap[i]]){
-      console.log("invalid");
       return {isValid: false, error: `${formMap[i]} is required`};
     }
   }
@@ -114,10 +135,15 @@ function _formValidator(form){
   else if(reservationTimeHours === 0 && reservationTimeMinutes === 0){
     return {isValid: false, error: "Invalid reservation_time"};
   }
+  
+  //check that reservation_time is a time
+  if(!reservation_time.match(/^\d{2}:\d{2}$/)){
+    return {isValid: false, error: "Invalid reservation_time"};
+  }
 
-  //check that people is a valid number
-  if(isNaN(people)){
-    return {isValid: false, error: "Invalid people"};
+  //check that people is not a string
+  if(typeof people !== "number"){
+    return {isValid: false, error: "people must be a number"};
   }
 
 
