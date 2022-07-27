@@ -165,8 +165,72 @@ async function _formValidator(form){
 
 }
 
+async function getRes(req, res) {
+  //get reservation for a given id
+  //return the reservation with 200 if it exists
+  //return 404 if it does not exist
+  console.log(req)
+  const id = req.params.reservation_id;
+  const reservation = await service.getReservation(id);
+  if(reservation){
+    res.status(200);
+    res.json({ data: reservation });
+  }
+  else{
+    res.status(404);
+    res.json({ error: "Reservation not found" });
+  }
+}
+
+async function update(req, res) {
+  //update a reservation
+  //return the reservation with 200 if it exists
+  //return 404 if it does not exist
+  const id = req.params.reservation_id
+  console.log(req.body.data);
+  const reservation = await service.getReservation(id);
+  if(reservation){
+    let { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = req.body.data;
+    const abortController = new AbortController();
+    const abortSignal = abortController.signal;
+    const newReservation = {
+      first_name,
+      last_name,
+      mobile_number,
+      reservation_date,
+      reservation_time,
+      people,
+    };
+    let check = _formValidator(newReservation);
+    if(check.isValid){
+      //remove the seconds from the reservation_time
+      reservation_time = reservation_time.split(":");
+      reservation_time = [reservation_time[0], reservation_time[1]].join(":");
+      const response = await updateReservation(id, newReservation, abortSignal);
+      if(response.error){
+        return res.status(400).json({
+          error: response.error
+        });
+      }
+      res.status(200);
+      res.json({ data: newReservation });
+    }
+    else{
+      console.log(check.error);
+      res.status(400);
+      res.json({ domain: "internal_application_error",error: check.error });
+    }
+  }
+  else{
+    res.status(404);
+    res.json({ error: "Reservation not found" });
+  }
+}
+
 
 module.exports = {
   list,
   newRes,
+  getRes,
+  update,
 };

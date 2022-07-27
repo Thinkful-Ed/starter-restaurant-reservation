@@ -27,7 +27,7 @@ function NewTable() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(form),
+            body: JSON.stringify({data:form}),
             signal: abortSignal
         });
         if (response.ok) {

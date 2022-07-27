@@ -9,6 +9,13 @@ const getAllReservations = async (date) => {
         .returning('*')
 };
 
+const getReservation= async (reservation_id) => {
+    return knex("reservations")
+    .select("*")
+    .where({ reservation_id })
+    .first();
+}
+
 const timeIsAvailable = async (time, date) => {
     return await knex("reservations")
         .select("*")
@@ -18,8 +25,18 @@ const timeIsAvailable = async (time, date) => {
         .returning('*')
 };
 
+const updateReservation = async (id, data) => {
+    return await knex("reservations")
+        .where({'reservation_id': id})
+        .update(data)
+        .returning('*')
+}
+
 
 
 module.exports = {
-    getAllReservations
+    getAllReservations,
+    getReservation,
+    timeIsAvailable,
+    updateReservation
 }

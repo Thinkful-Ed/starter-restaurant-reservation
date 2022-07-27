@@ -14,5 +14,12 @@ router
   .post(controller.newRes)
   .all(methodNotAllowed);
 
+router
+  .route("/:reservation_id")
+  .get(controller.getRes)
+  .put(controller.update)
+  //.delete(controller.delete)
+  .all(methodNotAllowed);
+
 
 module.exports = router;
