@@ -119,7 +119,7 @@ function _formValidator(form){
   }
   let day = new Date(reservation_date).getDay();
   if(day == 1){
-    return {isValid: false, error: "Date cannot be on a Tuesday"};
+    return {isValid: false, error: "The restaurant is closed on Tuesday"};
   }
 
   //check that reservation time is a valid time and is not empty
