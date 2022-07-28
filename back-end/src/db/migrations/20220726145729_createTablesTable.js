@@ -8,6 +8,7 @@ exports.up = function (knex) {
 			.inTable("reservations")
 			.onDelete("cascade");
 		table.string("table_name").notNullable();
+		table.string("table_status");
 		table.integer("capacity").notNullable();
 	});
 };

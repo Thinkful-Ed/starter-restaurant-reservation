@@ -32,7 +32,6 @@ export default function SeatReservation() {
 					reservation_id,
 					abortController.signal
 				);
-				//create readReservation function
 				setReservation(response);
 			} catch (error) {
 				setReservationError(error);
