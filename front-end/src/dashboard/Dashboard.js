@@ -5,6 +5,8 @@ import { useParams } from "react-router";
 import { useLocation } from "react-router-dom";
 import { today, next, previous } from "../utils/date-time";
 import ResCard from "../dashboard/pieces/ResCard";
+import DisplayTables from "../layout/DisplayTables";
+import { listTables } from "../utils/api";
 /**
  * Defines the dashboard page.
  * @param date
@@ -19,7 +21,7 @@ function Dashboard() {
   const [date, setDate] = useState(query.get("date") || today());
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  
+  const [tables, setTables] = useState([]);
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
@@ -33,6 +35,10 @@ function Dashboard() {
     
     listReservations({ date }, abortController.signal)
       .then(setReservations)
+      .catch(setReservationsError);
+
+    listTables(abortController.signal)
+      .then(setTables)
       .catch(setReservationsError);
     return () => abortController.abort();
   }
@@ -64,7 +70,28 @@ function Dashboard() {
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
+      <div className="d-md-flex flex-wrap">
+      <div className="col-md-6">
       {reservations.map(reservation => (  <ResCard key={reservation.id} reservation={reservation} /> ))}
+      </div>
+      <div className="col-md-6 col-lg-6 col-sm-12">
+          <div className="table-responsive">
+            <table className="table no-wrap">
+              <thead>
+                <tr>
+                  <th className="border-top-0">#</th>
+                  <th className="border-top-0">TABLE NAME</th>
+                  <th className="border-top-0">CAPACITY</th>
+                  <th className="border-top-0">FREE?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <DisplayTables tables={tables} loadDashboard={loadDashboard} />
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

@@ -19,6 +19,7 @@ describe("US-04 - Seat reservation - E2E", () => {
 
   beforeAll(async () => {
     await fsPromises.mkdir("./.screenshots", { recursive: true });
+    
     setDefaultOptions({ timeout: 1000 });
     browser = await puppeteer.launch();
   });
@@ -30,12 +31,15 @@ describe("US-04 - Seat reservation - E2E", () => {
   describe("/tables/new page", () => {
     beforeEach(async () => {
       page = await browser.newPage();
+      
       page.on("console", onPageConsole);
       await page.setViewport({ width: 1920, height: 1080 });
       await page.goto(`${baseURL}/tables/new`, { waitUntil: "networkidle0" });
     });
 
     test("filling and submitting form creates a new table", async () => {
+      jest.setTimeout(90000);
+      await page.setDefaultNavigationTimeout(100000); // disable timeout
       const tableName = `#${Date.now().toString(10)}`;
 
       await page.type("input[name=table_name]", tableName);
@@ -170,6 +174,8 @@ describe("US-04 - Seat reservation - E2E", () => {
     });
 
     test("seating reservation at table #1 makes the table occupied", async () => {
+      jest.setTimeout(90000);
+      await page.setDefaultNavigationTimeout(100000);
       await page.waitForSelector('option:not([value=""])');
 
       await page.screenshot({
@@ -186,7 +192,7 @@ describe("US-04 - Seat reservation - E2E", () => {
 
       await Promise.all([
         page.click("[type=submit]"),
-        page.waitForNavigation({ waitUntil: "networkidle0" }),
+        page.waitForNavigation({ waitUntil: "networkidle0" })
       ]);
 
       await page.screenshot({
@@ -199,6 +205,7 @@ describe("US-04 - Seat reservation - E2E", () => {
     });
 
     test("cannot seat reservation at Bar #1", async () => {
+      jest.setTimeout(90000);
         await page.waitForSelector('option:not([value=""])');
 
         await page.screenshot({
@@ -253,7 +260,7 @@ describe("US-04 - Seat reservation - E2E", () => {
         path: ".screenshots/us-04-dashboard-seat-button-before.png",
         fullPage: true,
       });
-
+      console.log(reservation)
       const hrefSelector = `[href="/reservations/${reservation.reservation_id}/seat"]`;
 
       await page.waitForSelector(hrefSelector);

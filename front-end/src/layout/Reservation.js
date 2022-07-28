@@ -4,7 +4,7 @@ import ErrorAlert from "./ErrorAlert";
 import { useEffect, useState } from "react";
 import { readReservation } from "../utils/api";
 import MapTableOptions from "./MapTableOptions";
-
+import { seatTable } from "../utils/api";
 
 function Reservation(){
     const history = useHistory();
@@ -50,13 +50,18 @@ function Reservation(){
         history.push("/dashboard");
     }
 
-    function submitHandler(e){
-        e.preventDefault();
-        console.log(reservation);
-        setReservation(resInit);
-        setTableForm(tableFormInit);
-        history.push("/dashboard");
-    }
+    async function submitHandler(event) {
+        event.preventDefault();
+        const abortController = new AbortController();
+        try {
+          setReservationError(null);
+          await seatTable(id, selectedTable, abortController.signal);
+          history.push("/dashboard");
+        } catch (error) {
+          setReservationError(error);
+          history.push("/dashboard");
+        }
+      }
 
     function changeHandler(e){
         const { value } = e.target
@@ -72,7 +77,7 @@ function Reservation(){
             <h1>Reservation</h1>
             <ErrorAlert error={reservationError}/>
             <ResCard reservation={reservation} mode={"single"}/>
-            <form onSubmit={submitHandler}>
+            <form>
         <fieldset>
           <div className="row">
             <div className="form-group col">
@@ -97,7 +102,7 @@ function Reservation(){
             <span className="oi oi-x"></span>
             &nbsp;Cancel
           </button>
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" onClick={submitHandler} className="btn btn-primary">
             <span className="oi oi-check"></span>
             &nbsp;Submit
           </button>

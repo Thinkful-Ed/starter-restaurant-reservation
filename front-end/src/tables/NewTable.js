@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link,useHistory } from 'react-router-dom';
-import { listReservations } from '../utils/api';
+import { listReservations,createTable } from '../utils/api';
 // import ErrorAlert from '../layout/ErrorAlert';
 import ErrorAlert from '../layout/ErrorAlert';
 import { useParams } from 'react-router';
@@ -18,25 +18,19 @@ function NewTable() {
     const initForm = {table_name: '', capacity: ''};
     const [error, setError] = React.useState(null);
     const [form , setForm] = React.useState(initForm)
-    async function create(event) {
+    async function submitHandler(event) {
         event.preventDefault();
+        form.capacity = parseInt(form.capacity);
         const abortController = new AbortController();
-        const abortSignal = abortController.signal;
-        const response = await fetch(`${apiUrl}/tables`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({data:form}),
-            signal: abortSignal
-        });
-        if (response.ok) {
-            history.push('/tables');
-        } else {
-            const error = await response.json();
-            setError({message:error});
+    
+        try {
+          setError(null);
+          await createTable(form, abortController.signal);
+          history.push(`/dashboard`);
+        } catch (error) {
+          setError(error);
         }
-    }
+      }
     function handleChange(event) {
         const { name, value } = event.target;
         setForm({ ...form, [name]: value });
@@ -46,14 +40,15 @@ function NewTable() {
     return(
         <div>
             <h1>New Table</h1>
-            <form onSubmit={create}>
+            <ErrorAlert error={error} />
+            <form onSubmit={submitHandler}>
                 <label>Table Name:</label>
                 <input type="text" name="table_name" value={form.table_name} onChange={handleChange}/>
                 <label>Capacity:</label>
                 <input type="number" name="capacity" value={form.capacity} onChange={handleChange}/>
                 
             </form>
-            <button type="submit" onClick={create}>Submit</button>
+            <button type="submit" onClick={submitHandler}>Submit</button>
             <button type="button" className="btn btn-secondary" onClick={() => history.goBack()}>Cancel</button>
         </div>
     )

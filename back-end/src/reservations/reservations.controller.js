@@ -25,6 +25,8 @@ async function createReservation(newReservation, abortSignal) {
       console.log(err);
       if (err.code === "22007"){
         return { error: "reservation_date is invalid" };
+      }else{
+        return { error: "internal_application_error: create", message: err.code};
       }
     }
     );
@@ -53,7 +55,7 @@ async function newRes(req, res) {
     });
   }
   let { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = req.body.data;
-  console.log(req.body);
+  
   //console.log(first_name, last_name, mobile_number, reservation_date, reservation_time, people);
   const abortController = new AbortController();
   const abortSignal = abortController.signal;
@@ -66,7 +68,7 @@ async function newRes(req, res) {
     people,
   };
   console.log("validating")
-  let check = _formValidator(newReservation);
+  let check = await _formValidator(newReservation);
   if(check.isValid){
     //remove the seconds from the reservation_time
     reservation_time = reservation_time.split(":");
@@ -78,13 +80,13 @@ async function newRes(req, res) {
       });
     }
     res.status(201);
-    res.json({ data: newReservation });
+    res.json({ data: response[0] });
     //redirect to the new reservation
   }
   else{
     console.log(check.error);
     res.status(400);
-    res.json({ domain: "internal_application_error",error: check.error });
+    res.json({ domain: "internal_application_error: newRes",error: check.error });
   }
   
 
@@ -121,7 +123,6 @@ async function _formValidator(form){
   if(day == 1){
     return {isValid: false, error: "The restaurant is closed on Tuesday"};
   }
-
   //check that reservation time is a valid time and is not empty
   const reservationTime = new Date(reservation_time);
   const reservationTimeHours = reservationTime.getHours();
@@ -140,7 +141,6 @@ async function _formValidator(form){
   if(!reservation_time.match(/^\d{2}:\d{2}$/)){
     return {isValid: false, error: "Invalid reservation_time"};
   }
-
   //check that people is not a string
   if(typeof people !== "number"){
     return {isValid: false, error: "people must be a number"};
@@ -149,18 +149,17 @@ async function _formValidator(form){
   //check that the given time is not already taken
   const reservations = await service.getAllReservations(reservation_date);
   for(let i=0; i<reservations.length; i++){
-    let reservationTimeSplit = reservations[i].reservation_time.split(":");
-    let reservationTimeHours = reservationTimeSplit[0];
-    let reservationTimeMinutes = reservationTimeSplit[1];
-    let reservationTime = new Date(reservationTimeHours, reservationTimeMinutes);
-    if(reservationTime.getTime() === reservationTime.getTime()){
+    console.log(reservations[i].reservation_time);
+    let checkTimeSplit = reservations[i].reservation_time.split(":");
+    let reservationTimeString = reservationTimeHours[0] + ":" + reservationTimeMinutes[1];
+    let checkTimeString = checkTimeSplit[0] + ":" + checkTimeSplit[1];
+    if(checkTimeString === reservationTimeString){
       return {isValid: false, error: "reservation_time is already taken"};
     }
   }
 
 
 
-  
   return {isValid:true};
 
 }
@@ -219,7 +218,7 @@ async function update(req, res) {
     else{
       console.log(check.error);
       res.status(400);
-      res.json({ domain: "internal_application_error",error: check.error });
+      res.json({ domain: "internal_application_error: update",error: check.error });
     }
   }
   else{

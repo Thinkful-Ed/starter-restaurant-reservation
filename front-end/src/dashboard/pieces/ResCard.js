@@ -19,16 +19,24 @@ function ResCard(props) {
         hour = 12;
     }
     time = hour + ":" + minute + " " + ampm;
+    function spaced(x){
+        let str = ""
+        for (let i = 0; i < x; i++) {
+            str += "&nbsp;"
+        }
+        return str
+    }
+
     return (
         <div className="card">
             <div className="card-body">
-                <h5 className="card-title">Name: {props.reservation.first_name} {props.reservation.last_name}</h5>
-                <h6 className="card-subtitle mb-2 text-muted">Phone: {props.reservation.mobile_number}</h6>
+                <h5 className="card-title">Name:&nbsp;{props.reservation.first_name} {props.reservation.last_name}</h5>
+                <h6 className="card-subtitle mb-2 text-muted">Phone:&nbsp;{props.reservation.mobile_number}</h6>
                 <p className="card-text">{props.reservation.message}</p>
-                <p className="card-text">Time:  {time}</p>
-                <p className="card-text">Date:  {props.reservation.reservation_date}</p>
-                <p className="card-text">Status:{props.reservation.status}</p>
-                <p className="card-text">Party Size: {props.reservation.people}</p>
+                <p className="card-text">Time:&nbsp;{time}</p>
+                <p className="card-text">Date:&nbsp;{props.reservation.reservation_date}</p>
+                <p className="card-text">Status:&nbsp;{props.reservation.status}</p>
+                <p className="card-text">Party Size:&nbsp;{props.reservation.people}</p>
                 {mode === "single" ? 
                 (
                 <></>

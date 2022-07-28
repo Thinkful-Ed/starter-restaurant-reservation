@@ -7,6 +7,7 @@ const getAllReservations = async (date) => {
         .where({'reservation_date': date})
         .orderBy('reservation_time')
         .returning('*')
+        .catch(err => console.log(err));
 };
 
 const getReservation= async (reservation_id) => {
