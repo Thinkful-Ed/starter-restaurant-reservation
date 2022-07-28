@@ -1,9 +1,9 @@
 import React from "react";
-
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
+
 
 /**
  * Defines all the routes for the application.
@@ -12,7 +12,7 @@ import { today } from "../utils/date-time";
  *
  * @returns {JSX.Element}
  */
-function Routes() {
+ function Routes() {
   return (
     <Switch>
       <Route exact={true} path="/">
