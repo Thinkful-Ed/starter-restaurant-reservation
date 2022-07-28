@@ -51,9 +51,9 @@ function NewTable() {
                 <input type="text" name="table_name" value={form.table_name} onChange={handleChange}/>
                 <label>Capacity:</label>
                 <input type="number" name="capacity" value={form.capacity} onChange={handleChange}/>
-                <input type="submit"/>
+                
             </form>
-            
+            <button type="submit" onClick={create}>Submit</button>
             <button type="button" className="btn btn-secondary" onClick={() => history.goBack()}>Cancel</button>
         </div>
     )

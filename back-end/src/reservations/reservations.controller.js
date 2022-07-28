@@ -169,12 +169,13 @@ async function getRes(req, res) {
   //get reservation for a given id
   //return the reservation with 200 if it exists
   //return 404 if it does not exist
-  console.log(req)
   const id = req.params.reservation_id;
   const reservation = await service.getReservation(id);
   if(reservation){
     res.status(200);
-    res.json({ data: reservation });
+    let response = { data: reservation }
+    console.log(response)
+    res.json(response);
   }
   else{
     res.status(404);

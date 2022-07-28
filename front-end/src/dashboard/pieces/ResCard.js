@@ -1,11 +1,12 @@
 
-
+import {Link} from 'react-router-dom';
 
 
 
 function ResCard(props) {
+    let mode = props.mode;
+    console.log(mode)
     let time = props.reservation.reservation_time;
-
     let timeSplit = time.split(":");
     let hour = timeSplit[0];
     let minute = timeSplit[1];
@@ -28,6 +29,15 @@ function ResCard(props) {
                 <p className="card-text">Date:  {props.reservation.reservation_date}</p>
                 <p className="card-text">Status:{props.reservation.status}</p>
                 <p className="card-text">Party Size: {props.reservation.people}</p>
+                {mode === "single" ? 
+                (
+                <></>
+                )
+                 : 
+                 (
+                    <Link to={`/reservations/${props.reservation.reservation_id}/seat`}><button className="btn btn-primary" href={`/reservations/${props.reservation.reservation_id}/seat`}>Seat</button></Link>
+                 )}
+                
             </div>
         </div>
     )
