@@ -13,7 +13,6 @@ export default function ReservationsTable({reservations}) {
           <td>{reservation.people}</td>
           <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
           <td>
-          {reservation.status === "booked" ? (
         <a
           className="btn btn-secondary"
           role="button"
@@ -21,7 +20,6 @@ export default function ReservationsTable({reservations}) {
         >
           Seat
         </a>
-      ) : null}
           </td>
           </tr>
       );
