@@ -104,7 +104,7 @@ async function tableIsFree(req, res, next) {
     status: 200,
     message: `table_id is occupied`,
   });
-  }
+}
 
 async function tableIsOccupied(req, res, next) {
   const table_id = req.params.table_id;
@@ -137,9 +137,9 @@ async function update(req, res) {
 }
 
 async function deleteTableReservation(req, res) {
-  const table_id = req.params.table_id;
-  const deletedTable = await tablesService.deleteTableReservation(table_id);
-  res.status(200).json({ data: deletedTable });
+	const { table_id } = req.params;
+	const response = await tablesService.deleteTableReservation(table_id)
+	res.status(200).json({data:response})
 }
 
 module.exports = {
