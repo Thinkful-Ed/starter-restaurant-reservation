@@ -88,7 +88,7 @@ function Dashboard({ date }) {
         </thead>
         <tbody>
           {reservations.map((reservation) => {
-            return <ReservationDisplay reservation={reservation} key={reservation.id} />;
+            return <ReservationDisplay reservation={reservation} key={reservation.reservation_id} />;
           })}
         </tbody>
       </table>
@@ -106,7 +106,7 @@ function Dashboard({ date }) {
         </thead>
         <tbody>
         {tables.map((table) => {
-            return <TableDisplay table={table} key={table.id}  />;
+            return <TableDisplay table={table} key={table.table_id} loadDashboard={loadDashboard} />;
           })}
         </tbody>
       </table>

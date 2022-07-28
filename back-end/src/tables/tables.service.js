@@ -15,13 +15,22 @@ function create (table) {
     return knex('tables').select('*').where({ table_id: tableId }).first();
   }
 
+  function destroy(tableId, reservationId){
+    return knex("tables").where({ table_id: tableId }).update({reservation_id: null})
+    .then(() => 
+    knex('reservations').where({ reservation_id: reservationId }).update({status: 'finished'}));
+}
+
   function setReservationId(tableId, reservationId){
-    return knex('tables').select('*').where({ table_id: Number(tableId) }).update({reservation_id: Number(reservationId)});
+    return knex('tables').select('*').where({ table_id: Number(tableId) }).update({reservation_id: Number(reservationId)})
+    .then(() => 
+    knex('reservations').where({ reservation_id: reservationId }).update({status: 'seated'}));
   }
 
 module.exports = {
     list,
     create,
     read,
-    setReservationId
+    setReservationId,
+    destroy
 }

@@ -12,6 +12,7 @@ export default function ReservationDisplay(reservation) {
     people,
     status,
   } = reservation.reservation;
+  if(status === "booked"){
   return (
     
     <tr>
@@ -23,7 +24,7 @@ export default function ReservationDisplay(reservation) {
       <td>{reservation_date}</td>
       <td>{reservation_time}</td>
       <td>{people}</td>
-      <td>{status}</td>
+      <td data-reservation-id-status={reservation_id}>{status}</td>
       <td>
       <a className="btn btn-info m-2" role="button" href={`/reservations/${reservation_id}/seat`}>
         Seat
@@ -31,4 +32,21 @@ export default function ReservationDisplay(reservation) {
       </td>
     </tr>
   );
+  }
+  else {
+    return (
+    
+      <tr>
+        <th scope="row">{reservation_id}</th>
+        <td>
+          {first_name} {last_name}
+        </td>
+        <td>{mobile_number}</td>
+        <td>{reservation_date}</td>
+        <td>{reservation_time}</td>
+        <td>{people}</td>
+        <td data-reservation-id-status={reservation_id}>{status}</td>
+      </tr>
+    );
+  }
 }

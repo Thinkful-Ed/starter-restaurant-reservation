@@ -3,7 +3,6 @@ import { useParams, useHistory } from "react-router-dom";
 import {
   readReservation,
   listTables,
-  seatReservation,
   seatTable,
 } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -43,10 +42,10 @@ function SeatReservation() {
   function submitHandler(e) {
     e.preventDefault();
     const abortController = new AbortController();
-    seatReservation(reservation_id, abortController.signal)
-      .then(() =>
-        seatTable(currentTable, reservation_id, abortController.signal)
-      )
+    seatTable(currentTable, reservation_id, abortController.signal)
+      // .then(() =>
+      // seatReservation(reservation_id, abortController.signal)
+      // )
       .then(() => history.push("/dashboard"));
   }
 
