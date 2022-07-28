@@ -1,7 +1,3 @@
-/**
- * List handler for reservation resources
-*/
-
 const reservationsService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/requiredProperties");
@@ -89,6 +85,20 @@ function isWithinValidHours(req, res, next) {
   next();
 }
 
+async function validateReservationId(req, res, next) {
+	const { reservation_Id } = req.params;
+	const reservation = await service.read(reservation_Id);
+	if (!reservation) {
+		return next({
+			status: 404,
+			message: `Reservation ID: ${reservation_Id} - Not Found`,
+		});
+	} else {
+		res.locals.reservation = reservation;
+		return next();
+	}
+}
+
 async function list(req, res, next) {
   const { date, currentDate } = req.query;
   if(date) {
@@ -108,6 +118,11 @@ async function create(req, res, next) {
   reservation.reservation_id = reservation_id;
   res.status(201).json({ data: reservation });
 }
+
+async function read(req, res, next) {
+	const responseData = res.locals.reservation;
+	res.status(200).json({ data: responseData });
+}
  
 module.exports = {
   list: asyncErrorBoundary(list),
@@ -121,4 +136,6 @@ module.exports = {
           isWithinValidHours,
         asyncErrorBoundary(create)
       ],
+  read: [validateReservationId, 
+          asyncErrorBoundary(read)],
 };
