@@ -1,4 +1,141 @@
-.side-bar {
+/* .side-bar {
   background-color: #393a44;
   min-width: 200px;
+} */
+
+
+.navbar.main-navbar {
+  min-width: 200px;
+  background-color: #415280;
+  /* background-color: #FFDC82; */
+  /* background-color: #e6c8c6; cherubic hex code  */
+}
+
+body {
+  overflow-x: hidden;
+  color: aliceblue;
+  background-size: 400px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.header-logo {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 100px;
+  text-align: center;
+  color: #e7e7e7;
+  line-height: 50%;
+  margin-bottom: 50px;
+  margin-top: 120px;
+  padding-top: 28px;
+  text-shadow: 0 .5rem 1rem rgba(0, 0, 0, .40);
+}
+
+.padded {
+  padding: 20px;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+.card-main {
+  background-color: #6495ED;
+  border-radius: 1.25rem;
+  box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .30);
+  max-width: 600px;
+}
+
+.card-text {
+  color: rgb(231, 224, 224);
+}
+
+.plus-button {
+  right: 10px;
+  position: absolute;
+  top: 10px;
+}
+
+.nav-link {
+  color: #2aa198 !important;
+  padding: 0;
+}
+
+.card-body {
+  background-color: #39575d;
+  border: #1f424b;
+}
+
+.card-header {
+  background-color: #2d4f57;
+  border: #1f424b;
+}
+
+/* .btn-success {
+  background-color: #2aa198;
+  border: #2aa198;
+}
+
+.btn-primary  {
+  background-color: #b58900;
+  border: #b58900;
+} */
+
+.btn-secondary {
+  background-color: #ffdc82;
+  border: #ffdc82;
+  color: #212940;
+}
+
+.btn-success {
+  color: #212940;
+}
+.btn-primary  {
+  color: #212940;
+}
+
+.form-control {
+  background-color: #c3d3d3;
+}
+
+.dark-bg {
+  background-color: #39575d;
+}
+
+.card {
+  background-color: #1f424b;
+}
+
+/* .btn-secondary {
+  background-color: #839496;
+} */
+
+.form-select {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+  color: #073642;
+  background-color: #a9bdbd;
+}
+
+.white-text {
+  color: white !important
+}
+
+.alert-danger {
+  background-color: #d33682;
+  border: none;
+  color: #fff;
+}
+
+@media all and (min-width: 950px) {
+  .logo {
+      margin-right: 200px;
+  }
+}
+
+@media all and (max-width: 550px) {
+  .header-logo {
+      font-size: 18.9vw;
+  }
 }

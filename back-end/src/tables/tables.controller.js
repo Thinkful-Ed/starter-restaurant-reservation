@@ -50,6 +50,7 @@ function validateData(req, res, next){
 }
 
 async function reservationIdExists(req, res, next){
+    console.log("asdf1")
     const reservation = await service.readReservationId(req.body.data.reservation_id)
     console.log("reservertioniddidid: ", req.body.data.reservation_id)
     console.log("reserzervation:", reservation)
@@ -122,6 +123,16 @@ async function update(req, res){
     res.status(200).json({ data: reservation_id})
 }
 
+//destroy something
+function destroy(req, res, next){
+    console.log("helloback")  // this is working
+    // service.destroy(req.params.table_id)
+    // .then(()=> res.sendStatus(200))
+    // // const deletedTable = await service.delete(table_id)
+    // //res.status(200).json({ data: deletedtable})
+    // .catch(next)
+}
+
 module.exports = {
     list,
     create:[
@@ -141,5 +152,10 @@ module.exports = {
         tableExists,
         asyncErrorBoundary(update)
         
+    ],
+    delete:[
+        reservationIdExists,
+        asyncErrorBoundary(destroy)
     ]
+    
 }

@@ -9,7 +9,7 @@ function ReservationIdSeat(){
     const [allTables, setAllTables] = useState([])
     const [tableId, setTableId] = useState(null)
     const [currentReservation, setCurrentReservation] = useState(null)
-    const [tableCapacity, setTableCapacity] = useState([])
+
 
     // console.log("params: ", params.reservation_id)
 
@@ -29,16 +29,16 @@ function ReservationIdSeat(){
 
 
     // console.log("current rezz", currentReservation)
-let tableCapacities = {}
+// let tableCapacities = {}
 
     useEffect(()=>{
         const getTables = async () =>{
             try{
                 const getAllTables = await listTables(params.reservation_id)
                 // console.log("getAllTables: ", getAllTables)
-                getAllTables.map((eachTable)=>{
-                    tableCapacities[eachTable.table_id] = eachTable.capacity
-                })
+                // getAllTables.map((eachTable)=>{
+                //     tableCapacities[eachTable.table_id] = eachTable.capacity
+                // })
                 // console.log("tableCapacities", tableCapacities)
                 setAllTables(getAllTables)
             }catch(e){
