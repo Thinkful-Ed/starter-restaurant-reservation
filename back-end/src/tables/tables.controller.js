@@ -100,10 +100,10 @@ async function tableIsFree(req, res, next) {
   if (!table.reservation_id) {
     return next();
   }
-    next({
-      status: 400,
-      message: `table_id is occupied`,
-    });
+  next({
+    status: 200,
+    message: `table_id is occupied`,
+  });
   }
 
 async function tableIsOccupied(req, res, next) {
@@ -121,20 +121,20 @@ async function tableIsOccupied(req, res, next) {
 async function list(req, res) {
     const data = await tablesService.list();
     res.json({ data });
-  }
+}
 
 async function create(req, res) {
     const table = req.body.data;
     const data = await tablesService.create(table);
     res.status(201).json({ data });
-  }
+}
 
-  async function update(req, res) {
+async function update(req, res) {
   const { reservation_id } = req.body.data;
   const { table_id } = req.params;
   await tablesService.update(reservation_id, table_id);
   res.status(200).json({ data: reservation_id });
-  }
+}
 
 async function deleteTableReservation(req, res) {
   const table_id = req.params.table_id;
