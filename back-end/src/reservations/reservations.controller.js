@@ -87,7 +87,7 @@ function isWithinValidHours(req, res, next) {
 
 async function validateReservationId(req, res, next) {
 	const { reservation_Id } = req.params;
-	const reservation = await service.read(reservation_Id);
+	const reservation = await reservationsService.read(reservation_Id);
 	if (!reservation) {
 		return next({
 			status: 404,

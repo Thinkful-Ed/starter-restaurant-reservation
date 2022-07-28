@@ -114,17 +114,16 @@
  //   return await fetchJson(url, options, []);
  // }
  
- export async function updateTableOnceSeated(reservation_id, table_id, signal) {
-   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
-   // console.log(reservation_id, table_id)
-   const options = {
-     headers,
-     signal,
-     method: "PUT",
-     body: JSON.stringify({ data: {reservation_id} }),
-   };
-   return await fetchJson(url, options, []);
- }
+ export async function updateTable(table_id,data,signal){
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const options = {
+    headers,
+    signal:signal,
+    method: "PUT",
+    body: JSON.stringify(data)
+  }
+  return await fetchJson(url,options,[])
+}
  
  
  
