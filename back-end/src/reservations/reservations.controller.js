@@ -16,6 +16,7 @@ const REQUIRED_PROPERTIES = [
   "reservation_date",
   "reservation_time",
   "people",
+  "status",
 ]
 
 const hasRequiredProperties = hasProperties(...REQUIRED_PROPERTIES);
