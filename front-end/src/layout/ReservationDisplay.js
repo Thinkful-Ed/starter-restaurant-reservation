@@ -5,23 +5,26 @@ export default function ReservationDisplay({ onCancel, reservations = []}){
     const rows = reservations.length ? (
         reservations.map((reservation) => {
             // const {reservation_id, first_name, last_name, mobile_number, reservation_date, reservation_time, people, status } = reservation;
-            return (
-                <tr key={reservation.reservation_id}>
-                <td>{reservation.reservation_id}</td>
-                <td>{reservation.first_name}</td>
-                <td>{reservation.last_name}</td>
-                <td>{reservation.mobile_number}</td>
-                <td>{reservation.reservation_date}</td>
-                <td>{reservation.reservation_time}</td>
-                <td>{reservation.people}</td>
-                <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
-                <ReservationButtons 
-                    status={reservation.status}
-                    reservation_id={reservation.reservation_id}
-                    onCancel={onCancel}
-                />
-            </tr>
-            )
+            if (reservation.status !== "finished"){
+                return (
+                    <tr key={reservation.reservation_id}>
+                    <td>{reservation.reservation_id}</td>
+                    <td>{reservation.first_name}</td>
+                    <td>{reservation.last_name}</td>
+                    <td>{reservation.mobile_number}</td>
+                    <td>{reservation.reservation_date}</td>
+                    <td>{reservation.reservation_time}</td>
+                    <td>{reservation.people}</td>
+                    
+                    <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
+                    <ReservationButtons 
+                        status={reservation.status}
+                        reservation_id={reservation.reservation_id}
+                        onCancel={onCancel}
+                    />
+                </tr>
+                )
+            }
         })
     ) : (
         <tr>

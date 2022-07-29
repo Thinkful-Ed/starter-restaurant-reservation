@@ -114,7 +114,7 @@ function reservationExists(req, res, next){
           res.locals.reservation = reservation
           return next()
       }
-      next({ status: 404, message: `Reservation cannot be found!`})
+      next({ status: 404, message: `Reservation ID: ${req.params.reservation_id} cannot be found!`})
   })
   .catch(next)
 }
@@ -123,10 +123,10 @@ async function read(req, res){
   res.status(200).json({ data: res.locals.reservation })
 }
 
-async function update(req, res, next){
-  await service.update(res.locals.reservation.reservation_id)
-  res.status(200).json({ data: res.locals.reservation})
-}
+// async function update(req, res, next){
+//   await service.update(res.locals.reservation.reservation_id)
+//   res.status(200).json({ data: res.locals.reservation})
+// }
 
 
 async function create(req, res){
@@ -143,8 +143,13 @@ async function create(req, res){
   console.log("You did it! Great job!")
   //then push the newReserve into somewhere?
   const response = await service.create(newReserve)
-  console.log("response: ", response)
-  res.status(201).json({ data: response })
+  console.log("responseasdf: ", response)
+  if (response.status == "booked" || response.status == "finished"){
+    res.status(400).json({ data: response})
+  }else{
+    res.status(201).json({ data: response })
+  } 
+  // res.status(201).json({ data: response })
 
   // res.json({ data: await service.create(req.body.data)})
 
@@ -160,6 +165,12 @@ async function create(req, res){
 //  .catch(next)
   // res.send({ data: "hello from the server"})
   
+}
+
+async function finish(req, res, next){
+  const reservation_id = req.params.reservation_id
+  await service.changeToFinished(reservation_id)
+  res.status(200).json({ data: { status: "<new-status>"} })
 }
 
 module.exports = {
@@ -186,6 +197,9 @@ module.exports = {
 
   update: [
     reservationExists,
-    asyncErrorBoundary(update)
-  ]
+    // asyncErrorBoundary(update)
+    asyncErrorBoundary(finish)
+  ],
+
+
 };

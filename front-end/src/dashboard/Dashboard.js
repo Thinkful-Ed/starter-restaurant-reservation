@@ -55,7 +55,7 @@ function Dashboard({ date }) {
     removeReservation(table_id, reservation_id).then(loadDashboard).catch(setTablesError);
   }
 
-  function onCancel({reservation_id}) {
+  function onCancel(reservation_id) {
     const abortController = new AbortController();
     cancelReservation(reservation_id, abortController.signal).then(loadDashboard).catch(setReservationsError)
   };

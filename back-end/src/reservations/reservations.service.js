@@ -25,17 +25,24 @@ function read(reservation_id){
     .first()
 }
 
-function update(reservationId){
-    // console.log("reservationId", reservationId)
-    // return knex("tables")
-    // .where({reservation_id: reservationId})
-    // .update({table_status: "occupied"})
+function changeToFinished(reservation_id){
+    return knex("reservations")
+    .where({reservation_id})
+    .update({status: "finished"})
 }
+
+// function update(reservationId){
+//     // console.log("reservationId", reservationId)
+//     // return knex("tables")
+//     // .where({reservation_id: reservationId})
+//     // .update({table_status: "occupied"})
+// }
 
 module.exports = {
     list,
     listByDate,
     create,
     read,
-    update
+    changeToFinished
+    // update
 }
