@@ -48,10 +48,9 @@ export default function SeatReservation() {
 
     const submitHandler = async (event) =>{
         event.preventDefault();
-        const data = {reservation_id}
         try{
             const abortController = new AbortController();
-            await updateTable(selectedTable,{data},abortController.signal);
+            await updateTable(reservation_id, selectedTable, abortController.signal);
             history.push("/dashboard")
             
         }catch(error){
