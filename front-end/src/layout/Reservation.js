@@ -7,66 +7,58 @@ import MapTableOptions from "./MapTableOptions";
 import { seatTable } from "../utils/api";
 
 function Reservation(){
-    const history = useHistory();
-    const id = useParams().reservation_id;
-    console.log(id)
-    const resInit = {
-        reservation_id: id,
-        first_name: "",
-        last_name: "",
-        mobile_number: "",
-        reservation_date: "",
-        reservation_time: "",
-        people: "",
-        status: ""
+    const initialReservation = {
+        first_name: "Loading...",
+        last_name: "Loading...",
+        reservation_time: "Loading...",
+        reservation_date: "Loading...",
+        people: "Loading...",
+        status: "Loading...",
     }
 
-    const tableFormInit = {
-        table_name: "",
-    }
-    const [reservation, setReservation] = useState(resInit);
+
+
+    const { reservation_id } = useParams();
+    const [reservation, setReservation] = useState(initialReservation);
     const [reservationError, setReservationError] = useState(null);
-    const [tableForm, setTableForm] = useState(false);
-    const [selectedTable, setSelectedTable] = useState(null);
-
+    const [selectedTableId, setSelectedTableId] = useState(3);
+    const history = useHistory();
+  
     useEffect(() => {
-        const abortController = new AbortController();
-        const checkReservation = async () => {
-          try {
-            await readReservation(id, abortController.signal).then(
-              setReservation
-            );
-          } catch (error) {
-            setReservationError(error);
-          }
-        };
-        checkReservation();
-        return () => abortController.abort;
-      }, [reservationError, id]);
-
-    function cancelHandler(){
-        setReservation(resInit);
-        setTableForm(tableFormInit);
-        history.push("/dashboard");
-    }
-
-    async function submitHandler(event) {
-        event.preventDefault();
-        const abortController = new AbortController();
+      const abortController = new AbortController();
+      const checkReservation = async () => {
         try {
-          setReservationError(null);
-          await seatTable(id, selectedTable, abortController.signal);
-          history.push("/dashboard");
+          await readReservation(reservation_id, abortController.signal).then(
+            setReservation
+          );
         } catch (error) {
           setReservationError(error);
-          history.push("/dashboard");
         }
-      }
-
-    function changeHandler(e){
-        const { value } = e.target
-        setSelectedTable(value);
+      };
+      checkReservation();
+      return () => abortController.abort;
+    }, [reservationError, reservation_id]);
+  
+    function cancelHandler() {
+      history.goBack();
     }
+  
+    async function submitHandler(event) {
+      event.preventDefault();
+      const abortController = new AbortController();
+      try {
+        setReservationError(null);
+        await seatTable(reservation_id, selectedTableId, abortController.signal);
+        history.push("/dashboard");
+      } catch (error) {
+        setReservationError(error);
+      }
+    }
+  
+    function changeHandler({ target }) {
+      setSelectedTableId(Number(target.value));
+    }
+  
 
     //table form will be a select box with all the tables
 

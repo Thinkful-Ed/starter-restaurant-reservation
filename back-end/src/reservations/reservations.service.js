@@ -1,43 +1,46 @@
 const knex = require("../db/connection");
 
-const getAllReservations = async (date) => {
-    return await knex("reservations")
-        .select("*")
-        .whereNot('status', 'finished')
-        .where({'reservation_date': date})
-        .orderBy('reservation_time')
-        .returning('*')
-        .catch(err => console.log(err));
-};
-
-const getReservation= async (reservation_id) => {
-    return knex("reservations")
+async function list(date) {
+  return knex("reservations")
     .select("*")
-    .where({ reservation_id })
-    .first();
+    .where({ reservation_date: date })
+    .whereNot("reservations.status", "finished")
+    .whereNot("reservations.status", "cancelled")
+    .orderBy("reservation_time", "asc");
 }
 
-const timeIsAvailable = async (time, date) => {
-    return await knex("reservations")
-        .select("*")
-        .where({'reservation_date': date})
-        .where({'reservation_time': time})
-        .whereNot('status', 'finished')
-        .returning('*')
-};
-
-const updateReservation = async (id, data) => {
-    return await knex("reservations")
-        .where({'reservation_id': id})
-        .update(data)
-        .returning('*')
+async function create(reservation) {
+  return knex("reservations")
+    .insert(reservation)
+    .returning("*")
+    .then((createdRecords) => createdRecords[0]);
 }
 
+async function read(reservation_id) {
+  return knex("reservations").select("*").where({ reservation_id }).first();
+}
 
+async function update(updatedReservation, reservationId) {
+  return knex("reservations")
+    .select("*")
+    .where({ reservation_id: reservationId })
+    .update(updatedReservation, "*")
+    .then((createdRecords) => createdRecords[0]);
+}
+
+function search(mobile_number) {
+  return knex("reservations")
+    .whereRaw(
+      "translate(mobile_number, '() -', '') like ?",
+      `%${mobile_number.replace(/\D/g, "")}%`
+    )
+    .orderBy("reservation_date");
+}
 
 module.exports = {
-    getAllReservations,
-    getReservation,
-    timeIsAvailable,
-    updateReservation
-}
+  list,
+  create,
+  read,
+  update,
+  search,
+};
