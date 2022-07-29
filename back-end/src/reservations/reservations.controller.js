@@ -100,6 +100,22 @@ async function validateReservationId(req, res, next) {
 	}
 }
 
+function verifyStatus(req, res, next){
+	const validStatusList = ["booked","seated","finished"]
+	const {status} = req.body.data
+
+	const bodyStatus = res.locals.reservation.status
+	if (!validStatusList.includes(status)){
+		return next({status:400,message:`Status:${status} is not valid`})
+	}
+	if (bodyStatus === "finished"){
+		return next({status:400,message:`Cannot change status from finished.`})
+	}
+	return next()
+}
+
+//CRUD Functions
+
 async function list(req, res, next) {
   const { date, currentDate } = req.query;
   if(date) {
@@ -124,6 +140,14 @@ async function read(req, res, next) {
 	const responseData = res.locals.reservation;
 	res.status(200).json({ data: responseData });
 }
+
+async function updateStatus(req,res,next){
+	const currentData = res.locals.reservation
+	const updatedStatus = req.body.data
+	const updatedReservation = {...currentData,...updatedStatus}
+	const response = await service.updateStatus(updatedReservation,updatedReservation.reservation_id)
+	res.status(200).json({data:response})
+}
  
 module.exports = {
   list: asyncErrorBoundary(list),
@@ -139,4 +163,7 @@ module.exports = {
       ],
   read: [validateReservationId, 
           asyncErrorBoundary(read)],
+  updateStatus: [validateReservationId,
+          verifyStatus,
+          asyncErrorBoundary(updateStatus)],
 };
