@@ -8,6 +8,8 @@ import AddReservation from "./AddReservation";
 import useQuery from "../utils/useQuery"
 import AddTable from "./AddTable";
 import ReservationIdSeat from "./ReservationIdSeat";
+import Search from "./Search/SearchDisplay";
+
 
 /**
  * Defines all the routes for the application.
@@ -30,6 +32,10 @@ function Routes() {
     <Switch>
       <Route exact={true} path="/">
         <Redirect to={"/dashboard"} />
+      </Route>
+
+      <Route path="/search">
+        <Search />
       </Route>
 
       <Route path="/reservations/:reservation_id/seat">

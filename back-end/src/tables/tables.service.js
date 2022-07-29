@@ -41,11 +41,21 @@ function update(table_id, reservation_id){
     )
 }
 
+function removeReservation(table_id, reservation_id){
+    return knex("tables")
+    .where({table_id})
+    // .select("reservation_id")
+    .update({reservation_id: null})
+    .then(()=>knex("reservations").where({ reservation_id }).update({ status: "finished"}))
+}
+
+
 module.exports = {
     list,
     listTablesAndReservationId,
     create,
     read,
     readReservationId,
-    update
+    update,
+    removeReservation
 }

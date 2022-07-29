@@ -113,7 +113,7 @@ function ReservationForm({handleSubmit, handleChange, reservationForm, noPastDat
                 </div> 
             <div className="row">
                 <div className="col-sm">
-                    <button type="button" className="btn btn-secondary" onClick={()=> history.push("/reservations/new")}>Cancel</button>
+                    <button type="button" className="btn btn-secondary" onClick={()=> history.push("/")}>Cancel</button>
                     <button type="submit" className="btn btn-primary" value="submit">Submit</button>
                 </div>
                 
