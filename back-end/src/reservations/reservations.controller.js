@@ -114,6 +114,14 @@ function verifyStatus(req, res, next){
 	return next()
 }
 
+function checkIfBooked(req,res,next){
+  const {status} = req.body.data
+  if (status === "booked"){
+    return next()
+  }
+  return next({status:400,message:`Status cannot be ${status}`})
+}
+
 //CRUD Functions
 
 async function list(req, res, next) {
@@ -159,6 +167,7 @@ module.exports = {
           isNotOnTuesday,
           isInTheFuture,  
           isWithinValidHours,
+          checkIfBooked,
         asyncErrorBoundary(create)
       ],
   read: [validateReservationId, 
