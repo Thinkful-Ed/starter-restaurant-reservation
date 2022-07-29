@@ -10,7 +10,6 @@ const timeFormat = /\d\d:\d\d/;
  * List handler for reservation resources
  */
 async function list(req, res) {
-  // // console.log("req qwuery", req.query.date)
   const {date} = req.query
   // // console.log("dateasdfasdf: ", date)
   // const currentDate = await service.list()
@@ -25,12 +24,77 @@ async function list(req, res) {
   res.json({data})
 }
 
-//validate data
+
+async function read(req, res){
+  res.status(200).json({ data: res.locals.reservation })
+}
+
+// async function update(req, res, next){
+//   await service.update(res.locals.reservation.reservation_id)
+//   res.status(200).json({ data: res.locals.reservation})
+// }
+
+
+async function create(req, res){
+  const {data: { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = {} } = req.body
+
+  const newReserve = {
+    first_name,
+    last_name,
+    mobile_number,
+    reservation_date,
+    reservation_time,
+    people
+  }
+  const response = await service.create(newReserve)
+  // console.log("responseStat: ", response.status)
+  // if (response.status == "booked"){
+  //   res.status(201).json({ data: response })  
+  // } else if (response.status == "seated"){
+  //   res.status(400).json({ data: response })  
+  // }
+  // else {
+  //   res.status(400).json({ data: response })  
+  // }
+  res.status(201).json({ data: response })
+
+  // res.json({ data: await service.create(req.body.data)})
+  
+}
+
+// async function finish(req, res, next){
+//   const reservation_id = req.params.reservation_id
+//   await service.changeToFinished(reservation_id)
+//   const result = await service.read(reservation_id)
+//   // console.log("asdfasdfasdf", result)
+//   res.status(200).json({ data: { status: result.status} })
+// }
+
+async function update(req, res, next){
+  const reservation_id = req.params.reservation_id
+  const {status} = req.body.data
+  await service.update(reservation_id, status )
+  const result = await service.read(reservation_id)
+
+  res.status(200).json({ data: { status: result.status} })
+}
+
+async function getReservationByPhone(req, res, next){
+  console.log("hello") 
+}
+
+
+//-------------------------- validation stuff
 function validateData(req, res, next){
-  const {reservation_time, reservation_date} = req.body.data
+  const {reservation_time, reservation_date, status} = req.body.data
   // let reserv_time = data["reservation_time"]
   let day = new Date(`${reservation_date} ${reservation_time}`)
-  
+  if (status === "seated" || status === "finished"){
+    next({
+      status: 400,
+      message: "Cannot be seated or finished"
+    })
+  }
   if (day.getDay() === 2) {
     next({
       status: 400,
@@ -46,19 +110,6 @@ function validateData(req, res, next){
   }
 
   next()
-
-  //check if there are any violations
-  //if (day is a tuesday) errors.push("it's a tuesday")
-  // console.log(errors)
-  
-  //if (too early or too late) errors.push("not open yet")
-  // console.log(errors)
-
-  // if (errors.length > 0){
-  //   //return the errors as a response
-  // } else{
-  //   //payload is valid, proceed to the next steps to POST to db
-  // }
 }
 
 function bodyHasData(propertyName){
@@ -107,6 +158,8 @@ function peopleIsValidNumber(req, res, next){
  
 }
 
+
+
 function reservationExists(req, res, next){
   service.read(req.params.reservation_id)
   .then((reservation)=>{
@@ -119,58 +172,22 @@ function reservationExists(req, res, next){
   .catch(next)
 }
 
-async function read(req, res){
-  res.status(200).json({ data: res.locals.reservation })
-}
-
-// async function update(req, res, next){
-//   await service.update(res.locals.reservation.reservation_id)
-//   res.status(200).json({ data: res.locals.reservation})
-// }
-
-
-async function create(req, res){
-  const {data: { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = {} } = req.body
-
-  const newReserve = {
-    first_name,
-    last_name,
-    mobile_number,
-    reservation_date,
-    reservation_time,
-    people
+async function validateStatus(req, res, next){
+  console.log("hey lok at me:", req.body)
+  const { status } = req.body.data
+  // const response = await service.read()
+  if (status !== "finished" && status !== "seated" && status !== "booked" && status !== "cancelled" ){
+    return next ({ status: 400, message: "Reservation status is unknown" })
   }
-  console.log("You did it! Great job!")
-  //then push the newReserve into somewhere?
-  const response = await service.create(newReserve)
-  console.log("responseasdf: ", response)
-  if (response.status == "booked" || response.status == "finished"){
-    res.status(400).json({ data: response})
-  }else{
-    res.status(201).json({ data: response })
-  } 
-  // res.status(201).json({ data: response })
-
-  // res.json({ data: await service.create(req.body.data)})
-
-
-  //pass data to service here
-  //const data = await service.create(req.body.data)
-  //return res.status(201).json({ data })
-
-
-  //await service
-//  .create(req.body.date)
-//  .then((data )=> res.status(201).json({ data }))
-//  .catch(next)
-  // res.send({ data: "hello from the server"})
-  
-}
-
-async function finish(req, res, next){
-  const reservation_id = req.params.reservation_id
-  await service.changeToFinished(reservation_id)
-  res.status(200).json({ data: { status: "<new-status>"} })
+  if (res.locals.reservation.status === "finished"){
+    return next({ status: 400, message: "Cannot update a finished reservation."})
+  }
+  // if (status === "unknown"){
+  //   return next({ status: 400, message: "Reservation status is unknown"})
+  // } else if( status === "finished"){
+  //   return next({ status: 400, message: "A finished reservation cannot be updated"})
+  // }
+  next()
 }
 
 module.exports = {
@@ -198,8 +215,9 @@ module.exports = {
   update: [
     reservationExists,
     // asyncErrorBoundary(update)
-    asyncErrorBoundary(finish)
+    validateStatus,
+    asyncErrorBoundary(update)
   ],
-
+  getReservationByPhone,
 
 };

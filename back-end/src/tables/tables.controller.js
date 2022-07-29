@@ -92,7 +92,12 @@ async function reservationIdExists(req, res, next){
 async function validTableCapacity(req, res, next){
     const getTableInfo = await service.read(req.params.table_id)
     const getReservationInfo = await service.readReservationId(req.body.data.reservation_id)
-    console.log(getTableInfo)
+    if (getReservationInfo.status === "seated"){
+        return next({
+            status: 400,
+            message: "Reservation is already seated."
+        })
+    }
     if (getTableInfo.capacity < getReservationInfo.people){
         return next({
             status: 400,
@@ -180,8 +185,8 @@ module.exports = {
     update:[
         bodyHasData("reservation_id"),
         reservationIdExists,
-        validTableCapacity,
         tableExists,
+        validTableCapacity,
         asyncErrorBoundary(update)
         
     ],

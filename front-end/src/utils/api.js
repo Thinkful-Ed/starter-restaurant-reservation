@@ -168,10 +168,22 @@ export async function removeReservation(table_id, reservation_id, signal){
   return await fetchJson(url, options, {});
  };
 
+ export async function finishReservation(reservationId, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservationId}/status`;
+  const options = {
+    method: "PUT",
+    body: JSON.stringify({
+      data: { status: "finished"}
+    }), 
+    headers, 
+    signal,
+  };
+  return await fetchJson(url, options, {});
+ };
 
 
  // function to submit a GET request to the server to find phone number
  export async function getReservationPlusMobile(mobile_number, signal){
-  const url = new URL(`${API_BASE_URL}/reservations/?mobine_number=${mobile_number}`)
+  const url = new URL(`${API_BASE_URL}/reservations/?mobile_number=${mobile_number}`)
   return await fetchJson(url, { headers, signal }, [])
 }

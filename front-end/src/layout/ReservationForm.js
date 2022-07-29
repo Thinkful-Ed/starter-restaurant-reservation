@@ -1,7 +1,7 @@
 import React from "react"
 import { useHistory } from "react-router-dom"
 
-
+// parent is AddReservation.js
 function ReservationForm({handleSubmit, handleChange, reservationForm, noPastDate}){
     const history = useHistory()
 

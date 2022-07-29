@@ -37,7 +37,6 @@ function AddReservation(){
         
     }
 
-    console.log("09:00" < "10:10")
 
 
     // console.log({...reservationForm})
