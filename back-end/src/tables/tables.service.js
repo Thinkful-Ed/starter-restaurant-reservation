@@ -46,20 +46,27 @@ async function update(reservation_id, table_id) {
 	  }
 	)
 	.then(() =>
-	  knex("reservations").where({ reservation_id: Number(reservation_id) }).update({ status: "seated" })
+	  knex("reservations")
+	  .where({ reservation_id: Number(reservation_id) })
+	  .update({ status: "seated" })
 	)
 }
 
 async function deleteTableReservation(table_id) {
- return knex("tables")
- .where({ table_id: table_id })
- .update(
-   {
-	 reservation_id: null,
-	 table_status: "free",
-   }
- )
+	await knex("reservations")
+		.where({ reservation_id: Number(table_id) })
+		.update({ status: "finished" });
+	return knex("tables")
+	.where({ table_id: table_id })
+	.update(
+	{
+		reservation_id: null,
+		table_status: "free",
+	}
+	)
 }
+
+
 
 module.exports = {
    list,

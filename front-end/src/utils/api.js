@@ -104,9 +104,8 @@ export async function listTables(signal) {
   return await fetchJson(url, { headers, signal }, []);
 }
 
-export async function updateTableOnceSeated(reservation_id, table_id, signal) {
+export async function updateTable(reservation_id, table_id, signal) {
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
-  // console.log(reservation_id, table_id)
   const options = {
     headers,
     signal,

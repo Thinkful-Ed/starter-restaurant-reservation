@@ -18,7 +18,7 @@ const REQUIRED_PROPERTIES = [
   "people",
 ]
 
-const hasRequiredProperties = hasProperties(...REQUIRED_PROPERTIES);
+const hasRequiredProperties = hasProperties(REQUIRED_PROPERTIES);
 
 function validDate(req, res, next) {
   const date = req.body.data.reservation_date;
@@ -99,6 +99,32 @@ async function validateReservationId(req, res, next) {
 	}
 }
 
+function checkIfBooked(req,res,next){
+  const {status} = req.body.data
+  if (status === "booked"){
+    return next()
+  }
+  if (status === "seated" || status === "finished"){
+  return next({status:400,message:`Status cannot be ${status}`})
+  }
+}
+
+function verifyStatus(req, res, next){
+	const validStatusList = ["booked","seated","finished"]
+	const {status} = req.body.data
+
+	const bodyStatus = res.locals.reservation.status
+	if (!validStatusList.includes(status)){
+		return next({status:400,message:`Status:${status} is not valid`})
+	}
+	if (bodyStatus === "finished"){
+		return next({status:400,message:`Cannot change status from finished.`})
+	}
+	return next()
+}
+
+//CRUD Functions
+
 async function list(req, res, next) {
   const { date, currentDate } = req.query;
   if(date) {
@@ -113,6 +139,7 @@ async function list(req, res, next) {
 }
 
 async function create(req, res, next) {
+  console.log("got to Create")
   const reservation = req.body.data;
   const { reservation_id } = await reservationsService.create(reservation);
   reservation.reservation_id = reservation_id;
@@ -122,6 +149,14 @@ async function create(req, res, next) {
 async function read(req, res, next) {
 	const responseData = res.locals.reservation;
 	res.status(200).json({ data: responseData });
+}
+
+async function updateStatus(req,res,next){
+	const currentData = res.locals.reservation
+	const updatedStatus = req.body.data
+	const updatedReservation = {...currentData,...updatedStatus}
+	const response = await reservationsService.updateStatus(updatedReservation,updatedReservation.reservation_id)
+	res.status(200).json({data:response})
 }
  
 module.exports = {
@@ -134,8 +169,12 @@ module.exports = {
           isNotOnTuesday,
           isInTheFuture,  
           isWithinValidHours,
+          checkIfBooked,
         asyncErrorBoundary(create)
       ],
   read: [validateReservationId, 
           asyncErrorBoundary(read)],
+  updateStatus: [validateReservationId,
+          verifyStatus,
+          asyncErrorBoundary(updateStatus)],
 };

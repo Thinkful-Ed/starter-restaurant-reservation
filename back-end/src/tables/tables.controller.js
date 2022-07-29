@@ -132,7 +132,7 @@ async function create(req, res) {
 async function update(req, res) {
   const { reservation_id } = req.body.data;
   const { table_id } = req.params;
-  await tablesService.update(reservation_id, table_id);
+  await tablesService.update(reservation_id, table_id, { status: "seated" });
   res.status(200).json({ data: reservation_id });
 }
 
