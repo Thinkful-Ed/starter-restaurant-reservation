@@ -134,7 +134,7 @@ async function list(req, res, next) {
   } else if (currentDate) {  
     const data = await reservationsService.listByDate(currentDate);
   } else if(mobile_number){
-    const data = await reservationsService.listByMobileNumber(mobile_number);
+    const data = await reservationsService.search(mobile_number);
     res.json({ data });
   } else {
     const data = await reservationsService.list();
