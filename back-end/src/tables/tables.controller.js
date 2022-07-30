@@ -101,7 +101,7 @@ async function tableIsFree(req, res, next) {
     return next();
   }
   next({
-    status: 200,
+    status: 400,
     message: `table_id is occupied`,
   });
 }
