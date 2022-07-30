@@ -37,16 +37,7 @@ export default function Search() {
   return (
     <>
       <main>
-        <nav aria-label="breadcrumb">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <Link to="/">Home</Link>
-            </li>
-            <li className="breadcrumb-item active" aria-current="page">
-              Search Reservation
-            </li>
-          </ol>
-        </nav>
+        
         <h1>Search Reservations</h1>
         <form onSubmit={submitHandler}>
           <fieldset>
