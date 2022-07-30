@@ -111,7 +111,7 @@ function checkIfBooked(req,res,next){
 }
 
 function verifyStatus(req, res, next){
-	const validStatusList = ["booked","seated","finished"]
+	const validStatusList = ["booked","seated","finished", "cancelled"]
 	const {status} = req.body.data
 
 	const bodyStatus = res.locals.reservation.status
