@@ -127,12 +127,15 @@ function verifyStatus(req, res, next){
 //CRUD Functions
 
 async function list(req, res, next) {
-  const { date, currentDate } = req.query;
+  const { date, currentDate, mobile_number } = req.query;
   if(date) {
     const data = await reservationsService.listByDate(date);
     res.json({ data });
   } else if (currentDate) {  
     const data = await reservationsService.listByDate(currentDate);
+  } else if(mobile_number){
+    const data = await reservationsService.listByMobileNumber(mobile_number);
+    res.json({ data });
   } else {
     const data = await reservationsService.list();
     res.json({ data });
