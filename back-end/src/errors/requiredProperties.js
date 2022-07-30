@@ -3,7 +3,6 @@ function requiredProperties(...properties) {
       const { data = {} } = req.body;
       try {
         properties.forEach((property) => {
-          console.log(property)
           if (!data[property]) {
             const error = new Error(`A '${property}' property is required.`);
             error.status = 400;

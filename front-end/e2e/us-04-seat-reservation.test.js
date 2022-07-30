@@ -149,7 +149,6 @@ describe("US-04 - Seat reservation - E2E", () => {
     let reservation;
 
     beforeEach(async () => {
-      console.log("creting reservation")
       reservation = await createReservation({
         first_name: "Seat",
         last_name: Date.now().toString(10),
@@ -159,7 +158,6 @@ describe("US-04 - Seat reservation - E2E", () => {
         people: 4,
       });
 
-      console.log("reservation finished")
 
       page = await browser.newPage();
       page.on("console", onPageConsole);

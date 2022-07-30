@@ -18,7 +18,7 @@ const REQUIRED_PROPERTIES = [
   "people",
 ]
 
-const hasRequiredProperties = hasProperties(REQUIRED_PROPERTIES);
+const hasRequiredProperties = hasProperties(...REQUIRED_PROPERTIES);
 
 function validDate(req, res, next) {
   const date = req.body.data.reservation_date;
@@ -107,6 +107,7 @@ function checkIfBooked(req,res,next){
   if (status === "seated" || status === "finished"){
   return next({status:400,message:`Status cannot be ${status}`})
   }
+  return next()
 }
 
 function verifyStatus(req, res, next){
