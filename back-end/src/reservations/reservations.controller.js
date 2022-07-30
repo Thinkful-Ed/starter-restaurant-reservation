@@ -143,8 +143,8 @@ async function list(req, res, next) {
 }
 
 async function create(req, res, next) {
-  console.log("got to Create")
-  const reservation = req.body.data;
+  let reservation = req.body.data;
+  reservation = { ...reservation, status: "booked" };
   const { reservation_id } = await reservationsService.create(reservation);
   reservation.reservation_id = reservation_id;
   res.status(201).json({ data: reservation });

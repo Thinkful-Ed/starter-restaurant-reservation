@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { deleteTableReservation } from "../utils/api";
+import { deleteTableReservation, updateReservationStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 export default function TablesTable({ tables, loadDashboard }) {
@@ -25,9 +25,9 @@ const [error, setError] = useState(null);
         const ac = new AbortController();
         event.preventDefault();
         setError(null);
-        console.log(table.table_id);
         if(window.confirm("Is this table ready to seat new guests? This cannot be undone.")) {
             await deleteTableReservation(table.table_id, ac.signal);
+            await updateReservationStatus({status: "finished"}, table.reservation_id, ac.signal);
             loadDashboard();
             return;
         } else {

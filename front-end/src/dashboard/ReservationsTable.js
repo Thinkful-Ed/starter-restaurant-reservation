@@ -14,11 +14,13 @@ export default function ReservationsTable({reservations}) {
           <td>{reservation.people}</td>
           <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
           <td>{reservation.status !== "booked" ? null : (
-            <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-                <button className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}> 
-                    Seat
-                </button>
-            </Link>
+            <a
+            className="btn btn-secondary"
+            role="button"
+            href={`/reservations/${reservation.reservation_id}/seat`}
+          >
+            Seat
+          </a>
           )}
           </td>
           </tr>
