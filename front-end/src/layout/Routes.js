@@ -5,7 +5,8 @@ import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
 import ReservationForm from "../createReservation/ReservationForm";
-import SeatReservation from "../seatReservation/seatReservation"
+import SeatReservation from "../seatReservation/seatReservation";
+import Search from "../search/search";
 import CreateTable from "../createTable/createTable";
 import useQuery from "../utils/useQuery";
 
