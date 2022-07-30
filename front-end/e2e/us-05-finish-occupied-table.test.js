@@ -28,6 +28,7 @@ describe("US-05 - Finish an occupied table - E2E", () => {
   });
 
   describe("/dashboard page", () => {
+    jest.setTimeout(150000);
     let reservation;
     let table;
 
@@ -57,11 +58,12 @@ describe("US-05 - Finish an occupied table - E2E", () => {
     });
 
     test("clicking finish button and then clicking OK makes that table available", async () => {
+      
       await page.screenshot({
         path: ".screenshots/us-05-dashboard-finish-button-before.png",
         fullPage: true,
       });
-
+      console.log("Table ID:", table.table_id);
       const containsOccupied = await containsText(
         page,
         `[data-table-id-status="${table.table_id}"]`,
@@ -101,6 +103,9 @@ describe("US-05 - Finish an occupied table - E2E", () => {
     });
 
     test("clicking finish button and then clicking CANCEL does nothing", async () => {
+      await page.goto(`${baseURL}/dashboard?date=2035-01-01`, {
+        waitUntil: "networkidle0",
+      });
       await page.screenshot({
         path: ".screenshots/us-05-dashboard-finish-button-cancel-before.png",
         fullPage: true,

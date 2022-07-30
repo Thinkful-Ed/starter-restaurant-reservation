@@ -44,7 +44,7 @@ function NewReservation() {
     setForm({ ...form, [name]: value });
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     const abortController = new AbortController();
     const abortSignal = abortController.signal;
@@ -94,14 +94,15 @@ function NewReservation() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({data:newReservation})
     };
-    history.push(`/dashboard?date=${newReservation.reservation_date}`);
-    fetch(apiUrl + '/reservations', requestOptions)
+    
+    await fetch(apiUrl + '/reservations', requestOptions)
         .then(response => response.json())//then redirect to dashboard/?date=${date}
         .then(data => {
             console.log(data);
             
            
         })
+    history.push(`/dashboard?date=${newReservation.reservation_date}`);
   }
 
   function create(){

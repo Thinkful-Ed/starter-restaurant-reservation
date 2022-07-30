@@ -7,6 +7,7 @@ import { today } from "../utils/date-time";
 import NewRes from "../layout/NewRes";
 import { useParams } from "react-router-dom";
 import NewTable from "../tables/NewTable";
+import Search from "./Search";
 //get api url from environment variables
 
 
@@ -38,6 +39,9 @@ function Routes() {
       </Route>
       <Route path="/tables/new">
         <NewTable/>
+      </Route>
+      <Route path="/search">
+        <Search/>
       </Route>
       <Route>
         <NotFound />
