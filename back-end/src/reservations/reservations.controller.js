@@ -162,6 +162,14 @@ async function updateStatus(req,res,next){
 	const response = await reservationsService.updateStatus(updatedReservation,updatedReservation.reservation_id)
 	res.status(200).json({data:response})
 }
+
+async function updateReservation(req, res, next) {
+  const reservation = req.body.data;
+  const newReservation = await reservationsService.updateReservation(
+    reservation
+  );
+  res.status(200).json({ data: newReservation });
+}
  
 module.exports = {
   list: asyncErrorBoundary(list),
@@ -174,11 +182,20 @@ module.exports = {
           isInTheFuture,  
           isWithinValidHours,
           checkIfBooked,
-        asyncErrorBoundary(create)
-      ],
+        asyncErrorBoundary(create)],
   read: [validateReservationId, 
           asyncErrorBoundary(read)],
   updateStatus: [validateReservationId,
           verifyStatus,
           asyncErrorBoundary(updateStatus)],
+  updateReservation: [validateReservationId,
+          hasRequiredProperties,
+          validDate,
+          validTime,
+          validPeople,
+          isNotOnTuesday,
+          isInTheFuture,
+          isWithinValidHours,
+          checkIfBooked,
+          asyncErrorBoundary(updateReservation)],
 };
