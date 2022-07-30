@@ -35,9 +35,9 @@ function ResCard(props) {
                 <p className="card-text">{props.reservation.message}</p>
                 <p className="card-text">Time:&nbsp;{time}</p>
                 <p className="card-text">Date:&nbsp;{props.reservation.reservation_date}</p>
-                <p className="card-text">Status:&nbsp;{props.reservation.status}</p>
+                <p className="card-text" data-reservation-id-status={props.reservation.reservation_id}>Status:&nbsp;{props.reservation.status}</p>
                 <p className="card-text">Party Size:&nbsp;{props.reservation.people}</p>
-                {mode === "single" ? 
+                {(mode === "single" || props.reservation.status === "seated")? 
                 (
                 <></>
                 )
