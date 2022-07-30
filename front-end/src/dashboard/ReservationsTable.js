@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function ReservationsTable({reservations}) {
 
@@ -13,13 +14,11 @@ export default function ReservationsTable({reservations}) {
           <td>{reservation.people}</td>
           <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
           <td>{reservation.status !== "booked" ? null : (
-          <a
-            className="btn btn-secondary"
-            role="button"
-            href={`/reservations/${reservation.reservation_id}/seat`}
-          >
-            Seat
-          </a>
+            <Link to={`/reservations/${reservation.reservation_id}/seat`}>
+                <button className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}> 
+                    Seat
+                </button>
+            </Link>
           )}
           </td>
           </tr>
