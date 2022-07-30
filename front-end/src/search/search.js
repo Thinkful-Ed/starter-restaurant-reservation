@@ -3,7 +3,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { listReservations } from "../utils/api";
 import ReservationsTable from "../dashboard/ReservationsTable";
 
-export default function search() {
+export default function Search() {
   const [mobile_number, setMobile_number] = useState("");
   const [reservations, setReservations] = useState(null);
   const [error, setError] = useState(null);
