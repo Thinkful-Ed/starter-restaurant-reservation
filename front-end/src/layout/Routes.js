@@ -37,6 +37,9 @@ function Routes() {
       <Route path="/tables/new">
         <CreateTable />
       </Route>
+      <Route exact={true} path="/search">
+        <Search />
+      </Route>
       <Route>
         <NotFound />
       </Route>
