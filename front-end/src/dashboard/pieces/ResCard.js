@@ -19,13 +19,6 @@ function ResCard(props) {
         hour = 12;
     }
     time = hour + ":" + minute + " " + ampm;
-    function spaced(x){
-        let str = ""
-        for (let i = 0; i < x; i++) {
-            str += "&nbsp;"
-        }
-        return str
-    }
 
     return (
         <div className="card">

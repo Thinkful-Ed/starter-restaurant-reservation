@@ -37,6 +37,9 @@ function Routes() {
       <Route path="/reservations/:reservation_id">
         <Reservation/>
       </Route>
+      <Route exact={true} path="/reservations/:reservation_id/edit">
+        <EditReservation />
+      </Route>
       <Route path="/tables/new">
         <NewTable/>
       </Route>
