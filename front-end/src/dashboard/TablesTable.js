@@ -38,6 +38,7 @@ const [error, setError] = useState(null);
     return (
         <div> 
             <ErrorAlert error={error} />
+            <h4>Tables</h4>
             <table className="table table-sm">
                 <thead>
                     <tr>

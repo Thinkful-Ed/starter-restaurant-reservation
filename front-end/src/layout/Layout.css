@@ -1,4 +1,23 @@
 .side-bar {
-  background-color: #393a44;
+  background-color: #752273;
   min-width: 200px;
+}
+
+.btn {
+  background-color: #F791F3;
+  border-color: #754574;
+}
+
+
+.table {
+  color: #786B77;
+}
+
+h1 {
+  color: #752273;
+}
+
+#sidebarToggle {
+  color: #752273;
+  background-color: #752273;
 }
