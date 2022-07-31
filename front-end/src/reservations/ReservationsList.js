@@ -62,6 +62,7 @@ export default function ReservationsList({ date, reservations }) {
   const nextHandler = () => {
     history.push(`/dashboard?date=${next(date)}`);
   };
+  
   return (
     <>
       <div className="d-md-flex mb-3">

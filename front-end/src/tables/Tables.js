@@ -7,7 +7,7 @@ export default function Tables({ tables }) {
         <tr key={index}>
           <td>{table.table_name}</td>
           <td>{table.capacity}</td>
-          <td>{table.occupied || "vacant"}</td>
+          <td>{table.table_status || "vacant"}</td>
           <td>{table.reservation_id}</td>
         </tr>
       );

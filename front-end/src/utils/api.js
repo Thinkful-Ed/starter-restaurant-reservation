@@ -99,3 +99,15 @@ export async function createTable(data, signal) {
 
   return await fetchJson(url, options, data);
 }
+
+export async function updateTable(tableId, data, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`);
+  const options = {
+    headers,
+    signal,
+    method: "PUT",
+    body: JSON.stringify({ data: data }),
+  };
+
+  return await fetchJson(url, options, []);
+}
