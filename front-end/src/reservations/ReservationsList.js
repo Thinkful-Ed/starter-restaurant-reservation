@@ -1,14 +1,8 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { next, previous, today } from "../utils/date-time";
-import ErrorAlert from "../layout/ErrorAlert";
 
-export default function ReservationsList({
-  date,
-  reservations,
-  reservationsError,
-}) {
-  
+export default function ReservationsList({ date, reservations }) {
   const history = useHistory();
 
   const reservationsList = () => {
@@ -73,7 +67,6 @@ export default function ReservationsList({
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date: {date}</h4>
       </div>
-      <ErrorAlert error={reservationsError} />
       <button className="btn btn-primary mr-1" onClick={previousHandler}>
         Previous
       </button>

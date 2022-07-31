@@ -1,7 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { listTables } from "../utils/api";
+import React from "react";
 
-export default function Tables({ data }) {
+export default function Tables({ tables }) {
+  const listTables = () => {
+    return tables.map((table, index) => {
+      return (
+        <tr key={index}>
+          <td>{table.table_name}</td>
+          <td>{table.capacity}</td>
+          <td>{table.occupied || "vacant"}</td>
+          <td>{table.reservation_id}</td>
+        </tr>
+      );
+    });
+  };
+
   return (
     <>
       <h1>Tables</h1>
@@ -14,6 +26,7 @@ export default function Tables({ data }) {
             <th>Reservation ID</th>
           </tr>
         </thead>
+        <tbody>{tables && listTables()}</tbody>
       </table>
     </>
   );
