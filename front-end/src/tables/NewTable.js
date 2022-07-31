@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { createTable } from "../utils/api";
 
 export default function NewTable() {
   const history = useHistory();
@@ -7,21 +8,27 @@ export default function NewTable() {
   const initialFormState = { table_name: "", capacity: "" };
 
   const [formData, setFormData] = useState(initialFormState);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const changeHandler = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
+    const abort = new AbortController();
 
     const preSubmit = {
       table_name: formData.table_name,
       capacity: parseInt(formData.capacity),
     };
-    console.log(preSubmit); // NEED TO IMPLEMENT preSubmit TO BACKEND
 
-    history.push("/dashboard");
+    try {
+      await createTable(preSubmit, abort.signal);
+      history.push("/dashboard");
+    } catch (error) {
+      setErrorMessage(error);
+    }
   };
 
   const cancelHandler = (event) => {
@@ -29,9 +36,18 @@ export default function NewTable() {
     history.goBack();
   };
 
+  const errorElement = () => {
+    return (
+      <div className="alert alert-danger">
+        <p>ERROR: {errorMessage.message}</p>
+      </div>
+    );
+  };
+
   return (
     <>
       <h1>Create Table</h1>
+      {errorMessage && errorElement()}
       <form onSubmit={submitHandler}>
         <div className="form-group ">
           <input
