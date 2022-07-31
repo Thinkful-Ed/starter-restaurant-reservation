@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { next, previous, today } from "../utils/date-time";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 import "./Dashboard.css";
 
@@ -39,21 +39,26 @@ function Dashboard({ date }) {
       );
     }
 
-    const list = reservations.map((reservation, index) => {
+    const list = reservations.map((reservation) => {
       return (
-        <tr key={index}>
+        <tr key={reservation.reservation_id}>
           <td>{reservation.first_name}</td>
           <td>{reservation.last_name}</td>
           <td>{reservation.mobile_number}</td>
           <td>{reservation.reservation_date}</td>
           <td>{reservation.reservation_time}</td>
           <td>{reservation.people}</td>
+          <td>
+            <Link to={`/reservations/${reservation.reservation_id}/seat`}>
+              <button className="btn btn-secondary">Seat</button>
+            </Link>
+          </td>
         </tr>
       );
     });
 
     return (
-      <table>
+      <table className="table mt-3">
         <thead>
           <tr key={date}>
             <th>First Name</th>
@@ -62,6 +67,7 @@ function Dashboard({ date }) {
             <th>Date</th>
             <th>Time</th>
             <th>People</th>
+            <th>Give Table</th>
           </tr>
         </thead>
         <tbody>{list}</tbody>

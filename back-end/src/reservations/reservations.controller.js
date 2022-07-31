@@ -127,7 +127,12 @@ async function create(req, res) {
   res.status(201).json({ data });
 }
 
+async function read(req, res) {
+  res.json({ data: await service.read(req.params.reservation_id) });
+}
+
 module.exports = {
   list,
   create: [bodyDataVerification, dateCheck, timeCheck, create],
+  read,
 };
