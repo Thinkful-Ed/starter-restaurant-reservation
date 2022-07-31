@@ -17,8 +17,18 @@ function create(reservation){
   .returning("*")
   .then((createdRecords) => createdRecords[0]);
 }
+function read(reservation_id){
+  console.log("reservation_id in service is", reservation_id)
+  return knex("reservations")
+  .select("*")
+  .where({reservation_id:reservation_id})
+  .first()
+}
+
 module.exports = {
   list,
   create,
-  listByQuery
+  listByQuery,
+  read,
+  
 }

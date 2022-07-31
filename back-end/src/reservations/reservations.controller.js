@@ -54,9 +54,26 @@ async function create(req, res, next){
   })
   .catch(next)
 }
+async function reservationExists(req,res,next){
+  let reservation_id = req.params.reservation_id
+  let reservation= await reservationService.read(reservation_id)
+  if(reservation){
+    res.locals.reservation = reservation
+    return next();
+  }
+  return next({
+    status:404,
+    message:`Reservation id ${reservation_id}, could not be found.`
+  })
+}
+async function read(req,res){
+  const {reservation} = res.locals
+  res.json({ data: reservation });
+}
 
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [asyncErrorBoundary(hasRequiredProperties), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create)]
+  create: [asyncErrorBoundary(hasRequiredProperties), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create)],
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)]
 };

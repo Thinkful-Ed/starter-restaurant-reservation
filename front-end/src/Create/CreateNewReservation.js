@@ -41,19 +41,20 @@ export default function CreateNewReservation(){
   }
   function changeHandler(event){
     let stateValue = event.target.value;
-    if(event.target.name === "people") {
-      console.log("stateValue", stateValue)
-      console.log("typeof stateValue before", typeof stateValue)
+
+    if(event.target.name === "people" && stateValue) {
+      // console.log("stateValue", stateValue)
+      // console.log("typeof stateValue before", typeof stateValue)
 
       stateValue = parseInt(stateValue, 10)
 
-      console.log("typeof stateValue after", typeof stateValue)
+      // console.log("typeof stateValue after", typeof stateValue)
     }
     setFormData({...formData, [event.target.name]: stateValue})
   }
   return(
     <>
-    {errorMessages && <p className = "alert alert-danger" >{errorMessages}</p>}
+    {errorMessages && <li className = "alert alert-danger" >{errorMessages}</li>}
     <form onSubmit={handleSubmit}>
       <div className = "form-group">
         <label> First Name</label>
