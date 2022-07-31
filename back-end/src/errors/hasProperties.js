@@ -3,8 +3,8 @@
 //  Creates a middleware function that validates that req.body.data has the specified non-falsey properties.
 
  function hasProperties(...properties) {
-  return function (res, req, next) {
-    const { data = {} } = res.body;
+  return function (req, res, next) {
+    const { data = {} } = req.body;
 
     errorMessages = []
 
@@ -71,7 +71,7 @@
           else if(value > '21:30'){
             errorMessages.push(`The restaurant closes at 10:30pm. Please choose a reservation time that is not so close to closing.`)
           }
-          else if(`${currentTime.getHours()}:${currentTime.getMinutes()}` > value){
+          else if(data["reservation_date"] === currentTime.toISOString().split('T')[0] && `${currentTime.getHours()}:${currentTime.getMinutes()}` > value){
             console.log("this is the current time: ",`${new Date().getTime()}`, "this is the reservation time: ", value )
             errorMessages.push(`Sorry but the reservation time has already passed for today. Please choose a time in the future. `)
           }

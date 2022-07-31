@@ -3,6 +3,7 @@ import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, next } from "../utils/date-time"
 import { Link } from "react-router-dom";
+import TableList from "../Table/TableList"
 
 /**
  * Defines the dashboard page.
@@ -43,8 +44,13 @@ function Dashboard({ date }) {
         <Link to ={`/dashboard?date=${next(date)}`}><button>Next</button></Link>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
-
+      {reservations.map((reservation, ind) => {
+        return (<div>
+          {JSON.stringify(reservation)}
+          <Link to={`/reservations/${reservation.reservation_id}/seat`}><button key={ind}>Seat</button></Link>
+        </div>)
+      })}
+      <TableList/>
     </main>
   );
 }
