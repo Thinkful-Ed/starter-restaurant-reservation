@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { listTables } from "../utils/api";
 
-export default function Tables() {
+export default function Tables({ data }) {
   return (
     <>
       <h1>Tables</h1>

@@ -10,7 +10,6 @@ import NotFound from "./NotFound";
 import Dashboard from "../dashboard/Dashboard";
 import NewRes from "../reservations/NewRes";
 import NewTable from "../tables/NewTable";
-import Tables from "../tables/Tables";
 import Seat from "../reservations/Seat";
 
 /**
@@ -31,16 +30,7 @@ function Routes() {
       </Route>
 
       <Route path="/dashboard">
-        <div className="container-flex">
-          <div className="row col-md">
-            <div className="col">
-              <Dashboard date={date || today()} />
-            </div>
-            <div className="col">
-              <Tables />
-            </div>
-          </div>
-        </div>
+        <Dashboard date={date || today()} />
       </Route>
 
       <Route exact={true} path="/reservations">
