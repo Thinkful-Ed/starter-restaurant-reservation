@@ -109,16 +109,31 @@ async function update(req,res,next){
 
   res.json({ data: await tableService.update(updatedReservationId, req.params.table_id) })
 }
+async function byeByeOccupiedTable(req,res,next){
+  const {table_id} = req.params;
+  console.log("table_id: ", table_id)
+  const reservationIsThere = await tableService.read(table_id);
+  console.log("reservationIsThere", reservationIsThere)
+  if(reservationIsThere.reservation_id){
+    res.json({data: await tableService.freeUpTable(table_id)})
+  }
+  return next({
+    status:400,
+    message:`This table is not occupied.`
+  })
+
+}
 async function tableIdExists(req,res,next){
   console.log("tableIdExists");
   const tableId = await tableService.read(req.params.table_id)
-  // console.log("table id is: ", tableId)
+  console.log("table id is: ", tableId)
+
   if(tableId){
     return next()
   }
   return next({
-    status:400,
-    message: `The table id does not exist, ${tableId}.`
+    status:404,
+    message: `The table id does not exist, ${req.params.table_id}.`
   })
 }
 
@@ -158,6 +173,7 @@ async function reservationIdExists(req,res,next){
 
 }
 
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -171,4 +187,8 @@ module.exports = {
     asyncErrorBoundary(validCapacity),
     asyncErrorBoundary(update),
   ],
+  byeByeOccupiedTable: [
+    asyncErrorBoundary(tableIdExists),
+    asyncErrorBoundary(byeByeOccupiedTable)
+  ]
 };
