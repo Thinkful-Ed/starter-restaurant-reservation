@@ -66,7 +66,7 @@ export default function Seat() {
       <h4>Reservation {`${params.reservation_id}`}</h4>
       <form onSubmit={submitHandler}>
         <div>
-          <label for="table_id" className="col mr-2">
+          <label htmlFor="table_id" className="col mr-2">
             Table - Capacity
           </label>
           <select

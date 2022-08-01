@@ -9,6 +9,9 @@ export default function Tables({ tables }) {
           <td>{table.capacity}</td>
           <td>{table.table_status || "vacant"}</td>
           <td>{table.reservation_id}</td>
+          <td>
+            <button className="btn btn-info">Finish</button>
+          </td>
         </tr>
       );
     });
@@ -24,6 +27,7 @@ export default function Tables({ tables }) {
             <th>Capacity</th>
             <th>Vacancy</th>
             <th>Reservation ID</th>
+            <th>Finish</th>
           </tr>
         </thead>
         <tbody>{tables && listTables()}</tbody>
