@@ -27,15 +27,27 @@ function update(updatedReservation, table_id) {
   return knex("tables")
     .select("*")
     .where({table_id })
-    .update(updatedReservation, "*")
+    .update({reservation_id:Number(updatedReservation.reservation_id)})
     .then((upReservation) => upReservation[0])
 }
+
+function freeUpTable(table_id) {
+  //your solution here
+  return knex("tables")
+    .select("*")
+    .where({table_id })
+    .update({reservation_id: null})
+    .then((upReservation) => upReservation[0])
+}
+
+
 
 module.exports = {
   list,
   create,
   read,
   readReservation,
-  update
+  update,
+  freeUpTable
 
 }
