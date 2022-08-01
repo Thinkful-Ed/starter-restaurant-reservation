@@ -11,7 +11,7 @@ function create(table) {
 }
 
 function update(resId, tableId) {
-  const table = { reservation_id: resId, table_status: "occupied" };
+  const table = { reservation_id: resId };
   return knex("tables")
     .select("*")
     .where({ table_id: tableId })
@@ -19,7 +19,7 @@ function update(resId, tableId) {
 }
 
 async function finish(tableId) {
-  const table = { reservation_id: null, table_status: null };
+  const table = { reservation_id: null };
   const { reservation_id } = await knex("tables")
     .select("reservation_id")
     .where({ table_id: tableId })

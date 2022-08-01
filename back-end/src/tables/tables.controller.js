@@ -78,7 +78,7 @@ async function capacityMatch(req, res, next) {
 }
 
 function tableOccupied(req, res, next) {
-  if (res.locals.table.table_status !== null) {
+  if (res.locals.table.reservation_id !== null) {
     next({ status: 400, message: "occupied" });
   }
 
@@ -100,7 +100,7 @@ async function tableExists(req, res, next) {
 }
 
 function tableNotOccupied(req, res, next) {
-  if (res.locals.table.table_status === null) {
+  if (res.locals.table.reservation_id === null) {
     next({ status: 400, message: "table is not occupied" });
   }
 
@@ -125,8 +125,8 @@ async function update(req, res) {
 }
 
 async function destroy(req, res) {
-  await service.finish(req.params.table_id);
-  res.sendStatus(200);
+  const data = await service.finish(req.params.table_id);
+  res.json({ data });
 }
 
 module.exports = {

@@ -118,6 +118,20 @@ function timeCheck(req, res, next) {
   next();
 }
 
+async function reservationExists(req, res, next) {
+  const { reservation_id } = req.params;
+  const data = await service.read(reservation_id);
+
+  if (!data) {
+    next({
+      status: 404,
+      message: `reservation ${reservation_id} does not exist.`,
+    });
+  }
+
+  next();
+}
+
 async function list(req, res) {
   res.json({ data: await service.list(req.query.date) });
 }
@@ -134,5 +148,5 @@ async function read(req, res) {
 module.exports = {
   list,
   create: [bodyDataVerification, dateCheck, timeCheck, create],
-  read,
+  read: [reservationExists, read],
 };
