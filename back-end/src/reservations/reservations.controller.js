@@ -44,7 +44,7 @@ async function hasOnlyValidProperties(req, res, next){
   next();
 }
 
-const hasRequiredProperties = hasProperties("first_name", "last_name", "mobile_number", "reservation_date", "reservation_time", "people", "status")
+const hasRequiredProperties = hasProperties("first_name", "last_name", "mobile_number", "reservation_date", "reservation_time", "people")
 
 async function create(req, res, next){
   // console.log("create")
