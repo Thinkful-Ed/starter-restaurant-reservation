@@ -21,18 +21,20 @@ export default function TableList(){
   useEffect(()=>{
     async function theTable(){
       let result = await listTables();
-      console.log("result", result);
+      // console.log("result", result);
       setData(result)
     }
     theTable();
   },[])
 
-  let theTablesList = data.map((table)=> <tr>
+  let theTablesList = data.map((table)=> <tr key={table.table_id}>
     <td>{table.table_id}</td>
     <td>{table.table_name}</td>
     <td>{table.capacity}</td>
     <td  data-table-id-status={table.table_id}>{table.reservation_id ?"Occupied":"Free"}</td>
-    {table.reservation_id && <button data-table-id-finish={table.table_id} onClick={()=>clickHandler(table.table_id)}>Finish</button>}
+    <td>
+      {table.reservation_id && <button data-table-id-finish={table.table_id} onClick={()=>clickHandler(table.table_id)}>Finish</button>}
+    </td>
     </tr>)
   return(
     <>

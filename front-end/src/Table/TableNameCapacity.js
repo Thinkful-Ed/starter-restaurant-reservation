@@ -16,7 +16,7 @@ export default function TableNameCapacity(){
   //console.log("table name",tableNumber[0].table_name)
   let theTablesList = tableNumber.map((table)=>{
     // console.log("table: ", table)
-  return <option value={table.table_id} >{`${table.table_name} - ${table.capacity}`}</option>
+  return <option key={table.table_id} value={table.table_id} >{`${table.table_name} - ${table.capacity}`}</option>
   }
 )
   return(

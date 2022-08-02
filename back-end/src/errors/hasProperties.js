@@ -24,7 +24,7 @@
           if(Number.isNaN(reservation_date.getTime())) {
               errorMessages.push(`The reservation date ${property} is not valid.`)
           } else {
-              console.log("date is valid")
+              // console.log("date is valid")
           }
         }
 
@@ -33,13 +33,13 @@
           if(Number.isNaN(reservation_time.getTime())) {
               errorMessages.push(`The reservation time ${property} is not valid.`)
           } else {
-              console.log("Time is valid")
+              // console.log("Time is valid")
           }
         }
         if(property === "people" && value){
           //the values are all of type string currently :(
-            console.log("Type value: ", typeof value)
-            console.log("value: ", value)
+            // console.log("Type value: ", typeof value)
+            // console.log("value: ", value)
           if(typeof value !== "number"){
             errorMessages.push(`The people field should be a number. ${typeof value}`)
           }
@@ -48,7 +48,7 @@
           }
         }
         if(property === "reservation_date" && value) {
-          console.log("value is", value)
+          // console.log("value is", value)
           const reservation_date = value
           const date_from_string = new Date(`${reservation_date} ${data["reservation_time"]}`)
           if(date_from_string.getDay() === 2) {
@@ -64,7 +64,7 @@
         }
         if(property === "reservation_time" && value){
           let currentTime = new Date()
-          console.log("value", value)
+          // console.log("value", value)
           if(value < '10:30'){
             errorMessages.push(`Your reservation time for ${value} is before we open. Please choose a time when we are opened.`)
           }
@@ -72,7 +72,7 @@
             errorMessages.push(`The restaurant closes at 10:30pm. Please choose a reservation time that is not so close to closing.`)
           }
           else if(data["reservation_date"] === currentTime.toISOString().split('T')[0] && `${currentTime.getHours()}:${currentTime.getMinutes()}` > value){
-            console.log("this is the current time: ",`${new Date().getTime()}`, "this is the reservation time: ", value )
+            // console.log("this is the current time: ",`${new Date().getTime()}`, "this is the reservation time: ", value )
             errorMessages.push(`Sorry but the reservation time has already passed for today. Please choose a time in the future. `)
           }
         }
