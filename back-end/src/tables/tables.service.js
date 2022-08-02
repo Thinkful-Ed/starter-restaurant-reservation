@@ -22,22 +22,56 @@ function readReservation(reservation_id){
   .first()
 }
 
-function update(updatedReservation, table_id) {
+async function update(updatedReservation, table_id) {
   //your solution here
-  return knex("tables")
-    .select("*")
-    .where({table_id })
-    .update({reservation_id:Number(updatedReservation.reservation_id)})
-    .then((upReservation) => upReservation[0])
+  try {
+    await knex.transaction(async (trx) => {
+      await trx("reservations")
+        .select("*")
+        .where({ reservation_id: Number(updatedReservation.reservation_id) })
+        .update({ status: "seated" })
+        .then((upReservation) => upReservation[0]);
+    });
+
+    await knex.transaction(async (trx) => {
+      await trx("tables")
+        .select("*")
+        .where({ table_id })
+        .update({ reservation_id: Number(updatedReservation.reservation_id) })
+        .then((upReservation) => upReservation[0]);
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-function freeUpTable(table_id) {
+
+
+
+
+
+async function freeUpTable(table_id, reservation_id) {
   //your solution here
-  return knex("tables")
-    .select("*")
-    .where({table_id })
-    .update({reservation_id: null})
-    .then((upReservation) => upReservation[0])
+  try{
+    await knex.transaction(async (trx) => {
+      await trx("reservations")
+      .select("*")
+      .where({reservation_id})
+      .update({status: "finished"})
+      .then((upReservation) => upReservation[0])
+    })
+
+    await knex.transaction(async (trx) => {
+      await trx("tables")
+      .select("*")
+      .where({table_id })
+      .update({reservation_id: null})
+      .then((upReservation) => upReservation[0])
+    })
+
+  }catch(error){
+    console.error(error)
+  }
 }
 
 
