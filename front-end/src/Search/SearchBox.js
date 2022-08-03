@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react"
 import {useParams, Link, useHistory} from "react-router-dom";
 import { listReservations } from "../utils/api";
-import ReservationList from "../Create/ReservationList";
+import ReservationList from "../Reservations/ReservationList";
 
 export default function SearchBox(){
   const [searchData, setSearchData] = useState({ mobile_number: "" });

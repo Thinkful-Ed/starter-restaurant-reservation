@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from "react";
 import {useParams, Link, useHistory} from "react-router-dom"
-import { createReservation } from "../utils/api";
+import { createReservation, updateReservation, readReservation } from "../utils/api";
+import { formatAsDate } from "../utils/date-time"
 
-
-export default function CreateNewReservation(){
+export default function ReservationForm({ reservation_id, eventType }){
   const initialFormState = {
     first_name: "",
     last_name: "",
@@ -12,18 +12,40 @@ export default function CreateNewReservation(){
     reservation_date: "",
     people: 0
   }
-  const [formData, setFormData] = useState({...initialFormState})
+
   const [errorMessages, setErrorMessages] = useState("");
+  const [formData, setFormData] = useState({...initialFormState})
   const history = useHistory();
 
+  useEffect(() => {
+    async function readReservationInfo() {
+      try {
+        const reservationInfo = await readReservation(reservation_id);
 
+        reservationInfo.reservation_date = formatAsDate(reservationInfo.reservation_date)
+
+        setFormData(reservationInfo);
+      } catch (error) {
+        if (error.name === "AbortError") {
+          console.log("Aborted");
+        } else {
+          throw error;
+        }
+      }
+    }
+    reservation_id && readReservationInfo();
+  }, [reservation_id]);
 
   function handleSubmit(event){
     event.preventDefault();
     async function addReservationToList(){
       try{
-        await createReservation(formData);
-        history.push(`/dashboard?date=${formData.reservation_date}`)
+
+        if (eventType === "create") {
+          await createFunc();
+        } else if (eventType === "edit") {
+          await editFunc();
+        }
 
       }catch (error){
         if (error.name === "AbortError"){
@@ -37,9 +59,21 @@ export default function CreateNewReservation(){
       }
     }
     addReservationToList();
-
   }
+
+  const createFunc = async () => {
+    await createReservation(formData);
+    history.push(`/dashboard?date=${formData.reservation_date}`)
+  };
+
+  const editFunc = async () => {
+    // console.log("formData", formData);
+    await updateReservation(formData);
+    history.push(`/dashboard?date=${formData.reservation_date}`)
+  };
+
   function changeHandler(event){
+    // console.log("reservation_id", reservation_id);
     let stateValue = event.target.value;
 
     if(event.target.name === "people" && stateValue) {
@@ -52,8 +86,9 @@ export default function CreateNewReservation(){
     }
     setFormData({...formData, [event.target.name]: stateValue})
   }
+
   return(
-    <>
+  <>
     {errorMessages && <li className = "alert alert-danger" >{errorMessages}</li>}
     <form onSubmit={handleSubmit}>
       <div className = "form-group">
@@ -83,7 +118,7 @@ export default function CreateNewReservation(){
         name = "reservation_date"
         type = "date"
         required = {true}
-        value = {formData.reservation_date} onChange = {changeHandler}
+        value = {formData.reservation_date ? formatAsDate(formData.reservation_date) : ""} onChange = {changeHandler}
         />
         <label>Reservation Time</label>
         <input
@@ -103,11 +138,6 @@ export default function CreateNewReservation(){
         <button type= "button" onClick ={()=>history.goBack()}>Cancel</button>
       </div>
     </form>
-    </>
-
+  </>
   )
 }
-
-//table to store reservations (migrations)
-//backend post route that can receive information and save it into db
-// can test with porstman ^

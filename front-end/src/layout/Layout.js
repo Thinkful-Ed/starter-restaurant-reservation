@@ -14,9 +14,10 @@ import "./Layout.css";
 function Layout() {
   return (
     <div className="container-fluid">
-      <div className="row h-100">
-        <div className="col-md-2 side-bar">
+      <div className="row-2">
+        <div className="col-md-12 side-bar">
           <Menu />
+          {/* <img src="/images/jay-wennington-N_Y88TWmGwA-unsplash.jpg" classNam3="img-fluid"/> */}
         </div>
         <div className="col">
           <Routes />
