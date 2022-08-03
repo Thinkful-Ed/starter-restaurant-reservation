@@ -7,13 +7,46 @@ function list() {
     .orderBy("reservation_time");
 }
 
-function listByQuery(date) {
-  return knex("reservations")
+function listByQuery(date, mobile_number) {
+  let dbQuery = knex("reservations")
     .select("*")
-    .where({ reservation_date: date })
-    .andWhereNot({ status: "finished" })
+    // .whereNot({ status: "finished" })
     .orderBy("reservation_time");
+
+  if (date) {
+    dbQuery = dbQuery.andWhere({ reservation_date: date });
+  }
+
+  if (mobile_number) {
+    dbQuery = dbQuery.andWhere('mobile_number', 'like', `%${mobile_number}%`)
+      // .andWhere({ mobile_number: mobile_number })
+  } else {
+    dbQuery = dbQuery.andWhereNot({ status: "finished" });
+  }
+
+  // console.log("dbQuery.toSQL().toNative()", dbQuery.toSQL().toNative());
+
+  return dbQuery;
 }
+
+// function foo(movie_id) {
+//   let dbQuery = knex("reservations")
+//   .select("*")
+//   .where({ reservation_date: date })
+
+//   if(movie_id) {
+//     dbQuery = dbQuery.andWhere({movie_id})
+//   }
+
+//   return dbQuery;
+// }
+
+// function listByMobileQuery(mobile_number){
+//   return knex("reservations")
+//     .select("*")
+//     .where({mobile_number:mobile_number})
+//     .orderBy("reservation_time")
+// }
 
 //function to create a reservation which returns only one record
 function create(reservation){
@@ -43,9 +76,9 @@ function theStatus(reservation_id, status){
 }
 
 module.exports = {
-  list,
   create,
   listByQuery,
   read,
-  theStatus
+  theStatus,
+
 }

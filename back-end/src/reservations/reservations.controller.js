@@ -1,25 +1,38 @@
 const reservationService = require("./reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
-const hasProperties = require("../errors/hasProperties")
+const hasProperties = require("../errors/hasProperties");
+// const { next } = require("../../../front-end/src/utils/date-time");
 /**
  * List handler for reservation resources
  */
-async function list(req, res) {
-  // console.log("req", req)
-  const { date } = req.query;
-  let data;
+async function list(req, res, next) {
+  // console.log("req.query", req.query);
+  const { date, mobile_number } = req.query;
 
-  if(date){
+  const data = await reservationService.listByQuery(date, mobile_number);
+  // console.log("data", data)
 
-    data= await reservationService.listByQuery(date);
-  }
-  else {
-    data= await reservationService.list();
-  }
+  // if (!data) {
+  //   return next({
+  //     status: 400,
+  //     message: `No reservations were found`,
+  //   });
+  // }
 
-  res.json({data})
-  // console.log(data)
+  res.json({ data });
 }
+
+// async function listReservationsByMobileNumber(req, res){
+//   const {mobile_number} = req.query;
+//   let data;
+//   if(mobile_numer){
+//     data = await reservationService.listByMobileQuery(mobile_number);
+//   }
+//   else{
+//     data = await reservationService.list();
+//   }
+//   res.json({data})
+// }
 
 async function hasOnlyValidProperties(req, res, next){
   // console.log("hello valid properties")
@@ -129,5 +142,6 @@ module.exports = {
   list: asyncErrorBoundary(list),
   create: [asyncErrorBoundary(hasRequiredProperties), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
-  youCanChangeTheStatus: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(validateIfReservationIsFinished), asyncErrorBoundary(youCanChangeTheStatus)]
+  youCanChangeTheStatus: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(validateIfReservationIsFinished), asyncErrorBoundary(youCanChangeTheStatus)],
+
 };
