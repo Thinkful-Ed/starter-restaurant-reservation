@@ -2,6 +2,7 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
+
 /**
  * Defines the menu for this application.
  *
@@ -56,6 +57,7 @@ function Menu() {
         </div>
       </div>
     </nav>
+    
   );
 }
 

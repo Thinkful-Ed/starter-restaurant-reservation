@@ -74,11 +74,21 @@ function theStatus(reservation_id, status){
     .update({status})
     .then((upReservation) => upReservation[0])
 }
+function update(updatedReservation, reservation_id) {
+  //your solution here
+  // console.log("updatedReservation", updatedReservation);
+  return knex("reservations")
+    .select("*")
+    .where({reservation_id: reservation_id})
+    .update(updatedReservation, "*")
+    .then((upReservation) => upReservation[0])
+}
 
 module.exports = {
   create,
   listByQuery,
   read,
   theStatus,
+  update
 
 }

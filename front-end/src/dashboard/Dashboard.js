@@ -4,7 +4,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { previous, next } from "../utils/date-time"
 import { Link } from "react-router-dom";
 import TableList from "../Table/TableList"
-import ReservationList from "../Create/ReservationList";
+import ReservationList from "../Reservations/ReservationList";
 
 /**
  * Defines the dashboard page.
@@ -38,7 +38,7 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
       <div>
         <Link to={`/dashboard?date=${previous(date)}`}><button>Previous</button></Link>
