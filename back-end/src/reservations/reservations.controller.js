@@ -2,12 +2,10 @@ const reservationService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 
-
 /**
  * List handler for reservation resources
  */
 async function list(req, res, next) {
-
   const { date, mobile_number } = req.query;
 
   const data = await reservationService.listByQuery(date, mobile_number);
@@ -15,9 +13,7 @@ async function list(req, res, next) {
   res.json({ data });
 }
 
-
 async function hasOnlyValidProperties(req, res, next) {
-
   const VALID_PROPERTIES = [
     "first_name",
     "last_name",
@@ -51,7 +47,6 @@ const hasRequiredProperties = hasProperties(
 );
 
 async function create(req, res, next) {
-
   const status = req.body.data.status;
   if (status === "finished" || status === "seated") {
     return next({
@@ -104,7 +99,10 @@ async function update(req, res) {
   const updatedReservation = req.body.data;
 
   res.json({
-    data: await reservationService.update(updatedReservation, res.locals.reservation.reservation_id)
+    data: await reservationService.update(
+      updatedReservation,
+      res.locals.reservation.reservation_id
+    ),
   });
 }
 
