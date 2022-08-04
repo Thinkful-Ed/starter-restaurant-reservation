@@ -1,43 +1,23 @@
 const reservationService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
-// const { next } = require("../../../front-end/src/utils/date-time");
-// const _ = require("lodash");
+
 
 /**
  * List handler for reservation resources
  */
 async function list(req, res, next) {
-  // console.log("req.query", req.query);
+
   const { date, mobile_number } = req.query;
 
   const data = await reservationService.listByQuery(date, mobile_number);
-  // console.log("data", data)
-
-  // if (!data) {
-  //   return next({
-  //     status: 400,
-  //     message: `No reservations were found`,
-  //   });
-  // }
 
   res.json({ data });
 }
 
-// async function listReservationsByMobileNumber(req, res){
-//   const {mobile_number} = req.query;
-//   let data;
-//   if(mobile_numer){
-//     data = await reservationService.listByMobileQuery(mobile_number);
-//   }
-//   else{
-//     data = await reservationService.list();
-//   }
-//   res.json({data})
-// }
 
 async function hasOnlyValidProperties(req, res, next) {
-  // console.log("hello valid properties")
+
   const VALID_PROPERTIES = [
     "first_name",
     "last_name",
@@ -47,7 +27,7 @@ async function hasOnlyValidProperties(req, res, next) {
     "people",
     "status",
   ];
-  // console.log("valid properties", VALID_PROPERTIES)
+
   const { data = {} } = req.body;
   const invalidFields = Object.keys(data).filter(
     (field) => !VALID_PROPERTIES.includes(field)
@@ -71,7 +51,7 @@ const hasRequiredProperties = hasProperties(
 );
 
 async function create(req, res, next) {
-  // console.log("create")
+
   const status = req.body.data.status;
   if (status === "finished" || status === "seated") {
     return next({
@@ -82,7 +62,6 @@ async function create(req, res, next) {
   await reservationService
     .create(req.body.data)
     .then((data) => {
-      // console.log("data in reservations create", data)
       return res.status(201).json({ data });
     })
     .catch(next);
@@ -109,7 +88,7 @@ async function read(req, res) {
 
 async function validateIfReservationIsFinished(req, res, next) {
   const reservation_id = req.params.reservation_id;
-  //const reservation = await reservation
+
   if (reservation_id) {
     if (res.locals.reservation.status === "finished") {
       return next({
@@ -147,9 +126,6 @@ async function youCanChangeTheStatus(req, res, next) {
 
   await reservationService.theStatus(reservation_id, status);
   let changeStatus = await reservationService.read(reservation_id);
-
-  // console.log("****************************");
-  // console.log("changeStatus", changeStatus);
 
   if (changeStatus) {
     return res.json({ data: changeStatus });

@@ -20,12 +20,7 @@ import EditReservation from "../Reservations/EditReservation";
  */
 function Routes() {
   const query = useQuery();
-  // console.log("query hook:", query);
   const date = query.get("date");
-  const limit = query.get("limit");
-
-  // console.log("date from query", date);
-  // console.log("today() is", today());
 
   return (
     <Switch>

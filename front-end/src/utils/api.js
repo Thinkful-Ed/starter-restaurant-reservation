@@ -110,7 +110,6 @@ export async function listTables(signal) {
 }
 
 export async function readReservation(reservation_id, signal){
-  // console.log("about to call api with reservation_id = ", reservation_id);
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
   return await fetchJson(url, {signal}, {})
 }

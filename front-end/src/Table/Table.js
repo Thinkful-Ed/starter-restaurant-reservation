@@ -37,14 +37,17 @@ export default function Table(){
       }
     }
     addTableToList();
+    return () => ac.abort();
   }
   return(
+    <>
+    <style>{'body { background-color: #f7f4f180; }'}</style>
     <form onSubmit= {submitTableHandler}>
-      <table>
+      <table className="table table-striped">
         <thead>
           <tr>
-            <th>Table Name</th>
-            <th>Capacity</th>
+            <th scope="col">Table Name</th>
+            <th scope="col">Capacity</th>
           </tr>
         </thead>
         <tbody>
@@ -69,5 +72,6 @@ export default function Table(){
     <button type="submit">Submit</button>
     <button type="button" onClick={()=>history.goBack()}>Cancel</button>
     </form>
+    </>
   )
 }

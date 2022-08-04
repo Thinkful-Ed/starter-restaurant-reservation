@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import {readReservation} from "../utils/api"
 import TableNameCapacity from "./TableNameCapacity"
 import {seatReservation} from "../utils/api"
@@ -16,8 +16,6 @@ export default function TableSeat(){
 
   async function submitHandler(event){
     event.preventDefault()
-    // console.log("make PUT api call with reservation_id", reservation_id)
-    // console.log("formData", formData)
 
 
     const table_id = formData.table_id
@@ -26,7 +24,6 @@ export default function TableSeat(){
   }
 
   useEffect(()=>{
-    //console.log("reservation_id in TableSeat", reservation_id);
     async function getClientReservation(){
       let clientInfo = await readReservation(reservation_id);
       setClient(clientInfo)

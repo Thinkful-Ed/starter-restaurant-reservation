@@ -1,12 +1,11 @@
-import React, {useState, useEffect} from "react"
-import {useParams, Link, useHistory} from "react-router-dom";
+import React, {useState} from "react"
 import { listReservations } from "../utils/api";
 import ReservationList from "../Reservations/ReservationList";
 
 export default function SearchBox(){
   const [searchData, setSearchData] = useState({ mobile_number: "" });
-  const [results, setResults] = useState(null)
-  // const [errorMessages, setErrorMessages]= useState(null)
+  const [results, setResults] = useState(null);
+  const ac = new AbortController();
 
   function changeMobileHandler(event){
     setSearchData({...searchData, [event.target.name]:event.target.value})
@@ -17,25 +16,26 @@ export default function SearchBox(){
 
     async function requestForCustomerByMobileNumber() {
       try {
-        // setErrorMessages(null)
-        let listOfReservations = await listReservations(searchData);
-        // console.log("listOfReservations", listOfReservations);
+
+        let listOfReservations = await listReservations(searchData, ac.signal);
+
         setResults(listOfReservations);
       } catch (error) {
         if (error.name === "AbortError") {
           console.log("Aborted");
         } else {
-          // console.log(error)
-          // setErrorMessages(error.message)
-          // throw error;
+
+           throw error;
         }
       }
     }
     requestForCustomerByMobileNumber();
+    return () => ac.abort()
   }
 
   return(
     <>
+    <style>{'body { background-color: #f7f4f180; }'}</style>
     {results && results.length === 0 && <li className="alert alert-danger m-2">No reservations found</li>}
     <form onSubmit={findCustomer}>
       <label htmlFor="mobile_number">

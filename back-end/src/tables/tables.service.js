@@ -23,7 +23,7 @@ function readReservation(reservation_id){
 }
 
 async function update(updatedReservation, table_id) {
-  //your solution here
+
   try {
     await knex.transaction(async (trx) => {
       await trx("reservations")
@@ -51,7 +51,7 @@ async function update(updatedReservation, table_id) {
 
 
 async function freeUpTable(table_id, reservation_id) {
-  //your solution here
+
   try{
     await knex.transaction(async (trx) => {
       await trx("reservations")

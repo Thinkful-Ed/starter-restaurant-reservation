@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {useParams, Link, useHistory} from "react-router-dom"
+import {useHistory} from "react-router-dom"
 import { createReservation, updateReservation, readReservation } from "../utils/api";
 import { formatAsDate } from "../utils/date-time"
 
@@ -16,11 +16,13 @@ export default function ReservationForm({ reservation_id, eventType }){
   const [errorMessages, setErrorMessages] = useState("");
   const [formData, setFormData] = useState({...initialFormState})
   const history = useHistory();
+  const ac = new AbortController();
 
   useEffect(() => {
+
     async function readReservationInfo() {
       try {
-        const reservationInfo = await readReservation(reservation_id);
+        const reservationInfo = await readReservation(reservation_id, ac.signal);
 
         reservationInfo.reservation_date = formatAsDate(reservationInfo.reservation_date)
 
@@ -59,30 +61,24 @@ export default function ReservationForm({ reservation_id, eventType }){
       }
     }
     addReservationToList();
+    return () => ac.abort()
   }
 
   const createFunc = async () => {
-    await createReservation(formData);
+    await createReservation(formData, ac.signal);
     history.push(`/dashboard?date=${formData.reservation_date}`)
   };
 
   const editFunc = async () => {
-    // console.log("formData", formData);
-    await updateReservation(formData);
+    await updateReservation(formData, ac.signal);
     history.push(`/dashboard?date=${formData.reservation_date}`)
   };
 
   function changeHandler(event){
-    // console.log("reservation_id", reservation_id);
     let stateValue = event.target.value;
 
     if(event.target.name === "people" && stateValue) {
-      // console.log("stateValue", stateValue)
-      // console.log("typeof stateValue before", typeof stateValue)
-
       stateValue = parseInt(stateValue, 10)
-
-      // console.log("typeof stateValue after", typeof stateValue)
     }
     setFormData({...formData, [event.target.name]: stateValue})
   }
@@ -96,7 +92,7 @@ export default function ReservationForm({ reservation_id, eventType }){
         <input
         name = "first_name"
         type = "text"
-        //required = {true}
+        required = {true}
         value = {formData.first_name} onChange={changeHandler}
         />
         <label>Last Name</label>

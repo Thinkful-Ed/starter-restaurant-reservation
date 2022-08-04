@@ -15,27 +15,22 @@ import ReservationList from "../Reservations/ReservationList";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-
+  const ac = new AbortController();
 
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
 
-    // const dateThatIsOnPage = date;
-    // const previousDate = previous(dateThatIsOnPage);
-    // console.log("dateThatIsOnPage", dateThatIsOnPage)
-    // console.log("previousDate", previousDate)
-
-    const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
+    listReservations({ date }, ac.signal)
       .then(setReservations)
       .catch(setReservationsError);
-    return () => abortController.abort();
+    return () => ac.abort();
   }
 
   return (
     <main>
+      <style>{'body { background-color: #f7f4f180; }'}</style>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date {date}</h4>
