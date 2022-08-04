@@ -1,27 +1,24 @@
-import React, {useState, useEffect} from "react"
-import {listTables} from "../utils/api"
+import React, { useState, useEffect } from "react";
+import { listTables } from "../utils/api";
 
-export default function TableNameCapacity(){
-  const[tableNumber, setTableNumber] = useState([])
+export default function TableNameCapacity() {
+  const [tableNumber, setTableNumber] = useState([]);
 
-  useEffect(()=>{
-    async function getListOfTables(){
+  useEffect(() => {
+    async function getListOfTables() {
       let listOfTables = await listTables();
-      setTableNumber(listOfTables)
-      // console.log("listOfTables: ", listOfTables)
+      setTableNumber(listOfTables);
     }
     getListOfTables();
-  },[])
-  // console.log("tableNumber: ", tableNumber)
-  //console.log("table name",tableNumber[0].table_name)
-  let theTablesList = tableNumber.map((table)=>{
-    // console.log("table: ", table)
-  return <option key={table.table_id} value={table.table_id} >{`${table.table_name} - ${table.capacity}`}</option>
-  }
-)
-  return(
-    <>
-    {theTablesList}
-    </>
-  )
+  }, []);
+
+  let theTablesList = tableNumber.map((table) => {
+    return (
+      <option
+        key={table.table_id}
+        value={table.table_id}
+      >{`${table.table_name} - ${table.capacity}`}</option>
+    );
+  });
+  return <>{theTablesList}</>;
 }

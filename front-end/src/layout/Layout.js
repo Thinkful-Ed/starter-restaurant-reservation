@@ -15,9 +15,8 @@ function Layout() {
   return (
     <div className="container-fluid">
       <div className="row-2">
-        <div className="col-md-12 side-bar">
+        <div className="col-md side-bar">
           <Menu />
-          {/* <img src="/images/jay-wennington-N_Y88TWmGwA-unsplash.jpg" classNam3="img-fluid"/> */}
         </div>
         <div className="col">
           <Routes />

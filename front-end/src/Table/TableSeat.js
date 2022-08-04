@@ -1,57 +1,57 @@
-import React, {useState, useEffect} from "react"
-import { Link, useParams, useHistory } from "react-router-dom";
-import {readReservation} from "../utils/api"
-import TableNameCapacity from "./TableNameCapacity"
-import {seatReservation} from "../utils/api"
+import React, { useState, useEffect } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import { readReservation } from "../utils/api";
+import TableNameCapacity from "./TableNameCapacity";
+import { seatReservation } from "../utils/api";
 
-export default function TableSeat(){
-  const {reservation_id} = useParams();
-  const[client, setClient] = useState([])
-  const[formData, setFormData] =useState(null)
+export default function TableSeat() {
+  const { reservation_id } = useParams();
+  const [client, setClient] = useState([]);
+  const [formData, setFormData] = useState(null);
   const history = useHistory();
 
-  const changeHandler=(event)=>{
-    setFormData({[event.target.name]: event.target.value})
+  const changeHandler = (event) => {
+    setFormData({ [event.target.name]: event.target.value });
+  };
+
+  async function submitHandler(event) {
+    event.preventDefault();
+
+    const table_id = formData.table_id;
+    await seatReservation(reservation_id, table_id);
+    history.push(`/dashboard`);
   }
 
-  async function submitHandler(event){
-    event.preventDefault()
-    // console.log("make PUT api call with reservation_id", reservation_id)
-    // console.log("formData", formData)
-
-
-    const table_id = formData.table_id
-    await seatReservation(reservation_id, table_id)
-    history.push(`/dashboard`)
-  }
-
-  useEffect(()=>{
-    //console.log("reservation_id in TableSeat", reservation_id);
-    async function getClientReservation(){
+  useEffect(() => {
+    async function getClientReservation() {
       let clientInfo = await readReservation(reservation_id);
-      setClient(clientInfo)
+      setClient(clientInfo);
     }
     getClientReservation();
-  },[reservation_id])
+  }, [reservation_id]);
 
-  return(
+  return (
     <>
       <h1>Seat Reservation</h1>
-      <h3>#{`${reservation_id}- ${client.first_name} ${client.last_name} on ${client.reservation_date} at ${client.reservation_time} for ${client.people}`}</h3>
+      <h3>
+        #
+        {`${reservation_id}- ${client.first_name} ${client.last_name} on ${client.reservation_date} at ${client.reservation_time} for ${client.people}`}
+      </h3>
       <form onSubmit={submitHandler}>
         <label htmlFor="seat">
           Seat at:
           <select name="table_id" required={true} onChange={changeHandler}>
             <option></option>
-            <TableNameCapacity/>
+            <TableNameCapacity />
           </select>
         </label>
         <div>
-          <button type ="submit">Submit</button>
-          <button type="button" onClick={()=>history.goBack()}>Cancel</button>
+          <button type="submit">Submit</button>
+          <button type="button" onClick={() => history.goBack()}>
+            Cancel
+          </button>
         </div>
       </form>
     </>
-
-  )
+  );
 }

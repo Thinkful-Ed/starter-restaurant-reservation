@@ -1,12 +1,9 @@
-import React, {useState, useEffect} from "react";
-import {useParams, Link, useHistory} from "react-router-dom"
-import { updateReservation } from "../utils/api";
+import React from "react";
+import { useParams } from "react-router-dom";
 import ReservationForm from "./ReservationForm";
 
-export default function EditReservation(){
+export default function EditReservation() {
   const { reservation_id } = useParams();
 
-  return(
-    <ReservationForm reservation_id={reservation_id} eventType="edit" />
-  )
+  return <ReservationForm reservation_id={reservation_id} eventType="edit" />;
 }
