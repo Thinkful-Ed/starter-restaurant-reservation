@@ -15,11 +15,12 @@ import ReservationList from "../Reservations/ReservationList";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const ac = new AbortController();
+ 
 
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
+    const ac = new AbortController();
     setReservationsError(null);
     listReservations({ date }, ac.signal)
       .then(setReservations)

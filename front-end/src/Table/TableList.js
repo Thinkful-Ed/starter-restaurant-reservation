@@ -30,13 +30,13 @@ export default function TableList() {
 
   let theTablesList = data.map((table) => (
     <tr key={table.table_id}>
-      <td scope="col">{table.table_id}</td>
-      <td scope="col">{table.table_name}</td>
-      <td scope="col">{table.capacity}</td>
-      <td data-table-id-status={table.table_id} scope="col">
+      <td>{table.table_id}</td>
+      <td>{table.table_name}</td>
+      <td>{table.capacity}</td>
+      <td data-table-id-status={table.table_id}>
         {table.reservation_id ? "Occupied" : "Free"}
       </td>
-      <td scope="col">
+      <td>
         {table.reservation_id && (
           <button
             data-table-id-finish={table.table_id}
@@ -54,11 +54,11 @@ export default function TableList() {
       <table className="table table-striped">
         <thead>
           <tr>
-            <th>Table Id</th>
-            <th>Table Name</th>
-            <th>Capacity</th>
-            <th>Free?</th>
-            <th></th>
+            <th scope="col">Table Id</th>
+            <th scope="col">Table Name</th>
+            <th scope="col">Capacity</th>
+            <th scope="col">Free?</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>{theTablesList}</tbody>

@@ -20,10 +20,11 @@ export default function ReservationForm({ reservation_id, eventType }) {
   const [errorMessages, setErrorMessages] = useState("");
   const [formData, setFormData] = useState({ ...initialFormState });
   const history = useHistory();
-  const ac = new AbortController();
+
 
   useEffect(() => {
     async function readReservationInfo() {
+      const ac = new AbortController();
       try {
         const reservationInfo = await readReservation(
           reservation_id,
@@ -47,6 +48,7 @@ export default function ReservationForm({ reservation_id, eventType }) {
   }, [reservation_id]);
 
   function handleSubmit(event) {
+    const ac = new AbortController();
     event.preventDefault();
     async function addReservationToList() {
       try {
@@ -69,11 +71,13 @@ export default function ReservationForm({ reservation_id, eventType }) {
   }
 
   const createFunc = async () => {
+    const ac = new AbortController();
     await createReservation(formData, ac.signal);
     history.push(`/dashboard?date=${formData.reservation_date}`);
   };
 
   const editFunc = async () => {
+    const ac = new AbortController();
     await updateReservation(formData, ac.signal);
     history.push(`/dashboard?date=${formData.reservation_date}`);
   };
