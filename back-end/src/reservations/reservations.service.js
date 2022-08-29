@@ -13,7 +13,15 @@ function listDate(date) {
     .orderBy("reservations.reservation_time");
 }
 
+function create(newCustomer) {
+  return knex(tableName)
+  .insert(newCustomer)
+  .returning("*")
+  .then(customerData=>customerData[0])
+}
+
 module.exports = {
   list,
   listDate,
+  create,
 };
