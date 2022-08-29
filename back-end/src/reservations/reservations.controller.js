@@ -7,6 +7,7 @@
  async function list(req, res) {
   const query = req.query.date;
   const data = query ? await service.listDate(query) : await service.list();
+console.log(query)
 
   res.json({
     data,
