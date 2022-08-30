@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { createRes } from "../utils/api";
-export default function NewReservation() {
+export default function NewReservation({ date, setDate }) {
   const history = useHistory();
 
   const [newReservation, setNewReservation] = useState({
@@ -12,22 +12,19 @@ export default function NewReservation() {
     reservation_time: "",
     people: "",
   });
-  console.log(newReservation);
 
   const handleChange = (event) => {
     const { target } = event;
     const value = target.value;
     setNewReservation({ ...newReservation, [target.name]: value });
-    console.log("value", [target.name], value);
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
     newReservation.people = Number(newReservation.people); //to change string to number so that it fits the api criteria
-    console.log(newReservation.people);
     createRes(newReservation);
-    console.log("called", newReservation);
-    history.push("/");
+    history.push("/reservations");
+    setDate(newReservation.reservation_date);
   };
 
   return (
@@ -88,13 +85,7 @@ export default function NewReservation() {
         </div>
         <button>Submit</button>
       </form>
-      <button
-        onClick={() => {
-          history.go("-1");
-        }}
-      >
-        Cancel
-      </button>
+      <button onClick={() => history.push("/reservations")}>Cancel</button>
     </>
   );
 }
