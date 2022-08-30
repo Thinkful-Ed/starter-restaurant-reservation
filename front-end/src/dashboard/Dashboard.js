@@ -13,9 +13,9 @@ import { previous, next, today } from "../utils/date-time";
 function Dashboard({ date, setDate }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(loadDashboard, [date]);
-  console.log(reservations);
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -26,19 +26,39 @@ function Dashboard({ date, setDate }) {
     return () => abortController.abort();
   }
 
-  return (
-    <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
-      </div>
-      <ErrorAlert error={reservationsError} />
-      {reservations.map((reservation) => (
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 1 * 2500);
+
+  function areReservations() {
+    if (reservations.length === 0) {
+      if (isLoading === true) {
+        return <h2>Loading...</h2>;
+      } else {
+        return (
+          <h4 className="alert alert-primary">
+            There are no reservations for this date yet...
+          </h4>
+        );
+      }
+    } else {
+      return reservations.map((reservation) => (
         <ListReservations
           key={reservation.reservation_id}
           reservation={reservation}
         />
-      ))}
+      ));
+    }
+  }
+
+  return (
+    <main>
+      <h1>Dashboard</h1>
+      <div className="d-md-flex mb-3">
+        <h4 className="mb-0">Reservations for {date}</h4>
+      </div>
+      <ErrorAlert error={reservationsError} />
+      {areReservations()}
       <button
         className="btn btn-primary mr-2 pt-2 pb-2"
         onClick={() => {
