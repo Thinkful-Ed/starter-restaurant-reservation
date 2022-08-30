@@ -4,22 +4,22 @@ function ListReservations({reservation}) {
     return ( 
         <div className="div">
             <div>
-                <h3>{`${reservation.first_name} ${reservation.last_name}'s Reservation`}</h3>
+                <h2>{`${reservation.first_name} ${reservation.last_name}'s Reservation`}</h2>
             </div>
             <div>
-                <h4>Check-in Time</h4>
+                <h6>Check-in Time</h6>
                 <p>{reservation.reservation_time}</p>
             </div>
             <div>
-                <h4>Reservation Date</h4>
+                <h6>Reservation Date</h6>
                 <p>{reservation.reservation_date}</p>
             </div>
             <div>
-                <h4>Guest Amount</h4>
+                <h6>Guest Amount</h6>
                 <p>{reservation.people}</p>
             </div>
             <div>
-                <h4>Contact Info</h4>
+                <h6>Contact Info</h6>
                 <p>{reservation.mobile_number}</p>
             </div>
         </div>

@@ -12,6 +12,13 @@ import { today } from "../utils/date-time";
  *
  * @returns {JSX.Element}
  */
+
+console.log(today())
+
+const d = new Date(today());
+
+console.log("d:", d)
+
 function Routes() {
   return (
     <Switch>
@@ -22,7 +29,7 @@ function Routes() {
         <Redirect to={"/dashboard"} />
       </Route>
       <Route path="/dashboard">
-        <Dashboard date={"2020-12-30"} /> {/*today()*/}
+         <Dashboard /> {/*date={today()} */}
       </Route>
       <Route>
         <NotFound />
