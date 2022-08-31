@@ -83,9 +83,9 @@ export default function NewReservation({ date, setDate }) {
             onChange={handleChange}
           />
         </div>
-        <button>Submit</button>
+        <button type="submit">submit</button>
       </form>
-      <button onClick={() => history.push("/reservations")}>Cancel</button>
+      <button onClick={() => history.push("/reservations")}>cancel</button>
     </>
   );
 }

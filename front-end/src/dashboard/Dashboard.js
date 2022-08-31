@@ -14,6 +14,7 @@ function Dashboard({ date, setDate }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  
 
   useEffect(loadDashboard, [date]);
 
@@ -32,7 +33,7 @@ function Dashboard({ date, setDate }) {
 
   function areReservations() {
     if (reservations.length === 0) {
-      if (isLoading === true) {
+      if (isLoading) {
         return <h2>Loading...</h2>;
       } else {
         return (
