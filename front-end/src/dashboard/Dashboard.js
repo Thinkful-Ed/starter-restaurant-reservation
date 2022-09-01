@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import Reservation from "../reservations/Reservation";
+import useQuery from "../utils/useQuery";
 
 /**
  * Defines the dashboard page.
@@ -9,6 +11,10 @@ import ErrorAlert from "../layout/ErrorAlert";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  const query = useQuery();
+  let dateQuery = query.get("date");
+  if (dateQuery) date = dateQuery;
+
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -23,6 +29,10 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  const reservationList = reservations.map((reservation) => (
+    <Reservation key={reservation.reservation_id} reservation={reservation} />
+  ));
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -30,7 +40,7 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      {reservationList}
     </main>
   );
 }
