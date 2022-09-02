@@ -3,32 +3,27 @@
  */
 const service = require("./reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const hasProperties = require("../errors/hasProperties");
-
-const VALID_PROPERTIES = [
-  "first_name",
-  "last_name",
-  "mobile_number",
-  "reservation_date",
-  "reservation_time",
-  "people"
-];
-
-const hasAllProperties = hasProperties("first_name", "last_name", "mobile_number", "reservation_date", "reservation_time", "people")
 
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
+  const properties = ["first_name", "last_name", "mobile_number", "reservation_date", "reservation_time", "people"]
+  const today = new Date();
+  const timeNow = today.toLocaleTimeString();
+  today.toISOString().split('T')[0]
+  const standardizedDate = new Date(data.reservation_date).toISOString().split('T')[0]
 
-  const invalidFields = Object.keys(data).filter(
-    (field) => !VALID_PROPERTIES.includes(field)
-  );
-
-  if (invalidFields.length) {
-    return next({
-      status: 400,
-      message: `Invalid field(s): ${invalidFields.join(", ")}`,
-    });
+  if(!data){
+    const error = new Error(`Data is required.`);
+    error.status = 400;
+    next(error);
   }
+  properties.forEach((property) => {
+    if (!data[property]) {
+      const error = new Error(`A '${property}' property is required.`);
+      error.status = 400;
+      next(error);
+    }
+  });
 
   const dateRegex = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
   const timeRegex = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/
@@ -54,14 +49,64 @@ function hasOnlyValidProperties(req, res, next) {
     });
   }
 
+  // Future date validation
+  // if (new Date(data.reservation_date) < today){
+  //   const error = new Error(`Reservation date must be in the future.`);
+  //   error.status = 400;
+  //   next(error);
+  // }
+
+  if(new Date(data.reservation_date).getDay() == 1){
+    const error = new Error(`The restaurant is closed on Tuesday.`);
+    error.status = 400;
+    next(error);
+  }
+
+  if(data.reservation_time + ":00" < "10:30:00"){
+    const error = new Error(`The restaurant is closed before 10:30.`);
+    error.status = 400;
+    next(error);
+  }
+
+  if(data.reservation_time + ":00" > "21:30:00"){
+    const error = new Error(`The restaurant is closes at 10:30.`);
+    error.status = 400;
+    next(error);
+  }
+
+  if (new Date(data.reservation_date) == today && data.reservation_time + ":00" < timeNow){
+    const error = new Error(`Reservation time must be in the future.`);
+    error.status = 400;
+    next(error);
+  }
+
   next();
 }
 
-
 async function list(req, res) {
-  const todaysDate = req.query.date
-  const data = await service.list(todaysDate)
+  const todaysDate = req.query.date;
+  if(todaysDate){
+    const data = await service.listToday(todaysDate)
+    res.json({data: data})
+  }else{
+  const data = await service.list()
   res.json({data:data});
+  }
+}
+
+async function reservationExists(req, res, next) {
+  const {reservation_id} = req.params;
+  const reservation = await service.read(reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  return next({ status: 404, message: `Reservation ${reservation_id} cannot be found.`})
+}
+
+async function read(req, res, next) {
+  const {reservation} = res.locals;
+  res.json({data: reservation});
 }
 
 async function create(req, res, next) {
@@ -73,8 +118,8 @@ async function create(req, res, next) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
+  read: [asyncErrorBoundary(reservationExists), read],
   create: [
-    hasAllProperties,
     hasOnlyValidProperties,
     asyncErrorBoundary(create)]
 };
