@@ -20,6 +20,13 @@ function read(tableId) {
     .first();
 }
 
+function reservationCheck(reservationId) {
+  return knex("reservations")
+    .select("*")
+    .where({ "reservation_id": reservationId})
+    .first();
+}
+
 function update(updatedTable) {
   return knex("tables")
     .select("*")
@@ -32,5 +39,6 @@ module.exports = {
   list,
   create,
   read,
+  reservationCheck,
   update,
 };

@@ -10,8 +10,7 @@ function hasOnlyValidProperties(req, res, next) {
   const today = new Date();
   const timeNow = today.toLocaleTimeString();
   today.toISOString().split('T')[0]
-  const standardizedDate = new Date(data.reservation_date).toISOString().split('T')[0]
-
+  const requestedDate = new Date(data.reservation_date.replace(/-/g, "/"));
   if(!data){
     const error = new Error(`Data is required.`);
     error.status = 400;
@@ -24,6 +23,7 @@ function hasOnlyValidProperties(req, res, next) {
       next(error);
     }
   });
+  console.log(data.reservation_date)
 
   const dateRegex = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
   const timeRegex = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/
@@ -49,14 +49,14 @@ function hasOnlyValidProperties(req, res, next) {
     });
   }
 
-  // Future date validation
-  // if (new Date(data.reservation_date) < today){
-  //   const error = new Error(`Reservation date must be in the future.`);
-  //   error.status = 400;
-  //   next(error);
-  // }
+  //Future date validation
+  if (requestedDate < today){
+    const error = new Error(`Reservation date must be in the future.`);
+    error.status = 400;
+    next(error);
+  }
 
-  if(new Date(data.reservation_date).getDay() == 1){
+  if(requestedDate.getDay() == 2){
     const error = new Error(`The restaurant is closed on Tuesday.`);
     error.status = 400;
     next(error);
@@ -74,7 +74,7 @@ function hasOnlyValidProperties(req, res, next) {
     next(error);
   }
 
-  if (new Date(data.reservation_date) == today && data.reservation_time + ":00" < timeNow){
+  if (requestedDate == today && data.reservation_time + ":00" < timeNow){
     const error = new Error(`Reservation time must be in the future.`);
     error.status = 400;
     next(error);

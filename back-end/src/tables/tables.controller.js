@@ -71,6 +71,10 @@ async function update(req, res, next) {
   if (!req.body.data.reservation_id) {
     return next({ status: 400, message: `Data requires reservation_id.` });
   }
+  const resCheck = await service.reservationCheck(req.body.data.reservation_id)
+  if (!resCheck){
+    return next({ status: 404, message: `Reservation id ${req.body.data.reservation_id} does not exist`})
+  }
   const updatedTable = {
     ...req.body.data,
     table_id: res.locals.table.table_id,

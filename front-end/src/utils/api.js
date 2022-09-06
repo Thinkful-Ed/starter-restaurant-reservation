@@ -86,3 +86,13 @@ export async function todaysReservations(date){
   }
   return await fetchJson(url, options, [])
 }
+
+export async function createTable(formData) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: formData }),
+  };
+  return await fetchJson(url, options, []);
+}
