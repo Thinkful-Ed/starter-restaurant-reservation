@@ -51,6 +51,33 @@ function peoplePropertyIsValid(req, res, next) {
   }
 }
 
+function reservationIsNotForTuesday(req, res, next) {
+  const { reservation_date } = req.body.data;
+  const date = new Date(reservation_date);
+  if (date.getDay() !== 1) {
+    return next();
+  } else {
+    return next({
+      status: 400,
+      message: `Sorry! We are closed on Tuesdays.`,
+    });
+  }
+}
+
+function reservationIsForFuture(req, res, next) {
+  const { reservation_date, reservation_time } = req.body.data;
+  const now = new Date();
+  const reservation = new Date(`${reservation_date} ${reservation_time}`);
+  if (reservation > now) {
+    return next();
+  } else {
+    return next({
+      status: 400,
+      message: `Sorry! Reservations must be for a future time or date.`
+    })
+  }
+}
+
 // HTTP REQUEST HANDLERS FOR 'RESERVATIONS' RESOURCES //
 
 async function list(req, res) {
@@ -85,6 +112,8 @@ module.exports = {
     reservationDatePropertyIsValid,
     reservationTimePropertyIsValid,
     peoplePropertyIsValid,
+    reservationIsNotForTuesday,
+    reservationIsForFuture,
     asyncErrorBoundary(create),
   ],
 };
