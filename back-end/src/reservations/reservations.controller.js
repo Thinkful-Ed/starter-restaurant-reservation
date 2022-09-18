@@ -9,7 +9,9 @@ function bodyDataHas(propertyName) {
     if (data[propertyName]) {
       return next();
     }
-    next({ status: 400, message: `Must include a ${propertyName}` });
+    next({
+      status: 400, 
+      message: `Must include a ${propertyName}` });
   };
 }
 
@@ -73,8 +75,20 @@ function reservationIsForFuture(req, res, next) {
   } else {
     return next({
       status: 400,
-      message: `Sorry! Reservations must be for a future time or date.`
-    })
+      message: `Sorry! Reservations must be for a future time or date.`,
+    });
+  }
+}
+
+function reservationIsForOpenHours(req, res, next) {
+  const { reservation_time } = req.body.data;
+  if (reservation_time >= "10:30" && reservation_time <= "21:30") {
+    return next();
+  } else {
+    return next({
+      status: 400,
+      message: `Sorry! Reservations are only available from 10:30am to 9:30pm.`,
+    });
   }
 }
 
@@ -114,6 +128,7 @@ module.exports = {
     peoplePropertyIsValid,
     reservationIsNotForTuesday,
     reservationIsForFuture,
+    reservationIsForOpenHours,
     asyncErrorBoundary(create),
   ],
 };
