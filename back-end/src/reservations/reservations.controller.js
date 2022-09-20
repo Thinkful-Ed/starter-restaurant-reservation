@@ -10,8 +10,9 @@ function bodyDataHas(propertyName) {
       return next();
     }
     next({
-      status: 400, 
-      message: `Must include a ${propertyName}` });
+      status: 400,
+      message: `Must include a ${propertyName}`,
+    });
   };
 }
 
@@ -43,12 +44,12 @@ function reservationTimePropertyIsValid(req, res, next) {
 
 function peoplePropertyIsValid(req, res, next) {
   const { people } = req.body.data;
-  if (typeof people === "number") {
+  if (typeof people === "number" && people > 0) {
     return next();
   } else {
     return next({
       status: 400,
-      message: `Invalid field: 'people' must be a positive integer greater than 0.`,
+      message: `Invalid field: 'people' must be at least 1.`,
     });
   }
 }
@@ -92,7 +93,32 @@ function reservationIsForOpenHours(req, res, next) {
   }
 }
 
+async function reservationExists(req, res, next) {
+  const reservationId = req.params.reservation_id;
+  const existingReservation = await reservationsService.read(reservationId);
+  if (existingReservation) {
+    return next();
+  } else {
+    return next({
+      status: 404,
+      message: `Reservation ${reservationId} does not exist.`,
+    });
+  }
+}
+
 // HTTP REQUEST HANDLERS FOR 'RESERVATIONS' RESOURCES //
+
+async function create(req, res) {
+  const newReservation = req.body.data;
+  const responseData = await reservationsService.create(newReservation);
+  res.status(201).json({ data: responseData });
+}
+
+async function read(req, res, next) {
+  const reservationId = req.params.reservation_id;
+  const responseData = await reservationsService.read(reservationId);
+  res.status(200).json({ data: responseData });
+}
 
 async function list(req, res) {
   const { date } = req.query;
@@ -106,16 +132,9 @@ async function list(req, res) {
   }
 }
 
-async function create(req, res) {
-  const newReservation = req.body.data;
-  const responseData = await reservationsService.create(newReservation);
-  res.status(201).json({ data: responseData });
-}
-
 // EXPORTS //
 
 module.exports = {
-  list: [asyncErrorBoundary(list)],
   create: [
     bodyDataHas("first_name"),
     bodyDataHas("last_name"),
@@ -131,4 +150,6 @@ module.exports = {
     reservationIsForOpenHours,
     asyncErrorBoundary(create),
   ],
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
+  list: [asyncErrorBoundary(list)],
 };

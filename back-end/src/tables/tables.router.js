@@ -1,8 +1,15 @@
 const router = require("express").Router();
-const { rightOuterJoin } = require("../db/connection");
 const controller = require("./tables.controller");
 const methodNotAllowed = require("../errors/methodNotAllowed");
 
-router.route("/").all(methodNotAllowed);
+router
+  .route("/")
+  .get(controller.list)
+  .post(controller.create)
+  .all(methodNotAllowed);
+
+router.route("/:table_id").get(controller.read).all(methodNotAllowed);
+
+router.route("/:table_id/seat").put(controller.updateTableStatusToOccupied).all(methodNotAllowed);
 
 module.exports = router;

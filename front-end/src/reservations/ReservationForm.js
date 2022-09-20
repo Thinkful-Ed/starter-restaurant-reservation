@@ -36,10 +36,9 @@ export default function ReservationForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post(
-        process.env.REACT_APP_API_BASE_URL + `/reservations`,
-        {data: formData}
-      );
+      await axios.post(process.env.REACT_APP_API_BASE_URL + `/reservations`, {
+        data: formData,
+      });
       history.push(`/dashboard?date=${formData.reservation_date}`);
     } catch (error) {
       setErrors(error.response.data.error);

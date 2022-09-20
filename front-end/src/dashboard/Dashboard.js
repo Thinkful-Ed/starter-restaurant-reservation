@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import useQuery from "../utils/useQuery";
+import axios from "axios";
 import { listReservations } from "../utils/api";
+import ReservationsList from "../reservations/ReservationsList";
+import TablesList from "../tables/TablesList";
 import ErrorAlert from "../layout/ErrorAlert";
 
 /**
@@ -10,16 +13,17 @@ import ErrorAlert from "../layout/ErrorAlert";
  * @returns {JSX.Element}
  */
 
-
-
 function Dashboard({ date }) {
   const query = useQuery();
   date = query.get("date") || date;
+  const URL = process.env.REACT_APP_API_BASE_URL;
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tablesError, setTablesError] = useState(null);
+  const [tables, setTables] = useState([]);
 
   useEffect(loadDashboard, [date]);
-  
+
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
@@ -29,19 +33,42 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  useEffect(() => {
+    const abortController = new AbortController();
+    setTablesError(null);
+    async function listTables() {
+      try {
+        const response = await axios.get(URL + "/tables", {
+          signal: abortController.signal,
+        });
+        setTables(response.data.data);
+      } catch (error) {
+        setTablesError(error);
+      }
+    }
+    listTables();
+    return () => abortController.abort();
+  }, [URL]);
+
   return (
     <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
-      </div>
       <div>
-        <button className="btn btn-info">Previous Day</button>
-        <button className="btn btn-info">Today</button>
-        <button className="btn btn-info">Next Day</button>
+        <h1>Dashboard</h1>
+        <ErrorAlert error={reservationsError} />
+        <div>
+          <h4>Reservations for {date}</h4>
+        </div>
+        <div>
+          <ReservationsList reservations={reservations} />
+        </div>
+        <ErrorAlert error={tablesError} />
+        <div>
+          <h4>Tables</h4>
+        </div>
+        <div>
+          <TablesList tables={tables} />
+        </div>
       </div>
-      <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
     </main>
   );
 }
