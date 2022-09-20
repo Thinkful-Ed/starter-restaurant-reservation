@@ -64,7 +64,7 @@ export default function SeatReservation() {
           </select>
         </div>
         <button
-          type="cancel"
+          type="button"
           className="btn btn-danger"
           onClick={() => history.goBack()}
         >
