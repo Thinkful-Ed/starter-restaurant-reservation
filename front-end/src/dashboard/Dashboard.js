@@ -83,6 +83,7 @@ function Dashboard({ date }) {
           >
             Tomorrow
           </button>
+
         </div>
         <div>
           <ReservationsList reservations={reservations} />
