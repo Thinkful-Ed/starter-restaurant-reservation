@@ -83,12 +83,7 @@ function Dashboard({ date }) {
           >
             Tomorrow
           </button>
-          <button
-            type="button"
-            className="btn btn-success"
-          >
-            FINISH PLACEHOLDER
-          </button>
+
         </div>
         <div>
           <ReservationsList reservations={reservations} />
