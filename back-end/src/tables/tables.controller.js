@@ -94,6 +94,18 @@ function tableIsAvailable(req, res, next) {
   }
 }
 
+function tableIsOccupied(req, res, next) {
+  const tableStatus = res.locals.table.status;
+  if (tableStatus === "Occupied") {
+    return next();
+  } else {
+    return next({
+      status: 400,
+      message: `This table is not occupied.`,
+    });
+  }
+}
+
 // HTTP REQUEST HANDLERS FOR 'TABLES' RESOURCES //
 
 async function create(req, res) {
@@ -115,6 +127,12 @@ async function updateTableStatusToOccupied(req, res, next) {
     tableId,
     reservationId
   );
+  res.status(200).json({ data: responseData });
+}
+
+async function deleteTableAssignment(req, res) {
+  const tableId = req.params.table_id;
+  const responseData = await tablesService.deleteTableAssignment(tableId);
   res.status(200).json({ data: responseData });
 }
 
@@ -141,6 +159,11 @@ module.exports = {
     tableHasCapacity,
     tableIsAvailable,
     asyncErrorBoundary(updateTableStatusToOccupied),
+  ],
+  deleteTableAssignment: [
+    asyncErrorBoundary(tableExists),
+    tableIsOccupied,
+    asyncErrorBoundary(deleteTableAssignment),
   ],
   list: [asyncErrorBoundary(list)],
 };

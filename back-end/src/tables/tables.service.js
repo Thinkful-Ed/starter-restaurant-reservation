@@ -17,6 +17,13 @@ function updateTableStatusToOccupied(tableId, reservationId) {
     .update({ status: "Occupied", reservation_id: reservationId });
 }
 
+function deleteTableAssignment(tableId) {
+  return knex("tables")
+    .select("*")
+    .where({ table_id: tableId })
+    .update({ status: "Free", reservation_id: null })
+}
+
 function list() {
   return knex("tables").select("*").orderBy("table_name");
 }
@@ -25,5 +32,6 @@ module.exports = {
   create,
   read,
   updateTableStatusToOccupied,
+  deleteTableAssignment,
   list,
 };
