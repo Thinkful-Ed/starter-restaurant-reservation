@@ -16,7 +16,7 @@ function bodyDataHas(propertyName) {
   };
 }
 
-function reservationDatePropertyIsValid(req, res, next) {
+function datePropertyIsValid(req, res, next) {
   const { reservation_date } = req.body.data;
   const dateFormat = /^\d{4}-\d{1,2}-\d{1,2}$/;
   if (dateFormat.test(reservation_date)) {
@@ -29,7 +29,7 @@ function reservationDatePropertyIsValid(req, res, next) {
   }
 }
 
-function reservationTimePropertyIsValid(req, res, next) {
+function timePropertyIsValid(req, res, next) {
   const { reservation_time } = req.body.data;
   const timeFormat = /\d\d:\d\d/;
   if (timeFormat.test(reservation_time)) {
@@ -108,6 +108,19 @@ async function reservationExists(req, res, next) {
   }
 }
 
+function statusPropertyIsValid(req, res, next) {
+  const status = req.body.data.status;
+  console.log(status);
+  if (status === "booked") {
+    return next();
+  } else {
+    return next({
+      status: 400,
+      message: `${status} is an invalid status for a new reservation.`
+    })
+  }
+}
+
 // HTTP REQUEST HANDLERS FOR 'RESERVATIONS' RESOURCES //
 
 async function createReservation(req, res) {
@@ -146,12 +159,13 @@ module.exports = {
     bodyDataHas("reservation_date"),
     bodyDataHas("reservation_time"),
     bodyDataHas("people"),
-    reservationDatePropertyIsValid,
-    reservationTimePropertyIsValid,
+    datePropertyIsValid,
+    timePropertyIsValid,
     peoplePropertyIsValid,
     reservationIsNotForTuesday,
     reservationIsForFuture,
     reservationIsForOpenHours,
+    statusPropertyIsValid,
     asyncErrorBoundary(createReservation),
   ],
   readReservation: [
