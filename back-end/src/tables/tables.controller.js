@@ -43,7 +43,7 @@ function capacityPropertyIsValid(req, res, next) {
 
 async function tableExists(req, res, next) {
   const tableId = req.params.table_id;
-  const existingTable = await tablesService.read(tableId);
+  const existingTable = await tablesService.readTable(tableId);
   if (existingTable) {
     res.locals.table = existingTable;
     return next();
@@ -57,7 +57,9 @@ async function tableExists(req, res, next) {
 
 async function reservationExists(req, res, next) {
   const reservationId = req.body.data.reservation_id;
-  const existingReservation = await reservationsService.read(reservationId);
+  const existingReservation = await reservationsService.readReservation(
+    reservationId
+  );
   if (existingReservation) {
     res.locals.reservation = existingReservation;
     return next();
@@ -108,62 +110,59 @@ function tableIsOccupied(req, res, next) {
 
 // HTTP REQUEST HANDLERS FOR 'TABLES' RESOURCES //
 
-async function create(req, res) {
+async function createTable(req, res) {
   const newTable = req.body.data;
-  const responseData = await tablesService.create(newTable);
+  const responseData = await tablesService.createTable(newTable);
   res.status(201).json({ data: responseData });
 }
 
-async function read(req, res) {
+async function readTable(req, res) {
   const tableId = req.params.table_id;
-  const responseData = await tablesService.read(tableId);
+  const responseData = await tablesService.readTable(tableId);
   res.status(200).json({ data: responseData });
 }
 
-async function updateTableStatusToOccupied(req, res, next) {
+async function seatTable(req, res, next) {
   const tableId = res.locals.table.table_id;
   const reservationId = res.locals.reservation.reservation_id;
-  const responseData = await tablesService.updateTableStatusToOccupied(
-    tableId,
-    reservationId
-  );
+  const responseData = await tablesService.seatTable(tableId, reservationId);
   res.status(200).json({ data: responseData });
 }
 
-async function deleteTableAssignment(req, res) {
+async function unseatTable(req, res) {
   const tableId = req.params.table_id;
-  const responseData = await tablesService.deleteTableAssignment(tableId);
+  const responseData = await tablesService.unseatTable(tableId);
   res.status(200).json({ data: responseData });
 }
 
-async function list(req, res) {
-  const responseData = await tablesService.list();
+async function listTables(req, res) {
+  const responseData = await tablesService.listTables();
   res.status(200).json({ data: responseData });
 }
 
 // EXPORTS //
 
 module.exports = {
-  create: [
+  createTable: [
     bodyDataHas("table_name"),
     bodyDataHas("capacity"),
     tableNamePropertyIsValid,
     capacityPropertyIsValid,
-    asyncErrorBoundary(create),
+    asyncErrorBoundary(createTable),
   ],
-  read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
-  updateTableStatusToOccupied: [
+  readTable: [asyncErrorBoundary(tableExists), asyncErrorBoundary(readTable)],
+  seatTable: [
     bodyDataHas("reservation_id"),
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(reservationExists),
     tableHasCapacity,
     tableIsAvailable,
-    asyncErrorBoundary(updateTableStatusToOccupied),
+    asyncErrorBoundary(seatTable),
   ],
-  deleteTableAssignment: [
+  unseatTable: [
     asyncErrorBoundary(tableExists),
     tableIsOccupied,
-    asyncErrorBoundary(deleteTableAssignment),
+    asyncErrorBoundary(unseatTable),
   ],
-  list: [asyncErrorBoundary(list)],
+  listTables: [asyncErrorBoundary(listTables)],
 };

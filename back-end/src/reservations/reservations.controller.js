@@ -95,7 +95,9 @@ function reservationIsForOpenHours(req, res, next) {
 
 async function reservationExists(req, res, next) {
   const reservationId = req.params.reservation_id;
-  const existingReservation = await reservationsService.read(reservationId);
+  const existingReservation = await reservationsService.readReservation(
+    reservationId
+  );
   if (existingReservation) {
     return next();
   } else {
@@ -108,26 +110,28 @@ async function reservationExists(req, res, next) {
 
 // HTTP REQUEST HANDLERS FOR 'RESERVATIONS' RESOURCES //
 
-async function create(req, res) {
+async function createReservation(req, res) {
   const newReservation = req.body.data;
-  const responseData = await reservationsService.create(newReservation);
+  const responseData = await reservationsService.createReservation(
+    newReservation
+  );
   res.status(201).json({ data: responseData });
 }
 
-async function read(req, res, next) {
+async function readReservation(req, res, next) {
   const reservationId = req.params.reservation_id;
-  const responseData = await reservationsService.read(reservationId);
+  const responseData = await reservationsService.readReservation(reservationId);
   res.status(200).json({ data: responseData });
 }
 
-async function list(req, res) {
+async function listReservations(req, res) {
   const { date } = req.query;
   if (date) {
-    const responseData = await reservationsService.list(date);
+    const responseData = await reservationsService.listReservations(date);
     res.status(200).json({ data: responseData });
   } else {
     const today = new Date().toISOString().slice(0, 10);
-    const responseData = await reservationsService.list(today);
+    const responseData = await reservationsService.listReservations(today);
     res.status(200).json({ data: responseData });
   }
 }
@@ -135,7 +139,7 @@ async function list(req, res) {
 // EXPORTS //
 
 module.exports = {
-  create: [
+  createReservation: [
     bodyDataHas("first_name"),
     bodyDataHas("last_name"),
     bodyDataHas("mobile_number"),
@@ -148,8 +152,11 @@ module.exports = {
     reservationIsNotForTuesday,
     reservationIsForFuture,
     reservationIsForOpenHours,
-    asyncErrorBoundary(create),
+    asyncErrorBoundary(createReservation),
   ],
-  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
-  list: [asyncErrorBoundary(list)],
+  readReservation: [
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(readReservation),
+  ],
+  listReservations: [asyncErrorBoundary(listReservations)],
 };

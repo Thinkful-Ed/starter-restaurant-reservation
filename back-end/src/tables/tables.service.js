@@ -1,37 +1,37 @@
 const knex = require("../db/connection");
 
-function create(newTable) {
+function createTable(newTable) {
   return knex("tables")
     .insert(newTable)
     .returning("*")
     .then((createdRecord) => createdRecord[0]);
 }
 
-function read(tableId) {
+function readTable(tableId) {
   return knex("tables").select("*").where({ table_id: tableId }).first();
 }
 
-function updateTableStatusToOccupied(tableId, reservationId) {
+function seatTable(tableId, reservationId) {
   return knex("tables")
     .where({ table_id: tableId })
     .update({ status: "Occupied", reservation_id: reservationId });
 }
 
-function deleteTableAssignment(tableId) {
+function unseatTable(tableId) {
   return knex("tables")
     .select("*")
     .where({ table_id: tableId })
-    .update({ status: "Free", reservation_id: null })
+    .update({ status: "Free", reservation_id: null });
 }
 
-function list() {
+function listTables() {
   return knex("tables").select("*").orderBy("table_name");
 }
 
 module.exports = {
-  create,
-  read,
-  updateTableStatusToOccupied,
-  deleteTableAssignment,
-  list,
+  createTable,
+  readTable,
+  seatTable,
+  unseatTable,
+  listTables,
 };
