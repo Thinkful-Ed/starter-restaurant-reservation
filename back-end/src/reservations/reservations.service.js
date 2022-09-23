@@ -19,7 +19,8 @@ function readReservation(reservationId) {
 function updateReservationStatus(reservationId, newStatus) {
   return knex("reservations")
     .where({ reservation_id: reservationId })
-    .update({ status: newStatus });
+    .update({ status: newStatus })
+    .returning("*");
 }
 
 function listReservations(date) {
