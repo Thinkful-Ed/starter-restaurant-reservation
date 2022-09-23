@@ -108,15 +108,28 @@ async function reservationExists(req, res, next) {
   }
 }
 
-function statusPropertyIsValid(req, res, next) {
+function statusPropertyIsNotSeatedOrFinished(req, res, next) {
   const status = req.body.data.status;
   if (status !== "seated" && status !== "finished") {
     return next();
   } else {
     return next({
       status: 400,
-      message: `${status} is an invalid status for a new reservation.`
-    })
+      message: `${status} is an invalid status for a new reservation.`,
+    });
+  }
+}
+
+function statusPropertyIsValid(req, res, next) {
+  const { status } = req.body.data;
+  const validStatuses = ["booked", "seated", "finished"];
+  if (validStatuses.includes(status)) {
+    return next();
+  } else {
+    return next({
+      status: 400,
+      message: `Status unknown: Status must be booked, seated, or finished.`,
+    });
   }
 }
 
@@ -133,6 +146,16 @@ async function createReservation(req, res) {
 async function readReservation(req, res, next) {
   const reservationId = req.params.reservation_id;
   const responseData = await reservationsService.readReservation(reservationId);
+  res.status(200).json({ data: responseData });
+}
+
+async function updateReservationStatus(req, res, next) {
+  const reservationId = req.params.reservation_id;
+  const newStatus = req.body.data.status;
+  responseData = await reservationsService.updateReservationStatus(
+    reservationId,
+    newStatus
+  );
   res.status(200).json({ data: responseData });
 }
 
@@ -164,12 +187,18 @@ module.exports = {
     reservationIsNotForTuesday,
     reservationIsForFuture,
     reservationIsForOpenHours,
-    statusPropertyIsValid,
+    statusPropertyIsNotSeatedOrFinished,
     asyncErrorBoundary(createReservation),
   ],
   readReservation: [
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(readReservation),
+  ],
+  updateReservationStatus: [
+    bodyDataHas("status"),
+    statusPropertyIsValid,
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(updateReservationStatus),
   ],
   listReservations: [asyncErrorBoundary(listReservations)],
 };
