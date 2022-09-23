@@ -110,8 +110,7 @@ async function reservationExists(req, res, next) {
 
 function statusPropertyIsValid(req, res, next) {
   const status = req.body.data.status;
-  console.log(status);
-  if (status === "booked") {
+  if (status !== "seated" && status !== "finished") {
     return next();
   } else {
     return next({
