@@ -98,7 +98,7 @@ function tableIsAvailable(req, res, next) {
 
 function tableIsOccupied(req, res, next) {
   const tableStatus = res.locals.table.status;
-  if (tableStatus === "Occupied") {
+  if (tableStatus === "occupied") {
     return next();
   } else {
     return next({
@@ -134,7 +134,7 @@ async function readTable(req, res) {
   res.status(200).json({ data: responseData });
 }
 
-async function seatTable(req, res, next) {
+async function seatTable(req, res) {
   const tableId = res.locals.table.table_id;
   const reservationId = res.locals.reservation.reservation_id;
   const responseData = await tablesService.seatTable(tableId, reservationId);
@@ -143,7 +143,8 @@ async function seatTable(req, res, next) {
 
 async function unseatTable(req, res) {
   const tableId = req.params.table_id;
-  const responseData = await tablesService.unseatTable(tableId);
+  const reservationId = res.locals.table.reservation_id;
+  const responseData = await tablesService.unseatTable(tableId, reservationId);
   res.status(200).json({ data: responseData });
 }
 

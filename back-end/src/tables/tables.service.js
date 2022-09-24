@@ -26,11 +26,20 @@ async function seatTable(tableId, reservationId) {
     .catch(trx.rollback);
 }
 
-function unseatTable(tableId) {
+async function unseatTable(tableId, reservationId) {
+  const trx = await knex.transaction();
+
   return knex("tables")
     .select("*")
     .where({ table_id: tableId })
-    .update({ status: "free", reservation_id: null });
+    .update({ status: "free", reservation_id: null })
+    .then(function () {
+      return trx("reservations")
+        .where({ reservation_id: reservationId })
+        .update({ status: "finished" });
+    })
+    .then(trx.commit)
+    .catch(trx.rollback);
 }
 
 function listTables() {
