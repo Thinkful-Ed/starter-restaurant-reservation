@@ -172,9 +172,15 @@ async function updateReservationStatus(req, res, next) {
 }
 
 async function listReservations(req, res) {
-  const { date } = req.query;
+  const { date, mobile_number } = req.query;
   if (date) {
     const responseData = await reservationsService.listReservations(date);
+    res.status(200).json({ data: responseData });
+  } else if (mobile_number) {
+    const responseData = await reservationsService.listReservations(
+      null,
+      mobile_number
+    );
     res.status(200).json({ data: responseData });
   } else {
     const today = new Date().toISOString().slice(0, 10);

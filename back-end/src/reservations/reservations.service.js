@@ -23,13 +23,20 @@ function updateReservationStatus(reservationId, newStatus) {
     .returning("*");
 }
 
-function listReservations(date) {
+function listReservations(date, mobile_number) {
   if (date) {
     return knex("reservations")
       .select("*")
       .where({ reservation_date: date })
       .whereNot({ status: "finished" })
       .orderBy("reservation_time");
+  } else if (mobile_number) {
+    return knex("reservations")
+      .whereRaw(
+        "translate(mobile_number, '() -', '') like ?",
+        `%${mobile_number.replace(/\D/g, "")}%`
+      )
+      .orderBy("reservation_date");
   } else {
     return knex("reservations").select("*").whereNot({ status: "finished" });
   }
