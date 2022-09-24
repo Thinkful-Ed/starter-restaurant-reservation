@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function ReservationCard({ reservation }) {
+export default function ReservationCard({ reservation, loadReservations }) {
   return (
     <tr>
       <td>{reservation.first_name}</td>
