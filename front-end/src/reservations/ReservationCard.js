@@ -12,7 +12,7 @@ export default function ReservationCard({ reservation }) {
       <td data-reservation-id-status={reservation.reservation_id}>
         {reservation.status}
       </td>
-      {reservation.status === "Booked" && (
+      {reservation.status === "booked" && (
         <Link to={`/reservations/${reservation.reservation_id}/seat`}>
           <button className="btn btn-success">Seat</button>
         </Link>

@@ -86,7 +86,7 @@ function tableHasCapacity(req, res, next) {
 
 function tableIsAvailable(req, res, next) {
   const tableStatus = res.locals.table.status;
-  if (tableStatus === "Free") {
+  if (tableStatus === "free") {
     return next();
   } else {
     return next({
