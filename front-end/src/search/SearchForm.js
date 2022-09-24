@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import ErrorAlert from "../layout/ErrorAlert";
 import formatPhoneNumber from "../utils/formatPhoneNumber";
 import { listReservations } from "../utils/api";
@@ -12,30 +11,38 @@ export default function SearchForm() {
   const [reservationsDisplay, setReservationsDisplay] = useState("");
 
   useEffect(() => {
-    if (reservations.length) {
-      setReservationsDisplay(
-        reservations.map((reservation, index) => {
-          return (
-            <span key={index}>
-              <ReservationCard
-                reservation={reservation}
-                loadReservations={loadReservations}
-              />
-            </span>
+    const abortController = new AbortController();
+    setErrors(null);
+    async function listMatchingReservations() {
+      try {
+        if (reservations.length) {
+          setReservationsDisplay(
+            reservations.map((reservation, index) => {
+              return (
+                <span key={index}>
+                  <ReservationCard
+                    reservation={reservation}
+                    loadReservations={loadReservations}
+                  />
+                </span>
+              );
+            })
           );
-        })
-      );
-    } else if (reservations !== "") {
-      setReservationsDisplay(
-        <div className="alert alert-info border border-info my-2">
-          No reservations found
-        </div>
-      );
+        } else if (reservations !== "") {
+          setReservationsDisplay(
+            <div className="alert alert-info">No reservations found</div>
+          );
+        }
+      } catch (error) {
+        setErrors(error);
+      }
     }
+    listMatchingReservations();
+    return () => abortController.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reservations]);
 
   function loadReservations() {
-    setReservationsDisplay("placeholder for loading reservations display");
     const abortController = new AbortController();
     setErrors(null);
     listReservations({ mobile_number: mobileNumber }, abortController.signal)
