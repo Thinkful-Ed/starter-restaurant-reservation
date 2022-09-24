@@ -19,12 +19,9 @@ export default function SearchForm() {
           setReservationsDisplay(
             reservations.map((reservation, index) => {
               return (
-                <span key={index}>
-                  <ReservationCard
-                    reservation={reservation}
-                    loadReservations={loadReservations}
-                  />
-                </span>
+                <div key={index}>
+                  <ReservationCard reservation={reservation} />
+                </div>
               );
             })
           );
