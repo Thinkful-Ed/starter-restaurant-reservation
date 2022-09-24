@@ -17,6 +17,15 @@ export default function ReservationCard({ reservation }) {
           <button className="btn btn-success">Seat</button>
         </Link>
       )}
+      <Link to={`/reservations/${reservation.reservation_id}/edit`}>
+        <button className="btn btn-secondary">Edit</button>
+      </Link>
+      <button
+        className="btn btn-danger"
+        data-reservation-id-cancel={reservation.reservation_id}
+      >
+        Cancel
+      </button>
     </tr>
   );
 }

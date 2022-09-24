@@ -64,21 +64,21 @@ function Dashboard({ date }) {
         <div>
           <button
             type="button"
-            className="btn btn-success"
+            className="btn btn-primary"
             onClick={() => history.push(`/dashboard?date=${previous(date)}`)}
           >
             Yesterday
           </button>
           <button
             type="button"
-            className="btn btn-success"
+            className="btn btn-primary"
             onClick={() => history.push(`/dashboard?date=${today()}`)}
           >
             Today
           </button>
           <button
             type="button"
-            className="btn btn-success"
+            className="btn btn-primary"
             onClick={() => history.push(`/dashboard?date=${next(date)}`)}
           >
             Tomorrow
