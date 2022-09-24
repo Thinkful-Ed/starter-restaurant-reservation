@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import formatPhoneNumber from "../utils/formatPhoneNumber";
 import ErrorAlert from "../layout/ErrorAlert";
 
 export default function ReservationForm() {
@@ -31,6 +32,14 @@ export default function ReservationForm() {
         people: parseInt(event.target.value),
       });
     }
+  };
+
+  const handlePhoneNumberChange = ( event) => {
+    const formattedPhoneNumber = formatPhoneNumber(event.target.value);
+    setFormData({
+      ...formData,
+      mobile_number: formattedPhoneNumber,
+    });
   };
 
   const handleSubmit = async (event) => {
@@ -82,7 +91,7 @@ export default function ReservationForm() {
             placeholder="XXX-XXX-XXXX"
             required={true}
             value={formData.mobile_number}
-            onChange={handleChange}
+            onChange={handlePhoneNumberChange}
           />
         </div>
         <div>
