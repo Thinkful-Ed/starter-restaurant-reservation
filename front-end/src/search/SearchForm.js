@@ -4,7 +4,7 @@ import formatPhoneNumber from "../utils/formatPhoneNumber";
 export default function SearchForm() {
   const [mobileNumber, setMobileNumber] = useState("");
 
-const handleChange = (event) => {
+  const handleChange = (event) => {
     const formattedPhoneNumber = formatPhoneNumber(event.target.value);
     setMobileNumber(formattedPhoneNumber);
   };
@@ -19,11 +19,15 @@ const handleChange = (event) => {
             type="text"
             id="mobile_number"
             placeholder="Enter a customer's phone number"
+            style={{ width: 275 }}
             required={true}
             value={mobileNumber}
             onChange={handleChange}
           />
         </div>
+        <button type="submit" className="btn btn-primary">
+          Find
+        </button>
       </form>
     </div>
   );
