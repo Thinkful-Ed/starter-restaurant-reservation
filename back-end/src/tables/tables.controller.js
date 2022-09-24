@@ -108,6 +108,18 @@ function tableIsOccupied(req, res, next) {
   }
 }
 
+function reservationIsNotAlreadySeated(req, res, next) {
+  const status = res.locals.reservation.status;
+  if (status !== "seated") {
+    next();
+  } else {
+    next({
+      status: 400,
+      message: `Reservation is already seated.`,
+    });
+  }
+}
+
 // HTTP REQUEST HANDLERS FOR 'TABLES' RESOURCES //
 
 async function createTable(req, res) {
@@ -155,6 +167,7 @@ module.exports = {
     bodyDataHas("reservation_id"),
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(reservationExists),
+    reservationIsNotAlreadySeated,
     tableHasCapacity,
     tableIsAvailable,
     asyncErrorBoundary(seatTable),
