@@ -234,7 +234,6 @@ module.exports = {
     reservationIsNotForTuesday,
     reservationIsForFuture,
     reservationIsForOpenHours,
-    statusPropertyIsNotFinished,
     asyncErrorBoundary(updateReservation),
   ],
   updateReservationStatus: [
