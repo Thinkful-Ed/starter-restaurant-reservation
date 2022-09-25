@@ -11,7 +11,9 @@ export default function ReservationCard({ reservation }) {
 
     if (window.confirm(message)) {
       try {
-        await axios.put(`${URL}/reservations/${reservation.reservation_id}/status`);
+        await axios.put(
+          `${URL}/reservations/${reservation.reservation_id}/status`
+        );
         window.location.reload();
       } catch (error) {
         console.log(error);
@@ -30,25 +32,29 @@ export default function ReservationCard({ reservation }) {
         {reservation.status}
       </td>
       <td>
-      {reservation.status === "booked" && (
-        <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-          <button className="btn btn-success">Seat</button>
-        </Link>
-      )}
+        {reservation.status === "booked" && (
+          <Link to={`/reservations/${reservation.reservation_id}/seat`}>
+            <button className="btn btn-success">Seat</button>
+          </Link>
+        )}
       </td>
       <td>
-      <Link to={`/reservations/${reservation.reservation_id}/edit`}>
-        <button className="btn btn-secondary">Edit</button>
-      </Link>
+        {reservation.status === "booked" && (
+          <Link to={`/reservations/${reservation.reservation_id}/edit`}>
+            <button className="btn btn-secondary">Edit</button>
+          </Link>
+        )}
       </td>
       <td>
-      <button
-        className="btn btn-danger"
-        data-reservation-id-cancel={reservation.reservation_id}
-        onClick={handleCancelClick}
-      >
-        Cancel
-      </button>
+        {reservation.status !== "finished" && (
+          <button
+            className="btn btn-danger"
+            data-reservation-id-cancel={reservation.reservation_id}
+            onClick={handleCancelClick}
+          >
+            Cancel
+          </button>
+        )}
       </td>
     </tr>
   );
