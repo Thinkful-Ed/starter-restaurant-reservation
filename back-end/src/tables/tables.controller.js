@@ -24,7 +24,8 @@ function tableNamePropertyIsValid(req, res, next) {
   } else {
     return next({
       status: 400,
-      message: `Invalid field: 'table_name' must be at least two characters long.`,
+      message: `'table_name' is invalid. Table Name must be at least two characters long.`,
+
     });
   }
 }
@@ -36,7 +37,7 @@ function capacityPropertyIsValid(req, res, next) {
   } else {
     return next({
       status: 400,
-      message: `Invalid field: 'capacity' must be at least 1.`,
+      message: `'capacity' is invalid. Capacity must be at least 1.`,
     });
   }
 }
@@ -115,7 +116,7 @@ function reservationIsNotAlreadySeated(req, res, next) {
   } else {
     next({
       status: 400,
-      message: `Reservation is already seated.`,
+      message: `This reservation is already seated.`,
     });
   }
 }
