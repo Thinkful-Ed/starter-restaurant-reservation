@@ -90,6 +90,7 @@ export default function ReservationForm() {
             id="mobile_number"
             placeholder="XXX-XXX-XXXX"
             required={true}
+            minLength="10"
             value={formData.mobile_number}
             onChange={handlePhoneNumberChange}
           />
