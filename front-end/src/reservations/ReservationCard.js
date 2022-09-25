@@ -30,14 +30,19 @@ export default function ReservationCard({ reservation }) {
       <td data-reservation-id-status={reservation.reservation_id}>
         {reservation.status}
       </td>
+      <td>
       {reservation.status === "booked" && (
         <Link to={`/reservations/${reservation.reservation_id}/seat`}>
           <button className="btn btn-success">Seat</button>
         </Link>
       )}
+      </td>
+      <td>
       <Link to={`/reservations/${reservation.reservation_id}/edit`}>
         <button className="btn btn-secondary">Edit</button>
       </Link>
+      </td>
+      <td>
       <button
         className="btn btn-danger"
         data-reservation-id-cancel={reservation.reservation_id}
@@ -45,6 +50,7 @@ export default function ReservationCard({ reservation }) {
       >
         Cancel
       </button>
+      </td>
     </tr>
   );
 }
