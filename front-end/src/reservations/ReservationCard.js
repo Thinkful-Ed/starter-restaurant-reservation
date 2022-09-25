@@ -1,7 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function ReservationCard({ reservation }) {
+  const URL = process.env.REACT_APP_API_BASE_URL;
+
+  const handleCancelClick = async (event) => {
+    event.preventDefault();
+    const message = `Do you want to cancel this reservation? This cannot be undone.`;
+
+    // PUT request URL needs to be update to use the target's reservationId
+    if (window.confirm(message)) {
+      try {
+        await axios.put(`${URL}/reservations/:reservation_id/status`);
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <tr>
       <td>{reservation.first_name}</td>
@@ -23,6 +41,7 @@ export default function ReservationCard({ reservation }) {
       <button
         className="btn btn-danger"
         data-reservation-id-cancel={reservation.reservation_id}
+        onClick={handleCancelClick}
       >
         Cancel
       </button>
