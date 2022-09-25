@@ -1,9 +1,11 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function ReservationCard({ reservation }) {
   const URL = process.env.REACT_APP_API_BASE_URL;
+  const history = useHistory();
 
   const handleCancelClick = async (event) => {
     event.preventDefault();
@@ -12,9 +14,11 @@ export default function ReservationCard({ reservation }) {
     if (window.confirm(message)) {
       try {
         await axios.put(
-          `${URL}/reservations/${reservation.reservation_id}/status`
+          `${URL}/reservations/${reservation.reservation_id}/status`,
+
+          { data: { status: "cancelled" } }
         );
-        window.location.reload();
+        history.go(0);
       } catch (error) {
         console.log(error);
       }
@@ -46,7 +50,7 @@ export default function ReservationCard({ reservation }) {
         )}
       </td>
       <td>
-        {reservation.status !== "finished" && (
+        {reservation.status !== "finished" && reservation.status !== "cancelled" && (
           <button
             className="btn btn-danger"
             data-reservation-id-cancel={reservation.reservation_id}

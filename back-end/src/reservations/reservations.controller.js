@@ -122,7 +122,7 @@ function statusPropertyIsNotSeatedOrFinished(req, res, next) {
 
 function statusPropertyIsValid(req, res, next) {
   const { status } = req.body.data;
-  const validStatuses = ["booked", "seated", "finished"];
+  const validStatuses = ["booked", "seated", "finished", "cancelled"];
   if (validStatuses.includes(status)) {
     return next();
   } else {
@@ -240,7 +240,6 @@ module.exports = {
     bodyDataHas("status"),
     asyncErrorBoundary(reservationExists),
     statusPropertyIsValid,
-    statusPropertyIsNotFinished,
     asyncErrorBoundary(updateReservationStatus),
   ],
   listReservations: [asyncErrorBoundary(listReservations)],

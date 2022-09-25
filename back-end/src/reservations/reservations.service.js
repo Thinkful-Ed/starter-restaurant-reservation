@@ -29,7 +29,8 @@ function updateReservationStatus(reservationId, newStatus) {
     .select("*")
     .where({ reservation_id: reservationId })
     .update({ status: newStatus })
-    .returning("*");
+    .returning("*")
+    .then((updatedRecord) => updatedRecord[0]);
 }
 
 function listReservations(date, mobile_number) {

@@ -36,6 +36,9 @@ export default function ReservationsList({ reservations, searchMode }) {
       .filter((reservation) => {
         return reservation.status !== "finished";
       })
+      .filter((reservation) => {
+        return reservation.status !== "cancelled";
+      })
       .map((reservation) => {
         return (
           <ReservationCard
