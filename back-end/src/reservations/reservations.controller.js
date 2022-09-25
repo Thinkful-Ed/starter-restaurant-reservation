@@ -161,6 +161,14 @@ async function readReservation(req, res, next) {
   res.status(200).json({ data: responseData });
 }
 
+async function updateReservation(req, res, next) {
+  const updatedReservation = req.body.data;
+  const responseData = await reservationsService.updateReservation(
+    updatedReservation
+  );
+  res.status(200).json({ data: responseData });
+}
+
 async function updateReservationStatus(req, res, next) {
   const reservationId = req.params.reservation_id;
   const newStatus = req.body.data.status;
@@ -168,6 +176,7 @@ async function updateReservationStatus(req, res, next) {
     reservationId,
     newStatus
   );
+  console.log(responseData);
   res.status(200).json({ data: responseData });
 }
 
@@ -211,6 +220,22 @@ module.exports = {
   readReservation: [
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(readReservation),
+  ],
+  updateReservation: [
+    asyncErrorBoundary(reservationExists),
+    bodyDataHas("first_name"),
+    bodyDataHas("last_name"),
+    bodyDataHas("mobile_number"),
+    bodyDataHas("reservation_date"),
+    bodyDataHas("reservation_time"),
+    bodyDataHas("people"),
+    datePropertyIsValid,
+    timePropertyIsValid,
+    peoplePropertyIsValid,
+    reservationIsNotForTuesday,
+    reservationIsForFuture,
+    reservationIsForOpenHours,
+    asyncErrorBoundary(updateReservation),
   ],
   updateReservationStatus: [
     bodyDataHas("status"),
