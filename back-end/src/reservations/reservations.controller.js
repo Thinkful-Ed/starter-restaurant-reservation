@@ -176,7 +176,6 @@ async function updateReservationStatus(req, res, next) {
     reservationId,
     newStatus
   );
-  console.log(responseData);
   res.status(200).json({ data: responseData });
 }
 
@@ -235,6 +234,7 @@ module.exports = {
     reservationIsNotForTuesday,
     reservationIsForFuture,
     reservationIsForOpenHours,
+    statusPropertyIsNotFinished,
     asyncErrorBoundary(updateReservation),
   ],
   updateReservationStatus: [
