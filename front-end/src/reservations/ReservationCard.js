@@ -9,10 +9,9 @@ export default function ReservationCard({ reservation }) {
     event.preventDefault();
     const message = `Do you want to cancel this reservation? This cannot be undone.`;
 
-    // PUT request URL needs to be update to use the target's reservationId
     if (window.confirm(message)) {
       try {
-        await axios.put(`${URL}/reservations/:reservation_id/status`);
+        await axios.put(`${URL}/reservations/${reservation.reservation_id}/status`);
         window.location.reload();
       } catch (error) {
         console.log(error);
