@@ -170,8 +170,8 @@ module.exports = {
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(reservationExists),
     reservationIsNotAlreadySeated,
-    tableHasCapacity,
     tableIsAvailable,
+    tableHasCapacity,
     asyncErrorBoundary(seatTable),
   ],
   unseatTable: [
