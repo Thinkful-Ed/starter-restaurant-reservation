@@ -14,7 +14,7 @@ export default function EditReservation() {
     async function getReservation() {
       const abortController = new AbortController();
       try {
-        axios
+        await axios
           .get(`${URL}/reservations/${reservation_id}`, {
             signal: abortController.signal,
           })
@@ -35,10 +35,12 @@ export default function EditReservation() {
     <div>
       <h1>Edit Reservation</h1>
       <ErrorAlert error={errors} />
+      {existingReservation && (
       <ReservationForm
         existingReservation={existingReservation}
         editMode={true}
       />
+      )}
     </div>
   );
 }
