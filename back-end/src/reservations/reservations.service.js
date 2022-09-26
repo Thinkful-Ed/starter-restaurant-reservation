@@ -16,12 +16,12 @@ function readReservation(reservationId) {
     .first();
 }
 
-async function updateReservation(reservationId, updatedReservation){
+async function updateReservation(reservationId, updatedReservation) {
   return knex("reservations")
-      .select("*")
-      .where({ reservation_id: reservationId })
-      .update(updatedReservation, "*")
-      .then((updatedRecord) => updatedRecord[0]);
+    .select("*")
+    .where({ reservation_id: reservationId })
+    .update(updatedReservation, "*")
+    .then((updatedRecord) => updatedRecord[0]);
 }
 
 function updateReservationStatus(reservationId, newStatus) {

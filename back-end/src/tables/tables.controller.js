@@ -25,7 +25,6 @@ function tableNamePropertyIsValid(req, res, next) {
     return next({
       status: 400,
       message: `'table_name' is invalid. Table Name must be at least two characters long.`,
-
     });
   }
 }

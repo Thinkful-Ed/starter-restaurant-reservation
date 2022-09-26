@@ -32,10 +32,9 @@ export default function TableForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post(
-        process.env.REACT_APP_API_BASE_URL + `/tables`,
-        {data: formData}
-      );
+      await axios.post(process.env.REACT_APP_API_BASE_URL + `/tables`, {
+        data: formData,
+      });
       history.push(`/dashboard`);
     } catch (error) {
       setErrors(error.response.data.error);
