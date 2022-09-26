@@ -15,7 +15,6 @@ export default function ReservationCard({ reservation }) {
       try {
         await axios.put(
           `${URL}/reservations/${reservation.reservation_id}/status`,
-
           { data: { status: "cancelled" } }
         );
         history.go(0);
@@ -50,15 +49,16 @@ export default function ReservationCard({ reservation }) {
         )}
       </td>
       <td>
-        {reservation.status !== "finished" && reservation.status !== "cancelled" && (
-          <button
-            className="btn btn-danger"
-            data-reservation-id-cancel={reservation.reservation_id}
-            onClick={handleCancelClick}
-          >
-            Cancel
-          </button>
-        )}
+        {reservation.status !== "finished" &&
+          reservation.status !== "cancelled" && (
+            <button
+              className="btn btn-danger"
+              data-reservation-id-cancel={reservation.reservation_id}
+              onClick={handleCancelClick}
+            >
+              Cancel
+            </button>
+          )}
       </td>
     </tr>
   );
