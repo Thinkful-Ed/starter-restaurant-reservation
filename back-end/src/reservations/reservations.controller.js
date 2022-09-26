@@ -134,6 +134,18 @@ function statusPropertyIsValid(req, res, next) {
   }
 }
 
+function statusPropertyIsNotFinished(req, res, next) {
+  const status = res.locals.reservation.status;
+  if (status !== "finished") {
+    return next();
+  } else {
+    return next({
+      status: 400,
+      message: `'finished' is an invalid status. Finished reservations cannot be updated.`,
+    });
+  }
+}
+
 // HTTP REQUEST HANDLERS FOR 'RESERVATIONS' RESOURCES //
 
 async function createReservation(req, res) {
@@ -228,9 +240,10 @@ module.exports = {
     asyncErrorBoundary(updateReservation),
   ],
   updateReservationStatus: [
-    bodyDataHas("status"),
     asyncErrorBoundary(reservationExists),
+    bodyDataHas("status"),
     statusPropertyIsValid,
+    statusPropertyIsNotFinished,
     asyncErrorBoundary(updateReservationStatus),
   ],
   listReservations: [asyncErrorBoundary(listReservations)],
