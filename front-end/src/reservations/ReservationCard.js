@@ -49,8 +49,7 @@ export default function ReservationCard({ reservation }) {
         )}
       </td>
       <td>
-        {reservation.status !== "finished" &&
-          reservation.status !== "cancelled" && (
+        {reservation.status === "booked" && (
             <button
               className="btn btn-danger"
               data-reservation-id-cancel={reservation.reservation_id}
