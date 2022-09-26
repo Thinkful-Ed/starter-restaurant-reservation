@@ -168,13 +168,13 @@ async function createReservation(req, res) {
   res.status(201).json({ data: responseData });
 }
 
-async function readReservation(req, res, next) {
+async function readReservation(req, res) {
   const reservationId = req.params.reservation_id;
   const responseData = await reservationsService.readReservation(reservationId);
   res.status(200).json({ data: responseData });
 }
 
-async function updateReservation(req, res, next) {
+async function updateReservation(req, res) {
   const reservationId = res.locals.reservation.reservation_id;
   const updatedReservation = req.body.data;
   const responseData = await reservationsService.updateReservation(
@@ -184,7 +184,7 @@ async function updateReservation(req, res, next) {
   res.status(200).json({ data: responseData });
 }
 
-async function updateReservationStatus(req, res, next) {
+async function updateReservationStatus(req, res) {
   const reservationId = req.params.reservation_id;
   const newStatus = req.body.data.status;
   responseData = await reservationsService.updateReservationStatus(
