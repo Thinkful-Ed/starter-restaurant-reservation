@@ -4,7 +4,10 @@ import axios from "axios";
 import formatPhoneNumber from "../utils/formatPhoneNumber";
 import ErrorAlert from "../layout/ErrorAlert";
 
-export default function ReservationForm({ reservation, editMode = false }) {
+export default function ReservationForm({
+  existingReservation,
+  editMode = false,
+}) {
   const URL = process.env.REACT_APP_API_BASE_URL + "/reservations";
   const history = useHistory();
 
@@ -17,12 +20,10 @@ export default function ReservationForm({ reservation, editMode = false }) {
     people: 0,
   };
 
-  console.log(reservation);
-
-  const [formData, setFormData] = useState(reservation || intialFormState);
+  const [formData, setFormData] = useState(
+    existingReservation || intialFormState
+  );
   const [errors, setErrors] = useState(null);
-
-  console.log(formData);
 
   const handleChange = (event) => {
     event.preventDefault();
@@ -52,7 +53,7 @@ export default function ReservationForm({ reservation, editMode = false }) {
     try {
       setErrors(null);
       if (editMode) {
-        await axios.put(`${URL}/${reservation.reservation_id}`, {
+        await axios.put(`${URL}/${existingReservation.reservation_id}`, {
           data: formData,
         });
       } else {
@@ -144,7 +145,7 @@ export default function ReservationForm({ reservation, editMode = false }) {
           />
         </div>
         <button
-          type="btn btn-danger"
+          type="button"
           className="btn btn-danger"
           onClick={() => history.goBack()}
         >

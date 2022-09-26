@@ -7,7 +7,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 export default function EditReservation() {
   const URL = process.env.REACT_APP_API_BASE_URL;
   const { reservation_id } = useParams();
-  const [reservation, setReservation] = useState(null);
+  const [existingReservation, setExistingReservation] = useState(null);
   const [errors, setErrors] = useState(null);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export default function EditReservation() {
             signal: abortController.signal,
           })
           .then(({ data: { data } }) => {
-            setReservation(data);
+            setExistingReservation(data);
           });
       } catch (error) {
         setErrors(error);
@@ -35,7 +35,10 @@ export default function EditReservation() {
     <div>
       <h1>Edit Reservation</h1>
       <ErrorAlert error={errors} />
-      <ReservationForm reservation={reservation} editMode={true} />
+      <ReservationForm
+        existingReservation={existingReservation}
+        editMode={true}
+      />
     </div>
   );
 }

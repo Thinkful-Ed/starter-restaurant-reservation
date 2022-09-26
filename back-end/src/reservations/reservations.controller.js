@@ -99,6 +99,7 @@ async function reservationExists(req, res, next) {
     reservationId
   );
   if (existingReservation) {
+    res.locals.reservation = existingReservation;
     return next();
   } else {
     return next({
@@ -150,8 +151,10 @@ async function readReservation(req, res, next) {
 }
 
 async function updateReservation(req, res, next) {
+  const reservationId = res.locals.reservation.reservation_id;
   const updatedReservation = req.body.data;
   const responseData = await reservationsService.updateReservation(
+    reservationId,
     updatedReservation
   );
   res.status(200).json({ data: responseData });
