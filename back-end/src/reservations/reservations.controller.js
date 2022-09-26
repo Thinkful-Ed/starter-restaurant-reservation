@@ -146,6 +146,18 @@ function statusPropertyIsNotFinished(req, res, next) {
   }
 }
 
+function statusPropertyIsBooked(req, res, next) {
+  const status = res.locals.reservation.status;
+  if (status === "booked") {
+    return next();
+  } else {
+    return next({
+      status: 400,
+      message: `${status} is an invalid status. Only 'booked' reservations can be updated.`,
+    });
+  }
+}
+
 // HTTP REQUEST HANDLERS FOR 'RESERVATIONS' RESOURCES //
 
 async function createReservation(req, res) {
@@ -225,6 +237,7 @@ module.exports = {
   ],
   updateReservation: [
     asyncErrorBoundary(reservationExists),
+    statusPropertyIsBooked,
     bodyDataHas("first_name"),
     bodyDataHas("last_name"),
     bodyDataHas("mobile_number"),
