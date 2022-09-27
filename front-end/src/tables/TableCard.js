@@ -10,7 +10,6 @@ export default function TableCard({ table }) {
 
     if (window.confirm(message)) {
       unSeatTable(table.table_id);
-      //window.location.reload();
       history.go(0);
     }
   };
