@@ -113,7 +113,7 @@ export default function ReservationForm({
             type="date"
             id="reservation_date"
             placeholder="YYYY-MM-DD"
-            pattern="\d{4}-\d{2}-\d{2}"
+            //pattern="\d{4}-\d{2}-\d{2}"
             required={true}
             value={formData.reservation_date}
             onChange={handleChange}

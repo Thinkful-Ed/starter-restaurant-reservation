@@ -30,7 +30,7 @@ describe("US-05 - Finish an occupied table - E2E", () => {
   describe("/dashboard page", () => {
     let reservation;
     let table;
-
+console.log(33)
     beforeEach(async () => {
       reservation = await createReservation({
         first_name: "Finish",
@@ -40,13 +40,13 @@ describe("US-05 - Finish an occupied table - E2E", () => {
         reservation_time: "13:45",
         people: 4,
       });
-
+      console.log(43)
       table = await createTable({
         table_name: `#${Date.now().toString(10)}`,
         capacity: 99,
         reservation_id: reservation.reservation_id,
       });
-
+      console.log(49)
       page = await browser.newPage();
       page.on("console", onPageConsole);
       await page.setViewport({ width: 1920, height: 1080 });
@@ -55,7 +55,7 @@ describe("US-05 - Finish an occupied table - E2E", () => {
       });
       await page.reload({ waitUntil: "networkidle0" });
     });
-
+    console.log(58)
     test("clicking finish button and then clicking OK makes that table available", async () => {
       await page.screenshot({
         path: ".screenshots/us-05-dashboard-finish-button-before.png",
@@ -67,21 +67,21 @@ describe("US-05 - Finish an occupied table - E2E", () => {
         `[data-table-id-status="${table.table_id}"]`,
         "occupied"
       );
-
+      console.log(70)
       expect(containsOccupied).toBe(true);
-
+      console.log(72)
       const finishButtonSelector = `[data-table-id-finish="${table.table_id}"]`;
       await page.waitForSelector(finishButtonSelector);
-
+      console.log(75)
       page.on("dialog", async (dialog) => {
         expect(dialog.message()).toContain(
           "Is this table ready to seat new guests?"
         );
         await dialog.accept();
       });
-
+      console.log(82)
       await page.click(finishButtonSelector);
-
+      console.log(84)
       await page.waitForResponse((response) => {
         return response.url().endsWith(`/tables`);
       });

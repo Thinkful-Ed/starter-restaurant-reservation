@@ -19,7 +19,7 @@ export default function ReservationCard({ reservation }) {
         );
         history.go(0);
       } catch (error) {
-        console.log(error);
+        return error;
       }
     }
   };
