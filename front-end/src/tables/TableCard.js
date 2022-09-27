@@ -1,14 +1,17 @@
 import React from "react";
+import { useHistory } from "react-router";
 import { unSeatTable } from "../utils/api";
 
-export default function TableCard({ table, setTables }) {
+export default function TableCard({ table }) {
+  const history = useHistory();
   const handleFinishClick = async (event) => {
     event.preventDefault();
     const message = `Is this table ready to seat new guests? This cannot be undone.`;
 
     if (window.confirm(message)) {
       unSeatTable(table.table_id);
-      window.location.reload();
+      //window.location.reload();
+      history.go(0);
     }
   };
 

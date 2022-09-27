@@ -49,7 +49,7 @@ function Dashboard({ date }) {
             className="btn btn-primary"
             onClick={() => history.push(`/dashboard?date=${previous(date)}`)}
           >
-            Yesterday
+            Previous Date
           </button>
           <button
             type="button"
@@ -63,7 +63,7 @@ function Dashboard({ date }) {
             className="btn btn-primary"
             onClick={() => history.push(`/dashboard?date=${next(date)}`)}
           >
-            Tomorrow
+            Next Date
           </button>
         </div>
         <div>
@@ -74,7 +74,7 @@ function Dashboard({ date }) {
           <h4>Tables</h4>
         </div>
         <div>
-          <TablesList tables={tables} setTables={setTables} />
+          <TablesList tables={tables} />
         </div>
       </div>
     </main>
