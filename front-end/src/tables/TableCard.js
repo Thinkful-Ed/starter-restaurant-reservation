@@ -9,8 +9,6 @@ export default function TableCard({ table, setTables }) {
     if (window.confirm(message)) {
       unSeatTable(table.table_id);
       window.location.reload();
-
-      //   DO I NEED TO SET RESERVATIONS AND TABLES STATES HERE???
     }
   };
 
@@ -28,7 +26,7 @@ export default function TableCard({ table, setTables }) {
       <td>{table.capacity}</td>
       <td data-table-id-status={table.table_id}>{statusText()}</td>
       <td>
-        {table.status === "occupied" && (
+        {table.reservation_id && (
           <button
             data-table-id-finish={table.table_id}
             className="btn btn-primary"

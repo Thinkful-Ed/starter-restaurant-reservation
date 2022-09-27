@@ -85,8 +85,8 @@ function tableHasCapacity(req, res, next) {
 }
 
 function tableIsAvailable(req, res, next) {
-  const tableStatus = res.locals.table.status;
-  if (tableStatus === "free") {
+  const tableIsSeated = res.locals.table.reservation_id;
+  if (!tableIsSeated) {
     return next();
   } else {
     return next({
@@ -97,8 +97,8 @@ function tableIsAvailable(req, res, next) {
 }
 
 function tableIsOccupied(req, res, next) {
-  const tableStatus = res.locals.table.status;
-  if (tableStatus === "occupied") {
+  const tableIsSeated = res.locals.table.reservation_id;
+  if (tableIsSeated) {
     return next();
   } else {
     return next({
