@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-export default function TableCard({ table }) {
+export default function TableCard({ table, setTables }) {
   const URL = process.env.REACT_APP_API_BASE_URL;
 
   const handleFinishClick = async (event) => {
@@ -11,7 +11,14 @@ export default function TableCard({ table }) {
     if (window.confirm(message)) {
       try {
         await axios.delete(`${URL}/tables/${table.table_id}/seat`);
-        window.location.reload();
+        setTables(function (oldTables) {
+          const newTables = [...oldTables];
+          const tableToUpdate = newTables.find((tableToFind) => {
+            return tableToFind.table_id === table.table_id;
+          });
+          tableToUpdate.status = "free";
+          return newTables;
+        });
       } catch (error) {
         console.log(error);
       }

@@ -92,7 +92,7 @@ function Dashboard({ date }) {
           <h4>Tables</h4>
         </div>
         <div>
-          <TablesList tables={tables} />
+          <TablesList tables={tables} setTables={setTables} />
         </div>
       </div>
     </main>
