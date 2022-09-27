@@ -206,8 +206,7 @@ async function listReservations(req, res) {
     );
     res.status(200).json({ data: responseData });
   } else {
-    const today = new Date().toISOString().slice(0, 10);
-    const responseData = await reservationsService.listReservations(today);
+    const responseData = await reservationsService.listReservations();
     res.status(200).json({ data: responseData });
   }
 }
