@@ -18,6 +18,7 @@ function Dashboard({ date }) {
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
+      // listReservations({ date: "2020-12-30" }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
