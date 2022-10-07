@@ -22,7 +22,6 @@ export default function ReservationForm() {
       ...formData,
       [target.name]: target.value,
     });
-    console.log(formData);
   };
 
   const handleSubmit = (event) => {
@@ -32,6 +31,8 @@ export default function ReservationForm() {
     const reservationDate = new Date(
       `${formData.reservation_date}T${formData.reservation_time}:00`
     );
+
+    const [hours, minutes] = formData.reservation_time.split(":");
 
     const errors = [];
 
@@ -44,6 +45,18 @@ export default function ReservationForm() {
     if (reservationDate.getDay() == 2) {
       errors.push({
         message: `Periodic Tables is closed on Tuesdays. Sorry!`,
+      });
+    }
+
+    if ((hours <= 10 && minutes < 30) || hours <= 9) {
+      errors.push({
+        message: `Periodic Tables opens at 10:30 AM.`,
+      });
+    }
+
+    if ((hours >= 21 && minutes > 30) || hours >= 22) {
+      errors.push({
+        message: `Periodic Tables stops accepting reservations at 9:30 PM.`,
       });
     }
 

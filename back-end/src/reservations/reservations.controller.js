@@ -106,12 +106,39 @@ function validateReservationDate(req, res, next) {
   }
 }
 
+function validateReservationTime(req, res, next) {
+  const {
+    reservation: { reservation_time },
+  } = res.locals;
+
+  const [hours, minutes] = reservation_time.split(":");
+
+  try {
+    if ((hours <= 10 && minutes < 30) || hours <= 9) {
+      const error = new Error(`Periodic Tables opens at 10:30 AM.`);
+      error.status = 400;
+      throw error;
+    }
+    if ((hours >= 21 && minutes > 30) || hours >= 22) {
+      const error = new Error(
+        `Periodic Tables stops accepting reservations at 9:30 PM.`
+      );
+      error.status = 400;
+      throw error;
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
     hasProperties(...REQUIRED_PROPERTIES),
     asyncErrorBoundary(validateProperties),
     validateReservationDate,
+    validateReservationTime,
     asyncErrorBoundary(create),
   ],
   read: asyncErrorBoundary(read),
