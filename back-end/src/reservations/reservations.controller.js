@@ -23,6 +23,9 @@ async function list(req, res) {
   });
 }
 
+/**
+ * Create handler for reservation resources
+ */
 async function create(req, res) {
   const data = await service.create(res.locals.reservation);
   res.status(201).json({ data });
@@ -34,6 +37,7 @@ async function read(req, res) {
   });
 }
 
+// TODO: put in utils and refactor
 async function validateProperties(req, res, next) {
   const {
     reservation: { reservation_date, reservation_time, people },
@@ -66,15 +70,40 @@ async function validateProperties(req, res, next) {
   }
 }
 
-// put in utils
 function validateDate(date) {
-  let date_regex = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
+  let date_regex = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
   return date_regex.test(date);
 }
 
 function validateTime(time) {
-  let time_regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/;
+  let time_regex = /^(2[0-3]|[01][0-9]):[0-5][0-9]$/;
   return time_regex.test(time);
+}
+
+function validateReservationDate(req, res, next) {
+  const {
+    reservation: { reservation_date, reservation_time },
+  } = res.locals;
+
+  const reservationDate = new Date(
+    `${reservation_date}T${reservation_time}:00`
+  );
+
+  try {
+    if (Date.now() > Date.parse(reservationDate)) {
+      const error = new Error(`Reservation must be for a future date or time.`);
+      error.status = 400;
+      throw error;
+    }
+    if (reservationDate.getDay() == 2) {
+      const error = new Error(`Periodic Tables is closed on Tuesdays. Sorry!`);
+      error.status = 400;
+      throw error;
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
 }
 
 module.exports = {
@@ -82,6 +111,7 @@ module.exports = {
   create: [
     hasProperties(...REQUIRED_PROPERTIES),
     asyncErrorBoundary(validateProperties),
+    validateReservationDate,
     asyncErrorBoundary(create),
   ],
   read: asyncErrorBoundary(read),
