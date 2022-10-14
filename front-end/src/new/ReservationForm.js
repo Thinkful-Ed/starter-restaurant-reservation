@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
-export default function ReservationForm() {
+function ReservationForm() {
   const history = useHistory();
 
   const initialFormState = {
@@ -71,7 +71,9 @@ export default function ReservationForm() {
     return () => abortController.abort();
   };
 
-  let displayErrors = formErrors.map((error) => <ErrorAlert error={error} />);
+  let displayErrors = formErrors.map((error) => (
+    <ErrorAlert key={error} error={error} />
+  ));
 
   return (
     <>
@@ -165,3 +167,5 @@ export default function ReservationForm() {
     </>
   );
 }
+
+export default ReservationForm;

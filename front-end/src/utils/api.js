@@ -79,3 +79,20 @@ export async function createReservation(params, signal) {
     []
   );
 }
+
+export async function listTables(signal) {
+  return ["table 1", "table 2", "table 3"];
+}
+
+export async function createTable(params, signal) {
+  // const url = new URL(`${API_BASE_URL}/reservations`);
+  // console.log(params);
+  const data = { ...params, ["capacity"]: Number(params.capacity) };
+
+  // return await fetchJson(
+  //   url,
+  //   { headers, signal, method: "POST", body: JSON.stringify({ data }) },
+  //   []
+  // );
+  console.log("create table");
+}
