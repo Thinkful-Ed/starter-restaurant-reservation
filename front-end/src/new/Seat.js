@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import { listTables } from "../utils/api";
+import { useHistory, useParams } from "react-router-dom";
+import { listTables, readReservation, updateTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 function Seat() {
   const history = useHistory();
-
-  const initialFormState = {
-    table_id: 0,
-  };
+  const { reservation_id } = useParams();
 
   const [tables, setTables] = useState([]);
-  const [formData, setFormData] = useState({ ...initialFormState });
+  const [tableId, setTableId] = useState(null);
   const [formErrors, setFormErrors] = useState([]);
 
   useEffect(loadTables, []);
@@ -19,14 +16,11 @@ function Seat() {
   function loadTables() {
     const abortController = new AbortController();
     listTables(abortController.signal).then(setTables).catch(console.log);
+    return () => abortController.abort();
   }
 
   const handleChange = ({ target }) => {
-    setFormData({
-      ...formData,
-      [target.name]: target.value,
-    });
-    console.log(formData);
+    setTableId(target.value);
   };
 
   const handleSubmit = (event) => {
@@ -38,9 +32,9 @@ function Seat() {
 
     // **** Check of table capacity is sufficient
 
-    // if (formData.table_name.length > 2) {
+    // if (tables[table].capacity < reservation.people) {
     //   errors.push({
-    //     message: `Table name must be at least 2 characters long.`,
+    //     message: `Table ${table.table_name} does not have enough capacity to seat this reservation`,
     //   });
     // }
 
@@ -48,13 +42,13 @@ function Seat() {
 
     // **** Seat table API Call
 
-    // createTable(formData, abortController.signal)
-    //   .then((_) => {
-    //     history.push(`/dashboard`);
-    //   })
-    //   .catch((e) => console.log(e));
+    updateTable(reservation_id, tableId, abortController.signal)
+      .then((_) => {
+        history.push(`/dashboard`);
+      })
+      .catch((e) => console.log(e));
 
-    // return () => abortController.abort();
+    return () => abortController.abort();
   };
 
   let displayErrors = formErrors.map((error) => (
@@ -62,23 +56,27 @@ function Seat() {
   ));
 
   const tableList = tables.map((table) => (
-    <option value={table}>{table}</option>
+    <option key={table.table_id} value={table.table_id}>
+      {table.table_name} - {table.capacity}
+    </option>
   ));
   return (
     <>
+      {JSON.stringify(tableId)}
       {formErrors.length ? displayErrors : null}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label className="form-label" htmlFor="table_name">
+          <label className="form-label" htmlFor="table">
             Table Name:
           </label>
           <select
             required
             onChange={handleChange}
-            value={formData.table_name}
+            value={tableId}
             className="form-control"
             name="table_id"
           >
+            <option value="">-- Choose Table --</option>
             {tableList}
           </select>
         </div>

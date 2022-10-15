@@ -2,6 +2,7 @@ function hasProperties(...properties) {
   return function (req, res, next) {
     const { data = {} } = req.body;
 
+    console.log(data);
     try {
       properties.forEach((property) => {
         if (!data[property]) {
@@ -10,7 +11,7 @@ function hasProperties(...properties) {
           throw error;
         }
       });
-      res.locals.reservation = data;
+      res.locals.data = data;
       next();
     } catch (error) {
       next(error);
