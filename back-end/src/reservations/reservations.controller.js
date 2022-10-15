@@ -27,21 +27,25 @@ async function list(req, res) {
  * Create handler for reservation resources
  */
 async function create(req, res) {
-  const data = await service.create(res.locals.reservation);
+  const data = await service.create(res.locals.data);
   res.status(201).json({ data });
 }
 
 async function read(req, res) {
+  const { id } = req.params;
+  const data = await service.read(id);
+  console.log(data);
   res.json({
-    data: [],
+    data,
   });
 }
 
 // TODO: put in utils and refactor
 async function validateProperties(req, res, next) {
   const {
-    reservation: { reservation_date, reservation_time, people },
+    data: { reservation_date, reservation_time, people },
   } = res.locals;
+  console.log(reservation_date);
   try {
     if (!validateDate(reservation_date)) {
       const error = new Error(
@@ -82,7 +86,7 @@ function validateTime(time) {
 
 function validateReservationDate(req, res, next) {
   const {
-    reservation: { reservation_date, reservation_time },
+    data: { reservation_date, reservation_time },
   } = res.locals;
 
   const reservationDate = new Date(
@@ -108,7 +112,7 @@ function validateReservationDate(req, res, next) {
 
 function validateReservationTime(req, res, next) {
   const {
-    reservation: { reservation_time },
+    data: { reservation_time },
   } = res.locals;
 
   const [hours, minutes] = reservation_time.split(":");
