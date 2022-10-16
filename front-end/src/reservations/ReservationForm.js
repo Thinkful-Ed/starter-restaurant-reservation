@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { useHistory }  from "react-router-dom"
 import axios from "axios"
-import formatPhoneNumber from "../utils/formatPhoneNumber"
 import ErrorAlert from "../layout/ErrorAlert"
 
 export default function ReservationForm() {
