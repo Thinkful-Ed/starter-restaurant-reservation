@@ -20,7 +20,6 @@ function Dashboard({ date }) {
   const history = useHistory()
   const query = useQuery()
   date = query.get("date") || date
-  const URL = process.env.REACT_APP_API_BASE_URL
 
 
   useEffect(loadDashboard, [date]);
