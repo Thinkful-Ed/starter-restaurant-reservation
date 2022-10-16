@@ -18,7 +18,7 @@ function bodyDataHas(propertyName) {
 
 function datePropertyIsValid(req, res, next) {
   const { reservation_date } = req.body.data
-  const dateFormat = /^\d{4}-\d{1,2}-d{1,2}$/
+  const dateFormat = /^\d{4}-\d{1,2}-\d{1,2}$/
   if (dateFormat.test(reservation_date)) {
     return next()
   } else {
