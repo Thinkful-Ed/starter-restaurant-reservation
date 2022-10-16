@@ -40,10 +40,18 @@ async function read(req, res) {
   });
 }
 
+async function update(req, res) {
+  const data = await service.update(req.params.reservation_id, req.body.data);
+  console.log(data);
+  res.json({
+    data,
+  });
+}
+
 // TODO: put in utils and refactor
 async function validateProperties(req, res, next) {
   const {
-    data: { reservation_date, reservation_time, people },
+    data: { reservation_date, reservation_time, people, status },
   } = res.locals;
   console.log(reservation_date);
   try {
@@ -64,7 +72,13 @@ async function validateProperties(req, res, next) {
     }
 
     if (typeof people !== "number") {
-      const error = new Error(`'people must be a number`);
+      const error = new Error(`people must be a number`);
+      error.status = 400;
+      throw error;
+    }
+
+    if (status && status !== "booked") {
+      const error = new Error(`status must be "booked", received: ${status}`);
       error.status = 400;
       throw error;
     }
@@ -136,6 +150,43 @@ function validateReservationTime(req, res, next) {
   }
 }
 
+async function reservationExists(req, res, next) {
+  const reservation = await service.read(req.params.reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  return next({
+    status: 404,
+    message: `Reservation cannot be found : ${req.params.reservation_id}`,
+  });
+}
+
+async function validStatus(req, res, next) {
+  const validStatuses = ["booked", "seated", "finished"];
+  const { status } = req.body.data;
+  console.log(status);
+  if (status && validStatuses.includes(status)) {
+    return next();
+  } else {
+    return next({
+      status: 400,
+      message: `Invalid Status: ${status}`,
+    });
+  }
+}
+
+async function notFinished(req, res, next) {
+  const { status } = res.locals.reservation;
+  if (status === "finished") {
+    return next({
+      status: 400,
+      message: `a finished reservation cannot be updated`,
+    });
+  }
+  next();
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -146,4 +197,10 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: asyncErrorBoundary(read),
+  update: [
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(notFinished),
+    asyncErrorBoundary(validStatus),
+    asyncErrorBoundary(update),
+  ],
 };
