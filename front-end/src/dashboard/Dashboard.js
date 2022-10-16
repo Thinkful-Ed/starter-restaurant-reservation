@@ -16,9 +16,11 @@ import ReservationsList from "../reservations/ReservationsList"
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+
   const history = useHistory()
   const query = useQuery()
   date = query.get("date") || date
+  const URL = process.env.REACT_APP_API_BASE_URL
 
 
   useEffect(loadDashboard, [date]);
@@ -38,7 +40,7 @@ function Dashboard({ date }) {
         <h1>Dashboard</h1>
         <ErrorAlert error={reservationsError} />
         <div className="d-md-flex mb-3">
-          <h4 className="mb-0">Reservations for date</h4>
+          <h4 className="mb-0">Reservations for {date}</h4>
         </div>
       </div>
       <div>

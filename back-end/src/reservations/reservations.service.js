@@ -8,9 +8,14 @@ function create(newReservation) {
 }
 
 function list(date) {
-    return knex("reservations")
-        .select("*")
-        .where({ reservation_date: date })
+    if (date) {
+        return knex("reservations")
+            .select("*")
+            .where({ reservation_date: date })
+            .orderBy("reservation_time")
+    } else {
+        return knex("reservations").select("*")
+    }
 }
 
 module.exports = {

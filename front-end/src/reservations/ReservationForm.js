@@ -5,7 +5,6 @@ import formatPhoneNumber from "../utils/formatPhoneNumber"
 import ErrorAlert from "../layout/ErrorAlert"
 
 export default function ReservationForm() {
-    const URL = process.env.REACT_APP_API_BASE_URL + "/reservations"
     const history = useHistory()
 
     const initialFormState = {
@@ -35,19 +34,11 @@ export default function ReservationForm() {
         }
     }
 
-    const handlePhoneNumberChange = (event) => {
-        const formattedPhoneNumber = formatPhoneNumber(event.target.value)
-        setFormData({
-            ...formData,
-            mobile_number: formattedPhoneNumber,
-        })
-    }
-
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            setErrors(null)
-            await axios.post(URL, { data: formData })
+            await axios.post(process.env.REACT_APP_API_BASE_URL + '/reservations', 
+                { data: formData })
             history.push(`/dashboard?date=${formData.reservation_date}`)
         }
         catch (error) {
@@ -93,7 +84,7 @@ export default function ReservationForm() {
                         required={true}
                         minLength="12"
                         value={formData.mobile_number}
-                        onChange={handlePhoneNumberChange}
+                        onChange={handleChange}
                     />
                 </div>
                 <div>

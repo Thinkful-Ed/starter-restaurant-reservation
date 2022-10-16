@@ -59,7 +59,7 @@ function peoplePropertyIsValid(req, res, next) {
 
 async function create(req, res) {
   const newReservation = req.body.data
-  const responseData = await reservationsService.createReservation(
+  const responseData = await reservationsService.create(
     newReservation
   )
   res.status(201).json({ data: responseData })
@@ -71,7 +71,8 @@ async function list(req, res) {
     const responseData = await reservationsService.list(date)
     res.status(200).json({ data: responseData })
   } else {
-    const responseData = await reservationsService.list()
+    const today = new Date().toISOString().slice(0, 10)
+    const responseData = await reservationsService.list(today)
     res.status(200).json({ data: responseData })
   }
 }
