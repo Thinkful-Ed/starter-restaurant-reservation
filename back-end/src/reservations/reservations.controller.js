@@ -16,8 +16,13 @@ const REQUIRED_PROPERTIES = [
  */
 async function list(req, res) {
   const today = new Date().toLocaleDateString().replaceAll("/", "-");
-  const { date = today } = req.query;
-  const reservations = await service.list(date);
+  const { date = today, mobile_number } = req.query;
+  let reservations;
+  if (mobile_number) {
+    reservations = await service.search(mobile_number);
+  } else {
+    reservations = await service.list(date);
+  }
   res.json({
     data: [...reservations],
   });
