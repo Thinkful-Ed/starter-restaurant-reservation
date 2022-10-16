@@ -54,12 +54,40 @@ function peoplePropertyIsValid(req, res, next) {
   }
 }
 
+
+// REQUEST HANDLERS //
+
+async function create(req, res) {
+  const newReservation = req.body.data
+  const responseData = await reservationsService.createReservation(
+    newReservation
+  )
+  res.status(201).json({ data: responseData })
+}
+
 async function list(req, res) {
-  res.json({
-    data: [],
-  });
+  const { date } = req.query
+  if (date) {
+    const responseData = await reservationsService.list(date)
+    res.status(200).json({ data: responseData })
+  } else {
+    const responseData = await reservationsService.list()
+    res.status(200).json({ data: responseData })
+  }
 }
 
 module.exports = {
-  list,
+  create: [
+    bodyDataHas("first_name"),
+    bodyDataHas("last_name"),
+    bodyDataHas("mobile_number"),
+    bodyDataHas("reservation_date"),
+    bodyDataHas("reservation_time"),
+    bodyDataHas("people"),
+    datePropertyIsValid,
+    timePropertyIsValid,
+    peoplePropertyIsValid,
+    asyncErrorBoundary(create),
+  ],
+  list: [asyncErrorBoundary(list)]
 };
