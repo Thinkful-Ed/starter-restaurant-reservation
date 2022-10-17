@@ -63,7 +63,7 @@ function onlyFutureReservations(req, res, next) {
   } else {
     return next({
       status: 400,
-      message: "Reservations may only be set for a future time and date."
+      message: "Invalid Time or Date: Please set reservations for the future only."
     })
   }
 }
@@ -76,7 +76,7 @@ function notOnTuesday(req, res, next) {
   } else {
     return next({
       status: 400,
-      message: "We are closed on Tuesdays and cannot accept reservations then."
+      message: "Invalid Date: We are closed on Tuesdays."
     })
   }
 }
@@ -85,9 +85,7 @@ function notOnTuesday(req, res, next) {
 
 async function create(req, res) {
   const newReservation = req.body.data
-  const responseData = await reservationsService.create(
-    newReservation
-  )
+  const responseData = await reservationsService.create(newReservation)
   res.status(201).json({ data: responseData })
 }
 

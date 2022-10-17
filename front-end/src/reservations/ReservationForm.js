@@ -62,7 +62,7 @@ export default function ReservationForm() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="lastName">Last Name:</label>
+                    <label htmlFor="last_name">Last Name:</label>
                     <input
                         name="last_name"
                         type="text"
@@ -81,13 +81,13 @@ export default function ReservationForm() {
                         id="mobile_number"
                         placeholder="XXX-XXX-XXXX"
                         required={true}
-                        minLength="12"
+                        minLength="10"
                         value={formData.mobile_number}
                         onChange={handleChange}
                     />
                 </div>
                 <div>
-                    <label htmFor="reservation_date">Date of Reservation:</label>
+                    <label htmlFor="reservation_date">Date of Reservation:</label>
                     <input
                         name="reservation_date"
                         type="date"
@@ -112,7 +112,7 @@ export default function ReservationForm() {
                     />
                 </div>
                 <div>
-                    <label htmFor="people">Number of People:</label>
+                    <label htmlFor="people">Number of People:</label>
                     <input
                         name="people"
                         type="number"
