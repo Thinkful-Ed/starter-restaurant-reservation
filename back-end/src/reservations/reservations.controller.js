@@ -81,6 +81,18 @@ function notOnTuesday(req, res, next) {
   }
 }
 
+function notOutsideHours(req, res, next) {
+  const { reservation_time } = req.body.data
+  if (reservation_time >= "10:30" && reservation_time <= "21:30") {
+    return next()
+  } else {
+    return next({
+      status:400,
+      messages: "Invalid Time: Please schedule reservations during open hours at least one hour before closing."
+    })
+  }
+}
+
 // REQUEST HANDLERS //
 
 async function create(req, res) {
@@ -114,6 +126,7 @@ module.exports = {
     peoplePropertyIsValid,
     notOnTuesday,
     onlyFutureReservations,
+    notOutsideHours,
     asyncErrorBoundary(create),
   ],
   list: [asyncErrorBoundary(list)]
