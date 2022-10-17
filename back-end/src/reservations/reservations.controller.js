@@ -54,6 +54,32 @@ function peoplePropertyIsValid(req, res, next) {
   }
 }
 
+function onlyFutureReservations(req, res, next) {
+  const { reservation_date, reservation_time } = req.body.data
+  const present = new Date()
+  const reservation = new Date(`${reservation_date} ${reservation_time}`)
+  if (reservation > present) {
+    return next()
+  } else {
+    return next({
+      status: 400,
+      message: "Reservations may only be set for a future time and date."
+    })
+  }
+}
+
+function notOnTuesday(req, res, next) {
+  const { reservation_date } = req.body.data
+  const date = new Date(reservation_date)
+  if (date.getDay() !== 1) {
+    return next()
+  } else {
+    return next({
+      status: 400,
+      message: "We are closed on Tuesdays and cannot accept reservations then."
+    })
+  }
+}
 
 // REQUEST HANDLERS //
 
@@ -88,6 +114,8 @@ module.exports = {
     datePropertyIsValid,
     timePropertyIsValid,
     peoplePropertyIsValid,
+    notOnTuesday,
+    onlyFutureReservations,
     asyncErrorBoundary(create),
   ],
   list: [asyncErrorBoundary(list)]
