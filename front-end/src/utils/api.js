@@ -1,3 +1,4 @@
+import axios from "axios";
 /**
  * Defines the base URL for the API.
  * The default values is overridden by the `API_BASE_URL` environment variable.
@@ -67,3 +68,33 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+export async function findRes(reservationId){
+  const res = await axios.get(`${API_BASE_URL}/reservations/${reservationId}`, {
+    data: {reservation_id: reservationId},
+  });
+  return res.data.data;
+}
+
+export async function addRes(reservation) {
+  axios.post(`${url}/reservations`, { data: reservation })
+  .then((res) => {
+      res.status === 201 && history.push(`/dashboard?date=${reservation.reservation_date}`)
+  }) 
+  .catch((err) => {
+      setReservationError({ message: err.response.data.error})
+  });
+}
+
+export async function updateRes(reservation) {
+  axios.put(`${url}/reservations/${reservation.reservation_id}`, 
+  { data: reservation })
+  .then((res) => {
+      res.status === 200 && 
+      history.push(`/dashboard?date=${reservation.reservation_date}`)
+  })
+  .catch((err) => {
+      setReservationError({ message: err.response.data.error})
+  });
+}
+
