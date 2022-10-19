@@ -150,7 +150,7 @@ You can use the screenshots to debug your code by rendering additional informati
 
 The Product Manager has already created the user stories for _Periodic Tables_. Each of the user stories is listed below, and your Product Manager wants them to be implemented in the order in which they are listed. Another developer has already written the tests for each of the user stories so that you don't have to.
 
-Although the user stories do not say anything about deployment, you should consider deploying early and often. You may even decide to deploy before adding any features. We recommend that you use [Heroku](https://devcenter.heroku.com/articles/deploying-nodejs) to deploy this project.
+Although the user stories do not say anything about deployment, you should consider deploying early and often. You may even decide to deploy before adding any features. We recommend that you use [Render](https://render.com/) to deploy this project. Render will automatically deploy your application when you make a commit to the main branch on your project's Github repository. Review this [deployment guide](https://github.com/Thinkful-Ed/starter-restaurant-reservation-deployment) if you are unsure on how to deploy this project.
 
 ### US-01 Create and list reservations
 
