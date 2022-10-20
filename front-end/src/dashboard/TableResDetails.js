@@ -10,16 +10,16 @@ function TableResDetails({ reservations }) {
 
   return (
     <React.Fragment>
-      <table class="table">
+      <table className="tableResDetails">
         <thead>
           <tr>
-            <th class="border-top-0">#</th>
-            <th class="border-top-0">Name</th>
-            <th class="border-top-0">Phone</th>
-            <th class="border-top-0">Date</th>
-            <th class="border-top-0">Time</th>
-            <th class="border-top-0">People</th>
-            <th class="border-top-0">Status</th>
+            <th className="border-top-0">#</th>
+            <th className="border-top-0">Name</th>
+            <th className="border-top-0">Phone</th>
+            <th className="border-top-0">Date</th>
+            <th className="border-top-0">Time</th>
+            <th className="border-top-0">People</th>
+            <th className="border-top-0">Status</th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>
