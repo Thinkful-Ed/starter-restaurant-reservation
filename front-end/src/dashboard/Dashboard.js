@@ -9,7 +9,7 @@ import TableResDetails from "./TableResDetails";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date, previouseDate, nextDate }) {
+function Dashboard({ date, previousDate, nextDate }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -30,8 +30,24 @@ function Dashboard({ date, previouseDate, nextDate }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
       </div>
+      <div className="btn-gorup">
+        <button type="button" className="btn btn-secondary">
+          {String.fromCharCode(8592)} Previous
+        </button>
+        <button type="button" className="btn btn-secondary">
+          Today
+        </button>
+        <button type="button" className="btn btn-secondary">
+          Next {String.fromCharCode(8594)}
+        </button>
+      </div>
       <div className="TableResDetails">
-        <TableResDetails reservations={reservations} />
+        <TableResDetails
+          reservations={reservations}
+          date={date}
+          previousDate={previousDate}
+          nextDate={nextDate}
+        />
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}

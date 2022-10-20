@@ -12,6 +12,9 @@ import { today, previous, next } from "../utils/date-time";
  *
  * @returns {JSX.Element}
  */
+const previousDate = previous(today());
+const nextDate = next(today());
+
 function Routes() {
   return (
     <Switch>
@@ -24,8 +27,8 @@ function Routes() {
       <Route path="/dashboard">
         <Dashboard
           date={today()}
-          previouseDate={previous()}
-          nextDate={next()}
+          previousDate={previousDate}
+          nextDate={nextDate}
         />
       </Route>
       <Route>

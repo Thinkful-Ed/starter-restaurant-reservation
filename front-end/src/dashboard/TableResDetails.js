@@ -1,12 +1,12 @@
 import React from "react";
 import TableRow from "./TableRow";
 
-function TableResDetails({ reservations }) {
+function TableResDetails({ reservations, date }) {
   //loop over reservations
   //with each index, render TableRow component(which is only one row of data)
-  const rows = reservations.map((rowData, index) => (
-    <TableRow rowData={rowData} index={index} />
-  ));
+  const rows = reservations
+    .filter((eachRes) => eachRes.reservation_date === date)
+    .map((rowData, index) => <TableRow rowData={rowData} index={index} />);
 
   return (
     <React.Fragment>
