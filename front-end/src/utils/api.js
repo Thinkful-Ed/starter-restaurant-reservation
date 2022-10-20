@@ -98,3 +98,15 @@ export async function updateRes(reservation) {
   });
 }
 
+export async function cancelRes(){
+  window.confirm(
+    "Do you want to cancel this reservation? This cannot be undone."
+  ) && axios
+          .put(`${url}/reservations/${reservation_id}/status`, {
+            data: { status: "cancelled" },
+          })
+          .then((res) => {
+            res.status === 200 && history.push("/")
+          });
+}
+
