@@ -1,6 +1,13 @@
 import React from "react";
+import TableRow from "./TableRow";
 
-function TableResDetails() {
+function TableResDetails({ reservations }) {
+  //loop over reservations
+  //with each index, render TableRow component(which is only one row of data)
+  const rows = reservations.map((rowData, index) => (
+    <TableRow rowData={rowData} index={index} />
+  ));
+
   return (
     <React.Fragment>
       <table class="table">
@@ -15,22 +22,7 @@ function TableResDetails() {
             <th class="border-top-0">Status</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>6</td>
-            <td>"Alyssa"</td>
-            <td>1235232</td>
-            <td>2022-10-01</td>
-            <td>12:00:00</td>
-            <td>1</td>
-            <td>pending</td>
-            <td>
-              <button type="button" class="btn btn-primary">
-                Primary
-              </button>
-            </td>
-          </tr>
-        </tbody>
+        <tbody>{rows}</tbody>
       </table>
     </React.Fragment>
   );
