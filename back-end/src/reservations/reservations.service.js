@@ -7,9 +7,8 @@ function list(){
 
 function listByDate(reservation_date){
     return knex("reservations")
-        .distinct()
         .select("*")
-        .where({ "reservation_date": reservation_date })
+        .where({ reservation_date })
 }
 
 function read(reservation_id){
@@ -19,8 +18,23 @@ function read(reservation_id){
         .first()
 }
 
+function create(newReservation){
+    return knex("reservations")
+        .insert(newReservation)
+        .returning("*")
+}
+
+// function destroy(reservation_id){
+//     return knex("reservations")
+//         .select("*")
+//         .where({ reservation_id })
+//         .del()
+// }
+
 module.exports = {
     list,
     listByDate,
-    read
+    read,
+    create,
+    // destroy
 }
