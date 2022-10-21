@@ -24,12 +24,6 @@ async function create(req, res, next) {
   res.status(201).json({ data: reservation[0] });
 }
 
-// async function destroy(req, res){
-//   const {reservation_id} = req.body.data
-//   await service.destroy(reservation_id)
-//   res.sendStatus(204)
-// }
-
 const VALID_PROPERTIES = [
   "first_name",
   "last_name",
@@ -40,7 +34,7 @@ const VALID_PROPERTIES = [
 ];
 
 function hasValidProperties(req, res, next) {
-  const { data = {} } = req.body;
+  const { data } = res.locals;
 
   const invalidProperties = Object.keys(data).filter(
     (key) => !VALID_PROPERTIES.includes(key)
@@ -58,6 +52,7 @@ function hasValidProperties(req, res, next) {
 function bodyDataHas(property) {
   return (req, res, next) => {
     const { data = {} } = req.body;
+    res.locals.data = data;
     if (data[property]) {
       return next();
     }
@@ -68,57 +63,58 @@ function bodyDataHas(property) {
   };
 }
 
-const dateFormat = /^\d\d\d\d-\d\d-\d\d$/;
-const timeFormat = /^\d\d:\d\d$/;
-
-function dateIsValid(dateString) {
-  return dateString.match(dateFormat)?.[0];
-}
-
-function timeIsValid(timeString) {
-  return timeString.match(timeFormat)?.[0];
-}
-
 function hasValidPropertyValue(req, res, next) {
   const {
     data: { reservation_time, reservation_date, people },
-  } = req.body;
+  } = res.locals;
 
+  const dateFormat = /^\d\d\d\d-\d\d-\d\d$/;
+  const timeFormat = /^\d\d:\d\d$/;
+
+  function dateIsValid(dateString) {
+    return dateString.match(dateFormat)?.[0];
+  }
+
+  function timeIsValid(timeString) {
+    return timeString.match(timeFormat)?.[0];
+  }
+
+  
   if (typeof people !== "number") {
     next({
       status: 400,
-      message: `The value: "${people}", must be a number.`,
+      message: `The people value must be a number.`,
     });
   }
 
-  if(people === ''){
+  if (people === undefined) {
     next({
       status: 400,
-      message: `The value: "${people}", must contain a number.`,
+      message: `The people value, must contain a number.`,
     });
   }
 
-  if(people === 0){
+  if (people === 0) {
     next({
       status: 400,
-      message: `The value: "${people}", must be larger than 0.`,
+      message: `The people value must be larger than 0.`,
     });
   }
 
-  if(!timeIsValid(reservation_time)){
+  if (!timeIsValid(reservation_time)) {
     next({
       status: 400,
-      message: `The time: ${reservation_time} is not valid. Must be "HH:MM".`
-    })
+      message: `The reservation_time is not valid. Must be "HH:MM".`,
+    });
   }
 
-  if(!dateIsValid(reservation_date)){
+  if (!dateIsValid(reservation_date)) {
     next({
       status: 400,
-      message: `The date: ${reservation_date} is not valid. Must be "YYYY-MM-DD".`
-    })
+      message: `The reservation_date is not valid. Must be "YYYY-MM-DD".`,
+    });
   }
-  next()
+  next();
 }
 
 async function isValidId(req, res, next) {
@@ -146,6 +142,7 @@ module.exports = {
     bodyDataHas("reservation_date"),
     bodyDataHas("reservation_time"),
     hasValidProperties,
+    hasValidPropertyValue,
     asyncErrorBoundary(create),
   ],
   // destroy: [asyncErrorBoundary(destroy)]
