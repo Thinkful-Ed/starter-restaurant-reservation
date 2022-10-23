@@ -24,7 +24,7 @@ export default function TableCard({ table }) {
             <td>{table.capacity}</td>
             <td data-table-id-status={table.table_id}>{table.status}</td>
             <td>
-                {table.status === "Occupied" && (
+                {table.status === "occupied" && (
                     <button
                         data-table-id-finish={table.table_id}
                         className="btn btn-primary"

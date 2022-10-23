@@ -61,7 +61,6 @@ function Dashboard({ date }) {
         <div className="d-md-flex mb-3">
           <h4 className="mb-0">Reservations for {date}</h4>
         </div>
-
         <div>
           <button
             type="button"
@@ -85,9 +84,8 @@ function Dashboard({ date }) {
             Next Date
           </button>
         </div>
-        
         <div>
-        <ReservationsList reservations={reservations} />
+          <ReservationsList reservations={reservations} />
         </div>
         <ErrorAlert error={tablesError} />
         <div>

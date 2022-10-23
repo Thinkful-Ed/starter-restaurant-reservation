@@ -43,7 +43,7 @@ export default function SeatReservation() {
         event.preventDefault()
         try {
             await axios.put(`${URL}/tables/${selectedTable}/seat`, {
-                data: {reservation_id: reservation_id },
+                data: { reservation_id: reservation_id },
             })
             history.push("/dashboard")
         } catch (error) {
@@ -64,7 +64,7 @@ export default function SeatReservation() {
                     </select>
                 </div>
                 <button
-                    type="cancel"
+                    type="button"
                     className="btn btn-danger"
                     onClick={() => history.goBack()}
                 >
