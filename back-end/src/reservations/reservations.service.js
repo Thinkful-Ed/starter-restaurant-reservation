@@ -1,27 +1,31 @@
 const knex = require("../db/connection")
 
-function create(newReservation) {
+// CRUD SERVICES //
+
+function createReservation(newReservation) {
     return knex("reservations")
         .insert(newReservation)
         .returning("*")
-        .then((createdReservation) => createdReservation[0])
+        .then((createdRecord) => createdRecord[0])
 }
 
-function read(reservationId) {
+function readReservation(reservationId) {
     return knex("reservations")
-    .select("*")
-    .where({ reservation_id: reservationId })
-    .first()
+        .select("*")
+        .where({ reservation_id: reservationId })
+        .first()
 }
 
-function updateStatus(reservationId, newStatus) {
+function updateReservationStatus(reservationId, newStatus) {
     return knex("reservations")
+        .select("*")
         .where({ reservation_id: reservationId })
         .update({ status: newStatus })
         .returning("*")
+        .then((updatedRecord) => updatedRecord[0]) 
 }
 
-function list(date) {
+function listReservations(date) {
     if (date) {
         return knex("reservations")
             .select("*")
@@ -33,9 +37,11 @@ function list(date) {
     }
 }
 
+// EXPORTS //
+
 module.exports = {
-    create,
-    read,
-    updateStatus,
-    list,
+    createReservation,
+    readReservation,
+    updateReservationStatus,
+    listReservations,
 }

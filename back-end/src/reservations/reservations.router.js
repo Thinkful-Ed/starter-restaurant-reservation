@@ -11,18 +11,18 @@ const { route } = require("../tables/tables.router")
 
 router
     .route("/")
-    .get(controller.list)
-    .post(controller.create)
+    .get(controller.listReservations)
+    .post(controller.createReservation)
     .all(methodNotAllowed);
 
 router
     .route("/:reservation_id")
-    .get(controller.read)
+    .get(controller.readReservation)
     .all(methodNotAllowed)
 
 router
     .route("/:reservation_id/status")
-    .put(controller.updateStatus)
+    .put(controller.updateReservationStatus)
     .all(methodNotAllowed)
 
 module.exports = router;

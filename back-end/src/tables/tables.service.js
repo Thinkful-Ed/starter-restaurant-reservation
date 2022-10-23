@@ -1,13 +1,13 @@
 const knex = require("../db/connection")
 
-function create(newTable) {
+function createTable(newTable) {
     return knex("tables")
         .insert(newTable)
         .returning("*")
-        .then((createdTable) => (createdTable[0]))
+        .then((createdRecord) => (createdRecord[0]))
 }
 
-function read(tableId) {
+function readTable(tableId) {
     return knex("tables").select("*").where({ table_id: tableId }).first()
 }
 
@@ -42,14 +42,14 @@ async function finishTable(tableId, reservationId) {
         .catch(trx.rollback)
 }
 
-function list() {
+function listTables() {
     return knex("tables").select("*").orderBy("table_name")
 }
 
 module.exports = {
-    create,
-    read,
+    createTable,
+    readTable,
     seatTable,
     finishTable,
-    list,
+    listTables,
 }
