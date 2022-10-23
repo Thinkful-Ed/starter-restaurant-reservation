@@ -21,6 +21,7 @@ export default function ReservationsList({ reservations }) {
                         <th>Mobile Number</th>
                         <th>Time</th>
                         <th>Number of People</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>{reservationsList}</tbody>

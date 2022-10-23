@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router"
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery"
 import { previous, today, next } from "../utils/date-time";
 import ReservationsList from "../reservations/ReservationsList"
+import TablesList from "../tables/TablesList"
 
 
 /**
@@ -14,10 +14,10 @@ import ReservationsList from "../reservations/ReservationsList"
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  const URL = process.env.REACT_APP_API_BASE_URL
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
-  const history = useHistory()
   const query = useQuery()
   date = query.get("date") || date
 
