@@ -57,7 +57,9 @@ async function tableExists(req, res, next) {
 
 async function reservationExists(req, res, next) {
     const reservationId = req.body.data.reservation_id
-    const existingReservation = await reservationsService.read(reservationId)
+    const existingReservation = await reservationsService.read(
+        reservationId
+    )
     if (existingReservation) {
         res.locals.reservation = existingReservation
         return next()
@@ -106,6 +108,18 @@ function tableOccupied(req, res, next) {
     }
 }
 
+function reservationNotYetSeated(req, res, next) {
+    const status = res.locals.reservation.status
+    if (status !== "seated") {
+        next()
+    } else {
+        next({
+            status: 400,
+            message: `Reservation is already seated.`,
+        })
+    }
+}
+
 // REQUEST HANDLERS //
 
 async function create(req, res) {
@@ -120,19 +134,17 @@ async function read(req, res) {
     res.status(200).json({ data: responseData })
 }
 
-async function updateStatusToOccupied(req, res, next) {
+async function seat(req, res, next) {
     const tableId = res.locals.table.table_id
     const reservationId = res.locals.reservation.reservation_id
-    const responseData = await tablesService.occupyTable(
-        tableId,
-        reservationId
-    )
+    const responseData = await tablesService.seatTable(tableId, reservationId)
     res.status(200).json({ data: responseData })
 }
 
-async function freeTable(req, res) {
+async function finish(req, res) {
     const tableId = req.params.table_id
-    const responseData = await tablesService.finishTable(tableId)
+    const reservationId = res.locals.table.reservation_id
+    const responseData = await tablesService.finishTable(tableId, reservationId)
     res.status(200).json({ data: responseData })
 }
 
@@ -152,18 +164,19 @@ module.exports = {
         asyncErrorBoundary(create),
     ],
     read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
-    updateStatusToOccupied: [
+    seat: [
         bodyDataHas("reservation_id"),
         asyncErrorBoundary(tableExists),
         asyncErrorBoundary(reservationExists),
+        reservationNotYetSeated,
         tableHasCapacity,
         tableAvailable,
-        asyncErrorBoundary(updateStatusToOccupied),
+        asyncErrorBoundary(seat),
     ],
-    freeTable: [
+    finish: [
         asyncErrorBoundary(tableExists),
         tableOccupied,
-        asyncErrorBoundary(freeTable),
+        asyncErrorBoundary(finish),
     ],
     list: [asyncErrorBoundary(list)],
 }

@@ -11,17 +11,35 @@ function read(tableId) {
     return knex("tables").select("*").where({ table_id: tableId }).first()
 }
 
-function occupyTable(tableId, reservationId) {
-    return knex("tables")
+async function seatTable(tableId, reservationId) {
+    const trx = await knex.transaction()
+
+    return trx("tables")
         .where({ table_id: tableId })
-        .update({ status: "Occupied", reservation_id: reservationId })
+        .update({ status: "occupied", reservation_id: reservationId })
+        .then(function () {
+            return trx("reservations")
+            .where({ reservation_id: reservationId })
+            .update({ status: "seated" })
+        })
+        .then(trx.commit)
+        .catch(trx.rollback)
 }
 
-function finishTable(tableId) {
+async function finishTable(tableId, reservationId) {
+    const trx = await knex.transaction()
+
     return knex("tables")
         .select("*")
         .where({ table_id: tableId })
-        .update({ status: "Free", reservation_id: null })
+        .update({ status: "free", reservation_id: null })
+        .then(function () {
+            return trx("reservations")
+                .where({ reservation_id: reservationId })
+                .update({ status: "finished" })
+        })
+        .then(trx.commit)
+        .catch(trx.rollback)
 }
 
 function list() {
@@ -31,7 +49,7 @@ function list() {
 module.exports = {
     create,
     read,
-    occupyTable,
+    seatTable,
     finishTable,
     list,
 }

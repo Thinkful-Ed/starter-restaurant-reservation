@@ -54,6 +54,19 @@ function peoplePropertyIsValid(req, res, next) {
   }
 }
 
+function notOnTuesday(req, res, next) {
+  const { reservation_date } = req.body.data
+  const date = new Date(reservation_date)
+  if (date.getDay() !== 1) {
+    return next()
+  } else {
+    return next({
+      status: 400,
+      message: "Invalid Date: We are closed on Tuesdays."
+    })
+  }
+}
+
 function onlyFutureReservations(req, res, next) {
   const { reservation_date, reservation_time } = req.body.data
   const present = new Date()
@@ -64,19 +77,6 @@ function onlyFutureReservations(req, res, next) {
     return next({
       status: 400,
       message: "Invalid Time or Date: Please set reservations for the future only."
-    })
-  }
-}
-
-function notOnTuesday(req, res, next) {
-  const { reservation_date } = req.body.data
-  const date = new Date(reservation_date)
-  if (date.getDay() !== 1) {
-    return next()
-  } else {
-    return next({
-      status: 400,
-      message: "Invalid Date: We are closed on Tuesdays."
     })
   }
 }
@@ -95,7 +95,9 @@ function notOutsideHours(req, res, next) {
 
 async function reservationExists(req,res, next) {
   const reservationId = req.params.reservation_id
-  const existingReservation = await reservationsService.read(reservationId)
+  const existingReservation = await reservationsService.read(
+    reservationId
+  )
   if (existingReservation) {
     return next()
   } else {
@@ -106,17 +108,66 @@ async function reservationExists(req,res, next) {
   }
 }
 
+function statusNotSeatedOrFinished(req, res, next) {
+  const status = req.body.data.status
+  if (status!== "seated" && status!== "finished") {
+    return next()
+  } else {
+    return next({
+      status: 400,
+      message: `${status} is an invalid status for a new reservation.`,
+    })
+  }
+}
+
+function validStatus(req, res, next) {
+  const { status } = req.body.data
+  const validStatuses = ["booked", "seated", "finished"]
+  if (validStatuses.includes(status)) {
+    return next()
+  } else {
+    return next({
+      status: 400,
+      message: `Status unknown: Status must be booked, seated, or finished.`
+    })
+  }
+}
+
+function statusNotFinshed(req, res, next) {
+  const status = req.body.data.status
+  if (status === "finished") {
+    return next()
+  } else {
+    return next({
+      status: 400,
+      message: `A finished reservation cannot be updated.`
+    })
+  }
+}
+
 // REQUEST HANDLERS //
 
 async function create(req, res) {
   const newReservation = req.body.data
-  const responseData = await reservationsService.create(newReservation)
+  const responseData = await reservationsService.create(
+    newReservation
+  )
   res.status(201).json({ data: responseData })
 }
 
 async function read(req, res) {
   const reservationId = req.params.reservation_id
   const responseData = await reservationsService.read(reservationId)
+  res.status(200).json({ data: responseData })
+}
+
+async function updateStatus(req, res) {
+  const reservationId = req.params.reservation_id
+  const newStatus = req.body.data.status
+  responseData = await reservationsService.updateStatus(
+    reservationId,
+    newStatus
+  )
   res.status(200).json({ data: responseData })
 }
 
@@ -132,6 +183,8 @@ async function list(req, res) {
   }
 }
 
+// EXPORTS //
+
 module.exports = {
   create: [
     bodyDataHas("first_name"),
@@ -146,8 +199,19 @@ module.exports = {
     notOnTuesday,
     onlyFutureReservations,
     notOutsideHours,
+    statusNotSeatedOrFinished,
     asyncErrorBoundary(create),
   ],
-  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
+  read: [
+    asyncErrorBoundary(reservationExists),
+     asyncErrorBoundary(read)
+  ],
+  updateStatus: [
+    bodyDataHas("status"),
+    asyncErrorBoundary(reservationExists),
+    validStatus,
+    statusNotFinshed,
+    asyncErrorBoundary(updateStatus),
+  ],
   list: [asyncErrorBoundary(list)]
 };
