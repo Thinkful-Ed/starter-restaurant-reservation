@@ -6,18 +6,17 @@ import useQuery from "../utils/useQuery"
 import ReservationsList from "../reservations/ReservationsList"
 import TablesList from "../tables/TablesList"
 
-
 /**
  * Defines the dashboard page.
  * @param date
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
+
 function Dashboard({ date }) {
   const query = useQuery()
   date = query.get("date") || date
   const URL = process.env.REACT_APP_API_BASE_URL
-
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([])

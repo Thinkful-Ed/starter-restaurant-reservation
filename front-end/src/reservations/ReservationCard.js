@@ -15,5 +15,4 @@ export default function ReservationCard({ reservation }) {
             </Link>
         </tr>
     )
-
 }

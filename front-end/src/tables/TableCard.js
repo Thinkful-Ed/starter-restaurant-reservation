@@ -1,6 +1,6 @@
 import React from "react"
 
-export default function TableCard({ table}) {
+export default function TableCard({ table }) {
     return (
         <tr>
             <td>{table.table_name}</td>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useHistory, useParams } from "react-router"
 import axios from "axios"
 import TableOptions from "../tables/TableOptions"
-import errorAlert from "../layout/ErrorAlert"
+import ErrorAlert from "../layout/ErrorAlert"
 
 export default function SeatReservation() {
     const history = useHistory()
@@ -31,7 +31,7 @@ export default function SeatReservation() {
     }, [URL])
 
     const options = tables.map((table) => {
-        <TableOptions table={table} key={table.table_id} />
+        return <TableOptions table={table} key={table.table_id} />
     })
 
     const handleChange = (event) => {
