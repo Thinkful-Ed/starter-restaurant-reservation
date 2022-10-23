@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import useQuery from "../utils/useQuery"
 import axios from "axios"
 import { listReservations } from "../utils/api";
-import ErrorAlert from "../layout/ErrorAlert";
-import useQuery from "../utils/useQuery"
+import { today, previous, next } from "../utils/date-time"
 import ReservationsList from "../reservations/ReservationsList"
 import TablesList from "../tables/TablesList"
+import ErrorAlert from "../layout/ErrorAlert";
+import { useHistory } from "react-router"
 
 /**
  * Defines the dashboard page.
@@ -14,6 +16,7 @@ import TablesList from "../tables/TablesList"
  */
 
 function Dashboard({ date }) {
+  const history = useHistory()
   const query = useQuery()
   date = query.get("date") || date
   const URL = process.env.REACT_APP_API_BASE_URL
@@ -58,6 +61,31 @@ function Dashboard({ date }) {
         <div className="d-md-flex mb-3">
           <h4 className="mb-0">Reservations for {date}</h4>
         </div>
+
+        <div>
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={() => history.push(`/dashboard?date=${previous(date)}`)}
+          >
+            Previous Date
+          </button>
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={() => history.push(`/dashboard?date=${today()}`)}
+          >
+            Current Date 
+          </button>
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={() => history.push(`/dashboard?date=${next(date)}`)}
+          >
+            Next Date
+          </button>
+        </div>
+        
         <div>
         <ReservationsList reservations={reservations} />
         </div>
