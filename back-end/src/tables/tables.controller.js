@@ -1,7 +1,6 @@
 const tablesService = require("./tables.service")
 const reservationsService = require("../reservations/reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
-const { table } = require("../db/connection")
 
 // VALIDATION //
 
@@ -95,6 +94,18 @@ function tableAvailable(req, res, next) {
     }
 }
 
+function tableOccupied(req, res, next) {
+    const tableStatus = res.locals.table.status
+    if (tableStatus === "Occupied") {
+        return next()
+    } else {
+        return next({
+            status: 400,
+            message: `This table is not occupied.`,
+        })
+    }
+}
+
 // REQUEST HANDLERS //
 
 async function create(req, res) {
@@ -116,6 +127,12 @@ async function updateStatusToOccupied(req, res, next) {
         tableId,
         reservationId
     )
+    res.status(200).json({ data: responseData })
+}
+
+async function freeTable(req, res) {
+    const tableId = req.params.table_id
+    const responseData = await tablesService.finishTable(tableId)
     res.status(200).json({ data: responseData })
 }
 
@@ -142,6 +159,11 @@ module.exports = {
         tableHasCapacity,
         tableAvailable,
         asyncErrorBoundary(updateStatusToOccupied),
+    ],
+    freeTable: [
+        asyncErrorBoundary(tableExists),
+        tableOccupied,
+        asyncErrorBoundary(freeTable),
     ],
     list: [asyncErrorBoundary(list)],
 }

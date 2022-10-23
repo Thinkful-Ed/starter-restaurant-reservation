@@ -10,6 +10,10 @@ router
 
 router.route("/:table_id").get(controller.read).all(methodNotAllowed)
 
-router.route("/:table_id/seat").put(controller.updateStatusToOccupied).all(methodNotAllowed)
+router
+    .route("/:table_id/seat")
+    .put(controller.updateStatusToOccupied)
+    .delete(controller.freeTable)
+    .all(methodNotAllowed)
 
 module.exports = router
