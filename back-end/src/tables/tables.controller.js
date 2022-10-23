@@ -100,19 +100,19 @@ function tableAvailable(req, res, next) {
 async function create(req, res) {
     const newTable = req.body.data
     const responseData = await tablesService.create(newTable)
-    req.status(201).json({ data: responseData })
+    res.status(201).json({ data: responseData })
 }
 
 async function read(req, res) {
-    const tableId = req.paraams.table_id
-    const responseData = await tablesService.read(rableId)
+    const tableId = req.params.table_id
+    const responseData = await tablesService.read(tableId)
     res.status(200).json({ data: responseData })
 }
 
 async function updateStatusToOccupied(req, res, next) {
     const tableId = res.locals.table.table_id
     const reservationId = res.locals.reservation.reservation_id
-    const responseData = await tablesService.updateStatusToOccupied(
+    const responseData = await tablesService.occupyTable(
         tableId,
         reservationId
     )
