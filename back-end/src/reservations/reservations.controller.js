@@ -93,12 +93,31 @@ function notOutsideHours(req, res, next) {
   }
 }
 
+async function reservationExists(req,res, next) {
+  const reservationId = req.params.reservation_id
+  const existingReservation = await reservationsService.read(reservationId)
+  if (existingReservation) {
+    return next()
+  } else {
+    return next({
+      status:404,
+      message: `Reservation ${reservationId} does not exist.`,
+    })
+  }
+}
+
 // REQUEST HANDLERS //
 
 async function create(req, res) {
   const newReservation = req.body.data
   const responseData = await reservationsService.create(newReservation)
   res.status(201).json({ data: responseData })
+}
+
+async function read(req, res) {
+  const reservationId = req.params.reservation_id
+  const responseData = await reservationsService.read(reservationId)
+  res.status(200).json({ data: responseData })
 }
 
 async function list(req, res) {
@@ -129,5 +148,6 @@ module.exports = {
     notOutsideHours,
     asyncErrorBoundary(create),
   ],
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)]
 };
