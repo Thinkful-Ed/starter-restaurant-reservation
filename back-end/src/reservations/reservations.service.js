@@ -7,6 +7,12 @@ function list(date) {
     .orderBy("reservation_time");
 }
 
+function create(reservation) {
+  return knex("reservations")
+    .insert(reservation, "*")
+    .then((createRecords) => createRecords[0]);
+}
 module.exports = {
   list,
+  create,
 };

@@ -1,85 +1,138 @@
-import React from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router";
 
 function CreateReservation() {
+  const history = useHistory();
+  const initialFormState = {
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    people: 1,
+  };
+
+  const [formData, setFormData] = useState({ ...initialFormState });
+
+  const handleChange = ({ target }) => {
+    setFormData({
+      ...formData,
+      [target.name]: target.value,
+    });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("Submitted", formData);
+    setFormData({ ...initialFormState });
+    //go to /dashboard page for the date of the new reservation
+    history.push(`/dashboard?date=${formData.reservation_date}`);
+  };
+
   return (
     <React.Fragment>
-      <form>
-        <div className="form-row">
-          <div className="col-md-4 mb-3">
-            <label htmlFor="firstName">First name</label>
-            <input
-              type="text"
-              className="form-control"
-              id="validationDefault01"
-              placeholder="First name"
-              value
-              required
-            />
-          </div>
-          <div className="col-md-4 mb-3">
-            <label htmlFor="lastName">Last name</label>
-            <input
-              type="text"
-              className="form-control"
-              id="validationDefault02"
-              placeholder="Last name"
-              value
-              required
-            />
-          </div>
-          <div className="col-md-4 mb-3">
-            <label htmlFor="mobileNumber">Mobile Number</label>
-            <input
-              type="text"
-              className="form-control"
-              id="validationDefaultUsername"
-              placeholder="Username"
-              aria-describedby="inputGroupPrepend2"
-              required
-            />
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="col-md-6 mb-3">
-            <label htmlFor="reservation_date">Date</label>
-            <input
-              type="date"
-              className="form-reservation_date"
-              id="reservation_date"
-              placeholder="yyy-mm-dd"
-              pattern="\d{4}-\d{2}-\d{4}"
-              value
-              required
-            />
-          </div>
-          <div className="col-md-3 mb-3">
-            <label htmlFor="validationDefault04">Time</label>
-            <input
-              type="text"
-              className="form-control"
-              id="validationDefault04"
-              placeholder="State"
-              required
-            />
-          </div>
-          <div className="col-md-3 mb-3">
-            <label htmlFor="validationDefault05">People</label>
-            <input
-              type="text"
-              className="form-control"
-              id="validationDefault05"
-              placeholder="Zip"
-              required
-            />
-          </div>
-        </div>
-        <button className="btn btn-secondary" type="submit">
-          Cancel
-        </button>
-        <button className="btn btn-primary" type="submit">
-          Submit
-        </button>
-      </form>
+      <div className="col">
+        <main>
+          <h1>Create Reservation</h1>
+          <form onSubmit={handleSubmit}>
+            <fieldset>
+              <div className="row">
+                <div className="form-group col">
+                  <label htmlFor="first_name">First name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="first_name"
+                    id="first_name"
+                    required
+                    placeholder="First name"
+                    onChange={handleChange}
+                    value={formData.first_name}
+                  />
+                </div>
+                <div className="form-group col">
+                  <label htmlFor="last_name">Last name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="last_name"
+                    id="last_name"
+                    required
+                    placeholder="Last Name"
+                    onChange={handleChange}
+                    value={formData.last_name}
+                  />
+                </div>
+                <div className="form-group col">
+                  <label htmlFor="mobile_number">Mobile Number</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="mobile_number"
+                    id="mobile_number"
+                    required
+                    placeholder="Mobile Number"
+                    onChange={handleChange}
+                    value={formData.mobile_number}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="form-group col">
+                  <label htmlFor="reservation_date">Date</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    name="reservation_date"
+                    id="reservation_date"
+                    required
+                    placeholder="yyyy-mm-dd"
+                    pattern="\d{4}-\d{2}-\d{2}"
+                    onChange={handleChange}
+                    value={formData.reservation_date}
+                  />
+                </div>
+                <div className="form-group col">
+                  <label htmlFor="reservation_time">Time</label>
+                  <input
+                    type="time"
+                    className="form-control"
+                    name="reservation_time"
+                    id="reservation_time"
+                    required
+                    placeholder="09:20"
+                    pattern="[0-9]{2}:[0-9]{2}"
+                    onChange={handleChange}
+                    value={formData.reservation_time}
+                  />
+                </div>
+                <div className="form-group col">
+                  <label htmlFor="people">Number of people</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    name="people"
+                    id="people"
+                    required
+                    min="1"
+                    onChange={handleChange}
+                    value={formData.people}
+                  />
+                </div>
+              </div>
+              <br />
+              <button type="submit" className="btn btn-primary">
+                Submit
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => history.goBack()}
+              >
+                Cancel
+              </button>
+            </fieldset>
+          </form>
+        </main>
+      </div>
     </React.Fragment>
   );
 }

@@ -59,13 +59,22 @@ async function fetchJson(url, options, onCancel) {
  */
 
 export async function listReservations(params, signal) {
-  console.log(params);
   const url = new URL(`${API_BASE_URL}/reservations`);
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
   );
-  console.log(url);
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
+}
+
+export async function createReservation(newReservation, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/new`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: newReservation }),
+    signal,
+  };
+  return await fetchJson(url, options, newReservation);
 }
