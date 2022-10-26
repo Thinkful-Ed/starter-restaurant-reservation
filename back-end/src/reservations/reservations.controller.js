@@ -79,7 +79,45 @@ function hasValidPropertyValue(req, res, next) {
     return timeString.match(timeFormat)?.[0];
   }
 
-  
+  function notWithinHours(time){
+    if(time < "10:30" || time > "21:30"){
+      return true
+    }
+    return false
+  }
+
+  function dayIsTuesday(date){
+    const reservationDate = new Date(date)
+    if(reservationDate.getDay() === 1){
+      return true
+    }
+    return false
+  }
+
+  const currentDate = new Date()
+  const reservationDate = new Date(reservation_date)
+
+  if( currentDate.valueOf() > reservationDate.valueOf()){
+    next({
+      status: 400,
+      message: `The reservation date must be in the future`,
+    });
+  }
+
+  if(dayIsTuesday(reservation_date)){
+    next({
+      status: 400,
+      message: `Sorry we are closed on Tuesday, please select another day.`,
+    });
+  }
+
+  if(notWithinHours(reservation_time)){
+    next({
+      status: 400,
+      message: `Reservations must be made between 10:30am and 9:30pm.`,
+    });
+  }
+
   if (typeof people !== "number") {
     next({
       status: 400,
