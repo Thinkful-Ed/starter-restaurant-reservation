@@ -1,7 +1,7 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const moment = require("moment");
-const e = require("express");
+//const e = require("express");
 
 //Middleware
 
@@ -28,20 +28,16 @@ function hasProperties(req, res, next){
   next();
 }
 
-async function reservationExists(req, res, next){
-  const { reservation_id } = req.params;
-  let reservation = await service.read(reservation_id);
-
-  const error = {
-    status: 404,
-    message: `Reservation ${reservation_id} cannot be found.`,
-  }
-
-  if(reservation){
+async function reservationExists(req, res, next) {
+  const reservation = await service.readReservation(req.body.data.reservation_id);
+  if (reservation) {
     res.locals.reservation = reservation;
     return next();
   }
-  next(error);
+  next({
+    status: 404,
+    message: `reservation_id ${req.body.data.reservation_id} does not exist`,
+  })
 }
 
 function validNames(req, res, next){
@@ -140,6 +136,7 @@ function validDateTime(req, res, next) {
 async function list(req, res) {
   const date = req.query.date ? req.query.date : moment().format("YYYY-MM-DD");
   const data = await service.list(date);
+  console.log("list: ", data);
   res.json({ data });
 }
 
@@ -175,7 +172,7 @@ async function create(req, res){
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  read: [reservationExists, asyncErrorBoundary(read)],
+  read: asyncErrorBoundary(read),
   create: [
     hasProperties,
     validNames,
