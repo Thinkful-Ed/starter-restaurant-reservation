@@ -1,6 +1,6 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-
+const bodyDataHas = require("../validations/bodyDataHas")
 async function list(req, res) {
   const { date } = req.query;
   if (!date) {
@@ -16,7 +16,7 @@ async function list(req, res) {
 }
 
 function read(req, res) {
-  res.status(201).json(res.locals.reservation);
+  res.status(200).json({data: res.locals.reservation});
 }
 
 async function create(req, res, next) {
@@ -47,20 +47,6 @@ function hasValidProperties(req, res, next) {
     });
   }
   next();
-}
-
-function bodyDataHas(property) {
-  return (req, res, next) => {
-    const { data = {} } = req.body;
-    res.locals.data = data;
-    if (data[property]) {
-      return next();
-    }
-    next({
-      status: 400,
-      message: `ERROR: Request must have a: ${property}.`,
-    });
-  };
 }
 
 function hasValidPropertyValue(req, res, next) {
