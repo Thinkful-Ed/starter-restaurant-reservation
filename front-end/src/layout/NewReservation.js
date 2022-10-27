@@ -39,7 +39,7 @@ function NewReservation() {
   const handleSubmit = (event) => {
     event.preventDefault();
     //implement saving of reservation to db
-    history.push(`/dashboard?date=${reservationDate}`)
+    history.push(`dashboard?date=${reservationDate}`)
     setFirstName('');
     setLastName('');
     setMobileNumber('');
