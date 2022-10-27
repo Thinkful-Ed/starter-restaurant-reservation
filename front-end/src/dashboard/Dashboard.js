@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { listReservations } from "../utils/api";
 import Listing from "./Listing";
 import ErrorAlert from "../layout/ErrorAlert";
+import { next, previous } from "../utils/date-time";
 
 /**
  * Defines the dashboard page.
@@ -12,21 +14,20 @@ import ErrorAlert from "../layout/ErrorAlert";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const [currentDate, setCurrentDate] = useState(date);
+  const [currentDate, setCurrentDate] = useState(getDate());
+  const history = useHistory();
 
   useEffect(loadDashboard, [currentDate]);
 
   function getDate() {
     const queryParams = new URLSearchParams(window.location.search);
-    return queryParams.get("date");
+    const dateTerm = queryParams.get("date");
+    return dateTerm ? dateTerm : date;
   }
 
-
-
   function loadDashboard() {
+    history.push(`/dashboard?date=${currentDate}`);
     const abortController = new AbortController();
-    const dateTerm = getDate();
-    if (dateTerm) {setCurrentDate(dateTerm)}
     setReservationsError(null);
     listReservations({date: currentDate}, abortController.signal)
       .then(setReservations)
@@ -34,8 +35,16 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
-  function todayHandler() {
+  const goToPrev = () => {
+    setCurrentDate((current) => previous(current));
+  }
 
+  const goToToday = () => {
+    history.push("/");
+  }
+
+  const goToNext = () => {
+    setCurrentDate((current) => next(current));
   }
 
   return (
@@ -59,9 +68,14 @@ function Dashboard({ date }) {
                 </tr>
               </thead>
               <tbody>
-                {reservations.map(reservation => <Listing reservation={reservation} />)}
+                {reservations.map(reservation => <Listing key={`reservation-${reservation.reservation_id}`} reservation={reservation} />)}
               </tbody>
             </table>
+          </div>
+          <div className="card-footer">
+            <button type="button" className="btn btn-danger mr-3" onClick={goToPrev}>Prev</button>
+            <button type="button" className="btn btn-success mr-3" onClick={goToToday}>Today</button>
+            <button type="button" className="btn btn-primary" onClick={goToNext}>Next</button>
           </div>
         </div>
       </div>

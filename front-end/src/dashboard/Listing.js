@@ -1,7 +1,6 @@
 import React from "react";
 
 function Listing({reservation}) {
-    console.log(reservation);
     return (
         <tr>
             <td>{reservation.last_name}</td>
