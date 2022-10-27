@@ -100,7 +100,7 @@ function hasValidPropertyValue(req, res, next) {
   if(notWithinHours(reservation_time)){
     next({
       status: 400,
-      message: `Reservations must be made between 10:30am and 9:30pm.`,
+      message: `reservation_time must be a time between 10:30am and 9:30pm.`,
     });
   }
 
