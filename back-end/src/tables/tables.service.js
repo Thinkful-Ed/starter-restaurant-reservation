@@ -24,6 +24,7 @@ function update(updatedTable){
         .select("*")
         .where({ table_id: updatedTable.table_id })
         .update(updatedTable, "*")
+        .then((updatedRecords) => updatedRecords[0])
 }
 module.exports = {
     list,
