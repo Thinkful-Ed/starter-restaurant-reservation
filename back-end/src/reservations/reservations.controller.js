@@ -33,7 +33,7 @@ function isDate(req, res, next) {
 }
 
 function isNumber(req, res, next) {
-  const { data: { people } } = req.body;
+  const { data: {people} } = req.body;
   if (typeof(people) === "number") {
     next();
   } else {

@@ -17,7 +17,7 @@ function Dashboard({ date }) {
   const [currentDate, setCurrentDate] = useState(getDate());
   const history = useHistory();
 
-  useEffect(loadDashboard, [currentDate]);
+  useEffect(loadDashboard, [currentDate, history]);
 
   function getDate() {
     const queryParams = new URLSearchParams(window.location.search);
