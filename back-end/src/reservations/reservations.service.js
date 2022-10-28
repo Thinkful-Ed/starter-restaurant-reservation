@@ -5,7 +5,9 @@ const knex = require("../db/connection");
 function getReservationsByDate(date) {
     return knex("reservations")
     .select("*")
-    .where({ reservation_date : date });
+    .where({ reservation_date : date })
+    .whereNotIn("status", ["finished", "cancelled"])
+    .orderBy("reservations.reservation_time");;
 }
 
 function create(reservation) {
