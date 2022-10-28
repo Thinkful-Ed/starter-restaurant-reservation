@@ -71,6 +71,26 @@ function dateValidations(req, res, next) {
   next();
 }
 
+// 9:30 AM 10:30 PM
+function timeValidations(req, res, next) {
+  const { data: { reservation_date, reservation_time } } = req.body;
+  const time = new Date(`${reservation_date}T${reservation_time}`);
+  const now = new Date();
+  const errors = [];
+  if (time.getHours() < 9 || (time.getHours() === 9 && time.getMinutes() < 30)) {
+    errors.push("Choose a time after the restaurant opens at 9:30 AM");
+  } else if (time.getHours() > 21 || (time.getHours() === 21 && time.getMinutes() > 30)) {
+    errors.push("Reservations stop at 9:30 PM. Choose another time");
+  } else if (time.getHours() < now.getHours() || (time.getHours() === now.getHours() && time.getMinutes() < now.getMinutes())) {
+    errors.push("Reservations must be at a future time");
+  }
+
+  if (errors.length) {
+    next({ status: 400, message: errors.length > 1 ? errors.join("; ") : errors[0] })
+  }
+  next();
+}
+
 async function create(req, res) {
   const data = await services.create(req.body.data);
   res.status(201).json({ data });
@@ -83,5 +103,5 @@ async function list(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [hasOnlyValidProperties, hasRequiredProperties, isDate, isTime, isNumber, dateValidations, asyncErrorBoundary(create)],
+  create: [hasOnlyValidProperties, hasRequiredProperties, isDate, isTime, isNumber, dateValidations, timeValidations, asyncErrorBoundary(create)],
 };
