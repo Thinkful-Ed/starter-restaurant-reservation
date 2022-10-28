@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
+import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import DashboardButtons from "./DashboardButtons";
-import ReservationList from "../reservations/ReservationList";
+import { previous, next } from "../utils/date-time";
+import ResTable from "./ReservationDash/ResTable";
 
 /**
  * Defines the dashboard page.
@@ -10,7 +11,8 @@ import ReservationList from "../reservations/ReservationList";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date, setDate }) {
+function Dashboard({ date }) {
+  const history = useHistory();
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -25,6 +27,19 @@ function Dashboard({ date, setDate }) {
     return () => abortController.abort();
   }
 
+  function handleToday() {
+    history.push(`/dashboard`);
+  }
+
+  function handlePrev() {
+    const newDate = previous(date);
+    history.push(`/dashboard?date=${newDate}`);
+  }
+
+  function handleNext() {
+    history.push(`/dashboard?date=${next(date)}`);
+  }
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -32,29 +47,31 @@ function Dashboard({ date, setDate }) {
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
       <div>
-        <DashboardButtons date={date} setDate = {setDate}/>
-        <ErrorAlert error={reservationsError} />
+        <button className="btn btn-dark mr-1" onClick={handlePrev}>
+          Previous
+        </button>
+        <button className="btn btn-dark mr-1" onClick={handleToday}>
+          Today
+        </button>
+        <button className="btn btn-dark" onClick={handleNext}>
+          Next
+        </button>
+      </div>
+      <ErrorAlert error={reservationsError} />
+      <div>
         <div>
           <div>
+            <h3>Reservations:</h3>
             <div>
-              <h3>Reservations:</h3>
-              <div>
-                {reservations.length === 0 && (
-                  <h5>
-                    There are no reservations for {date}
-                  </h5>
-                )}
-                {reservations.map((reservation) => (
-                  <ReservationList
-                    key={reservation.reservation_id}
-                    reservation={reservation}
-                    />
-                ))}
-              </div>
+              <ResTable
+                reservations={reservations}
+                setReservations={setReservations}
+                setError={setReservationsError}
+              />
             </div>
-            <div>
-              <h3>Tables:</h3>
-            </div>
+          </div>
+          <div>
+            <h3>Tables:</h3>
           </div>
         </div>
       </div>

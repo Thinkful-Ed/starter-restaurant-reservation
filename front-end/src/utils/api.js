@@ -1,4 +1,3 @@
-import axios from "axios";
 /**
  * Defines the base URL for the API.
  * The default values is overridden by the `API_BASE_URL` environment variable.
@@ -6,7 +5,7 @@ import axios from "axios";
 import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-date";
 
-const API_BASE_URL =
+export const API_BASE_URL=
   process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
 
 /**
@@ -69,44 +68,81 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
-export async function findRes(reservationId){
-  const res = await axios.get(`${API_BASE_URL}/reservations/${reservationId}`, {
-    data: {reservation_id: reservationId},
-  });
-  return res.data.data;
+export async function listTables(signal){
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return await fetchJson(url, { headers, signal }, [])
+};
+
+export async function addRes(reservation, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  };
+  return await fetchJson(url, options, []);
 }
 
-export async function addRes(reservation) {
-  axios.post(`${url}/reservations`, { data: reservation })
-  .then((res) => {
-      res.status === 201 && history.push(`/dashboard?date=${reservation.reservation_date}`)
-  }) 
-  .catch((err) => {
-      setReservationError({ message: err.response.data.error})
-  });
+export async function findRes(reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  return await fetchJson(url, {headers, signal}, [])
+  .then(formatReservationDate)
+  .then(formatReservationTime);
 }
 
-export async function updateRes(reservation) {
-  axios.put(`${url}/reservations/${reservation.reservation_id}`, 
-  { data: reservation })
-  .then((res) => {
-      res.status === 200 && 
-      history.push(`/dashboard?date=${reservation.reservation_date}`)
-  })
-  .catch((err) => {
-      setReservationError({ message: err.response.data.error})
-  });
+export async function updateRes(reservation, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation.reservation_id}`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  };
+  return await fetchJson(url, options)
+  .then(formatReservationDate)
+  .then(formatReservationTime);
 }
 
-export async function cancelRes(){
-  window.confirm(
-    "Do you want to cancel this reservation? This cannot be undone."
-  ) && axios
-          .put(`${url}/reservations/${reservation_id}/status`, {
-            data: { status: "cancelled" },
-          })
-          .then((res) => {
-            res.status === 200 && history.push("/")
-          });
+export async function cancelRes(reservation_id) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { status: "cancelled" } }),
+  };
+  return await fetchJson(url, options, []);
 }
 
+export async function addTable(table, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  const options = {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ data: table }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+export async function deleteTableReservation(table_id, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const options = {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify({ data: { table_id }}),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+export async function updateResStatus(data, reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}

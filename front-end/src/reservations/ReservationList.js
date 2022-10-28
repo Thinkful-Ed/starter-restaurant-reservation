@@ -1,58 +1,55 @@
-import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
-import  { cancelRes } from "../utils/api";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import ErrorAlert from "../layout/ErrorAlert";
+import { addRes } from "../utils/api";
+import ReservationForm from "./ReservationForm";
 
-function ReservationList({ reservation }){
-    const {
-        reservation_id,
-        first_name,
-        last_name,
-        people,
-        reservation_time,
-        status,
-    } = reservation;
+function ReservationList(){
+    const history = useHistory();
+    const [reservationsError, setReservationsError] = useState(null);
+    
+    const initialFormData = {
+        first_name: "",
+        last_name: "",
+        mobile_number: "",
+        reservation_date: "",
+        reservation_time: "",
+        people: "",
+    };
 
-return (
-    <div>
-        <div>
-            <h4>
-                {reservation_time} - {last_name}, {first_name}
-            </h4>
-            <p> Party: {people}</p>
-        </div>
-        <div>
-            <h4 data-reservation-id-status={reservation_id}>
-                Status: {status.toUpperCase()}
-            </h4>
-            <div>
-                {status === "booked" && (
-                    <>
-                    <div>
-                        <Link
-                        to={`/reservations/${reservation_id}/seat`}
-                        >
-                            <i></i>Seat
-                        </Link>
-                        <Link
-                        to={`/reservations/${reservation_id}/edit`}
-                        >
-                            <i></i>Edit
-                        </Link>
-                    </div>
-                    <div>
-                        <button
-                            data-reservation-id-cancel={reservation_id}
-                            onClick={cancelRes}
-                            >
-                                <i></i>Cancel
-                            </button>
-                    </div>
-                    </>
-                )}
-            </div>
-        </div>
-    </div>
+    const [formData, setFormData] = useState({ ...initialFormData });
+
+    function handleSubmit(event){
+        const resDate = formData.reservation_date;
+        event.preventDefault();
+        addRes({ ...formData, 
+                people: Number(formData.people),
+        })
+        .then(() => {
+            setFormData(initialFormData);
+            history.push(`/dashboard?date=${resDate}`);
+        })
+        .catch(setReservationsError);
+    }
+
+    function handleChange(event){
+        setFormData({
+            ...formData,
+            [event.target.name]: event.target.value,
+        });
+    }
+
+    return (
+        <>
+        <ErrorAlert error={reservationsError}/>
+        <ReservationForm
+            initialFormData={formData}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+        />
+        </>
     )
+
 }
 
 

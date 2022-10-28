@@ -1,5 +1,6 @@
 const dateFormat = /\d\d\d\d-\d\d-\d\d/;
 const timeFormat = /\d\d:\d\d/;
+const moment = require("moment");
 
 /**
  * Formats a Date object as YYYY-MM-DD.
@@ -79,4 +80,25 @@ export function next(currentDate) {
   date.setMonth(date.getMonth());
   date.setDate(date.getDate() + 1);
   return asDateString(date);
+}
+
+export function getDay(date){
+  return moment(date).format("dddd")
+};
+
+export function inTheFuture(reservation_date, errors){
+  const [year, month, day] = reservation_date.split("-");
+  const resDate = new Date(`${month} ${day}, ${year}`);
+  const today = new Date();
+  if (resDate < today){
+    errors.push("Reservation must be made for a future date");
+  }
+}
+
+export function notTuesday(reservation_date, errors){
+  const [year, month, day] = reservation_date.split("-");
+  const resDate = new Date(`${month} ${day}, ${year}`);
+  if (resDate.getDay() === 2){
+    errors.push("Restaurant closed on Tuesdays");
+  }
 }
