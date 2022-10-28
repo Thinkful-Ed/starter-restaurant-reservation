@@ -55,6 +55,22 @@ function getDate() {
   return `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`
 }
 
+function dateValidations(req, res, next) {
+  const { data: { reservation_date } } = req.body;
+  const date = new Date(reservation_date);
+  const today = new Date();
+  const errors = []
+  if (date.getDay() === 1) {
+    errors.push("The restaurant is closed on Tuesdays");
+  } else if (date.getTime() < today.getTime()) {
+    errors.push("Only future reservations are allowed");
+  }
+  if(errors.length) {
+    next({status: 400, message: errors.length > 1 ? errors.join("; ") : errors[0]})
+  }
+  next();
+}
+
 async function create(req, res) {
   const data = await services.create(req.body.data);
   res.status(201).json({ data });
@@ -67,5 +83,5 @@ async function list(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [hasOnlyValidProperties, hasRequiredProperties, isDate, isTime, isNumber, asyncErrorBoundary(create)],
+  create: [hasOnlyValidProperties, hasRequiredProperties, isDate, isTime, isNumber, dateValidations, asyncErrorBoundary(create)],
 };

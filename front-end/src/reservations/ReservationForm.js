@@ -78,8 +78,6 @@ function ReservationForm({reservation} = null) {
                         type="tel"
                         name="mobile_number"
                         required
-                        pattern="/\d{3}-\d{3}-\d{4}/"
-                        title="xxx-xxx-xxxx"
                         onChange={handleChange}
                         value={formData.mobile_number}
                     />
