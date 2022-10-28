@@ -53,6 +53,7 @@ function ReservationForm({reservation} = null) {
                     id="first_name"
                     type="text"
                     name="first_name"
+                    required
                     onChange={handleChange}
                     value={formData.first_name}
                 />
@@ -77,6 +78,8 @@ function ReservationForm({reservation} = null) {
                         type="tel"
                         name="mobile_number"
                         required
+                        pattern="/\d{3}-\d{3}-\d{4}/"
+                        title="xxx-xxx-xxxx"
                         onChange={handleChange}
                         value={formData.mobile_number}
                     />
@@ -89,7 +92,7 @@ function ReservationForm({reservation} = null) {
                         type="date"
                         name="reservation_date"
                         placeholder="YYYY-MM-DD"
-                        required pattern="\d{4}-\d{2}-\d{2}"
+                        required pattern="/\d{4}-\d{2}-\d{2}/"
                         onChange={handleChange}
                         value={formData.reservation_date}
                     />
@@ -102,7 +105,7 @@ function ReservationForm({reservation} = null) {
                         type="time"
                         name="reservation_time"
                         placeholder="HH:MM"
-                        required pattern="[0-9]{2}:[0-9]{2}"
+                        required pattern="/[0-9]{2}:[0-9]{2}/"
                         onChange={handleChange}
                         value={formData.reservation_time}
                     />
