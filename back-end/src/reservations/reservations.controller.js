@@ -29,17 +29,8 @@ function hasOnlyValidProperties(req, res, next) {
   }
   next();
 }
-//
-// function validPeople(req, res, next) {
-//   const { data = {} } = req.body;
-//   if (!Number(data["people"])) {
-//     return next({
-//       status: 400,
-//       message: "Number of people is invalid."
-//     })
-//   }
-//   next();
-// }
+
+
 //date and time validation
 function validDate(req, res, next) {
   const { data = {} } = req.body;
@@ -52,7 +43,7 @@ function validDate(req, res, next) {
   else if (new Date(data["reservation_date"]).getDay() + 1 === 2) {
     next({
       status: 400,
-      message: `Reservations are not available on Tuesdays.`,
+      message: `Reservations are closed on Tuesdays.`,
     });
   }
   else if (Date.parse(data["reservation_date"]) < Date.now()) {
@@ -96,10 +87,18 @@ async function list(req, res, next) {
   if (req.query.date) {
   date = req.query.date;
  }
- console.log(date);
 res.json({ data: await service.getReservationsByDate(date)})
 }
-
+//to get reservation by ID
+async function read(req, res, next) {
+  const { reservation_Id } = req.params;
+  const data = await service.read(reservation_Id);
+  if (data) {
+      res.json({ data });
+  } else {
+      return next({status: 404, message: 'Reservation cannot be found.'});
+  }
+}
 
 
 //to create a reservation
@@ -113,5 +112,6 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
+  read: asyncErrorBoundary(read),
   create: [hasRequiredProperties, hasOnlyValidProperties, validDate, validTime, asyncErrorBoundary(create)],
 };
