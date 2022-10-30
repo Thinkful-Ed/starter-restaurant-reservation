@@ -4,17 +4,19 @@ import axios from "axios"
 import TableOptions from "../tables/TableOptions"
 import ErrorAlert from "../layout/ErrorAlert"
 
+// Defines seat form for seating reservation at a table on seat path
+
 export default function SeatReservation() {
     const URL = process.env.REACT_APP_API_BASE_URL
     const history = useHistory()
     const { reservation_id } = useParams()
     const [tables, setTables] = useState([])
     const [selectedTable, setSelectedTable] = useState(null)
-    const [errors, setErrors] = useState(null)
+    const [error, setError] = useState(null)
 
     useEffect(() => {
         const abortController = new AbortController()
-        setErrors(null)
+        setError(null)
         async function listTables() {
             try {
                 const response = await axios.get(URL + "/tables", {
@@ -23,7 +25,7 @@ export default function SeatReservation() {
                 setTables(response.data.data)
                 setSelectedTable(response.data.data[0].table_id)
             } catch (error) {
-                setErrors(error)
+                setError(error)
             }
         }
         listTables()
@@ -39,6 +41,7 @@ export default function SeatReservation() {
         setSelectedTable(event.target.value)
     }
 
+    //Handles update request to table's 'reservation_id' assignment.
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
@@ -47,30 +50,32 @@ export default function SeatReservation() {
             })
             history.push("/dashboard")
         } catch (error) {
-            setErrors(error.response.data.error)
+            setError(error.response.data.error)
         }
     }
 
     return (
         <div>
-            <h4>Seat Reservation</h4>
-            <ErrorAlert error={errors} />
+            <h1 className="my-4">Seat Reservation</h1>
+            <ErrorAlert error={error} />
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="table_id">Seat reservation at table:</label>
-                    <select name="table_id" onChange={handleChange}>
+                    <label className="mr-2 mb-3 font-weight-bolder" htmlFor="table_id">Seat reservation at table:</label>
+                    <select name="table_id" className="border border-dark border-2" onChange={handleChange}>
                         <option>Select an option</option>
                         {options}
                     </select>
                 </div>
                 <button
                     type="button"
-                    className="btn btn-danger"
+                    className="btn btn-secondary mr-1 mb-3"
                     onClick={() => history.goBack()}
                 >
+                    <span className="oi oi-circle-x mr-2" />
                     Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary mx-1 mb-3">
+                <span className="oi oi-circle-check mr-2" />
                     Submit
                 </button>
             </form>

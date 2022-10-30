@@ -1,6 +1,10 @@
 import React from "react"
 import ReservationCard from "./ReservationCard.js"
 
+//Defines reservation list for dashboard and search pages
+//If 'searchMode' = true, all reservations returned for search parameters
+//Else, all reservations except status cancelled or finished returned.
+
 export default function ReservationsList({ reservations, searchMode }) {
     if (searchMode) {
         const reservationsList = reservations.map((reservation) => {
@@ -11,33 +15,11 @@ export default function ReservationsList({ reservations, searchMode }) {
                 />
             )
         })
-        return (
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Mobile Number</th>
-                            <th>Time</th>
-                            <th># of People</th>
-                            <th>Status</th>
-                            <th>Seat</th>
-                            <th>Edit</th>
-                            <th>Cancel</th>
-                        </tr>
-                    </thead>
-                    <tbody>{reservationsList}</tbody>
-                </table>
-            </div>
-        )
+        return <div>{reservationsList}</div>
     } else {
         const reservationsList = reservations
             .filter((reservation) => {
-                return reservation.status !== "finished"
-            })
-            .filter((reservation) => {
-                return reservation.status !== "cancelled"
+                return reservation.status !== "cancelled" || reservation.status !== "finished"
             })
             .map((reservation) => {
                 return (
@@ -47,26 +29,6 @@ export default function ReservationsList({ reservations, searchMode }) {
                     />
                 )
             })
-        
-        return (
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Mobile Number</th>
-                            <th>Time</th>
-                            <th># of People</th>
-                            <th>Status</th>
-                            <th>Seat</th>
-                            <th>Edit</th>
-                            <th>Cancel</th>
-                        </tr>
-                    </thead>
-                    <tbody>{reservationsList}</tbody>
-                </table>
-            </div>
-        )
+        return <div>{reservationsList}</div>
     }
 }

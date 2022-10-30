@@ -4,15 +4,17 @@ import formatPhoneNumber from "../utils/formatPhoneNumber"
 import { listReservations } from "../utils/api"
 import ReservationsList from "../reservations/ReservationsList"
 
+// Define form for searching existing reservations on search page
+
 export default function SearchForm() {
     const [mobileNumber, setMobileNumber] = useState("")
-    const [errors, setErrors] = useState(null)
+    const [error, setError] = useState(null)
     const [reservations, setReservations] = useState("")
     const [reservationsDisplay, setReservationsDisplay] = useState("")
 
     useEffect(() => {
         const abortController = new AbortController()
-        setErrors(null)
+        setError(null)
         async function listMatchingReservations() {
             try {
                 if (reservations.length) {
@@ -25,7 +27,7 @@ export default function SearchForm() {
                     )
                 }
             } catch (error) {
-                setErrors(error)
+                setError(error)
             }
         }
         listMatchingReservations()
@@ -34,10 +36,10 @@ export default function SearchForm() {
 
     function loadReservations() {
         const abortController = new AbortController()
-        setErrors(null)
+        setError(null)
         listReservations({ mobile_number: mobileNumber }, abortController.signal)
             .then(setReservations)
-            .catch(setErrors)
+            .catch(setError)
         return () => abortController.abort()
     }
 
@@ -53,27 +55,34 @@ export default function SearchForm() {
 
     return (
         <div>
-            <ErrorAlert error={errors} />
+            <ErrorAlert error={error} />
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="mobile_number">Mobile Number:</label>
+                <div className="input-group mb-3">
+                    <label className="sr-only" htmlFor="mobile_number">
+                        Mobile Number
+                    </label>
                     <input
                         name="mobile_number"
                         type="text"
                         id="mobile_number"
                         placeholder="Enter a customer's phone number"
-                        style={{ width: 275 }}
+                        className="form-control"
+                        aria-label="mobile_number"
+                        style={{ maxWidth: 300 }}
                         required={true}
                         value={mobileNumber}
                         onChange={handleChange}
                     />
+                    <div className="input-group-append">
+                        <button type="submit" className="btn btn-primary mb-3">
+                            <span className="oi oi-magnifying-glass mr-2" />
+                            Search
+                        </button>
+                    </div>
                 </div>
-                <button type="submit" className="btn btn-primary">
-                    Search
-                </button>
             </form>
             <div>
-                <ErrorAlert error={errors} />
+                <ErrorAlert error={error} />
                 {reservationsDisplay}
             </div>
         </div>

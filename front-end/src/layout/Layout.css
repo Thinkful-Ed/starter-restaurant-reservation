@@ -1,3 +1,7 @@
+body {
+  background-color: #000
+}
+
 h1,
 p {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -5,13 +9,12 @@ p {
 }
 h2,
 h3,
+h4,
+h5,
+h6,
 .side-bar {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-weight: 500;
-}
-
-h3 {
-  font-size: 1.25 rem;
 }
 
 .side-bar {
@@ -19,42 +22,34 @@ h3 {
   min-width: 200px;
 }
 
+main,
+.side-bar {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
 .navbar {
   position: fixed;
 }
 
-/* Large Screens */
-@media only screen and (min-width: 768px) {
-  .side-bar {
-    min-height: 100vh;
-  }
-}
-
 /* Small Screens */
-@media only screen and (max-width: 767px) {
-  .navbar,
-  .navbar-brand {
-    position: fixed;
-    z-index: 1030;
-    left: 0;
-    right: 0;
-    background: #393a44
-  }
+@media only screen and (max-width: 865px) {
   .navbar {
     bottom: 0;
   }
+
   span.navText {
     display: none;
   }
-  .navbar-brand {
-    top: 0;
-  }
+ 
   .navbar-nav {
     flex-direction: row;
     display: flex;
     width: 100%;
     justify-content: space-evenly;
+    align-content: center;
   }
+  
   main {
     padding-top: 20px;
     padding-bottom: 50px;

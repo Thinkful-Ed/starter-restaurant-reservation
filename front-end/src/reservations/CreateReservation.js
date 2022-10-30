@@ -4,7 +4,7 @@ import ReservationForm from "./ReservationForm"
 export default function CreateReservation() {
     return (
         <div>
-            <h1>Create Reservation</h1>
+            <h1 className="my-4">Create Reservation</h1>
             <ReservationForm />
         </div>
     )
