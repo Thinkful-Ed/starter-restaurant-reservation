@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useQuery from "../utils/useQuery"
-import axios from "axios"
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import { today, previous, next } from "../utils/date-time"
 import ReservationsList from "../reservations/ReservationsList"
 import TablesList from "../tables/TablesList"
@@ -19,7 +18,6 @@ function Dashboard({ date }) {
   const history = useHistory()
   const query = useQuery()
   date = query.get("date") || date
-  const URL = process.env.REACT_APP_API_BASE_URL
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([])
@@ -33,25 +31,9 @@ function Dashboard({ date }) {
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+    listTables(abortController.signal).then(setTables).catch(setTablesError)
     return () => abortController.abort();
   }
-
-  useEffect(() => {
-    const abortController = new AbortController()
-    setTablesError(null)
-    async function listTables() {
-      try {
-        const response = await axios.get(URL + "/tables", {
-          signal: abortController.signal,
-        })
-        setTables(response.data.data)
-      } catch (error) {
-        setTablesError(error)
-      }
-    }
-    listTables()
-    return () => abortController.abort()
-  }, [URL])
 
   return (
     <main>
@@ -64,21 +46,21 @@ function Dashboard({ date }) {
         <div>
           <button
             type="button"
-            className="btn btn-success"
+            className="btn btn-primary"
             onClick={() => history.push(`/dashboard?date=${previous(date)}`)}
           >
             Previous Date
           </button>
           <button
             type="button"
-            className="btn btn-success"
+            className="btn btn-primary"
             onClick={() => history.push(`/dashboard?date=${today()}`)}
           >
             Current Date 
           </button>
           <button
             type="button"
-            className="btn btn-success"
+            className="btn btn-primary"
             onClick={() => history.push(`/dashboard?date=${next(date)}`)}
           >
             Next Date

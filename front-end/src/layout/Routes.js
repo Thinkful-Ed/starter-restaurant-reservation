@@ -1,10 +1,11 @@
 import React from "react";
 
-import { Redirect, Route, Switch } from "react-router-dom";
-import Dashboard from "../dashboard/Dashboard";
-import NotFound from "./NotFound";
-import { today } from "../utils/date-time";
-import CreateReservation from "../reservations/CreateReservation";
+import { Redirect, Route, Switch } from "react-router-dom"
+import Dashboard from "../dashboard/Dashboard"
+import NotFound from "./NotFound"
+import { today } from "../utils/date-time"
+import CreateReservation from "../reservations/CreateReservation"
+import EditReservation from "../reservations/EditReservation"
 import SeatReservation from "../reservations/SeatReservation"
 import CreateTable from "../tables/CreateTable"
 import SearchReservations from "../search/SearchReservations"
@@ -31,6 +32,9 @@ function Routes() {
       <Route path="/reservations/new">
         <CreateReservation />
       </Route>
+      <Route path="/reservations/:reservation_id/edit">
+        <EditReservation />
+      </Route>
       <Route path="/reservations/:reservation_id/seat">
         <SeatReservation />
       </Route>
@@ -44,7 +48,7 @@ function Routes() {
         <NotFound />
       </Route>
     </Switch>
-  );
+  )
 }
 
-export default Routes;
+export default Routes

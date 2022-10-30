@@ -1,20 +1,24 @@
 import React from "react"
-import axios from "axios"
+import { useHistory } from "react-router"
+import { finishTable } from "../utils/api"
 
 export default function TableCard({ table }) {
-    const URL = process.env.REACT_APP_API_BASE_URL
-
+    const history = useHistory()
     const handleFinishClick = async (event) => {
         event.preventDefault()
         const message = `Is this table ready to seat new guests? This cannot be undone.`
 
         if(window.confirm(message)) {
-            try {
-                await axios.delete(`${URL}/tables/${table.table_id}/seat`)
-                window.location.reload()
-            } catch (error) {
-                console.log(error)
-            }
+            finishTable(table.table_id)
+            history.go(0)
+        }
+    }
+
+    function statusText() {
+        if (table.reservation_id) {
+            return "occupied"
+        } else {
+            return "free"
         }
     }
 
@@ -22,9 +26,9 @@ export default function TableCard({ table }) {
         <tr>
             <td>{table.table_name}</td>
             <td>{table.capacity}</td>
-            <td data-table-id-status={table.table_id}>{table.status}</td>
+            <td data-table-id-status={table.table_id}>{statusText()}</td>
             <td>
-                {table.status === "occupied" && (
+                {table.reservation_id && (
                     <button
                         data-table-id-finish={table.table_id}
                         className="btn btn-primary"

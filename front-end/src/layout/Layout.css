@@ -1,4 +1,62 @@
+h1,
+p {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 200;
+}
+h2,
+h3,
+.side-bar {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 1.25 rem;
+}
+
 .side-bar {
   background-color: #393a44;
   min-width: 200px;
+}
+
+.navbar {
+  position: fixed;
+}
+
+/* Large Screens */
+@media only screen and (min-width: 768px) {
+  .side-bar {
+    min-height: 100vh;
+  }
+}
+
+/* Small Screens */
+@media only screen and (max-width: 767px) {
+  .navbar,
+  .navbar-brand {
+    position: fixed;
+    z-index: 1030;
+    left: 0;
+    right: 0;
+    background: #393a44
+  }
+  .navbar {
+    bottom: 0;
+  }
+  span.navText {
+    display: none;
+  }
+  .navbar-brand {
+    top: 0;
+  }
+  .navbar-nav {
+    flex-direction: row;
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+  }
+  main {
+    padding-top: 20px;
+    padding-bottom: 50px;
+  }
 }

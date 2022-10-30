@@ -103,7 +103,7 @@ async function reservationExists(req, res, next) {
     return next()
   } else {
     return next({
-      status:404,
+      status: 404,
       message: `Reservation ${reservationId} does not exist.`,
     })
   }
@@ -123,7 +123,7 @@ function statusPropertyIsNotSeatedOrFinished(req, res, next) {
 
 function statusPropertyIsValid(req, res, next) {
   const { status } = req.body.data
-  const validStatuses = ["booked", "seated", "finished"]
+  const validStatuses = ["booked", "seated", "finished", "cancelled"]
   if (validStatuses.includes(status)) {
     return next()
   } else {
@@ -184,7 +184,7 @@ async function updateReservation(req, res) {
   res.status(200).json({ data: responseData })
 }
 
-async function updateReservationStatus(req, res, next) {
+async function updateReservationStatus(req, res) {
   const reservationId = req.params.reservation_id;
   const newStatus = req.body.data.status;
   const responseData = await reservationsService.updateReservationStatus(
@@ -252,8 +252,8 @@ module.exports = {
     asyncErrorBoundary(updateReservation),
   ],
   updateReservationStatus: [
-    bodyDataHas("status"),
     asyncErrorBoundary(reservationExists),
+    bodyDataHas("status"),
     statusPropertyIsValid,
     statusPropertyIsNotFinished,
     asyncErrorBoundary(updateReservationStatus),

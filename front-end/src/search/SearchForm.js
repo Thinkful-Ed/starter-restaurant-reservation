@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import ErrorAlert from "../layout/ErrorAlert"
 import formatPhoneNumber from "../utils/formatPhoneNumber"
 import { listReservations } from "../utils/api"
-import ReservationCard from "../reservations/ReservationCard"
+import ReservationsList from "../reservations/ReservationsList"
 
 export default function SearchForm() {
     const [mobileNumber, setMobileNumber] = useState("")
@@ -17,13 +17,7 @@ export default function SearchForm() {
             try {
                 if (reservations.length) {
                     setReservationsDisplay(
-                        reservations.map((reservation, index) => {
-                            return (
-                                <div key={index}>
-                                    <ReservationCard reservation={reservation} />
-                                </div>
-                            )
-                        })
+                        <ReservationsList reservations={reservations} searchMode={true} />
                     )
                 } else if (reservations !== "") {
                     setReservationsDisplay(
