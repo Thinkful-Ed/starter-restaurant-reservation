@@ -16,6 +16,14 @@ function readReservation(reservationId) {
         .first()
 }
 
+async function updateReservation(reservationId, updateReservation) {
+    return knex("reservations")
+        .select("*")
+        .where({ reservation_id: reservationId })
+        .update(updatedReservation, "*")
+        .then((updatedRecord) => updatedRecord[0])
+}
+
 function updateReservationStatus(reservationId, newStatus) {
     return knex("reservations")
         .select("*")
@@ -49,6 +57,7 @@ function listReservations(date, mobile_number) {
 module.exports = {
     createReservation,
     readReservation,
+    updateReservation,
     updateReservationStatus,
     listReservations,
 }

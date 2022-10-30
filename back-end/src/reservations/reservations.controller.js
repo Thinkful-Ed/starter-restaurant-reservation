@@ -146,6 +146,18 @@ function statusPropertyIsNotFinished(req, res, next) {
   }
 }
 
+function statusPropertyIsBooked(req, res, next) {
+  const status = res.locals.reservation.status
+  if (status === "booked") {
+    return next()
+  } else {
+    return next({
+      status: 400,
+      message: `${status} is an invalid status. Only 'booked' reservations can be updated.`
+    })
+  }
+}
+
 // REQUEST HANDLERS //
 
 async function createReservation(req, res) {
@@ -159,6 +171,16 @@ async function createReservation(req, res) {
 async function readReservation(req, res) {
   const reservationId = req.params.reservation_id
   const responseData = await reservationsService.readReservation(reservationId)
+  res.status(200).json({ data: responseData })
+}
+
+async function updateReservation(req, res) {
+  const reservationId = res.locals.reservation.reservation_id
+  const updatedReservation = req.body.data
+  const responseData = await reservationsService.updateReservation(
+    reservationId,
+    updatedReservation
+  )
   res.status(200).json({ data: responseData })
 }
 
@@ -184,8 +206,7 @@ async function listReservations(req, res) {
       )
       res.status(200).json({ data: responseData })
   } else {
-    const today = new Date().toISOString().slice(0, 10)
-    const responseData = await reservationsService.listReservations(today)
+    const responseData = await reservationsService.listReservations()
     res.status(200).json({ data: responseData })
   }
 }
@@ -212,6 +233,23 @@ module.exports = {
   readReservation: [
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(readReservation)
+  ],
+  updateReservation: [
+    asyncErrorBoundary(reservationExists),
+    statusPropertyIsBooked,
+    bodyDataHas("first_name"),
+    bodyDataHas("last_name"),
+    bodyDataHas("mobile_number"),
+    bodyDataHas("reservation_date"),
+    bodyDataHas("reservation_time"),
+    bodyDataHas("people"),
+    datePropertyIsValid,
+    timePropertyIsValid,
+    peoplePropertyIsValid,
+    reservationIsNotForTuesday,
+    reservationIsForFuture,
+    reservationIsForOpenHours,
+    asyncErrorBoundary(updateReservation),
   ],
   updateReservationStatus: [
     bodyDataHas("status"),
