@@ -6,7 +6,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 function TableForm(){
     const [table, setTable] = useState({
         table_name: "",
-        capacity: "",
+        capacity: 1,
     });
 
     const [tablesError, setTablesError] = useState(null);
@@ -20,10 +20,14 @@ function TableForm(){
         event.preventDefault()
         addTable(table)
             .then(() => {
-                history.push(`/dashboard`);
+                history.push("/dashboard");
             })
             .catch(setTablesError);
     }
+
+    function handleCancel() {
+        history.goBack();
+      }
 
     return (
         <div>
@@ -39,6 +43,7 @@ function TableForm(){
                         placeholder="Enter table name"
                         value={table.table_name}
                         onChange={handleChange}
+                        minLength={2}
                         required
                     />
                 </div>
@@ -51,6 +56,7 @@ function TableForm(){
                         placeholder="Enter seating capacity"
                         value={table.capacity}
                         onChange={handleChange}
+                        min="1"
                         required
                     />
                 </div>
@@ -59,7 +65,7 @@ function TableForm(){
                         Submit
                     </button>
                     <button
-                        onClick={() => history.goBack()}
+                        onClick={handleCancel}
                         className="btn btn-secondary"
                     >
                         Cancel

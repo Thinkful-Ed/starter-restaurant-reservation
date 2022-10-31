@@ -1,6 +1,6 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./tables.service");
-const reservRouter = require("../reservations/reservations.router");
+//const reservRouter = require("../reservations/reservations.router");
 
 //Validation middleware
 

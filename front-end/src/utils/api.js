@@ -125,7 +125,7 @@ export async function addTable(table, signal) {
   return await fetchJson(url, options);
 }
 
-export async function deleteTableReservation(table_id, signal) {
+export async function deleteTableRes(table_id, signal) {
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   const options = {
     method: "DELETE",
@@ -136,7 +136,7 @@ export async function deleteTableReservation(table_id, signal) {
   return await fetchJson(url, options);
 }
 
-export async function updateResStatus(data, reservation_id, signal) {
+export async function updateStatus(data, reservation_id, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
   const options = {
     method: "PUT",
