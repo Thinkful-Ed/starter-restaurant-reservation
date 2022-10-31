@@ -5,7 +5,7 @@ function TableRow({ rowData, index }) {
 
   return (
     <tr>
-      <td>{index + 1}</td>
+      <td>{rowData.table_id}</td>
       <td>{rowData.table_name}</td>
       <td>{rowData.capacity}</td>
       <td>pending</td>

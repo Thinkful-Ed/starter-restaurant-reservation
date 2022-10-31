@@ -1,13 +1,15 @@
 import React from "react";
 
 function TableRow({ rowData, index }) {
-  const handleSeatClick = () => console.log("seat");
+  // const handleSeatClick = () => console.log("seat");
   const handleEditClick = () => console.log("edit");
   const handleCancelClick = () => console.log("cancel");
 
+  //The "Seat" button must be a link with an href attribute that equals /reservations/${reservation_id}/seat, so it can be found by the tests.
+
   return (
     <tr>
-      <td>{index + 1}</td>
+      <td>{rowData.reservation_id}</td>
       <td>
         {rowData.last_name}, {rowData.first_name}
       </td>
@@ -17,13 +19,21 @@ function TableRow({ rowData, index }) {
       <td>{rowData.people}</td>
       <td>pending</td>
       <td>
-        <button
+        <a
+          className="btn btn-primary"
+          role="button"
+          href={`/reservations/${rowData.reservation_id}/seat`}
+        >
+          Seat
+        </a>
+
+        {/* <button
           type="button"
           className="btn btn-primary"
           onClick={handleSeatClick}
         >
           Seat
-        </button>
+        </button> */}
       </td>
       <td>
         <button
