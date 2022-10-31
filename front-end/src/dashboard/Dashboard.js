@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import TableResDetails from "./TableResDetails";
+import TableResDetails from "./Reservations/TableResDetails";
 import { previous, today, next } from "../utils/date-time";
+import TableList from "./Tables/TableList";
 
 /**
  * Defines the dashboard page.
@@ -14,7 +15,8 @@ import { previous, today, next } from "../utils/date-time";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  //history creates object
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
   const history = useHistory();
 
   useEffect(loadDashboard, [date]);
@@ -25,6 +27,8 @@ function Dashboard({ date }) {
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+
+    listTables(abortController.signal).then(setTables).catch(setTablesError);
     return () => abortController.abort();
   }
 
@@ -40,6 +44,8 @@ function Dashboard({ date }) {
   const nextClickHandler = () => {
     history.push(`/dashboard?date=${next(date)}`);
   };
+  console.log("RES FROM DASH", reservations);
+  console.log("TABLES FROM DASH", tables);
 
   return (
     <main>
@@ -71,14 +77,13 @@ function Dashboard({ date }) {
         </button>
       </div>
       <div className="TableResDetails">
-        <TableResDetails
-          reservations={reservations}
-          date={date}
-          // previousDate={previousDate}
-          // nextDate={nextDate}
-        />
+        <TableResDetails reservations={reservations} date={date} />
+      </div>
+      <div>
+        <TableList tables={tables} loadDashboard={loadDashboard} />
       </div>
       <ErrorAlert error={reservationsError} />
+      <ErrorAlert error={tablesError} />
       {/* {JSON.stringify(reservations)} */}
     </main>
   );

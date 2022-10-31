@@ -10,7 +10,7 @@ function TableResDetails({ reservations, date }) {
 
   return (
     <React.Fragment>
-      <table className="tableResDetails">
+      <table className="tableResDetails table">
         <thead>
           <tr>
             <th className="border-top-0">#</th>
