@@ -18,10 +18,20 @@ async function create(req, res, next) {
 
 async function update(req, res, next) {
   const updatedTable = {
-    ...req.body.data,
-    table_id: res.locals.table.table_id,
+    ...res.locals.table,
+    reservation_id: res.locals.reservation.reservation_id,
   };
+
+  const updatedReservation = {
+    ...res.locals.reservation,
+    status: "seated",
+  };
+
   const savedTable = await service.update(updatedTable);
+  const reservationInformation = await reservationService.update(
+    res.locals.reservation.reservation_id,
+    updatedReservation
+  );
   res.json({ data: savedTable });
 }
 
@@ -29,12 +39,35 @@ async function finishTable(req, res, next) {
   const currentTable = res.locals.table;
 
   const updatedTable = {
-    table_id: currentTable.table_id,
+    ...currentTable,
     reservation_id: null,
   };
 
-  await service.update(updatedTable);
-  res.status(200).json(`Table with ID ${updatedTable.table_id} now available.`);
+  const seatedReservation = await reservationService.read(
+    res.locals.table.reservation_id
+  );
+  const tableInformation = await service.update(updatedTable);
+  const reservationInformation = await reservationService.update(
+    res.locals.table.reservation_id,
+    {
+      ...seatedReservation,
+      status: "finished",
+    }
+  );
+
+  res.status(200).json({ data: tableInformation });
+}
+
+function reservationSeated(req, res, next){
+  const {reservation} = res.locals
+
+  if(reservation.status !== "seated"){
+    return next()
+  }
+  next({
+    status: 400,
+    message: "table is already seated."
+  })
 }
 
 function checkTableOccupied(req, res, next) {
@@ -180,6 +213,7 @@ module.exports = {
     asyncErrorBoundary(reservationIdExists),
     tableHasSufficientCapacity,
     isTableFree,
+    reservationSeated,
     asyncErrorBoundary(update),
   ],
   finishTable: [

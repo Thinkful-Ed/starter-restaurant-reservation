@@ -272,7 +272,7 @@ describe("US-06 - Reservation status", () => {
 
       const reservationsResponse = await request(app)
         .get(
-          `/reservations?date=${asDateString(reservationOne.reservation_date)}`
+          `/reservations?date=${asDateString(new Date(reservationOne.reservation_date))}`
         )
         .set("Accept", "application/json");
 
