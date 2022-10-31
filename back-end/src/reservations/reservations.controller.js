@@ -8,10 +8,7 @@ async function list(req, res) {
   }
 
   const foundReservations = await service.listByDate(date);
-  foundReservations.sort((a, b) =>
-    a.reservation_time < b.reservation_time ? -1 : 1
-  );
-
+  
   res.status(200).json({ data: foundReservations });
 }
 
