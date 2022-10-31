@@ -52,6 +52,31 @@ function updateStatus(reservation_id, status){
         .returning("*")
 }
 
+function updateReservation(reservation) {
+    const {
+      reservation_id,
+      first_name,
+      last_name,
+      mobile_number,
+      reservation_date,
+      reservation_time,
+      people
+    } = reservation;
+    return knex("reservations")
+      .select("*")
+      .where({ reservation_id })
+      .update({
+          first_name: first_name,
+          last_name: last_name,
+          mobile_number: mobile_number,
+          reservation_date: reservation_date,
+          reservation_time: reservation_time,
+          people: people
+      })
+      .returning("*")
+      .then((updatedRecords)=> updatedRecords[0])
+  }
+
 module.exports = {
     list,
     listByDate,
@@ -59,5 +84,6 @@ module.exports = {
     read,
     create,
     update,
-    updateStatus
+    updateStatus,
+    updateReservation
 }
