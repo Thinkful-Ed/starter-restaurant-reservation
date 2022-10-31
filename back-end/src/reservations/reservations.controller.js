@@ -35,6 +35,11 @@ async function updateStatus(req, res, next) {
   res.status(200).json({ data: updatedStatus[0] });
 }
 
+async function updateReservation(req, res, next) {
+  const updatedReservation = await service.updateReservation(req.body.data)
+  res.status(200).json({data: updatedReservation})
+}
+
 function statusNotUnknown(req, res, next) {
   const { status } = req.body.data;
 
@@ -69,6 +74,7 @@ function validStatus(req, res, next){
   })
 }
 const VALID_PROPERTIES = [
+  "reservation_id",
   "first_name",
   "last_name",
   "mobile_number",
@@ -76,6 +82,8 @@ const VALID_PROPERTIES = [
   "reservation_time",
   "people",
   "status",
+  "created_at",
+  "updated_at"
 ];
 
 function hasValidProperties(req, res, next) {
@@ -220,5 +228,16 @@ module.exports = {
     statusNotUnknown,
     statusNotFinished,
     updateStatus,
+  ],
+  updateReservation: [
+    asyncErrorBoundary(isValidId),
+    bodyDataHas("first_name"),
+    bodyDataHas("last_name"),
+    bodyDataHas("mobile_number"),
+    bodyDataHas("reservation_date"),
+    bodyDataHas("reservation_time"),
+    hasValidProperties,
+    hasValidPropertyValue,
+    updateReservation,
   ],
 };
