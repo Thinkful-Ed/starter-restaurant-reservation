@@ -44,8 +44,6 @@ function Dashboard({ date }) {
   const nextClickHandler = () => {
     history.push(`/dashboard?date=${next(date)}`);
   };
-  console.log("RES FROM DASH", reservations);
-  console.log("TABLES FROM DASH", tables);
 
   return (
     <main>

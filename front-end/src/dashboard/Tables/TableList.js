@@ -2,8 +2,8 @@ import React from "react";
 import TableRow from "./TableRow";
 
 function TableList({ tables, loadDashboard }) {
-  const rows = tables.map((rowData, index) => (
-    <TableRow rowData={rowData} index={index} />
+  const rows = tables.map((table, index) => (
+    <TableRow table={table} index={index} loadDashboard={loadDashboard} />
   ));
   return (
     <div>

@@ -1,28 +1,30 @@
 import React from "react";
 
-function TableRow({ rowData, index }) {
+function TableRow({ reservation, index }) {
   // const handleSeatClick = () => console.log("seat");
   const handleEditClick = () => console.log("edit");
   const handleCancelClick = () => console.log("cancel");
 
-  //The "Seat" button must be a link with an href attribute that equals /reservations/${reservation_id}/seat, so it can be found by the tests.
+  //The "Seat" button must be a link with an href attribute that equals /reservation/${reservation_id}/seat, so it can be found by the tests.
 
   return (
     <tr>
-      <td>{rowData.reservation_id}</td>
+      <td>{reservation.reservation_id}</td>
       <td>
-        {rowData.last_name}, {rowData.first_name}
+        {reservation.last_name}, {reservation.first_name}
       </td>
-      <td>{rowData.mobile_number}</td>
-      <td>{rowData.reservation_date}</td>
-      <td>{rowData.reservation_time}</td>
-      <td>{rowData.people}</td>
-      <td>pending</td>
+      <td>{reservation.mobile_number}</td>
+      <td>{reservation.reservation_date}</td>
+      <td>{reservation.reservation_time}</td>
+      <td>{reservation.people}</td>
+      <td data-reservation-id-status={reservation.reservation_id}>
+        {reservation.status}
+      </td>
       <td>
         <a
           className="btn btn-primary"
           role="button"
-          href={`/reservations/${rowData.reservation_id}/seat`}
+          href={`/reservations/${reservation.reservation_id}/seat`}
         >
           Seat
         </a>
