@@ -20,6 +20,7 @@ async function update(req, res, next) {
   const updatedTable = {
     ...res.locals.table,
     reservation_id: res.locals.reservation.reservation_id,
+    table_status: "occupied"
   };
 
   const updatedReservation = {
