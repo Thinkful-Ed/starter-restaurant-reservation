@@ -29,7 +29,7 @@ function hasProperties(req, res, next){
 }
 
 async function reservationExists(req, res, next) {
-  const reservation = await service.readReservation(req.body.data.reservation_id);
+  const reservation = await service.read(req.body.data.reservation_id);
   if (reservation) {
     res.locals.reservation = reservation;
     return next();
@@ -130,8 +130,44 @@ function validDateTime(req, res, next) {
   next();
 }
 
+function finishedRes(req, res, next) {
+  const { status } = res.locals.reservation;
+  if (status === "finished") {
+    return next({
+      status: 400,
+      message: "Reservation already finished, cannot modify",
+    });
+  }
+  next();
+}
 
-//CRU functions
+function bookedStatus(req, res, next) {
+  const { status } = res.locals.reservation
+    ? res.locals.reservation
+    : req.body.data;
+  if (status === "seated" || status === "finished" || status === "cancelled") {
+    return next({
+      status: 400,
+      message: `New reservation cannot be ${status} already`,
+    });
+  }
+  next();
+}
+
+function validStatus(req, res, next) {
+  const statuses = ["booked", "seated", "finished", "cancelled"];
+  const { status } = req.body.data;
+  if (!statuses.includes(status)) {
+    return next({ 
+      status: 400, 
+      message: "Status unknown" 
+    });
+  }
+  next();
+}
+
+
+//CRUD functions
 
 async function list(req, res) {
   const date = req.query.date ? req.query.date : moment().format("YYYY-MM-DD");
@@ -164,21 +200,54 @@ if(req.params.reservation_id){
  }
 }
 
+async function updateStatus(req, res, next) {
+  const { reservation_id } = req.params;
+  const { status } = req.body.data;
+  const reservation = await service.updateStatus(reservation_id, status);
+  res.status(200).json({ data: reservation });
+}
+
+async function updateRes(req, res, next) {
+  const { reservation_id } = req.params;
+  const reservation = req.body.data;
+  const data = await service.updateRes(reservation_id, reservation);
+  reservation.reservation_id = data.reservation_id;
+  res.json({ data: reservation });
+}
+
 async function create(req, res){
   const reservation = req.body.data;
-  const data = await service.create(reservation);
-  res.status(201).json({ data });
+  const { reservation_id } = await service.create(reservation);
+  reservation.reservation_id = reservation_id
+  res.status(201).json({ data: reservation });
 }
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  read: asyncErrorBoundary(read),
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   create: [
     hasProperties,
     validNames,
     validMobileNumber,
     validPartySize,
     validDateTime,
+    bookedStatus,
     asyncErrorBoundary(create),
   ],
+  updateStatus: [
+    asyncErrorBoundary(reservationExists),
+    validStatus,
+    finishedRes,
+    asyncErrorBoundary(updateStatus),
+  ],
+  updateRes: [
+    hasProperties,
+    asyncErrorBoundary(reservationExists),
+    validNames,
+    validMobileNumber,
+    validPartySize,
+    validDateTime,
+    validStatus,
+    asyncErrorBoundary(updateRes),
+  ]
 };
