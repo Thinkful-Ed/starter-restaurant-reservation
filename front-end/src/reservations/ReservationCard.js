@@ -11,6 +11,11 @@ function ReservationCard({ reservation, key }) {
       <td>{reservation.reservation_date}</td>
       <td>{reservation.reservation_time}</td>
       <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
+      <td>
+        <a href={`/reservations/${reservation.reservation_id}/seat`}>
+        <button>Seat</button>
+        </a>
+      </td>
     </tr>
   );
 }
