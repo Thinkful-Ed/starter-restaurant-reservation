@@ -8,6 +8,7 @@ function TablesInfo({table, key}) {
             <td>{currentTable.table_name}</td>
             <td>{currentTable.capacity}</td>
             <td>{currentTable.reservation_id}</td>
+            <td>{currentTable.table_status}</td>
         </tr>
      );
 }

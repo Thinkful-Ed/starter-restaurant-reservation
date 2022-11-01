@@ -92,6 +92,7 @@ function Dashboard({ todaysDate }) {
             "table name",
             "capacity",
             "reservation id",
+            "table status"
           ]}/>
           <tbody>
             {tables.map((table)=> <TablesInfo table={table} key={table.table_id} />)}
