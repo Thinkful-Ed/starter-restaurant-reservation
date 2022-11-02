@@ -27,7 +27,7 @@ function NewReservations() {
       .then((createdReservation) => history.push(`/dashboard?date=${formatAsDate(reservation.reservation_date)}`))
       .catch(setReservationsError)
 
-    return () => abortController.signal;
+    return () => abortController.abort();
   };
   const cancelHandler = () => {
     history.goBack();
