@@ -42,6 +42,7 @@ async function finishTable(req, res, next) {
   const updatedTable = {
     ...currentTable,
     reservation_id: null,
+    table_status: "free"
   };
 
   const seatedReservation = await reservationService.read(
