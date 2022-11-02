@@ -22,7 +22,6 @@ function CreateReservation() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Submitted", formData);
     const formatReservation = {
       ...formData,
       people: Number(formData.people),

@@ -28,14 +28,6 @@ function TableRow({ reservation, index }) {
         >
           Seat
         </a>
-
-        {/* <button
-          type="button"
-          className="btn btn-primary"
-          onClick={handleSeatClick}
-        >
-          Seat
-        </button> */}
       </td>
       <td>
         <button
