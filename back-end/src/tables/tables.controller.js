@@ -213,6 +213,7 @@ module.exports = {
   update: [
     bodyDataHas("reservation_id"),
     asyncErrorBoundary(reservationIdExists),
+    asyncErrorBoundary(isValidTableId),
     tableHasSufficientCapacity,
     isTableFree,
     reservationSeated,
