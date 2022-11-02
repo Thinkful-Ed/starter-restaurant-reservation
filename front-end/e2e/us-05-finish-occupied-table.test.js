@@ -57,10 +57,10 @@ describe("US-05 - Finish an occupied table - E2E", () => {
     });
 
     test("clicking finish button and then clicking OK makes that table available", async () => {
-      await page.screenshot({
-        path: ".screenshots/us-05-dashboard-finish-button-before.png",
-        fullPage: true,
-      });
+      // await page.screenshot({
+      //   path: ".screenshots/us-05-dashboard-finish-button-before.png",
+      //   fullPage: true,
+      // });
 
       const containsOccupied = await containsText(
         page,
@@ -86,10 +86,10 @@ describe("US-05 - Finish an occupied table - E2E", () => {
         return response.url().endsWith(`/tables`);
       });
 
-      await page.screenshot({
-        path: ".screenshots/us-05-dashboard-finish-button-after.png",
-        fullPage: true,
-      });
+      // await page.screenshot({
+      //   path: ".screenshots/us-05-dashboard-finish-button-after.png",
+      //   fullPage: true,
+      // });
 
       const containsFree = await containsText(
         page,
@@ -101,10 +101,10 @@ describe("US-05 - Finish an occupied table - E2E", () => {
     });
 
     test("clicking finish button and then clicking CANCEL does nothing", async () => {
-      await page.screenshot({
-        path: ".screenshots/us-05-dashboard-finish-button-cancel-before.png",
-        fullPage: true,
-      });
+      // await page.screenshot({
+      //   path: ".screenshots/us-05-dashboard-finish-button-cancel-before.png",
+      //   fullPage: true,
+      // });
 
       const containsOccupied = await containsText(
         page,
