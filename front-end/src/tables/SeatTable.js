@@ -90,6 +90,7 @@ function SeatTable() {
           tableData={tableData}
           setTableData={setTableData}
           submitHandler={submitHandler}
+          history={history}
         />
       </>
     );

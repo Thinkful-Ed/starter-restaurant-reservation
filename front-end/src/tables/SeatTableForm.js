@@ -1,6 +1,6 @@
 import React from 'react';
 
-function SeatTableForm({ tables ,tableData, setTableData, submitHandler }) {
+function SeatTableForm({ tables ,tableData, setTableData, submitHandler, history }) {
     const changeHandler = ({ target }) => {
         setTableData({ ...tableData, [target.name]: target.value });
         console.log(tableData)
@@ -30,6 +30,7 @@ function SeatTableForm({ tables ,tableData, setTableData, submitHandler }) {
                     </select>
                 </div>
                 <button type='submit'>Submit</button>
+                <button type='button' onClick={()=> history.goBack()}>Cancel</button>
             </form>
         </>
      );
