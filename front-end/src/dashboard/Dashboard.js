@@ -31,12 +31,10 @@ function Dashboard({ todaysDate }) {
     const abortController = new AbortController();
     setError(null);
     Promise.all([
-      listReservations({ todaysDate }, abortController.signal)
+      listReservations(abortController.signal)
         .then(setReservations)
         .catch(setError),
-      listTables(abortController.signal)
-        .then(setTables)
-        .catch(setError),
+      listTables(abortController.signal).then(setTables).catch(setError),
     ]);
 
     return () => abortController.abort();
@@ -46,7 +44,7 @@ function Dashboard({ todaysDate }) {
     <main>
       <h1>Dashboard</h1>
       <div>
-        <h4>Reservations for date:</h4>
+        <h4>Reservations List:</h4>
         <ErrorAlert error={error} />
         <table>
           <TableHeader
@@ -85,17 +83,27 @@ function Dashboard({ todaysDate }) {
 
       <div>
         <h4>Tables List:</h4>
-        <ErrorAlert error={error}/>
+        <ErrorAlert error={error} />
         <table>
-          <TableHeader headers={[
-            "id",
-            "table name",
-            "capacity",
-            "reservation id",
-            "table status"
-          ]}/>
+          <TableHeader
+            headers={[
+              "id",
+              "table name",
+              "capacity",
+              "reservation id",
+              "table status",
+            ]}
+          />
           <tbody>
-            {tables.map((table)=> <TablesInfo table={table} key={table.table_id} />)}
+            {tables.map((table) => (
+              <TablesInfo
+                table={table}
+                setError={setError}
+                loadDashboard={loadDashboard}
+                setReservations={setReservations}
+                key={table.table_id}
+              />
+            ))}
           </tbody>
         </table>
       </div>
