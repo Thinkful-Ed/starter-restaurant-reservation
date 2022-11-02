@@ -127,20 +127,45 @@ function hasValidValues(req, res, next) {
   next();
 }
 
-/**
- * List handler for reservation resources
- */
+//validation middleware to check if reservation exists
+async function reservationExists(req, res, next) {
+  console.log(req.params); // example: { reservation_Id: 5 }
+  //destructure reservation_Id from req.params
+  const { reservation_Id } = req.params;
+  //reservation is the promise from reservations.service's read
+  const reservation = await reservationsService.read(reservation_Id);
 
+  //if reservation is true (promise resolves),
+  if (reservation) {
+    //place reservation in res.locals object for later use
+    res.locals.reservation = reservation;
+    //move onto next middleware/function
+    return next();
+  }
+
+  //otherwise, return a 404+msg
+  next({
+    status: 404,
+    message: `The reservation with ID ${reservation_Id} does not exist`,
+  });
+}
+
+//creates a reservation
 async function create(req, res) {
   const data = await reservationsService.create(req.body.data);
-  console.log(req.body);
-  console.log(data);
   res.status(201).json({ data: data });
 }
 
+//lists all reservations given a date query
 async function list(req, res) {
   const data = await reservationsService.list(req.query.date);
   res.json({ data });
+}
+
+//returns an object for a reservation id
+async function read(req, res) {
+  const reservation = res.locals.reservation;
+  res.json({ data: reservation });
 }
 
 module.exports = {
@@ -151,4 +176,5 @@ module.exports = {
     hasValidValues,
     asyncErrorBoundary(create),
   ],
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
 };

@@ -4,13 +4,13 @@ import TableRow from "./TableRow";
 function TableResDetails({ reservations, date }) {
   //loop over reservations
   //with each index, render TableRow component(which is only one row of data)
-  const rows = reservations.map((rowData, index) => (
-    <TableRow rowData={rowData} index={index} />
+  const rows = reservations.map((reservation, index) => (
+    <TableRow reservation={reservation} index={index} />
   ));
 
   return (
     <React.Fragment>
-      <table className="tableResDetails">
+      <table className="tableResDetails table">
         <thead>
           <tr>
             <th className="border-top-0">#</th>
