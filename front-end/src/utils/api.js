@@ -107,7 +107,7 @@ export async function updateSeat(table_id, reservation_id, signal) {
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({ data: { reservation_id } }),
+    body: JSON.stringify({ data: { reservation_id: reservation_id } }),
     signal,
   };
   return await fetchJson(url, options);
