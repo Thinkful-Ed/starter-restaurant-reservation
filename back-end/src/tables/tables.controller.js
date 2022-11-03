@@ -17,47 +17,15 @@ async function create(req, res, next) {
 }
 
 async function update(req, res, next) {
-  const updatedTable = {
-    ...res.locals.table,
-    reservation_id: res.locals.reservation.reservation_id,
-    table_status: "occupied"
-  };
-
-  const updatedReservation = {
-    ...res.locals.reservation,
-    status: "seated",
-  };
-
-  const savedTable = await service.update(updatedTable);
-  const reservationInformation = await reservationService.update(
-    res.locals.reservation.reservation_id,
-    updatedReservation
-  );
-  res.json({ data: savedTable });
+  const data = await service.update( req.params.table_id, req.body.data.reservation_id);
+  res.status(200).json({ data });
 }
 
 async function finishTable(req, res, next) {
-  const currentTable = res.locals.table;
-
-  const updatedTable = {
-    ...currentTable,
-    reservation_id: null,
-    table_status: "free"
-  };
-
-  const seatedReservation = await reservationService.read(
-    res.locals.table.reservation_id
-  );
-  const tableInformation = await service.update(updatedTable);
-  const reservationInformation = await reservationService.update(
-    res.locals.table.reservation_id,
-    {
-      ...seatedReservation,
-      status: "finished",
-    }
-  );
-
-  res.status(200).json({ data: tableInformation });
+  const { table_id } = req.params;
+  const { reservation_id } = res.locals.table;
+  const data = await service.finishTable(table_id, reservation_id);
+  res.status(200).json({ data });
 }
 
 function reservationSeated(req, res, next){
