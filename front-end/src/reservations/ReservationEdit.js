@@ -18,7 +18,7 @@ export default function EditRes(){
         const abortController = new AbortController();
         try {
             const res = await findRes(reservation_id, abortController.signal);
-            setResData(res);
+            setResData({...res, reservation_time: res.reservation_time.slice(0,5)});
         } catch (err) {
             setErr(err);
         }
@@ -36,12 +36,14 @@ export default function EditRes(){
       }
 
       async function handleSubmit(event){
+        console.log("handleSubmit called:", resData);
         event.preventDefault();
         const abortController = new AbortController();
         const errs = [];
         findErrors(resData, errs);
         if (errs.length){
             setErr({ message: errs });
+            console.log(errs);
             return;
         }
         try {
@@ -49,6 +51,7 @@ export default function EditRes(){
             await updateRes(reservation_id, resData, abortController.signal);
             history.push(`/dashboard?date=${resData.reservation_date}`);
         } catch(err) {
+          console.log(err);
             setErr(err);
         } 
         return ()=> abortController.abort;

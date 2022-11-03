@@ -35,6 +35,7 @@ export default function ResTable({
             key={res.reservation_id}
             reservation={res}
             cancelRes={cancelReservation}
+            purpose={"dashboard"}
           />
         );
       });

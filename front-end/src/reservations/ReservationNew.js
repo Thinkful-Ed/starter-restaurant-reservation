@@ -4,7 +4,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { addRes } from "../utils/api";
 import ReservationForm from "./ReservationForm";
 
-function ReservationList(){
+function ReservationNew(){
     const history = useHistory();
     const [reservationsError, setReservationsError] = useState(null);
     
@@ -53,4 +53,4 @@ function ReservationList(){
 }
 
 
-export default ReservationList;
+export default ReservationNew;

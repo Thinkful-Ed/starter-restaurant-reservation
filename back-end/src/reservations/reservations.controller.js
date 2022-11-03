@@ -29,14 +29,14 @@ function hasProperties(req, res, next){
 }
 
 async function reservationExists(req, res, next) {
-  const reservation = await service.read(req.body.data.reservation_id);
+  const reservation = await service.read(req.params.reservation_id);
   if (reservation) {
     res.locals.reservation = reservation;
     return next();
   }
   next({
     status: 404,
-    message: `reservation_id ${req.body.data.reservation_id} does not exist`,
+    message: `reservation_id ${req.params.reservation_id} does not exist`,
   })
 }
 
@@ -90,7 +90,8 @@ function validDateTime(req, res, next) {
   const today = moment().format("YYYY-MM-DD");
   const timePattern = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
   const datePattern = /\d{4}-\d{2}-\d{2}/;
-  const resDate = moment(reservation_date).format("dddd");
+  const resDate = moment(reservation_date, "YYYY-MM-DD").format("dddd");
+  const currentTime = moment().format("HH:mm");
 
     if (!datePattern.test(reservation_date)){
       next({status: 400, message: "reservation_date is not a valid date"});
@@ -127,6 +128,9 @@ function validDateTime(req, res, next) {
       message: 'Restaurant is closed, please select a different time.',
     });
   }
+  if (req.body.data.reservation_date === today  && reservation_time < currentTime){
+    next({status: 400, message: "Please select a future time for today"});
+};
   next();
 }
 
@@ -155,25 +159,32 @@ function bookedStatus(req, res, next) {
 }
 
 function validStatus(req, res, next) {
-  const statuses = ["booked", "seated", "finished", "cancelled"];
-  const { status } = req.body.data;
-  if (!statuses.includes(status)) {
-    return next({ 
-      status: 400, 
-      message: "Status unknown" 
-    });
-  }
-  next();
-}
+  const { status } = res.locals.reservation;
+  const { data = {} } = req.body;
+
+  if (data.status === "cancelled"){
+    next();
+  }else if (status == "finished"){
+    next({status: 400, message: "cannot update a finished table"})
+  }else if (data.status == "booked" || data.status == "seated" || data.status == "finished"){
+    next();
+  }else next({status: 400, message: "unknown status"});
+};
+
 
 
 //CRUD functions
 
 async function list(req, res) {
   const date = req.query.date ? req.query.date : moment().format("YYYY-MM-DD");
+  if(req.query.mobile_number){
+    const data = await service.search(req.query.mobile_number)
+    res.json({ data })
+  }else{
   const data = await service.list(date);
-  console.log("list: ", data);
+  //console.log("list: ", data);
   res.json({ data });
+}
 }
 
 async function read(req, res, next){
@@ -200,6 +211,12 @@ if(req.params.reservation_id){
  }
 }
 
+// async function read(req, res) {
+//   const reservation = res.locals.reservation;
+//   console.log({ data: reservation });
+//   res.json({ data: reservation });
+// }
+
 async function updateStatus(req, res, next) {
   const { reservation_id } = req.params;
   const { status } = req.body.data;
@@ -211,8 +228,7 @@ async function updateRes(req, res, next) {
   const { reservation_id } = req.params;
   const reservation = req.body.data;
   const data = await service.updateRes(reservation_id, reservation);
-  reservation.reservation_id = data.reservation_id;
-  res.json({ data: reservation });
+  res.json({ data });
 }
 
 async function create(req, res){

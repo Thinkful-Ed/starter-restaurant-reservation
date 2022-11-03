@@ -57,7 +57,7 @@ async function validTable(req, res, next){
     } else if(currentTable.reservation_id){
         return next({
             status: 400,
-            message: "Table oocupied"
+            message: "Table occupied"
         });
     }
     next();

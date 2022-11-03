@@ -12,13 +12,13 @@ export default function TableView({ table }) {
     event.preventDefault();
     setTableError(null);
     if (window.confirm("Table cleared? This cannot be undone.")) {
-      updateStatus({ status: "Finished" }, currentTable.reservation_id)
+      updateStatus(currentTable.reservation_id, { status: "finished" })
         .then(() => deleteTableRes(currentTable.table_id))
         .then(() => {
           setCurrentTable({
             ...table,
             reservation_id: null,
-            table_status: "Available",
+            table_status: "free",
           });
           listTables();
           history.go(0);
@@ -31,12 +31,12 @@ export default function TableView({ table }) {
     <div>
       <ErrorAlert error={tableError} />
       <tr>
-        <th>{currentTable.table_id}</th>
+        <th scope="row">{currentTable.table_id}</th>
         <td>{currentTable.table_name}</td>
         <td>{currentTable.capacity}</td>
         <td>{currentTable.reservation_id}</td>
         <td data-table-id-status={`${table.table_id}`}>
-          {currentTable.table_status}{" "}
+          {currentTable.table_status}
         </td>
         <td data-table-id-finish={`${table.table_id}`}>
           {currentTable.reservation_id ? (

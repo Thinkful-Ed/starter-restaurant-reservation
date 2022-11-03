@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, next } from "../utils/date-time";
 import ResTable from "./ReservationDash/ResTable";
+import TableList from "./Tables/TableList";
 
 /**
  * Defines the dashboard page.
@@ -15,15 +16,21 @@ function Dashboard({ date }) {
   const history = useHistory();
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
 
-  useEffect(loadDashboard, [date]);
+  useEffect(loadDash, [date]);
 
-  function loadDashboard() {
+  function loadDash() {
     const abortController = new AbortController();
     setReservationsError(null);
+    setTablesError(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+      listTables(abortController.signal)
+      .then(setTables)
+      .catch(setTablesError);
     return () => abortController.abort();
   }
 
@@ -58,8 +65,6 @@ function Dashboard({ date }) {
         </button>
       </div>
       <ErrorAlert error={reservationsError} />
-      <div>
-        <div>
           <div>
             <h3>Reservations:</h3>
             <div>
@@ -72,9 +77,13 @@ function Dashboard({ date }) {
           </div>
           <div>
             <h3>Tables:</h3>
+            <div>
+              <TableList 
+                tables={tables} 
+                loadDash={loadDash}
+              />
+            </div>
           </div>
-        </div>
-      </div>
     </main>
   );
 }

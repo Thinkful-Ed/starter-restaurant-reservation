@@ -6,7 +6,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 function TableForm(){
     const [table, setTable] = useState({
         table_name: "",
-        capacity: 1,
+        capacity: "",
     });
 
     const [tablesError, setTablesError] = useState(null);
@@ -17,7 +17,7 @@ function TableForm(){
     }
 
     function handleSubmit(event){
-        event.preventDefault()
+        event.preventDefault();
         addTable(table)
             .then(() => {
                 history.push("/dashboard");

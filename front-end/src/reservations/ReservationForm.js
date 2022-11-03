@@ -101,6 +101,7 @@ export default function ReservationForm({
           </button>
           <button
             onClick={handleCancel}
+            type="button"
             className="btn btn-secondary"
           >
             Cancel

@@ -1,56 +1,71 @@
 import React, { useState } from "react";
 import { listReservations } from "../utils/api";
-import ResTable from "../dashboard/ReservationDash/ResTable";
 import ErrorAlert from "../layout/ErrorAlert";
+import ResTable from "../dashboard/ReservationDash/ResTable";
 
-export default function Search(){
+export default function Search() {
     const [reservations, setReservations] = useState([]);
-    const [input, setInput] = useState("");
-    const [errs, setErrs] = useState(null);
-
-    function handleChange(event){
-        setInput(event.target.value);
+    const [display, setDisplay] = useState(false);
+    const [mobile, setMobile] = useState("");
+    const [error, setError] = useState(null);
+  
+    function changeHandler(event) {
+      setMobile(event.target.value);
     }
-
-    function handleSubmit(event){
-        event.preventDefault();
-        const abortController = new AbortController();
-        listReservations({ mobile_number: input }, abortController.signal)
-            .then(setReservations)
-            .catch((err) => {
-                setErrs({ message: err.message });
-            });
+  
+    async function searchHandler(event) {
+      event.preventDefault();
+      const abortController = new AbortController();
+      try {
+        const reservations = await listReservations(
+          { mobile_number: mobile },
+          abortController.signal
+        );
+        setReservations(reservations);
+        setDisplay(true);
+      } catch (error) {
+        setError(error);
+      }
+      return () => abortController.abort();
     }
-
+  
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <h1>Search Reservations</h1>
-                <ErrorAlert error={errs} />
-                <div className="form-group">
-                    <label htmlFor="mobile_number">
-                        Search by phone number
-                    </label>
-                    <input 
-                        name="mobile_number"
-                        className="form-control"
-                        onChange={handleChange}
-                    />
-                </div>
-                <button className="btn btn-primary" type="submit">
-                    Search
-                </button>
-                {reservations.length ? (
-                   <ResTable
-                    reservations={reservations}
-                    setReservations={setReservations}
-                    setError={setErrs}
-                   />
-                ) : (
-                    <h2>Reservation not found</h2>
-                )}
-            </form>
+      <>
+        <div className="d-flex justify-content-center pt-3">
+          <h3>Search</h3>
         </div>
-    )
-}
-
+        <ErrorAlert error={error} />
+        <div className="pt-3 pb-3">
+          <form className="form-group" onSubmit={searchHandler}>
+            <input
+              name="mobile_number"
+              id="mobile_number"
+              onChange={changeHandler}
+              placeholder="Enter a customer's phone number"
+              value={mobile}
+              className="form-control"
+              required
+            />
+            <div className="pt-2">
+              <button type="submit" className="btn btn-primary">
+                Find
+              </button>
+            </div>
+          </form>
+        </div>
+        {display && (
+          <div>
+            {reservations.length ? (
+              <ResTable
+                reservations={reservations}
+                setReservations={setReservations}
+                setError={setError}
+              />
+            ) : (
+              <h3>No reservations found</h3>
+            )}
+          </div>
+        )}
+      </>
+    );
+  }

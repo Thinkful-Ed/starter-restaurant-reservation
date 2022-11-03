@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ResRow({ reservation, cancelRes }) {
+export default function ReservationRow({ reservation, purpose, cancelRes }) {
   function handleCancel() {
     return window.confirm(
       "Do you want to cancel this reservation? This cannot be undone."
@@ -10,6 +10,7 @@ export default function ResRow({ reservation, cancelRes }) {
   }
 
   return (
+    purpose === "dashboard" && (reservation.status === "finished" || reservation.status === "cancelled") ? null :
     <tr>
       <th scope="row">{reservation.reservation_id}</th>
       <td>{reservation.first_name}</td>
