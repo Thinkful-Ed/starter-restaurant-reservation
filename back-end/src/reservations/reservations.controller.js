@@ -1,6 +1,7 @@
 const services = require("./reservations.services");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
+const hasOnlyValidProperties = require("../errors/hasOnlyValidProperties");
 const P = require("pino");
 
 /**
@@ -11,16 +12,7 @@ const VALID_PROPERTIES = ["first_name", "last_name", "mobile_number", "reservati
 
 const hasRequiredProperties = hasProperties(VALID_PROPERTIES);
 
-const hasOnlyValidProperties = (req, res, next) => {
-  const { data = {} } = req.body;
-  const properties = Object.keys(data);
-  const invalid = properties.filter(prop => !VALID_PROPERTIES.includes(prop));
-  if (invalid.length) {
-    next({ status: 400, message: `Invalid fields: ${invalid.join(", ")}` });
-  } else {
-    next();
-  }
-}
+
 // 
 
 function isDate(req, res, next) {
@@ -103,5 +95,5 @@ async function list(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [hasOnlyValidProperties, hasRequiredProperties, isDate, isTime, isNumber, dateValidations, timeValidations, asyncErrorBoundary(create)],
+  create: [hasOnlyValidProperties(VALID_PROPERTIES), hasRequiredProperties, isDate, isTime, isNumber, dateValidations, timeValidations, asyncErrorBoundary(create)],
 };
