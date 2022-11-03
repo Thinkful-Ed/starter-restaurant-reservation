@@ -183,7 +183,7 @@ function validPropertyValues(req, res, next) {
   next();
 }
 
-const VALID_PROPERTIES = ["table_name", "capacity"];
+const VALID_PROPERTIES = ["table_name", "capacity", "reservation_id"];
 
 function hasValidProperties(req, res, next) {
   const { data } = res.locals;
