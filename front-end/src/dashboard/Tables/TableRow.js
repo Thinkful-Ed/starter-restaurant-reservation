@@ -1,4 +1,5 @@
 import React from "react";
+import { finishedTable } from "../../utils/api";
 
 function TableRow({ table, index, loadDashboard }) {
   //upon clicking finish
@@ -12,12 +13,14 @@ function TableRow({ table, index, loadDashboard }) {
       )
     ) {
       console.log("delete");
-      //make a delete request
+      finishedTable(table.table_id)
+        .then(loadDashboard)
+        .catch((error) => console.log("error", error));
     }
     return null;
   };
 
-  //knex "tables" has been given a reservation_id that is set to NULL (look at DBeaver). This was done because we joined reservations to tables within migration files
+  //knex "tables" has been given a reservation_id that is set to NULL (look at DBeaver). This was done because we altered table in knex files
   //if a reservation_id exists within tables, return "Occupied"
   //otherwise, return "Free"
   const status = table.reservation_id ? "Occupied" : "Free";
