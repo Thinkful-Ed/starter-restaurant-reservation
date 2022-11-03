@@ -27,17 +27,18 @@ function Dashboard({ todaysDate }) {
     (res) => res.reservation_date === todaysDate
   );
 
-  function loadDashboard() {
-    const abortController = new AbortController();
-    setError(null);
-    Promise.all([
-      listReservations(abortController.signal)
-        .then(setReservations)
-        .catch(setError),
-      listTables(abortController.signal).then(setTables).catch(setError),
-    ]);
+  async function loadDashboard() {
+    try {
+      const abortController = new AbortController();
+      setError(null);
+      setReservations(await listReservations(abortController.signal))
+      setTables(await listTables(abortController.signal))
 
     return () => abortController.abort();
+    } catch (error) {
+      setError(error)
+      console.log(error)
+    }
   }
 
   return (

@@ -22,18 +22,18 @@ function SeatTable() {
   const { search } = useLocation();
   if (search) {
     date = search.replace("?date=", "");
+    console.log(date)
   }
 
   useEffect(() => {
-    const abortController = new AbortController();
-    setError(null);
-    Promise.all([
-      listTables(abortController.signal).then(setTables).catch(setError),
-      getReservation(reservation_id, abortController.signal)
-        .then(setCurrentReservation)
-        .catch(setError),
-    ]);
-    return () => abortController.abort();
+    async function loadTables(){
+      const abortController = new AbortController();
+      setError(null);
+      setCurrentReservation(await getReservation(reservation_id, abortController.signal))
+      setTables(await listTables(abortController.signal))
+      return () => abortController.abort();
+    }
+    loadTables()
   }, [reservation_id]);
 
   const submitHandler = async (event) => {
@@ -41,14 +41,11 @@ function SeatTable() {
     const abortController = new AbortController();
     try {
       const updatedTable = await updateSeat(
-        tableData.table_id,
         reservation_id,
+        parseInt(tableData.table_id),
         abortController.signal
       );
-      const newTables = tables.map((table) =>
-        table.table_id === updatedTable.table_id ? updatedTable : table
-      );
-      setTables(newTables);
+      console.log(updatedTable)
       history.push(`/dashboard${date ? `?date=${date}` : ""}`);
     } catch (error) {
       setError(error);

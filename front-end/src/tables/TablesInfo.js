@@ -18,7 +18,6 @@ function TablesInfo({table, setError, loadDashboard, setReservations, key}) {
                     abortController.signal)
                     .catch(setError),
                 finishTableReservation(event.target.value, abortController.signal)
-                    .then(setCurrentTable)
                     .then(()=> history.push("/"))
                     .catch(setError)
             ])
@@ -31,7 +30,7 @@ function TablesInfo({table, setError, loadDashboard, setReservations, key}) {
             <td>{currentTable.table_name}</td>
             <td>{currentTable.capacity}</td>
             <td>{currentTable.reservation_id}</td>
-            <td data-table-id-status={`${table.table_id}`}>{currentTable.table_status}</td>
+            <td data-table-id-status={`${table.table_id}`}>{currentTable.reservation_id ? "occupied" : "free"}</td>
             <td>
                 {currentTable.reservation_id ? 
                 <button
