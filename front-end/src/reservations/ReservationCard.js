@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom"
 
 function ReservationCard({ reservation, key }) {
   return (
@@ -12,9 +13,14 @@ function ReservationCard({ reservation, key }) {
       <td>{reservation.reservation_time}</td>
       <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
       <td>
-        <a href={`/reservations/${reservation.reservation_id}/seat`}>
-        <button>Seat</button>
-        </a>
+        {reservation.status === "booked" ? <Link to={`/reservations/${reservation.reservation_id}/seat`}>
+          <button
+          href={`/reservations/${reservation.reservation_id}/seat`}
+          value={`${reservation.reservation_id}`}
+          >
+            Seat
+          </button>
+        </Link> : <></>}
       </td>
     </tr>
   );
