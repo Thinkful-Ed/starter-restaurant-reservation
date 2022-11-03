@@ -63,20 +63,24 @@ function Dashboard({ todaysDate }) {
           <tbody>
             {reservationByDate.length
               ? reservationByDate.map((reservation) => {
-                  return (
-                    <ReservationCard
-                      reservation={reservation}
-                      key={reservation.reservation_id}
-                    />
-                  );
+                  if(reservation.status !== "finished"){
+                    return (
+                      <ReservationCard
+                        reservation={reservation}
+                        key={reservation.reservation_id}
+                      />
+                    );
+                  }
                 })
               : reservations.map((reservation) => {
+                if(reservation.status !== "finished"){
                   return (
                     <ReservationCard
                       reservation={reservation}
                       key={reservation.reservation_id}
                     />
                   );
+                }
                 })}
           </tbody>
         </table>
