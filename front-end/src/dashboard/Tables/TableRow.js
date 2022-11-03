@@ -5,7 +5,17 @@ function TableRow({ table, index, loadDashboard }) {
   //make a DELETE request within utils/api
   //you want to loadDashboard after DELETE promise has resolved so that the state of tables are different
 
-  const handleFinishClick = () => console.log("finish");
+  const handleFinishClick = () => {
+    if (
+      window.confirm(
+        "Is this table ready to seat new guests? This cannot be undone."
+      )
+    ) {
+      console.log("delete");
+      //make a delete request
+    }
+    return null;
+  };
 
   //knex "tables" has been given a reservation_id that is set to NULL (look at DBeaver). This was done because we joined reservations to tables within migration files
   //if a reservation_id exists within tables, return "Occupied"
@@ -17,9 +27,10 @@ function TableRow({ table, index, loadDashboard }) {
       <td>{table.table_id}</td>
       <td>{table.table_name}</td>
       <td>{table.capacity}</td>
-      <td data-table-id-status={table.table_id}>{status}</td>
+      <td>{status}</td>
       <td>
         <button
+          data-table-id-status={table.table_id}
           type="button"
           className="btn btn-primary"
           onClick={handleFinishClick}
