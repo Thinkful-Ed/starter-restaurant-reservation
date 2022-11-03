@@ -10,10 +10,10 @@ function SeatTable() {
     reservation_id: null,
     table_status: "free",
     created_at: "",
-    updated_at: ""
+    updated_at: "",
   };
   const [tables, setTables] = useState([]);
-  const [currentReservation, setCurrentReservation] = useState({})
+  const [currentReservation, setCurrentReservation] = useState({});
   const [tableData, setTableData] = useState(initTableData);
   const [error, setError] = useState(null);
   const { reservation_id } = useParams();
@@ -22,16 +22,18 @@ function SeatTable() {
   const { search } = useLocation();
   if (search) {
     date = search.replace("?date=", "");
+    console.log(date)
   }
 
   useEffect(() => {
-    const abortController = new AbortController();
-    setError(null);
-    Promise.all([
-        listTables(abortController.signal).then(setTables).catch(setError),
-        getReservation(reservation_id, abortController.signal).then(setCurrentReservation).catch(setError)
-    ])
-    return () => abortController.abort();
+    async function loadTables(){
+      const abortController = new AbortController();
+      setError(null);
+      setCurrentReservation(await getReservation(reservation_id, abortController.signal))
+      setTables(await listTables(abortController.signal))
+      return () => abortController.abort();
+    }
+    loadTables()
   }, [reservation_id]);
 
   const submitHandler = async (event) => {
@@ -39,14 +41,11 @@ function SeatTable() {
     const abortController = new AbortController();
     try {
       const updatedTable = await updateSeat(
-        tableData.table_id,
         reservation_id,
+        parseInt(tableData.table_id),
         abortController.signal
       );
-      const newTables = tables.map((table) =>
-        table.table_id === updatedTable.table_id ? updatedTable : table
-      );
-      setTables(newTables);
+      console.log(updatedTable)
       history.push(`/dashboard${date ? `?date=${date}` : ""}`);
     } catch (error) {
       setError(error);
@@ -54,37 +53,39 @@ function SeatTable() {
     }
   };
 
-  if (tables) {
+  if (currentReservation.status === "booked") {
     return (
       <>
         <ErrorAlert error={error} />
         <h3>Seat the reservation:</h3>
         <br></br>
         <span>Current Reservation:</span>
-       <table>
-       <thead>
+        <table>
+          <thead>
             <tr>
-                <th>ID</th>
-                <th>NAME</th>
-                <th>PHONE</th>
-                <th>DATE</th>
-                <th>TIME</th>
-                <th>PEOPLE</th>
-                <th>STATUS</th>
+              <th>ID</th>
+              <th>NAME</th>
+              <th>PHONE</th>
+              <th>DATE</th>
+              <th>TIME</th>
+              <th>PEOPLE</th>
+              <th>STATUS</th>
             </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
             <tr>
-                <td>{currentReservation.reservation_id}</td>
-                <td>{currentReservation.first_name} {currentReservation.last_name}</td>
-                <td>{currentReservation.mobile_number}</td>
-                <td>{currentReservation.reservation_date}</td>
-                <td>{currentReservation.reservation_tim}</td>
-                <td>{currentReservation.people}</td>
-                <td>{currentReservation.status}</td>
+              <td>{currentReservation.reservation_id}</td>
+              <td>
+                {currentReservation.first_name} {currentReservation.last_name}
+              </td>
+              <td>{currentReservation.mobile_number}</td>
+              <td>{currentReservation.reservation_date}</td>
+              <td>{currentReservation.reservation_time}</td>
+              <td>{currentReservation.people}</td>
+              <td>{currentReservation.status}</td>
             </tr>
-        </tbody>
-       </table>
+          </tbody>
+        </table>
         <SeatTableForm
           tables={tables}
           tableData={tableData}
@@ -95,11 +96,7 @@ function SeatTable() {
       </>
     );
   } else {
-    return (
-      <div>
-        <h4>No open tables.</h4>
-      </div>
-    );
+    return <></>;
   }
 }
 
