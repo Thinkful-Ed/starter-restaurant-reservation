@@ -22,10 +22,10 @@ function read(reservation_Id) {
     .first();
 }
 
-function update(reservation_Id, status) {
-  return knex("reserations")
+function update(reservation_id, status) {
+  return knex("reservations")
     .select("*")
-    .where({ reservation_Id })
+    .where({ reservation_id })
     .update({ status })
     .returning("*")
     .then((updated) => updated[0]);
