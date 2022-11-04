@@ -66,8 +66,6 @@ function hasValidValues(req, res, next) {
   next();
 }
 
-// ------------------ SEAT VALIDATION ------------------
-
 function hasReservationId(req, res, next) {
   const table = req.body.data;
   //if there is no data body
@@ -93,6 +91,15 @@ async function reservation_idExists(req, res, next) {
   }
   //put reservation in res.locals to use later
   res.locals.reservation = reservation;
+  next();
+}
+
+async function isAlreadySeated(req, res, next) {
+  const { reservation_id } = req.body.data;
+  const reservation = await reservationsService.read(reservation_id);
+  if (reservation.status === "seated") {
+    next({ status: 400, message: `reservation is already seated` });
+  }
   next();
 }
 
@@ -179,6 +186,7 @@ module.exports = {
   ],
   update: [
     hasReservationId,
+    isAlreadySeated,
     asyncErrorBoundary(reservation_idExists),
     asyncErrorBoundary(hasCapacityAndAvailable),
     asyncErrorBoundary(update),
