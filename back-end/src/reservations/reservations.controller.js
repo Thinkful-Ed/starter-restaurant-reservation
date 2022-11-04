@@ -30,17 +30,40 @@ function hasOnlyValidFields(req, res, next) {
 }
 
 function checkStatus(req, res, next) {
-  const { data } = req.body;
+  const { status } = req.body.data;
 
-  if (data["status"] === "seated") {
+  if (status === "seated") {
     return next({ status: 400, message: `reservation is seated` });
   }
-  if (data["status"] === "finished") {
+  if (status === "finished") {
     return next({ status: 400, message: `reservation is finished` });
   }
+
   next();
 }
 
+function checkIfStatusUpdatable(req, res, next) {
+  const { status } = req.body.data;
+
+  if (status === "unknown") {
+    return next({ status: 400, message: `reservation status is unknown` });
+  }
+
+  next();
+}
+
+function isCurrentlyFinished(req, res, next) {
+  // console.log("res.locals.reservation", res.locals.reservation);
+  const { status } = res.locals.reservation;
+
+  if (status === "finished") {
+    return next({
+      status: 400,
+      message: `a finished reservation cannot be updated`,
+    });
+  }
+  next();
+}
 //----------------------------------------------------------------
 
 function hasProperties(...properties) {
@@ -154,11 +177,18 @@ function hasValidValues(req, res, next) {
 
 //validation middleware to check if reservation exists
 async function reservationExists(req, res, next) {
-  console.log(req.params); // example: { reservation_Id: 5 }
+  //console.log(req.params); // example: { reservation_Id: 5 }
   //destructure reservation_Id from req.params
-  const { reservation_Id } = req.params;
+  const { reservation_id } = req.params;
   //reservation is the promise from reservations.service's read
-  const reservation = await reservationsService.read(reservation_Id);
+  if (!reservation_id) {
+    return next({
+      status: 404,
+      message: `The reservation ID is ${reservation_id}`,
+    });
+  }
+
+  const reservation = await reservationsService.read(reservation_id);
 
   //if reservation is true (promise resolves),
   if (reservation) {
@@ -171,7 +201,7 @@ async function reservationExists(req, res, next) {
   //otherwise, return a 404+msg
   next({
     status: 404,
-    message: `The reservation with ID ${reservation_Id} does not exist`,
+    message: `The reservation with ID ${reservation_id} does not exist`,
   });
 }
 
@@ -194,9 +224,9 @@ async function read(req, res) {
 }
 
 async function update(req, res) {
-  const { reservation_Id } = req.params;
+  const { reservation_id } = req.params;
   const { status } = req.body.data;
-  const reservation = await reservationsService.update(reservation_Id, status);
+  const reservation = await reservationsService.update(reservation_id, status);
   res.json({ data: reservation });
 }
 
@@ -210,5 +240,10 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
-  update: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(update)],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    checkIfStatusUpdatable,
+    isCurrentlyFinished,
+    asyncErrorBoundary(update),
+  ],
 };

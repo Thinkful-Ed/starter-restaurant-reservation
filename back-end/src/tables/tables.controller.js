@@ -3,24 +3,6 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const tablesService = require("./tables.service");
 const reservationsService = require("../reservations/reservations.service");
 
-const REQUIRED_PROPERTIES = ["table_name", "capacity"];
-
-function hasOnlyValidProperties(req, res, next) {
-  const { data = {} } = req.body;
-
-  const invalidStatuses = Object.keys(data).filter(
-    (field) => !REQUIRED_PROPERTIES.includes(field)
-  );
-
-  if (invalidStatuses.length) {
-    return next({
-      status: 400,
-      message: `Invalid field(s): ${invalidStatuses.join(", ")}`,
-    });
-  }
-  next();
-}
-
 function hasProperties(properties) {
   return function (req, res, next) {
     const { data = {} } = req.body;
@@ -39,7 +21,27 @@ function hasProperties(properties) {
   };
 }
 
+const REQUIRED_PROPERTIES = ["table_name", "capacity"];
+const REQUIRED_PARAMETERS = ["reservation_id"];
+
 const hasRequiredProperties = hasProperties(REQUIRED_PROPERTIES);
+const hasRequiredUpdateProperties = hasProperties(REQUIRED_PARAMETERS);
+
+function hasOnlyValidProperties(req, res, next) {
+  const { data = {} } = req.body;
+
+  const invalidStatuses = Object.keys(data).filter(
+    (field) => !REQUIRED_PROPERTIES.includes(field)
+  );
+
+  if (invalidStatuses.length) {
+    return next({
+      status: 400,
+      message: `Invalid field(s): ${invalidStatuses.join(", ")}`,
+    });
+  }
+  next();
+}
 
 function hasValidValues(req, res, next) {
   const { table_name, capacity } = req.body.data;
@@ -66,39 +68,48 @@ function hasValidValues(req, res, next) {
   next();
 }
 
-function hasReservationId(req, res, next) {
-  const table = req.body.data;
-  //if there is no data body
-  if (!table) {
-    return next({ status: 400, message: "Must have data property" });
-  }
-  //if there is no reservation_id in req body
-  if (!table.reservation_id) {
-    return next({ status: 400, message: "Must have reservation_id" });
-  }
-  next();
-}
+// function hasReservationId(req, res, next) {
+//   const table = req.body.data;
+//   //if there is no data body
+//   if (!table) {
+//     return next({ status: 400, message: "Must have data property" });
+//   }
+//   //if there is no reservation_id in req body
+//   if (!table.reservation_id) {
+//     return next({ status: 400, message: "Must have reservation_id" });
+//   }
+//   next();
+//}
 
 async function reservation_idExists(req, res, next) {
   //destructure reservation_id
   const { reservation_id } = req.body.data;
   //reservation is promise from read function in /reservations/reservations.service
-  const reservation = await reservationsService.read(reservation_id);
-  //if cannot read,
-  if (!reservation) {
-    //return 404+msg
-    return next({ status: 404, message: `${reservation_id} does not exist` });
+  // console.log("from reservation id exist", reservation_id);
+
+  if (!reservation_id) {
+    return next({
+      status: 404,
+      message: `reservation_id is ${reservation_id}`,
+    });
   }
-  //put reservation in res.locals to use later
-  res.locals.reservation = reservation;
-  next();
+
+  const reservation = await reservationsService.read(reservation_id);
+
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  return next({
+    status: 404,
+    message: `${req.body.data.reservation_id} not found`,
+  });
 }
 
 async function isAlreadySeated(req, res, next) {
-  const { reservation_id } = req.body.data;
-  const reservation = await reservationsService.read(reservation_id);
+  const reservation = res.locals.reservation;
   if (reservation.status === "seated") {
-    next({ status: 400, message: `reservation is already seated` });
+    return next({ status: 400, message: `reservation is already seated` });
   }
   next();
 }
@@ -157,16 +168,23 @@ async function list(req, res, next) {
 
 async function create(req, res) {
   const data = await tablesService.create(req.body.data);
-  console.log(req.body);
+  // console.log(req.body);
   console.log(data);
   res.status(201).json({ data: data });
 }
 
 async function update(req, res, next) {
-  const { reservation_id } = req.body.data;
+  const { reservation_id } = res.locals.reservation;
   const { table_id } = req.params;
-  await tablesService.update(table_id, reservation_id);
-  res.status(200).json({ data: reservation_id });
+  console.log(
+    "line 177 table_id, from update",
+    table_id,
+    "reservation_id",
+    reservation_id
+  );
+  const data = await tablesService.update(reservation_id, table_id);
+  console.log("DATA, from update", data);
+  res.status(200).json({ data });
 }
 
 async function finish(req, res) {
@@ -185,9 +203,10 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   update: [
-    hasReservationId,
-    isAlreadySeated,
+    hasRequiredUpdateProperties,
     asyncErrorBoundary(reservation_idExists),
+    asyncErrorBoundary(tableIdExists),
+    isAlreadySeated,
     asyncErrorBoundary(hasCapacityAndAvailable),
     asyncErrorBoundary(update),
   ],
