@@ -5,8 +5,6 @@ function TableRow({ reservation, index }) {
   const handleEditClick = () => console.log("edit");
   const handleCancelClick = () => console.log("cancel");
 
-  //The "Seat" button must be a link with an href attribute that equals /reservation/${reservation_id}/seat, so it can be found by the tests.
-
   return (
     <tr>
       <td>{reservation.reservation_id}</td>
@@ -21,13 +19,15 @@ function TableRow({ reservation, index }) {
         {reservation.status}
       </td>
       <td>
-        <a
-          className="btn btn-primary"
-          role="button"
-          href={`/reservations/${reservation.reservation_id}/seat`}
-        >
-          Seat
-        </a>
+        {reservation.status === "booked" ? (
+          <a
+            className="btn btn-primary"
+            role="button"
+            href={`/reservations/${reservation.reservation_id}/seat`}
+          >
+            Seat
+          </a>
+        ) : null}
       </td>
       <td>
         <button

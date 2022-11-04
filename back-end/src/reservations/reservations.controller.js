@@ -1,31 +1,49 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const reservationsService = require("./reservations.service");
-const REQUIRED_PROPERTIES = [
+
+//------------------------ CHECK STATUS ------------------------
+//added status
+const VALID_FIELDS = [
   "first_name",
   "last_name",
   "mobile_number",
   "reservation_date",
   "reservation_time",
   "people",
+  "status",
 ];
 
-function hasOnlyValidProperties(req, res, next) {
+function hasOnlyValidFields(req, res, next) {
   const { data = {} } = req.body;
 
-  const invalidStatuses = Object.keys(data).filter(
-    (field) => !REQUIRED_PROPERTIES.includes(field)
+  const invalidFields = Object.keys(data).filter(
+    (field) => !VALID_FIELDS.includes(field)
   );
 
-  if (invalidStatuses.length) {
+  if (invalidFields.length) {
     return next({
       status: 400,
-      message: `Invalid field(s): ${invalidStatuses.join(", ")}`,
+      message: `Invalid field(s): ${invalidFields.join(", ")}`,
     });
   }
   next();
 }
 
-function hasProperties(properties) {
+function checkStatus(req, res, next) {
+  const { data } = req.body;
+
+  if (data["status"] === "seated") {
+    return next({ status: 400, message: `reservation is seated` });
+  }
+  if (data["status"] === "finished") {
+    return next({ status: 400, message: `reservation is finished` });
+  }
+  next();
+}
+
+//----------------------------------------------------------------
+
+function hasProperties(...properties) {
   return function (req, res, next) {
     const { data = {} } = req.body;
     try {
@@ -43,7 +61,14 @@ function hasProperties(properties) {
   };
 }
 
-const hasRequiredProperties = hasProperties(REQUIRED_PROPERTIES);
+const hasRequiredProperties = hasProperties(
+  "first_name",
+  "last_name",
+  "mobile_number",
+  "reservation_date",
+  "reservation_time",
+  "people"
+);
 
 const dateFormat = /^\d\d\d\d-\d\d-\d\d$/;
 const timeFormat = /^\d\d:\d\d$/;
@@ -168,13 +193,22 @@ async function read(req, res) {
   res.json({ data: reservation });
 }
 
+async function update(req, res) {
+  const { reservation_Id } = req.params;
+  const { status } = req.body.data;
+  const reservation = await reservationsService.update(reservation_Id, status);
+  res.json({ data: reservation });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
-    hasOnlyValidProperties,
     hasRequiredProperties,
+    hasOnlyValidFields,
     hasValidValues,
+    checkStatus,
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
+  update: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(update)],
 };
