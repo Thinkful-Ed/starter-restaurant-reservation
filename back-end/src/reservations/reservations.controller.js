@@ -14,11 +14,10 @@ const hasRequiredProperties = hasProperties(VALID_PROPERTIES);
 
 function hasOnlyValidProperties(req, res, next) {
   const {data = {} } = req.body;
-  const invalidFields = Object.keys(data).filter((field)=> !VALID_PROPERTIES.includes(field));
-  if (invalidFields.length) {
+  if (data.status == "finished" || data.status == "seated") {
     return next({
       status: 400,
-      message: `Invalid field(s): ${invalidFields.join(", ")}`,
+      message: `status ${data.status} is not valid`
     })
   }
   if (data.people && typeof data.people !== "number") {
@@ -29,6 +28,31 @@ function hasOnlyValidProperties(req, res, next) {
   }
   next();
 }
+//Reservation exists
+async function reservationExists(req, res, next) {
+  const { reservation_id } = req.params;
+const data = await service.read(reservation_id);
+if (data) {
+  res.locals.reservation = data;
+  return next();
+}
+return next({
+  status: 404,
+  message: `reservation_id ${reservation_id} does not exist`,
+});
+}
+// async function reservationExists(req, res, next) {
+//   const {reservation_Id} = req.params;
+//   const reservation = await service.read(reservation_Id);
+//   if (reservation) {
+//   res.locals.reservation = reservation;
+//   return next();
+// }
+//   next({
+//     status: 404,
+//     message: `reservation_id ${reservation_Id} does not exist.`
+//       })
+// }
 
 
 //date and time validation
@@ -77,26 +101,72 @@ function validTime(req, res, next) {
   next();
 }
 
-  //get current day, year, and month
-  //get day, year, and month of request 
+//validates status
+function validateStatus(req, res, next) {
+  const reservation = res.locals.reservation;
+  const { data = {} } = req.body;
+  const status = data.status;
+  if (reservation.status === "finished") {
+    return next({ status: 400, message: `Reservation is already finished` });
+  }
 
+  const validStatuses = ["finished", "booked", "seated", "cancelled"];
+  if (validStatuses.includes(status)) {
+    return next();
+  }
+  return next({ status: 400, message: `Invalid or unknown status: ${status}` });
+}
+
+function validateUpdateStatus(req, res, next) {
+  const { data = {} } = req.body;
+  const { status } = data;
+  if (status == "booked" || status == undefined) {
+    return next();
+  }
+  return next({ status: 400, message: `Invalid status: ${status}` });
+}
+
+// function validateStatus(req, res, next) {
+//   const {origStatus} = res.locals.reservation; 
+//   const {status} = req.body.data;
+//   const validStatuses = ["booked", "seated", "finished", "cancelled"]
+//   if (origStatus === "finished") {
+//     return next ({
+//       status: 400,
+//       message: "reservation is already finished."
+//     })
+//   }
+//   if (!validStatuses.includes(status)) {
+//     return next({
+//       status: 400,
+//       message: "cannot alter reservation with status invalid/unknown."
+//     })
+//   }
+//   next();
+// }
 
 //lists reservations by date
-async function list(req, res, next) {
+async function list(req, res) {
  let date = new Date().toJSON().slice(0,10);
   if (req.query.date) {
   date = req.query.date;
+  data = await service.getReservationsByDate(date);
  }
-res.json({ data: await service.getReservationsByDate(date)})
+ if (req.query.mobile_number) {
+  mobile_number = req.query.mobile_number;
+  data = await service.getReservationsByNumber(mobile_number)
+ }
+res.json({ data })
 }
+
 //to get reservation by ID
 async function read(req, res, next) {
-  const { reservation_Id } = req.params;
-  const data = await service.read(reservation_Id);
+  const { reservation_id } = req.params;
+  const data = await service.read(reservation_id);
   if (data) {
       res.json({ data });
   } else {
-      return next({status: 404, message: 'Reservation cannot be found.'});
+      return next({status: 404, message: `Reservation ${reservation_id} cannot be found.`});
   }
 }
 
@@ -107,11 +177,30 @@ async function create(req, res) {
   res.status(201).json({data: reservation})
 }
 
+async function updateStatus(req, res) {
 
+  const { status } = req.body.data;
+  const reservation = res.locals.reservation;
+  reservation.status = status;
+  const data = await service.updateStatus(reservation);
+  res.json({ data });
+  // const {reservation_Id} = req.params;
+  // const {status} = req.body.data;
+  // const result = await service.update(reservation_Id, status);
+  // res.json({data: result});
+}
 
+async function update(req, res) {
+  const reservation = {...req.body.data};
+  reservation.reservation_id = res.locals.reservation.reservation_id;
+  const data = await service.update(reservation);
+  res.json({data})
+}
 
 module.exports = {
   list: asyncErrorBoundary(list),
   read: asyncErrorBoundary(read),
   create: [hasRequiredProperties, hasOnlyValidProperties, validDate, validTime, asyncErrorBoundary(create)],
+  updateStatus: [asyncErrorBoundary(reservationExists), validateStatus, asyncErrorBoundary(updateStatus)],
+  update: [hasRequiredProperties, hasOnlyValidProperties, validDate, validTime, validateUpdateStatus, asyncErrorBoundary(reservationExists), asyncErrorBoundary(update)]
 };

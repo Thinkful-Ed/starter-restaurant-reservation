@@ -149,7 +149,7 @@ describe("US-06 - Reservation status", () => {
       reservationOne = await knex("reservations")
         .orderBy(["reservation_date", "reservation_time"])
         .first();
-      [tableOne, tableTwo] = await knex("tables").orderBy("table_name");
+      [tableOne, tableTwo] = await knex("tables").             orderBy("table_name");
     });
 
     test("returns 200 and changes reservation status to 'seated'", async () => {

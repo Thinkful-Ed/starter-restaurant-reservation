@@ -67,3 +67,78 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+/**
+ * Saves reservation to the database
+ * All fields required; date and time must be valid.
+ * People must be a number greater than 0
+ * @param reservation 
+ * the reservation being saved; must not have ID or timestamps properties
+ * @param signal 
+ * optional AbortController.signal
+ * @returns {Promise<reservation>}
+ * a promise that resolves the saved reservation, which is given id and timestamps.
+ */
+export async function createReservation(reservation, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  };
+  return await fetchJson(url, options, []);
+}
+
+/**
+ * Retrieves all existing tables.
+ * @returns {Promise<[tables]>}
+ *  a promise that resolves to an array of tables saved in the database.
+ */
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return await fetchJson(url, {signal}, []);
+}
+
+/**
+ * Saves table to the database
+ * All fields required and are validated;
+ * @param table 
+ * the table being saved; must not have ID or timestamps properties
+ * @param signal 
+ * optional AbortController.signal
+ * @returns {Promise<table>}
+ * a promise that resolves the saved tables, which is given ids and timestamps.
+ */
+
+export async function createTable(table, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({data: table}),
+    signal,
+  };
+  return await fetchJson(url, options, []);
+}
+
+/**
+ * Updates reservation status to 'seated'
+ * Requires only table input from form
+ * @param table_id
+ * the table reservation is being seated at
+ * @param reservation_id
+ * reservation being seated
+ * @param signal 
+ * optional AbortController.signal
+ * @returns {Promise<table>}
+ * a promise that updates the reservation status and updates the table availability.
+ */
+export async function updateToSeated(table_id, reservation_id) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({data: {reservation_id: reservation_id}}),
+  }
+  return await fetchJson(url, options, []);
+}
