@@ -155,13 +155,14 @@ describe("US-06 - Reservation status", () => {
     test("returns 200 and changes reservation status to 'seated'", async () => {
       expect(tableOne).not.toBeUndefined();
       expect(reservationOne).not.toBeUndefined();
-
+      console.log("reservationOne", reservationOne, "tableOne", tableOne);
       const seatResponse = await request(app)
         .put(`/tables/${tableOne.table_id}/seat`)
         .set("Accept", "application/json")
         .send({ data: { reservation_id: reservationOne.reservation_id } });
-
+      console.log("seatResponse.body", seatResponse.body);
       expect(seatResponse.body.error).toBeUndefined();
+
       expect(seatResponse.status).toBe(200);
 
       const reservationResponse = await request(app)

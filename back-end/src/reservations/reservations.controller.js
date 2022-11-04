@@ -53,7 +53,7 @@ function checkIfStatusUpdatable(req, res, next) {
 }
 
 function isCurrentlyFinished(req, res, next) {
-  console.log("res.locals.reservation", res.locals.reservation);
+  // console.log("res.locals.reservation", res.locals.reservation);
   const { status } = res.locals.reservation;
 
   if (status === "finished") {
@@ -177,10 +177,17 @@ function hasValidValues(req, res, next) {
 
 //validation middleware to check if reservation exists
 async function reservationExists(req, res, next) {
-  console.log(req.params); // example: { reservation_Id: 5 }
+  //console.log(req.params); // example: { reservation_Id: 5 }
   //destructure reservation_Id from req.params
   const { reservation_id } = req.params;
   //reservation is the promise from reservations.service's read
+  if (!reservation_id) {
+    return next({
+      status: 404,
+      message: `The reservation ID is ${reservation_id}`,
+    });
+  }
+
   const reservation = await reservationsService.read(reservation_id);
 
   //if reservation is true (promise resolves),
