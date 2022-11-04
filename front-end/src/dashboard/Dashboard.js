@@ -63,21 +63,23 @@ function Dashboard({ todaysDate }) {
           <tbody>
             {reservationByDate.length
               ? reservationByDate.map((reservation) => {
-                  if(reservation.status !== "finished"){
+                  if(reservation.status !== "finished" && reservation.status !== "cancelled"){
                     return (
                       <ReservationCard
                         reservation={reservation}
-                        key={reservation.reservation_id}
+                        loadReservations={loadDashboard}
+                        index={reservation.reservation_id}
                       />
                     );
                   }
                 })
               : reservations.map((reservation) => {
-                if(reservation.status !== "finished"){
+                if(reservation.status !== "finished" && reservation.status !== "cancelled"){
                   return (
                     <ReservationCard
                       reservation={reservation}
-                      key={reservation.reservation_id}
+                      loadReservations={loadDashboard}
+                      index={reservation.reservation_id}
                     />
                   );
                 }

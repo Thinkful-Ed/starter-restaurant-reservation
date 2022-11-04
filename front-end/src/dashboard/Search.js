@@ -73,14 +73,21 @@ function Search() {
                 "id",
                 "first name",
                 "last name",
+                "party size",
                 "phone number",
                 "date",
                 "time",
-                "party size",
                 "status",
               ]}
             />
-            {reservations.map((reservation)=> <ReservationCard reservation={reservation}/>)}
+            {reservations.map((reservation) => (
+              <ReservationCard
+                setError={setError}
+                index={reservation.reservation_id}
+                loadReservations={loadSearch}
+                reservation={reservation}
+              />
+            ))}
           </table>
         </div>
       ) : (

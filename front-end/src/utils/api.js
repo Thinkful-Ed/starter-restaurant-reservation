@@ -127,6 +127,7 @@ export async function updateSeat(reservation_id, table_id, signal) {
 
 export async function updateReservationStatus(status, reservation_id, signal) {
   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+  console.log(status, {status})
   const options = {
     method: "PUT",
     headers,
