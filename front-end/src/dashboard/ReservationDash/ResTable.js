@@ -42,6 +42,7 @@ export default function ResTable({
     
       return (
         <>
+        <div className="table-responsive">
           <table className="table table-sm table-striped table-bordered">
             <thead>
               <tr>
@@ -59,6 +60,7 @@ export default function ResTable({
             </thead>
             <tbody>{formatted}</tbody>
           </table>
+          </div>
         </>
       );
   }

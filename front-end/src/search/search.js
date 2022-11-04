@@ -31,30 +31,29 @@ export default function Search() {
   
     return (
       <>
-        <div className="d-flex justify-content-center pt-3">
-          <h3>Search</h3>
-        </div>
+      <div className="d-flex justify-content-center mt-4">
+          <h3>Reservation Lookup</h3>
+          </div>
         <ErrorAlert error={error} />
-        <div className="pt-3 pb-3">
-          <form className="form-group" onSubmit={searchHandler}>
+          <form className="form-inline d-flex justify-content-center mt-5" onSubmit={searchHandler}>
             <input
+              type="search"
               name="mobile_number"
               id="mobile_number"
               onChange={changeHandler}
               placeholder="Enter a customer's phone number"
               value={mobile}
-              className="form-control"
+              className="form-control bg-secondary bg-opacity-10"
               required
             />
-            <div className="pt-2">
-              <button type="submit" className="btn btn-primary">
-                Find
+              <button type="submit" className="btn btn-outline-primary ml-2">
+              <i className="fas fa-search"></i>
+              <span className="oi oi-magnifying-glass"/>
+              Search
               </button>
-            </div>
           </form>
-        </div>
         {display && (
-          <div>
+          <div className="d-flex justify-content-center mt-5">
             {reservations.length ? (
               <ResTable
                 reservations={reservations}

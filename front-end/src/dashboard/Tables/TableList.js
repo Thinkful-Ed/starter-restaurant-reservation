@@ -18,11 +18,11 @@ export default function TableList({ tables, loadDash }){
     });
 
     return (
-        <div>
+        <div className="table-responsive">
             <table className="table">
                 <thead>
                     <tr>
-                        <th scope="col">ID #</th>
+                        <th scope="col">ID</th>
                         <th scope="col">Table</th>
                         <th scope="col">Capacity</th>
                         <th scope="col">Status</th>

@@ -5,6 +5,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { previous, next } from "../utils/date-time";
 import ResTable from "./ReservationDash/ResTable";
 import TableList from "./Tables/TableList";
+import "./Dashboard.css";
 
 /**
  * Defines the dashboard page.
@@ -28,9 +29,7 @@ function Dashboard({ date }) {
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
-      listTables(abortController.signal)
-      .then(setTables)
-      .catch(setTablesError);
+    listTables(abortController.signal).then(setTables).catch(setTablesError);
     return () => abortController.abort();
   }
 
@@ -49,11 +48,11 @@ function Dashboard({ date }) {
 
   return (
     <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {date}</h4>
+      <div className="d-flex justify-content-center my-3">
+        <h1>Dashboard</h1>
       </div>
-      <div>
+
+      <div className="mb-5 d-flex justify-content-center">
         <button className="btn btn-dark mr-1" onClick={handlePrev}>
           Previous
         </button>
@@ -64,26 +63,26 @@ function Dashboard({ date }) {
           Next
         </button>
       </div>
+      <div className="d-flex justify-content-center mb-1">
+        <h4 className="mb-5 ">Reservations for {date}</h4>
+      </div>
       <ErrorAlert error={reservationsError} />
-          <div>
-            <h3>Reservations:</h3>
-            <div>
-              <ResTable
-                reservations={reservations}
-                setReservations={setReservations}
-                setError={setReservationsError}
-              />
-            </div>
-          </div>
-          <div>
-            <h3>Tables:</h3>
-            <div>
-              <TableList 
-                tables={tables} 
-                loadDash={loadDash}
-              />
-            </div>
-          </div>
+      <div>
+        <h3>Reservations:</h3>
+        <div>
+          <ResTable
+            reservations={reservations}
+            setReservations={setReservations}
+            setError={setReservationsError}
+          />
+        </div>
+      </div>
+      <div className="mt-5">
+        <h3>Tables:</h3>
+        <div>
+          <TableList tables={tables} loadDash={loadDash} />
+        </div>
+      </div>
     </main>
   );
 }

@@ -1,0 +1,24 @@
+.flex-container {
+    display: flex;
+    flex-direction: row !important;
+    align-content: center;
+    
+  }
+
+  @media (max-width: 500px) {
+    .flex-container {
+      flex-direction: column !important;
+    }
+  }
+
+  @media (min-width: 700px){
+    .flex-container {
+      justify-content: space-between !important;
+    }
+  }
+
+  .flex-item {
+    padding: 2px;
+    flex: 50%;
+  }
+  

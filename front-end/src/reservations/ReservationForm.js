@@ -16,12 +16,12 @@ export default function ReservationForm({
     initialFormData && (
       <form onSubmit={handleSubmit} className="form-group">
         <fieldset>
-          <legend>Reservation</legend>
+          <legend className="d-flex justify-content-center mt-3">Reservation</legend>
 
           <div className="form-group">
             <label htmlFor="first_name">First Name</label>
             <input
-              className="form-control"
+              className="form-control bg-secondary bg-opacity-10"
               type="text"
               name="first_name"
               placeholder={initialFormData?.first_name || "First Name"}
@@ -33,7 +33,7 @@ export default function ReservationForm({
           <div className="form-group">
             <label htmlFor="last_name">Last Name</label>
             <input
-              className="form-control"
+              className="form-control bg-secondary bg-opacity-10"
               type="text"
               name="last_name"
               placeholder={initialFormData?.last_name || "Last Name"}
@@ -45,7 +45,7 @@ export default function ReservationForm({
           <div className="form-group">
             <label htmlFor="mobile_number">Mobile Number</label>
             <input
-              className="form-control"
+              className="form-control bg-secondary bg-opacity-10"
               type="text"
               name="mobile_number"
               placeholder={initialFormData?.mobile_number || "Phone Number"}
@@ -57,7 +57,7 @@ export default function ReservationForm({
           <div className="form-group">
             <label htmlFor="reservation_date">Reservation Date</label>
             <input
-              className="form-control"
+              className="form-control bg-secondary bg-opacity-10"
               type="date"
               name="reservation_date"
               id="reservation_date"
@@ -70,7 +70,7 @@ export default function ReservationForm({
           <div className="form-group">
             <label htmlFor="reservation_time">Time</label>
             <input
-              className="form-control"
+              className="form-control bg-secondary bg-opacity-10"
               type="time"
               name="reservation_time"
               id="reservation_time"
@@ -83,7 +83,7 @@ export default function ReservationForm({
           <div className="form-group">
             <label htmlFor="people">Party Size</label>
             <input
-              className="form-control"
+              className="form-control bg-secondary bg-opacity-10"
               type="text"
               name="people"
               id="people"
@@ -95,8 +95,8 @@ export default function ReservationForm({
             />
           </div>
         </fieldset>
-        <div className="buttons">
-          <button className="btn btn-primary" type="submit">
+        <div className="buttons mt-4 d-flex justify-content-center">
+          <button className="btn btn-primary mr-2" type="submit">
             Submit
           </button>
           <button

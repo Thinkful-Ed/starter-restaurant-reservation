@@ -31,13 +31,15 @@ function TableForm(){
 
     return (
         <div>
-            <h1>New Table</h1>
+            <div className="d-flex justify-content-center my-4">
+            <h2>New Table</h2>
+            </div>
             <ErrorAlert error={tablesError} />
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="table_name">Table Name</label>
                     <input
-                        className="form-control"
+                        className="form-control bg-secondary bg-opacity-10"
                         type="text"
                         name="table_name"
                         placeholder="Enter table name"
@@ -50,7 +52,7 @@ function TableForm(){
                 <div className="form-group">
                     <label htmlFor="capacity">Capacity</label>
                     <input
-                        className="form-control"
+                        className="form-control bg-secondary bg-opacity-10"
                         type="text"
                         name="capacity"
                         placeholder="Enter seating capacity"
@@ -60,8 +62,8 @@ function TableForm(){
                         required
                     />
                 </div>
-                <div className="btns">
-                    <button className="btn btn-primary" type="submit">
+                <div className="btns mt-5 d-flex justify-content-center">
+                    <button className="btn btn-primary mr-2" type="submit">
                         Submit
                     </button>
                     <button

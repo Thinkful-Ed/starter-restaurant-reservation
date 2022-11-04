@@ -38,9 +38,9 @@ function ClearButton({ status, table, loadDash }){
 export default function TableClear({ table, loadDash }){
     const status = table.reservation_id ? "occupied" : "free";
     return (
-        <div>
+        <>
             <tr>
-                <th scope="row">{table.table_name}</th>
+                <th scope="row">{table.table_id}</th>
                 <td>{table.table_name}</td>
                 <td>{table.capacity}</td>
                 <td data-table-id-status={table.table_id}>{status}</td>
@@ -50,6 +50,6 @@ export default function TableClear({ table, loadDash }){
                     loadDash={loadDash}
                     />
             </tr>
-        </div>
+        </>
     )
 }

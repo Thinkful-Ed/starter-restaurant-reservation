@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { listTables, updateSeat, findRes } from "../utils/api";
+import { listTables, updateSeat } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 export default function Seat() {
@@ -40,14 +40,11 @@ export default function Seat() {
   if (tables) {
     return (
       <>
-        <div className="mb-3">
-          <h1> Current Seat Reservation </h1>
-        </div>
 
         <ErrorAlert error={tableError} />
         <ErrorAlert error={seatError} />
 
-        <div className="mb-3">
+        <div className="my-4 d-flex justify-content-center">
           <h3> Current Reservation: {reservation_id} </h3>
         </div>
 
@@ -57,7 +54,7 @@ export default function Seat() {
               Select Table
             </label>
             <select
-              className="form-control"
+              className="form-control bg-secondary bg-opacity-10"
               name="table_id"
               id="table_id"
               value={seatData}
@@ -77,16 +74,18 @@ export default function Seat() {
               })}
             </select>
           </div>
-          <button className="btn btn-primary" type="submit">
+          <div className="btns d-flex justify-content-center mt-5">
+          <button className="btn btn-primary mr-2" type="submit">
             Submit
           </button>
           <button
             type="button"
             onClick={handleCancel}
-            className="btn btn-secondary mr-2"
+            className="btn btn-secondary"
           >
             Cancel
           </button>
+          </div>
         </form>
       </>
     );
