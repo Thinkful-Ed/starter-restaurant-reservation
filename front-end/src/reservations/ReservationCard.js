@@ -22,6 +22,16 @@ function ReservationCard({ reservation, key }) {
           </button>
         </Link> : <></>}
       </td>
+      <td>
+      <Link to={`/reservations/${reservation.reservation_id}/edit`}>
+          <button
+          href={`/reservations/${reservation.reservation_id}/edit`}
+          value={`${reservation.reservation_id}`}
+          >
+            Edit
+          </button>
+        </Link>
+      </td>
     </tr>
   );
 }
