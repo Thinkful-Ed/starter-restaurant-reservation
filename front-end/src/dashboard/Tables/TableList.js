@@ -19,7 +19,7 @@ export default function TableList({ tables, loadDash }){
 
     return (
         <div className="table-responsive">
-            <table className="table">
+            <table className="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
