@@ -1,6 +1,5 @@
 import React from "react";
 import TableClear from "./TableClear";
-//import TableView from "../../tables/TableView";
 
 export default function TableList({ tables, loadDash }){
     if(!tables){
