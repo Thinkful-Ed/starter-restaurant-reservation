@@ -16,9 +16,4 @@
       justify-content: space-between !important;
     }
   }
-
-  .flex-item {
-    padding: 2px;
-    flex: 50%;
-  }
   
