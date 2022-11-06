@@ -85,7 +85,7 @@ function ReservationForm({submitHandler, cancelHandler, reservation, setReservat
           />
         </label>
         <button type="submit">Submit</button>
-        <button onClick={cancelHandler}>Cancel</button>
+        <button type="button" onClick={cancelHandler}>Cancel</button>
       </form>
     </div>
   );

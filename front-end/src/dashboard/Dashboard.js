@@ -27,19 +27,44 @@ function Dashboard({ todaysDate }) {
     (res) => res.reservation_date === todaysDate
   );
 
-  async function loadDashboard() {
-    try {
-      const abortController = new AbortController();
-      setError(null);
-      setReservations(await listReservations(abortController.signal))
-      setTables(await listTables(abortController.signal))
-
-    return () => abortController.abort();
-    } catch (error) {
-      setError(error)
-      console.log(error)
+  function loadDashboard() {
+    const abortController = new AbortController();
+    setError(null);
+    async function loadReservations() {
+      try {
+        setReservations(await listReservations(abortController.signal));
+        setError(null);
+      } catch (error) {
+        setError(error);
+      }
     }
+
+    async function loadTables() {
+      try {
+        setTables(await listTables(abortController.signal));
+        setError(null);
+      } catch (error) {
+        setError(error);
+      }
+    }
+    loadReservations();
+    loadTables();
+    return () => abortController.abort();
   }
+
+  // async function loadDashboard() {
+  //   try {
+  //     const abortController = new AbortController();
+  //     setError(null);
+  //     setReservations(await listReservations(abortController.signal))
+  //     setTables(await listTables(abortController.signal))
+
+  //   return () => abortController.abort();
+  //   } catch (error) {
+  //     setError(error)
+  //     console.log(error)
+  //   }
+  // }
 
   return (
     <main>
@@ -47,7 +72,7 @@ function Dashboard({ todaysDate }) {
       <div>
         <h4>Reservations List:</h4>
         <ErrorAlert error={error} />
-        <table>
+        <section>
           <TableHeader
             headers={[
               "id",
@@ -60,12 +85,17 @@ function Dashboard({ todaysDate }) {
               "status",
             ]}
           />
-          <tbody>
+          <div>
             {reservationByDate.length
               ? reservationByDate.map((reservation) => {
-                  if(reservation.status !== "finished" && reservation.status !== "cancelled"){
+                  if (
+                    reservation.status !== "finished" &&
+                    reservation.status !== "cancelled"
+                  ) {
                     return (
                       <ReservationCard
+                        key={reservation.reservation_id}
+                        setError={setError}
                         reservation={reservation}
                         loadReservations={loadDashboard}
                         index={reservation.reservation_id}
@@ -74,18 +104,23 @@ function Dashboard({ todaysDate }) {
                   }
                 })
               : reservations.map((reservation) => {
-                if(reservation.status !== "finished" && reservation.status !== "cancelled"){
-                  return (
-                    <ReservationCard
-                      reservation={reservation}
-                      loadReservations={loadDashboard}
-                      index={reservation.reservation_id}
-                    />
-                  );
-                }
+                  if (
+                    reservation.status !== "finished" &&
+                    reservation.status !== "cancelled"
+                  ) {
+                    return (
+                      <ReservationCard
+                        key={reservation.reservation_id}
+                        setError={setError}
+                        reservation={reservation}
+                        loadReservations={loadDashboard}
+                        index={reservation.reservation_id}
+                      />
+                    );
+                  }
                 })}
-          </tbody>
-        </table>
+          </div>
+        </section>
       </div>
 
       <div>
@@ -104,11 +139,12 @@ function Dashboard({ todaysDate }) {
           <tbody>
             {tables.map((table) => (
               <TablesInfo
+                key={table.table_id}
                 table={table}
                 setError={setError}
                 loadDashboard={loadDashboard}
                 setReservations={setReservations}
-                key={table.table_id}
+                index={table.table_id}
               />
             ))}
           </tbody>

@@ -3,7 +3,6 @@ import React from 'react';
 function SeatTableForm({ tables ,tableData, setTableData, submitHandler, history }) {
     const changeHandler = ({ target }) => {
         setTableData({ [target.name]: target.value });
-        console.log(tableData)
       };
     return ( 
         <>

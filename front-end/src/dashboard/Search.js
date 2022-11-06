@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
-import { useLocation } from "react-router-dom";
 import { listReservations } from "../utils/api";
 import TableHeader from "./TableHeader";
 import ReservationCard from "../reservations/ReservationCard";
@@ -17,16 +16,30 @@ function Search() {
     console.log(formData);
   };
 
-  useEffect(loadSearch, []);
+  useEffect(loadSearch);
 
-  async function loadSearch() {
-    try {
-      const abortController = new AbortController();
-      setReservations(
-        await listReservations(initFormData, abortController.signal)
-      );
-    } catch (error) {}
+  function loadSearch() {
+    const abortController = new AbortController();
+    setError(null)
+    async function loadReservations(){
+      try {
+        setReservations(await listReservations(initFormData, abortController.signal))
+      } catch (error) {
+        setError(error)
+      }
+    }
+    loadReservations()
+    return () => abortController.abort()
   }
+
+  // async function loadSearch() {
+  //   try {
+  //     const abortController = new AbortController();
+  //     setReservations(
+  //       await listReservations(initFormData, abortController.signal)
+  //     );
+  //   } catch (error) {}
+  // }
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -80,14 +93,17 @@ function Search() {
                 "status",
               ]}
             />
+            <tbody>
             {reservations.map((reservation) => (
               <ReservationCard
+                key={reservation.reservation_id}
                 setError={setError}
                 index={reservation.reservation_id}
                 loadReservations={loadSearch}
                 reservation={reservation}
               />
             ))}
+            </tbody>
           </table>
         </div>
       ) : (
