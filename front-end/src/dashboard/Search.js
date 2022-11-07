@@ -16,7 +16,7 @@ function Search() {
     console.log(formData);
   };
 
-  useEffect(loadSearch);
+  useEffect(loadSearch, []);
 
   function loadSearch() {
     const abortController = new AbortController();

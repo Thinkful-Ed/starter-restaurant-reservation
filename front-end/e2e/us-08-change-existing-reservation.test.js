@@ -112,7 +112,7 @@ describe("US-08 - Change an existing reservation - E2E", () => {
           // the url in the app never has /reservations?date= as the test was originally set to, it does have
           // /dashboard?date=, so I changed the .includes() to look for /dashboard not /reservations
           // in Routes, the application never allows a /reservations route, it always reroutes to /dashboard
-          // this causes this test to fail with /reservations?date= in the .includes()
+          // this causes this test to fail with /reservations?date= inside the .includes() method
 
           if (response.url().includes("/dashboard?date=")) return true
           return false

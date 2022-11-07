@@ -57,7 +57,7 @@ function EditReservation() {
   };
 
   const cancelHandler = () => {
-    history.goBack()
+    history.push(`/reservations?date=${formatAsDate(formData.reservation_date)}`)
   }
 
   return (
