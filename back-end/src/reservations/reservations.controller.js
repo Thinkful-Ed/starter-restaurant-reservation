@@ -213,8 +213,17 @@ async function create(req, res) {
 
 //lists all reservations given a date query
 async function list(req, res) {
-  const data = await reservationsService.list(req.query.date);
-  res.json({ data });
+  const { date } = req.query;
+  const { mobile_number } = req.query;
+
+  if (date) {
+    const data = await reservationsService.list(date);
+    res.json({ data });
+  }
+  if (mobile_number) {
+    const data = await reservationsService.listByMobileNumber(mobile_number);
+    res.json({ data });
+  }
 }
 
 //returns an object for a reservation id
