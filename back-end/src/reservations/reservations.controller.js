@@ -239,6 +239,16 @@ async function update(req, res) {
   res.json({ data: reservation });
 }
 
+async function editReservation(req, res) {
+  const { reservation_id } = req.params;
+  const updatedReservation = { ...req.body.data };
+  const data = await reservationsService.edit(
+    reservation_id,
+    updatedReservation
+  );
+  res.json({ data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -254,5 +264,11 @@ module.exports = {
     checkIfStatusUpdatable,
     isCurrentlyFinished,
     asyncErrorBoundary(update),
+  ],
+  editReservation: [
+    asyncErrorBoundary(reservationExists),
+    hasRequiredProperties,
+    hasValidValues,
+    asyncErrorBoundary(editReservation),
   ],
 };
