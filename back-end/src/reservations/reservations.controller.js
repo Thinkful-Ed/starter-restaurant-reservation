@@ -42,13 +42,14 @@ async function updateReservation(req, res, next) {
 
 function statusNotUnknown(req, res, next) {
   const { status } = req.body.data;
-
-  if (status !== "unknown") {
-    return next();
+  const VALID_STATUSES =["seated", "booked", "finished", "cancelled"]
+  if(VALID_STATUSES.includes(status)){
+    return next()
   }
+  
   next({
     status: 400,
-    message: "status cannot be unknown.",
+    message: "Status is unknown",
   });
 }
 

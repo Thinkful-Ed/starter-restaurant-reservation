@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useHistory  } from 'react-router-dom';
-import { finishTableReservation, updateReservationStatus, listReservations } from '../utils/api';
+import { finishTableReservation, updateReservationStatus } from '../utils/api';
 
-function TablesInfo({table, setError, loadDashboard, setReservations, key}) {
+function TablesInfo({table, setError, index}) {
     const [currentTable, setCurrentTable] = useState(table)
     const history = useHistory()
     
@@ -25,7 +25,7 @@ function TablesInfo({table, setError, loadDashboard, setReservations, key}) {
         return () => abortController.abort()
     }
     return ( 
-        <tr key={key}>
+        <tr key={index}>
             <td>{currentTable.table_id}</td>
             <td>{currentTable.table_name}</td>
             <td>{currentTable.capacity}</td>
