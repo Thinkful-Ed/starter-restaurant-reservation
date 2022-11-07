@@ -68,19 +68,6 @@ function hasValidValues(req, res, next) {
   next();
 }
 
-// function hasReservationId(req, res, next) {
-//   const table = req.body.data;
-//   //if there is no data body
-//   if (!table) {
-//     return next({ status: 400, message: "Must have data property" });
-//   }
-//   //if there is no reservation_id in req body
-//   if (!table.reservation_id) {
-//     return next({ status: 400, message: "Must have reservation_id" });
-//   }
-//   next();
-//}
-
 async function reservation_idExists(req, res, next) {
   //destructure reservation_id
   const { reservation_id } = req.body.data;

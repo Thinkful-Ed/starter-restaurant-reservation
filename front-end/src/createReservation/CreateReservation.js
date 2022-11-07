@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { createReservation } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function CreateReservation() {
   const history = useHistory();
@@ -13,6 +14,8 @@ function CreateReservation() {
 
   const [formData, setFormData] = useState({ ...initialFormState });
 
+  const [newResError, setNewResError] = useState(null);
+
   const handleChange = ({ target }) => {
     setFormData({
       ...formData,
@@ -20,23 +23,30 @@ function CreateReservation() {
     });
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
+    const abortController = new AbortController();
+    setNewResError(null);
+
     const formatReservation = {
       ...formData,
       people: Number(formData.people),
     };
-    const abortController = new AbortController();
-    await createReservation(formatReservation, abortController.signal);
-    history.push(`/dashboard?date=${formData.reservation_date}`);
+    createReservation(formatReservation, abortController.signal)
+      .then(() => {
+        history.push(`/dashboard?date=${formData.reservation_date}`);
+      })
+      .catch(setNewResError);
     return () => abortController.abort();
   };
 
   return (
     <React.Fragment>
+      <ErrorAlert error={newResError} />
       <div className="col">
         <main>
           <h1>Create Reservation</h1>
+
           <form onSubmit={handleSubmit}>
             <fieldset>
               <div className="row">

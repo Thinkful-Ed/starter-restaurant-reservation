@@ -12,7 +12,6 @@ function TableRow({ table, index, loadDashboard }) {
         "Is this table ready to seat new guests? This cannot be undone."
       )
     ) {
-      console.log("delete");
       finishedTable(table.table_id)
         .then(loadDashboard)
         .catch((error) => console.log("error", error));
