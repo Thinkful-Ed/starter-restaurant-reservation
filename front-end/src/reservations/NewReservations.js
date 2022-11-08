@@ -4,6 +4,8 @@ import { useHistory } from "react-router";
 import { createReservation } from "../utils/api";
 import { formatAsDate } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
+import "./reservation.css"
+
 function NewReservations() {
   const initReservation = {
     first_name: "",
@@ -33,8 +35,8 @@ function NewReservations() {
     history.goBack();
   };
   return (
-    <div>
-      <h2>New Reservation:</h2>
+    <div className="new-reservation-container">
+      <h3>New Reservation:</h3>
       <ErrorAlert error={reservationsError} />
       <ReservationForm
         reservation={reservation}

@@ -1,5 +1,5 @@
 import React from "react";
-
+import "./reservation.css"
 function ReservationForm({submitHandler, cancelHandler, reservation, setReservation}) {
   
   
@@ -11,11 +11,12 @@ function ReservationForm({submitHandler, cancelHandler, reservation, setReservat
     setReservation({ ...reservation, [target.name]: Number(target.value) });
   };
   return (
-    <div>
+    <div className="reservation-form-container">
       <form onSubmit={submitHandler}>
         <label>
           First Name:
           <input
+            className="reservation-form-input"
             onChange={changeHandler}
             value={reservation.first_name}
             type="text"
@@ -27,6 +28,7 @@ function ReservationForm({submitHandler, cancelHandler, reservation, setReservat
         <label>
           Last Name:
           <input
+            className="reservation-form-input"
             onChange={changeHandler}
             value={reservation.last_name}
             type="text"
@@ -38,6 +40,7 @@ function ReservationForm({submitHandler, cancelHandler, reservation, setReservat
         <label>
           Mobile Number:
           <input
+            className="reservation-form-input"
             onChange={changeHandler}
             value={reservation.mobile_number}
             placeholder="XXX-XXX-XXXX"
@@ -50,6 +53,7 @@ function ReservationForm({submitHandler, cancelHandler, reservation, setReservat
         <label>
           Reservation Date:
           <input
+            className="reservation-form-input"
             onChange={changeHandler}
             value={reservation.reservation_date}
             type="date"
@@ -61,6 +65,7 @@ function ReservationForm({submitHandler, cancelHandler, reservation, setReservat
         <label>
           Reservation Time:
           <input
+            className="reservation-form-input"
             onChange={changeHandler}
             value={reservation.reservation_time}
             type="time"
@@ -73,6 +78,7 @@ function ReservationForm({submitHandler, cancelHandler, reservation, setReservat
         <label>
           Party Size:
           <input
+            className="reservation-form-input"
             onChange={changeNumber}
             value={reservation.people}
             type="text"
@@ -84,8 +90,8 @@ function ReservationForm({submitHandler, cancelHandler, reservation, setReservat
             required
           />
         </label>
-        <button type="submit">Submit</button>
-        <button type="button" onClick={cancelHandler}>Cancel</button>
+        <button className="reservation-button margin-right-5" type="submit">Submit</button>
+        <button className="reservation-button-cancel" type="button" onClick={cancelHandler}>Cancel</button>
       </form>
     </div>
   );
