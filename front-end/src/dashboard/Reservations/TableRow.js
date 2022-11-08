@@ -1,51 +1,83 @@
-import React from "react";
+import React, { useState } from "react";
+import { cancelReservation } from "../../utils/api";
 
-function TableRow({ reservation, index }) {
-  // const handleSeatClick = () => console.log("seat");
-  const handleEditClick = () => console.log("edit");
-  const handleCancelClick = () => console.log("cancel");
+function TableRow({ reservation, loadDashboard }) {
+  const [cancelError, setCancelError] = useState(null);
+  const {
+    reservation_id,
+    last_name,
+    first_name,
+    mobile_number,
+    reservation_date,
+    reservation_time,
+    people,
+    status,
+  } = reservation;
+
+  function handleCancelClick(reservation_id) {
+    if (
+      window.confirm(
+        "Do you want to cancel this reservation? This cannot be undone."
+      )
+    ) {
+      const abortController = new AbortController();
+      setCancelError(null);
+      const status = {
+        status: "cancelled",
+      };
+      cancelReservation(reservation_id, status, abortController.signal)
+        .then(() => {
+          loadDashboard();
+        })
+        .catch(cancelError);
+      return () => abortController.abort;
+    }
+  }
 
   return (
-    <tr>
-      <td>{reservation.reservation_id}</td>
+    <tr key={reservation_id}>
+      <td>{reservation_id}</td>
       <td>
-        {reservation.last_name}, {reservation.first_name}
+        {last_name}, {first_name}
       </td>
-      <td>{reservation.mobile_number}</td>
-      <td>{reservation.reservation_date}</td>
-      <td>{reservation.reservation_time}</td>
-      <td>{reservation.people}</td>
-      <td data-reservation-id-status={reservation.reservation_id}>
-        {reservation.status}
-      </td>
+      <td>{mobile_number}</td>
+      <td>{reservation_date}</td>
+      <td>{reservation_time}</td>
+      <td>{people}</td>
+      <td data-reservation-id-status={reservation_id}>{status}</td>
       <td>
-        {reservation.status === "booked" ? (
+        {status === "booked" ? (
           <a
             className="btn btn-primary"
             role="button"
-            href={`/reservations/${reservation.reservation_id}/seat`}
+            href={`/reservations/${reservation_id}/seat`}
           >
             Seat
           </a>
         ) : null}
       </td>
       <td>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={handleEditClick}
-        >
-          Edit
-        </button>
+        {status === "booked" ? (
+          <a
+            className="btn btn-primary"
+            role="button"
+            href={`/reservations/${reservation_id}/edit`}
+          >
+            Edit
+          </a>
+        ) : null}
       </td>
       <td>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={handleCancelClick}
-        >
-          Cancel
-        </button>
+        {status === "booked" ? (
+          <button
+            data-reservation-id-cancel={reservation.reservation_id}
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => handleCancelClick(reservation_id)}
+          >
+            Cancel
+          </button>
+        ) : null}
       </td>
     </tr>
   );

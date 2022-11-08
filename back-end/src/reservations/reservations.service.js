@@ -25,7 +25,6 @@ function create(reservation) {
 }
 
 function read(reservation_id) {
-  //console.log("from reservation service", reservation_id);
   return knex("reservations").select("*").where({ reservation_id }).first();
 }
 

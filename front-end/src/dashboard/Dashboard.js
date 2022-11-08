@@ -75,7 +75,11 @@ function Dashboard({ date }) {
         </button>
       </div>
       <div className="TableResDetails">
-        <TableResDetails reservations={reservations} date={date} />
+        <TableResDetails
+          reservations={reservations}
+          date={date}
+          loadDashboard={loadDashboard}
+        />
       </div>
       <div>
         <TableList tables={tables} loadDashboard={loadDashboard} />

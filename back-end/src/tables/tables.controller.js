@@ -31,7 +31,7 @@ function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
 
   const invalidStatuses = Object.keys(data).filter(
-    (field) => !REQUIRED_PROPERTIES.includes(field)
+    (field) => ![...REQUIRED_PROPERTIES, "reservation_id"].includes(field)
   );
 
   if (invalidStatuses.length) {
@@ -72,8 +72,6 @@ async function reservation_idExists(req, res, next) {
   //destructure reservation_id
   const { reservation_id } = req.body.data;
   //reservation is promise from read function in /reservations/reservations.service
-  // console.log("from reservation id exist", reservation_id);
-
   if (!reservation_id) {
     return next({
       status: 404,
@@ -155,22 +153,13 @@ async function list(req, res, next) {
 
 async function create(req, res) {
   const data = await tablesService.create(req.body.data);
-  // console.log(req.body);
-  console.log(data);
   res.status(201).json({ data: data });
 }
 
 async function update(req, res, next) {
   const { reservation_id } = res.locals.reservation;
   const { table_id } = req.params;
-  console.log(
-    "line 177 table_id, from update",
-    table_id,
-    "reservation_id",
-    reservation_id
-  );
   const data = await tablesService.update(reservation_id, table_id);
-  console.log("DATA, from update", data);
   res.status(200).json({ data });
 }
 

@@ -13,7 +13,7 @@ function AssignResToTable() {
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
   const [seat, setSeat] = useState(null);
-  // const [reservation, setReservation] = useState(null);
+
   const history = useHistory();
 
   useEffect(loadTables, [reservation_id]);
@@ -23,9 +23,6 @@ function AssignResToTable() {
     setTablesError(null);
     listTables(abortController.signal).then(setTables).catch(setTablesError);
 
-    // listReservations(abortController.signal)
-    //   .then(setReservation)
-    //   .catch(setTablesError);
     return () => abortController.abort();
   }
 
@@ -36,14 +33,12 @@ function AssignResToTable() {
   ));
 
   function handleSeatChange(event) {
-    console.log(event.target.value);
     setSeat(event.target.value);
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const abortController = new AbortController();
-    console.log(reservation_id);
     await seatReservation(seat, reservation_id, abortController.signal);
     history.push(`/dashboard`);
     return () => abortController.abort();

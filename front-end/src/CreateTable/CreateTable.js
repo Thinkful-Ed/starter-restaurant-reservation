@@ -23,7 +23,6 @@ function CreateTable() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // console.log("formData", formData.capacity);
     const abortController = new AbortController();
     setTableError(null);
     const formatNewTable = {
@@ -32,11 +31,9 @@ function CreateTable() {
     };
     createNewTable(formatNewTable, abortController.signal)
       .then(() => {
-        // console.log("history push");
         history.push(`/dashboard`);
       })
       .catch(setTableError);
-    console.log("after catch");
     return () => abortController.abort();
   };
 

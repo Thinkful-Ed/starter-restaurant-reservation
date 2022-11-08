@@ -1,7 +1,7 @@
 import React from "react";
 import { finishedTable } from "../../utils/api";
 
-function TableRow({ table, index, loadDashboard }) {
+function TableRow({ table, loadDashboard }) {
   //upon clicking finish
   //make a DELETE request within utils/api
   //you want to loadDashboard after DELETE promise has resolved so that the state of tables are different
@@ -25,14 +25,14 @@ function TableRow({ table, index, loadDashboard }) {
   const status = table.reservation_id ? "Occupied" : "Free";
 
   return (
-    <tr>
+    <tr key={table.table_id}>
       <td>{table.table_id}</td>
       <td>{table.table_name}</td>
       <td>{table.capacity}</td>
-      <td>{status}</td>
+      <td data-table-id-status={table.table_id}>{status}</td>
       <td>
         <button
-          data-table-id-status={table.table_id}
+          data-table-id-finish={table.table_id}
           type="button"
           className="btn btn-primary"
           onClick={handleFinishClick}

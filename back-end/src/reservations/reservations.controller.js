@@ -53,7 +53,6 @@ function checkIfStatusUpdatable(req, res, next) {
 }
 
 function isCurrentlyFinished(req, res, next) {
-  // console.log("res.locals.reservation", res.locals.reservation);
   const { status } = res.locals.reservation;
 
   if (status === "finished") {
@@ -130,7 +129,10 @@ function reservationEligibleTime(timeString) {
 function hasValidValues(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
 
-  if (!timeIsValid(reservation_time)) {
+  const [hours, minutes] = reservation_time.split(":");
+  const resTime = `${hours}:${minutes}`;
+
+  if (!timeIsValid(resTime)) {
     return next({
       status: 400,
       message: "reservation_time must be in HH:MM:SS format",
@@ -177,7 +179,6 @@ function hasValidValues(req, res, next) {
 
 //validation middleware to check if reservation exists
 async function reservationExists(req, res, next) {
-  //console.log(req.params); // example: { reservation_Id: 5 }
   //destructure reservation_Id from req.params
   const { reservation_id } = req.params;
   //reservation is the promise from reservations.service's read
@@ -228,15 +229,15 @@ async function list(req, res) {
 
 //returns an object for a reservation id
 async function read(req, res) {
-  const reservation = res.locals.reservation;
-  res.json({ data: reservation });
+  const data = res.locals.reservation;
+  res.json({ data });
 }
 
 async function update(req, res) {
   const { reservation_id } = req.params;
   const { status } = req.body.data;
-  const reservation = await reservationsService.update(reservation_id, status);
-  res.json({ data: reservation });
+  const data = await reservationsService.update(reservation_id, status);
+  res.json({ data });
 }
 
 async function editReservation(req, res) {

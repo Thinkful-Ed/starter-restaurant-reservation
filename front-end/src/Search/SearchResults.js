@@ -1,7 +1,7 @@
 function SearchResults({ reservations }) {
   let row = reservations.map((reservation) => {
     return (
-      <tr>
+      <tr key={reservation.reservation_id}>
         <td>{reservation.mobile_number}</td>
         <td>{reservation.first_name}</td>
         <td>{reservation.last_name}</td>

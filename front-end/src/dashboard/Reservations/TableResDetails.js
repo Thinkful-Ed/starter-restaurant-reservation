@@ -1,11 +1,15 @@
 import React from "react";
 import TableRow from "./TableRow";
 
-function TableResDetails({ reservations, date }) {
+function TableResDetails({ reservations, date, loadDashboard }) {
   //loop over reservations
   //with each index, render TableRow component(which is only one row of data)
-  const rows = reservations.map((reservation, index) => (
-    <TableRow reservation={reservation} index={index} />
+  const rows = reservations.map((reservation) => (
+    <TableRow
+      reservation={reservation}
+      loadDashboard={loadDashboard}
+      key={reservation.reservation_id}
+    />
   ));
 
   return (

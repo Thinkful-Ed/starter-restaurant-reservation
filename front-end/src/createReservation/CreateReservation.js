@@ -9,7 +9,9 @@ function CreateReservation() {
     first_name: "",
     last_name: "",
     mobile_number: "",
-    people: 1,
+    reservation_date: "",
+    reservation_time: "",
+    people: 0,
   };
 
   const [formData, setFormData] = useState({ ...initialFormState });

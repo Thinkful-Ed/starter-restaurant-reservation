@@ -32,7 +32,6 @@ function update(reservation_id, table_id) {
 }
 
 function finished(table_id, reservation_id) {
-  //console.log("FINISHED table_id", table_id, "reservation_id", reservation_id);
   return knex.transaction(function (trx) {
     return trx("tables")
       .where({ table_id: table_id })

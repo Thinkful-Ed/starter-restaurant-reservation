@@ -3,7 +3,11 @@ import TableRow from "./TableRow";
 
 function TableList({ tables, loadDashboard }) {
   const rows = tables.map((table, index) => (
-    <TableRow table={table} index={index} loadDashboard={loadDashboard} />
+    <TableRow
+      table={table}
+      loadDashboard={loadDashboard}
+      key={table.table_id}
+    />
   ));
   return (
     <div>

@@ -22,7 +22,6 @@ function Search() {
       ...searchFormData,
       [target.name]: target.value,
     });
-    console.log(searchFormData);
   };
 
   const searchFormHandler = (event) => {
@@ -32,9 +31,8 @@ function Search() {
     const phoneNumber = {
       mobile_number: searchFormData.mobile_number,
     };
-    console.log("line 35 phoneNumber", phoneNumber);
     listReservations(phoneNumber, abortController.signal)
-      .then(setReservations, console.log(reservations))
+      .then(setReservations)
       .catch(setSearchError);
     return () => abortController.abort();
   };
@@ -47,7 +45,7 @@ function Search() {
         searchFormHandler={searchFormHandler}
       />
       {reservations.length === 0 ? (
-        <h4 className="no-reservations-found">No Reservations Found</h4>
+        <h4 className="no-reservations-found">No reservations found</h4>
       ) : (
         <SearchResults reservations={reservations} />
       )}
