@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 import { listReservations } from "../utils/api";
-import TableHeader from "./TableHeader";
 import ReservationCard from "../reservations/ReservationCard";
+import "./search.css"
 function Search() {
   const initFormData = {
     mobile_number: "",
@@ -20,26 +20,22 @@ function Search() {
 
   function loadSearch() {
     const abortController = new AbortController();
-    setError(null)
-    async function loadReservations(){
+    setError(null);
+    async function loadReservations() {
       try {
-        setReservations(await listReservations(initFormData, abortController.signal))
+        setReservations(
+          await listReservations(
+            { mobile_number: formData.mobile_number },
+            abortController.signal
+          )
+        );
       } catch (error) {
-        setError(error)
+        setError(error);
       }
     }
-    loadReservations()
-    return () => abortController.abort()
+    loadReservations();
+    return () => abortController.abort();
   }
-
-  // async function loadSearch() {
-  //   try {
-  //     const abortController = new AbortController();
-  //     setReservations(
-  //       await listReservations(initFormData, abortController.signal)
-  //     );
-  //   } catch (error) {}
-  // }
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -47,7 +43,7 @@ function Search() {
       const abortController = new AbortController();
       setClicked(true);
       const reservationsByNumber = await listReservations(
-        formData,
+        { mobile_number: formData.mobile_number },
         abortController.signal
       );
       setReservations(reservationsByNumber);
@@ -61,7 +57,7 @@ function Search() {
     <div>
       <ErrorAlert error={error} />
 
-      <div>
+      <div className="search-container">
         <form onSubmit={submitHandler}>
           <input
             name="mobile_number"
@@ -69,8 +65,9 @@ function Search() {
             onChange={changeHandler}
             placeholder="Enter a customer's phone number"
             required={true}
+            className="search-input"
           ></input>
-          <button type="submit">Find</button>
+          <button className="search-button" type="submit">Find</button>
         </form>
       </div>
       {clicked && reservations.length <= 0 ? (
@@ -78,37 +75,23 @@ function Search() {
       ) : (
         <></>
       )}
+      <div className="reservations-container">
       {reservations.length >= 1 ? (
         <div>
-          <table>
-            <TableHeader
-              headers={[
-                "id",
-                "first name",
-                "last name",
-                "party size",
-                "phone number",
-                "date",
-                "time",
-                "status",
-              ]}
+          {reservations.map((reservation) => (
+            <ReservationCard
+              key={reservation.reservation_id}
+              setError={setError}
+              index={reservation.reservation_id}
+              loadReservations={loadSearch}
+              reservation={reservation}
             />
-            <tbody>
-            {reservations.map((reservation) => (
-              <ReservationCard
-                key={reservation.reservation_id}
-                setError={setError}
-                index={reservation.reservation_id}
-                loadReservations={loadSearch}
-                reservation={reservation}
-              />
-            ))}
-            </tbody>
-          </table>
+          ))}
         </div>
       ) : (
         <></>
       )}
+      </div>
     </div>
   );
 }
