@@ -36,7 +36,11 @@
     display: flex;
     margin: 10px;
 }
-.reservation-status-text {
+.reservation-status-booked {
+    margin-left: 10px;
+    color:green;
+}
+.reservation-status-done {
     margin-left: 10px;
     color:red;
 }
