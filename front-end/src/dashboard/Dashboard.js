@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { listReservations, listTables } from "../utils/api";
+import { previous, next, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationCard from "../reservations/ReservationCard";
 import TablesInfo from "../tables/TablesInfo";
@@ -16,23 +17,26 @@ function Dashboard({ todaysDate }) {
   const [reservations, setReservations] = useState([]);
   const [error, setError] = useState(null);
   const [tables, setTables] = useState([]);
-
-  useEffect(loadDashboard, [todaysDate]);
+  const history = useHistory();
+  useEffect(()=>{
+    history.push(`/dashboard?date=${todaysDate}`)
+    loadDashboard()
+  }, [todaysDate]);
 
   const { search } = useLocation();
-  const selectedDate = search.replace("?date=", "");
-  todaysDate = selectedDate ? selectedDate : todaysDate;
 
-  const reservationByDate = reservations.filter(
-    (res) => res.reservation_date === todaysDate
-  );
+  if (search) {
+    todaysDate = search.replace("?date=", "");
+  }
 
   function loadDashboard() {
     const abortController = new AbortController();
     setError(null);
     async function loadReservations() {
       try {
-        setReservations(await listReservations(abortController.signal));
+        setReservations(
+          await listReservations({ date: todaysDate }, abortController.signal)
+        );
         setError(null);
       } catch (error) {
         setError(error);
@@ -52,60 +56,49 @@ function Dashboard({ todaysDate }) {
     return () => abortController.abort();
   }
 
-  // async function loadDashboard() {
-  //   try {
-  //     const abortController = new AbortController();
-  //     setError(null);
-  //     setReservations(await listReservations(abortController.signal))
-  //     setTables(await listTables(abortController.signal))
+  const previousHandler = () => {
+    history.push(`/dashboard?date=${previous(todaysDate)}`);
+    loadDashboard();
+  };
 
-  //   return () => abortController.abort();
-  //   } catch (error) {
-  //     setError(error)
-  //     console.log(error)
-  //   }
-  // }
+  const todayHandler = () => {
+    history.push(`/dashboard?date=${today()}`);
+    loadDashboard();
+  };
+
+  const nextHandler = () => {
+    history.push(`/dashboard?date=${next(todaysDate)}`);
+    loadDashboard();
+  };
 
   return (
     <main>
       <h1>Dashboard</h1>
+      <div className="buttons-container">
+        <button className="btn-el" onClick={previousHandler}>Previous</button>
+        <button className="btn-el" onClick={todayHandler}>Today</button>
+        <button className="btn-el" onClick={nextHandler}>Next</button>
+      </div>
       <div className="reservations-container">
         <h4>Reservations List:</h4>
         <ErrorAlert error={error} />
 
-        {reservationByDate.length
-          ? reservationByDate.map((reservation) => {
-              if (
-                reservation.status !== "finished" &&
-                reservation.status !== "cancelled"
-              ) {
-                return (
-                  <ReservationCard
-                    key={reservation.reservation_id}
-                    setError={setError}
-                    reservation={reservation}
-                    loadReservations={loadDashboard}
-                    index={reservation.reservation_id}
-                  />
-                );
-              }
-            })
-          : reservations.map((reservation) => {
-              if (
-                reservation.status !== "finished" &&
-                reservation.status !== "cancelled"
-              ) {
-                return (
-                  <ReservationCard
-                    key={reservation.reservation_id}
-                    setError={setError}
-                    reservation={reservation}
-                    loadReservations={loadDashboard}
-                    index={reservation.reservation_id}
-                  />
-                );
-              }
-            })}
+        {reservations.map((reservation) => {
+          if (
+            reservation.status !== "finished" &&
+            reservation.status !== "cancelled"
+          ) {
+            return (
+              <ReservationCard
+                key={reservation.reservation_id}
+                setError={setError}
+                reservation={reservation}
+                loadReservations={loadDashboard}
+                index={reservation.reservation_id}
+              />
+            );
+          }
+        })}
       </div>
 
       <div className="tables-container">
