@@ -1,0 +1,74 @@
+
+.reservation-card {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.reservation-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+}
+
+.reservation-row-1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.reservation-row-2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px;
+}
+
+.reservation-data {
+    margin: 10px;
+}
+
+.reservation-status {
+    display: flex;
+    margin: 10px;
+}
+.reservation-status-text {
+    margin-left: 10px;
+    color:red;
+}
+.res-id {
+    font-size: 14px;
+}
+
+.reservation-button {
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px 10px 5px 10px;
+    background-color: rgb(0, 140, 255);
+    color: white;
+    transition: 300ms;
+}
+
+.reservation-button:hover {
+    border: 1px solid black;
+    color: black;
+}
+
+.reservation-button-cancel {
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px 10px 5px 10px;
+    background-color: rgb(255, 56, 56);
+    color: white;
+    font-weight: 500;
+    transition: 300ms;
+}
+
+.reservation-button-cancel:hover {
+    border: 1px solid black;
+    color: black;
+}

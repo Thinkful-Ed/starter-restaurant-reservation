@@ -1,0 +1,40 @@
+.table-card {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.table-row {
+    display: flex;
+    margin: 10px;
+    justify-content: space-between;
+}
+
+.table-row-1 {
+    display: flex;
+    margin: 10px;
+    justify-content: space-around;
+}
+
+.table-data {
+    margin: 20px;
+}
+
+.table-button {
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 3px 8px 3px 8px;
+    background-color: rgb(255, 56, 56);
+    color: white;
+    font-weight: 500;
+    transition: 300ms;
+}
+
+.table-button:hover {
+    border: 1px solid black;
+    color: black;
+}

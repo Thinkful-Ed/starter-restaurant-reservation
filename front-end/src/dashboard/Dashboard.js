@@ -3,8 +3,8 @@ import { useLocation } from "react-router-dom";
 import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationCard from "../reservations/ReservationCard";
-import TableHeader from "./TableHeader";
 import TablesInfo from "../tables/TablesInfo";
+import "./dashboard.css";
 
 /**
  * Defines the dashboard page.
@@ -69,86 +69,58 @@ function Dashboard({ todaysDate }) {
   return (
     <main>
       <h1>Dashboard</h1>
-      <div>
+      <div className="reservations-container">
         <h4>Reservations List:</h4>
         <ErrorAlert error={error} />
-        <section>
-          <TableHeader
-            headers={[
-              "id",
-              "first name",
-              "last name",
-              "party size",
-              "phone number",
-              "date",
-              "time",
-              "status",
-            ]}
-          />
-          <div>
-            {reservationByDate.length
-              ? reservationByDate.map((reservation) => {
-                  if (
-                    reservation.status !== "finished" &&
-                    reservation.status !== "cancelled"
-                  ) {
-                    return (
-                      <ReservationCard
-                        key={reservation.reservation_id}
-                        setError={setError}
-                        reservation={reservation}
-                        loadReservations={loadDashboard}
-                        index={reservation.reservation_id}
-                      />
-                    );
-                  }
-                })
-              : reservations.map((reservation) => {
-                  if (
-                    reservation.status !== "finished" &&
-                    reservation.status !== "cancelled"
-                  ) {
-                    return (
-                      <ReservationCard
-                        key={reservation.reservation_id}
-                        setError={setError}
-                        reservation={reservation}
-                        loadReservations={loadDashboard}
-                        index={reservation.reservation_id}
-                      />
-                    );
-                  }
-                })}
-          </div>
-        </section>
+
+        {reservationByDate.length
+          ? reservationByDate.map((reservation) => {
+              if (
+                reservation.status !== "finished" &&
+                reservation.status !== "cancelled"
+              ) {
+                return (
+                  <ReservationCard
+                    key={reservation.reservation_id}
+                    setError={setError}
+                    reservation={reservation}
+                    loadReservations={loadDashboard}
+                    index={reservation.reservation_id}
+                  />
+                );
+              }
+            })
+          : reservations.map((reservation) => {
+              if (
+                reservation.status !== "finished" &&
+                reservation.status !== "cancelled"
+              ) {
+                return (
+                  <ReservationCard
+                    key={reservation.reservation_id}
+                    setError={setError}
+                    reservation={reservation}
+                    loadReservations={loadDashboard}
+                    index={reservation.reservation_id}
+                  />
+                );
+              }
+            })}
       </div>
 
-      <div>
+      <div className="tables-container">
         <h4>Tables List:</h4>
         <ErrorAlert error={error} />
-        <table>
-          <TableHeader
-            headers={[
-              "id",
-              "table name",
-              "capacity",
-              "reservation id",
-              "table status",
-            ]}
+        {tables.map((table) => (
+          <TablesInfo
+            key={table.table_id}
+            table={table}
+            setError={setError}
+            loadDashboard={loadDashboard}
+            setReservations={setReservations}
+            index={table.table_id}
           />
-          <tbody>
-            {tables.map((table) => (
-              <TablesInfo
-                key={table.table_id}
-                table={table}
-                setError={setError}
-                loadDashboard={loadDashboard}
-                setReservations={setReservations}
-                index={table.table_id}
-              />
-            ))}
-          </tbody>
-        </table>
+        ))}
       </div>
     </main>
   );
