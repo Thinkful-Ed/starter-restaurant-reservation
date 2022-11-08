@@ -6,6 +6,26 @@ main {
     font-family: 'Montserrat', sans-serif;
 }
 
+.buttons-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-el {
+    background-color: rgb(0, 140, 255);
+    border: 1px solid white;
+    border-radius: 5px;
+    color: white;
+    margin: 0px 10px 10px 0px;
+    transition: 300ms;
+}
+
+.btn-el:hover {
+    border: 1px solid black;
+    color: black;
+}
+
 .reservations-container {
     display: flex;
     flex-direction: column;
