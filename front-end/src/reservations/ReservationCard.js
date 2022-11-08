@@ -45,7 +45,7 @@ function ReservationCard({ reservation, loadReservations, setError, index }) {
       </div>
 
       <div className="reservation-status" data-reservation-id-status={reservation.reservation_id}>
-        Status: <div className="reservation-status-text">{reservation.status}</div>
+        Status: <div className={reservation.status === "booked" ? "reservation-status-booked" : "reservation-status-done"}>{reservation.status}</div>
       </div>
 
       <div className="reservation-row-2">

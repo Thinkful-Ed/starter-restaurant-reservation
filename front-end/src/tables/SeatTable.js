@@ -46,7 +46,7 @@ function SeatTable() {
         abortController.signal
       );
       console.log(updatedTable)
-      history.push(`/dashboard${date ? `?date=${date}` : ""}`);
+      history.push(`/dashboard?date=${currentReservation.reservation_date}`);
     } catch (error) {
       setError(error);
       console.log(error);
