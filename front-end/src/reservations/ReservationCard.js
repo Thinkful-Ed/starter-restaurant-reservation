@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { updateReservationStatus } from "../utils/api";
-
+import "./reservation.css"
 function ReservationCard({ reservation, loadReservations, setError, index }) {
   const history = useHistory()
   const handleCancelReservation = async (event) => {
@@ -29,17 +29,26 @@ function ReservationCard({ reservation, loadReservations, setError, index }) {
   };
 
   return (
-    <span key={index}>
-      <div>{reservation.reservation_id}</div>
-      <div>{reservation.first_name}</div>
-      <div>{reservation.last_name}</div>
-      <div>{reservation.people}</div>
-      <div>{reservation.mobile_number}</div>
-      <div>{reservation.reservation_date}</div>
-      <div>{reservation.reservation_time}</div>
-      <div data-reservation-id-status={reservation.reservation_id}>
-        {reservation.status}
+    <div className="reservation-card" key={index}>
+
+      <div className="res-id reservation-data">id:{reservation.reservation_id}</div>
+
+      <div className="reservation-row">
+        <div className="reservation-data">Name: {reservation.first_name} {reservation.last_name}</div>
+        <div className="reservation-data">Party Size: {reservation.people}</div>
       </div>
+
+      <div className="reservation-row-1">
+        <div className="reservation-data">Phone: {reservation.mobile_number}</div>
+        <div className="reservation-data">Date: {reservation.reservation_date}</div>
+        <div className="reservation-data">Time: {reservation.reservation_time}</div>
+      </div>
+
+      <div className="reservation-status" data-reservation-id-status={reservation.reservation_id}>
+        Status: <div className="reservation-status-text">{reservation.status}</div>
+      </div>
+
+      <div className="reservation-row-2">
       <div>
         {reservation.status === "booked" ? (
           <Link to={`/reservations/${reservation.reservation_id}/seat`}>
@@ -47,6 +56,7 @@ function ReservationCard({ reservation, loadReservations, setError, index }) {
               type="button"
               href={`/reservations/${reservation.reservation_id}/seat`}
               value={`${reservation.reservation_id}`}
+              className="reservation-button"
             >
               Seat
             </button>
@@ -63,6 +73,7 @@ function ReservationCard({ reservation, loadReservations, setError, index }) {
               type="button"
               href={`/reservations/${reservation.reservation_id}/edit`}
               value={`${reservation.reservation_id}`}
+              className="reservation-button"
             >
               Edit
             </button>
@@ -78,6 +89,7 @@ function ReservationCard({ reservation, loadReservations, setError, index }) {
             type="button"
             data-reservation-id-cancel={`${reservation.reservation_id}`}
             onClick={handleCancelReservation}
+            className="reservation-button-cancel"
           >
             Cancel
           </button>
@@ -85,7 +97,8 @@ function ReservationCard({ reservation, loadReservations, setError, index }) {
       ) : (
         <></>
       )}
-    </span>
+      </div>
+    </div>
   );
 }
 
