@@ -27,11 +27,22 @@ const nameProperLength = (req, res, next) => {
     next();
 }
 
+function getDate() {
+    const today = new Date();
+    return `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`
+}
+
 async function create(req, res, next) {
     const data = await services.create(req.body.data)
     res.status(201).json({ data });
 }
 
+async function list(req, res, next) {
+    const data = await services.list()
+    res.json({ data });
+}
+
 module.exports = {
     create: [hasOnlyValidProperties(VALID_PROPERTIES), hasRequiredProperties, nameProperLength, isNonzeroNumber, asyncErrorBoundary(create)],
+    list: [asyncErrorBoundary(list)],
 }
