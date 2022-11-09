@@ -103,7 +103,11 @@ function EditReservationForm({
               </div>
             </div>
             <br />
-            <button type="submit" className="btn btn-primary">
+            <button
+              style={{ backgroundColor: "#7B6A96", color: "white" }}
+              type="submit"
+              className="btn btn-submit"
+            >
               Submit
             </button>
             <button

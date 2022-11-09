@@ -13,7 +13,7 @@ function TableList({ tables, loadDashboard }) {
     <div>
       <table className="tablesList table">
         <thead>
-          <tr>
+          <tr className="tables-categories-row">
             <th className="border-top-0">#</th>
             <th className="border-top-0">Table Name</th>
             <th className="border-top-0">Capacity</th>
@@ -21,7 +21,7 @@ function TableList({ tables, loadDashboard }) {
             <th className="border-top-0">Finish</th>
           </tr>
         </thead>
-        <tbody>{rows}</tbody>
+        <tbody className="tables-body">{rows}</tbody>
       </table>
     </div>
   );

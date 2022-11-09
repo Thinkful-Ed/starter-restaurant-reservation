@@ -89,6 +89,7 @@ function Dashboard({ date }) {
             loadDashboard={loadDashboard}
           />
         </div>
+        <br />
         <div className="table-list-container">
           <TableList tables={tables} loadDashboard={loadDashboard} />
         </div>

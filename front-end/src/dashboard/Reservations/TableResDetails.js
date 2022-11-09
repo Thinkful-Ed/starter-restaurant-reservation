@@ -16,7 +16,7 @@ function TableResDetails({ reservations, date, loadDashboard }) {
     <React.Fragment>
       <table className="tableResDetails table">
         <thead>
-          <tr>
+          <tr className="reservations-categories-row">
             <th className="border-top-0">#</th>
             <th className="border-top-0">Name</th>
             <th className="border-top-0">Phone</th>
@@ -26,7 +26,7 @@ function TableResDetails({ reservations, date, loadDashboard }) {
             <th className="border-top-0">Status</th>
           </tr>
         </thead>
-        <tbody>{rows}</tbody>
+        <tbody className="reservations-body">{rows}</tbody>
       </table>
     </React.Fragment>
   );

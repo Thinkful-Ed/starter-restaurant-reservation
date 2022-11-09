@@ -48,7 +48,8 @@ function TableRow({ reservation, loadDashboard }) {
       <td>
         {status === "booked" ? (
           <a
-            className="btn btn-primary"
+            style={{ backgroundColor: "#7B6A96", color: "white" }}
+            className="btn btn-seat"
             role="button"
             href={`/reservations/${reservation_id}/seat`}
           >
@@ -59,7 +60,8 @@ function TableRow({ reservation, loadDashboard }) {
       <td>
         {status === "booked" ? (
           <a
-            className="btn btn-primary"
+            style={{ backgroundColor: "#7B6A96", color: "white" }}
+            className="btn btn-edit"
             role="button"
             href={`/reservations/${reservation_id}/edit`}
           >

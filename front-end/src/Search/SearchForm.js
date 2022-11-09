@@ -14,10 +14,11 @@ function SearchForm({ mobile_number, handleChange, searchFormHandler }) {
           placeholder="Enter a reservation's phone number"
         ></input>
       </div>
-      <br></br>
+      <br />
       <button
+        style={{ backgroundColor: "#7B6A96", color: "white" }}
         type="submit"
-        className="btn-search-form-submit"
+        className="btn btn-search-form-submit"
         onClick={searchFormHandler}
       >
         Search

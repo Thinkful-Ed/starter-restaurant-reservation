@@ -53,13 +53,12 @@ function AssignResToTable() {
 
   return (
     <React.Fragment>
-      <main>
-        <h1>Seat Reservation</h1>
-        <h3>Hello</h3>
+      <main className="seat-reservation-page">
+        <h1 className="title">Seat Reservation</h1>
         <form onSubmit={handleSubmit}>
-          <fieldset>
+          <fieldset className="seat-form">
             <div className="row">
-              <div className="form-group col">
+              <div className="seat-select col-4 ">
                 <label htmlFor="table_id">Seat at:</label>
                 <select
                   name="table_id"
@@ -73,7 +72,12 @@ function AssignResToTable() {
                 </select>
               </div>
             </div>
-            <button className="btn btn-primary mr-1" type="submit">
+            <br />
+            <button
+              style={{ backgroundColor: "#7B6A96", color: "white" }}
+              className="btn btn-submit mr-2"
+              type="submit"
+            >
               Submit
             </button>
             <button

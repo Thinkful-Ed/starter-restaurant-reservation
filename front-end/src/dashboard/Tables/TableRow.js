@@ -32,9 +32,10 @@ function TableRow({ table, loadDashboard }) {
       <td data-table-id-status={table.table_id}>{status}</td>
       <td>
         <button
+          style={{ backgroundColor: "#C86779", color: "white" }}
           data-table-id-finish={table.table_id}
           type="button"
-          className="btn btn-primary"
+          className="btn btn-table-finish"
           onClick={handleFinishClick}
         >
           Finish

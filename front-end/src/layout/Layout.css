@@ -18,6 +18,9 @@ h1 {
   font-weight: bolder;
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: rgb(69, 16, 16);
+  display: flex;
+  justify-content: center;
+  padding-top: 70px;
 }
 
 h2 {
@@ -25,12 +28,6 @@ h2 {
   font-size: 25px;
   color: #c2334d;
   font-weight: bold;
-}
-
-.title {
-  display: flex;
-  justify-content: center;
-  padding-top: 70px;
 }
 
 .subheading {
@@ -46,17 +43,49 @@ h2 {
   font-family: monospace;
 }
 
+.table-list-container,
 .reservation-list-container {
   background-color: rgb(247, 243, 243);
-}
-
-.table-list-container {
-  background-color: rgb(247, 243, 243);
+  padding: 20px 20px 0px 20px;
+  border: 3px #5c919a dashed;
 }
 
 .table-and-reservation-containers {
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
+}
+
+.reservations-categories-row,
+.tables-categories-row {
+  font-family: monospace;
+  color: #254d32;
+  text-shadow: 1px 2px #d0db97;
+  font-size: 18px;
+}
+
+.tables-body,
+.reservations-body {
+  font-family: Calibri;
+  font-size: 15px;
+}
+
+.seat-form {
+  font-family: monospace;
+}
+
+label {
+  font-family: monospace;
+  color: #254d32;
+  text-shadow: 1px 2px #d0db97;
+  font-size: 18px;
+}
+
+.seat-reservation-page {
+  align-items: center;
+}
+
+.seat-form {
+  padding: 10px;
 }
 /* <span className="oi oi-magnifying-glass" />
               &nbsp;Search */
