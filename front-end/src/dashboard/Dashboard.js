@@ -5,6 +5,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import TableResDetails from "./Reservations/TableResDetails";
 import { previous, today, next } from "../utils/date-time";
 import TableList from "./Tables/TableList";
+import "../layout/Layout.css";
 
 /**
  * Defines the dashboard page.
@@ -47,43 +48,52 @@ function Dashboard({ date }) {
 
   return (
     <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {date}</h4>
+      <div className="title">
+        <h1>Dashboard</h1>
       </div>
-      <div className="btn-gorup">
+      <div className="d-md-flex mb-3 subheading">
+        <h2 className="mb-0">Reservations for {date}</h2>
+      </div>
+      <div className="btn-group">
         <button
+          style={{ backgroundColor: "#d0db97" }}
           type="button"
-          className="btn btn-secondary"
+          className="btn btn-text"
           onClick={previousClickHandler}
         >
           {String.fromCharCode(8592)} Previous
         </button>
         <button
+          style={{ backgroundColor: "#d0db97" }}
           type="button"
-          className="btn btn-secondary"
+          className="btn btn-text"
           onClick={todayClickHandler}
         >
           Today
         </button>
         <button
+          style={{ backgroundColor: "#d0db97" }}
           type="button"
-          className="btn btn-secondary"
+          className="btn btn-text"
           onClick={nextClickHandler}
         >
           Next {String.fromCharCode(8594)}
         </button>
       </div>
-      <div className="TableResDetails">
-        <TableResDetails
-          reservations={reservations}
-          date={date}
-          loadDashboard={loadDashboard}
-        />
+      <br />
+      <div className="table-and-reservation-containers">
+        <div className="reservation-list-container">
+          <TableResDetails
+            reservations={reservations}
+            date={date}
+            loadDashboard={loadDashboard}
+          />
+        </div>
+        <div className="table-list-container">
+          <TableList tables={tables} loadDashboard={loadDashboard} />
+        </div>
       </div>
-      <div>
-        <TableList tables={tables} loadDashboard={loadDashboard} />
-      </div>
+
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
       {/* {JSON.stringify(reservations)} */}

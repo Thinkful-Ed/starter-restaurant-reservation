@@ -1,4 +1,63 @@
-.side-bar {
-  background-color: #393a44;
-  min-width: 200px;
+body {
+  background-image: url("tic-tac-toe.png");
 }
+
+.side-bar {
+  background-color: #254d32;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: "Courier New", Courier, monospace;
+}
+
+h1 {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 50px;
+  color: #c86779;
+  font-weight: bolder;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: rgb(69, 16, 16);
+}
+
+h2 {
+  font-family: monospace;
+  font-size: 25px;
+  color: #c2334d;
+  font-weight: bold;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  padding-top: 70px;
+}
+
+.subheading {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 27px;
+  padding: 0px 315px;
+  font-family: monospace;
+}
+
+.reservation-list-container {
+  background-color: rgb(247, 243, 243);
+}
+
+.table-list-container {
+  background-color: rgb(247, 243, 243);
+}
+
+.table-and-reservation-containers {
+  display: flex;
+  justify-content: space-evenly;
+}
+/* <span className="oi oi-magnifying-glass" />
+              &nbsp;Search */
+/* the second oi can be replaced with link to add the little icon */
