@@ -83,6 +83,15 @@ function timeValidations(req, res, next) {
   next();
 }
 
+async function resExists(req, res, next) {
+  const reservation = await services.read(req.params.reservation_id);
+  if (reservation) {
+    next()
+  } else {
+    next({ status: 404, message: "Reservation not found" });
+  }
+}
+
 async function create(req, res) {
   const data = await services.create(req.body.data);
   res.status(201).json({ data });
@@ -93,7 +102,13 @@ async function list(req, res) {
   res.json({ data });
 }
 
+async function read(req, res) {
+  const data = await services.read(req.params.reservation_id);
+  res.json({ data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [hasOnlyValidProperties(VALID_PROPERTIES), hasRequiredProperties, isDate, isTime, isNumber, dateValidations, timeValidations, asyncErrorBoundary(create)],
+  read: [asyncErrorBoundary(resExists), asyncErrorBoundary(read)],
 };
