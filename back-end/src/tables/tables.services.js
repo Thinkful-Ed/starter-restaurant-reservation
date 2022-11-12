@@ -13,13 +13,14 @@ function list() {
         .orderBy("t.table_name");
 }
 
-function listAvailability(reservation_date) {
+/*function listAvailability(reservation_date) {
     return knex("tables as t")
-        .join("res_tables as rt", "t.table_id", "rt.table_id")
-        .join("reservations as r", "rt.reservation_id", "r.reservation_id")
-        .select("t.table_id, rt.available")
+        .leftJoin("res_tables as rt", "t.table_id", "rt.table_id")
+        .leftJoin("reservations as r", "rt.reservation_id", "r.reservation_id")
+        .select("t.table_name, rt.available")
+        .orderBy("t.table_name")
         .whereBetween("r.reservation_date", [reservation_date, reservation_date])
-}
+} */
 
 function read(tableId) {
     return knex("tables as t").select("*").where({ table_id: tableId }).first();
@@ -64,7 +65,7 @@ function getAvailable(table_id) {
 module.exports = {
     create,
     list,
-    listAvailability,
+    //listAvailability,
     read,
     seat,
     getPeople,
