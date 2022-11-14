@@ -93,15 +93,15 @@ async function seat(req, res, next) {
     res.json({ data })
 }
 
-/* async function listAvailability(req, res, next) {
+async function listAvailability(req, res, next) {
     const { reservation_date } = req.params;
     const data = await services.listAvailability(reservation_date ? reservation_date : getDate())
     res.json({ data });
-} */
+}
 
 module.exports = {
     create: [hasOnlyValidProperties(VALID_PROPERTIES), hasRequiredProperties, nameProperLength, isNonzeroNumber, asyncErrorBoundary(create)],
     list: [asyncErrorBoundary(list)],
     seat: [asyncErrorBoundary(tableExists), asyncErrorBoundary(resExists), asyncErrorBoundary(resTableValidations), asyncErrorBoundary(seat)],
-    //listAvailability: [asyncErrorBoundary(listAvailability)],
+    listAvailability: [asyncErrorBoundary(listAvailability)],
 }

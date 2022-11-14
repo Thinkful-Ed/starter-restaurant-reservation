@@ -6,9 +6,9 @@ router.route("/:table_id/seat/")
     .put(controller.seat)
     .all(methodNotAllowed);
 
-/*router.route("/:reservation_date")
+router.route("/:reservation_date")
     .get(controller.listAvailability)
-    .all(methodNotAllowed) */
+    .all(methodNotAllowed)
 
 router.route("/")
     .post(controller.create)
