@@ -99,9 +99,15 @@ async function listAvailability(req, res, next) {
     res.json({ data });
 }
 
+async function read(req, res, next) {
+    const data = res.locals.table;
+    res.json({ data });
+}
+
 module.exports = {
     create: [hasOnlyValidProperties(VALID_PROPERTIES), hasRequiredProperties, nameProperLength, isNonzeroNumber, asyncErrorBoundary(create)],
     list: [asyncErrorBoundary(list)],
     seat: [asyncErrorBoundary(tableExists), asyncErrorBoundary(resExists), asyncErrorBoundary(resTableValidations), asyncErrorBoundary(seat)],
     listAvailability: [asyncErrorBoundary(listAvailability)],
+    read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
 }
