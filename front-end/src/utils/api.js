@@ -80,7 +80,7 @@ export async function createReservation(data, signal) {
 }
 
 export async function createTable(data, signal) {
-  const url = new URL (`${API_BASE_URL}/tables`)
+  const url = new URL (`${API_BASE_URL}/tables`);
   const options = {
     method: "POST",
     headers,
@@ -88,4 +88,12 @@ export async function createTable(data, signal) {
     signal
   };
   return await fetchJson(url, options);
+}
+
+export async function listTables(params, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  Object.entries(params).forEach(([key, value]) =>
+    url.searchParams.append(key, value.toString())
+  );
+  return await fetchJson(url, { headers, signal }, []);
 }
