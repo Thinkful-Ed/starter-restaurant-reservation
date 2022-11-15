@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ReservationTable from "./reservationsCard/ReservationTable";
 import ErrorAlert from "../layout/ErrorAlert";
 import CurrentDateToggle from "./reservationsCard/CurrentDateToggle";
-
+import TablesTable from "./tablesCard/TablesTable";
 /**
  * Defines the dashboard page.
  * @param date
@@ -23,6 +23,8 @@ import CurrentDateToggle from "./reservationsCard/CurrentDateToggle";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
   const [currentDate, setCurrentDate] = useState(getDate());
   const history = useHistory();
 
@@ -38,25 +40,42 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${currentDate}`);
     const abortController = new AbortController();
     setReservationsError(null);
+    setTablesError(null);
     listReservations({date: currentDate}, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+    listTables({ date: currentDate }, abortController.signal)
+      .then(setTables)
+      .catch(setTablesError);
     return () => abortController.abort();
   }  
 
   return (
     <main>
       <h1>Dashboard</h1>
-      <div className="col-6 mb-3">
-        <div className="card">
-          <div className="card-header">
-            <h4 className="card-title mb-0">Reservations for {currentDate}</h4>
+      <div className="row">
+        <div className="col-6 mb-3">
+          <div className="card">
+            <div className="card-header">
+              <h4 className="card-title mb-0">Reservations for {currentDate}</h4>
+            </div>
+            <div className="card-body">
+              <ErrorAlert error={reservationsError} />
+              <ReservationTable reservations={reservations} />
+            </div>
+            <CurrentDateToggle history={history} setCurrentDate={setCurrentDate} currentDate={currentDate}/>
           </div>
-          <div className="card-body">
-            <ErrorAlert error={reservationsError} />
-            <ReservationTable reservations={reservations} />
+        </div>
+        <div className="col-6 mb-3">
+          <div className="card">
+            <div className="card-header">
+              <h4 className="card-title mb-0">Tables</h4>
+            </div>
+            <div className="card-body">
+              <ErrorAlert error={tablesError} />
+              <TablesTable tables={tables} />
+            </div>
           </div>
-          <CurrentDateToggle history={history} setCurrentDate={setCurrentDate} currentDate={currentDate}/>
         </div>
       </div>
       
