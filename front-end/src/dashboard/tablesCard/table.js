@@ -2,7 +2,6 @@ import React from "react";
 
 function Table({ table }) {
     const { table_id, table_name, capacity, available } = table;
-    console.log(available);
 
     return (
         <tr>
