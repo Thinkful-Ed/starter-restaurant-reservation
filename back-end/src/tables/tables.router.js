@@ -10,10 +10,6 @@ router.route("/:table_id")
     .get(controller.read)
     .all(methodNotAllowed);
 
-router.route("/:reservation_date")
-    .get(controller.listAvailability)
-    .all(methodNotAllowed)
-
 router.route("/")
     .post(controller.create)
     .get(controller.list)

@@ -82,7 +82,11 @@ async function create(req, res, next) {
 }
 
 async function list(req, res, next) {
-    const data = await services.list()
+    const data = await services.list();
+    const avail = await listAvailability(req, res, next);
+    data.forEach(table => {
+        table.availabile = avail.has(table.table_id) ? avail.get(table.table_id).available : true;
+    })
     res.json({ data });
 }
 
@@ -94,9 +98,14 @@ async function seat(req, res, next) {
 }
 
 async function listAvailability(req, res, next) {
-    const { reservation_date } = req.params;
-    const data = await services.listAvailability(reservation_date ? reservation_date : getDate())
-    res.json({ data });
+    const { reservation_date } = req.query;
+    const data = await services.listAvailability(reservation_date ? reservation_date : getDate());
+    const availability = new Map();
+    data.forEach(obj => {
+        const { table_id, available } = obj;
+        availability.set(table_id,  { available });
+    });
+    return availability;
 }
 
 async function read(req, res, next) {
@@ -108,6 +117,5 @@ module.exports = {
     create: [hasOnlyValidProperties(VALID_PROPERTIES), hasRequiredProperties, nameProperLength, isNonzeroNumber, asyncErrorBoundary(create)],
     list: [asyncErrorBoundary(list)],
     seat: [asyncErrorBoundary(tableExists), asyncErrorBoundary(resExists), asyncErrorBoundary(resTableValidations), asyncErrorBoundary(seat)],
-    listAvailability: [asyncErrorBoundary(listAvailability)],
     read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
 }
