@@ -85,7 +85,7 @@ async function list(req, res, next) {
     const data = await services.list();
     const avail = await listAvailability(req, res, next);
     data.forEach(table => {
-        table.availabile = avail.has(table.table_id) ? avail.get(table.table_id).available : true;
+        table.available = avail.has(table.table_id) ? avail.get(table.table_id).available : true;
     })
     res.json({ data });
 }
