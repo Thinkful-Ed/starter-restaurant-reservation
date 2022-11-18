@@ -60,7 +60,7 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="row">
-        <div className="col-6 mb-3">
+        <div className="col-7 mb-3">
           <div className="card">
             <div className="card-header">
               <h4 className="card-title mb-0">Reservations for {currentDate}</h4>
@@ -72,7 +72,7 @@ function Dashboard({ date }) {
             <CurrentDateToggle history={history} setCurrentDate={setCurrentDate} currentDate={currentDate}/>
           </div>
         </div>
-        <div className="col-6 mb-3">
+        <div className="col-5 mb-3">
           <div className="card">
             <div className="card-header">
               <h4 className="card-title mb-0">Tables</h4>
