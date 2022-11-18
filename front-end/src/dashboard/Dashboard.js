@@ -28,7 +28,8 @@ function Dashboard({ date }) {
   const [currentDate, setCurrentDate] = useState(getDate());
   const history = useHistory();
 
-  useEffect(loadDashboard, [currentDate, history]);
+  useEffect(loadReservations, [currentDate, history]);
+  useEffect(loadTables, [reservations, history, currentDate])
 
   function getDate() {
     const queryParams = new URLSearchParams(window.location.search);
@@ -36,19 +37,24 @@ function Dashboard({ date }) {
     return dateTerm ? dateTerm : date;
   }
 
-  function loadDashboard() {
+  function loadReservations() {
     history.push(`/dashboard?date=${currentDate}`);
     const abortController = new AbortController();
     setReservationsError(null);
-    setTablesError(null);
     listReservations({date: currentDate}, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
-    listTables({ date: currentDate }, abortController.signal)
+    return () => abortController.abort();
+  }  
+
+  function loadTables() {
+    const abortController = new AbortController();
+    setTablesError(null);
+    listTables({ reservation_date: currentDate }, abortController.signal)
       .then(setTables)
       .catch(setTablesError);
     return () => abortController.abort();
-  }  
+  }
 
   return (
     <main>
