@@ -67,7 +67,6 @@ function dateValidations(req, res, next) {
 function timeValidations(req, res, next) {
   const { data: { reservation_date, reservation_time } } = req.body;
   const time = new Date(`${reservation_date} ${reservation_time}`);
-  console.log(time);
   const now = new Date();
   const errors = [];
   if (time.getHours() < 9 || (time.getHours() === 9 && time.getMinutes() < 30)) {
