@@ -19,6 +19,7 @@ function listAvailability(reservation_date) {
         .join("reservations", "res_tables.reservation_id", "reservations.reservation_id")
         .select("tables.table_id", "reservations.reservation_id", "res_tables.available")
         .where("reservations.reservation_date", reservation_date)
+        .andWhere({"res_tables.available": false}); 
 }
 
 function read(tableId) {
