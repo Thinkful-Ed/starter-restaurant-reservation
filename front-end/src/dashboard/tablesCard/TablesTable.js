@@ -1,5 +1,5 @@
 import React from "react";
-import Table from "./table";
+import Table from "./Table";
 
 function TablesTable({ tables }) {
     return (
@@ -12,7 +12,7 @@ function TablesTable({ tables }) {
                 </tr>
             </thead>
             <tbody>
-                {tables.map(table => <Table key={`table-${table.table_id}`} table={table} />)}
+                {tables.map((table) => <Table key={`table-${table.table_id}`} table={table} />)}
             </tbody>
         </table>
     );
