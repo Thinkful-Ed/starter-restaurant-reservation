@@ -6,6 +6,7 @@ function ReservationTable({reservations}) {
         <table className="table table-striped">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Last Name</th>
                     <th>First Name</th>
                     <th>Mobile Number</th>

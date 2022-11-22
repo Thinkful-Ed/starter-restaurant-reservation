@@ -17,7 +17,7 @@ function listAvailability(reservation_date) {
     return knex("tables")
         .join("res_tables", "tables.table_id", "res_tables.table_id")
         .join("reservations", "res_tables.reservation_id", "reservations.reservation_id")
-        .select("tables.table_id", "res_tables.available")
+        .select("tables.table_id", "reservations.reservation_id", "res_tables.available")
         .where("reservations.reservation_date", reservation_date)
 }
 

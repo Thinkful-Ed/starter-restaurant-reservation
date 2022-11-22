@@ -86,6 +86,7 @@ async function list(req, res, next) {
     const avail = await listAvailability(req, res, next);
     data.forEach(table => {
         table.available = avail.has(table.table_id) ? avail.get(table.table_id).available : true;
+        table.reservation_id = avail.has(table.table_id) ? avail.get(table.table_id).reservation_id : null;
     })
     res.json({ data });
 }
@@ -102,8 +103,8 @@ async function listAvailability(req, res, next) {
     const data = await services.listAvailability(reservation_date ? reservation_date : getDate());
     const availability = new Map();
     data.forEach(obj => {
-        const { table_id, available } = obj;
-        availability.set(table_id,  { available });
+        const { table_id, available, reservation_id } = obj;
+        availability.set(table_id,  { available, reservation_id });
     });
     return availability;
 }

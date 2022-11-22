@@ -9,6 +9,7 @@ function TablesTable({ tables }) {
                     <th>Table Name</th>
                     <th>Capacity</th>
                     <th>Available</th>
+                    <th>Res Id</th>
                 </tr>
             </thead>
             <tbody>
