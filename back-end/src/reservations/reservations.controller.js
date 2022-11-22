@@ -66,14 +66,15 @@ function dateValidations(req, res, next) {
 // 9:30 AM 10:30 PM
 function timeValidations(req, res, next) {
   const { data: { reservation_date, reservation_time } } = req.body;
-  const time = new Date(`${reservation_date}T${reservation_time}`);
+  const time = new Date(`${reservation_date} ${reservation_time}`);
+  console.log(time);
   const now = new Date();
   const errors = [];
   if (time.getHours() < 9 || (time.getHours() === 9 && time.getMinutes() < 30)) {
     errors.push("Choose a time after the restaurant opens at 9:30 AM");
   } else if (time.getHours() > 21 || (time.getHours() === 21 && time.getMinutes() > 30)) {
     errors.push("Reservations stop at 9:30 PM. Choose another time");
-  } else if (time.getHours() < now.getHours() || (time.getHours() === now.getHours() && time.getMinutes() < now.getMinutes())) {
+  } else if (reservation_date === now.getDate() && (time.getHours() < now.getHours() || (time.getHours() === now.getHours() && time.getMinutes() < now.getMinutes()))) {
     errors.push("Reservations must be at a future time");
   }
 
