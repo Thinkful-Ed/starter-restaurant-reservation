@@ -47,11 +47,19 @@ function getCapacity(table_id) {
         .first()
 }
 
-function getAvailable(table_id) {
+function getAvailable(table_id, reservation_id) {
     return knex("res_tables as rt")
         .select("rt.available")
         .where("rt.table_id", table_id)
+        .andWhere("rt.reservation_id", reservation_id)
         .first()
+}
+
+function makeAvailable(table_id, reservation_id) {
+    return knex("res_tables")
+        .where({ table_id: table_id })
+        .andWhere({ reservation_id: reservation_id })
+        .update({ available: true })     
 }
 
 /* function res_table_list({ res_table_id }) {
@@ -71,5 +79,6 @@ module.exports = {
     getPeople,
     getCapacity,
     getAvailable,
+    makeAvailable,
     //res_table_list
 }

@@ -3,7 +3,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 const hasOnlyValidProperties = require("../errors/hasOnlyValidProperties");
 const P = require("pino");
-const  resServices = require("../reservations/reservations.services")
+const  resServices = require("../reservations/reservations.services");
 
 
 const VALID_PROPERTIES = ["table_name", "capacity"];
@@ -52,13 +52,26 @@ async function resExists(req, res, next) {
     }
 }
 
+async function resQueryExists(req, res, next) {
+    if (!req.query || !req.query.reservation_id) {
+        next({ status: 400, message: "No reservation_id provided" });
+    }
+    const { reservation_id } = req.query
+    const reservation = await resServices.read(reservation_id);
+    if (reservation) {
+        next()
+    } else if (reservation_id) {
+        next({ status: 404, message: `Reservation ${reservation_id} not found` });
+    }
+}
+
 async function resTableValidations(req, res, next) {
     const errors = [];
     const { reservation_id } = req.body.data;
     const { table_id } = req.params;
     const { people } = await services.getPeople(reservation_id);
     const { capacity } = await services.getCapacity(table_id);
-    const available = await services.getAvailable(table_id);
+    const available = await services.getAvailable(table_id, reservation_id);
     if (people > capacity) {
         errors.push("Table capacity insufficient for party size");
     } 
@@ -69,6 +82,18 @@ async function resTableValidations(req, res, next) {
         next({ status: 400, message: errors.length > 1 ? errors.join("; ") : errors[0] });
     }
     next();
+}
+
+async function isOccupied(req, res, next) {
+    const { reservation_id } = req.query;
+    const { table_id } = req.params;
+    const { available } = await services.getAvailable(table_id, reservation_id)
+    console.log(available);
+    if (available) {
+        next({ status: 400, message: "Table must be occupied" });
+    }
+    next();
+
 }
 
 function getDate() {
@@ -114,9 +139,17 @@ async function read(req, res, next) {
     res.json({ data });
 }
 
+async function makeAvailable(req, res, next) {
+    const { reservation_id } = req.query;
+    const { table_id } = req.params;
+    await services.makeAvailable(table_id, reservation_id);
+    res.sendStatus(204);
+}
+
 module.exports = {
     create: [hasOnlyValidProperties(VALID_PROPERTIES), hasRequiredProperties, nameProperLength, isNonzeroNumber, asyncErrorBoundary(create)],
     list: [asyncErrorBoundary(list)],
     seat: [asyncErrorBoundary(tableExists), asyncErrorBoundary(resExists), asyncErrorBoundary(resTableValidations), asyncErrorBoundary(seat)],
     read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
+    makeAvailable: [asyncErrorBoundary(tableExists), asyncErrorBoundary(resQueryExists), asyncErrorBoundary(isOccupied), asyncErrorBoundary(makeAvailable)],
 }
