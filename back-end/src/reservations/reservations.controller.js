@@ -93,6 +93,15 @@ async function resExists(req, res, next) {
   }
 }
 
+async function createStatusValidation(req, res, next) {
+  const { status } = req.body.data;
+  if (!status || status === "booked") {
+    next();
+  } else {
+    next({status: 400, message: `Reservation status '${status}' is invalid. Status must be 'booked' upon creation`});
+  }
+}
+
 async function statusValidation(req, res, next) {
   const { status } = req.body.data;
   const message = [];
@@ -136,7 +145,7 @@ async function changeStatus(reservation_id, status) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [hasOnlyValidProperties([...VALID_PROPERTIES, "status"]), hasRequiredProperties, isDate, isTime, isNumber, dateValidations, timeValidations, asyncErrorBoundary(create)],
+  create: [hasOnlyValidProperties([...VALID_PROPERTIES, "status"]), hasRequiredProperties, isDate, isTime, isNumber, dateValidations, timeValidations, asyncErrorBoundary(createStatusValidation), asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(resExists), asyncErrorBoundary(read)],
   updateStatus: [asyncErrorBoundary(resExists), asyncErrorBoundary(statusValidation), asyncErrorBoundary(updateStatus)],
 };
