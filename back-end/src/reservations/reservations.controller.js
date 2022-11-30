@@ -125,7 +125,8 @@ async function read(req, res) {
 
 async function updateStatus(req, res) {
   const { status } = req.body.data;
-  const data = await changeStatus(res.locals.reservation.reservation_id, status)
+  const updated = await changeStatus(res.locals.reservation.reservation_id, status);
+  const data = updated[0]
   res.json({ data });
 }
 
