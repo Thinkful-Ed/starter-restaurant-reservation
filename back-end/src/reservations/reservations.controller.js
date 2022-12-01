@@ -108,13 +108,13 @@ async function statusValidation(req, res, next) {
   if (res.locals.reservation.status === "finished") {
     message.push("Cannot update a reservation with 'finished' status");
   }
-  else if (status === "booked" || status === "seated" || status === "finished") {
+  else if (status === "booked" || status  === "seated" || status === "finished") {
     next();
   } else {
     message.push("Provided reservation status unknown");
+  } if (message.length) {
+    next({ status: 400, message: message.join("; ") });
   }
-  next({ status: 400, message: message.join("; ") });
-
 }
 
 async function create(req, res) {
@@ -134,13 +134,13 @@ async function read(req, res) {
 
 async function updateStatus(req, res) {
   const { status } = req.body.data;
-  const updated = await changeStatus(res.locals.reservation.reservation_id, status);
-  const data = updated[0]
+  const data = await changeStatus(res.locals.reservation.reservation_id, status);
   res.json({ data });
 }
 
 async function changeStatus(reservation_id, status) {
-  return await services.updateStatus(reservation_id, status);
+  const data = await services.updateStatus(reservation_id, status);
+  return data[0];
 }
 
 module.exports = {
