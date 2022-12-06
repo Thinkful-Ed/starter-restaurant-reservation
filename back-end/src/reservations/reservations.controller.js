@@ -8,9 +8,7 @@ const reservationsService = require("./reservations.service")
 }
 
 async function create(req, res, next) {
-  reservationsService
-  .create(req.body.data)
-  .then((data) => res.status(201).json({data}))
+  res.status(201).json({ data: await reservationsService.create(req.body.data)})
   .catch(next)
 }
 
