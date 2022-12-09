@@ -67,3 +67,34 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+
+export async function createReservation(reservation, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  const options = {
+    method: "POST",
+    mode: "cors",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  };
+  const response = await fetchJson(url, options, reservation);
+  return response;
+}
+
+/**
+ * Retrieves a reservation.
+ * @returns {Promise<reservation>}
+ */
+export async function readReservation(reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  const options = {
+    method: "GET",
+    mode: "cors",
+    headers,
+    signal,
+  };
+  return await fetchJson(url, options, reservation_id)
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}
