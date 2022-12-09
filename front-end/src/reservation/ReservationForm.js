@@ -14,7 +14,6 @@ function ReservationForm() {
     reservation_date: "",
     reservation_time: "",
     people: 1,
-    status: null,
   };
 
   const [reservation, setReservation] = useState({
