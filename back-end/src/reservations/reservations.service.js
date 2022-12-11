@@ -1,7 +1,7 @@
 const knex = require("../db/connection");
 
 function list() {
-  return knex("reservations").select("*").orderBy("reservation_time");
+  return knex("reservations").select("*").orderBy("reservation_time").returning("*")
 }
 
 function listOnDate(reservation_date) {
@@ -10,6 +10,7 @@ function listOnDate(reservation_date) {
     .where({ reservation_date })
     .orderBy("reservation_time");
 }
+
 
 
 function create(reservation) {

@@ -5,7 +5,7 @@ import { createReservation } from "../utils/api";
 
 function ReservationForm() {
   const history = useHistory();
-//   const { reservation_id } = useParams();
+  //   const { reservation_id } = useParams();
 
   const initalFormState = {
     first_name: "",
@@ -21,12 +21,12 @@ function ReservationForm() {
   });
   const [error, setError] = useState(null);
 
-//   useEffect(() => {
-//     if (reservation_id) {
-//       setError(null);
-//       readReservation(reservation_id).then(setReservation).catch(setError);
-//     }
-//   }, [reservation_id]);
+  //   useEffect(() => {
+  //     if (reservation_id) {
+  //       setError(null);
+  //       readReservation(reservation_id).then(setReservation).catch(setError);
+  //     }
+  //   }, [reservation_id]);
 
   const handleChange = ({ target }) => {
     let { value, name } = target;
@@ -51,6 +51,7 @@ function ReservationForm() {
     setError(null);
     createReservation(reservation, abortController.signal)
       .then(() =>
+        //need to fix this so it actually pushes you to newly made reservation date
         history.push(`/dashboard/?date=${reservation.reservation_date}`)
       )
       .catch((error) => {
