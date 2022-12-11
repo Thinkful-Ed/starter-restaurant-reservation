@@ -6,6 +6,17 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 // async function list(req, res) {
 //   res.json({ data: await reservationsService.list() });
 // }
+const hasProperties = require("../errors/hasProperties");
+
+const hasRequiredProperties = hasProperties(
+  "first_name",
+  "last_name",
+  "mobile_number",
+  "reservation_date",
+  "reservation_time",
+  "people"
+);
+
 async function list(req, res, _next) {
   const { date } = req.query;
   if (date) {
@@ -107,6 +118,7 @@ async function create(req, res, next) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
+    hasRequiredProperties,
     peopleIsValid,
     hasBodyData,
     nameIsValid,
