@@ -52,7 +52,8 @@ function ReservationForm() {
     createReservation(reservation, abortController.signal)
       .then(() =>
         //need to fix this so it actually pushes you to newly made reservation date
-        history.push(`/dashboard/?date=${reservation.reservation_date}`)
+        history.push(`/dashboard?date=${reservation.reservation_date}`)
+        // history.push(`/dashboard/?date=${reservation.reservation_date}`)
       )
       .catch((error) => {
         setError(error);

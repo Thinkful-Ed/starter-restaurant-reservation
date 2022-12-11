@@ -7,8 +7,7 @@ function NewReservation() {
       <h1>Create a Reservation</h1>
       <ReservationForm />
     </main>
-  )
+  );
 }
-  
 
 export default NewReservation;

@@ -26,15 +26,6 @@ function Reservation({ reservations = [] }) {
     </tr>
   );
 
-  const handleNextDay = () => {
-    console.log("next day reservations");
-  };
-  const handleToday = () => {
-    console.log("todays reservations");
-  };
-  const handlePreviousDay = () => {
-    console.log("previous day reservations");
-  };
 
   return (
     <div className="table-responsive">
@@ -52,15 +43,6 @@ function Reservation({ reservations = [] }) {
         </thead>
         <tbody>{rows}</tbody>
       </table>
-      <button type="button" onClick={handleNextDay}>
-        Next
-      </button>
-      <button type="button" onClick={handleToday}>
-        Today
-      </button>
-      <button type="button" onClick={handlePreviousDay}>
-        Previous
-      </button>
     </div>
   );
 }
