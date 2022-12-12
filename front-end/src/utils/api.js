@@ -67,3 +67,17 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+ export async function createReservation(reservation){
+  const abortController = new AbortController()
+  const url = `${API_BASE_URL}/reservations/new`
+  const signal = abortController.signal
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ data: reservation })
+  }
+  await fetchJson(url, options, signal)
+}
