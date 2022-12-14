@@ -5,6 +5,7 @@ const P = require("pino");
 /**
  * List handler for reservation resources
  */
+/// validation middleware
 const VALID_PROPERTIES = [
   "first_name",
   "last_name",
@@ -29,6 +30,7 @@ function validateDate(req, res, next) {
 
 function validateTime(req, res, next ){
   const time = req.body.data.reservation_time;
+  res.locals.time = time
   if (!time.match(/^(\d{1,2}):(\d{2})([ap]m)?$/)){
    return next({
       status:400,
@@ -37,6 +39,17 @@ function validateTime(req, res, next ){
   }
   next();
 };
+
+function timeIsValid(req, res, next ){
+  const time = res.locals.time
+  if(time < "10:30" && time > "21:30"){
+    next({
+      status:400,
+      message:"Invalid time entry"
+    })
+  }
+  next()
+}
 
 function validatePeople(req, res, next){
   const people = req.body.data.people;
@@ -49,6 +62,33 @@ function validatePeople(req, res, next){
   next()
 };
 
+function isNotTuesday(req, res, next){
+  const date = new Date(req.body.data.reservation_date)
+  const day = date.getUTCDay();
+  res.locals.day = day;
+  res.locals.date = date;
+  if (day === 2){
+    next({
+      status:400,
+      message:"closed on tuesedays "
+    });
+  };
+  next();
+};
+// checks to see if the dat is in the past 
+function isNotPast(req, res, next){
+ const date = new Date()
+  const day = res.locals.day;
+    if(day < date){
+      next({
+        status: 400,
+        message: "must be scheduled for a future date"
+      });
+    };
+    next();
+};
+
+/////// crudl operations
 async function list(req, res) {
   console.log(req.params)
   res.json({
@@ -58,8 +98,11 @@ async function list(req, res) {
 
 async function create(req, res,) {
   const data = await service.create(req.body.data);
-  res.status(201).json({ data })
+  res.status(201).json({ data });
 }
+
+
+
 
 module.exports = {
   list,
@@ -68,8 +111,10 @@ module.exports = {
     validateDate,
     validateTime,
     validatePeople,
+    isNotTuesday,
+    isNotPast,
+    timeIsValid,
     asyncErrorBoundary(create),
   ],
-
-
+  
 };
