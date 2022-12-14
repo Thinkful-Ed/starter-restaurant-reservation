@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { createReservation } from "../utils/api";
 
 function ReservationsNew() {
   const initialReservation = {
@@ -14,19 +15,26 @@ function ReservationsNew() {
   const history = useHistory();
 
   const [formData, setFormData] = useState({ ...initialReservation });
+  const [error, setError] = useState(null);
 
   const handleChange = ({ target }) => {
     setFormData({
-      ...setFormData,
+      ...formData,
       [target.name]: target.value,
     });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Submitted:", formData);
-    setFormData({ ...initialReservation });
+    const abortController = new AbortController();
+    createReservation(formData, abortController.signal)
+      .then(() => history.push(`/dashboard/?date=${formData.reservation_date}`))
+      .catch((error) => {
+        setError(error);
+      });
+    return () => abortController.abort();
   };
+
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor="first_name">
@@ -36,7 +44,7 @@ function ReservationsNew() {
           type="text"
           name="first_name"
           onChange={handleChange}
-          value={FormData.first_name}
+          value={formData.first_name}
         />
       </label>
       <br />
