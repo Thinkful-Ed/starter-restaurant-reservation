@@ -48,7 +48,7 @@ function peopleIsValid(req, res, next) {
   next();
 }
 
-// Validate name
+// Validate the name
 function nameIsValid(req, res, next) {
   const { first_name, last_name } = req.body.data;
   const error = { status: 400 };
