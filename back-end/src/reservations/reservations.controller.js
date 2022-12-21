@@ -41,14 +41,15 @@ function checkIfDataExists(request, response, next) {
   }
 }
 
-// function isDate(dateString) {
-//   // Use Date.parse to parse the date string and check if it is a valid date
-//   return !isNaN(Date.parse(dateString));
-// }
+//helper function to check if reservation time is actually a time
 
-// // Example usage:
-// console.log(isDate('2022-12-21'));  // true
-// console.log(isDate('hello world'));  // false
+function isTime(string) {
+  // Define a regular expression that matches a time in the format "hh:mm"
+  const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+  // Test the string against the regular expression
+  return timeRegex.test(string);
+}
 
 function checkDataParameters(request, response, next) {
   const {
@@ -68,7 +69,8 @@ function checkDataParameters(request, response, next) {
     reservation_date &&
     reservation_time &&
     people &&
-    !isNaN(Date.parse(reservation_date))
+    !isNaN(Date.parse(reservation_date)) &&
+    isTime(reservation_time)
   ) {
     next();
   } else {
