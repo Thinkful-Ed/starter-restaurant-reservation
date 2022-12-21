@@ -9,7 +9,8 @@ async function list(req, res) {
   });
 }
 
-function createReservation(request, response) {
+async function createReservation(request, response) {
+  console.log("IN CREATE RESERVATIONS");
   const {
     data: {
       first_name,
@@ -28,11 +29,13 @@ function createReservation(request, response) {
     reservation_time,
     people,
   };
-  const makeNewReservation = service.postReservation(newReservation);
+  const makeNewReservation = await service.postReservation(newReservation);
+  console.log("MAKE NEW RESERVATION", makeNewReservation);
   response.status(201).json({ data: makeNewReservation });
 }
 
 function checkIfDataExists(request, response, next) {
+  // console.log("IN IF DATA EXISTS");
   const data = request.body.data;
   if (data) {
     next();
