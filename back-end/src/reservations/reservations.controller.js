@@ -70,7 +70,8 @@ function checkDataParameters(request, response, next) {
     reservation_time &&
     people &&
     !isNaN(Date.parse(reservation_date)) &&
-    isTime(reservation_time)
+    isTime(reservation_time) &&
+    typeof people === "number"
   ) {
     next();
   } else {
@@ -81,21 +82,6 @@ function checkDataParameters(request, response, next) {
     });
   }
 }
-
-// if (
-//   !data.deliverTo ||
-//   !data.mobileNumber ||
-//   !data.dishes ||
-//   data.dishes.length === 0 ||
-//   !Array.isArray(data.dishes)
-// ) {
-//   response
-//     .status(400)
-//     .json({ error: `deliverTo, mobileNumber, dishes must be valid` });
-// } else {
-//   response.locals.data = data;
-//   next();
-// }
 
 module.exports = {
   list: [checkDataParameters, list],
