@@ -29,7 +29,7 @@ function checkIfDateIsValid(request, response, next) {
     next({
       status: 400,
       message:
-        "Date needs to be in the future, restaurant is closed on Tuesdays",
+        "Date needs to be in the future and/or restaurant is closed on Tuesdays",
     });
   }
 }
