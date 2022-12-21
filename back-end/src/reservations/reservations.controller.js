@@ -3,6 +3,28 @@ const service = require("./reservations.service");
 /**
  * List handler for reservation resources
  */
+
+function isInTheFuture(date) {
+  // Get the current date and time
+  const now = new Date();
+  const reservationDate = new Date(date);
+  // Get the number of milliseconds since the Unix epoch for the current date and the given date
+  const nowTimestamp = now.getTime();
+  const dateTimestamp = reservationDate.getTime();
+  // Compare the timestamps
+  return dateTimestamp > nowTimestamp;
+}
+
+function checkIfDateIsValid(request, response, next) {
+  const { reservation_date } = request.body.data;
+  console.log("testing helper function", isInTheFuture(reservation_date));
+  if (isInTheFuture(reservation_date)) {
+    next();
+  } else {
+    next({ status: 400, message: "Date needs to be in the future" });
+  }
+}
+
 async function listReservationByDate(request, response) {
   const date = request.query.date;
   const reservations = await service.getReservationsByDate(date);
@@ -99,5 +121,10 @@ function checkDataParameters(request, response, next) {
 
 module.exports = {
   list: [listReservationByDate],
-  post: [checkIfDataExists, checkDataParameters, createReservation],
+  post: [
+    checkIfDataExists,
+    checkDataParameters,
+    checkIfDateIsValid,
+    createReservation,
+  ],
 };
