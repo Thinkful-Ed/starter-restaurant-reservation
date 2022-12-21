@@ -5,16 +5,25 @@ const service = require("./reservations.service");
  */
 async function listReservationByDate(request, response) {
   const date = request.query.date;
-  console.log("DATE", date);
   const reservations = await service.getReservationsByDate(date);
-  console.log("RESERVATIONS", reservations);
+  const sortedRservations = reservations.sort((a, b) => {
+    const [ah, am, as] = a.reservation_time.split(":");
+    const [bh, bm, bs] = b.reservation_time.split(":");
+    if (ah !== bh) {
+      return ah - bh;
+    }
+    if (am !== bm) {
+      return am - bm;
+    }
+    return as - bs;
+  });
+
   response.json({
     data: reservations,
   });
 }
 
 async function createReservation(request, response) {
-  console.log("IN CREATE RESERVATIONS");
   const {
     data: {
       first_name,
@@ -34,7 +43,6 @@ async function createReservation(request, response) {
     people,
   };
   const makeNewReservation = await service.postReservation(newReservation);
-  console.log("MAKE NEW RESERVATION", makeNewReservation);
   response.status(201).json({ data: makeNewReservation });
 }
 

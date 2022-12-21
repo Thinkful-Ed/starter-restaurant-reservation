@@ -7,7 +7,6 @@ function postReservation(reservation) {
 }
 
 function getReservationsByDate(date) {
-  console.log("xx", date);
   return knex("reservations").select("*").where({ reservation_date: date });
 }
 
