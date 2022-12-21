@@ -15,13 +15,22 @@ function isInTheFuture(date) {
   return dateTimestamp > nowTimestamp;
 }
 
+function isTuesday(date) {
+  const reservationDate = new Date(date);
+  return reservationDate.getDay() === 2;
+}
+
 function checkIfDateIsValid(request, response, next) {
   const { reservation_date } = request.body.data;
-  console.log("testing helper function", isInTheFuture(reservation_date));
-  if (isInTheFuture(reservation_date)) {
+  console.log("testing helper function", isTuesday(reservation_date));
+  if (isInTheFuture(reservation_date) && !isTuesday(reservation_date)) {
     next();
   } else {
-    next({ status: 400, message: "Date needs to be in the future" });
+    next({
+      status: 400,
+      message:
+        "Date needs to be in the future, restaurant is closed on Tuesdays",
+    });
   }
 }
 
