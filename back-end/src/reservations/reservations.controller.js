@@ -3,9 +3,13 @@ const service = require("./reservations.service");
 /**
  * List handler for reservation resources
  */
-async function list(req, res) {
-  res.json({
-    data: [],
+async function listReservationByDate(request, response) {
+  const date = request.query.date;
+  console.log("DATE", date);
+  const reservations = await service.getReservationsByDate(date);
+  console.log("RESERVATIONS", reservations);
+  response.json({
+    data: reservations,
   });
 }
 
@@ -35,7 +39,6 @@ async function createReservation(request, response) {
 }
 
 function checkIfDataExists(request, response, next) {
-  // console.log("IN IF DATA EXISTS");
   const data = request.body.data;
   if (data) {
     next();
@@ -87,6 +90,6 @@ function checkDataParameters(request, response, next) {
 }
 
 module.exports = {
-  list: [checkDataParameters, list],
+  list: [listReservationByDate],
   post: [checkIfDataExists, checkDataParameters, createReservation],
 };

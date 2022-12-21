@@ -6,4 +6,9 @@ function postReservation(reservation) {
     .then((createdRecords) => createdRecords[0]);
 }
 
-module.exports = { postReservation };
+function getReservationsByDate(date) {
+  console.log("xx", date);
+  return knex("reservations").select("*").where({ reservation_date: date });
+}
+
+module.exports = { postReservation, getReservationsByDate };
