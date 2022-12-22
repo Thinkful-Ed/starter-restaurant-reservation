@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
+import { getDateInt, getTimeInt } from "../utils/timeInt";
 
 function ReservationForm() {
   const history = useHistory();
@@ -20,6 +21,34 @@ function ReservationForm() {
     ...initalFormState,
   });
   const [error, setError] = useState(null);
+
+  function getDateErrors() {
+    const errorsArr = [];
+    const today = new Date();
+    const reservationDate = new Date(
+      `${reservation.reservation_date} ${reservation.reservation_time}`
+    );
+    const timeNowInt = getTimeInt(today);
+    const resTimeInt = getTimeInt(reservationDate);
+    const dateNowInt = getDateInt(today);
+    const resDateInt = getDateInt(reservationDate);
+
+    if (reservationDate.getDay() === 2) {
+      errorsArr.push(
+        "The restaurant is closed on Tuesdays, select a different day of the week"
+      );
+    }
+    if (resDateInt < dateNowInt) {
+      errorsArr.push("Date must be in the future");
+    }
+    if (resTimeInt < 1030 || resTimeInt > 2130) {
+      errorsArr.push("Time must be within business hours (10:30 - 21:30)");
+    }
+    if (dateNowInt === resDateInt && timeNowInt > resTimeInt) {
+      errorsArr.push("Time of reservation has already passed today");
+    }
+    return errorsArr;
+  }
 
   //   useEffect(() => {
   //     if (reservation_id) {
@@ -46,19 +75,23 @@ function ReservationForm() {
 
   function handleSubmit(event) {
     event.preventDefault();
-
+    const errorsArr = getDateErrors();
     const abortController = new AbortController();
     setError(null);
-    createReservation(reservation, abortController.signal)
-      .then(() =>
-        //need to fix this so it actually pushes you to newly made reservation date
-        history.push(`/dashboard?date=${reservation.reservation_date}`)
-        // history.push(`/dashboard/?date=${reservation.reservation_date}`)
-      )
-      .catch((error) => {
-        setError(error);
-      });
-    return () => abortController.abort();
+    if (!errorsArr.length) {
+      createReservation(reservation, abortController.signal)
+        .then(() =>
+          history.push(`/dashboard?date=${reservation.reservation_date}`)
+        )
+        .catch((error) => {
+          setError(error);
+        });
+
+      return () => abortController.abort();
+    } else {
+      const errorMessage = { message: `${errorsArr.join(", ").trim()}` };
+      setError(errorMessage);
+    }
   }
 
   return (

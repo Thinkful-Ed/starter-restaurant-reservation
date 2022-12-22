@@ -25,7 +25,6 @@ async function list(req, res, _next) {
     data = await reservationsService.list();
     return res.json({ data });
   }
-
 }
 
 function hasBodyData(req, res, next) {
@@ -108,6 +107,39 @@ function timeIsValid(req, res, next) {
   }
 }
 
+function dateIsNotTuesday(req, res, next) {
+  const { reservation_date } = req.body.data;
+  const newDate = new Date(reservation_date);
+  const UTCDay = newDate.getUTCDay();
+
+  if (UTCDay === 2) {
+    return next({
+      status: 400,
+      message: `The restaurant is closed on Tuesdays. Please enter a date that is not a Tuesday for your reservation`,
+    });
+  }
+  next();
+}
+
+function dateIsNotInFuture(req, res, next) {
+  const { reservation_date } = req.body.data;
+  const { reservation_time } = req.body.data;
+  const resDate = new Date(`${reservation_date} ${reservation_time} UTC`);
+  const todaysDateUnformatted = new Date();
+  const userTimeZoneOffset = todaysDateUnformatted.getTimezoneOffset() * 60000;
+  const todaysDate = new Date(
+    todaysDateUnformatted.getTime() - userTimeZoneOffset
+  );
+
+  if (resDate - todaysDate > 0) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: `The reservation_date must be in the future`,
+  });
+}
+
 async function create(req, res, next) {
   res
     .status(201)
@@ -118,6 +150,8 @@ async function create(req, res, next) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
+    dateIsNotTuesday,
+    dateIsNotInFuture,
     hasRequiredProperties,
     peopleIsValid,
     hasBodyData,
