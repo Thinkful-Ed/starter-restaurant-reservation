@@ -140,6 +140,32 @@ function dateIsNotInFuture(req, res, next) {
   });
 }
 
+function duringOpenHours(req, res, next) {
+  const { reservation_time } = req.body.data;
+  const hoursString = reservation_time.slice(0, 2);
+  const minutesString = reservation_time.slice(3, 5);
+  const hour = Number(hoursString);
+  const minutes = Number(minutesString);
+
+  if ((hour == 10 && minutes <= 30) || hour < 10) {
+    return next({
+      status: 400,
+      message: `Reservations can only be made between 10:30 AM until 9:30 PM`,
+    });
+  } else if ((hour == 21 && minutes >= 30) || (hour == 22 && minutes < 30)) {
+    return next({
+      status: 400,
+      message: `Reservations can only be made between 10:30 AM until 9:30 PM`,
+    });
+  } else if ((hour == 22 && minutes >= 30) || hour > 22) {
+    return next({
+      status: 400,
+      message: `Reservations can only be made between 10:30 AM until 9:30 PM`,
+    });
+  }
+  next();
+}
+
 async function create(req, res, next) {
   res
     .status(201)
@@ -150,8 +176,6 @@ async function create(req, res, next) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
-    dateIsNotTuesday,
-    dateIsNotInFuture,
     hasRequiredProperties,
     peopleIsValid,
     hasBodyData,
@@ -159,6 +183,9 @@ module.exports = {
     mobileNumberIsValid,
     dateIsValid,
     timeIsValid,
+    dateIsNotTuesday,
+    dateIsNotInFuture,
+    duringOpenHours,
     asyncErrorBoundary(create),
   ],
 };
