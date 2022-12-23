@@ -1,3 +1,6 @@
+
+const pg = require('pg');
+pg.defaults.ssl = process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false;
 const { PORT = 5001 } = process.env;
 
 const app = require("./app");

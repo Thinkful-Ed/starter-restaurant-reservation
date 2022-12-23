@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
+
+// reservation list
+import ReservationList from "./Reservation";
+
 /**
  * Defines the dashboard page.
  * @param date
@@ -28,9 +32,11 @@ function Dashboard({ date }) {
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
+        <ErrorAlert error={reservationsError} />
+        {/* {JSON.stringify(reservations)} */}
+        <ReservationList reservations={reservations} />
       </div>
-      <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      
     </main>
   );
 }
