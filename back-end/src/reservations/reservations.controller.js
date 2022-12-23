@@ -15,6 +15,31 @@ function isInTheFuture(date) {
   return dateTimestamp > nowTimestamp;
 }
 
+function isBetween1030And2130(time) {
+  // Get the hours, minutes, and seconds of the given time
+  const date = new Date(time);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  // Check if the time is between 10:30 and 21:30
+  return (
+    (hours > 10 || (hours === 10 && minutes >= 30)) &&
+    (hours < 21 || (hours === 21 && minutes <= 30))
+  );
+}
+
+function checkIfTimeIsValid(request, response, next) {
+  const { reservation_time } = request.body.data;
+  if (isBetween1030And2130(reservation_time)) {
+    next();
+  } else {
+    next({
+      status: 400,
+      message: "Reservation needs to be between 10:30 and 21:30",
+    });
+  }
+}
+
 function isTuesday(date) {
   const reservationDate = new Date(date);
   return reservationDate.getDay() === 2;
@@ -134,6 +159,7 @@ module.exports = {
     checkIfDataExists,
     checkDataParameters,
     checkIfDateIsValid,
+    checkIfTimeIsValid,
     createReservation,
   ],
 };
