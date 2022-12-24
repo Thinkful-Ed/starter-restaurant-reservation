@@ -16,21 +16,27 @@ function isInTheFuture(date) {
 }
 
 function isBetween1030And2130(time) {
-  // Get the hours, minutes, and seconds of the given time
-  const date = new Date(time);
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-  // Check if the time is between 10:30 and 21:30
-  return (
-    (hours > 10 || (hours === 10 && minutes >= 30)) &&
-    (hours < 21 || (hours === 21 && minutes <= 30))
-  );
+  const [hours, minutes] = time.split(":");
+  const hoursInt = parseInt(hours);
+  const minutesInt = parseInt(minutes);
+
+  if (hoursInt > 10 || (hoursInt === 10 && minutesInt >= 30)) {
+    if (hoursInt < 21 || (hoursInt === 21 && minutesInt <= 30)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function checkIfTimeIsValid(request, response, next) {
   const { reservation_time } = request.body.data;
-  if (isBetween1030And2130(reservation_time)) {
+  const reservationToString = reservation_time.toString();
+  console.log("reservation time", reservationToString);
+  console.log(
+    "testing time helper function",
+    isBetween1030And2130(reservationToString)
+  );
+  if (isBetween1030And2130(reservationToString)) {
     next();
   } else {
     next({
@@ -47,7 +53,6 @@ function isTuesday(date) {
 
 function checkIfDateIsValid(request, response, next) {
   const { reservation_date } = request.body.data;
-  console.log("testing helper function", isTuesday(reservation_date));
   if (isInTheFuture(reservation_date) && !isTuesday(reservation_date)) {
     next();
   } else {

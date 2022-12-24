@@ -1,0 +1,15 @@
+[
+  {
+  "name":"bar #1",
+  "capacity":1
+  },
+  {"name": "bar #2",
+  "capacity":1
+  },
+  {"name": "#1",
+"capacity": 6
+  },
+  {"name": "#2",
+"capacity": 6
+  }
+]
