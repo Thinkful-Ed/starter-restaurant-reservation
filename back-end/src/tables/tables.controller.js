@@ -37,6 +37,60 @@ async function getAllTables(request, response, next) {
   response.json({ data: sortedTable });
 }
 
+function checkIfDataExists(request, response, next) {
+  const data = request.body.data;
+  if (data) {
+    next();
+  } else {
+    next({ status: 400, message: "Data is missing" });
+  }
+}
+
+async function updateTableById(request, response, next) {
+  const { table_id } = request.params;
+  const data = request.body.data;
+  console.log("request body data ", request.body.data);
+  console.log("table_id", table_id);
+  const updatedTable = await service.put(
+    table_id,
+    console.log("inside the put function")
+  );
+  console.log("updatedTable", updatedTable);
+  response.status(200).json({ data: updatedTable });
+}
+
+async function checkIfReservationIdExists(request, response, next) {
+  const { reservation_id } = request.body.data;
+  const reservation = await service.getReservationById(reservation_id);
+
+  if (reservation) {
+    next();
+  } else {
+    next({
+      status: 404,
+      message: `reservation_id ${reservation_id} does not exist`,
+    });
+  }
+}
+
+async function checkTableCapacity(request, response, next) {
+  const { table_id } = request.params;
+  const { reservation_id } = request.body.data;
+
+  console.log("table_id", table_id);
+  console.log("reservation_id", reservation_id);
+  const table = await service.get(table_id);
+  const reservation = await service.getReservationById(reservation_id);
+  if (table.capacity < reservation.people) {
+    next({
+      status: 400,
+      message: `table capacity is too small for reservation`,
+    });
+  } else {
+    next();
+  }
+}
+
 module.exports = {
   post: [
     hasProperties("table_name", "capacity"),
@@ -44,4 +98,11 @@ module.exports = {
     post,
   ],
   get: [getAllTables],
+  put: [
+    checkIfDataExists,
+    hasProperties("reservation_id"),
+    checkIfReservationIdExists,
+    checkTableCapacity,
+    updateTableById,
+  ],
 };
