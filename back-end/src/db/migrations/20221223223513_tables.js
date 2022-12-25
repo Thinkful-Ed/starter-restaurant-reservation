@@ -7,7 +7,7 @@ exports.up = function (knex) {
       .references("reservation_id")
       .inTable("reservations")
       .onDelete("CASCADE");
-    table.string("name");
+    table.string("table_name");
     table.integer("capacity");
     table.timestamps(true, true); //creates the created_at and updated_at columns
   });

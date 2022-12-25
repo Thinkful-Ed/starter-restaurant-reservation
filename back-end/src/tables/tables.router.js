@@ -7,6 +7,6 @@
 const router = require("express").Router();
 const controller = require("./tables.controller");
 
-router.route("/");
+router.route("/").post(controller.post).get(controller.get);
 
 module.exports = router;
