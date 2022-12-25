@@ -3,8 +3,6 @@ const hasProperties = require("../errors/hasProperties");
 
 function checkTableDataParameters(request, response, next) {
   const { table_name, capacity } = request.body.data;
-  console.log("table_name.length", table_name.length);
-  console.log("capacity", capacity);
 
   if (capacity < 1 || table_name.length < 2 || typeof capacity === "string") {
     next({
@@ -33,7 +31,6 @@ async function getAllTables(request, response, next) {
     }
     return 0;
   });
-  console.log(sortedTable, sortedTable.length);
   response.json({ data: sortedTable });
 }
 
@@ -49,14 +46,13 @@ function checkIfDataExists(request, response, next) {
 async function updateTableById(request, response, next) {
   const { table_id } = request.params;
   const { reservation_id } = request.body.data;
-  console.log("request body data ", request.body.data);
   const updatedTable = await service.put(table_id, reservation_id);
-  console.log("updatedTable", updatedTable);
   response.status(200).json({ data: updatedTable });
 }
 
 async function checkIfReservationIdExists(request, response, next) {
   const { reservation_id } = request.body.data;
+
   const reservation = await service.getReservationById(reservation_id);
 
   if (reservation) {
@@ -69,12 +65,25 @@ async function checkIfReservationIdExists(request, response, next) {
   }
 }
 
+async function checkIfTableIdExists(request, response, next) {
+  const { table_id } = request.params;
+
+  const table = await service.get(table_id);
+
+  if (table) {
+    next();
+  } else {
+    next({
+      status: 404,
+      message: `table_id ${table_id} does not exist`,
+    });
+  }
+}
+
 async function checkTableCapacity(request, response, next) {
   const { table_id } = request.params;
   const { reservation_id } = request.body.data;
 
-  console.log("table_id", table_id);
-  console.log("reservation_id", reservation_id);
   const table = await service.get(table_id);
   const reservation = await service.getReservationById(reservation_id);
   if (table.capacity < reservation.people) {
@@ -100,6 +109,25 @@ async function checkIfTableIsOccupied(request, response, next) {
   }
 }
 
+async function checkIfTableIsNotOccupied(request, response, next) {
+  const { table_id } = request.params;
+  const table = await service.get(table_id);
+  if (!table.reservation_id) {
+    next({
+      status: 400,
+      message: `table is not occupied`,
+    });
+  } else {
+    next();
+  }
+}
+
+async function deleteReservationId(request, response, next) {
+  const { table_id } = request.params;
+  const deletedTable = await service.delete(table_id);
+  response.status(200).json({ data: deletedTable });
+}
+
 module.exports = {
   post: [
     hasProperties("table_name", "capacity"),
@@ -114,5 +142,10 @@ module.exports = {
     checkTableCapacity,
     checkIfTableIsOccupied,
     updateTableById,
+  ],
+  delete: [
+    checkIfTableIdExists,
+    checkIfTableIsNotOccupied,
+    deleteReservationId,
   ],
 };

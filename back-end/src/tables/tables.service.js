@@ -25,9 +25,13 @@ function updateTableById(tableid, reservation_id) {
     });
 }
 
-// knex('users')
-//   .where({ id: 2 })
-//   .update({ name: 'Homer' })
+function deleteReservationId(tableid) {
+  return knex("tables")
+    .select("*")
+    .where({ table_id: tableid })
+    .update({ reservation_id: null }, "*")
+    .then((updatedRecords) => updatedRecords[0]);
+}
 
 function getReservationById(reservationId) {
   return knex("reservations")
@@ -42,4 +46,5 @@ module.exports = {
   getAll: getAllTables,
   put: updateTableById,
   getReservationById,
+  delete: deleteReservationId,
 };
