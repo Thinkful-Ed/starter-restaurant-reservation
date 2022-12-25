@@ -23,7 +23,18 @@ async function post(request, response, next) {
 
 async function getAllTables(request, response, next) {
   const data = await service.getAll();
-  response.json({ data });
+  const copy = data.slice();
+  const sortedTable = copy.sort(function (a, b) {
+    if (a.table_name < b.table_name) {
+      return -1;
+    }
+    if (a.table_name > b.table_name) {
+      return 1;
+    }
+    return 0;
+  });
+  console.log(sortedTable, sortedTable.length);
+  response.json({ data: sortedTable });
 }
 
 module.exports = {

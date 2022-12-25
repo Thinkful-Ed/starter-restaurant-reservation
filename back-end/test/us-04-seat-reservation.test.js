@@ -148,7 +148,7 @@ describe("US-04 - Seat reservation", () => {
     });
 
     describe("GET /tables", () => {
-      test.only("returns all tables sorted by table name", async () => {
+      test("returns all tables sorted by table name", async () => {
         const response = await request(app)
           .get("/tables")
           .set("Accept", "application/json");
