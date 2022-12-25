@@ -158,6 +158,14 @@ function checkDataParameters(request, response, next) {
   }
 }
 
+async function getReservationById(request, response, next) {
+  const { reservation_id } = request.params;
+
+  const reservation = await service.getReservationById(reservation_id);
+
+  response.status(200).json({ data: reservation });
+}
+
 module.exports = {
   list: [listReservationByDate],
   post: [
@@ -167,4 +175,5 @@ module.exports = {
     checkIfTimeIsValid,
     createReservation,
   ],
+  get: [getReservationById],
 };
