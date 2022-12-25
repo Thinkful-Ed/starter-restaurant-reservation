@@ -158,6 +158,20 @@ function checkDataParameters(request, response, next) {
   }
 }
 
+async function checkIfReservationIdExists(request, response, next) {
+  const { reservation_id } = request.params;
+  const reservation = await service.getReservationById(reservation_id);
+
+  if (reservation) {
+    next();
+  } else {
+    next({
+      status: 404,
+      message: `reservation_id ${reservation_id} does not exist`,
+    });
+  }
+}
+
 async function getReservationById(request, response, next) {
   const { reservation_id } = request.params;
 
@@ -175,5 +189,5 @@ module.exports = {
     checkIfTimeIsValid,
     createReservation,
   ],
-  get: [getReservationById],
+  get: [checkIfReservationIdExists, getReservationById],
 };
