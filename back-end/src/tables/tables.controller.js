@@ -48,13 +48,9 @@ function checkIfDataExists(request, response, next) {
 
 async function updateTableById(request, response, next) {
   const { table_id } = request.params;
-  const data = request.body.data;
+  const { reservation_id } = request.body.data;
   console.log("request body data ", request.body.data);
-  console.log("table_id", table_id);
-  const updatedTable = await service.put(
-    table_id,
-    console.log("inside the put function")
-  );
+  const updatedTable = await service.put(table_id, reservation_id);
   console.log("updatedTable", updatedTable);
   response.status(200).json({ data: updatedTable });
 }
@@ -91,6 +87,19 @@ async function checkTableCapacity(request, response, next) {
   }
 }
 
+async function checkIfTableIsOccupied(request, response, next) {
+  const { table_id } = request.params;
+  const table = await service.get(table_id);
+  if (table.reservation_id) {
+    next({
+      status: 400,
+      message: `table is occupied`,
+    });
+  } else {
+    next();
+  }
+}
+
 module.exports = {
   post: [
     hasProperties("table_name", "capacity"),
@@ -103,6 +112,7 @@ module.exports = {
     hasProperties("reservation_id"),
     checkIfReservationIdExists,
     checkTableCapacity,
+    checkIfTableIsOccupied,
     updateTableById,
   ],
 };

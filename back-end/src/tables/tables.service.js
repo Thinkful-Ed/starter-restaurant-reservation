@@ -14,13 +14,15 @@ function getAllTables() {
   return knex("tables").select("*");
 }
 
-function updateTableById(tableid) {
-  return knex("tables").select("*").where({ table_id: tableid });
-  // .update(tables, "*")
-  // .then((updatedRecords) => updatedRecords[0])
-  // .catch((error) => {
-  //   console.error(error);
-  // });
+function updateTableById(tableid, reservation_id) {
+  return knex("tables")
+    .select("*")
+    .where({ table_id: tableid })
+    .update({ reservation_id }, "*")
+    .then((updatedRecords) => updatedRecords[0])
+    .catch((error) => {
+      console.error(error);
+    });
 }
 
 // knex('users')
