@@ -40,7 +40,8 @@ function create(req, res){
 }
 
 module.exports = {
-  list,create: asyncErrorBoundary(create), 
+  list,
+  create: asyncErrorBoundary(create), 
   read: [asyncErrorBoundary(reservationExists), read],
     reservationExists:[asyncErrorBoundary(reservationExists)],
 };
