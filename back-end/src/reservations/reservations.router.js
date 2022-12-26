@@ -6,6 +6,7 @@
 
 const router = require("express").Router({mergeParams:true});
 const controller = require("./reservations.controller");
+const cors = require("cors");
 const methodNotAllowed = require("../errors/methodNotAllowed");
 //Use CORS
 router.use(cors());
