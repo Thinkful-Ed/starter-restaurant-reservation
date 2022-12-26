@@ -31,11 +31,7 @@ function isBetween1030And2130(time) {
 function checkIfTimeIsValid(request, response, next) {
   const { reservation_time } = request.body.data;
   const reservationToString = reservation_time.toString();
-  console.log("reservation time", reservationToString);
-  console.log(
-    "testing time helper function",
-    isBetween1030And2130(reservationToString)
-  );
+
   if (isBetween1030And2130(reservationToString)) {
     next();
   } else {
@@ -180,6 +176,35 @@ async function getReservationById(request, response, next) {
   response.status(200).json({ data: reservation });
 }
 
+async function checkReservationStatus(request, response, next) {
+  const data = request.body.data;
+  const reservation_id = data.reservation_id;
+  const status = data.status;
+
+  if (status === "seated" || status === "finished") {
+    next({
+      status: 400,
+      message: `Reservation is already ${status}`,
+    });
+  } else {
+    next();
+  }
+}
+
+async function checkStatusUnknownFinished(request, response, next) {
+  const data = request.body.data;
+  const status = data.status;
+
+  if (status === "unknown" || status === "finished") {
+    next({
+      status: 400,
+      message: `Reservation is already ${status}`,
+    });
+  } else {
+    next();
+  }
+}
+
 module.exports = {
   list: [listReservationByDate],
   post: [
@@ -187,7 +212,9 @@ module.exports = {
     checkDataParameters,
     checkIfDateIsValid,
     checkIfTimeIsValid,
+    checkReservationStatus,
     createReservation,
   ],
   get: [checkIfReservationIdExists, getReservationById],
+  put: [checkStatusUnknownFinished, checkIfReservationIdExists],
 };

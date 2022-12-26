@@ -17,4 +17,16 @@ function getReservationById(reservationId) {
     .first();
 }
 
-module.exports = { postReservation, getReservationsByDate, getReservationById };
+function updateReservationStatus(reservationId, statusUpdate) {
+  return knex("reservations")
+    .where({ reservation_id: reservationId })
+    .update({ status: statusUpdate }, "*")
+    .then((updatedRecords) => updatedRecords[0]);
+}
+
+module.exports = {
+  postReservation,
+  getReservationsByDate,
+  getReservationById,
+  updateReservationStatus,
+};
