@@ -239,7 +239,7 @@ describe("US-06 - Reservation status", () => {
     });
   });
 
-  describe("GET /reservations/date=XXXX-XX-XX", () => {
+  describe.only("GET /reservations/date=XXXX-XX-XX", () => {
     let reservationOne;
     let tableOne;
 

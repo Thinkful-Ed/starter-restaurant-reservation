@@ -80,6 +80,15 @@ async function listReservationByDate(request, response) {
   });
 }
 
+async function getReservationsByDate(request, response) {
+  const date = request.params.date;
+  console.log("INSIDE GETTING RESERVATION BY DATE");
+  const reservations = await service.getReservationsByDate(date);
+  response.json({
+    data: reservations,
+  });
+}
+
 async function createReservation(request, response) {
   const {
     data: {
@@ -254,4 +263,5 @@ module.exports = {
     checkCurrentStatusFinished,
     updateReservationStatus,
   ],
+  getReservationsByDate,
 };
