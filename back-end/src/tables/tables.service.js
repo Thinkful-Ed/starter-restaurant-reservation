@@ -40,6 +40,22 @@ function getReservationById(reservationId) {
     .first();
 }
 
+function seatTable(reservationId) {
+  return knex("reservations")
+    .select("*")
+    .where({ reservation_id: reservationId })
+    .update({ status: "seated" }, "*")
+    .then((updatedRecords) => updatedRecords[0]);
+}
+
+async function finishTable(reservationId) {
+  return knex("reservations")
+    .select("*")
+    .where({ reservation_id: reservationId })
+    .update({ status: "finished" }, "*")
+    .then((updatedRecords) => updatedRecords[0]);
+}
+
 module.exports = {
   post: postTables,
   get: getTableById,
@@ -47,4 +63,6 @@ module.exports = {
   put: updateTableById,
   getReservationById,
   delete: deleteReservationId,
+  seatTable,
+  finishTable,
 };

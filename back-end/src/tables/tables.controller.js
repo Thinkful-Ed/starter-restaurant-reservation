@@ -47,7 +47,21 @@ async function updateTableById(request, response, next) {
   const { table_id } = request.params;
   const { reservation_id } = request.body.data;
   const updatedTable = await service.put(table_id, reservation_id);
+  const updatedReservation = await service.seatTable(reservation_id);
   response.status(200).json({ data: updatedTable });
+}
+
+async function checkCurrentStatus(request, response, next) {
+  const { reservation_id } = request.body.data;
+  const reservation = await service.getReservationById(reservation_id);
+  if (reservation.status === "seated") {
+    next({
+      status: 400,
+      message: `reservation is already seated`,
+    });
+  } else {
+    next();
+  }
 }
 
 async function checkIfReservationIdExists(request, response, next) {
@@ -112,6 +126,7 @@ async function checkIfTableIsOccupied(request, response, next) {
 async function checkIfTableIsNotOccupied(request, response, next) {
   const { table_id } = request.params;
   const table = await service.get(table_id);
+  response.locals.table = table;
   if (!table.reservation_id) {
     next({
       status: 400,
@@ -124,7 +139,11 @@ async function checkIfTableIsNotOccupied(request, response, next) {
 
 async function deleteReservationId(request, response, next) {
   const { table_id } = request.params;
+  console.log("response locals", response.locals.table);
   const deletedTable = await service.delete(table_id);
+  const finishTable = await service.finishTable(
+    response.locals.table.reservation_id
+  );
   response.status(200).json({ data: deletedTable });
 }
 
@@ -141,6 +160,7 @@ module.exports = {
     checkIfReservationIdExists,
     checkTableCapacity,
     checkIfTableIsOccupied,
+    checkCurrentStatus,
     updateTableById,
   ],
   delete: [
