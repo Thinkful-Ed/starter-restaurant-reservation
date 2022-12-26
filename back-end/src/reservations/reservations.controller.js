@@ -191,11 +191,33 @@ async function checkReservationStatus(request, response, next) {
   }
 }
 
-async function checkStatusUnknownFinished(request, response, next) {
+async function checkCurrentStatusFinished(request, response, next) {
+  const { reservation_id } = request.params;
+
+  // Retrieve the current status of the reservation from the database
+  const reservation = await service.getReservationById(reservation_id);
+  const currentStatus = reservation.status;
+
+  if (currentStatus === "finished" || currentStatus === "unknown") {
+    // Return a 400 status code and an error message indicating that the reservation is already finished
+    next({
+      status: 400,
+      message: `Reservation is already ${currentStatus} and cannot be updated`,
+    });
+  } else {
+    // Allow the update to proceed
+    next();
+  }
+}
+
+async function checkIfStatusIsUnknown(request, response, next) {
+  const { reservation_id } = request.params;
+  const reservation = await service.getReservationById(reservation_id);
+  const currentStatus = reservation.status;
   const data = request.body.data;
   const status = data.status;
 
-  if (status === "unknown" || status === "finished") {
+  if (status === "unknown" || currentStatus === "unknown") {
     next({
       status: 400,
       message: `Reservation is already ${status}`,
@@ -203,6 +225,16 @@ async function checkStatusUnknownFinished(request, response, next) {
   } else {
     next();
   }
+}
+
+async function updateReservationStatus(request, response, next) {
+  const { reservation_id } = request.params;
+  const { data: { status } = {} } = request.body;
+  const updatedReservation = await service.updateReservationStatus(
+    reservation_id,
+    status
+  );
+  response.status(200).json({ data: updatedReservation });
 }
 
 module.exports = {
@@ -216,5 +248,10 @@ module.exports = {
     createReservation,
   ],
   get: [checkIfReservationIdExists, getReservationById],
-  put: [checkStatusUnknownFinished, checkIfReservationIdExists],
+  put: [
+    checkIfReservationIdExists,
+    checkIfStatusIsUnknown,
+    checkCurrentStatusFinished,
+    updateReservationStatus,
+  ],
 };

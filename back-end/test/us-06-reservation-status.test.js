@@ -107,7 +107,7 @@ describe("US-06 - Reservation status", () => {
       expect(response.status).toBe(400);
     });
 
-    test.only("returns 400 if status is currently finished (a finished reservation cannot be updated)", async () => {
+    test("returns 400 if status is currently finished (a finished reservation cannot be updated)", async () => {
       expect(reservationOne).not.toBeUndefined();
 
       reservationOne.status = "finished";
