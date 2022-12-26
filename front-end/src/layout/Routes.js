@@ -3,9 +3,9 @@ import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
-import { today } from "../utils/date-time";
 
-import ReservationsList from "../reservations/ReservationsList";
+
+// import ReservationsList from "../reservations/ReservationsList";
 import Search from "../search/Search";
 import Tables from "../tables/Tables";
 import CreateReservation from "../reservations/CreateReservation";
@@ -26,8 +26,8 @@ function Routes() {
         <Redirect to={"/dashboard"} />
       </Route>
       <Route exact={true} path="/reservations">
-
-        <ReservationsList />
+      <Redirect to={"/dashboard"} />
+        {/* <ReservationsList /> */}
       </Route>
       <Route exact={true} path="/reservations/:reservationId/edit">
         <UpdateReservation />
@@ -37,7 +37,8 @@ function Routes() {
 
       </Route>
       <Route path="/dashboard">
-        <Dashboard date={today()} />
+        {/* <Dashboard date={today()} /> */}
+        <Dashboard />
       </Route>
       <Route path="/search">
         <Search />

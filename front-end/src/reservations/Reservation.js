@@ -4,16 +4,16 @@ import {Link, useRouteMatch} from "react-router-dom";
 function Reservation({reservation, handleReservationDelete}){
   const {url} = useRouteMatch();
     return(
-        <div className="reservation" key={reservation.id}>
+        <div className="reservation mb-4" key={reservation.reservation_id}>
       <div className="reservation-body">
         
-        <p className="reservation-text"><span className="font-weight-bold">First Name: </span> {reservation.firstName}</p>
-        <p className="reservation-text"><span className="font-weight-bold">Last Name: </span> {reservation.lastName}</p>
-        <p className="reservation-text"><span className="font-weight-bold">Phone: </span> {reservation.phone}</p>
-        <p className="reservation-text"><span className="font-weight-bold">Date: </span> {reservation.date}</p>
-        <p className="reservation-text"><span className="font-weight-bold">Time: </span> {reservation.time}</p>
-        <p className="reservation-text"><span className="font-weight-bold"># in Party: </span> {reservation.party}</p>
-        <Link to={`${url}/reservations/${reservation.id}/edit`} className="mt-2 mr-2">
+        <p className="reservation-text"><span className="font-weight-bold">First Name: </span> {reservation.first_name}</p>
+        <p className="reservation-text"><span className="font-weight-bold">Last Name: </span> {reservation.last_name}</p>
+        <p className="reservation-text"><span className="font-weight-bold">Phone: </span> {reservation.mobile_number}</p>
+        <p className="reservation-text"><span className="font-weight-bold">Date: </span> {reservation.reservation_date}</p>
+        <p className="reservation-text"><span className="font-weight-bold">Time: </span> {reservation.reservation_time}</p>
+        <p className="reservation-text"><span className="font-weight-bold"># in Party: </span> {reservation.people}</p>
+        <Link to={`${url}/reservations/${reservation.reservation_id}/edit`} className="mt-2 mr-2">
           <button className="btn btn-secondary">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +30,7 @@ function Reservation({reservation, handleReservationDelete}){
           </button>
         </Link>
         
-        <button className="btn btn-danger float-right" onClick={()=>handleReservationDelete(reservation.id)}>
+        <button className="btn btn-danger float-right" onClick={()=>handleReservationDelete(reservation.reservation_id)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
