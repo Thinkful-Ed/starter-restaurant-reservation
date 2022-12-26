@@ -7,9 +7,10 @@ const service = require("../reservations/reservations.services");
 //List reservations based on is showing
 async function list(req, res,next){
   const {date} = req.query;
+  console.log(date);
   //add date to list reservations on specific day
   if(date){
-       const data = await service.reservationsByDate();
+       const data = await service.reservationsByDate(date);
        res.json({data});
   }else{
    const data = await service.list();

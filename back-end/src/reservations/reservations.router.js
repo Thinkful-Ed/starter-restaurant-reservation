@@ -6,10 +6,10 @@
 
 const router = require("express").Router({mergeParams:true});
 const controller = require("./reservations.controller");
-const cors = require("cors");
+//const cors = require("cors");
 const methodNotAllowed = require("../errors/methodNotAllowed");
 //Use CORS
-router.use(cors());
+//router.use(cors());
 
 router.route("/").get(controller.list).all(methodNotAllowed);
 router.route("/:reservationId").get(controller.read).all(methodNotAllowed);
