@@ -1,5 +1,7 @@
-import React from "react";
+import React, {useState, useEffect}  from "react";
+import { listReservations } from "../utils/api";
 
+import ReservationsList from "./ReservationsList";
 /**
  * Defines the reservation page.
  * @param date
@@ -7,6 +9,16 @@ import React from "react";
  * @returns {JSX.Element}
  */
 function Reservations() {
+ 
+    const [reservations, setReservations] = useState([]);
+
+    useEffect(() => {
+      const abortController = new AbortController();
+  
+      listReservations( abortController.signal).then((data) => { setReservations(data); setReservations(data.reservations); });
+  
+      return () => abortController.abort();
+    }, []);
   
   
 
@@ -15,6 +27,7 @@ function Reservations() {
       <h1>Reservations</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
+        <ReservationsList reservations={reservations} />
       </div>
     </main>
   );
