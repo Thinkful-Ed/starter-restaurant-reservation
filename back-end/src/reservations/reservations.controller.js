@@ -33,7 +33,7 @@ async function reservationExists(req, res,next){
 function bodyHas(propertyName){
   return function(req,res,next){
       const {data = {}} = req.body;
-      if(data[propertyName] && data[propertyName] !== ""){
+      if(data[propertyName]){
           return next();
       }
       next({
