@@ -64,10 +64,31 @@ function checkIfDateIsValid(request, response, next) {
   }
 }
 
-async function listReservationByDate(request, response) {
-  const date = request.query.date;
+async function listReservationsByQuery(request, response, next) {
+  console.log(request.query);
+  console.log("INSIDE LIST RESERVATIONS FUNCTION");
+
+  const { date, mobile_number } = request.query;
+  if (date) {
+    const reservations = await listReservationByDate(date);
+    response.json({ data: reservations });
+  }
+  if (mobile_number) {
+    let reservations = await service.getAllReservationsByMobileNumber(
+      mobile_number
+    );
+    if (reservations === undefined) {
+      reservations = [];
+    }
+    console.log("reservations ------", reservations);
+    response.json({ data: reservations });
+  }
+}
+
+async function listReservationByDate(date) {
   const reservations = await service.getReservationsByDate(date);
-  const sortedRservations = reservations.sort((a, b) => {
+
+  const sortedReservations = reservations.sort((a, b) => {
     const [ah, am, as] = a.reservation_time.split(":");
     const [bh, bm, bs] = b.reservation_time.split(":");
     if (ah !== bh) {
@@ -79,9 +100,14 @@ async function listReservationByDate(request, response) {
     return as - bs;
   });
 
-  response.json({
-    data: reservations,
+  const filteredReservations = [];
+  reservations.forEach((reservation) => {
+    if (reservation.status !== "finished") {
+      filteredReservations.push(reservation);
+    }
   });
+
+  return filteredReservations;
 }
 
 async function createReservation(request, response) {
@@ -242,7 +268,7 @@ async function updateReservationStatus(request, response, next) {
 }
 
 module.exports = {
-  list: [listReservationByDate],
+  list: [listReservationsByQuery],
   post: [
     checkIfDataExists,
     checkDataParameters,

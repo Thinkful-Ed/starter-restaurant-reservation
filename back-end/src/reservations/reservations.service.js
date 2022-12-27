@@ -1,5 +1,18 @@
 const knex = require("../db/connection");
 
+function getAllReservationsByMobileNumber(mobileNumber) {
+  return knex("reservations")
+    .select("*")
+    .where("mobile_number", "like", `%${mobileNumber}%`)
+    .orderBy("reservations.reservation_date");
+}
+
+function getAllReservations() {
+  return knex("reservations")
+    .select("*")
+    .orderBy("reservations.reservation_date");
+}
+
 function postReservation(reservation) {
   return knex("reservations")
     .insert(reservation, "*")
@@ -7,7 +20,10 @@ function postReservation(reservation) {
 }
 
 function getReservationsByDate(date) {
-  return knex("reservations").select("*").where({ reservation_date: date });
+  return knex("reservations")
+    .select("*")
+    .where({ reservation_date: date })
+    .orderBy("reservations.reservation_date");
 }
 
 function getReservationById(reservationId) {
@@ -29,4 +45,5 @@ module.exports = {
   getReservationsByDate,
   getReservationById,
   updateReservationStatus,
+  getAllReservationsByMobileNumber,
 };
