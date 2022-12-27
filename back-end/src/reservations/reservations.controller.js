@@ -51,7 +51,7 @@ res.json({data});
 }
 
 //Create reservations
-function create (req, res){
+async function create (req, res){
   const {data: {first_name, last_name, reservation_date, reservation_time, mobile_number, people}={}} = req.body;
   const newReservation = {
       first_name, 
@@ -61,7 +61,7 @@ function create (req, res){
       mobile_number, 
       people
   };
-  orders.push(newReservation);
+  await service.create(newReservation);
   res.status(201).json({data: newReservation});
 };
 
