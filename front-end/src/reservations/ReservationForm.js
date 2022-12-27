@@ -51,7 +51,6 @@ const history = useHistory();
                     id="reservation_date"
                     placeholder="Reservation Date"
                     type="date"
-                    pattern="\d{4}-\d{2}-\d{2}"
                     onChange={handleReservationChange}
                     value={reservationFormData.reservation_date} required/>
                     </td></tr>
