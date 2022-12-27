@@ -1,52 +1,67 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "../reservations/ReservationsList";
 import {next, previous, today} from "../utils/date-time";
+import useQuery from "../utils/useQuery";
+import { Link, useHistory } from "react-router-dom";
+import { listReservations } from "../utils/api";
+// import LoadTables from "../Comps/LoadTables";
+// import { Col, Row, Container, Button } from "react-bootstrap";
+// import Table from "react-bootstrap/Table";
+// import "./Dashboard.css";
+
 /**
  * Defines the dashboard page.
  * @param date
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard() {
+function Dashboard({date}) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-const [date, setDate] = useState(today());
-// const queryString = window.location.search;
-// const urlParams = new URLSearchParams(queryString);
-// const rDate = urlParams.get('rDate');
-//    if(rDate){
-//     setDate(rDate)
-//    } 
 
-  useEffect(loadDashboard, [date]);
+const history = useHistory();
+const [tables, setTables] = useState([]);
+
+const newDate = useQuery().get("date") ?? date;
+
+// async function cancelRes(reservationId) {
+//   if (window.confirm("Do you want to cancel this reservation?")) {
+//   try {
+//   await cancelReservation(reservationId);
+//   history.go();
+//   } catch (error) {
+//   setReservationsError(error);
+//   }
+//   }
+//   }
+  useEffect(loadDashboard, [newDate]);
 
   function loadDashboard() {
     const abortController = new AbortController();
-    
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      .catch(setReservationsError);
+    listReservations({ date: newDate }, abortController.signal)
+    .then(setReservations)
+    .catch(setReservationsError);
     return () => abortController.abort();
-  }
+    }
 
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-3">Reservations for date : {date}</h4>
+        <h4 className="mb-3">Reservations for date : {newDate}</h4>
       </div>
-       <div className="d-md-flex mb-3"> <button className="btn btn-primary mr-2" onClick={()=>setDate(previous(date))}>
+       <div className="d-md-flex mb-3"> <Link to={`/dashboard?date=${previous(newDate)}`}><button className="btn btn-primary mr-2">
           Previous Day
-        </button>
-        <button className="btn btn-success mr-2" onClick={()=>setDate(today())}>
+        </button></Link>
+        <Link to={`/dashboard?date=${today(date)}`}><button className="btn btn-success mr-2">
           Today
-        </button>
-        <button className="btn btn-secondary mr-2" onClick={()=>setDate(next(date))}>
+        </button></Link>
+        <Link to={`/dashboard?date=${next(newDate)}`}>
+        <button className="btn btn-secondary mr-2">
           Next Day
-        </button>
+        </button></Link>
         </div>
       
       <ErrorAlert error={reservationsError} />
