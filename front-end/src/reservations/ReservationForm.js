@@ -11,10 +11,10 @@ const history = useHistory();
           <tbody>
           <tr><th>Add/Edit a Reservation</th></tr>
           <tr><td>
-            <label className="p-3" htmlFor="reservationId">Reservation ID</label>
-            <input name="reservationId"
-                    id="reservationId"
-                    placeholder="ReservationId"
+            <label className="p-3" htmlFor="id">Reservation ID</label>
+            <input name="id"
+                    id="id"
+                    placeholder="Reservation Id"
                     onChange={handleReservationChange}
                     value={reservationFormData.reservationId} required readOnly/>
                     </td></tr>
@@ -43,11 +43,11 @@ const history = useHistory();
                     placeholder="phone"
                     type="text"
                     onChange={handleReservationChange}
-                    value={reservationFormData.last_name} required/>
+                    value={reservationFormData.phone} required/>
                     </td></tr>
                     <tr><td>
             <label className="pr-3" htmlFor="reservation_date">Date of Reservation</label>
-            <input name="reservation_reservation_date"
+            <input name="reservation_date"
                     id="reservation_date"
                     placeholder="Reservation Date"
                     type="date"
@@ -59,7 +59,7 @@ const history = useHistory();
             <input name="reservation_time"
                     id="reservation_time"
                     placeholder="Reservation Time"
-                    type="reservation_time"
+                    type="time"
                     onChange={handleReservationChange}
                     value={reservationFormData.reservation_time} required/>
                     </td></tr>

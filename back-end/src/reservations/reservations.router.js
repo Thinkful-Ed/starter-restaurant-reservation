@@ -12,11 +12,10 @@ const methodNotAllowed = require("../errors/methodNotAllowed");
 //router.use(cors());
 
 router.route("/").get(controller.list).all(methodNotAllowed);
-router.route("/:reservationId").get(controller.read).all(methodNotAllowed);
-//update with post once I create them
-//router.route("/:reservationId").get(controller.read).post(controller.update).all(methodNotAllowed);
+//router.route("/:reservationId").get(controller.read).all(methodNotAllowed);
+router.route("/:reservationId").get(controller.read).put(controller.update).all(methodNotAllowed);
 
-//update with post once I create them
-//router.route("/new").post(controller.create);
+
+router.route("/new").post(controller.create).all(methodNotAllowed);
 
 module.exports = router;
