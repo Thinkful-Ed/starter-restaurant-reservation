@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-
+import { readReservation, updateReservation } from "../utils/api";
 import {useHistory, useParams, Link} from "react-router-dom";
 import ReservationForm from "./ReservationForm";
 
@@ -22,21 +22,7 @@ function UpdateReservation (){
       useEffect(() => {
         const abortController = new AbortController();
     
-        // readReservation(reservationId, abortController.signal).then((data)=>{setReservation(data);});
-    
-        return () => abortController.abort();
-      }, []);
-
-      useEffect(() => {
-        const abortController = new AbortController();
-    
-        // readReservation(reservationId, abortController.signal).then((data)=>{setReservation(data); setReservationFormData({
-          
-        //   id: `${data.id}`,
-        //   front:`${data.front}`, 
-        //   back:`${data.back}`, 
-        //   reservationId: `${data.reservationId}`
-        // })});
+        readReservation(reservationId, abortController.signal).then((data)=>{setReservation(data);});
     
         return () => abortController.abort();
       }, []);
@@ -54,7 +40,7 @@ function UpdateReservation (){
           
               const abortController = new AbortController();
           
-            //   updateReservation(reservation, abortController.signal);
+             updateReservation(reservation, abortController.signal);
           
               history.push("/");
         }

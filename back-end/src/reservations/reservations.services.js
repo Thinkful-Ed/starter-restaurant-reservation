@@ -12,7 +12,7 @@ function reservationsByDate(date) {
   .from("reservations as r")
   .where("r.reservation_date", "=", date);
 }
-//Knex query to read reseration based on reservation id provided
+//Knex query to read reservation based on reservation id provided
 function read(reservation_id){
     return knex
     .select("*")
@@ -21,7 +21,23 @@ function read(reservation_id){
     .first();
 
 }
+//Knex query to create reservation 
+function create(reservation) {
+    return knex("reservations")
+      .insert(reservation)
+      .returning("*")
+      .then((createdReservation) => createdReservation[0]);
+  }
+
+//Knex query to update a specific reservation
+function update(updatedReservation){
+    return knex("reservations")
+    .select("*")
+    .where({review_id: updatedReservation.reservation_id})
+    .update(updatedReservation, ["*"])
+    .then((data)=> data[0]);
+}
 
 module.exports = {
-    list, reservationsByDate, read
+    list, reservationsByDate, create, read, update
 }
