@@ -52,7 +52,7 @@ res.json({data});
 
 //Create reservations
 async function create (req, res){
-  const {first_name, last_name, reservation_date, reservation_time, mobile_number, people} = req.body.data;
+  const {first_name, last_name, reservation_date, reservation_time, mobile_number, people} = req.body;
   const newReservation = {
       first_name, 
       last_name, 
@@ -67,7 +67,7 @@ async function create (req, res){
 
 //Update existing reservation 
 async function update(req, res) {
-  const updatedReservation = { ...res.locals.reservation, ...req.body.data };
+  const updatedReservation = { ...res.locals.reservation, ...req.body };
   const data = await service.update(updatedReservation);  
   res.status(201).json({ data });
   }

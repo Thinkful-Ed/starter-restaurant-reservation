@@ -33,7 +33,7 @@ function ReservationsList({reservations}) {
        
         const result = window.confirm("Create this reservation?");
         if (result) {
-
+          console.log("Inside list res:", reservation)
             const abortController = new AbortController();
 
             createReservation(reservation, abortController.signal);
