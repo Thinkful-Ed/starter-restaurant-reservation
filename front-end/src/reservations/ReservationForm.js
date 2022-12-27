@@ -6,23 +6,24 @@ function ReservationForm ({reservationFormData, handleReservationChange, handleR
 const history = useHistory();
     return (
 
-        <form name="createReservation" onSubmit={handleReservationSubmit}>
+        <form name="Reservations" onSubmit={handleReservationSubmit}>
           <table className="table table-bordered"> 
           <tbody>
           <tr><th>Add/Edit a Reservation</th></tr>
           <tr><td>
-            <label className="p-3" htmlFor="id">Reservation ID</label>
-            <input name="id"
-                    id="id"
+            <label className="p-3" htmlFor="ireservation_id">Reservation ID</label>
+            <input name="reservation_id"
+                    id="reservation_id"
+                    type="number"
                     placeholder="Reservation Id"
                     onChange={handleReservationChange}
-                    value={reservationFormData.reservationId} required readOnly/>
+                    value={reservationFormData.reservation_id} required readOnly/>
                     </td></tr>
             <tr><td>
             <label className="p-3" htmlFor="first_name">First Name</label>
             <input name="first_name"
                     id="first_name"
-                    placeholder="first_name"
+                    placeholder="First Name"
                     type="text"
                     onChange={handleReservationChange}
                     value={reservationFormData.first_name} required/>
@@ -31,19 +32,19 @@ const history = useHistory();
             <label className="pr-3" htmlFor="last_name">Last Name</label>
             <input name="last_name"
                     id="last_name"
-                    placeholder="last_name"
+                    placeholder="Last Name"
                     type="text"
                     onChange={handleReservationChange}
                     value={reservationFormData.last_name} required/>
                     </td></tr>
                     <tr><td>
-            <label className="pr-3" htmlFor="phone">Phone</label>
-            <input name="phone"
-                    id="phone"
-                    placeholder="phone"
+            <label className="pr-3" htmlFor="mobile_number">Mobile Number</label>
+            <input name="mobile_number"
+                    id="mobile_number"
+                    placeholder="Mobile Number"
                     type="text"
                     onChange={handleReservationChange}
-                    value={reservationFormData.phone} required/>
+                    value={reservationFormData.mobile_number} required/>
                     </td></tr>
                     <tr><td>
             <label className="pr-3" htmlFor="reservation_date">Date of Reservation</label>

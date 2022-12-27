@@ -52,7 +52,7 @@ res.json({data});
 
 //Create reservations
 async function create (req, res){
-  const {data: {first_name, last_name, reservation_date, reservation_time, mobile_number, people}={}} = req.body;
+  const {first_name, last_name, reservation_date, reservation_time, mobile_number, people} = req.body.data;
   const newReservation = {
       first_name, 
       last_name, 
@@ -65,16 +65,11 @@ async function create (req, res){
   res.status(201).json({data: newReservation});
 };
 
-//Update existing reservation and requery reservation to return updated data
+//Update existing reservation 
 async function update(req, res) {
   const updatedReservation = { ...res.locals.reservation, ...req.body.data };
-  await service.update(updatedReservation);
-  const reservationToReturn = await service.read(
-  res.locals.reservation.reservation_id
-  );
- 
-  
-  res.json({ data: reservationToReturn });
+  const data = await service.update(updatedReservation);  
+  res.status(201).json({ data });
   }
 module.exports = {
   list,

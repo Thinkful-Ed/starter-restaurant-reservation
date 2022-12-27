@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from "react";
-import {useParams, useHistory, Link} from "react-router-dom";
+import React, {useState} from "react";
+import { useHistory} from "react-router-dom";
 import { createReservation,  } from "../utils/api";
 import ReservationForm from "./ReservationForm";
 
@@ -20,7 +20,7 @@ const history = useHistory();
 
 
     const initialReservationFormData = {
-        id: ``,
+        
         first_name:``, 
         last_name:``,
         mobile_number:``, 
@@ -38,12 +38,12 @@ const history = useHistory();
       const handleReservationSubmit = (event)=>{
         event.preventDefault();
         handleReservationCreate(reservationFormData);
-        setReservationFormData({...initialReservationFormData});
+        //setReservationFormData({...initialReservationFormData});
       };
     return (
         <div className="pt-3">
           
-        <ReservationForm handleReservationChange={handleReservationChange} handleReservationSubmit={handleReservationSubmit} handleReservationCreate={handleReservationCreate} reservationFormData={reservationFormData} />
+        <ReservationForm handleReservationChange={handleReservationChange} handleReservationSubmit={handleReservationSubmit} reservationFormData={reservationFormData} handleReservationCreate={handleReservationCreate} />
         </div>
     )
 }

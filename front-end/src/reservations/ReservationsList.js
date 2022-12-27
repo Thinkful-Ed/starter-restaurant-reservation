@@ -29,18 +29,18 @@ function ReservationsList({reservations}) {
         }
     };
 
-    // const handleReservationCreate = async (reservation) => {
+    const handleReservationCreate = async (reservation) => {
        
-    //     const result = window.confirm("Create this reservation?");
-    //     if (result) {
+        const result = window.confirm("Create this reservation?");
+        if (result) {
 
-    //         const abortController = new AbortController();
+            const abortController = new AbortController();
 
-    //         createReservation(reservation, abortController.signal);
+            createReservation(reservation, abortController.signal);
 
-    //         history.push("/dashboard");
-    //     }
-    // };
+            history.push("/dashboard");
+        }
+    };
 
     const list = reservations.map((reservation) => {
         return <Reservation key={reservation.reservation_id} reservation={reservation} handleReservationDelete={handleReservationDelete} />
@@ -52,7 +52,7 @@ function ReservationsList({reservations}) {
      
       <div className="d-md-flex mb-3">      
         <div className="reservation-deck ptr-3 pt-3">{list}</div>
-        <Route path={`${url}/reservations/new`}><CreateReservation /></Route>
+        <Route path={`${url}/reservations/new`}><CreateReservation handleReservationCreate={handleReservationCreate} /></Route>
         <Route path={`${url}/reservations/:reservationId/edit`}><UpdateReservation /></Route>
       </div>
     </main>
