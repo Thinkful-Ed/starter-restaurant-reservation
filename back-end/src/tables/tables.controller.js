@@ -1,5 +1,6 @@
 const service = require("./tables.service");
 const hasProperties = require("../errors/hasProperties");
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 function checkTableDataParameters(request, response, next) {
   const { table_name, capacity } = request.body.data;

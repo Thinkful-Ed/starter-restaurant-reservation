@@ -276,25 +276,25 @@ async function updateReservation(request, response, next) {
 }
 
 module.exports = {
-  list: [listReservationsByQuery],
+  list: [asyncErrorBoundary(listReservationsByQuery)],
   post: [
     checkIfDataExists,
     checkDataParameters,
     checkIfDateIsValid,
     checkIfTimeIsValid,
     checkReservationStatus,
-    createReservation,
+    asyncErrorBoundary(createReservation),
   ],
-  get: [checkIfReservationIdExists, getReservationById],
+  get: [checkIfReservationIdExists, asyncErrorBoundary(getReservationById)],
   put: [
     checkIfReservationIdExists,
-    checkIfStatusIsUnknown,
-    checkCurrentStatusFinished,
-    updateReservationStatus,
+    asyncErrorBoundary(checkIfStatusIsUnknown),
+    asyncErrorBoundary(checkCurrentStatusFinished),
+    asyncErrorBoundary(updateReservationStatus),
   ],
   updateReservation: [
     checkIfReservationIdExists,
     checkDataParameters,
-    updateReservation,
+    asyncErrorBoundary(updateReservation),
   ],
 };
