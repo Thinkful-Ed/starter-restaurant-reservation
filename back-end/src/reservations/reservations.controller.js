@@ -53,13 +53,14 @@ res.json({data});
 function dateIsValid(req, res, next){
   const {reservation_date} = req.body;
   const today = new Date();
-  if(reservation_date >= today){
-    return next();
+  if(reservation_date < today){
+    next({
+      status: 400, 
+      message: `Reservation must include a valid future date`
+  });
   }
-  next({
-    status: 400, 
-    message: `Reservation must include a valid future date`
-});
+  
+return next();
 };
 
 //Create reservations
