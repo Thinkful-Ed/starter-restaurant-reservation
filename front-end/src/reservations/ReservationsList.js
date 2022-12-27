@@ -2,6 +2,7 @@ import React from "react";
 import CreateReservation from "./CreateReservation";
 import UpdateReservation from "./UpdateReservation";
 import Reservation from "./Reservation";
+import { createReservation } from "../utils/api";
 
 import { Route, useHistory,  useRouteMatch } from "react-router-dom";
 
@@ -33,9 +34,9 @@ function ReservationsList({reservations}) {
         const result = window.confirm("Create this reservation?");
         if (result) {
 
-            //const abortController = new AbortController();
+            const abortController = new AbortController();
 
-            //createReservation(reservation, abortController.signal);
+            createReservation(reservation, abortController.signal);
 
             history.push("/dashboard");
         }
