@@ -7,7 +7,9 @@ const service = require("./reservations.service");
 function isInTheFuture(date) {
   // Get the current date and time
   const now = new Date();
+
   const reservationDate = new Date(date);
+
   // Get the number of milliseconds since the Unix epoch for the current date and the given date
   const nowTimestamp = now.getTime();
   const dateTimestamp = reservationDate.getTime();
@@ -44,11 +46,13 @@ function checkIfTimeIsValid(request, response, next) {
 
 function isTuesday(date) {
   const reservationDate = new Date(date);
-  return reservationDate.getDay() === 2;
+
+  return reservationDate.getUTCDay() === 2;
 }
 
 function checkIfDateIsValid(request, response, next) {
   const { reservation_date } = request.body.data;
+
   if (isInTheFuture(reservation_date) && !isTuesday(reservation_date)) {
     next();
   } else {
