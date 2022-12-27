@@ -13,12 +13,18 @@ function Dashboard() {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 const [date, setDate] = useState(today());
-
+// const queryString = window.location.search;
+// const urlParams = new URLSearchParams(queryString);
+// const rDate = urlParams.get('rDate');
+//    if(rDate){
+//     setDate(rDate)
+//    } 
 
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
     const abortController = new AbortController();
+    
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
@@ -31,17 +37,18 @@ const [date, setDate] = useState(today());
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-3">Reservations for date : {date}</h4>
-       <div className="mb-3"> <button className="btn btn-primary" onClick={()=>setDate(previous(date))}>
+      </div>
+       <div className="d-md-flex mb-3"> <button className="btn btn-primary mr-2" onClick={()=>setDate(previous(date))}>
           Previous Day
         </button>
-        <button className="btn btn-success" onClick={()=>setDate(today())}>
+        <button className="btn btn-success mr-2" onClick={()=>setDate(today())}>
           Today
         </button>
-        <button className="btn btn-secondary" onClick={()=>setDate(next(date))}>
+        <button className="btn btn-secondary mr-2" onClick={()=>setDate(next(date))}>
           Next Day
         </button>
         </div>
-      </div>
+      
       <ErrorAlert error={reservationsError} />
       {/* {JSON.stringify(reservations)} */}
       <ReservationsList reservations={reservations} />

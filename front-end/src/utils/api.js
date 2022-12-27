@@ -80,7 +80,6 @@ export async function listReservations(params, signal) {
  */
 export async function createReservation(reservation, signal) {
   const url = `${API_BASE_URL}/reservations`;
-  console.log("Inside api call:", reservation)
   const options = {
     method: "POST",
     headers,

@@ -14,7 +14,7 @@ const history = useHistory();
 
         createReservation(reservation, abortController.signal);
         
-        history.push("/");
+        history.push(`/dashboard?rdate=${reservation.reservation_date}`);
     }
 };
 
