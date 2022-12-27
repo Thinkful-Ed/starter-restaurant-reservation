@@ -3,7 +3,6 @@ import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "../reservations/ReservationsList";
 import {next, previous, today} from "../utils/date-time";
-
 /**
  * Defines the dashboard page.
  * @param date
@@ -14,6 +13,7 @@ function Dashboard() {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 const [date, setDate] = useState(today());
+
 
   useEffect(loadDashboard, [date]);
 
@@ -30,7 +30,7 @@ const [date, setDate] = useState(today());
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-3">Reservations for date</h4>
+        <h4 className="mb-3">Reservations for date : {date}</h4>
        <div className="mb-3"> <button className="btn btn-primary" onClick={()=>setDate(previous(date))}>
           Previous Day
         </button>

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { readReservation, updateReservation } from "../utils/api";
 import {useHistory, useParams} from "react-router-dom";
 import ReservationForm from "./ReservationForm";
+import formatReservationDate from "../utils/format-reservation-date";
 
 function UpdateReservation (){
   const {reservationId} = useParams();
@@ -22,7 +23,10 @@ function UpdateReservation (){
       useEffect(() => {
         const abortController = new AbortController();
     
-        readReservation(reservationId, abortController.signal).then((data)=>{setReservationFormData(data);});
+        readReservation(reservationId, abortController.signal).then((data)=>{
+          const updatedData = formatReservationDate(data);
+          
+          setReservationFormData(updatedData);});
     
         return () => abortController.abort();
       }, [reservationId]);

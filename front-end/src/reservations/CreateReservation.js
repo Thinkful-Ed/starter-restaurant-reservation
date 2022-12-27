@@ -9,7 +9,7 @@ const history = useHistory();
   const handleReservationCreate = async (reservation) => {
     const result = window.confirm("Create this reservation?");
     if (result) {
-console.log("Inside create res:", reservation)
+
         const abortController = new AbortController();
 
         createReservation(reservation, abortController.signal);
@@ -37,7 +37,7 @@ console.log("Inside create res:", reservation)
       };
       const handleReservationSubmit = (event)=>{
         event.preventDefault();
-        console.log("Inside submit:", event)
+        
         handleReservationCreate(reservationFormData);
         //setReservationFormData({...initialReservationFormData});
       };
