@@ -79,22 +79,10 @@ async function update(req, res) {
 module.exports = {
   list,
   create:[
-  // bodyHas("first_name"), 
-  // bodyHas("last_name"), 
-  // bodyHas("reservation_date"),
-  // bodyHas("reservation_time"),
-  // bodyHas("mobile_number"),
-  // bodyHas("people"),
   asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), read],
   reservationExists:[asyncErrorBoundary(reservationExists)],
   update:[
-  // bodyHas("first_name"), 
-  // bodyHas("last_name"), 
-  // bodyHas("reservation_date"),
-  // bodyHas("reservation_time"),
-  // bodyHas("mobile_number"),
-  // bodyHas("people"),
   asyncErrorBoundary(reservationExists), 
   asyncErrorBoundary(update)],
 };
