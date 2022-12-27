@@ -49,6 +49,18 @@ const {reservationId} = req.params;
 const data = await service.read(reservationId);
 res.json({data});
 }
+//Check for a valid future date
+function dateIsValid(req, res, next){
+  const {reservation_date} = req.body;
+  const today = new Date();
+  if(reservation_date >= today){
+    return next();
+  }
+  next({
+    status: 400, 
+    message: `Reservation must include a valid future date`
+});
+};
 
 //Create reservations
 async function create (req, res){
@@ -73,7 +85,7 @@ async function update(req, res) {
   }
 module.exports = {
   list,
-  create:[
+  create:[ dateIsValid,
   asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), read],
   reservationExists:[asyncErrorBoundary(reservationExists)],
