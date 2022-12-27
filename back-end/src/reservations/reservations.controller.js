@@ -1,4 +1,5 @@
 const service = require("./reservations.service");
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 /**
  * List handler for reservation resources
@@ -65,9 +66,6 @@ function checkIfDateIsValid(request, response, next) {
 }
 
 async function listReservationsByQuery(request, response, next) {
-  console.log(request.query);
-  console.log("INSIDE LIST RESERVATIONS FUNCTION");
-
   const { date, mobile_number } = request.query;
   if (date) {
     const reservations = await listReservationByDate(date);
@@ -80,7 +78,7 @@ async function listReservationsByQuery(request, response, next) {
     if (reservations === undefined) {
       reservations = [];
     }
-    console.log("reservations ------", reservations);
+
     response.json({ data: reservations });
   }
 }
@@ -267,6 +265,16 @@ async function updateReservationStatus(request, response, next) {
   response.status(200).json({ data: updatedReservation });
 }
 
+async function updateReservation(request, response, next) {
+  const { reservation_id } = request.params;
+  const data = request.body.data;
+  const updatedReservation = await service.updateReservation(
+    reservation_id,
+    data
+  );
+  response.status(200).json({ data: updatedReservation[0] });
+}
+
 module.exports = {
   list: [listReservationsByQuery],
   post: [
@@ -283,5 +291,10 @@ module.exports = {
     checkIfStatusIsUnknown,
     checkCurrentStatusFinished,
     updateReservationStatus,
+  ],
+  updateReservation: [
+    checkIfReservationIdExists,
+    checkDataParameters,
+    updateReservation,
   ],
 };

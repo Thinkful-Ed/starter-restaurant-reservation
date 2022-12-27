@@ -139,7 +139,7 @@ async function checkIfTableIsNotOccupied(request, response, next) {
 
 async function deleteReservationId(request, response, next) {
   const { table_id } = request.params;
-  console.log("response locals", response.locals.table);
+
   const deletedTable = await service.delete(table_id);
   const finishTable = await service.finishTable(
     response.locals.table.reservation_id

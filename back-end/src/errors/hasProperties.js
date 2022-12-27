@@ -13,7 +13,6 @@ function hasProperties(...properties) {
       properties.forEach((property) => {
         const value = data[property];
         if (!value) {
-          console.log("value", value);
           const error = new Error(`A '${property}' property is required.`);
           error.status = 400;
           throw error;

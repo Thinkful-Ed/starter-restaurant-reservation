@@ -7,16 +7,16 @@ function getAllReservationsByMobileNumber(mobileNumber) {
     .orderBy("reservations.reservation_date");
 }
 
-function getAllReservations() {
-  return knex("reservations")
-    .select("*")
-    .orderBy("reservations.reservation_date");
-}
-
 function postReservation(reservation) {
   return knex("reservations")
     .insert(reservation, "*")
     .then((createdRecords) => createdRecords[0]);
+}
+
+function updateReservation(reservationId, reservation) {
+  return knex("reservations")
+    .where({ reservation_id: reservationId })
+    .update(reservation, "*");
 }
 
 function getReservationsByDate(date) {
@@ -46,4 +46,5 @@ module.exports = {
   getReservationById,
   updateReservationStatus,
   getAllReservationsByMobileNumber,
+  updateReservation,
 };
