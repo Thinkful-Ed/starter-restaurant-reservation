@@ -46,14 +46,15 @@ const [reservationsError, setReservationsError] = useState(null);
       
 
         const abortController = new AbortController();
-
-         createReservation(reservation, abortController.signal)
-        .catch(setReservationsError);
-        console.log(reservationsError)
-        // if(reservationsError===null){
-        //   history.push(`/dashboard?date=${reservation.reservation_date}`);
-        // }
-        
+try{
+  const newReservation = await createReservation(reservation, abortController.signal);
+  history.push(`/dashboard?date=${newReservation.reservation_date}`);
+}
+   catch(error){
+    if (error){
+      setReservationsError(error)
+    }
+   }          
     
   //} 
   return () => abortController.abort();
