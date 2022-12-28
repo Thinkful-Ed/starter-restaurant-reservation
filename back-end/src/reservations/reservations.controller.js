@@ -53,6 +53,9 @@ res.json({data});
 //Check for a valid future date
 function dateIsFuture(req, res, next){
   const {reservation_date} = req.body;
+  const reformat = reservation_date.split('-');
+    const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
+    const d = new Date(reformDate);
   const today = new Date();
   if(reservation_date < today){
     next({
