@@ -4,13 +4,14 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("../reservations/reservations.services");
 
-//List reservations based on is showing
+//List reservations based on date
 async function list(req, res,next){
   const {date} = req.query;
-  console.log(date);
+  
   //add date to list reservations on specific day
   if(date){
        const data = await service.reservationsByDate(date);
+       //const sorted = data.sort((a, b)=> a.reservation_time - b.reservation_time);
        res.json({data});
   }else{
    const data = await service.list();
@@ -26,14 +27,14 @@ async function reservationExists(req, res,next){
       res.locals.reservation = reservation;
       return next();
   }
-  return next({status: 404, message: `Reservation does not exist`})
+  return next({status: 404, message: `Reservation id ${reservationId} does not exist`})
 
 }
 //Check to see if the property provided exists in the data
 function bodyHas(propertyName){
   return function(req,res,next){
       const {data = {}} = req.body;
-      if(data[propertyName]){
+      if(data[propertyName] && data[propertyName] !== ""){
           return next();
       }
       next({
@@ -43,6 +44,18 @@ function bodyHas(propertyName){
   };
   };
   
+  //Check to see if people is valid
+function peopleIsValid(req, res,next){
+  const {people} = req.body;
+if(people %1 !== 0 || people === 0){
+  next({
+    status: 400, 
+    message: `Reservation must include 1 or more people`
+});
+}
+return next();
+};
+
 //Read reservation based on reservation id provided
 async function read(req, res, next){
 const {reservationId} = req.params;
@@ -68,6 +81,51 @@ function dateIsFuture(req, res, next){
   
 return next();
 };
+//Combined check if date is valid
+ function hasValidDate(req, res,next){
+  const {data = {}} = req.body;
+  const date = data["reservation_date"];
+  const time = data["reservation_time"];
+  const formattedDate = new Date(`${date}T${time}`);
+  const day = new Date(date).getUTCDay();
+  if(isNaN(Date.parse(data["reservation_date"]))){
+    return next({
+      status: 400, 
+      message: `Invalid reservation_date`,
+    });
+  }
+  if(day === 2){
+    return next({
+      status: 400, 
+      message: `Restaurant is closed on Tuesdays`,
+    });
+  }
+  if(formattedDate <= new Date()){
+    return next({
+      status: 400, 
+      message: `Reservation must be in the future`,
+    });
+  }
+  next();
+ }
+//Check if date is valid
+function validDate(req, res, next){
+  const {reservation_date} = req.body;
+  const reformat = reservation_date.split('-');
+    const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
+    const d = new Date(reformDate);
+    const valid = Object.prototype.toString.call(d) === "[object Date]";
+    console.log(valid);
+  if(valid){
+    next({
+      status: 400, 
+      message: `reservation_date is not a date`
+  });
+  }
+  
+return next();
+};
+
 //Check to see if date is a Tuesday
 function dateNotTuesday(req, res,next){
   const {reservation_date} = req.body;
@@ -83,6 +141,20 @@ if(day === 2){
 }
 return next();
 };
+//Check to see if time is valid
+function validTime(req, res,next){
+  const {reservation_time} = req.body;
+  regexp = /^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$/;
+
+if(regexp.test(reservation_time)){
+  next({
+    status: 400, 
+    message: `Reservation time not valid`
+});
+}
+return next();
+};
+
 //Check to see if time during open hours
 function timeDuringOpenHours(req, res,next){
   const {reservation_time} = req.body;
@@ -96,6 +168,7 @@ if(reservation_time < open || reservation_time > close){
 }
 return next();
 };
+
 //Check to see if time before now
 function timeBeforeNow(req, res,next){
   const {reservation_time, reservation_date} = req.body;
@@ -134,11 +207,19 @@ async function update(req, res) {
   const data = await service.update(updatedReservation);  
   res.status(201).json({ data });
   }
+
 module.exports = {
   list,
   create:[ 
-    dateIsFuture, 
-    dateNotTuesday,
+    bodyHas("first_name"),
+    bodyHas("last_name"),
+    bodyHas("mobile_number"),
+    bodyHas("reservation_date"), 
+    bodyHas("reservation_time"), 
+    bodyHas("people"), 
+    hasValidDate,
+    peopleIsValid,
+    validTime,
     timeDuringOpenHours, 
     timeBeforeNow,
     asyncErrorBoundary(create)],
@@ -148,8 +229,14 @@ module.exports = {
   reservationExists:[
     asyncErrorBoundary(reservationExists)],
   update:[
-    dateIsFuture, 
-    dateNotTuesday, 
+    bodyHas("first_name"),
+    bodyHas("last_name"),
+    bodyHas("mobile_number"),
+    bodyHas("reservation_date"), 
+    bodyHas("reservation_time"), 
+    bodyHas("people"), 
+    hasValidDate, 
+    peopleIsValid,
     timeDuringOpenHours, 
     timeBeforeNow,
     asyncErrorBoundary(reservationExists), 
