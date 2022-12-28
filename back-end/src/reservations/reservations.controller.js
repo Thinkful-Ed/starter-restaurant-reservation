@@ -227,7 +227,7 @@ return next();
 
 //Create reservations
 async function create (req, res){
-  const {first_name, last_name, reservation_date, reservation_time, mobile_number, people} = req.body;
+  const {data:{first_name, last_name, reservation_date, reservation_time, mobile_number, people} ={}} = req.body;
   const newReservation = {
       first_name, 
       last_name, 
