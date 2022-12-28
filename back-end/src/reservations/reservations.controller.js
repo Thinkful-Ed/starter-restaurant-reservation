@@ -45,15 +45,15 @@ function bodyHas(propertyName){
   };
   
   //Check to see if people is valid
-function peopleIsValid(req, res,next){
-  const {people} = req.body;
-if(people %1 !== 0 || people === 0){
-  next({
+function hasValidPeople(req, res,next){
+  const {data = {}} = req.body;
+  if (data["people"] === 0 || !Number.isInteger(data["people"])) {
+    return next({
     status: 400, 
     message: `Reservation must include 1 or more people`
 });
 }
-return next();
+next();
 };
 
 //Read reservation based on reservation id provided
@@ -108,6 +108,45 @@ return next();
   }
   next();
  }
+
+
+//Combined check if date is valid
+function hasValidTime(req, res,next){
+  const {data = {}} = req.body;
+  const date = data["reservation_date"];
+  const time = data["reservation_time"];
+  const formattedDate = new Date(`${date}T${time}`);
+  const open = "10:30:00";
+  const close = "21:30:00";
+  const reformat = date.split('-');
+  const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
+  const d = new Date(reformDate);
+const today = new Date();
+const now = d.toLocaleTimeString();
+
+  if(isNaN(Date.parse(data["reservation_time"]))){
+    return next({
+      status: 400, 
+      message: `reservation_time is not a time`,
+    });
+  }
+if(reservation_time < open || reservation_time > close){
+   return next({
+    status: 400, 
+    message: `Reservation time must be after 10:30am and before 9:30pm`
+});
+}
+if(formattedDate == today && reservation_time < now){
+  return next({
+    status: 400, 
+    message: `Reservation time must not occur in the past`
+});
+}
+   next();
+ }
+
+
+
 //Check if date is valid
 function validDate(req, res, next){
   const {reservation_date} = req.body;
@@ -216,12 +255,10 @@ module.exports = {
     bodyHas("mobile_number"),
     bodyHas("reservation_date"), 
     bodyHas("reservation_time"), 
-    bodyHas("people"), 
+    hasValidPeople,
     hasValidDate,
-    peopleIsValid,
-    validTime,
-    timeDuringOpenHours, 
-    timeBeforeNow,
+    hasValidTime, 
+    
     asyncErrorBoundary(create)],
   read:[
     asyncErrorBoundary(reservationExists), 
@@ -234,11 +271,10 @@ module.exports = {
     bodyHas("mobile_number"),
     bodyHas("reservation_date"), 
     bodyHas("reservation_time"), 
-    bodyHas("people"), 
-    hasValidDate, 
-    peopleIsValid,
-    timeDuringOpenHours, 
-    timeBeforeNow,
+    hasValidPeople,
+    hasValidDate,
+    hasValidTime,  
+        
     asyncErrorBoundary(reservationExists), 
     asyncErrorBoundary(update)],
 };
