@@ -66,7 +66,7 @@ function dateIsFuture(req, res, next){
   
 return next();
 };
-//check to see if date is a Tuesday
+//Check to see if date is a Tuesday
 function dateNotTuesday(req, res,next){
   const {reservation_date} = req.body;
   const reformat = reservation_date.split('-');
@@ -77,6 +77,35 @@ if(day === 2){
   next({
     status: 400, 
     message: `We are closed on Tuesday`
+});
+}
+return next();
+};
+//Check to see if time during open hours
+function timeDuringOpenHours(req, res,next){
+  const {reservation_time} = req.body;
+  const open = "10:30:00";
+  const close = "21:30:00";
+if(reservation_time < open || reservation_time > close){
+  next({
+    status: 400, 
+    message: `Reservation time must be after 10:30am and before 9:30pm`
+});
+}
+return next();
+};
+//Check to see if time before now
+function timeBeforeNow(req, res,next){
+  const {reservation_time, reservation_date} = req.body;
+  const reformat = reservation_date.split('-');
+    const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
+    const d = new Date(reformDate);
+  const today = new Date();
+  const now = d.toLocaleTimeString();
+if(d == today && reservation_time < now){
+  next({
+    status: 400, 
+    message: `Reservation time must not occur in the past`
 });
 }
 return next();
@@ -105,12 +134,22 @@ async function update(req, res) {
   }
 module.exports = {
   list,
-  create:[ dateIsFuture, dateNotTuesday,
-  asyncErrorBoundary(create)],
-  read: [asyncErrorBoundary(reservationExists), read],
-  reservationExists:[asyncErrorBoundary(reservationExists)],
+  create:[ 
+    dateIsFuture, 
+    dateNotTuesday,
+    timeDuringOpenHours, 
+    timeBeforeNow,
+    asyncErrorBoundary(create)],
+  read:[
+    asyncErrorBoundary(reservationExists), 
+    read],
+  reservationExists:[
+    asyncErrorBoundary(reservationExists)],
   update:[
-    dateIsFuture, dateNotTuesday,
-  asyncErrorBoundary(reservationExists), 
-  asyncErrorBoundary(update)],
+    dateIsFuture, 
+    dateNotTuesday, 
+    timeDuringOpenHours, 
+    timeBeforeNow,
+    asyncErrorBoundary(reservationExists), 
+    asyncErrorBoundary(update)],
 };
