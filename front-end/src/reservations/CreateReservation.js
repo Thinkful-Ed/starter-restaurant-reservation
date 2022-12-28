@@ -42,20 +42,21 @@ const [reservationsError, setReservationsError] = useState(null);
       //validateNotTuesday(reservationFormData);
       //console.log(formErrors)
       //if(formErrors.length === 0){
-      const result = window.confirm("Create this reservation?");
-      if (result) {
+      //const result = window.confirm("Create this reservation?");
+      
 
         const abortController = new AbortController();
 
          createReservation(reservation, abortController.signal)
         .catch(setReservationsError);
-        if(reservationsError == null){
-          history.push(`/dashboard?date=${reservation.reservation_date}`);
-        }
+        console.log(reservationsError)
+        // if(reservationsError===null){
+        //   history.push(`/dashboard?date=${reservation.reservation_date}`);
+        // }
         
-    }
-  //} 
     
+  //} 
+  return () => abortController.abort();
 };
 
     const initialReservationFormData = {
