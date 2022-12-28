@@ -57,7 +57,7 @@ function dateIsFuture(req, res, next){
     const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
     const d = new Date(reformDate);
   const today = new Date();
-  if(reservation_date < today){
+  if(d < today){
     next({
       status: 400, 
       message: `Reservation must include a valid future date`
