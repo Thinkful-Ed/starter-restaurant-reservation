@@ -49,8 +49,9 @@ const {reservationId} = req.params;
 const data = await service.read(reservationId);
 res.json({data});
 }
+
 //Check for a valid future date
-function dateIsValid(req, res, next){
+function dateIsFuture(req, res, next){
   const {reservation_date} = req.body;
   const today = new Date();
   if(reservation_date < today){
@@ -60,6 +61,21 @@ function dateIsValid(req, res, next){
   });
   }
   
+return next();
+};
+//check to see if date is a Tuesday
+function dateNotTuesday(req, res,next){
+  const {reservation_date} = req.body;
+  const reformat = reservation_date.split('-');
+  const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
+  const d = new Date(reformDate);
+  let day = d.getDay();
+if(day === 2){
+  next({
+    status: 400, 
+    message: `We are closed on Tuesday`
+});
+}
 return next();
 };
 
@@ -86,11 +102,12 @@ async function update(req, res) {
   }
 module.exports = {
   list,
-  create:[ dateIsValid,
+  create:[ dateIsFuture, dateNotTuesday,
   asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), read],
   reservationExists:[asyncErrorBoundary(reservationExists)],
   update:[
+    dateIsFuture, dateNotTuesday,
   asyncErrorBoundary(reservationExists), 
   asyncErrorBoundary(update)],
 };
