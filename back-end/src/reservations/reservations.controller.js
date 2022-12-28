@@ -258,7 +258,6 @@ module.exports = {
     hasValidPeople,
     hasValidDate,
     hasValidTime, 
-    
     asyncErrorBoundary(create)],
   read:[
     asyncErrorBoundary(reservationExists), 
@@ -274,7 +273,6 @@ module.exports = {
     hasValidPeople,
     hasValidDate,
     hasValidTime,  
-        
     asyncErrorBoundary(reservationExists), 
     asyncErrorBoundary(update)],
 };
