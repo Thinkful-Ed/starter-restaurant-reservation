@@ -8,10 +8,10 @@ require('dotenv').config();
 const path = require("path");
 
 const {
-  DATABASE_URL = "postgres://ptawqjrw:ZotK9_ar97VomQoNsP0gjIRTHRYpGG1o@chunee.db.elephantsql.com/ptawqjrw",
-  DATABASE_URL_DEVELOPMENT = "postgres://ptawqjrw:ZotK9_ar97VomQoNsP0gjIRTHRYpGG1o@chunee.db.elephantsql.com/ptawqjrw",
-  DATABASE_URL_TEST = "postgres://ptawqjrw:ZotK9_ar97VomQoNsP0gjIRTHRYpGG1o@chunee.db.elephantsql.com/ptawqjrw",
-  DATABASE_URL_PREVIEW = "postgres://ptawqjrw:ZotK9_ar97VomQoNsP0gjIRTHRYpGG1o@chunee.db.elephantsql.com/ptawqjrw",
+  DATABASE_URL = "postgres://gofdemkt:C1nHyCwa3yPpg3goo6aEQuvJ-KSmB1k9@berry.db.elephantsql.com/gofdemkt",
+  DATABASE_URL_DEVELOPMENT = "postgres://gofdemkt:C1nHyCwa3yPpg3goo6aEQuvJ-KSmB1k9@berry.db.elephantsql.com/gofdemkt",
+  DATABASE_URL_TEST = "postgres://gofdemkt:C1nHyCwa3yPpg3goo6aEQuvJ-KSmB1k9@berry.db.elephantsql.com/gofdemkt",
+  DATABASE_URL_PREVIEW = "postgres://gofdemkt:C1nHyCwa3yPpg3goo6aEQuvJ-KSmB1k9@berry.db.elephantsql.com/gofdemkt",
   DEBUG,
 } = process.env;
 

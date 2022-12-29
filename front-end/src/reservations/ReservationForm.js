@@ -1,53 +1,53 @@
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
-// import ErrorAlert from "../layout/ErrorAlert";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function ReservationForm ({reservationFormData, handleReservationChange, handleReservationSubmit}){
 const history = useHistory();
-// const [formErrors, setFormErrors] = useState([]);
+const [formErrors, setFormErrors] = useState([]);
 
-// const validateNotTuesday = (reservation) =>{
+const validateNotTuesday = (reservation) =>{
 
-//   const reformat = reservation.reservation_date.split('-');
-//   const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
-//   const d = new Date(reformDate);
-//   const tuesError = []
-//   let day = d.getDay();
+  const reformat = reservation.reservation_date.split('-');
+  const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
+  const d = new Date(reformDate);
+  const tuesError = []
+  let day = d.getDay();
 
-// if(day === 2){
-//   tuesError.push({message:'Form: We are closed on Tuesday'})
-// }
-//  return tuesError;
+if(day === 2){
+  tuesError.push({message:'Form: We are closed on Tuesday'})
+}
+ return tuesError;
   
-//   }
-//   const validateFutureDate = (reservation) =>{
-//     const reformat = reservation.reservation_date.split('-');
-//     const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
-//     const d = new Date(reformDate);
-//     const tooday = new Date();
-//   const futureError =[]
-//     if(d < tooday){
-//       futureError.push({message:'Form: Reservation must include a valid future date'})
-//     }
-//     return futureError;
-//     }
+  }
+  const validateFutureDate = (reservation) =>{
+    const reformat = reservation.reservation_date.split('-');
+    const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
+    const d = new Date(reformDate);
+    const tooday = new Date();
+  const futureError =[]
+    if(d < tooday){
+      futureError.push({message:'Form: Reservation must include a valid future date'})
+    }
+    return futureError;
+    }
 
-// const formValidation = (event)=>{
-//         event.preventDefault();
-//        const futureError = validateFutureDate(reservationFormData);
-//        const tuesError = validateNotTuesday(reservationFormData);
-//        setFormErrors([...futureError, ...tuesError])
-//        console.log(formErrors.length)
-//         if(formErrors.length === 0){
-//         handleReservationSubmit(event);
-// }}
+const formValidation = (event)=>{
+        event.preventDefault();
+       const futureError = validateFutureDate(reservationFormData);
+       const tuesError = validateNotTuesday(reservationFormData);
+       setFormErrors([...futureError, ...tuesError])
+       console.log(formErrors.length)
+        if(formErrors.length === 0){
+        handleReservationSubmit(event);
+}}
 
     return (
-        // <div>
-        // {formErrors.length > 0 && formErrors.map((formError)=>(
-        //         <ErrorAlert error={formError} />
-        //        ))}
-        <form name="Reservations" onSubmit={handleReservationSubmit}>
+        <div>
+        {formErrors.length > 0 && formErrors.map((formError)=>(
+                <ErrorAlert error={formError} />
+               ))}
+        <form name="Reservations" onSubmit={formValidation}>
           <table className="table table-bordered"> 
           <tbody>
           <tr><th>Add/Edit a Reservation</th></tr>
@@ -113,7 +113,7 @@ const history = useHistory();
                     </tbody>
             </table>
         </form>
-      //  </div>
+        </div>
     );
 }
 export default ReservationForm;

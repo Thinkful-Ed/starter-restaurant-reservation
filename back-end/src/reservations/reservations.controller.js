@@ -147,7 +147,7 @@ function hasValidDate(req, res, next) {
   if (date.getTime() < new Date().getTime()) {
     return next({
       status: 400,
-      message: "Current date must be in future",
+      message: "reservation_date must be in future",
     });
   }
   if (date.getDay() === 2) {
