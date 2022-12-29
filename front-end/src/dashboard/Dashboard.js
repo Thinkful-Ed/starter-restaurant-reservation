@@ -35,16 +35,24 @@ const newDate = useQuery().get("date") ?? date;
 //   }
 //   }
 //   }
-  useEffect(loadDashboard, [newDate]);
+  useEffect(()=>{
+   async function loadDashboard() {
+      const abortController = new AbortController();
+      try{
+        const reservationsFromAPI = await listReservations({ date: newDate }, abortController.signal);
+        setReservations(reservationsFromAPI);
+      } catch(error){
+        if (error){
+          setReservationsError(error)
+        }
+      }
+      return () => abortController.abort();
+      }
 
-  function loadDashboard() {
-    const abortController = new AbortController();
-    setReservationsError(null);
-    listReservations({ date: newDate }, abortController.signal)
-    .then(setReservations)
-    .catch(setReservationsError);
-    return () => abortController.abort();
-    }
+loadDashboard();
+  }, [newDate]);
+
+  
 
   return (
     <main>
