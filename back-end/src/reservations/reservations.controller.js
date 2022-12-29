@@ -147,7 +147,7 @@ function hasValidDate(req, res, next) {
   const tooday = new Date();
   const toodayToLocaleString = tooday.toLocaleDateString();
   const dateToLocaleString = date.toLocaleDateString();
-  let t = d.toLocaleTimeString();
+  let t = date.toLocaleTimeString();
 let now = tooday.toLocaleTimeString();
   if ((dateToLocaleString< toodayToLocaleString) || (dateToLocaleString === toodayToLocaleString && t < now)) {
     return next({
