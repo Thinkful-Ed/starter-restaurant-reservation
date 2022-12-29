@@ -19,10 +19,10 @@ const rTime = reservation.reservation_time;
 let now = tooday.toLocaleTimeString();
 
 if((dateToLocaleString < toodayToLocaleString) || (dateToLocaleString === toodayToLocaleString && t < now)){
-        errors.push({message:'Form: Reservation must be in the future'})
+        errors.push({key:1, message:'Form: Reservation must be in the future'})
 }
 if(day === 2){
-  errors.push({message:'Form: We are closed on Tuesday'})
+  errors.push({key:2, message:'Form: We are closed on Tuesday'})
 }
 // if(dateToLocaleString< tooday){
 //         errors.push({message:'Form: Reservation must include a valid future date'})
