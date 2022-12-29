@@ -175,10 +175,18 @@ function hasValidTime(req, res, next) {
   const today = new Date();
   const now = today.getTime();
   const rTime = rDate.getTime();
-  if ((reservation_time < "10:30" || reservation_time > "21:30") || rTime < now) {
+  
+  if (reservation_time < "10:30" || reservation_time > "21:30") {
     return next({
       status: 400,
-      message: "Invalid reservation_time",
+      message: "reservation_time not during business hours",
+    });
+  }
+
+  if (rTime < now) {
+    return next({
+      status: 400,
+      message: "reservation_time before now",
     });
   }
   if (moment(reservation_time, "HH:mm", true).isValid()) {
