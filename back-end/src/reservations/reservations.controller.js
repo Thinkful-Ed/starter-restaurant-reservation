@@ -142,14 +142,9 @@ res.json({data});
 
 //Combined check if date is valid
 function hasValidDate(req, res, next) {
-  const { data: { reservation_date, reservation_time } = {} } = req.body;
-  const date = new Date(`${reservation_date}T${reservation_time}`);
-  const tooday = new Date();
-  const toodayToLocaleString = tooday.toLocaleDateString();
-  const dateToLocaleString = date.toLocaleDateString();
-  let t = date.toLocaleTimeString();
-let now = tooday.toLocaleTimeString();
-  if ((dateToLocaleString< toodayToLocaleString) || (dateToLocaleString === toodayToLocaleString && t < now)) {
+  const { data: { reservation_date } = {} } = req.body;
+  const date = new Date(reservation_date);
+  if (date < new Date()) {
     return next({
       status: 400,
       message: "reservation_date must be in future",
@@ -173,7 +168,8 @@ let now = tooday.toLocaleTimeString();
 //Combined check if date is valid
 function hasValidTime(req, res, next) {
   const { data: { reservation_time } = {} } = req.body;
-  if (reservation_time < "10:30" || reservation_time > "21:30") {
+  const now = new Date().toLocaleTimeString();
+  if (reservation_time < "10:30" || reservation_time > "21:30" || reservation_time < now) {
     return next({
       status: 400,
       message: "Invalid reservation_time",

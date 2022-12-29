@@ -18,7 +18,7 @@ const rTime = reservation.reservation_time;
   let t = d.toLocaleTimeString();
 let now = tooday.toLocaleTimeString();
 
-if((dateToLocaleString< toodayToLocaleString) || (dateToLocaleString === toodayToLocaleString && t < now)){
+if((dateToLocaleString < toodayToLocaleString) || (dateToLocaleString === toodayToLocaleString && t < now)){
         errors.push({message:'Form: Reservation must be in the future'})
 }
 if(day === 2){
@@ -31,17 +31,17 @@ if(day === 2){
  return errors;
   
   }
-  const validateFutureDate = (reservation) =>{
-    const reformat = reservation.reservation_date.split('-');
-    const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
-    const d = new Date(reformDate);
-    const tooday = new Date();
-  const futureError =[]
-    if(d < tooday){
-      futureError.push({message:'Form: Reservation must include a valid future date'})
-    }
-    return futureError;
-    }
+//   const validateFutureDate = (reservation) =>{
+//     const reformat = reservation.reservation_date.split('-');
+//     const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
+//     const d = new Date(reformDate);
+//     const tooday = new Date();
+//   const futureError =[]
+//     if(d < tooday){
+//       futureError.push({message:'Form: Reservation must include a valid future date'})
+//     }
+//     return futureError;
+//     }
 
 const formValidation = (event)=>{
         event.preventDefault();
