@@ -122,7 +122,7 @@ function hasTime(req, res,next){
   //Check to see if people is valid
 function hasValidPeople(req, res,next){
   const {data = {}} = req.body;
-  const peopleAsNumber = Number(people)
+  const peopleAsNumber = Number(data["people"])
   if (peopleAsNumber === 0 || !Number.isInteger(peopleAsNumber)) {
     return next({
     status: 400, 
