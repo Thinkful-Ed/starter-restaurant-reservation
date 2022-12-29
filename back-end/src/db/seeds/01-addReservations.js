@@ -1,8 +1,5 @@
 
 exports.seed = function(knex) {
-  // Deletes ALL existing entries
-  return knex('reservations').del()
-    .then(function () {
       // Inserts seed entries
       return knex('reservations').insert([
         {
@@ -49,7 +46,7 @@ exports.seed = function(knex) {
           "first_name": "Anthony",
           "last_name": "Charboneau",
           "mobile_number": "620-646-8897",
-          "reservation_date": "2022-12-25",
+          "reservation_date": "2022-12-28",
           "reservation_time": "18:00",
           "people": 2,
           "created_at": "2020-12-10T08:31:32.326Z",
@@ -58,5 +55,4 @@ exports.seed = function(knex) {
       ]
       
       );
-    });
 };
