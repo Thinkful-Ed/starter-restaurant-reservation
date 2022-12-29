@@ -3,6 +3,7 @@
  */
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("../reservations/reservations.services");
+const moment = require("moment");
 
 //List reservations based on date
 async function list(req, res,next){
@@ -102,82 +103,119 @@ res.json({data});
 
 
 //Combined check if date is valid
- function hasValidDate(req, res,next){
-  const {data = {}} = req.body;
-  const date = data["reservation_date"];
-  const time = data["reservation_time"];
-  const formattedDate = new Date(`${date}T${time}`);
-  const day = new Date(date).getUTCDay();
-  if(isNaN(Date.parse(data["reservation_date"]))){
+//  function hasValidDate(req, res,next){
+//   const {data = {}} = req.body;
+//   const date = data["reservation_date"];
+//   const time = data["reservation_time"];
+//   const formattedDate = new Date(`${date}T${time}`);
+//   const day = new Date(date).getUTCDay();
+//   if (!moment(reservation_date, "YYYY-MM-DD", true).isValid()) {
+//     return next({
+//       status: 400, 
+//       message: `Invalid reservation_date`,
+//     });
+//   }
+//   if(day === 2){
+//     return next({
+//       status: 400, 
+//       message: `Restaurant is closed on Tuesdays`,
+//     });
+//   }
+//   if(formattedDate <= new Date()){
+//     return next({
+//       status: 400, 
+//       message: `Reservation must be in the future`,
+//     });
+//   }
+//   next();
+//  }
+function hasValidDate(req, res, next) {
+  const { data: { reservation_date } = {} } = req.body;
+  const date = new Date(reservation_date);
+  if (date.getTime() < new Date().getTime()) {
     return next({
-      status: 400, 
-      message: `Invalid reservation_date`,
+      status: 400,
+      message: "Current date must be in future",
     });
   }
-  if(day === 2){
+  if (date.getDay() === 2) {
     return next({
-      status: 400, 
-      message: `Restaurant is closed on Tuesdays`,
+      status: 400,
+      message: "Restaurant is closed on Tuesday",
     });
   }
-  if(formattedDate <= new Date()){
-    return next({
-      status: 400, 
-      message: `Reservation must be in the future`,
-    });
+  if (moment(reservation_date, "YYYY-MM-DD", true).isValid()) {
+    return next();
   }
-  next();
- }
-
+  next({
+    status: 400,
+    message: "reservation_date is not valid",
+  });
+}
 
 //Combined check if date is valid
-function hasValidTime(req, res,next){
-  const {data = {}} = req.body;
-  const date = data["reservation_date"];
-  const time = data["reservation_time"];
-  const formattedDate = new Date(`${date}T${time}`);
-  const open = "10:30:00";
-  const close = "21:30:00";
-  const reformat = date.split('-');
-  const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
-  const d = new Date(reformDate);
-const today = new Date();
-const now = d.toLocaleTimeString();
+// function hasValidTime(req, res,next){
+//   const {data = {}} = req.body;
+//   const date = data["reservation_date"];
+//   const time = data["reservation_time"];
+//   const formattedDate = new Date(`${date}T${time}`);
+//   const open = "10:30:00";
+//   const close = "21:30:00";
+//   const reformat = date.split('-');
+//   const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
+//   const d = new Date(reformDate);
+// const today = new Date();
+// const now = d.toLocaleTimeString();
 
-  if(isNaN(Date.parse(data["reservation_time"]))){
+// if (!moment(reservation_time, "HH:mm", true).isValid()) {
+//     return next({
+//       status: 400, 
+//       message: `reservation_time is not a time`,
+//     });
+//   }
+// if(reservation_time < open || reservation_time > close){
+//    return next({
+//     status: 400, 
+//     message: `Reservation time must be after 10:30am and before 9:30pm`
+// });
+// }
+// if(formattedDate == today && reservation_time < now){
+//   return next({
+//     status: 400, 
+//     message: `Reservation time must not occur in the past`
+// });
+// }
+//    next();
+//  }
+function hasValidTime(req, res, next) {
+  const { data: { reservation_time } = {} } = req.body;
+  if (reservation_time < "10:30" || reservation_time > "21:30") {
     return next({
-      status: 400, 
-      message: `reservation_time is not a time`,
+      status: 400,
+      message: "Invalid reservation_time",
     });
   }
-if(reservation_time < open || reservation_time > close){
-   return next({
-    status: 400, 
-    message: `Reservation time must be after 10:30am and before 9:30pm`
-});
+  if (moment(reservation_time, "HH:mm", true).isValid()) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: "reservation_time is not valid",
+  });
 }
-if(formattedDate == today && reservation_time < now){
-  return next({
-    status: 400, 
-    message: `Reservation time must not occur in the past`
-});
-}
-   next();
- }
-
 //Create reservations
 async function create (req, res){
-  const {data:{first_name, last_name, reservation_date, reservation_time, mobile_number, people} ={}} = req.body;
-  const newReservation = {
-      first_name, 
-      last_name, 
-      reservation_date, 
-      reservation_time, 
-      mobile_number, 
-      people
-  };
-  await service.create(newReservation);
-  res.status(201).json({data: newReservation});
+  // const {data:{first_name, last_name, reservation_date, reservation_time, mobile_number, people} ={}} = req.body;
+  // const newReservation = {
+  //     first_name, 
+  //     last_name, 
+  //     reservation_date, 
+  //     reservation_time, 
+  //     mobile_number, 
+  //     people
+  // };
+  const data = await service.create(req.body.data);
+  res.status(201).json({data});
 };
 
 //Update existing reservation 
