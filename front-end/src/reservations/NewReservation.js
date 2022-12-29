@@ -19,21 +19,28 @@ function NewReservation() {
       },
       body: JSON.stringify({
         data: {
-          first_name: "first",
-          last_name: "last",
-          mobile_number: "800-555-1212",
-          reservation_date: "2025-01-01",
-          reservation_time: "17:30",
-          people: 2,
+          first_name: event.target.elements.first_name.value,
+          last_name: event.target.elements.last_name.value,
+          mobile_number: event.target.elements.mobile_number.value,
+          reservation_date: event.target.elements.reservation_date.value,
+          reservation_time: event.target.elements.reservation_time.value,
+          people: parseInt(event.target.elements.people.value),
+          // first_name: "first",
+          // last_name: "last",
+          // mobile_number: "800-555-1212",
+          // reservation_date: "2025-01-01",
+          // reservation_time: "17:30",
+          // people: 2,
         },
       }),
-
+      // first_name: "first",
+      // last_name: "last",
+      // mobile_number: "800-555-1212",
+      // reservation_date: "2025-01-01",
+      // reservation_time: "17:30",
+      // people: 2,
       // body: JSON.stringify({
-      //   first_name: event.target.first_name.value,
-      //   mobile_number: event.target.mobile_number.value,
-      //   reservation_date: event.target.reservation_date.value,
-      //   reservation_time: event.target.reservation_time.value,
-      //   people: event.target.people.value,
+
       // }),
     });
   }
@@ -42,17 +49,29 @@ function NewReservation() {
     <div>
       <h1>NEW RESERVATIONS</h1>
       <form onSubmit={onSubmit}>
-        <input name="first_name"></input>
+        <label for="first_name">First Name</label>
+        <input name="first_name" id="first_name" type="text"></input>
 
-        <input name="last_name"></input>
+        <label for="last_name">Last Name</label>
+        <input name="last_name" id="last_name" type="text"></input>
 
-        <input name="mobile_number"></input>
+        <label for="mobile_number">Mobile Number</label>
+        <input name="mobile_number" id="mobile_number" type="tel"></input>
 
-        <input name="reservation_date"></input>
+        <label for="reservation_date">Reservation date</label>
+        <input
+          name="reservation_date"
+          id="reservation date"
+          type="date"></input>
 
-        <input name="reservation_time"></input>
+        <label for="reservation_time">Reservation Time</label>
+        <input
+          name="reservation_time"
+          id="reservation_time"
+          type="time"></input>
 
-        <input name="people"></input>
+        <label for="people">Number of people</label>
+        <input name="people" id="people" type="number"></input>
 
         <button type="submit">Submit</button>
       </form>
