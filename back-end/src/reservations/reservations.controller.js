@@ -34,7 +34,7 @@ async function reservationExists(req, res,next){
 function bodyHas(propertyName){
   return function(req,res,next){
       const {data = {}} = req.body;
-      if(data[propertyName] && data[propertyName] !== ""){
+      if(data[propertyName]){
           return next();
       }
       next({
@@ -43,7 +43,41 @@ function bodyHas(propertyName){
       });
   };
   };
-  
+  //Check if has valid first name
+  function hasFirstName(req, res,next){
+    const { data: { first_name } = {} } = req.body;
+    if (first_name && first_name !== "") {
+      return next();
+    }
+    next({
+      status: 400,
+      message: `Invalid first_name`,
+    });
+  }
+  //Check if has valid last name
+  function hasLastName(req, res,next){
+    const { data: { last_name } = {} } = req.body;
+    if (last_name && last_name !== "") {
+      return next();
+    }
+    next({
+      status: 400,
+      message: `Invalid last_name`,
+    });
+  }
+
+  //Check if has valid mobile number
+  function hasMobileNumber(req, res,next){
+    const { data: { mobile_number } = {} } = req.body;
+    if (mobile_number && mobile_number !== "") {
+      return next();
+    }
+    next({
+      status: 400,
+      message: `Invalid mobile_number`,
+    });
+  }
+
   //Check to see if people is valid
 function hasValidPeople(req, res,next){
   const {data = {}} = req.body;
@@ -250,11 +284,9 @@ async function update(req, res) {
 module.exports = {
   list,
   create:[ 
-    bodyHas("first_name"),
-    bodyHas("last_name"),
-    bodyHas("mobile_number"),
-    bodyHas("reservation_date"), 
-    bodyHas("reservation_time"), 
+    hasFirstName,
+    hasLastName,
+    hasMobileNumber,
     hasValidPeople,
     hasValidDate,
     hasValidTime, 
@@ -265,11 +297,9 @@ module.exports = {
   reservationExists:[
     asyncErrorBoundary(reservationExists)],
   update:[
-    bodyHas("first_name"),
-    bodyHas("last_name"),
-    bodyHas("mobile_number"),
-    bodyHas("reservation_date"), 
-    bodyHas("reservation_time"), 
+    hasFirstName,
+    hasLastName,
+    hasMobileNumber,
     hasValidPeople,
     hasValidDate,
     hasValidTime,  
