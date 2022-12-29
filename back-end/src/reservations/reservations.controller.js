@@ -144,13 +144,11 @@ res.json({data});
 function hasValidDate(req, res, next) {
   const { data: { reservation_date } = {} } = req.body;
   const date = new Date(reservation_date);
-  const dateToLocaleDateString = date.toLocaleDateString();
   const today = new Date ();
-  const todaytoLocalDateString = today.toLocaleDateString();
-  if (dateToLocaleDateString < todaytoLocalDateString) {
+  if (date < today) {
     return next({
       status: 400,
-      message: "reservation_date must be in future",
+      message: "reservation_date must be a future date and time",
     });
   }
   if (date.getDay() === 2) {
@@ -172,19 +170,11 @@ function hasValidDate(req, res, next) {
 function hasValidTime(req, res, next) {
   const { data: { reservation_date, reservation_time } = {} } = req.body;
   const rDate = new Date(`${reservation_date}T${reservation_time}`);
-  const today = new Date();
   
   if (reservation_time < "10:30" || reservation_time > "21:30") {
     return next({
       status: 400,
       message: "reservation_time not during business hours",
-    });
-  }
-
-  if (today.getTime() > rDate.getTime()) {
-    return next({
-      status: 400,
-      message: "reservation_time before now",
     });
   }
   if (moment(reservation_time, "HH:mm", true).isValid()) {
