@@ -126,7 +126,7 @@ function hasValidPeople(req, res,next){
   if (peopleAsNumber === 0 || !Number.isInteger(peopleAsNumber)) {
     return next({
     status: 400, 
-    message: `Reservation must include 1 or more people`
+    message: `people must be a number and greater than 1`
 });
 }
 next();
@@ -144,11 +144,13 @@ res.json({data});
 function hasValidDate(req, res, next) {
   const { data: { reservation_date, reservation_time } = {} } = req.body;
   const date = new Date(`${reservation_date}T${reservation_time}`);
+  const momentDate = moment(date);
+  const now = moment();
   const today = new Date();
-  if (date < today) {
+  if (now > momentDate) {
     return next({
       status: 400,
-      message: "reservation_date must be a future date and time",
+      message: "reservation_date must be a future date",
     });
   }
   if (date.getDay() === 2) {
