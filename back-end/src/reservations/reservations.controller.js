@@ -122,8 +122,9 @@ function hasTime(req, res,next){
   //Check to see if people is valid
 function hasValidPeople(req, res,next){
   const {data = {}} = req.body;
-  const peopleAsNumber = Number(data["people"])
-  if (peopleAsNumber === 0 || !Number.isInteger(peopleAsNumber)) {
+  const people = data["people"];
+  const peopleAsNumber = people;
+  if (peopleAsNumber === 0 || typeof peopleAsNumber !== 'number') {
     return next({
     status: 400, 
     message: `people must be a number and greater than 1`
