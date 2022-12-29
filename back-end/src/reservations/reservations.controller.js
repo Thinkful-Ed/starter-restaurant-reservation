@@ -122,7 +122,8 @@ function hasTime(req, res,next){
   //Check to see if people is valid
 function hasValidPeople(req, res,next){
   const {data = {}} = req.body;
-  if (data["people"] === 0 || !Number.isInteger(data["people"])) {
+  const peopleAsNumber = Number(people)
+  if (peopleAsNumber === 0 || !Number.isInteger(peopleAsNumber)) {
     return next({
     status: 400, 
     message: `Reservation must include 1 or more people`
