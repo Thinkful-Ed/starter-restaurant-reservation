@@ -173,9 +173,9 @@ function hasValidTime(req, res, next) {
   const { data: { reservation_date, reservation_time } = {} } = req.body;
   const rDate = new Date(`${reservation_date}T${reservation_time}`);
   const today = new Date();
-  const now = today.toLocaleTimeString();
-  const rTime = rDate.toLocaleTimeString();
-  if (reservation_time < "10:30" || reservation_time > "21:30" || rTime < now) {
+  // const now = today.toLocaleTimeString();
+  // const rTime = rDate.toLocaleTimeString();
+  if (reservation_time < "10:30" || reservation_time > "21:30" || rDate < today) {
     return next({
       status: 400,
       message: "Invalid reservation_time",
