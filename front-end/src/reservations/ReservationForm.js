@@ -6,18 +6,29 @@ function ReservationForm ({reservationFormData, handleReservationChange, handleR
 const history = useHistory();
 const [formErrors, setFormErrors] = useState([]);
 
-const validateNotTuesday = (reservation) =>{
-
-  const reformat = reservation.reservation_date.split('-');
-  const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
-  const d = new Date(reformDate);
-  const tuesError = []
+const validDate = (reservation) =>{
+const rDate = reservation.reservation_date;
+const rTime = reservation.reservation_time;
+  const d = new Date(`${rDate}T${rTime}`);
+  const errors = [];
+  const tooday = new Date();
+  const toodayToLocaleString = tooday.toLocaleDateString();
+  const dateToLocaleString = d.toLocaleDateString();
   let day = d.getDay();
+  let t = d.toLocaleTimeString();
+let now = tooday.toLocaleTimeString();
 
-if(day === 2){
-  tuesError.push({message:'Form: We are closed on Tuesday'})
+if((dateToLocaleString< toodayToLocaleString) || (dateToLocaleString === toodayToLocaleString && t < now)){
+        errors.push({message:'Form: Reservation must be in the future'})
 }
- return tuesError;
+if(day === 2){
+  errors.push({message:'Form: We are closed on Tuesday'})
+}
+// if(dateToLocaleString< tooday){
+//         errors.push({message:'Form: Reservation must include a valid future date'})
+//       }
+      
+ return errors;
   
   }
   const validateFutureDate = (reservation) =>{
@@ -34,9 +45,8 @@ if(day === 2){
 
 const formValidation = (event)=>{
         event.preventDefault();
-       const futureError = validateFutureDate(reservationFormData);
-       const tuesError = validateNotTuesday(reservationFormData);
-       setFormErrors([...futureError, ...tuesError])
+       const dateError = validDate(reservationFormData);
+       setFormErrors([dateError])
        console.log(formErrors.length)
         if(formErrors.length === 0){
         handleReservationSubmit(event);
