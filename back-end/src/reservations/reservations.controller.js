@@ -144,7 +144,10 @@ res.json({data});
 function hasValidDate(req, res, next) {
   const { data: { reservation_date } = {} } = req.body;
   const date = new Date(reservation_date);
-  if (date < new Date()) {
+  const dateToLocaleString = date.dateToLocaleString();
+  const today = new Date ();
+  const toodayToLodateToLocaleStringcaleString = today.toLocaleDateString();
+  if (dateToLocaleString < dateToLocaleString) {
     return next({
       status: 400,
       message: "reservation_date must be in future",
