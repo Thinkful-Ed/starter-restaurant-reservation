@@ -171,7 +171,8 @@ function hasValidDate(req, res, next) {
 //Combined check if date is valid
 function hasValidTime(req, res, next) {
   const { data: { reservation_time } = {} } = req.body;
-  const now = new Date().toLocaleTimeString();
+  const today = new Date();
+  const now = today.toLocaleTimeString();
   if (reservation_time < "10:30" || reservation_time > "21:30" || reservation_time < now) {
     return next({
       status: 400,
