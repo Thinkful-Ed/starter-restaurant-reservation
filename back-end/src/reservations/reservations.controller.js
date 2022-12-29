@@ -44,9 +44,10 @@ function bodyHas(propertyName){
   };
   };
   //Check if has valid first name
-  function hasFirstName(req, res,next){
-    const { data: { first_name } = {} } = req.body;
-    if (!first_name || first_name === "") {
+  function hasFirstName(req, res, next){
+    const { data={}  } = req.body;
+    const fname = data["first_name"];
+    if (!fname || fname === "") {
       return next({
         status: 400,
         message: `Invalid first_name`,
@@ -56,8 +57,9 @@ function bodyHas(propertyName){
   }
   //Check if has valid last name
   function hasLastName(req, res,next){
-    const { data: { last_name } = {} } = req.body;
-    if (!last_name || last_name === "") {
+    const { data = {}  } = req.body;
+    const lname = data["last_name"];
+    if (!lname || lname === "") {
       return next({
         status: 400,
         message: `Invalid last_name`,
@@ -68,8 +70,9 @@ function bodyHas(propertyName){
 
   //Check if has valid mobile number
   function hasMobileNumber(req, res,next){
-    const { data: { mobile_number } = {} } = req.body;
-    if (!mobile_number || mobile_number === "") {
+    const { data = {} } = req.body;
+    const mobile = data["mobile_number"];
+    if (!mobile || mobile === "") {
       return next({
         status: 400,
         message: `Invalid mobile_number`,
@@ -97,24 +100,7 @@ const data = await service.read(reservationId);
 res.json({data});
 }
 
-//Check for a valid future date
-function dateIsFuture(req, res, next){
-  const {reservation_date} = req.body;
-  const reformat = reservation_date.split('-');
-    const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
-    const d = new Date(reformDate);
-    const dDate = d.toLocaleDateString();
-  const today = new Date();
-  const todayDate = today.toLocaleDateString();
-  if(dDate < todayDate){
-    next({
-      status: 400, 
-      message: `Reservation must include a valid future date`
-  });
-  }
-  
-return next();
-};
+
 //Combined check if date is valid
  function hasValidDate(req, res,next){
   const {data = {}} = req.body;
@@ -178,86 +164,6 @@ if(formattedDate == today && reservation_time < now){
 }
    next();
  }
-
-
-
-//Check if date is valid
-function validDate(req, res, next){
-  const {reservation_date} = req.body;
-  const reformat = reservation_date.split('-');
-    const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
-    const d = new Date(reformDate);
-    const valid = Object.prototype.toString.call(d) === "[object Date]";
-    console.log(valid);
-  if(valid){
-    next({
-      status: 400, 
-      message: `reservation_date is not a date`
-  });
-  }
-  
-return next();
-};
-
-//Check to see if date is a Tuesday
-function dateNotTuesday(req, res,next){
-  const {reservation_date} = req.body;
-  const reformat = reservation_date.split('-');
-  const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
-  const d = new Date(reformDate);
-  let day = d.getDay();
-if(day === 2){
-  next({
-    status: 400, 
-    message: `We are closed on Tuesday`
-});
-}
-return next();
-};
-//Check to see if time is valid
-function validTime(req, res,next){
-  const {reservation_time} = req.body;
-  regexp = /^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$/;
-
-if(regexp.test(reservation_time)){
-  next({
-    status: 400, 
-    message: `Reservation time not valid`
-});
-}
-return next();
-};
-
-//Check to see if time during open hours
-function timeDuringOpenHours(req, res,next){
-  const {reservation_time} = req.body;
-  const open = "10:30:00";
-  const close = "21:30:00";
-if(reservation_time < open || reservation_time > close){
-  next({
-    status: 400, 
-    message: `Reservation time must be after 10:30am and before 9:30pm`
-});
-}
-return next();
-};
-
-//Check to see if time before now
-function timeBeforeNow(req, res,next){
-  const {reservation_time, reservation_date} = req.body;
-  const reformat = reservation_date.split('-');
-    const reformDate = `${reformat[1]}-${reformat[2]}-${reformat[0]}`;
-    const d = new Date(reformDate);
-  const today = new Date();
-  const now = d.toLocaleTimeString();
-if(d == today && reservation_time < now){
-  next({
-    status: 400, 
-    message: `Reservation time must not occur in the past`
-});
-}
-return next();
-};
 
 //Create reservations
 async function create (req, res){
