@@ -51,15 +51,6 @@ const history = useHistory();
           <table className="table table-bordered"> 
           <tbody>
           <tr><th>Add/Edit a Reservation</th></tr>
-          <tr><td>
-            <label className="p-3" htmlFor="ireservation_id">Reservation ID</label>
-            <input name="reservation_id"
-                    id="reservation_id"
-                    type="number"
-                    placeholder="Reservation Id"
-                    onChange={handleReservationChange}
-                    value={reservationFormData.reservation_id} required readOnly/>
-                    </td></tr>
             <tr><td>
             <label className="p-3" htmlFor="first_name">First Name</label>
             <input name="first_name"
