@@ -142,9 +142,9 @@ res.json({data});
 
 //Combined check if date is valid
 function hasValidDate(req, res, next) {
-  const { data: { reservation_date } = {} } = req.body;
-  const date = new Date(reservation_date);
-  const today = new Date ();
+  const { data: { reservation_date, reservation_time } = {} } = req.body;
+  const date = new Date(`${reservation_date}T${reservation_time}`);
+  const today = new Date();
   if (date < today) {
     return next({
       status: 400,
@@ -168,8 +168,7 @@ function hasValidDate(req, res, next) {
 
 //Combined check if date is valid
 function hasValidTime(req, res, next) {
-  const { data: { reservation_date, reservation_time } = {} } = req.body;
-  const rDate = new Date(`${reservation_date}T${reservation_time}`);
+  const { data: { reservation_time } = {} } = req.body;
   
   if (reservation_time < "10:30" || reservation_time > "21:30") {
     return next({
