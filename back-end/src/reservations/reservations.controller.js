@@ -142,9 +142,14 @@ res.json({data});
 
 //Combined check if date is valid
 function hasValidDate(req, res, next) {
-  const { data: { reservation_date } = {} } = req.body;
-  const date = new Date(reservation_date);
-  if (date.getTime() < new Date().getTime()) {
+  const { data: { reservation_date, reservation_time } = {} } = req.body;
+  const date = new Date(`${reservation_date}T${reservation_time}`);
+  const tooday = new Date();
+  const toodayToLocaleString = tooday.toLocaleDateString();
+  const dateToLocaleString = date.toLocaleDateString();
+  let t = d.toLocaleTimeString();
+let now = tooday.toLocaleTimeString();
+  if ((dateToLocaleString< toodayToLocaleString) || (dateToLocaleString === toodayToLocaleString && t < now)) {
     return next({
       status: 400,
       message: "reservation_date must be in future",
