@@ -57,7 +57,7 @@ function NewReservation() {
       <h1>NEW RESERVATIONS</h1>
       <ErrorAlert error={reservationsError} />
       <form onSubmit={onSubmit}>
-        <label for="first_name">First Name</label>
+        <label htmlFor="first_name">First Name</label>
         <input
           name="first_name"
           id="first_name"
@@ -65,7 +65,7 @@ function NewReservation() {
           value={formData.first_name}
           onChange={handleChange}></input>
 
-        <label for="last_name">Last Name</label>
+        <label htmlFor="last_name">Last Name</label>
         <input
           name="last_name"
           id="last_name"
@@ -73,7 +73,7 @@ function NewReservation() {
           value={formData.last_name}
           onChange={handleChange}></input>
 
-        <label for="mobile_number">Mobile Number</label>
+        <label htmlFor="mobile_number">Mobile Number</label>
         <input
           name="mobile_number"
           id="mobile_number"
@@ -81,7 +81,7 @@ function NewReservation() {
           value={formData.mobile_number}
           onChange={handleChange}></input>
 
-        <label for="reservation_date">Reservation date</label>
+        <label htmlFor="reservation_date">Reservation date</label>
         <input
           name="reservation_date"
           id="reservation_date"
@@ -89,7 +89,7 @@ function NewReservation() {
           value={formData.reservation_date}
           onChange={handleChange}></input>
 
-        <label for="reservation_time">Reservation Time</label>
+        <label htmlFor="reservation_time">Reservation Time</label>
         <input
           name="reservation_time"
           id="reservation_time"
@@ -97,7 +97,7 @@ function NewReservation() {
           value={formData.reservation_time}
           onChange={handleChange}></input>
 
-        <label for="people">Number of people</label>
+        <label htmlFor="people">Number of people</label>
         <input
           name="people"
           id="people"

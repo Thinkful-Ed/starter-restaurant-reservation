@@ -49,7 +49,7 @@ function NewTables() {
       <h1>NEW TABLE</h1>
       <ErrorAlert error={reservationsError} />
       <form onSubmit={onSubmit}>
-        <label for="table_name">Table Name</label>
+        <label htmlFor="table_name">Table Name</label>
         <input
           name="table_name"
           id="table_name"
@@ -57,7 +57,7 @@ function NewTables() {
           value={formData.table_name}
           onChange={handleChange}></input>
 
-        <label for="capacity">Capacity</label>
+        <label htmlFor="capacity">Capacity</label>
         <input
           name="capacity"
           id="capacity"
