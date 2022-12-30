@@ -146,10 +146,8 @@ res.json({data});
 function hasValidDate(req, res, next) {
   const { data: { reservation_date, reservation_time } = {} } = req.body;
   const date = new Date(`${reservation_date}T${reservation_time}`);
-  const momentDate = moment(date);
-  const now = moment();
   const today = new Date();
-  if (now > momentDate) {
+  if (today.getTime() > date.getTime()) {
     return next({
       status: 400,
       message: "reservation_date must be a future date",

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 import { useHistory } from "react-router-dom";
-// import { createTable } from "../utils/api";
+import { createTable } from "../utils/api";
 
 function CreateTable() {
     const history = useHistory();
@@ -18,7 +18,7 @@ function CreateTable() {
 
         const abortController = new AbortController();
         try {
-            // await createTable(table, abortController.signal);
+            await createTable(table, abortController.signal);
 
             history.push(`/dashboard`);
         }
@@ -81,7 +81,7 @@ function CreateTable() {
                             <td><label htmlFor="table_name">Table Name</label></td>
                             <td><label htmlFor="capacity">Capacity</label></td>
                             <td>Actions</td>
-                            </tr>
+                        </tr>
                         <tr>
                             <td><input name="table_name"
                                 id="table_name"

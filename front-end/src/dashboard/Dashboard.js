@@ -4,7 +4,7 @@ import ReservationsList from "../reservations/ReservationsList";
 import {next, previous, today} from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 import { Link } from "react-router-dom";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import TablesList from "../tables/TablesList"
 // import LoadTables from "../Comps/LoadTables";
 // import { Col, Row, Container, Button } from "react-bootstrap";
@@ -20,6 +20,8 @@ import TablesList from "../tables/TablesList"
 function Dashboard({date}) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
 
 // const history = useHistory();
 const newDate = useQuery().get("date") ?? date;
@@ -51,7 +53,22 @@ const newDate = useQuery().get("date") ?? date;
 loadDashboard();
   }, [newDate]);
 
-  
+  useEffect(() => {
+    async function loadTables() {
+      const abortController = new AbortController();
+      try {
+        const tablesFromAPI = await listTables(abortController.signal);
+        setTables(tablesFromAPI);
+      } catch (error) {
+        if (error) {
+          setTablesError(error)
+        }
+      }
+      return () => abortController.abort();
+    }
+
+    loadTables();
+  }, []);
 
   return (
     <main>
@@ -71,7 +88,8 @@ loadDashboard();
       <ErrorAlert error={reservationsError} />
       {/* {JSON.stringify(reservations)} */}
       <ReservationsList reservations={reservations} />
-      <TablesList />
+      <ErrorAlert error={tablesError} />
+      <TablesList tables={tables}/>
     </main>
   );
 }
