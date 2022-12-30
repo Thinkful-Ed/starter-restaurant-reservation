@@ -1,10 +1,11 @@
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { createReservation } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function NewReservation() {
   const history = useHistory();
-
+  const [reservationsError, setReservationsError] = useState(null);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -33,6 +34,7 @@ function NewReservation() {
   return (
     <div>
       <h1>NEW RESERVATIONS</h1>
+      <ErrorAlert error={reservationsError} />
       <form onSubmit={onSubmit}>
         <label for="first_name">First Name</label>
         <input
