@@ -58,8 +58,10 @@ function CreateTable() {
     const formValidation = (event) => {
         event.preventDefault();
         const capacityError = validCapacity(tableFormData);
-        setFormErrors([capacityError])
-        if (!formErrors) {
+        if(capacityError.legnth>0){
+            setFormErrors([capacityError])
+           }
+            else{
             handleTableSubmit(event);
         }
     }

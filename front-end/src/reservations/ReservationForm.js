@@ -31,8 +31,10 @@ if(day === 2){
 const formValidation = (event)=>{
         event.preventDefault();
        const dateError = validDate(reservationFormData);
-       setFormErrors([dateError])
-        if(!formErrors){
+       if(dateError.legnth>0){
+        setFormErrors([dateError])
+       }
+        else{
         handleReservationSubmit(event);
 }}
 
