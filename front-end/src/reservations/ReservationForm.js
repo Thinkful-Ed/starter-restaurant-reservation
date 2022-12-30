@@ -32,7 +32,7 @@ const formValidation = (event)=>{
         event.preventDefault();
        const dateError = validDate(reservationFormData);
        setFormErrors([dateError])
-        if(formErrors.length === 0){
+        if(!formErrors){
         handleReservationSubmit(event);
 }}
 
