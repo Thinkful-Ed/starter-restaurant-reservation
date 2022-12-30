@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { listTables, setTableToOccupied } from "../utils/api";
+import { useHistory } from "react-router-dom";
+import ErrorAlert from "../layout/ErrorAlert";
 
 const INITIAL_FORM_DATA = {
   table_id: "",
 };
 
 function CurrentReservation() {
+  const history = useHistory();
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
@@ -31,21 +34,25 @@ function CurrentReservation() {
     const abortController = new AbortController();
 
     try {
-      console.log("formData", formData);
       await setTableToOccupied(
         formData.table_id,
         reservationId,
         abortController.signal
       );
-      // history.push(`/dashboard?date=${formData.reservation_date}`);
+      history.push(`/dashboard`);
     } catch (error) {
       setReservationsError(error);
     }
   }
 
+  function handleCancel() {
+    history.goBack();
+  }
+
   return (
     <div>
       I AM RESERVATION {reservationId}
+      <ErrorAlert error={reservationsError} />
       <div>{JSON.stringify(formData)}</div>
       <form onSubmit={onSubmit}>
         <label htmlFor="table_id">Table</label>
@@ -64,6 +71,7 @@ function CurrentReservation() {
           ))}
         </select>
         <button type="submit">Submit</button>
+        <button onClick={handleCancel}>Cancel</button>
       </form>
     </div>
   );
