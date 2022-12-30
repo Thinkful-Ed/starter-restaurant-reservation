@@ -6,6 +6,7 @@ import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
 import NewReservation from "../reservations/NewReservation";
 import { useLocation } from "react-router-dom";
+import NewTable from "../tables/NewTables";
 
 function useQuery() {
   const { search } = useLocation();
@@ -26,6 +27,9 @@ function Routes() {
     <Switch>
       <Route exact={true} path="/">
         <Redirect to={"/dashboard"} />
+      </Route>
+      <Route exact={true} path="/tables/new">
+        <NewTable />
       </Route>
       <Route exact={true} path="/reservations/new">
         <NewReservation />

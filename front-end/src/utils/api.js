@@ -81,11 +81,15 @@ export async function createReservation(reservation, signal) {
   return await fetchJson(url, options);
 }
 
-//listreservationsbydate
+//create table
 
-export async function getReservationsByDate(date, signal) {
-  const url = `${API_BASE_URL}/reservations?date=${date}`;
-  return await fetchJson(url, { headers, signal }, [])
-    .then(formatReservationDate)
-    .then(formatReservationTime);
+export async function createNewTable(table, signal) {
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: table }),
+    signal,
+  };
+  return await fetchJson(url, options);
 }
