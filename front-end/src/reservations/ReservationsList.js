@@ -3,7 +3,6 @@ import CreateReservation from "./CreateReservation";
 import UpdateReservation from "./UpdateReservation";
 import Reservation from "./Reservation";
 import { createReservation } from "../utils/api";
-
 import { Route, useHistory,  useRouteMatch } from "react-router-dom";
 
 /**
@@ -49,9 +48,21 @@ function ReservationsList({reservations}) {
     
   return (
     <main>
-     
-      <div className="d-md-flex mb-3">      
-        <div className="reservation-deck ptr-3 pt-3">{list}</div>
+      <div className="d-md-flex mb-3">   
+      <table className="table bordered table-striped table-hover table-condensed">
+        <tbody>
+          <tr>
+          <td>First Name</td>
+          <td>Last Name</td>
+          <td>Phone</td>
+          <td>Date</td>
+          <td>Time</td>
+          <td># of People</td>
+          <td className="text-center">Actions:</td>
+          </tr>
+          {list}
+        </tbody>
+        </table>   
         <Route path={`${url}/reservations/new`}><CreateReservation handleReservationCreate={handleReservationCreate} /></Route>
         <Route path={`${url}/reservations/:reservationId/edit`}><UpdateReservation /></Route>
       </div>

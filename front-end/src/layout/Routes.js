@@ -7,9 +7,10 @@ import { today } from "../utils/date-time";
 
 // import ReservationsList from "../reservations/ReservationsList";
 import Search from "../search/Search";
-import Tables from "../tables/Tables";
+// import Tables from "../tables/Tables";
 import CreateReservation from "../reservations/CreateReservation";
 import UpdateReservation from "../reservations/UpdateReservation";
+import CreateTable from "../tables/CreateTable";
 
 
 /**
@@ -43,11 +44,11 @@ function Routes() {
       <Route path="/search">
         <Search />
       </Route>
-      <Route path="/tables">
+      {/* <Route path="/tables">
         <Tables />
-      </Route>
+      </Route> */}
       <Route path="/tables/new">
-        <Tables />
+        <CreateTable />
       </Route>
       <Route>
         <NotFound />
