@@ -7,6 +7,7 @@ import { today } from "../utils/date-time";
 import NewReservation from "../reservations/NewReservation";
 import { useLocation } from "react-router-dom";
 import NewTable from "../tables/NewTables";
+import CurrentReservation from "../reservations/CurrentReservation";
 
 function useQuery() {
   const { search } = useLocation();
@@ -30,6 +31,9 @@ function Routes() {
       </Route>
       <Route exact={true} path="/tables/new">
         <NewTable />
+      </Route>
+      <Route exact={true} path="/reservations/:reservationId/seat">
+        <CurrentReservation />
       </Route>
       <Route exact={true} path="/reservations/new">
         <NewReservation />

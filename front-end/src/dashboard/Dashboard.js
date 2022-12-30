@@ -53,14 +53,16 @@ function Dashboard({ date }) {
       <div>
         {reservations.map((reservation) => {
           return (
-            <div>
+            <div key={reservation.reservation_id}>
               <span>{reservation.first_name}</span>
               <span>{reservation.last_name}</span>
               <span>{reservation.mobile_number}</span>
               <span>{reservation.reservation_date}</span>
               <span>{reservation.reservation_time}</span>
               <span>{reservation.people}</span>
-              <button>SEAT</button>
+              <a href={`/reservations/${reservation.reservation_id}/seat`}>
+                <button>SEAT</button>
+              </a>
             </div>
           );
         })}
