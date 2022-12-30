@@ -3,17 +3,28 @@ import { useState } from "react";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
+// const MOCK_FORM_DATA = {
+//   first_name: "James",
+//   last_name: "Smith",
+//   mobile_number: "800-555-1212",
+//   reservation_date: "01012035",
+//   reservation_time: "1330",
+//   people: "2",
+// };
+
+const INITIAL_FORM_DATA = {
+  first_name: "",
+  last_name: "",
+  mobile_number: "",
+  reservation_date: "",
+  reservation_time: "",
+  people: "",
+};
+
 function NewReservation() {
   const history = useHistory();
   const [reservationsError, setReservationsError] = useState(null);
-  const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    mobile_number: "",
-    reservation_date: "",
-    reservation_time: "",
-    people: "",
-  });
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
 
   const handleChange = (event) => {
     const { target } = event;
@@ -24,11 +35,17 @@ function NewReservation() {
     event.preventDefault();
     const abortController = new AbortController();
     try {
-      await createReservation(formData, abortController.signal);
+      await createReservation(
+        {
+          ...formData,
+          people: parseInt(formData.people),
+        },
+        abortController.signal
+      );
+      history.push(`/dashboard?date=${formData.reservation_date}`);
     } catch (error) {
       setReservationsError(error);
     }
-    history.push(`/dashboard?date=${formData.reservation_date}`);
   }
 
   function handleCancel() {
@@ -53,6 +70,7 @@ function NewReservation() {
           name="last_name"
           id="last_name"
           type="text"
+          value={formData.last_name}
           onChange={handleChange}></input>
 
         <label for="mobile_number">Mobile Number</label>
@@ -60,6 +78,7 @@ function NewReservation() {
           name="mobile_number"
           id="mobile_number"
           type="tel"
+          value={formData.mobile_number}
           onChange={handleChange}></input>
 
         <label for="reservation_date">Reservation date</label>
@@ -67,6 +86,7 @@ function NewReservation() {
           name="reservation_date"
           id="reservation_date"
           type="date"
+          value={formData.reservation_date}
           onChange={handleChange}></input>
 
         <label for="reservation_time">Reservation Time</label>
@@ -74,6 +94,7 @@ function NewReservation() {
           name="reservation_time"
           id="reservation_time"
           type="time"
+          value={formData.reservation_time}
           onChange={handleChange}></input>
 
         <label for="people">Number of people</label>
@@ -81,6 +102,7 @@ function NewReservation() {
           name="people"
           id="people"
           type="number"
+          value={formData.people}
           onChange={handleChange}></input>
 
         <button type="submit">Submit</button>
