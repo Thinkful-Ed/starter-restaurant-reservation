@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { listTables } from "../utils/api";
+import { finishOccupiedTable, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import { useHistory } from "react-router";
 
 /**
  * Defines the dashboard page.
@@ -9,8 +10,10 @@ import ErrorAlert from "../layout/ErrorAlert";
  * @returns {JSX.Element}
  */
 function TablesSection() {
+  const history = useHistory();
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
+  const [showButton, setShowButton] = useState(false);
 
   useEffect(loadTables, []);
 
@@ -20,6 +23,21 @@ function TablesSection() {
     listTables(abortController.signal).then(setTables).catch(setTablesError);
     return () => abortController.abort();
   }
+
+  const handleFinishTable = async (table_id) => {
+    if (
+      window.confirm(
+        "Is this table ready to seat new guests? This cannot be undone."
+      )
+    ) {
+      await finishOccupiedTable(table_id);
+      setShowButton(false);
+      history.push("/dashboard");
+      history.go(0);
+    } else {
+      history.goBack();
+    }
+  };
 
   return (
     <div>
@@ -32,6 +50,17 @@ function TablesSection() {
               <div>{table.table_name}</div>
               <div>{table.capacity}</div>
               <div>{table.reservation_id === null ? "Free" : "Occupied"}</div>
+              <div>
+                {table.reservation_id === null ? (
+                  <div></div>
+                ) : (
+                  <button
+                    data-table-id-finish={table.table_id}
+                    onClick={() => handleFinishTable(table.table_id)}>
+                    Finish
+                  </button>
+                )}
+              </div>
             </div>
           );
         })}

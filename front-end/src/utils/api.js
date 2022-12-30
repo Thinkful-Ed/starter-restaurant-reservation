@@ -116,3 +116,15 @@ export async function setTableToOccupied(table_id, reservation_id, signal) {
   };
   return await fetchJson(url, options);
 }
+
+//Send a `DELETE` request to `/tables/:table_id/seat` in order to remove the table assignment
+
+export async function finishOccupiedTable(table_id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = {
+    method: "DELETE",
+    headers,
+    signal,
+  };
+  return await fetchJson(url, options);
+}
