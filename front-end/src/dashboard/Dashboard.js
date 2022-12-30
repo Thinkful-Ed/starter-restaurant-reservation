@@ -3,8 +3,9 @@ import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "../reservations/ReservationsList";
 import {next, previous, today} from "../utils/date-time";
 import useQuery from "../utils/useQuery";
-import { Link, useHistory } from "react-router-dom";
-import { listReservations } from "../utils/api";
+import { Link } from "react-router-dom";
+import { listReservations, listTables } from "../utils/api";
+import TablesList from "../tables/TablesList"
 // import LoadTables from "../Comps/LoadTables";
 // import { Col, Row, Container, Button } from "react-bootstrap";
 // import Table from "react-bootstrap/Table";
@@ -19,10 +20,10 @@ import { listReservations } from "../utils/api";
 function Dashboard({date}) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
 
-const history = useHistory();
-const [tables, setTables] = useState([]);
-
+// const history = useHistory();
 const newDate = useQuery().get("date") ?? date;
 
 // async function cancelRes(reservationId) {
@@ -52,14 +53,26 @@ const newDate = useQuery().get("date") ?? date;
 loadDashboard();
   }, [newDate]);
 
-  
+  useEffect(() => {
+    async function loadTables() {
+      const abortController = new AbortController();
+      try {
+        const tablesFromAPI = await listTables(abortController.signal);
+        setTables(tablesFromAPI);
+      } catch (error) {
+        if (error) {
+          setTablesError(error)
+        }
+      }
+      return () => abortController.abort();
+    }
+
+    loadTables();
+  }, []);
 
   return (
     <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-3">Reservations for date : {newDate}</h4>
-      </div>
+      <h2 className="pt-3">Reservations for date: {newDate}</h2>
        <div className="d-md-flex mb-3"> <Link to={`/dashboard?date=${previous(newDate)}`}><button className="btn btn-primary mr-2">
           Previous Day
         </button></Link>
@@ -75,6 +88,8 @@ loadDashboard();
       <ErrorAlert error={reservationsError} />
       {/* {JSON.stringify(reservations)} */}
       <ReservationsList reservations={reservations} />
+      <ErrorAlert error={tablesError} />
+      <TablesList tables={tables}/>
     </main>
   );
 }

@@ -119,19 +119,20 @@ function hasTime(req, res,next){
   }
   next();
 }
-  //Check to see if people is valid
+//Check to see if people is valid
 function hasValidPeople(req, res,next){
   const {data = {}} = req.body;
   const people = data["people"];
   const peopleAsNumber = people;
-  if (peopleAsNumber === 0 || typeof peopleAsNumber !== 'number') {
+  if (peopleAsNumber === 0 || !Number.isInteger(peopleAsNumber)) {
     return next({
     status: 400, 
-    message: `people must be a number and greater than 1`
+    message: `people must be a number and not equal zero`
 });
 }
 next();
 };
+
 
 //Read reservation based on reservation id provided
 async function read(req, res, next){
@@ -145,10 +146,8 @@ res.json({data});
 function hasValidDate(req, res, next) {
   const { data: { reservation_date, reservation_time } = {} } = req.body;
   const date = new Date(`${reservation_date}T${reservation_time}`);
-  const momentDate = moment(date);
-  const now = moment();
   const today = new Date();
-  if (now > momentDate) {
+  if (today.getTime() > date.getTime()) {
     return next({
       status: 400,
       message: "reservation_date must be a future date",
