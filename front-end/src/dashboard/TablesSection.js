@@ -25,7 +25,17 @@ function TablesSection() {
     <div>
       I AM TABLES
       <ErrorAlert error={tablesError} />
-      <div>{JSON.stringify(tables)}</div>
+      <div>
+        {tables.map((table) => {
+          return (
+            <div key={table.table_id}>
+              <div>{table.table_name}</div>
+              <div>{table.capacity}</div>
+              <div>{table.reservation_id === null ? "Free" : "Occupied"}</div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
