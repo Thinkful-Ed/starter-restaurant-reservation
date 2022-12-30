@@ -50,7 +50,21 @@ function Dashboard({ date }) {
       <button onClick={handleTodayButtonClick}>Today</button>
       <button onClick={handleNextButtonClick}>Next Date</button>
       <ErrorAlert error={reservationsError} />
-      <div>{JSON.stringify(reservations)}</div>
+      <div>
+        {reservations.map((reservation) => {
+          return (
+            <div>
+              <span>{reservation.first_name}</span>
+              <span>{reservation.last_name}</span>
+              <span>{reservation.mobile_number}</span>
+              <span>{reservation.reservation_date}</span>
+              <span>{reservation.reservation_time}</span>
+              <span>{reservation.people}</span>
+              <button>SEAT</button>
+            </div>
+          );
+        })}
+      </div>
 
       <TablesSection />
     </main>
