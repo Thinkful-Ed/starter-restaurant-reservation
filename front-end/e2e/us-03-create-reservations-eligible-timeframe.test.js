@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer");
-const { setDefaultOptions } = require('expect-puppeteer');
+const { setDefaultOptions } = require("expect-puppeteer");
 const fs = require("fs");
 const fsPromises = fs.promises;
 
@@ -75,7 +75,7 @@ describe("US-03 - Create reservation on a future, working date - E2E", () => {
       expect(await page.$(".alert-danger")).toBeTruthy();
     });
 
-    test("displays an error message if reservation time is after the close time", async () => {
+    test.only("displays an error message if reservation time is after the close time", async () => {
       await page.type("input[name=reservation_date]", "02022035");
       await page.type("input[name=reservation_time]", "1045PM");
 

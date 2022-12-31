@@ -43,8 +43,10 @@ function NewReservation() {
         },
         abortController.signal
       );
+      console.log("WE HAVE NO ERROR");
       history.push(`/dashboard?date=${formData.reservation_date}`);
     } catch (error) {
+      console.log("WE HAVE ERROR");
       setReservationsError(error);
     }
   }
