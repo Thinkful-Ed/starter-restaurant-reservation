@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { listTables, readReservation } from "../utils/api";
+import { listTables, readReservation, updateTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 function TableSeating() {
@@ -15,7 +15,20 @@ function TableSeating() {
     
     const [seatTableFormData, setSeatTableFormData] = useState({});
 
+
     useEffect(() => {
+        async function loadReservation() {
+            const abortController = new AbortController();
+            try {
+                const reservationFromAPI = await readReservation(reservationId,abortController.signal);
+                setReservation(reservationFromAPI);
+            } catch (error) {
+                if (error) {
+                    setReservationError(error)
+                }
+            }
+            return () => abortController.abort();
+        }
         async function loadTables() {
             const abortController = new AbortController();
             try {
@@ -41,22 +54,6 @@ function TableSeating() {
         }
 
         loadTables();
-    }, []);
-
-    useEffect(() => {
-        async function loadReservation() {
-            const abortController = new AbortController();
-            try {
-                const reservationFromAPI = await readReservation(reservationId,abortController.signal);
-                setReservation(reservationFromAPI);
-            } catch (error) {
-                if (error) {
-                    setReservationError(error)
-                }
-            }
-            return () => abortController.abort();
-        }
-
         loadReservation();
     }, [reservationId]);
 
@@ -64,7 +61,7 @@ function TableSeating() {
 
         const abortController = new AbortController();
         try {
-            // await seatReservations(table.table_id, reservationId, abortController.signal);
+            await updateTable(table.table_id, reservationId, abortController.signal);
 
             history.push(`/dashboard`);
         }
@@ -79,8 +76,10 @@ function TableSeating() {
     };
 
     function validCapacity(table) {
+        console.log(tables);
         const people = reservation.people;
-        const tableCapacity = tables[table.table_id].capacity;
+        const currentTable = tables.filter((item)=>table.id === item.id);
+        const tableCapacity = currentTable[0].capacity;
         const errors = [];
         if (people > tableCapacity) {
             errors.push({ key: 1, message: 'Form: Too many people for this table' })

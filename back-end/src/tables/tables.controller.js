@@ -95,7 +95,7 @@ async function create (req, res){
 
 //Update existing table with reservation 
 async function update(req, res) {
-  const {data: {resrvation_id}} = req.body;
+  const {data: {reservation_id}} = req.body;
   const {tableId} = req.params;
   const status = "Occupied";
   const tableUpdate= {
