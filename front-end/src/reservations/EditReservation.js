@@ -1,6 +1,6 @@
 import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { createReservation } from "../utils/api";
+import { updateReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationForm from "./ReservationForm";
 import { useParams } from "react-router-dom";
@@ -41,7 +41,14 @@ function EditReservation() {
         reservation_id,
         abortController.signal
       );
-      setFormData(response);
+      setFormData({
+        first_name: response.first_name,
+        last_name: response.last_name,
+        mobile_number: response.mobile_number,
+        reservation_date: response.reservation_date,
+        reservation_time: response.reservation_time,
+        people: response.people,
+      });
     } catch (error) {
       setReservationsError(error);
     }
@@ -57,14 +64,15 @@ function EditReservation() {
     event.preventDefault();
     const abortController = new AbortController();
     try {
-      await createReservation(
+      await updateReservation(
         {
           ...formData,
           people: parseInt(formData.people),
         },
+        reservation_id,
         abortController.signal
       );
-      history.push(`/dashboard?date=${formData.reservation_date}`);
+      history.goBack();
     } catch (error) {
       setReservationsError(error);
     }
