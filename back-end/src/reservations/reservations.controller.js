@@ -204,9 +204,8 @@ async function getReservationById(request, response, next) {
   response.status(200).json({ data: reservation });
 }
 
-async function checkReservationStatus(request, response, next) {
+function checkReservationStatus(request, response, next) {
   const data = request.body.data;
-  const reservation_id = data.reservation_id;
   const status = data.status;
 
   if (status === "seated" || status === "finished") {
