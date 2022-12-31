@@ -30,30 +30,31 @@ function EditReservation() {
   const [reservationsError, setReservationsError] = useState(null);
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
 
-  useEffect(loadReservationData, [reservation_id]);
-
-  async function loadReservationData() {
-    console.log("reservation_id--------------------", reservation_id);
-    const abortController = new AbortController();
-    setReservationsError(null);
-    try {
-      const response = await getReservationById(
-        reservation_id,
-        abortController.signal
-      );
-      setFormData({
-        first_name: response.first_name,
-        last_name: response.last_name,
-        mobile_number: response.mobile_number,
-        reservation_date: response.reservation_date,
-        reservation_time: response.reservation_time,
-        people: response.people,
-      });
-    } catch (error) {
-      setReservationsError(error);
+  useEffect(() => {
+    async function loadReservationData() {
+      console.log("reservation_id--------------------", reservation_id);
+      const abortController = new AbortController();
+      setReservationsError(null);
+      try {
+        const response = await getReservationById(
+          reservation_id,
+          abortController.signal
+        );
+        setFormData({
+          first_name: response.first_name,
+          last_name: response.last_name,
+          mobile_number: response.mobile_number,
+          reservation_date: response.reservation_date,
+          reservation_time: response.reservation_time,
+          people: response.people,
+        });
+      } catch (error) {
+        setReservationsError(error);
+      }
+      return () => abortController.abort();
     }
-    return () => abortController.abort();
-  }
+    loadReservationData();
+  }, [reservation_id]);
 
   const handleChange = (event) => {
     const { target } = event;

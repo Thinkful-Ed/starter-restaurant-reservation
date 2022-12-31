@@ -44,11 +44,13 @@ function ReservationsList({ reservations }) {
                 <a href={`/reservations/${reservation.reservation_id}/edit`}>
                   <button>Edit</button>
                 </a>
-                <button
-                  data-reservation-id-cancel={reservation.reservation_id}
-                  onClick={() => handleCancel(reservation.reservation_id)}>
-                  Cancel
-                </button>
+                {reservation.status !== "cancelled" && (
+                  <button
+                    data-reservation-id-cancel={reservation.reservation_id}
+                    onClick={() => handleCancel(reservation.reservation_id)}>
+                    Cancel
+                  </button>
+                )}
               </div>
             </div>
           );
