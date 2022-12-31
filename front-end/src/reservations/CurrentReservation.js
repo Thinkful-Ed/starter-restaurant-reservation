@@ -66,7 +66,7 @@ function CurrentReservation() {
             Select a table
           </option>
           {tables.map((table) => (
-            <option value={table.table_id}>
+            <option value={table.table_id} key={table.table_id}>
               {table.table_name} - {table.capacity}
             </option>
           ))}
