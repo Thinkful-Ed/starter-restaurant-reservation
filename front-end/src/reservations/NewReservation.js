@@ -2,6 +2,7 @@ import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import ReservationForm from "./ReservationForm";
 
 // const MOCK_FORM_DATA = {
 //   first_name: "James",
@@ -48,66 +49,15 @@ function NewReservation() {
     }
   }
 
-  function handleCancel() {
-    history.goBack();
-  }
-
   return (
     <div>
       <h1>NEW RESERVATIONS</h1>
       <ErrorAlert error={reservationsError} />
-      <form onSubmit={onSubmit}>
-        <label htmlFor="first_name">First Name</label>
-        <input
-          name="first_name"
-          id="first_name"
-          type="text"
-          value={formData.first_name}
-          onChange={handleChange}></input>
-
-        <label htmlFor="last_name">Last Name</label>
-        <input
-          name="last_name"
-          id="last_name"
-          type="text"
-          value={formData.last_name}
-          onChange={handleChange}></input>
-
-        <label htmlFor="mobile_number">Mobile Number</label>
-        <input
-          name="mobile_number"
-          id="mobile_number"
-          type="tel"
-          value={formData.mobile_number}
-          onChange={handleChange}></input>
-
-        <label htmlFor="reservation_date">Reservation date</label>
-        <input
-          name="reservation_date"
-          id="reservation_date"
-          type="date"
-          value={formData.reservation_date}
-          onChange={handleChange}></input>
-
-        <label htmlFor="reservation_time">Reservation Time</label>
-        <input
-          name="reservation_time"
-          id="reservation_time"
-          type="time"
-          value={formData.reservation_time}
-          onChange={handleChange}></input>
-
-        <label htmlFor="people">Number of people</label>
-        <input
-          name="people"
-          id="people"
-          type="number"
-          value={formData.people}
-          onChange={handleChange}></input>
-
-        <button type="submit">Submit</button>
-        <button onClick={handleCancel}>Cancel</button>
-      </form>
+      <ReservationForm
+        reservation={formData}
+        handleChange={handleChange}
+        onSubmit={onSubmit}
+      />
     </div>
   );
 }
