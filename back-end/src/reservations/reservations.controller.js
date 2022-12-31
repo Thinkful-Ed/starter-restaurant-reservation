@@ -123,7 +123,7 @@ function hasTime(req, res,next){
 function hasValidPeople(req, res,next){
   const {data:{people} = {}} = req.body;
   const peopleAsNumber = people;
-  if (!Number.isInteger(peopleAsNumber)) {
+  if (peopleAsNumber % 1 !== 0) {
     return next({
     status: 400, 
     message: `people must be a number`
