@@ -86,7 +86,7 @@ async function listReservationsByQuery(request, response, next) {
 async function listReservationByDate(date) {
   const reservations = await service.getReservationsByDate(date);
 
-  const sortedReservations = reservations.sort((a, b) => {
+  reservations.sort((a, b) => {
     const [ah, am, as] = a.reservation_time.split(":");
     const [bh, bm, bs] = b.reservation_time.split(":");
     if (ah !== bh) {
@@ -282,15 +282,18 @@ module.exports = {
     checkReservationStatus,
     asyncErrorBoundary(createReservation),
   ],
-  get: [checkIfReservationIdExists, asyncErrorBoundary(getReservationById)],
+  get: [
+    asyncErrorBoundary(checkIfReservationIdExists),
+    asyncErrorBoundary(getReservationById),
+  ],
   put: [
-    checkIfReservationIdExists,
+    asyncErrorBoundary(checkIfReservationIdExists),
     asyncErrorBoundary(checkStatusUnknown),
     asyncErrorBoundary(checkCurrentStatusFinished),
     asyncErrorBoundary(updateReservationStatus),
   ],
   updateReservation: [
-    checkIfReservationIdExists,
+    asyncErrorBoundary(checkIfReservationIdExists),
     checkDataParameters,
     checkCurrentStatusFinished,
     asyncErrorBoundary(updateReservation),
