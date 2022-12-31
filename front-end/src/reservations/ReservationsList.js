@@ -4,6 +4,7 @@ import UpdateReservation from "./UpdateReservation";
 import Reservation from "./Reservation";
 import { createReservation } from "../utils/api";
 import { Route, useHistory,  useRouteMatch } from "react-router-dom";
+import TableSeating from "../tables/TableSeating";
 
 /**
  * Defines the reservation page.
@@ -65,6 +66,8 @@ function ReservationsList({reservations}) {
         </table>   
         <Route path={`${url}/reservations/new`}><CreateReservation handleReservationCreate={handleReservationCreate} /></Route>
         <Route path={`${url}/reservations/:reservationId/edit`}><UpdateReservation /></Route>
+        <Route path={`${url}/reservations/:reservationId/seat`}><TableSeating /></Route>
+
       </div>
     </main>
   );

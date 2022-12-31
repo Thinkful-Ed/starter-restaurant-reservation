@@ -167,7 +167,7 @@ export async function createTable(table, signal) {
  *  a promise that resolves to the updated reservation.
  */
 export async function updateTable(table_id, reservationId, signal) {
-  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const url = `${API_BASE_URL}/tables/${table_id}`;
   const options = {
     method: "PUT",
     headers,
