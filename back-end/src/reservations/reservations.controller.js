@@ -54,12 +54,9 @@ function isTuesday(date) {
 function checkIfDateIsValid(request, response, next) {
   const { reservation_date } = request.body.data;
 
-  console.log("CHECKING DATE VALIDITY", reservation_date);
   if (isInTheFuture(reservation_date) && !isTuesday(reservation_date)) {
-    console.log("TIME IS VALID");
     next();
   } else {
-    console.log("TIME IS NOT VALID");
     next({
       status: 400,
       message:
