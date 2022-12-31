@@ -88,8 +88,18 @@ async function seatReservation(reservation_id, table_id) {
   return await fetchJson(url, options, {});
 }
 
+async function searchReservationsByPhoneNumber(mobile_number) {
+  const url = `${API_BASE_URL}/reservations?mobile_number=${mobile_number}`;
+  const options = {
+    method: "GET",
+    headers,
+  };
+  return await fetchJson(url, options, {});
+}
+
 module.exports = {
   createReservation,
   createTable,
   seatReservation,
+  searchReservationsByPhoneNumber,
 };
