@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
+import ReservationsList from "../reservations/ReservationsList";
 import { searchReservationsByPhoneNumber } from "../utils/api";
 
 const INITIAL_FORM_DATA = {
@@ -10,6 +11,7 @@ const INITIAL_FORM_DATA = {
 function Search() {
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const [error, setError] = useState(null);
+  const [reservations, setReservations] = useState([]);
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -20,6 +22,7 @@ function Search() {
         abortController.signal
       );
       console.log("RESULT------", result);
+      setReservations(result);
     } catch (error) {
       setError(error);
     }
@@ -41,6 +44,7 @@ function Search() {
         value={formData.mobile_number}
         onChange={handleChange}></input>
       <button type="submit">Find</button>
+      <ReservationsList reservations={reservations} />
     </form>
   );
 }
