@@ -37,9 +37,10 @@ function Search() {
       <input
         name="mobile_number"
         id="mobile_number"
+        placeholder="Enter a customer's phone number"
         value={formData.mobile_number}
         onChange={handleChange}></input>
-      <button type="submit">Submit</button>
+      <button type="submit">Find</button>
     </form>
   );
 }
