@@ -71,21 +71,14 @@ function Dashboard({ date }) {
               <span> {reservation.reservation_date} </span>
               <span> {reservation.reservation_time} </span>
               <span> {reservation.people} </span>
-              <div> RESERVATION STATUS {reservation.status} </div>
+              <div data-reservation-id-status={reservation.reservation_id}>
+                RESERVATION STATUS {reservation.status || "booked"}
+              </div>
               <div>
-                {reservation.status === null ? (
-                  <div>
-                    <div>Booked</div>
-                    <a
-                      href={`/reservations/${reservation.reservation_id}/seat`}>
-                      <button
-                        data-reservation-id-status={reservation.reservation_id}>
-                        Seat
-                      </button>
-                    </a>
-                  </div>
-                ) : (
-                  <div></div>
+                {reservation.status === null && (
+                  <a href={`/reservations/${reservation.reservation_id}/seat`}>
+                    <button>Seat</button>
+                  </a>
                 )}
               </div>
             </div>
