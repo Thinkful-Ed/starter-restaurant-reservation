@@ -13,7 +13,6 @@ function TablesSection() {
   const history = useHistory();
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
-  const [showButton, setShowButton] = useState(false);
 
   useEffect(loadTables, []);
 
@@ -31,11 +30,8 @@ function TablesSection() {
       )
     ) {
       await finishOccupiedTable(table_id);
-      setShowButton(false);
       history.push("/dashboard");
       history.go(0);
-    } else {
-      history.goBack();
     }
   };
 
