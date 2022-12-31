@@ -67,23 +67,6 @@ const newDate = useQuery().get("date") ?? date;
 loadDashboard();
   }, [newDate]);
 
-  // useEffect(() => {
-  //   async function loadTables() {
-  //     const abortController = new AbortController();
-  //     try {
-  //       const tablesFromAPI = await listTables(abortController.signal);
-  //       setTables(tablesFromAPI);
-  //     } catch (error) {
-  //       if (error) {
-  //         setTablesError(error)
-  //       }
-  //     }
-  //     return () => abortController.abort();
-  //   }
-
-  //   loadTables();
-  // }, []);
-
   return (
     <main>
       <h2 className="pt-3">Reservations for date: {newDate}</h2>
