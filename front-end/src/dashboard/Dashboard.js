@@ -39,6 +39,17 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${next(date)}`);
   }
 
+  // function handleResStatNull() {
+  //   setStatus("booked");
+  //   return <div></div>;
+  // }
+
+  // function handleChangeStatus(event, reservationStatus) {
+  //   event.preventDefault();
+  //   setStatus(reservationStatus);
+  //   return
+  // }
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -54,15 +65,29 @@ function Dashboard({ date }) {
         {reservations.map((reservation) => {
           return (
             <div key={reservation.reservation_id}>
-              <span>{reservation.first_name}</span>
-              <span>{reservation.last_name}</span>
-              <span>{reservation.mobile_number}</span>
-              <span>{reservation.reservation_date}</span>
-              <span>{reservation.reservation_time}</span>
-              <span>{reservation.people}</span>
-              <a href={`/reservations/${reservation.reservation_id}/seat`}>
-                <button>SEAT</button>
-              </a>
+              <span> {reservation.first_name} </span>
+              <span> {reservation.last_name} </span>
+              <span> {reservation.mobile_number} </span>
+              <span> {reservation.reservation_date} </span>
+              <span> {reservation.reservation_time} </span>
+              <span> {reservation.people} </span>
+              <div> RESERVATION STATUS {reservation.status} </div>
+              <div>
+                {reservation.status === null ? (
+                  <div>
+                    <div>Booked</div>
+                    <a
+                      href={`/reservations/${reservation.reservation_id}/seat`}>
+                      <button
+                        data-reservation-id-status={reservation.reservation_id}>
+                        Seat
+                      </button>
+                    </a>
+                  </div>
+                ) : (
+                  <div></div>
+                )}
+              </div>
             </div>
           );
         })}
