@@ -159,14 +159,14 @@ export async function createTable(table, signal) {
 
 /**
  * Updates an existing table
- * @param updatedTable
+ * @param updateTable
  *  the reservation to save, which must have an `id` property.
  * @param signal
  *  optional AbortController.signal
  * @returns {Promise<Error|*>}
  *  a promise that resolves to the updated reservation.
  */
-export async function updatedTable(table_id, reservationId, signal) {
+export async function updateTable(table_id, reservationId, signal) {
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
   const options = {
     method: "PUT",
