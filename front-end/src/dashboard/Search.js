@@ -11,7 +11,7 @@ const INITIAL_FORM_DATA = {
 function Search() {
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const [error, setError] = useState(null);
-  const [reservations, setReservations] = useState([]);
+  const [reservations, setReservations] = useState(null);
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -44,7 +44,12 @@ function Search() {
         value={formData.mobile_number}
         onChange={handleChange}></input>
       <button type="submit">Find</button>
-      <ReservationsList reservations={reservations} />
+      {reservations !== null && reservations.length === 0 && (
+        <div>No reservations found</div>
+      )}
+      {reservations !== null && reservations.length > 0 && (
+        <ReservationsList reservations={reservations} />
+      )}
     </form>
   );
 }
