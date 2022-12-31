@@ -45,11 +45,11 @@ function TablesSection() {
             <div key={table.table_id}>
               <div>{table.table_name}</div>
               <div>{table.capacity}</div>
-              <div>{table.reservation_id === null ? "Free" : "Occupied"}</div>
+              <div data-table-id-status={table.table_id}>
+                {table.reservation_id === null ? "Free" : "Occupied"}
+              </div>
               <div>
-                {table.reservation_id === null ? (
-                  <div></div>
-                ) : (
+                {table.reservation_id !== null && (
                   <button
                     data-table-id-finish={table.table_id}
                     onClick={() => handleFinishTable(table.table_id)}>
