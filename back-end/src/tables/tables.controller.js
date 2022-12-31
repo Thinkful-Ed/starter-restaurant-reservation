@@ -97,7 +97,12 @@ async function create (req, res){
 async function update(req, res) {
   const {data: {resrvation_id}} = req.body;
   const {tableId} = req.params;
-  const data = await service.update(tableId, reservation_id);  
+  const status = "Occupied";
+  const tableUpdate= {
+    reservation_id: reservation_id, 
+    status: status
+  }
+  const data = await service.update(tableId, tableUpdate);  
   res.status(201).json({ data });
   }
 

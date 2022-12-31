@@ -104,7 +104,10 @@ function TableSeating() {
         event.preventDefault();
         const capacityError = validCapacity(seatTableFormData);
         setFormErrors([capacityError])
-        if (formErrors.length === 0) {
+        if(capacityError.legnth>0){
+            setFormErrors([capacityError])
+           }
+            else{
             handleTableseatSubmit(event);
         }
     }
