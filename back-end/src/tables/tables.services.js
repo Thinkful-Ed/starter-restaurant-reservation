@@ -25,11 +25,11 @@ function create(table) {
   }
 
 //Knex query to update a specific reservation
-function update(tableId, reservationId){
+function update(tableId, tableUpdate){
     return knex("tables")
     .select("*")
     .where({table_id: tableId})
-    .update(reservation_id, reservationId, ["*"])
+    .update(tableUpdate, ["*"])
     .then((data)=> data[0]);
 }
 

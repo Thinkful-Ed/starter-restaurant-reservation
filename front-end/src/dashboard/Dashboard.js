@@ -49,6 +49,7 @@ const newDate = useQuery().get("date") ?? date;
       }
       return () => abortController.abort();
       }
+      
       async function loadTables() {
         const abortController = new AbortController();
         try {
