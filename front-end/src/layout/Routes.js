@@ -8,6 +8,7 @@ import NewReservation from "../reservations/NewReservation";
 import { useLocation } from "react-router-dom";
 import NewTable from "../tables/NewTables";
 import CurrentReservation from "../reservations/CurrentReservation";
+import Search from "../dashboard/Search";
 
 function useQuery() {
   const { search } = useLocation();
@@ -28,6 +29,9 @@ function Routes() {
     <Switch>
       <Route exact={true} path="/">
         <Redirect to={"/dashboard"} />
+      </Route>
+      <Route exact={true} path="/search">
+        <Search />
       </Route>
       <Route exact={true} path="/tables/new">
         <NewTable />
