@@ -139,3 +139,13 @@ export async function setReservationStatus(reservation_id, status, signal) {
   };
   return await fetchJson(url, options);
 }
+
+export async function searchReservationsByPhoneNumber(mobile_number, signal) {
+  const url = `${API_BASE_URL}/reservations?mobile_number=${mobile_number}`;
+  const options = {
+    method: "GET",
+    headers,
+    signal,
+  };
+  return await fetchJson(url, options, {});
+}
