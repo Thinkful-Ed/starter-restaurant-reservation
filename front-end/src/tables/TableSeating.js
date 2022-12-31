@@ -127,7 +127,7 @@ function TableSeating() {
                             <th colSpan={"3"}>Seat a Reservation</th></tr>
                         <tr>
                             <td>
-                                <label for="table_id">Choose a table:</label>
+                                <label htmlFor="table_id">Choose a table:</label>
 
                                 <select name="table_id" id="table_id" onChange={handleTableSeatChange}>
                                     {options.map((option) => {

@@ -49,26 +49,40 @@ const newDate = useQuery().get("date") ?? date;
       }
       return () => abortController.abort();
       }
+      async function loadTables() {
+        const abortController = new AbortController();
+        try {
+          const tablesFromAPI = await listTables(abortController.signal);
+          setTables(tablesFromAPI);
+        } catch (error) {
+          if (error) {
+            setTablesError(error)
+          }
+        }
+        return () => abortController.abort();
+      }
+  
+      loadTables();
 
 loadDashboard();
   }, [newDate]);
 
-  useEffect(() => {
-    async function loadTables() {
-      const abortController = new AbortController();
-      try {
-        const tablesFromAPI = await listTables(abortController.signal);
-        setTables(tablesFromAPI);
-      } catch (error) {
-        if (error) {
-          setTablesError(error)
-        }
-      }
-      return () => abortController.abort();
-    }
+  // useEffect(() => {
+  //   async function loadTables() {
+  //     const abortController = new AbortController();
+  //     try {
+  //       const tablesFromAPI = await listTables(abortController.signal);
+  //       setTables(tablesFromAPI);
+  //     } catch (error) {
+  //       if (error) {
+  //         setTablesError(error)
+  //       }
+  //     }
+  //     return () => abortController.abort();
+  //   }
 
-    loadTables();
-  }, []);
+  //   loadTables();
+  // }, []);
 
   return (
     <main>
