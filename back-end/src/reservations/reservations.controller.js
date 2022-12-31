@@ -222,23 +222,20 @@ async function checkReservationStatus(request, response, next) {
 async function checkCurrentStatusFinished(request, response, next) {
   const { reservation_id } = request.params;
 
-  // Retrieve the current status of the reservation from the database
   const reservation = await service.getReservationById(reservation_id);
   const currentStatus = reservation.status;
 
-  if (currentStatus === "finished" || currentStatus === "unknown") {
-    // Return a 400 status code and an error message indicating that the reservation is already finished
+  if (currentStatus === "finished" || currentStatus === "cancelled") {
     next({
       status: 400,
-      message: `Reservation is already ${currentStatus} and cannot be updated`,
+      message: `Reservation is ${currentStatus} and cannot be updated`,
     });
   } else {
-    // Allow the update to proceed
     next();
   }
 }
 
-async function checkIfStatusIsUnknown(request, response, next) {
+async function checkStatusUnknown(request, response, next) {
   const { reservation_id } = request.params;
   const reservation = await service.getReservationById(reservation_id);
   const currentStatus = reservation.status;
@@ -288,13 +285,14 @@ module.exports = {
   get: [checkIfReservationIdExists, asyncErrorBoundary(getReservationById)],
   put: [
     checkIfReservationIdExists,
-    asyncErrorBoundary(checkIfStatusIsUnknown),
+    asyncErrorBoundary(checkStatusUnknown),
     asyncErrorBoundary(checkCurrentStatusFinished),
     asyncErrorBoundary(updateReservationStatus),
   ],
   updateReservation: [
     checkIfReservationIdExists,
     checkDataParameters,
+    checkCurrentStatusFinished,
     asyncErrorBoundary(updateReservation),
   ],
 };
