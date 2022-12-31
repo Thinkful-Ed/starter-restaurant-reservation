@@ -4,6 +4,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { today, previous, next } from "../utils/date-time";
 import { useHistory } from "react-router-dom";
 import TablesSection from "./TablesSection";
+import ReservationsList from "../reservations/ReservationsList";
 
 /**
  * Defines the dashboard page.
@@ -39,17 +40,6 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${next(date)}`);
   }
 
-  // function handleResStatNull() {
-  //   setStatus("booked");
-  //   return <div></div>;
-  // }
-
-  // function handleChangeStatus(event, reservationStatus) {
-  //   event.preventDefault();
-  //   setStatus(reservationStatus);
-  //   return
-  // }
-
   return (
     <main>
       <h1>Dashboard</h1>
@@ -61,31 +51,7 @@ function Dashboard({ date }) {
       <button onClick={handleTodayButtonClick}>Today</button>
       <button onClick={handleNextButtonClick}>Next Date</button>
       <ErrorAlert error={reservationsError} />
-      <div>
-        {reservations.map((reservation) => {
-          return (
-            <div key={reservation.reservation_id}>
-              <span> {reservation.first_name} </span>
-              <span> {reservation.last_name} </span>
-              <span> {reservation.mobile_number} </span>
-              <span> {reservation.reservation_date} </span>
-              <span> {reservation.reservation_time} </span>
-              <span> {reservation.people} </span>
-              <div data-reservation-id-status={reservation.reservation_id}>
-                RESERVATION STATUS {reservation.status || "booked"}
-              </div>
-              <div>
-                {reservation.status === null && (
-                  <a href={`/reservations/${reservation.reservation_id}/seat`}>
-                    <button>Seat</button>
-                  </a>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
+      <ReservationsList reservations={reservations} />
       <TablesSection />
     </main>
   );
