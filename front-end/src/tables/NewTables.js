@@ -54,6 +54,7 @@ function NewTables() {
           name="table_name"
           id="table_name"
           type="text"
+          required
           value={formData.table_name}
           onChange={handleChange}></input>
 
@@ -62,6 +63,7 @@ function NewTables() {
           name="capacity"
           id="capacity"
           type="number"
+          required
           value={formData.capacity}
           onChange={handleChange}></input>
 

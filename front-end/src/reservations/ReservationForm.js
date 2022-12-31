@@ -14,6 +14,7 @@ function NewReservation({ reservation, handleChange, onSubmit }) {
         name="first_name"
         id="first_name"
         type="text"
+        required
         value={reservation.first_name}
         onChange={handleChange}></input>
 
@@ -22,6 +23,7 @@ function NewReservation({ reservation, handleChange, onSubmit }) {
         name="last_name"
         id="last_name"
         type="text"
+        required
         value={reservation.last_name}
         onChange={handleChange}></input>
 
@@ -30,6 +32,7 @@ function NewReservation({ reservation, handleChange, onSubmit }) {
         name="mobile_number"
         id="mobile_number"
         type="tel"
+        required
         value={reservation.mobile_number}
         onChange={handleChange}></input>
 
@@ -38,6 +41,7 @@ function NewReservation({ reservation, handleChange, onSubmit }) {
         name="reservation_date"
         id="reservation_date"
         type="date"
+        required
         value={reservation.reservation_date}
         onChange={handleChange}></input>
 
@@ -46,6 +50,7 @@ function NewReservation({ reservation, handleChange, onSubmit }) {
         name="reservation_time"
         id="reservation_time"
         type="time"
+        required
         value={reservation.reservation_time}
         onChange={handleChange}></input>
 
@@ -54,6 +59,7 @@ function NewReservation({ reservation, handleChange, onSubmit }) {
         name="people"
         id="people"
         type="number"
+        required
         value={reservation.people}
         onChange={handleChange}></input>
 

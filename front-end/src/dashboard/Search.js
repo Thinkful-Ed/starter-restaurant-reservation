@@ -42,6 +42,7 @@ function Search() {
           name="mobile_number"
           id="mobile_number"
           placeholder="Enter a customer's phone number"
+          required
           value={formData.mobile_number}
           onChange={handleChange}></input>
         <button type="submit">Find</button>
