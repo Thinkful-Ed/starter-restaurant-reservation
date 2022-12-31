@@ -73,7 +73,7 @@ function EditReservation() {
         reservation_id,
         abortController.signal
       );
-      history.goBack();
+      history.push(`/dashboard?date=${formData.reservation_date}`);
     } catch (error) {
       setReservationsError(error);
     }
