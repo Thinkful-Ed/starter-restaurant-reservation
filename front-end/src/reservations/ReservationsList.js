@@ -26,6 +26,9 @@ function ReservationsList({ reservations }) {
                     <button>Seat</button>
                   </a>
                 )}
+                <a href={`/reservations/${reservation.reservation_id}/edit`}>
+                  <button>Edit</button>
+                </a>
               </div>
             </div>
           );

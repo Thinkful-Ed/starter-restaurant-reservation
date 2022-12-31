@@ -34,23 +34,25 @@ function Search() {
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <ErrorAlert error={error} />
-      <label htmlFor="mobile_number">Mobile Number</label>
-      <input
-        name="mobile_number"
-        id="mobile_number"
-        placeholder="Enter a customer's phone number"
-        value={formData.mobile_number}
-        onChange={handleChange}></input>
-      <button type="submit">Find</button>
+    <div>
+      <form onSubmit={onSubmit}>
+        <ErrorAlert error={error} />
+        <label htmlFor="mobile_number">Mobile Number</label>
+        <input
+          name="mobile_number"
+          id="mobile_number"
+          placeholder="Enter a customer's phone number"
+          value={formData.mobile_number}
+          onChange={handleChange}></input>
+        <button type="submit">Find</button>
+      </form>
       {reservations !== null && reservations.length === 0 && (
         <div>No reservations found</div>
       )}
       {reservations !== null && reservations.length > 0 && (
         <ReservationsList reservations={reservations} />
       )}
-    </form>
+    </div>
   );
 }
 
