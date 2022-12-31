@@ -28,7 +28,7 @@
     "eject": "react-scripts eject",
     "start": "PORT=3006 react-scripts start",
     "test": "npx cross-env CI=true npm run test:run",
-    "test:run": "run-s test:unit test:e2e --watch",
+    "test:run": "run-s test:unit test:e2e",
     "test:1": "run-p -l -r test:start:* \"test:e2e:run -- us-01\"",
     "test:2": "run-p -l -r test:start:* \"test:e2e:run -- us-02\"",
     "test:3": "run-p -l -r test:start:* \"test:e2e:run -- us-03\"",
