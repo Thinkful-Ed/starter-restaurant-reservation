@@ -1,6 +1,4 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
-import { useState } from "react";
 
 function Search() {
   return (

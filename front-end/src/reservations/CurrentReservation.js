@@ -11,10 +11,9 @@ const INITIAL_FORM_DATA = {
 function CurrentReservation() {
   const history = useHistory();
   const [tables, setTables] = useState([]);
-  const [tablesError, setTablesError] = useState(null);
+  const [reservationsError, setReservationsError] = useState(null);
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const { reservationId } = useParams();
-  const [reservationsError, setReservationsError] = useState(null);
   useEffect(loadTables, []);
 
   const handleChange = (event) => {
@@ -24,8 +23,10 @@ function CurrentReservation() {
 
   function loadTables() {
     const abortController = new AbortController();
-    setTablesError(null);
-    listTables(abortController.signal).then(setTables).catch(setTablesError);
+    setReservationsError(null);
+    listTables(abortController.signal)
+      .then(setTables)
+      .catch(setReservationsError);
     return () => abortController.abort();
   }
 
