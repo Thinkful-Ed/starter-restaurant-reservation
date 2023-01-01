@@ -176,3 +176,22 @@ export async function updateTable(tableId,reservationId, signal) {
   };
   return await fetchJson(url, options, {});
 }
+
+/**
+ * Finish an existing table
+ * @param finishTable
+ *  the reservation to save, which must have an `id` property.
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<Error|*>}
+ *  a promise that resolves to the updated reservation.
+ */
+export async function finishTable(tableId, signal) {
+  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
+  const options = {
+    method: "DELETE",
+    headers,
+    signal,
+  };
+  return await fetchJson(url, options, {});
+}

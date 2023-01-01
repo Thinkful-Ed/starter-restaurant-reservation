@@ -24,7 +24,7 @@ function create(table) {
       .then((createdTable) => createdTable[0]);
   }
 
-//Knex query to update a specific reservation
+//Knex query to add reservation id to table
 function update(tableId, reservationId, status){
     return knex("tables")
     .select("*")
@@ -33,6 +33,15 @@ function update(tableId, reservationId, status){
     .then((data)=> data[0]);
 }
 
+//Knex query to remove reservation id from table
+function remove(tableId, reservationId, status){
+    return knex("tables")
+    .select("*")
+    .where({table_id: tableId})
+    .update({reservation_id: reservationId, status: status}, ["*"])
+    .then((data)=> data[0]);
+}
+
 module.exports = {
-    list, read, create, update
+    list, read, create, update, remove
 }
