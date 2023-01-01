@@ -66,9 +66,9 @@ function hasOnlyValidProperties(req, res, next) {
 
 //Cheeck the capacity and table occupancy
 async function validSeating(req, res, next) {
-  const { data :{reservation_id}= {}} = req.body;
-  const {tableId} = req.params;
-  const table = await service.read(tableId);
+  const { data :{reservation_id, table_id}= {}} = req.body;
+  // const {tableId} = req.params;
+  const table = await service.read(table_id);
   const reservation = await reservationService.read(reservation_id);
   const tableCapacity = Number(table.capacity); 
   const peopleAsNumber = Number(reservation.people);
