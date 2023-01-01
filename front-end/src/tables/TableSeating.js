@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { listTables, readReservation, updateTable } from "../utils/api";
+import { listTables, readReservation, updateTable, updateReservationStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 function TableSeating() {
@@ -58,9 +58,11 @@ function TableSeating() {
     }, [reservationId]);
 
     const handleTableSeating = async (table) => {
+        const status = "seated";
 
         const abortController = new AbortController();
         try {
+            await updateReservationStatus(table.reservation_id, status, abortController.signal);
             await updateTable(table.table_id, reservationId, abortController.signal);
 
             history.push(`/dashboard`);

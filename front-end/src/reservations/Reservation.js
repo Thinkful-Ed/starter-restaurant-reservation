@@ -14,13 +14,15 @@ function Reservation({reservation, handleReservationDelete}){
             <td>{reservation.reservation_date}</td>
             <td>{reservation.reservation_time}</td>
             <td>{reservation.people}</td>
+            <td data-reservation-id-status={`${reservation.reservation_id}`}>{reservation.status}</td>
+
             <td> 
               <Link to={`/reservations/${reservation.reservation_id}/edit`} className="mt-2 mr-2">
               <button className="btn btn-secondary">Edit</button>
               </Link>
-              <Link to={`/reservations/${reservation.reservation_id}/seat`} className="mt-2 mr-2">
+              {reservation.status === "booked" ? <Link to={`/reservations/${reservation.reservation_id}/seat`} className="mt-2 mr-2">
               <button className="btn btn-info">Seat</button>
-              </Link>
+              </Link>: ""}
               </td>
        
         </tr>

@@ -128,7 +128,7 @@ async function tableExists(req, res,next){
 
 }
 
-//Finish existing table 
+//Finish existing table and set reservation status to finished
 async function remove(req, res) {
   const {tableId} = req.params;
   const status = "Free";

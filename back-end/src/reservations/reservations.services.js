@@ -34,11 +34,20 @@ function create(reservation) {
 function update(updatedReservation){
     return knex("reservations")
     .select("*")
-    .where({review_id: updatedReservation.reservation_id})
+    .where({reservation_id: updatedReservation.reservation_id})
     .update(updatedReservation, ["*"])
     .then((data)=> data[0]);
 }
 
+//Knex query to finish reservation 
+function statusUpdate(reservationId, status){
+    return knex("reservations")
+    .select("*")
+    .where({reservation_id: reservationId})
+    .update({status: status}, ["*"])
+    .then((data)=> data[0]);
+}
+
 module.exports = {
-    list, reservationsByDate, create, read, update
+    list, reservationsByDate, create, read, update, statusUpdate
 }
