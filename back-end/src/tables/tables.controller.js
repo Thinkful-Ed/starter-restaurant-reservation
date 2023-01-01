@@ -95,14 +95,14 @@ async function create (req, res){
 
 //Update existing table with reservation 
 async function update(req, res) {
-  const {data: {reservation_id}} = req.body;
-  const {tableId} = req.params;
+  const {data: {reservation_id, table_id}} = req.body;
+  // const {tableId} = req.params;
   const status = "Occupied";
-  const tableUpdate= {
-    reservation_id: reservation_id, 
-    status: status
-  }
-  const data = await service.update(tableId, tableUpdate);  
+  // const tableUpdate= {
+  //   reservation_id: reservation_id, 
+  //   status: status
+  // }
+  const data = await service.update(table_id, reservation_id, status);  
   res.status(201).json({ data });
   }
 
