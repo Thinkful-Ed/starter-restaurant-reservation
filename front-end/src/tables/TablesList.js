@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import Table from "./Table";
-import { finishTable } from "../utils/api";
+import { finishTable, updateReservationStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 // import { listTables } from "../utils/api";
 import { useHistory } from "react-router-dom";
@@ -28,12 +28,15 @@ function TablesList({tables}) {
 
   //   loadTables();
   // }, []);
-  const finishTableHandler = async (table_id) => {
+  const finishTableHandler = async (table_id, reservation_id) => {
     const result = window.confirm("Is this table ready to seat new guests? This cannot be undone.");
     if (result) {
       const abortController = new AbortController();
       const dashboardDate = today();
+      const status = "finished";
+
     try {
+      await updateReservationStatus(reservation_id, status, abortController.signal);
         await finishTable(table_id, abortController.signal);
 
         history.push(`/dashboard?date=${dashboardDate}`);
@@ -54,8 +57,8 @@ function TablesList({tables}) {
   return (
     <main>
       <h2>Tables</h2>
+      <ErrorAlert error={tablesError} />
       <div className="d-md-flex mb-3">
-        <ErrorAlert error={tablesError} />
         <table className="table bordered table-striped table-hover table-condensed">
           <tbody>
             <tr>

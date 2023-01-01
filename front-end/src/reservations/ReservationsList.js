@@ -59,6 +59,7 @@ function ReservationsList({reservations}) {
           <td>Date</td>
           <td>Time</td>
           <td># of People</td>
+          <td>Status</td>
           <td className="text-center">Actions:</td>
           </tr>
           {list}
