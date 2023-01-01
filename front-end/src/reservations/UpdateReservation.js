@@ -12,7 +12,7 @@ function UpdateReservation (){
    
     const initialReservationFormData = {
          
-        
+        id: ``,
         first_name:``, 
         last_name:``,
         mobile_number:``, 
@@ -26,7 +26,15 @@ function UpdateReservation (){
         readReservation(reservationId, abortController.signal).then((data)=>{
           const updatedData = formatReservationDate(data);
           
-          setReservationFormData(updatedData);});
+          setReservationFormData({
+            id: `${updatedData.reservation_id}`,
+            first_name:`${updatedData.first_name}`, 
+            last_name:`${updatedData.last_name}`,
+            mobile_number:`${updatedData.mobile_number}`, 
+            reservation_date: `${updatedData.reservation_date}`, 
+            reservation_time: `${updatedData.reservation_time}`, 
+            people: `${updatedData.people}`
+          });});
     
         return () => abortController.abort();
       }, [reservationId]);
