@@ -132,7 +132,7 @@ async function tableExists(req, res,next){
 async function remove(req, res) {
   const {tableId} = req.params;
   const status = "Free";
-  const reservation_id = "";
+  const reservation_id = null;
   const data = await service.remove(tableId, reservation_id, status);  
   res.status(201).json({ data });
   }
