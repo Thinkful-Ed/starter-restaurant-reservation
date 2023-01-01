@@ -1,15 +1,16 @@
-import React from "react";
+import React, {useState} from "react";
 import Table from "./Table";
-// import ErrorAlert from "../layout/ErrorAlert";
+import { finishTable } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 // import { listTables } from "../utils/api";
-// import { Route, useHistory,  useRouteMatch } from "react-router-dom";
-// const history = useHistory();
-// const {url} = useRouteMatch();
-
+import { useHistory } from "react-router-dom";
+import { today } from "../utils/date-time";
 
 function TablesList({tables}) {
+  const history = useHistory();
+
   // const [tables, setTables] = useState([]);
-  // const [tablesError, setTablesError] = useState(null);
+  const [tablesError, setTablesError] = useState(null);
 
   // useEffect(() => {
   //   async function loadTables() {
@@ -27,21 +28,41 @@ function TablesList({tables}) {
 
   //   loadTables();
   // }, []);
+  const finishTableHandler = async (table_id) => {
+    const result = window.confirm("Is this table ready to seat new guests? This cannot be undone.");
+    if (result) {
+      const abortController = new AbortController();
+      const dashboardDate = today();
+    try {
+        await finishTable(table_id, abortController.signal);
+
+        history.push(`/dashboard?date=${dashboardDate}`);
+      }
+    catch (error) {
+        if (error) {
+            setTablesError(error);
+        }
+    }
+    return () => abortController.abort();
+    } 
+    
+};
 
   const list = tables.map((table) => {
-    return <Table key={table.table_id} table={table} />
+    return <Table key={table.table_id} table={table} finishTable={finishTableHandler}/>
   });
   return (
     <main>
       <h2>Tables</h2>
       <div className="d-md-flex mb-3">
-        {/* <ErrorAlert error={tablesError} /> */}
+        <ErrorAlert error={tablesError} />
         <table className="table bordered table-striped table-hover table-condensed">
           <tbody>
             <tr>
               <td>Table Name</td>
               <td>Capacity</td>
               <td>Status</td>
+              <td>Action</td>
             </tr>
             {list}
           </tbody>

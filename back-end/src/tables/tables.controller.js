@@ -64,7 +64,7 @@ function hasOnlyValidProperties(req, res, next) {
     next();
 }
 
-//Cheeck the capacity and table occupancy
+//Check the capacity and table occupancy
 async function validSeating(req, res, next) {
   const { data :{reservation_id}= {}} = req.body;
   const {tableId} = req.params;
@@ -87,6 +87,20 @@ async function validSeating(req, res, next) {
   next();
 }
 
+//Check table occupancy
+async function validOccupied(req, res, next) {
+  const {tableId} = req.params;
+  const table = await service.read(tableId);
+  if (table.status === "Free") {
+      return next({
+          status: 400,
+          message: "Table is not occupied",
+        });
+  }
+ 
+  next();
+}
+
   //Create tables
 async function create (req, res){
     const data = await service.create(req.body.data);
@@ -98,10 +112,6 @@ async function update(req, res) {
   const {data: {reservation_id}} = req.body;
   const {tableId} = req.params;
   const status = "Occupied";
-  // const tableUpdate= {
-  //   reservation_id: reservation_id, 
-  //   status: status
-  // }
   const data = await service.update(tableId, reservation_id, status);  
   res.status(201).json({ data });
   }
@@ -118,6 +128,16 @@ async function tableExists(req, res,next){
 
 }
 
+//Finish existing table 
+async function remove(req, res) {
+  const {tableId} = req.params;
+  const status = "Free";
+  const reservation_id = "";
+  const data = await service.remove(tableId, reservation_id, status);  
+  res.status(201).json({ data });
+  }
+
+
 module.exports= {
 list, 
 create:[
@@ -130,5 +150,9 @@ update: [
   tableExists,
   validSeating,
   asyncErrorBoundary(update)
+], 
+remove: [
+  validOccupied, 
+  asyncErrorBoundary(remove)
 ]
 }
