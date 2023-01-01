@@ -1,8 +1,7 @@
 import React from "react";
-import {Link, useRouteMatch} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 function Reservation({reservation, handleReservationDelete}){
-  const {url} = useRouteMatch();
 
   //format time????
 
@@ -16,10 +15,12 @@ function Reservation({reservation, handleReservationDelete}){
             <td>{reservation.reservation_time}</td>
             <td>{reservation.people}</td>
             <td> 
-              <Link to={`${url}/reservations/${reservation.reservation_id}/edit`} className="mt-2 mr-2">
+              <Link to={`/reservations/${reservation.reservation_id}/edit`} className="mt-2 mr-2">
               <button className="btn btn-secondary">Edit</button>
               </Link>
-              <a role="button" className="btn btn-success" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a>
+              <Link to={`/reservations/${reservation.reservation_id}/seat`} className="mt-2 mr-2">
+              <button className="btn btn-secondary">Seat</button>
+              </Link>
               </td>
        
         </tr>

@@ -1,10 +1,10 @@
 import React from "react";
-import CreateReservation from "./CreateReservation";
-import UpdateReservation from "./UpdateReservation";
+// import CreateReservation from "./CreateReservation";
+// import UpdateReservation from "./UpdateReservation";
 import Reservation from "./Reservation";
-import { createReservation } from "../utils/api";
-import { Route, useHistory,  useRouteMatch } from "react-router-dom";
-import TableSeating from "../tables/TableSeating";
+// import { createReservation } from "../utils/api";
+import { useHistory } from "react-router-dom";
+// import TableSeating from "../tables/TableSeating";
 
 /**
  * Defines the reservation page.
@@ -14,7 +14,7 @@ import TableSeating from "../tables/TableSeating";
  */
 function ReservationsList({reservations}) {
   const history = useHistory();
-    const {url} = useRouteMatch();
+    // const {url} = useRouteMatch();
     
   
     const handleReservationDelete = async (id) => {
@@ -29,18 +29,18 @@ function ReservationsList({reservations}) {
         }
     };
 
-    const handleReservationCreate = async (reservation) => {
+    // const handleReservationCreate = async (reservation) => {
        
-        const result = window.confirm("Create this reservation?");
-        if (result) {
-          console.log("Inside list res:", reservation)
-            const abortController = new AbortController();
+    //     const result = window.confirm("Create this reservation?");
+    //     if (result) {
+    //       console.log("Inside list res:", reservation)
+    //         const abortController = new AbortController();
 
-            createReservation(reservation, abortController.signal);
+    //         createReservation(reservation, abortController.signal);
 
-            history.push("/dashboard");
-        }
-    };
+    //         history.push("/dashboard");
+    //     }
+    // };
 
     const list = reservations.map((reservation) => {
         return <Reservation key={reservation.reservation_id} reservation={reservation} handleReservationDelete={handleReservationDelete} />
@@ -64,9 +64,9 @@ function ReservationsList({reservations}) {
           {list}
         </tbody>
         </table>   
-        <Route path={`${url}/reservations/new`}><CreateReservation handleReservationCreate={handleReservationCreate} /></Route>
+        {/* <Route path={`${url}/reservations/new`}><CreateReservation handleReservationCreate={handleReservationCreate} /></Route>
         <Route path={`${url}/reservations/:reservationId/edit`}><UpdateReservation /></Route>
-        <Route path={`${url}/reservations/:reservationId/seat`}><TableSeating /></Route>
+        <Route path={`${url}/reservations/:reservationId/seat`}><TableSeating /></Route> */}
 
       </div>
     </main>
