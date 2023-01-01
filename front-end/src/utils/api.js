@@ -167,11 +167,11 @@ export async function createTable(table, signal) {
  *  a promise that resolves to the updated reservation.
  */
 export async function updateTable(tableId,reservationId, signal) {
-  const url = `${API_BASE_URL}/reservations/${reservationId}/seat`;
+  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({data:{reservation_id: reservationId, table_id:tableId}}),
+    body: JSON.stringify({data:{reservation_id: reservationId}}),
     signal,
   };
   return await fetchJson(url, options, {});

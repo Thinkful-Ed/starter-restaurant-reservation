@@ -49,6 +49,7 @@ async function reservationExists(req, res,next){
   return next({status: 404, message: `Reservation id ${reservationId} does not exist`})
 
 }
+
 //Check to see if the property provided exists in the data
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
