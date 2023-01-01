@@ -41,7 +41,8 @@ const newDate = useQuery().get("date") ?? date;
       const abortController = new AbortController();
       try{
         const reservationsFromAPI = await listReservations({ date: newDate }, abortController.signal);
-        setReservations(reservationsFromAPI);
+        const reservationsToDisplay = reservationsFromAPI.filter((item)=> item.status !== "finished");
+        setReservations(reservationsToDisplay);
       } catch(error){
         if (error){
           setReservationsError(error)
