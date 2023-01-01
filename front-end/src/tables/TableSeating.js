@@ -76,7 +76,6 @@ function TableSeating() {
     };
 
     function validCapacity(table) {
-        console.log(tables);
         const people = reservation.people;
         const currentTable = tables.filter((item)=>table.id === item.id);
         const tableCapacity = currentTable[0].capacity;
