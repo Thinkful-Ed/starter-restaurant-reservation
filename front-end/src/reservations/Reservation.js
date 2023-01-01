@@ -19,7 +19,7 @@ function Reservation({reservation, handleReservationDelete}){
               <button className="btn btn-secondary">Edit</button>
               </Link>
               <Link to={`/reservations/${reservation.reservation_id}/seat`} className="mt-2 mr-2">
-              <button className="btn btn-secondary">Seat</button>
+              <button className="btn btn-info">Seat</button>
               </Link>
               </td>
        
