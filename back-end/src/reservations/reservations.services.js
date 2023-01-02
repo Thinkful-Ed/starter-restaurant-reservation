@@ -31,11 +31,11 @@ function create(reservation) {
   }
 
 //Knex query to update a specific reservation
-function update(updatedReservation){
+function update(reservationId, updates){
     return knex("reservations")
     .select("*")
-    .where({reservation_id: updatedReservation.reservation_id})
-    .update(updatedReservation, ["*"])
+    .where({reservation_id: reservationId})
+    .update(updates, ["*"])
     .then((data)=> data[0]);
 }
 
