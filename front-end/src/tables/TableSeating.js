@@ -123,7 +123,7 @@ function TableSeating() {
             {reservationError &&
                 <ErrorAlert error={reservationError} />
             }
-            <form name="Tables" onSubmit={formValidation}>
+            <form name="TableSeating" onSubmit={formValidation}>
                 <table className="table table-bordered table-condensed table-striped">
                     <tbody>
                         <tr>
