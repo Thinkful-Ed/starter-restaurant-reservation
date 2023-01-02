@@ -132,8 +132,8 @@ export async function readReservation(reservationId, signal) {
  * @returns {Promise<Error|*>}
  *  a promise that resolves to the updated reservation.
  */
-export async function updateReservation(updatedReservation, signal) {
-  const url = `${API_BASE_URL}/reservations/${updatedReservation.id}`;
+export async function updateReservation(reservationId, updatedReservation, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservationId}`;
   const options = {
     method: "PUT",
     headers,

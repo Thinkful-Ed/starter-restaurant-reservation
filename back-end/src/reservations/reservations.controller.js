@@ -205,8 +205,9 @@ async function create (req, res){
 
 //Update existing reservation 
 async function update(req, res) {
-  const updatedReservation = { ...res.locals.reservation, ...req.body };
-  const data = await service.update(updatedReservation);  
+  const {reservationId} = req.params;
+  const updatedReservation = {...req.body};
+  const data = await service.update(reservationId,updatedReservation);  
   res.status(201).json({ data });
   }
 
