@@ -37,7 +37,7 @@ function TablesSection() {
 
   return (
     <div>
-      I AM TABLES
+      <h2>TABLES SECTION</h2>
       <ErrorAlert error={tablesError} />
       <div>
         {tables.map((table) => {
