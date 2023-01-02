@@ -4,7 +4,8 @@ exports.up = function (knex) {
       table.string("table_name").notNullable();
       table.string("capacity").notNullable();
       table.string("status").defaultTo("Free");
-      table.integer("reservation_id").references("reservation_id").inTable("reservations").onDelete("CASCADE");
+      table.integer("reservation_id").unsigned()
+      table.foreign("reservation_id").references("reservation_id").inTable("reservations").onDelete("CASCADE");
       table.timestamps(true, true);
     });
   };
