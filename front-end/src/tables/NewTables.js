@@ -49,26 +49,32 @@ function NewTables() {
       <h1>NEW TABLE</h1>
       <ErrorAlert error={reservationsError} />
       <form onSubmit={onSubmit}>
-        <label htmlFor="table_name">Table Name</label>
-        <input
-          name="table_name"
-          id="table_name"
-          type="text"
-          required
-          value={formData.table_name}
-          onChange={handleChange}></input>
+        <div>
+          <label htmlFor="table_name">Table Name</label>
+          <input
+            name="table_name"
+            id="table_name"
+            type="text"
+            required
+            value={formData.table_name}
+            onChange={handleChange}></input>
+        </div>
 
-        <label htmlFor="capacity">Capacity</label>
-        <input
-          name="capacity"
-          id="capacity"
-          type="number"
-          required
-          value={formData.capacity}
-          onChange={handleChange}></input>
+        <div>
+          <label htmlFor="capacity">Capacity</label>
+          <input
+            name="capacity"
+            id="capacity"
+            type="number"
+            required
+            value={formData.capacity}
+            onChange={handleChange}></input>
+        </div>
 
-        <button type="submit">Submit</button>
-        <button onClick={handleCancel}>Cancel</button>
+        <div>
+          <button type="submit">Submit</button>
+          <button onClick={handleCancel}>Cancel</button>
+        </div>
       </form>
     </div>
   );
