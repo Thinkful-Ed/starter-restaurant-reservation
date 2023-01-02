@@ -103,7 +103,7 @@ const formValidation = (event)=>{
                     value={reservationFormData.people} required/>
                     </td></tr>
                     <tr><td>
-                   {reservationFormData.status && reservationFormData.status === "booked" ? "" : <button type="submit" className="btn btn-primary mr-3">Submit</button>} 
+                    <button type="submit" className="btn btn-primary mr-3">Submit</button>
                     <button  type="button" onClick={()=> history.goBack()} className="btn btn-danger">Cancel</button>
 
                     </td></tr>

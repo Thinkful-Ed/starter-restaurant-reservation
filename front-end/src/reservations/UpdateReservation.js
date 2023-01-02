@@ -36,7 +36,6 @@ function UpdateReservation (){
             reservation_date: `${updatedData.reservation_date}`, 
             reservation_time: `${updatedData.reservation_time}`, 
             people: `${updatedData.people}`,
-            status: `${updatedData.status}`
           });});
     
         return () => abortController.abort();
