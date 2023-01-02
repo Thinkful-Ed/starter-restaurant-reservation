@@ -26,16 +26,6 @@ function Dashboard({date}) {
 // const history = useHistory();
 const newDate = useQuery().get("date") ?? date;
 
-// async function cancelRes(reservationId) {
-//   if (window.confirm("Do you want to cancel this reservation?")) {
-//   try {
-//   await cancelReservation(reservationId);
-//   history.go();
-//   } catch (error) {
-//   setReservationsError(error);
-//   }
-//   }
-//   }
   useEffect(()=>{
    async function loadDashboard() {
       const abortController = new AbortController();

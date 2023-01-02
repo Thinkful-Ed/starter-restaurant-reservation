@@ -70,7 +70,7 @@ try{
         mobile_number:``, 
         reservation_date: ``, 
         reservation_time: ``, 
-        people: ``
+        people: ``, 
       };
       const [reservationFormData, setReservationFormData]=useState({...initialReservationFormData});
       const handleReservationChange = ({target})=>{
