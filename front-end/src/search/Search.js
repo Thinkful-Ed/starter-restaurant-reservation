@@ -8,6 +8,7 @@ function Search(){
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [searchFormData, setSearchFormData] = useState({});
+  const [searchPerformed, setSearchPerformed] = useState(false);
 
   const handleSearch = async (event) => {
     event.preventDefault();
@@ -15,6 +16,7 @@ function Search(){
     try {
         const reservationsFromAPI = await reservationSearch({ mobile_number:searchFormData.mobile_number }, abortController.signal);
         setReservations(reservationsFromAPI);
+        setSearchPerformed(true);
     }
     catch (error) {
         if (error) {
@@ -35,10 +37,10 @@ const handleSearchChange = ({ target }) => {
 };
     return(
         <main>
-      <div className="d-md-flex mb-3 pt-3">
-      {reservationsError &&
+          {reservationsError &&
                 <ErrorAlert error={reservationsError} />
             }
+      <div className="d-md-flex mb-3 pt-3">
       <form name="Tables" onSubmit={handleSearch}>
                 <table className="table table-bordered table-condensed table-striped">
 <tbody>
@@ -50,7 +52,7 @@ const handleSearchChange = ({ target }) => {
               size="30"
               placeholder="Enter a customer's phone number"
               onChange={handleSearchChange} 
-              value={searchFormData.mobile_number}/>
+              value={searchFormData.mobile_number} required/>
               <button type="submit"  className="btn btn-primary m-3">Find</button>
               </td>
               </tr>
@@ -58,12 +60,12 @@ const handleSearchChange = ({ target }) => {
                 </table>
             </form>
       </div>
-      <div className="d-md-flex mb-3">
+     {searchPerformed ? <div><div className="d-md-flex mb-3">
         <h4>Search Results</h4>
         </div>
         <div className="d-md-flex mb-3">
         {reservations.length > 0 ? <ReservationsList reservations={reservations} /> : <p>No reservations found.</p>}
-        </div>
+        </div></div> : ""} 
 
     </main>
   );
