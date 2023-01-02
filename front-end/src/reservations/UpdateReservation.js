@@ -14,7 +14,6 @@ function UpdateReservation (){
    
     const initialReservationFormData = {
          
-        id: ``,
         first_name:``, 
         last_name:``,
         mobile_number:``, 
@@ -29,7 +28,6 @@ function UpdateReservation (){
           const updatedData = formatReservationDate(data);
           
           setReservationFormData({
-            id: `${updatedData.reservation_id}`,
             first_name:`${updatedData.first_name}`, 
             last_name:`${updatedData.last_name}`,
             mobile_number:`${updatedData.mobile_number}`, 
