@@ -25,16 +25,16 @@ function UpdateReservation (){
         const abortController = new AbortController();
     
         readReservation(reservationId, abortController.signal).then((data)=>{
-          const timeUpdatedData = formatRservationTime(data)
-          const updatedData = formatReservationDate(timeUpdatedData);
+          // const timeUpdatedData = formatRservationTime(data)
+          // const updatedData = formatReservationDate(timeUpdatedData);
           
           setReservationFormData({
-            first_name:`${updatedData.first_name}`, 
-            last_name:`${updatedData.last_name}`,
-            mobile_number:`${updatedData.mobile_number}`, 
-            reservation_date: `${updatedData.reservation_date}`, 
-            reservation_time: `${updatedData.reservation_time}`, 
-            people: `${updatedData.people}`,
+            first_name:`${data.first_name}`, 
+            last_name:`${data.last_name}`,
+            mobile_number:`${data.mobile_number}`, 
+            reservation_date: `${data.reservation_date}`, 
+            reservation_time: `${data.reservation_time}`, 
+            people: `${data.people}`,
           });});
     
         return () => abortController.abort();
