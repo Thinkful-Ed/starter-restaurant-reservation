@@ -52,7 +52,7 @@ function UpdateReservation (){
 
           try{
           
-             await updateReservation(reservation, abortController.signal);
+             await updateReservation(reservationId,reservation, abortController.signal);
           
               history.goBack();
         } catch(error){
