@@ -26,11 +26,16 @@ const VALID_PROPERTIES = [
 //List reservations based on date
 async function list(req, res,next){
   const {date} = req.query;
-  
+  const {mobile_number} = req.query;
+
+  //add mobile number to list reservations for specific mobile number
+  if(mobile_number){
+    const data = await service.search(mobile_number);
+    res.json({data});
+}
   //add date to list reservations on specific day
-  if(date){
+  else if(date){
        const data = await service.reservationsByDate(date);
-       //const sorted = data.sort((a, b)=> a.reservation_time - b.reservation_time);
        res.json({data});
   }else{
    const data = await service.list();

@@ -48,6 +48,15 @@ function statusUpdate(reservationId, status){
     .then((data)=> data[0]);
 }
 
+function search(mobile_number) {
+    return knex("reservations")
+      .whereRaw(
+        "translate(mobile_number, '() -', '') like ?",
+        `%${mobile_number.replace(/\D/g, "")}%`
+      )
+      .orderBy("reservation_date");
+  }
+
 module.exports = {
-    list, reservationsByDate, create, read, update, statusUpdate
+    list, reservationsByDate, create, read, update, statusUpdate, search
 }
