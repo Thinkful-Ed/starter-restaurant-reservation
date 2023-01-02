@@ -49,10 +49,9 @@ function UpdateReservation (){
       };
       const handleReservationUpdate = async (reservation) => {
         const abortController = new AbortController();
-        const formatted = formatRservationTime(reservation);
           try{
-          
-             await updateReservation(reservationId, formatted, abortController.signal);
+          console.log(reservation.reservation_time);
+             await updateReservation(reservationId, reservation, abortController.signal);
           
               history.goBack();
         } catch(error){
