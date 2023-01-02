@@ -1,7 +1,6 @@
 import React from "react";
-import {Link} from "react-router-dom";
 
-function Reservation({reservation, handleReservationDelete}){
+function Reservation({reservation, handleReservationCancel}){
 
   //format time????
 
@@ -17,12 +16,13 @@ function Reservation({reservation, handleReservationDelete}){
             <td data-reservation-id-status={`${reservation.reservation_id}`}>{reservation.status}</td>
 
             <td> 
-              <Link to={`/reservations/${reservation.reservation_id}/edit`} className="mt-2 mr-2">
+              <a href={`/reservations/${reservation.reservation_id}/edit`} className="mt-2 mr-2">
               <button className="btn btn-secondary">Edit</button>
-              </Link>
-              {reservation.status === "booked" ? <Link to={`/reservations/${reservation.reservation_id}/seat`} className="mt-2 mr-2">
+              </a>
+              {reservation.status === "booked" ? <a href={`/reservations/${reservation.reservation_id}/seat`}  className="mt-2 mr-2">
               <button className="btn btn-info">Seat</button>
-              </Link>: ""}
+              </a>: ""}
+              <button data-reservation-id-cancel={`${reservation.reservation_id}`} className="btn btn-danger" onClick={()=> handleReservationCancel(reservation.reservation_id)}>Cancel</button>
               </td>
        
         </tr>

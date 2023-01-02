@@ -3,11 +3,13 @@ import { readReservation, updateReservation } from "../utils/api";
 import {useHistory, useParams} from "react-router-dom";
 import ReservationForm from "./ReservationForm";
 import formatReservationDate from "../utils/format-reservation-date";
+import ErrorAlert from "../layout/ErrorAlert";
+
 
 function UpdateReservation (){
   const {reservationId} = useParams();
     const history = useHistory();
-   
+   const [reservationError, setReservationError] = useState(null);
     //const [reservation, setReservation] = useState({});
    
     const initialReservationFormData = {
@@ -33,7 +35,8 @@ function UpdateReservation (){
             mobile_number:`${updatedData.mobile_number}`, 
             reservation_date: `${updatedData.reservation_date}`, 
             reservation_time: `${updatedData.reservation_time}`, 
-            people: `${updatedData.people}`
+            people: `${updatedData.people}`,
+            status: `${updatedData.status}`
           });});
     
         return () => abortController.abort();
@@ -47,33 +50,30 @@ function UpdateReservation (){
         });   
       };
       const handleReservationUpdate = async (reservation) => {
-        const result = window.confirm("Update this reservation?");
-        if (result) {
+        const abortController = new AbortController();
+
+          try{
           
-              const abortController = new AbortController();
+             await updateReservation(reservation, abortController.signal);
           
-             updateReservation(reservation, abortController.signal);
-          
-              history.push("/");
+              history.goBack();
+        } catch(error){
+          if(error){
+            setReservationError(error);
+          }
         }
+        return () => abortController.abort();
       };
       const handleReservationSubmit = (event)=>{
         event.preventDefault();
         handleReservationUpdate(reservationFormData);
-        //setReservationFormData({...initialReservationFormData});
       };
     return (
       
         <div className="pt-3">
-          {/* <nav aria-label="breadcrumb">
-  <ol className="breadcrumb">
-    <li className="breadcrumb-item"><Link to={"/"}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-house-door-fill mr-3" viewBox="0 0 16 16">
-  <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"/>
-</svg>Home</Link></li>
-    <li className="breadcrumb-item"><Link to={`/reservations/${reservation.reservationId}`}>{reservation.name}</Link></li>
-    <li className="breadcrumb-item active" aria-current="page">Edit Reservation {reservation.id}</li>
-  </ol>
-</nav> */}
+         {reservationError &&
+                <ErrorAlert error={reservationError} />
+            }
 <ReservationForm handleReservationChange={handleReservationChange} handleReservationSubmit={handleReservationSubmit} reservationFormData={reservationFormData} />
         </div>
         

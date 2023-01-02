@@ -1,10 +1,8 @@
-import React from "react";
-// import CreateReservation from "./CreateReservation";
-// import UpdateReservation from "./UpdateReservation";
+import React, {useState} from "react";
 import Reservation from "./Reservation";
-// import { createReservation } from "../utils/api";
+import { updateReservationStatus } from "../utils/api";
 import { useHistory } from "react-router-dom";
-// import TableSeating from "../tables/TableSeating";
+import ErrorAlert from "../layout/ErrorAlert";
 
 /**
  * Defines the reservation page.
@@ -15,40 +13,39 @@ import { useHistory } from "react-router-dom";
 function ReservationsList({reservations}) {
   const history = useHistory();
     // const {url} = useRouteMatch();
-    
+    const [reservationError, setReservationError] = useState(null);
   
-    const handleReservationDelete = async (id) => {
-        const result = window.confirm("Delete this reservation?");
+    const handleReservationCancel = async (reservationId) => {
+      const abortController = new AbortController();
+
+        const result = window.confirm("Do you want to cancel this reservation? This cannot be undone.");
         if (result) {
-
-            //const abortController = new AbortController();
-
-            //deleteReservation(id, abortController.signal);
-
-            history.push("/dashboard");
+          try{
+            const status = "cancelled";
+            await updateReservationStatus(reservationId, status, abortController.signal);
+            history.go();
         }
+        catch (error) {
+          if (error) {
+              setReservationError(error);
+          }
+      }
+
+      return () => abortController.abort();
     };
-
-    // const handleReservationCreate = async (reservation) => {
-       
-    //     const result = window.confirm("Create this reservation?");
-    //     if (result) {
-    //       console.log("Inside list res:", reservation)
-    //         const abortController = new AbortController();
-
-    //         createReservation(reservation, abortController.signal);
-
-    //         history.push("/dashboard");
-    //     }
-    // };
+      
+  };
 
     const list = reservations.map((reservation) => {
-        return <Reservation key={reservation.reservation_id} reservation={reservation} handleReservationDelete={handleReservationDelete} />
+        return <Reservation key={reservation.reservation_id} reservation={reservation} handleReservationCancel={handleReservationCancel} />
     });
 
     
   return (
     <main>
+      {reservationError &&
+                <ErrorAlert error={reservationError} />
+            }
       <div className="d-md-flex mb-3">   
       <table className="table bordered table-striped table-hover table-condensed">
         <tbody>
