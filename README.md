@@ -16,21 +16,27 @@ The organization of this backend consists of service, controller, and router for
 ## API Endpoints
 
 ** RESERVATIONS **
--GET /dashboard: retrieves all reservations (and their info) by the date
+-GET /dashboard: retrieve all reservations (and their info) by the date
 
 -POST /reservations/new: create a new reservation
 
--GET /reservations/:reservation_id/seat : will display in a selection the tables
+-GET /reservations/:reservation_id/seat : display a selection the tables
+
+-PUT /reservations/:reservation_id/status: this will update the status of the reservation. accepts data in the format: {data: { status: "<new-status>" } } where <new-status> is one of booked, seated, or finished
+
+-GET /reservations?mobile_number=800-555-1212: will retrieve a reservation where the mobile number matches the parameters given
+
+- PUT /reservations/:reservation_id/edit: this will send a put request to the database so that the user can update details of the reservation
 
 ** TABLES **
 
 -GET /dashboard: retrieves all the tables and their statuses
 
--POST /tables/new: can post a new table (input being table name and capacity of the table)
+-POST /tables/new: create a new table (inputs are table name and capacity of the table)
 
 -PUT /tables/:table_id/seat/: will update reservation Id for the table so that the table will be occupied
 
--DELETE /tables/:table_id/seat: this will delete the reservation Id that is associated with a particular table, freeing up this table for new guests
+-DELETE /tables/:table_id/seat: delete the reservation Id that is associated with a particular table, freeing up this table for new guests
 
 ** NOTE **
 -all APIS have features that check for required, non nullable fields and correct data type

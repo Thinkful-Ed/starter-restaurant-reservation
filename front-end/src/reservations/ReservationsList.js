@@ -8,7 +8,7 @@ function ReservationsList({ reservations }) {
   const handleCancel = async (reservation_id) => {
     if (
       window.confirm(
-        "Do you want to cancel this reservation? This cannot be undone.",
+        "Do you want to cancel this reservation? This cannot be undone."
       )
     ) {
       await setReservationStatus(reservation_id, "cancelled");
@@ -21,16 +21,12 @@ function ReservationsList({ reservations }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0 mt-5">Reservations</h4>
       </div>
-      <head>
-        <link rel="stylesheet" href="../utils/style.css" />
-      </head>
       <div>
         {reservations.map((reservation) => {
           return (
             <div
               className="restaurant-reservation"
-              key={reservation.reservation_id}
-            >
+              key={reservation.reservation_id}>
               <table>
                 <tr>
                   <th>First Name</th>
@@ -61,8 +57,7 @@ function ReservationsList({ reservations }) {
                   <td>
                     {" "}
                     <div
-                      data-reservation-id-status={reservation.reservation_id}
-                    >
+                      data-reservation-id-status={reservation.reservation_id}>
                       {reservation.status || "booked"}
                     </div>
                   </td>
@@ -82,8 +77,7 @@ function ReservationsList({ reservations }) {
                   <button
                     className="btn btn-secondary"
                     data-reservation-id-cancel={reservation.reservation_id}
-                    onClick={() => handleCancel(reservation.reservation_id)}
-                  >
+                    onClick={() => handleCancel(reservation.reservation_id)}>
                     Cancel
                   </button>
                 )}
