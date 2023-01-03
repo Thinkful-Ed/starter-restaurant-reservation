@@ -1,4 +1,6 @@
-body, #root, .container-fluid {
+body,
+#root,
+.container-fluid {
   min-height: 100vh;
 }
 
@@ -23,7 +25,9 @@ form {
   width: 300px;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   display: block;
   height: 38px;
   padding: 8px;
@@ -47,16 +51,12 @@ button {
   min-width: 200px;
 }
 
-.restaurant-table, .restaurant-reservation {
+.restaurant-table,
+.restaurant-reservation {
   margin-bottom: 16px;
   padding-top: 8px;
   border-top: 1px solid lightgray;
 }
-
-
-
-
-
 
 @media (max-width: 768px) {
   h1 {
@@ -72,6 +72,10 @@ button {
   }
 
   input {
+    width: 100%;
+  }
+
+  form {
     width: 100%;
   }
 
@@ -96,6 +100,5 @@ button {
 
   ul li {
     width: 50%;
-    /* text-align: center; */
   }
 }
