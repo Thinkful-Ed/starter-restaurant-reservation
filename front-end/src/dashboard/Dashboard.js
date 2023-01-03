@@ -43,9 +43,11 @@ function Dashboard({ date }) {
   return (
     <main>
       <h1>Dashboard</h1>
-      <div>{date}</div>
+
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for &nbsp;</h4>
+
+        <h4> {date} </h4>
       </div>
       <button onClick={handlePreviousButtonClick}>Previous Date</button>
       <button onClick={handleTodayButtonClick}>Today</button>
