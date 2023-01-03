@@ -5,7 +5,6 @@ import { createTable } from "../utils/api";
 
 function CreateTable() {
     const history = useHistory();
-    const [formErrors, setFormErrors] = useState(null);
     const [tablesErrors, setTablesErrors] = useState(null);
     const initialTableFormData = {
 
@@ -45,12 +44,12 @@ function CreateTable() {
 
     };
     function validCapacity(table) {
-        const errors = [];
+        const errors = {};
         if (table.capacity < 1) {
-            errors.push({ key: 1, message: 'Form: Capacity must be at least 1' })
+            errors.capacity= 'Form: Capacity must be at least 1';
         }
         if (table.table_name.lenth < 2) {
-            errors.push({ key: 2, message: 'Form: Table name must be at least 2 characters' })
+            errors.table='Form: Table name must be at least 2 characters';
         }
         return errors;
     }
@@ -58,19 +57,36 @@ function CreateTable() {
     const formValidation = (event) => {
         event.preventDefault();
         const capacityError = validCapacity(tableFormData);
-        if(capacityError.legnth>0){
-            setFormErrors([capacityError])
-           }
+              // Clear all previous errors
+  const errorElements = document.querySelectorAll(".errors");
+  //   errorElements.classList.remove("alert");
+  //   errorElements.classList.remove("alert-danger");
+  
+    for (let element of errorElements) {
+      element.style.display = "none";
+    }
+     // Display any new errors
+     if(Object.keys(capacityError).length !== 0){
+      const errorDiv = document.querySelector(".errors");
+      errorDiv.classList.add("alert");
+      errorDiv.classList.add("alert-danger");
+      Object.keys(capacityError).forEach((key) => {
+          // Find the specific error element
+          const errorElement = document.querySelector(`.errors`);
+          errorElement.innerHTML = capacityError[key];
+          errorElement.style.display = "block";
+        });
+     }
+           
             else{
             handleTableSubmit(event);
         }
-    }
+    };
 
     return (
         <div className="pt-3">
-            {formErrors && formErrors.map((formError) => (
-                <ErrorAlert error={formError} />
-            ))}
+                     <div className="m-2 errors"></div>
+
             {tablesErrors &&
                 <ErrorAlert error={tablesErrors} />
             }
@@ -80,9 +96,8 @@ function CreateTable() {
                         <tr>
                             <th colSpan={"3"}>Create a Table</th></tr>
                         <tr>
-                            <td><label htmlFor="table_name">Table Name</label></td>
-                            <td><label htmlFor="capacity">Capacity</label></td>
-                            <td>Actions</td>
+                            <td><label htmlFor="table_name">Table Name:</label></td>
+                            <td><label htmlFor="capacity">Capacity:</label></td>
                         </tr>
                         <tr>
                             <td><input name="table_name"
@@ -97,6 +112,8 @@ function CreateTable() {
                                 type="number"
                                 onChange={handleTableChange}
                                 value={tableFormData.capacity} required /></td>
+                                </tr>
+                                <tr>
                             <td><button type="submit" className="btn btn-primary mr-3">Submit</button>
                                 <button type="button" onClick={() => history.goBack()} className="btn btn-danger">Cancel</button></td>
                         </tr>

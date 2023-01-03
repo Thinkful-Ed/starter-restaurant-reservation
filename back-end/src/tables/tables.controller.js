@@ -52,7 +52,7 @@ function hasOnlyValidProperties(req, res, next) {
   function validTable(req, res, next) {
     const { data :{table_name, capacity}= {}} = req.body;
     const capacityAsNumber = Number(capacity);
-    if (!Number.isInteger(capacity)) {
+    if (!Number.isInteger(capacityAsNumber)) {
         return next({
             status: 400,
             message: "capacity must be a number",

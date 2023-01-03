@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { listTables, readReservation, updateTable, updateReservationStatus } from "../utils/api";
+import { listTables, readReservation, updateTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 function TableSeating() {
@@ -9,7 +9,7 @@ function TableSeating() {
     const { reservationId } = useParams();
     const [reservation, setReservation] = useState([]);
     const [reservationError, setReservationError] = useState(null);
-    const [formErrors, setFormErrors] = useState(null);
+    // const [formErrors, setFormErrors] = useState(null);
     const [options, setOptions] = useState([]);
     const history = useHistory();
     
@@ -58,11 +58,11 @@ function TableSeating() {
     }, [reservationId]);
 
     const handleTableSeating = async (table) => {
-        const status = "seated";
+        // const status = "seated";
 
         const abortController = new AbortController();
         try {
-            await updateReservationStatus(reservationId, status, abortController.signal);
+            // await updateReservationStatus(reservationId, status, abortController.signal);
             await updateTable(table.table_id, reservationId, abortController.signal);
 
             history.push(`/dashboard`);
@@ -81,9 +81,9 @@ function TableSeating() {
         const people = reservation.people;
         const currentTable = tables.filter((item)=>table.id === item.id);
         const tableCapacity = currentTable[0].capacity;
-        const errors = [];
+        const errors = {};
         if (people > tableCapacity) {
-            errors.push({ key: 1, message: 'Form: Too many people for this table' })
+            errors.capacity='Form: Too many people for this table';
         }
         
         return errors;
@@ -103,10 +103,28 @@ function TableSeating() {
     const formValidation = (event) => {
         event.preventDefault();
         const capacityError = validCapacity(seatTableFormData);
-        setFormErrors([capacityError])
-        if(capacityError.legnth>0){
-            setFormErrors([capacityError])
-           }
+                     // Clear all previous errors
+  const errorElements = document.querySelectorAll(".errors");
+  //   errorElements.classList.remove("alert");
+  //   errorElements.classList.remove("alert-danger");
+  
+    for (let element of errorElements) {
+      element.style.display = "none";
+    }
+     // Display any new errors
+     if(Object.keys(capacityError).length !== 0){
+      const errorDiv = document.querySelector(".errors");
+      errorDiv.classList.add("alert");
+      errorDiv.classList.add("alert-danger");
+      Object.keys(capacityError).forEach((key) => {
+          // Find the specific error element
+          const errorElement = document.querySelector(`.errors`);
+          errorElement.innerHTML = capacityError[key];
+          errorElement.style.display = "block";
+        });
+     }
+           
+
             else{
             handleTableseatSubmit(event);
         }
@@ -114,9 +132,8 @@ function TableSeating() {
     return (
 
         <div className="pt-3">
-            {formErrors && formErrors.map((formError) => (
-                <ErrorAlert error={formError} />
-            ))}
+                                <div className="m-2 errors"></div>
+
             {tablesError &&
                 <ErrorAlert error={tablesError} />
             }
