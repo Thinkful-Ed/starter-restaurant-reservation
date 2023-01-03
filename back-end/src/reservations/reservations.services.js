@@ -10,7 +10,7 @@ function reservationsByDate(date) {
   return knex
   .select("*")
   .from("reservations as r")
-  .where("r.reservation_date", "=", date)
+  .where("r.reservation_date", "=", date).andWhereNot("r.status", "=", "finished")
   .orderBy("r.reservation_time");
 }
 //Knex query to read reservation based on reservation id provided

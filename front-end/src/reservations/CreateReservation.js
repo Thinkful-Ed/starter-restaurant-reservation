@@ -71,6 +71,7 @@ try{
         reservation_date: ``, 
         reservation_time: ``, 
         people: ``, 
+        status: `booked`
       };
       const [reservationFormData, setReservationFormData]=useState({...initialReservationFormData});
       const handleReservationChange = ({target})=>{
