@@ -47,5 +47,9 @@
   },
   "keywords": [],
   "author": "Thinkful, Inc.",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "jquery": "^3.6.3",
+    "react-bootstrap": "^2.7.0"
+  }
 }
