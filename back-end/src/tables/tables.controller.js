@@ -93,6 +93,12 @@ async function validSeating(req, res, next) {
           message: "table is already occupied",
         });
   }
+  if (reservation.status === "seated") {
+    return next({
+        status: 400,
+        message: "reservation already seated",
+      });
+}
   next();
 }
 
@@ -133,6 +139,8 @@ async function update(req, res) {
   const {data: {reservation_id}} = req.body;
   const {tableId} = req.params;
   const status = "Occupied";
+  const reservationStatus = "seated";
+  await reservationService.statusUpdate(reservation_id, reservationStatus);
   const data = await service.update(tableId, reservation_id, status);  
   res.status(200).json({ data });
   }
@@ -154,6 +162,9 @@ async function remove(req, res) {
   const {tableId} = req.params;
   const status = "Free";
   const reservation_id = null;
+  const reservationStatus = "finished";
+  const reservationId = res.locals.table.reservation_id;
+  await reservationService.statusUpdate(reservationId, reservationStatus);
   const data = await service.remove(tableId, reservation_id, status);  
   res.status(200).json({ data });
   }

@@ -2,9 +2,9 @@ import React, {useState, useEffect} from "react";
 import { readReservation, updateReservation } from "../utils/api";
 import {useHistory, useParams} from "react-router-dom";
 import ReservationForm from "./ReservationForm";
-import formatReservationDate from "../utils/format-reservation-date";
+// import formatReservationDate from "../utils/format-reservation-date";
 import ErrorAlert from "../layout/ErrorAlert";
-import formatRservationTime from "../utils/format-reservation-time";
+// import formatRservationTime from "../utils/format-reservation-time";
 
 function UpdateReservation (){
   const {reservationId} = useParams();

@@ -21,6 +21,15 @@ const VALID_PROPERTIES = [
   "reservation_time",
   "people",
   "status",
+  "reservation_id", 
+  "created_at", 
+  "updated_at"
+];
+const VALID_STATUSES = [
+  "booked",
+  "seated",
+  "finished",
+  "cancelled",
 ];
 
 //List reservations based on date
@@ -77,67 +86,53 @@ function hasOnlyValidProperties(req, res, next) {
 }
 
  //Check if has valid status
- function hasValidStatus(req, res, next){
-  const status = res.locals.reservation.status;
+ function hasFinishedOrSeatedStatus(req, res, next){
+const status = res.locals.reservation.status;
   if (status === "finished") {
     return next({
       status: 400,
       message: `a finished reservation cannot be updated`,
     });
   }
-  next();
-}
-
-
-  //Check if has valid first name
-  function hasFirstName(req, res, next){
-    const { data={}  } = req.body;
-    const fname = data["first_name"];
-    if (!fname || fname === "") {
-      return next({
-        status: 400,
-        message: `Invalid first_name`,
-      });
-    }
-    next();
-  }
-  //Check if has valid last name
-  function hasLastName(req, res,next){
-    const { data = {}  } = req.body;
-    const lname = data["last_name"];
-    if (!lname || lname === "") {
-      return next({
-        status: 400,
-        message: `Invalid last_name`,
-      });
-    }
-    next();
-  }
-
-  //Check if has valid mobile number
-  function hasMobileNumber(req, res,next){
-    const { data = {} } = req.body;
-    const mobile = data["mobile_number"];
-    if (!mobile || mobile === "") {
-      return next({
-        status: 400,
-        message: `Invalid mobile_number`,
-      });
-    }
-    next();
-  }
-//Check if has time
-function hasTime(req, res,next){
-  const { data = {} } = req.body;
-  const reservation_time = data["reservation_time"];
-  if (!reservation_time || reservation_time === "") {
+  if (status === "seated") {
     return next({
       status: 400,
-      message: `Invalid reservation_time`,
+      message: `reservation already seated`,
     });
   }
   next();
 }
+//Check if has valid status
+function hasSeatedOrFinishedStatus(req, res, next){
+  const {data:{status}={}}=req.body;
+    if (status === "finished") {
+      return next({
+        status: 400,
+        message: `a finished reservation cannot be updated`,
+      });
+    }
+    if (status === "seated") {
+      return next({
+        status: 400,
+        message: `reservation already seated`,
+      });
+    }
+    next();
+  }
+  
+//Check if has valid status
+function hasValidStatus(req, res, next){
+  const {data:{status}={}} = req.body;
+  if (!VALID_STATUSES.includes(status)) {
+    return next({
+      status: 400,
+      message: `unknown status`,
+    });
+  }
+  next();
+}
+
+
 //Check to see if people is valid
 function hasValidPeople(req, res,next){
   const {data:{people} = {}} = req.body;
@@ -240,6 +235,7 @@ module.exports = {
     hasValidPeople,
     hasValidDate,
     hasValidTime, 
+    hasSeatedOrFinishedStatus,
     asyncErrorBoundary(create)],
   read:[
     asyncErrorBoundary(reservationExists), 
@@ -255,8 +251,9 @@ module.exports = {
     asyncErrorBoundary(reservationExists), 
     asyncErrorBoundary(update)],
     statusUpdate:[
-      asyncErrorBoundary(reservationExists), 
       hasValidStatus,
+      asyncErrorBoundary(reservationExists), 
+      hasFinishedOrSeatedStatus,
       asyncErrorBoundary(updateStatus)
     ]
 };
