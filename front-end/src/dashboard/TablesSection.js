@@ -37,26 +37,43 @@ function TablesSection() {
 
   return (
     <div>
-      <h2>TABLES SECTION</h2>
+      <h4>TABLES SECTION</h4>
       <ErrorAlert error={tablesError} />
       <div>
         {tables.map((table) => {
           return (
             <div key={table.table_id}>
-              <div>{table.table_name}</div>
-              <div>{table.capacity}</div>
-              <div data-table-id-status={table.table_id}>
-                {table.reservation_id === null ? "Free" : "Occupied"}
-              </div>
-              <div>
-                {table.reservation_id !== null && (
-                  <button
-                    data-table-id-finish={table.table_id}
-                    onClick={() => handleFinishTable(table.table_id)}>
-                    Finish
-                  </button>
-                )}
-              </div>
+              <table>
+                <tr>
+                  <th>Table name</th>
+                  <td>{table.table_name}</td>
+                </tr>
+                <tr>
+                  <th>Table Capacity</th>
+                  <td>{table.capacity}</td>
+                </tr>
+                <tr>
+                  <th>Status</th>
+                  <td>
+                    {" "}
+                    <div data-table-id-status={table.table_id}>
+                      {table.reservation_id === null ? "Free" : "Occupied"}
+                    </div>
+                  </td>
+                  <td>
+                    &nbsp;
+                    <div>
+                      {table.reservation_id !== null && (
+                        <button
+                          data-table-id-finish={table.table_id}
+                          onClick={() => handleFinishTable(table.table_id)}>
+                          Finish
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              </table>
             </div>
           );
         })}

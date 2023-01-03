@@ -2,3 +2,10 @@
   background-color: #393a44;
   min-width: 200px;
 }
+
+/* this should pad things in the reservationlist */
+
+td,
+th {
+  padding: 10px;
+}
