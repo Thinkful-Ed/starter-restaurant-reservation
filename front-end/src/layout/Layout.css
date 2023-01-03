@@ -1,4 +1,104 @@
+body,
+#root,
+.container-fluid {
+  min-height: 100vh;
+}
+
+#accordionSidebar {
+  flex: 1;
+}
+
+td,
+th {
+  padding: 10px;
+}
+
+ul {
+  padding-top: 8px;
+}
+
+label {
+  display: block;
+}
+
+form {
+  width: 300px;
+}
+
+input,
+select,
+textarea {
+  display: block;
+  height: 38px;
+  padding: 8px;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+button {
+  margin: 4px 4px 4px 0;
+}
+
+.routes-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px;
+}
+
 .side-bar {
   background-color: #393a44;
   min-width: 200px;
+}
+
+.restaurant-table,
+.restaurant-reservation {
+  margin-bottom: 16px;
+  padding-top: 8px;
+  border-top: 1px solid lightgray;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  .container-fluid {
+    min-height: unset;
+  }
+
+  .side-bar {
+    padding: 8px;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  form {
+    width: 100%;
+  }
+
+  form button {
+    width: 100%;
+    display: block;
+    margin: 0 0 4px 0;
+  }
+
+  form button:first-of-type {
+    margin-top: 8px;
+  }
+
+  #accordionSidebar {
+    flex: 1;
+    flex-direction: row;
+  }
+
+  ul {
+    margin: 0 16px;
+  }
+
+  ul li {
+    width: 50%;
+  }
 }
