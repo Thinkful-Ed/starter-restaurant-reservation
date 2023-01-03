@@ -20,8 +20,13 @@ function read(table_id){
 function create(table) {
     return knex("tables")
       .insert(table)
-      .returning("*")
-      .then((createdTable) => createdTable[0]);
+      .returning(["capacity", "table_name"])
+      .then((data) => {
+        return {
+            capacity: Number(data[0].capacity), 
+            table_name: data[0].table_name
+        }
+      });
   }
 
 //Knex query to add reservation id to table

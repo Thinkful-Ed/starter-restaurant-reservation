@@ -20,7 +20,7 @@ const VALID_PROPERTIES = [
   "reservation_date",
   "reservation_time",
   "people",
-  //"status",
+  "status",
 ];
 
 //List reservations based on date
@@ -76,6 +76,19 @@ function hasOnlyValidProperties(req, res, next) {
   next();
 }
 
+ //Check if has valid status
+ function hasValidStatus(req, res, next){
+  const status = res.locals.reservation.status;
+  if (status === "finished") {
+    return next({
+      status: 400,
+      message: `a finished reservation cannot be updated`,
+    });
+  }
+  next();
+}
+
+
   //Check if has valid first name
   function hasFirstName(req, res, next){
     const { data={}  } = req.body;
@@ -129,7 +142,7 @@ function hasTime(req, res,next){
 function hasValidPeople(req, res,next){
   const {data:{people} = {}} = req.body;
   const peopleAsNumber = people;
-  if (peopleAsNumber % 1 !== 0) {
+  if (!Number.isInteger(peopleAsNumber)) {
     return next({
     status: 400, 
     message: `people must be a number`
@@ -208,7 +221,7 @@ async function update(req, res) {
   const {reservationId} = req.params;
   const updatedReservation = {...req.body.data};
   const data = await service.update(reservationId,updatedReservation);  
-  res.status(201).json({ data });
+  res.status(200).json({ data });
   }
 
   //Update reservation status
@@ -216,7 +229,7 @@ async function updateStatus(req, res) {
   const {reservationId} = req.params;
   const {data: {status}} = req.body;
   const data = await service.statusUpdate(reservationId, status);  
-  res.status(201).json({ data });
+  res.status(200).json({ data });
   }
 
 module.exports = {
@@ -243,6 +256,7 @@ module.exports = {
     asyncErrorBoundary(update)],
     statusUpdate:[
       asyncErrorBoundary(reservationExists), 
+      hasValidStatus,
       asyncErrorBoundary(updateStatus)
     ]
 };

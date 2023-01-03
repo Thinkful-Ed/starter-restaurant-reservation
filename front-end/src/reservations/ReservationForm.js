@@ -1,48 +1,70 @@
-import React, {useState} from "react";
+import React from "react";
 import {useHistory} from "react-router-dom";
-import ErrorAlert from "../layout/ErrorAlert";
 
 function ReservationForm ({reservationFormData, handleReservationChange, handleReservationSubmit}){
 const history = useHistory();
-const [formErrors, setFormErrors] = useState([]);
 
 const validDate = (reservation) =>{
 const rDate = reservation.reservation_date;
 const rTime = reservation.reservation_time;
   const d = new Date(`${rDate}T${rTime}`);
-  const errors = [];
+  const errors = {};
   const tooday = new Date();
-  const toodayToLocaleString = tooday.toLocaleDateString();
-  const dateToLocaleString = d.toLocaleDateString();
+//   const toodayToLocaleString = tooday.toLocaleDateString();
+//   const dateToLocaleString = d.toLocaleDateString();
   let day = d.getDay();
-  let t = d.toLocaleTimeString();
-let now = tooday.toLocaleTimeString();
+//   let t = d.toLocaleTimeString();
+// let now = tooday.toLocaleTimeString();
 
-if((dateToLocaleString < toodayToLocaleString) || (dateToLocaleString === toodayToLocaleString && t < now)){
-        errors.push({key:1, message:'Form: Reservation must be in the future'})
+if(d.getTime() < tooday.getTime()){
+        errors.past='Form: Reservation occurs in the past';
 }
 if(day === 2){
-  errors.push({key:2, message:'Form: We are closed on Tuesday'})
+  errors.tuesday = 'Form: We are closed on Tuesday';
 }
+if(rTime < "10:30"|| rTime > "22:30"){
+    errors.hours = 'Form: Reservaiton time is before open or after close';
+  }
+  if(rTime > "21:30" && rTime < "22:30"){
+    errors.close = 'Form: Reservaiton time is after close time';
+  }
  return errors;
   
 }
 
 const formValidation = (event)=>{
         event.preventDefault();
-       const dateError = validDate(reservationFormData);
-       if(dateError.legnth>0){
-        setFormErrors([dateError])
-       }
-        else{
+       const dateErrors = validDate(reservationFormData);
+       // Clear all previous errors
+  const errorElements = document.querySelectorAll(".errors");
+//   errorElements.classList.remove("alert");
+//   errorElements.classList.remove("alert-danger");
+
+  for (let element of errorElements) {
+    element.style.display = "none";
+  }
+   // Display any new errors
+   if(Object.keys(dateErrors).length !== 0){
+    const errorDiv = document.querySelector(".errors");
+    errorDiv.classList.add("alert");
+    errorDiv.classList.add("alert-danger");
+    Object.keys(dateErrors).forEach((key) => {
+        // Find the specific error element
+        const errorElement = document.querySelector(`.errors`);
+        errorElement.innerHTML = dateErrors[key];
+        errorElement.style.display = "block";
+      });
+   }
+   
+else{
         handleReservationSubmit(event);
-}}
+}
+}
 
     return (
         <div>
-        {formErrors && formErrors.map((formError)=>(
-                <ErrorAlert error={formError} />
-               ))}
+         <div className="m-2 errors"></div>
+
         <form name="Reservations" onSubmit={formValidation}>
         <table className="table table-bordered table-condensed table-striped">
           <tbody>
