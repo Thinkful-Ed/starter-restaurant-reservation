@@ -8,7 +8,7 @@ function ReservationsList({ reservations }) {
   const handleCancel = async (reservation_id) => {
     if (
       window.confirm(
-        "Do you want to cancel this reservation? This cannot be undone."
+        "Do you want to cancel this reservation? This cannot be undone.",
       )
     ) {
       await setReservationStatus(reservation_id, "cancelled");
@@ -58,7 +58,8 @@ function ReservationsList({ reservations }) {
                   <td>
                     {" "}
                     <div
-                      data-reservation-id-status={reservation.reservation_id}>
+                      data-reservation-id-status={reservation.reservation_id}
+                    >
                       {reservation.status || "booked"}
                     </div>
                   </td>
@@ -68,16 +69,18 @@ function ReservationsList({ reservations }) {
               <div>
                 {reservation.status === null && (
                   <a href={`/reservations/${reservation.reservation_id}/seat`}>
-                    <button>Seat</button>
+                    <button className="btn btn-primary">Seat</button>
                   </a>
                 )}
                 <a href={`/reservations/${reservation.reservation_id}/edit`}>
-                  <button>Edit</button>
+                  <button className="btn btn-primary">Edit</button>
                 </a>
                 {reservation.status !== "cancelled" && (
                   <button
+                    className="btn btn-secondary"
                     data-reservation-id-cancel={reservation.reservation_id}
-                    onClick={() => handleCancel(reservation.reservation_id)}>
+                    onClick={() => handleCancel(reservation.reservation_id)}
+                  >
                     Cancel
                   </button>
                 )}

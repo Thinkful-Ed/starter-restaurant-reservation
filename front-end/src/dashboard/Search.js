@@ -19,7 +19,7 @@ function Search() {
     try {
       const result = await searchReservationsByPhoneNumber(
         formData.mobile_number,
-        abortController.signal
+        abortController.signal,
       );
       console.log("RESULT------", result);
       setReservations(result);
@@ -35,8 +35,10 @@ function Search() {
 
   return (
     <div>
+      <h1>Search by phone number</h1>
       <form onSubmit={onSubmit}>
         <ErrorAlert error={error} />
+
         <label htmlFor="mobile_number">Mobile Number</label>
         <input
           name="mobile_number"
@@ -44,8 +46,12 @@ function Search() {
           placeholder="Enter a customer's phone number"
           required
           value={formData.mobile_number}
-          onChange={handleChange}></input>
-        <button type="submit">Find</button>
+          onChange={handleChange}
+        ></input>
+
+        <button className="btn btn-primary" type="submit">
+          Find
+        </button>
       </form>
       {reservations !== null && reservations.length === 0 && (
         <div>No reservations found</div>

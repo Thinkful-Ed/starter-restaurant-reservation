@@ -41,7 +41,7 @@ function NewReservation() {
           ...formData,
           people: parseInt(formData.people),
         },
-        abortController.signal
+        abortController.signal,
       );
       history.push(`/dashboard?date=${formData.reservation_date}`);
     } catch (error) {
@@ -51,7 +51,7 @@ function NewReservation() {
 
   return (
     <div>
-      <h1>NEW RESERVATIONS</h1>
+      <h1>New reservation</h1>
       <ErrorAlert error={reservationsError} />
       <ReservationForm
         reservation={formData}

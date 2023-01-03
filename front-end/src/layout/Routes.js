@@ -27,35 +27,37 @@ function useQuery() {
 function Routes() {
   const query = useQuery();
   return (
-    <Switch>
-      <Route exact={true} path="/">
-        <Redirect to={"/dashboard"} />
-      </Route>
-      <Route exact={true} path="/search">
-        <Search />
-      </Route>
-      <Route exact={true} path="/tables/new">
-        <NewTable />
-      </Route>
-      <Route exact={true} path="/reservations/:reservation_id/edit">
-        <EditReservation />
-      </Route>
-      <Route exact={true} path="/reservations/:reservationId/seat">
-        <CurrentReservation />
-      </Route>
-      <Route exact={true} path="/reservations/new">
-        <NewReservation />
-      </Route>
-      <Route exact={true} path="/reservations">
-        <Redirect to={"/dashboard"} />
-      </Route>
-      <Route path="/dashboard">
-        <Dashboard date={query.get("date") || today()} />
-      </Route>
-      <Route>
-        <NotFound />
-      </Route>
-    </Switch>
+    <div className="routes-container">
+      <Switch>
+        <Route exact={true} path="/">
+          <Redirect to={"/dashboard"} />
+        </Route>
+        <Route exact={true} path="/search">
+          <Search />
+        </Route>
+        <Route exact={true} path="/tables/new">
+          <NewTable />
+        </Route>
+        <Route exact={true} path="/reservations/:reservation_id/edit">
+          <EditReservation />
+        </Route>
+        <Route exact={true} path="/reservations/:reservationId/seat">
+          <CurrentReservation />
+        </Route>
+        <Route exact={true} path="/reservations/new">
+          <NewReservation />
+        </Route>
+        <Route exact={true} path="/reservations">
+          <Redirect to={"/dashboard"} />
+        </Route>
+        <Route path="/dashboard">
+          <Dashboard date={query.get("date") || today()} />
+        </Route>
+        <Route>
+          <NotFound />
+        </Route>
+      </Switch>
+    </div>
   );
 }
 

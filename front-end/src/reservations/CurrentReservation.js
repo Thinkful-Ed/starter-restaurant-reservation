@@ -38,7 +38,7 @@ function CurrentReservation() {
       await setTableToOccupied(
         formData.table_id,
         reservationId,
-        abortController.signal
+        abortController.signal,
       );
       history.push(`/dashboard`);
     } catch (error) {
@@ -61,7 +61,8 @@ function CurrentReservation() {
           name="table_id"
           id="table_id"
           value={formData.table_id}
-          onChange={handleChange}>
+          onChange={handleChange}
+        >
           <option value="" disabled>
             Select a table
           </option>
@@ -71,8 +72,12 @@ function CurrentReservation() {
             </option>
           ))}
         </select>
-        <button type="submit">Submit</button>
-        <button onClick={handleCancel}>Cancel</button>
+        <button className="btn btn-primary" type="submit">
+          Submit
+        </button>
+        <button className="btn btn-secondary" onClick={handleCancel}>
+          Cancel
+        </button>
       </form>
     </div>
   );

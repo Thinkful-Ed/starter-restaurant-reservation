@@ -18,7 +18,8 @@ function NewReservation({ reservation, handleChange, onSubmit }) {
             type="text"
             required
             value={reservation.first_name}
-            onChange={handleChange}></input>
+            onChange={handleChange}
+          ></input>
         </div>
 
         <div className="pb-1">
@@ -29,7 +30,8 @@ function NewReservation({ reservation, handleChange, onSubmit }) {
             type="text"
             required
             value={reservation.last_name}
-            onChange={handleChange}></input>
+            onChange={handleChange}
+          ></input>
         </div>
 
         <div className="pb-1">
@@ -40,7 +42,8 @@ function NewReservation({ reservation, handleChange, onSubmit }) {
             type="tel"
             required
             value={reservation.mobile_number}
-            onChange={handleChange}></input>
+            onChange={handleChange}
+          ></input>
         </div>
 
         <div className="pb-1">
@@ -51,7 +54,8 @@ function NewReservation({ reservation, handleChange, onSubmit }) {
             type="date"
             required
             value={reservation.reservation_date}
-            onChange={handleChange}></input>
+            onChange={handleChange}
+          ></input>
         </div>
 
         <div className="pb-1">
@@ -62,7 +66,8 @@ function NewReservation({ reservation, handleChange, onSubmit }) {
             type="time"
             required
             value={reservation.reservation_time}
-            onChange={handleChange}></input>
+            onChange={handleChange}
+          ></input>
         </div>
 
         <div className="pb-1">
@@ -73,11 +78,16 @@ function NewReservation({ reservation, handleChange, onSubmit }) {
             type="number"
             required
             value={reservation.people}
-            onChange={handleChange}></input>
+            onChange={handleChange}
+          ></input>
         </div>
       </fieldset>
-      <button type="submit">Submit</button>
-      <button onClick={handleCancel}>Cancel</button>
+      <button className="btn btn-primary" type="submit">
+        Submit
+      </button>
+      <button className="btn btn-secondary" onClick={handleCancel}>
+        Cancel
+      </button>
     </form>
   );
 }

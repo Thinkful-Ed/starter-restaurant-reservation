@@ -32,7 +32,7 @@ function NewTables() {
           ...formData,
           capacity: parseInt(formData.capacity),
         },
-        abortController.signal
+        abortController.signal,
       );
       history.push(`/dashboard`);
     } catch (error) {
@@ -46,7 +46,7 @@ function NewTables() {
 
   return (
     <div>
-      <h1>NEW TABLE</h1>
+      <h1>New table</h1>
       <ErrorAlert error={reservationsError} />
       <form onSubmit={onSubmit}>
         <fieldset>
@@ -58,7 +58,8 @@ function NewTables() {
               type="text"
               required
               value={formData.table_name}
-              onChange={handleChange}></input>
+              onChange={handleChange}
+            ></input>
           </div>
 
           <div className="pb-1">
@@ -69,11 +70,16 @@ function NewTables() {
               type="number"
               required
               value={formData.capacity}
-              onChange={handleChange}></input>
+              onChange={handleChange}
+            ></input>
           </div>
         </fieldset>
-        <button type="submit">Submit</button>
-        <button onClick={handleCancel}>Cancel</button>
+        <button className="btn btn-primary" type="submit">
+          Submit
+        </button>
+        <button className="btn btn-secondary" onClick={handleCancel}>
+          Cancel
+        </button>
       </form>
     </div>
   );

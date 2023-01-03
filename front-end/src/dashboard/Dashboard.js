@@ -45,19 +45,15 @@ function Dashboard({ date }) {
       <h1>Dashboard</h1>
 
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for &nbsp;</h4>
-
-        <h4> {date} </h4>
+        <h4>Reservations for {date}</h4>
       </div>
-      <button
-        onClick={handlePreviousButtonClick}
-        className="btn btn-primary mr-1">
+      <button onClick={handlePreviousButtonClick} className="btn btn-primary">
         Previous Date
       </button>
-      <button onClick={handleTodayButtonClick} className="btn btn-primary mr-1">
+      <button onClick={handleTodayButtonClick} className="btn btn-primary">
         Today
       </button>
-      <button onClick={handleNextButtonClick} className="btn btn-primary mr-1">
+      <button onClick={handleNextButtonClick} className="btn btn-primary">
         Next Date
       </button>
       <ErrorAlert error={reservationsError} />

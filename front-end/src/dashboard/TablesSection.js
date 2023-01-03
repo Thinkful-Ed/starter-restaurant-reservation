@@ -26,7 +26,7 @@ function TablesSection() {
   const handleFinishTable = async (table_id) => {
     if (
       window.confirm(
-        "Is this table ready to seat new guests? This cannot be undone."
+        "Is this table ready to seat new guests? This cannot be undone.",
       )
     ) {
       await finishOccupiedTable(table_id);
@@ -65,8 +65,10 @@ function TablesSection() {
                     <div>
                       {table.reservation_id !== null && (
                         <button
+                          className="btn btn-primary"
                           data-table-id-finish={table.table_id}
-                          onClick={() => handleFinishTable(table.table_id)}>
+                          onClick={() => handleFinishTable(table.table_id)}
+                        >
                           Finish
                         </button>
                       )}
