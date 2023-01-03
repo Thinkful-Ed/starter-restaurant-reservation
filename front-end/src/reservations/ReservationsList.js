@@ -19,7 +19,7 @@ function ReservationsList({ reservations }) {
   return (
     <div>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations</h4>
+        <h4 className="mb-0 mt-5">Reservations</h4>
       </div>
       <head>
         <link rel="stylesheet" href="../utils/style.css" />
@@ -27,7 +27,10 @@ function ReservationsList({ reservations }) {
       <div>
         {reservations.map((reservation) => {
           return (
-            <div key={reservation.reservation_id}>
+            <div
+              className="restaurant-reservation"
+              key={reservation.reservation_id}
+            >
               <table>
                 <tr>
                   <th>First Name</th>

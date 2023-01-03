@@ -37,12 +37,11 @@ function TablesSection() {
 
   return (
     <div>
-      <h4>TABLES SECTION</h4>
-      <ErrorAlert error={tablesError} />
+      <h4 className="mt-5 pt-5">Tables</h4>
       <div>
         {tables.map((table) => {
           return (
-            <div key={table.table_id}>
+            <div className="restaurant-table" key={table.table_id}>
               <table>
                 <tr>
                   <th>Table name</th>
@@ -55,13 +54,11 @@ function TablesSection() {
                 <tr>
                   <th>Status</th>
                   <td>
-                    {" "}
                     <div data-table-id-status={table.table_id}>
                       {table.reservation_id === null ? "Free" : "Occupied"}
                     </div>
                   </td>
                   <td>
-                    &nbsp;
                     <div>
                       {table.reservation_id !== null && (
                         <button
@@ -80,6 +77,7 @@ function TablesSection() {
           );
         })}
       </div>
+      <ErrorAlert error={tablesError} />
     </div>
   );
 }

@@ -49,7 +49,7 @@ function Search() {
           onChange={handleChange}
         ></input>
 
-        <button className="btn btn-primary" type="submit">
+        <button className="btn btn-primary w-100" type="submit">
           Find
         </button>
       </form>

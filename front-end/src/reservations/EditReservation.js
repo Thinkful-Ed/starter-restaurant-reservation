@@ -38,7 +38,7 @@ function EditReservation() {
       try {
         const response = await getReservationById(
           reservation_id,
-          abortController.signal
+          abortController.signal,
         );
         setFormData({
           first_name: response.first_name,
@@ -71,7 +71,7 @@ function EditReservation() {
           people: parseInt(formData.people),
         },
         reservation_id,
-        abortController.signal
+        abortController.signal,
       );
       history.push(`/dashboard?date=${formData.reservation_date}`);
     } catch (error) {
@@ -81,7 +81,7 @@ function EditReservation() {
 
   return (
     <div>
-      <h1>EDIT RESERVATION</h1>
+      <h1>Edit reservation</h1>
       <ErrorAlert error={reservationsError} />
       <ReservationForm
         reservation={formData}

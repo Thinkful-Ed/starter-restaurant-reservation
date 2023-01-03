@@ -47,17 +47,20 @@ function Dashboard({ date }) {
       <div className="d-md-flex mb-3">
         <h4>Reservations for {date}</h4>
       </div>
-      <button onClick={handlePreviousButtonClick} className="btn btn-primary">
-        Previous Date
-      </button>
-      <button onClick={handleTodayButtonClick} className="btn btn-primary">
-        Today
-      </button>
-      <button onClick={handleNextButtonClick} className="btn btn-primary">
-        Next Date
-      </button>
-      <ErrorAlert error={reservationsError} />
+
+      <div className="mb-3">
+        <button onClick={handlePreviousButtonClick} className="btn btn-primary">
+          Previous Date
+        </button>
+        <button onClick={handleTodayButtonClick} className="btn btn-primary">
+          Today
+        </button>
+        <button onClick={handleNextButtonClick} className="btn btn-primary">
+          Next Date
+        </button>
+      </div>
       <ReservationsList reservations={reservations} />
+      <ErrorAlert error={reservationsError} />
       <TablesSection />
     </main>
   );

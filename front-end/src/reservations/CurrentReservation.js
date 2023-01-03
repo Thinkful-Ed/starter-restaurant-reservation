@@ -52,9 +52,8 @@ function CurrentReservation() {
 
   return (
     <div>
-      I AM RESERVATION {reservationId}
+      <h1>Seat reservation</h1>
       <ErrorAlert error={reservationsError} />
-      <div>{JSON.stringify(formData)}</div>
       <form onSubmit={onSubmit}>
         <label htmlFor="table_id">Table</label>
         <select
