@@ -8,6 +8,10 @@ exports.up = function (knex) {
     table.string("reservation_time").notNullable();
     table.integer("people").notNullable()
     table.string("status").notNullable().defaultTo("pending")
+    // DOES THIS TABLE REFERENCE TABLES TABLE? IF SO AT WHICH COLUMN? ADD 
+    //.foreign("<column>")
+    //.references("<column>")
+    //.onDelete("cascade")
     table.timestamps(true, true);
   });
 };
