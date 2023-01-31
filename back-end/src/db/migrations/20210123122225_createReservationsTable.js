@@ -1,6 +1,6 @@
 exports.up = function (knex) {
   return knex.schema.createTable("reservations", (table) => {
-    table.increments("reservation_id").primary();
+    table.increments("reservation_id").primary()
     table.string("first_name").notNullable();
     table.string("last_name").notNullable();
     table.string("mobile_number").notNullable();
@@ -8,10 +8,6 @@ exports.up = function (knex) {
     table.string("reservation_time").notNullable();
     table.integer("people").notNullable()
     table.string("status").notNullable().defaultTo("pending")
-    // DOES THIS TABLE REFERENCE TABLES TABLE? IF SO AT WHICH COLUMN? ADD 
-    //.foreign("<column>")
-    //.references("<column>")
-    //.onDelete("cascade")
     table.timestamps(true, true);
   });
 };
