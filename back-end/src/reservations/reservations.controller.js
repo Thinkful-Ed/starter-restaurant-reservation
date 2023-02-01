@@ -3,7 +3,6 @@
  */
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const { response } = require("express");
 const hasProperties = require("../db/utils/hasProperties");
 const hasRequiredProperties = hasProperties("first_name", "last_name", "mobile_number", "reservation_date", "reservation_time", "people");
 const validateTypes = require("../db/utils/validateTypes");
@@ -19,14 +18,10 @@ async function list(req, res, _next) {
   res.json({ data: listing})
 }
 
-
-
-async function create(req, res, next) {
+async function create(req, res, _next) {
   const data = await service.create(req.body.data);
   res.status(201).json({ data });
 }
-
-
 
 
 module.exports = {
