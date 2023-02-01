@@ -23,6 +23,16 @@ async function create(req, res, _next) {
   res.status(201).json({ data });
 }
 
+async function reservationExists(req, res, next){
+  const { reservation_id } = req.params;
+  const foundReservation = await service.read(reservation_id);
+  if(!foundReservation){
+    return next({ status:404, message:`Reservation with id ${reservation_id} not found`})
+  }
+  res.locals.foundReservation = foundReservation;
+  next();
+}
+
 async function read(req, res, next) {
   const { reservation_id } = req.params;
   const foundReservation = await service.read(reservation_id);
@@ -32,6 +42,6 @@ async function read(req, res, next) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [hasRequiredProperties, validateInputTypes, asyncErrorBoundary(create)],
-  read: [asyncErrorBoundary(read)],
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
 
 };

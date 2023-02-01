@@ -17,25 +17,38 @@ function validType(){
         if(!data.reservation_time.match(reTime)) {
         next({ status:400, message: 'Please enter a valid reservation_time.'})
         };
-    
-        // console.log(thisDay)
-        // console.log(thisDay.getUTCDay())
-    
+        
+        
         // validate Date/day
         let reservationDay = new Date(data.reservation_date)
         if(reservationDay.getUTCDay() === 2){
-            next({ status:400, message: 'Sorry, we are closed on Tuesday'})
+            next({ status:400, message: 'Sorry, we are closed on Tuesdays'})
         }
 
+
+
+
+
+        ///FROM HERE DOWN IS BROKEN??????????
+    
+
+
+
+        const resYear = reservationDay.getUTCFullYear();
+        const resMonth = reservationDay.getUTCMonth();
+        const resDay = reservationDay.getUTCDate();
+
+        const todayDate = Date.now()
+        // console.log(Date.now())
+        console.log(`!!!!!!!!! ${reservationDay}`)
+        console.log(reservationDay, todayDate)
+
+
+    
         if(reservationDay.getUTCDate() < Date.now()){
             next({ status:400, message: 'You can only make reservations for the future.'})
         }
 
-        // console.log(date.now())
-        // console.log(reservationDay.getUTCDate())
-        // console.log(reservationDay.getHours())
-        // console.log(reservationDay.getUTCHours())
-        // console.log(reservationDay.toLocaleTimeString())
 
         let reservationTimeHours = reservationDay.getUTCHours();
         let reservationTimeMinutes = reservationDay.getUTCMinutes();
