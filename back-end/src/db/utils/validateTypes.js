@@ -21,15 +21,38 @@ function validType(){
         // console.log(thisDay)
         // console.log(thisDay.getUTCDay())
     
-
-        let thisDay = new Date(data.reservation_date)
-        if(thisDay.getUTCDay() === 2){
+        // validate Date/day
+        let reservationDay = new Date(data.reservation_date)
+        if(reservationDay.getUTCDay() === 2){
             next({ status:400, message: 'Sorry, we are closed on Tuesday'})
         }
 
-        if(thisDay.getUTCDate() < Date.now()){
+        if(reservationDay.getUTCDate() < Date.now()){
             next({ status:400, message: 'You can only make reservations for the future.'})
         }
+
+        // console.log(date.now())
+        // console.log(reservationDay.getUTCDate())
+        // console.log(reservationDay.getHours())
+        // console.log(reservationDay.getUTCHours())
+        // console.log(reservationDay.toLocaleTimeString())
+
+        let reservationTimeHours = reservationDay.getUTCHours();
+        let reservationTimeMinutes = reservationDay.getUTCMinutes();
+        
+    
+        if(reservationTimeMinutes < 30){
+            if(reservationTimeHours <= 10){
+                next({ status:400, message: 'Invalid time'})
+            }
+        }
+
+        if(reservationTimeMinutes > 30){
+            if(reservationTimeHours >= 21){
+                next({ status:400, message: 'Invalid time'})
+            }
+        }
+
         next();
     }
 }
