@@ -18,6 +18,18 @@ function validType(){
         next({ status:400, message: 'Please enter a valid reservation_time.'})
         };
     
+        // console.log(thisDay)
+        // console.log(thisDay.getUTCDay())
+    
+
+        let thisDay = new Date(data.reservation_date)
+        if(thisDay.getUTCDay() === 2){
+            next({ status:400, message: 'Sorry, we are closed on Tuesday'})
+        }
+
+        if(thisDay.getUTCDate() < Date.now()){
+            next({ status:400, message: 'You can only make reservations for the future.'})
+        }
         next();
     }
 }

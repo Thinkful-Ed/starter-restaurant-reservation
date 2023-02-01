@@ -17,9 +17,9 @@ router.route("/")
     .get(controller.list)
     .post(controller.create)
     .all(methodNotAllowed);
-
-
-//FORM TO CREATE NEW RESERVATION
+    
+    
+    //FORM TO CREATE NEW RESERVATION
 router.route("/new")
     .all(methodNotAllowed);
 
