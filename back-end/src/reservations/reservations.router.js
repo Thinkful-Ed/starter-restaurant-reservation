@@ -4,7 +4,7 @@
  * @type {Router}
  */
 
-const router = require("express").Router();
+const router = require("express").Router({ mergeParams: true});
 // DO WE NEED MERGEROUTES ON???
 const controller = require("./reservations.controller");
 const methodNotAllowed = require("../errors/methodNotAllowed")
@@ -20,10 +20,14 @@ router.route("/")
     
     
     //FORM TO CREATE NEW RESERVATION
-router.route("/new")
-    .all(methodNotAllowed);
+// router.route("/new")
+//     .all(methodNotAllowed);
 
-router.route("/dashboard")
+// router.route("/dashboard")
+
+router.route("/:reservation_id")
+    .get(controller.read)
+    .all(methodNotAllowed);
 
 
 
