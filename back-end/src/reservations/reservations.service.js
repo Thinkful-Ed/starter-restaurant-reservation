@@ -4,10 +4,8 @@ const knex = require("../db/connection");
 function list(date) {
     return knex("reservations")
         .select("*")
-        // .whereNotIn("status")
         .where({ reservation_date: date })
         .orderBy("reservation_time")
-        // .then((reservationsList) => "reservation_status" != 'finished')
 }
 
 function create(reservation) {
@@ -17,6 +15,7 @@ function create(reservation) {
         .then((newReservation) => newReservation[0])
 }
 
+//TODO delete unused code
 // function read(reservationId) {
 //     return knex('reservations as r')
 //         .join("tables as t", "r.reservation_id", "t.reservation_id")
@@ -24,7 +23,6 @@ function create(reservation) {
 //         .where({ reservation_id: reservationId })
 //         .first()
 // }
-
 
 function read(reservationId) {
     return knex("reservations")

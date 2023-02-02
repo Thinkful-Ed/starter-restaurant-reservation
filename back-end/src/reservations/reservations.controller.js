@@ -1,6 +1,3 @@
-/**
- * List handler for reservation resources
- */
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../utils/hasProperties");
@@ -19,26 +16,27 @@ async function searchPhoneNum(req, res, next) {
 
   if(mobile_number){
     const listing = await service.search(mobile_number);
-    res.status(200).json({ data: listing })
+    res.status(200).json({ data: listing });
   } else {
     next();
-  }
-}
+  };
+};
 
-function formatDate(req, res, next) {
+function getTodaysDate() {
   const TodayDate = new Date(Date.now());
   const year = TodayDate.getFullYear();
   const month = TodayDate.getMonth() + 1;
   const day = TodayDate.getDate();
   const formattedDate = `${year}-${month}-${day}`;
-  return formattedDate
-}
+  return formattedDate;
+};
 
 async function list(req, res, _next) {
-  let { date }  = req.query;
-  if(!date){
-    date = formatDate()
-  }
+  const { date } = req.query;
+
+  if(!date) {
+    date = getTodaysDate();
+  };
 
   const listing = await service.list(date)
   let filtered = listing.filter((eachRes) => 
@@ -49,9 +47,10 @@ async function list(req, res, _next) {
 
 async function create(req, res, next) {
   const reqStatus = req.body.data.status;
-  if(reqStatus == 'seated' || reqStatus == 'finished') {
+
+  if(reqStatus === 'seated' || reqStatus === 'finished') {
     next({ status: 400, message: `Status is ${reqStatus}`})
-  }
+  };
   const data = await service.create(req.body.data);
 
   res.status(201).json({ data });
