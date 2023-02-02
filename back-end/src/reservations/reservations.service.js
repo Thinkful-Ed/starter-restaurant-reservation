@@ -7,6 +7,7 @@ function list(date) {
         // .whereNotIn("status")
         .where({ reservation_date: date })
         .orderBy("reservation_time")
+        // .then((reservationsList) => "reservation_status" != 'finished')
 }
 
 function create(reservation) {

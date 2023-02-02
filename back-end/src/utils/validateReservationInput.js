@@ -22,12 +22,14 @@ function validType(){
         // validate Date/day
 
         // THIS IS THE OLD FORMAT
-        // let reservationDay = new Date(data.reservation_date)
+        let reservationDay = new Date(data.reservation_date)
 
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-        // THIS IS THE NEW FORMAT ---- CHANGE THE TIME VALIDATION TO USE .GETUTC....() ON THIS INSTEAD OF SLICE
-        let reservationDay = new Date(`${data.reservation_date}T${data.reservation_time}:00`);
+        // TODO Get rid of all the xtra code
+        //DONT USE THIS 
+        // //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+        // // THIS IS THE NEW FORMAT ---- CHANGE THE TIME VALIDATION TO USE .GETUTC....() ON THIS INSTEAD OF SLICE
+        // let reservationDay = new Date(`${data.reservation_date}T${data.reservation_time}:00`);
 
 
 
