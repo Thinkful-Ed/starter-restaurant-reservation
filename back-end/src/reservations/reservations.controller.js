@@ -49,28 +49,29 @@ async function create(req, res, next) {
   const reqStatus = req.body.data.status;
 
   if(reqStatus === 'seated' || reqStatus === 'finished') {
-    next({ status: 400, message: `Status is ${reqStatus}`})
+    next({ status: 400, message: `Status is ${reqStatus}`});
   };
+
   const data = await service.create(req.body.data);
 
   res.status(201).json({ data });
-}
+};
 
-async function reservationExists(req, res, next){
+async function reservationExists(req, res, next) {
   const { reservation_id } = req.params;
   const foundReservation = await service.read(reservation_id);
-  if(!foundReservation){
-    return next({ status:404, message:`Reservation with id ${reservation_id} not found`})
-  }
+  if(!foundReservation) {
+    next({ status:404, message:`Reservation with id ${reservation_id} not found`});
+  };
   res.locals.foundReservation = foundReservation;
   next();
-}
+};
 
-async function read(req, res, next) {
+async function read(req, res, _next) {
   const { reservation_id } = req.params;
   const foundReservation = await service.read(reservation_id);
   res.json({ data: foundReservation });
-}
+};
 
 function validateStatusChange(req, res, next) {
   
@@ -78,52 +79,58 @@ function validateStatusChange(req, res, next) {
     const updateStatus = req.body.data.status;
   
     if(resStatus == 'finished'){
-      next({ status: 400, message:`${res.locals.foundReservation.reservation_id} has status: ${resStatus}`})
-    }
+      next({ status: 400, message:`${res.locals.foundReservation.reservation_id} has status: ${resStatus}`});
+    };
     if(updateStatus == 'unknown') {
-      next({ status: 400, message: `Cannot enter a status of ${updateStatus}`})
-    }
+      next({ status: 400, message: `Cannot enter a status of ${updateStatus}`});
+    };
     next();
-}
+};
 
-async function updateStatus(req, res, next) {
+async function updateStatus(req, res, _next) {
 
   const updatedRes = {
     ...res.locals.foundReservation,
     status: req.body.data.status,
-  }
+  };
+
   const updated = await service.update(updatedRes);
-  res.status(200).json({ data: updated })
+
+  res.status(200).json({ data: updated });
 }
 
 
-function validateReservationForUpdate(req, res, next) {
+function validateReservationForUpdate(req, _res, next) {
   const {first_name, last_name, people, reservation_date, reservation_time, mobile_number } = req.body.data;
-  let errorField;
+  let errorField = "";
 
-  if(!first_name || first_name.length < 1){
-    errorField = 'first_name'
-  }
-  if(!last_name || last_name.length < 1) {
-    errorField = 'last_name'
-  }
-  if(!mobile_number || mobile_number.length < 1){
-    errorField = 'mobile_number'
-  }
-  if(!reservation_time){
-    errorField = 'reservation_time'
-  }
-  if(!reservation_date) {
-    errorField = 'reservation_date'
-  }
-  if(people === 0) {
-    errorField = 'people'
-  }
+    switch (true) {
+      case (!first_name || first_name.length < 1):
+        errorField = 'first_name';
+        break;
+      case (!last_name || last_name.length < 1):
+        errorField = 'last_name';
+        break;
+      case (!mobile_number || mobile_number.length < 1):
+        errorField = 'mobile_number';
+        break;
+      case (!reservation_time):
+        errorField = 'reservation_time';
+        break;
+      case(!reservation_date):
+        errorField = 'reservation_date';
+        break;
+      case(people === 0):
+        errorField = 'people';
+        break;
+      default:
+        break;  
+    }
+
 
   if(errorField){
     next({status:400, message:`${errorField} is invalid.`})
   }
-
 
   next();
 }
