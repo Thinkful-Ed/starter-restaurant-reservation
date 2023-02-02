@@ -97,7 +97,7 @@ async function updateStatus(req, res, _next) {
   const updated = await service.update(updatedRes);
 
   res.status(200).json({ data: updated });
-}
+};
 
 
 function validateReservationForUpdate(req, _res, next) {
@@ -125,35 +125,33 @@ function validateReservationForUpdate(req, _res, next) {
         break;
       default:
         break;  
-    }
+    };
 
-
-  if(errorField){
+  if(errorField) {
     next({status:400, message:`${errorField} is invalid.`})
-  }
+  };
 
   next();
-}
+};
 
-async function update(req, res, next) {
+async function update(req, res, _next) {
   const { foundReservation } = res.locals;
   const updatedReservation = req.body.data;
- 
 
   const updatedRes = {
     ...updatedReservation,
-    reservation_id: foundReservation.reservation_id
-  }
+    reservation_id: foundReservation.reservation_id,
+  };
+
   const updated = await service.update(updatedRes);
-  res.status(200).json({ data: updated })
-}
 
-
+  res.status(200).json({ data: updated });
+};
 
 module.exports = {
   list: [asyncErrorBoundary(searchPhoneNum), asyncErrorBoundary(list)],
   create: [hasRequiredProperties, validateInputTypes, asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   updateStatus: [asyncErrorBoundary(reservationExists), validateStatusChange, asyncErrorBoundary(updateStatus)],
-  update: [asyncErrorBoundary(reservationExists), validateReservationForUpdate, validateInputTypes, asyncErrorBoundary(update)]
+  update: [asyncErrorBoundary(reservationExists), validateReservationForUpdate, validateInputTypes, asyncErrorBoundary(update)],
 };
