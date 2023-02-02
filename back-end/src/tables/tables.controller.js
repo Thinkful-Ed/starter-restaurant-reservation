@@ -7,7 +7,7 @@ const validateTable = validTable();
 const tableHasProperties = hasProperties("reservation_id")
 const tableUpdate = require("../utils/tableUpdate");
 const validateTableInfo = tableUpdate();
-const {update: updateRes} = require("../reservations/reservations.service");
+const {update: updateRes, read: readRes } = require("../reservations/reservations.service");
 
 
 //DON'T FORGET TO TAKE OUT UNUSED next's
@@ -50,6 +50,7 @@ async function update(req, res, next) {
     };
 
     const updated = await service.update(updatedTable);
+
     if(thisReservation.status == 'seated') {
         next({ status: 400, message: `Reservation is ${thisReservation.status}.`})
     }
@@ -62,10 +63,20 @@ async function update(req, res, next) {
 }
 
 async function destroy(req, res, next) {
-    if(res.locals.foundTable.status === "free") {
+    const { foundTable } = res.locals;
+
+    if(foundTable.status === "free") {
         next({ status: 400, message: 'Table is not occupied.'})
     }
-    await service.delete(res.locals.foundTable.table_id);
+
+    await service.delete(foundTable.table_id);
+    const foundRes = await readRes(foundTable.reservation_id);
+
+    await updateRes({
+        ...foundRes,
+        status: 'finished'
+    })
+    
     await service.list()
     res.sendStatus(200)
 }
