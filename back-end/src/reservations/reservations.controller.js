@@ -23,10 +23,10 @@ async function searchPhoneNum(req, res, next) {
 };
 
 function getTodaysDate() {
-  const TodayDate = new Date(Date.now());
-  const year = TodayDate.getFullYear();
-  const month = TodayDate.getMonth() + 1;
-  const day = TodayDate.getDate();
+  const todayDate = new Date(Date.now());
+  const year = todayDate.getFullYear();
+  const month = todayDate.getMonth() + 1;
+  const day = todayDate.getDate();
   const formattedDate = `${year}-${month}-${day}`;
   return formattedDate;
 };
@@ -34,9 +34,7 @@ function getTodaysDate() {
 async function list(req, res, _next) {
   const { date } = req.query;
 
-  if(!date) {
-    date = getTodaysDate();
-  };
+  !date ? date = getTodaysDate() : null;
 
   const listing = await service.list(date);
 
@@ -44,7 +42,7 @@ async function list(req, res, _next) {
     eachRes.status !== 'finished'
   );
 
-  res.json({ data: filtered});
+  res.json({ data: filtered });
 };
 
 async function create(req, res, next) {
@@ -140,7 +138,6 @@ function validateReservationForUpdate(req, _res, next) {
 
 async function update(req, res, _next) {
   const { foundReservation } = res.locals;
-  const updatedReservation = req.body.data;
 
   const updatedRes = {
     ...req.body.data,
