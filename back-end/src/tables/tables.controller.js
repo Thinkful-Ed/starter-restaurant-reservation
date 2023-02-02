@@ -53,10 +53,20 @@ async function update(req, res, next) {
     res.status(200).json({ data: updated })
 }
 
+async function destroy(req, res, next) {
+    if(res.locals.foundTable.status === "free") {
+        next({ status: 400, message: 'Table is not occupied.'})
+    }
+    await service.delete(res.locals.foundTable.table_id);
+    res.sendStatus(200)
+}
+
+
 
 module.exports = {
     list: [asyncErrorBoundary(list)],
     create: [hasRequiredProperties, validateTable, asyncErrorBoundary(create)],
     read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
-    update: [asyncErrorBoundary(tableExists), tableHasProperties, asyncErrorBoundary(validateTableInfo), asyncErrorBoundary(update)]
+    update: [asyncErrorBoundary(tableExists), tableHasProperties, asyncErrorBoundary(validateTableInfo), asyncErrorBoundary(update)],
+    delete: [asyncErrorBoundary(tableExists), asyncErrorBoundary(destroy)]
 }
