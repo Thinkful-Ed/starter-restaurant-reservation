@@ -13,9 +13,32 @@ const validateInputTypes = validateTypes();
 //TODO remove unused code
 //TODO split larger functions into helper functions
 
+async function searchPhoneNum(req, res, next) {
+  const { mobile_number } = req.query;
+
+  if(mobile_number){
+    const listing = await service.search(mobile_number);
+    res.status(200).json({ data: listing })
+  } else {
+    next();
+  }
+}
+
+function formatDate(req, res, next) {
+  const TodayDate = new Date(Date.now());
+  const year = TodayDate.getFullYear();
+  const month = TodayDate.getMonth() + 1;
+  const day = TodayDate.getDate();
+  const formattedDate = `${year}-${month}-${day}`;
+  return formattedDate
+}
 
 async function list(req, res, _next) {
   let { date }  = req.query;
+  if(!date){
+    date = formatDate()
+  }
+
   const listing = await service.list(date)
   let filtered = listing.filter((eachRes) => 
     eachRes.status !== 'finished'
@@ -78,7 +101,7 @@ async function update(req, res, next) {
 
 
 module.exports = {
-  list: asyncErrorBoundary(list),
+  list: [asyncErrorBoundary(searchPhoneNum), asyncErrorBoundary(list)],
   create: [hasRequiredProperties, validateInputTypes, asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   update: [asyncErrorBoundary(reservationExists), validateStatusChange, asyncErrorBoundary(update)]
