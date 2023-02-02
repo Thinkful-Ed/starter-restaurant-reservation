@@ -86,7 +86,7 @@ function validateStatusChange(req, res, next) {
     next();
 }
 
-async function update(req, res, next) {
+async function updateStatus(req, res, next) {
 
   const updatedRes = {
     ...res.locals.foundReservation,
@@ -96,7 +96,9 @@ async function update(req, res, next) {
   res.status(200).json({ data: updated })
 }
 
+async function update(req, res, next) {
 
+}
 
 
 
@@ -104,5 +106,6 @@ module.exports = {
   list: [asyncErrorBoundary(searchPhoneNum), asyncErrorBoundary(list)],
   create: [hasRequiredProperties, validateInputTypes, asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
-  update: [asyncErrorBoundary(reservationExists), validateStatusChange, asyncErrorBoundary(update)]
+  updateStatus: [asyncErrorBoundary(reservationExists), validateStatusChange, asyncErrorBoundary(updateStatus)],
+  update: [asyncErrorBoundary(reservationExists), validateInputTypes, asyncErrorBoundary(update)]
 };
