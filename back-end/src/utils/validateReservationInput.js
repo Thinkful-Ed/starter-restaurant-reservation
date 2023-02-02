@@ -20,7 +20,20 @@ function validType(){
         
 
         // validate Date/day
+
+        // THIS IS THE OLD FORMAT
         let reservationDay = new Date(data.reservation_date)
+
+
+        // TODO Get rid of all the xtra code
+        //DONT USE THIS 
+        // //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+        // // THIS IS THE NEW FORMAT ---- CHANGE THE TIME VALIDATION TO USE .GETUTC....() ON THIS INSTEAD OF SLICE
+        // let reservationDay = new Date(`${data.reservation_date}T${data.reservation_time}:00`);
+
+
+
+
         if(reservationDay.getUTCDay() === 2){
             next({ status:400, message: 'Sorry, we are closed on Tuesdays'})
         }
