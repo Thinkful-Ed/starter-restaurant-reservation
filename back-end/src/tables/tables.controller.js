@@ -56,7 +56,7 @@ async function update(req, res, next) {
     }
     await updateRes({
         ...thisReservation,
-        status: 'seated'
+        status: 'seated',
     })
 
     res.status(200).json({ data: updated })
