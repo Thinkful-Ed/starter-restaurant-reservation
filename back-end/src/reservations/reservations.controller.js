@@ -5,7 +5,7 @@ const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../utils/hasProperties");
 const hasRequiredProperties = hasProperties("first_name", "last_name", "mobile_number", "reservation_date", "reservation_time", "people");
-const validateTypes = require("../utils/validateTypes");
+const validateTypes = require("../utils/validateReservationInput");
 const validateInputTypes = validateTypes();
 
 

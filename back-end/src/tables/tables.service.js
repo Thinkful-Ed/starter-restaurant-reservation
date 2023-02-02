@@ -30,6 +30,11 @@ function update(updatedTable) {
         .then((updated) => updated[0])
 }
 
+function destroy(tableId) {
+    return knex("tables")
+        .where({ table_id: tableId })
+        .del()
+}
 
 
 module.exports = {
@@ -37,4 +42,5 @@ module.exports = {
     create,
     read,
     update,
+    delete: destroy,
 }
