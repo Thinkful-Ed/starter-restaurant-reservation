@@ -10,14 +10,16 @@ const validateInputTypes = validateTypes();
 
 
 //DON'T FORGET TO REMOVE/EDIT ANY UNUSED next VARS
+//TODO remove unused code
+//TODO split larger functions into helper functions
 
 
 async function list(req, res, _next) {
   let { date }  = req.query;
   const listing = await service.list(date)
-  let filtered = listing.filter((eachRes) => {
-    eachRes.status != 'finished'
-  })
+  let filtered = listing.filter((eachRes) => 
+    eachRes.status !== 'finished'
+  )
   res.json({ data: filtered})
 }
 
