@@ -1,4 +1,4 @@
-function methodNotAllowed(req, res, next){
+function methodNotAllowed(req, _res, next){
     next({
         status: 405,
         message: `${req.method} not allowed for ${req.originalUrl}`,

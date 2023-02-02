@@ -38,12 +38,14 @@ async function list(req, res, _next) {
     date = getTodaysDate();
   };
 
-  const listing = await service.list(date)
+  const listing = await service.list(date);
+
   let filtered = listing.filter((eachRes) => 
     eachRes.status !== 'finished'
-  )
-  res.json({ data: filtered})
-}
+  );
+
+  res.json({ data: filtered});
+};
 
 async function create(req, res, next) {
   const reqStatus = req.body.data.status;
@@ -59,11 +61,15 @@ async function create(req, res, next) {
 
 async function reservationExists(req, res, next) {
   const { reservation_id } = req.params;
+
   const foundReservation = await service.read(reservation_id);
+
   if(!foundReservation) {
     next({ status:404, message:`Reservation with id ${reservation_id} not found`});
   };
+
   res.locals.foundReservation = foundReservation;
+
   next();
 };
 
@@ -74,21 +80,19 @@ async function read(req, res, _next) {
 };
 
 function validateStatusChange(req, res, next) {
-  
     const resStatus = res.locals.foundReservation.status;
     const updateStatus = req.body.data.status;
   
-    if(resStatus == 'finished'){
+    if(resStatus === 'finished'){
       next({ status: 400, message:`${res.locals.foundReservation.reservation_id} has status: ${resStatus}`});
     };
-    if(updateStatus == 'unknown') {
+    if(updateStatus === 'unknown') {
       next({ status: 400, message: `Cannot enter a status of ${updateStatus}`});
     };
     next();
 };
 
 async function updateStatus(req, res, _next) {
-
   const updatedRes = {
     ...res.locals.foundReservation,
     status: req.body.data.status,
@@ -139,7 +143,7 @@ async function update(req, res, _next) {
   const updatedReservation = req.body.data;
 
   const updatedRes = {
-    ...updatedReservation,
+    ...req.body.data,
     reservation_id: foundReservation.reservation_id,
   };
 
