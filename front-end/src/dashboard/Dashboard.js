@@ -23,6 +23,8 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  console.log(reservations)
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -30,7 +32,39 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      {reservations.length > 0 ? (
+        <table clasName = "table">
+          <thead>
+            <tr>
+              <th>Reservation ID</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Mobile Number</th>
+              <th>Reservation Date</th>
+              <th>Reservation Time</th>
+              <th>People</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {reservations.map((reservation, index) => (
+              <tr key={index}>
+                <td>{reservation.reservation_id}</td>
+                <td>{reservation.first_name}</td>
+                <td>{reservation.last_name}</td>
+                <td>{reservation.mobile_number}</td>
+                <td>{reservation.reservation_date}</td>
+                <td>{reservation.reservation_time}</td>
+                <td>{reservation.people}</td>
+                <td>{reservation.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>No reservations found for this date.</p>
+      )}
+      {/* {JSON.stringify(reservations)} */}
     </main>
   );
 }

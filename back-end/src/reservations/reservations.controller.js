@@ -40,7 +40,6 @@ async function list(req, res, _next) {
 
   const listing = await service.list(date);
   const filtered = listing.filter((eachRes) => eachRes.status !== 'finished');
-
   res.json({ data: filtered });
 }
 
