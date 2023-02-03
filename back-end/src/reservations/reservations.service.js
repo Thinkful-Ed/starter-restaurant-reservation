@@ -6,38 +6,29 @@ function list(date) {
         .select("*")
         .where({ reservation_date: date })
         .orderBy("reservation_time")
-}
+};
 
 function create(reservation) {
     return knex("reservations")
         .insert(reservation)
         .returning("*")
         .then((newReservation) => newReservation[0])
-}
-
-//TODO delete unused code
-// function read(reservationId) {
-//     return knex('reservations as r')
-//         .join("tables as t", "r.reservation_id", "t.reservation_id")
-//         .select("t.table_id", "r.reservation_id", "t.status")
-//         .where({ reservation_id: reservationId })
-//         .first()
-// }
+};
 
 function read(reservationId) {
     return knex("reservations")
         .select("*")
         .where({ reservation_id: reservationId })
-        .first()
-}
+        .first();
+};
 
 function update(updatedRes) {
     return knex("reservations")
         .select("*")
         .where({ reservation_id: updatedRes.reservation_id })
         .update(updatedRes, "*")
-        .then((updated) => updated[0])
-}
+        .then((updated) => updated[0]);
+};
 
 function search(mobile_number) {
     return knex("reservations")
@@ -46,7 +37,7 @@ function search(mobile_number) {
             `%${mobile_number.replace(/\D/g, "")}%`
         )
        .orderBy("reservation_date") 
-}
+};
 
 
 module.exports = {

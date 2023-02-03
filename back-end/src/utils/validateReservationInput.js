@@ -6,46 +6,42 @@ function validType(){
         // regular expression to match required time format
         const reTime = /^\d{1,2}:\d{2}([ap]m)?$/;
         
-        if(typeof(data.people) !== 'number'){
-        next({ status:400, message: 'people must be a number.'})
-        };
+        // if(typeof(data.people) !== 'number'){
+        // next({ status:400, message: 'people must be a number.'})
+        // };
     
-        if(!data.reservation_date.match(reDate)) {
-        next({ status:400, message: 'Please enter a valid reservation_date.'})
-        };
+        // if(!data.reservation_date.match(reDate)) {
+        // next({ status:400, message: 'Please enter a valid reservation_date.'})
+        // };
     
-        if(!data.reservation_time.match(reTime)) {
-        next({ status:400, message: 'Please enter a valid reservation_time.'})
-        };
-        
+        // if(!data.reservation_time.match(reTime)) {
+        // next({ status:400, message: 'Please enter a valid reservation_time.'})
+        // };
 
-        // validate Date/day
+        let errorField = ''
+        switch (true) {
+            case typeof(data.people) !== 'number':
+                errorField = 'people';
+                break;
+            case !data.reservation_date.match(reDate):
+                errorField = 'reservation_date';
+                break;
+            case !data.reservation_time.match(reTime):
+                errorField = 'reservation_time';
+                break;
+            default:
+                break;            
+        }
+        if(errorField){
+            next({ status: 400, message: `${errorField} is invalid.`})
+        }
 
-        // THIS IS THE OLD FORMAT
         let reservationDay = new Date(data.reservation_date)
-
-
-        // TODO Get rid of all the xtra code
-        //DONT USE THIS 
-        // //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-        // // THIS IS THE NEW FORMAT ---- CHANGE THE TIME VALIDATION TO USE .GETUTC....() ON THIS INSTEAD OF SLICE
-        // let reservationDay = new Date(`${data.reservation_date}T${data.reservation_time}:00`);
-
-
-
 
         if(reservationDay.getUTCDay() === 2){
             next({ status:400, message: 'Sorry, we are closed on Tuesdays'})
         }
 
-        // console.log(`RESERVATIONDAY DATE${reservationDay}`)
-
-
-/**     reservationDay --> Tue Dec 31 2024 19:00:00 GMT-0500 (Eastern Standard Time)
- *      Date.now()  --> 1675294729286
- *   
- * 
- */
         const todayDateLong = Date.now();
         const todayDate = new Date(todayDateLong);      //Wed Feb 01 2023 18:42:11 GMT-0500 (Eastern Standard Time)
 
@@ -58,15 +54,6 @@ function validType(){
         const thisMonth = todayDate.getUTCMonth();
         const thisDay = todayDate.getUTCDate();
     
-    
-/**
- *       if resYear > thisYear       good
- *      if resYear = thisyear && resMonth > thisMonth       good
- *       if resYear=thisyear && resMonth=thisMonth && resDay > this Day     good
- * 
- * if this year is > res year gone
- * if this year === res year but this month is greather than gone
- */
 
         if(thisYear > resYear){
             next({ status:400, message: 'You can only make reservations for the future.'})
@@ -99,5 +86,6 @@ function validType(){
         next();
     }
 }
+
 
   module.exports = validType;
