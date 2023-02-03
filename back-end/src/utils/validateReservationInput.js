@@ -1,4 +1,4 @@
-function validType(){
+function validType() {
     return function validateTypes(req, _res, next){
         const { data } = req.body;
         // regular expression to match required date format
@@ -22,7 +22,7 @@ function validType(){
         const reservationTimeHours = reservationTime.slice(0,2);
         const reservationTimeMinutes = reservationTime.slice(3,5);
         
-        let errorMessage = ''
+        let errorMessage = '';
         switch (true) {
             case typeof(data.people) !== 'number':
                 errorMessage = 'people must be a number.';
@@ -49,14 +49,15 @@ function validType(){
                 errorMessage = 'Invalid time.';
                 break;
             case reservationTimeMinutes >= 30 && reservationTimeHours >= 21:
-                errorMessage = 'Invalid time.'      
+                errorMessage = 'Invalid time.';
+                break;      
             default:
                 break;            
         }
 
         if(errorMessage){
-            next({ status: 400, message: `${errorMessage}`})
-        }
+            next({ status: 400, message: `${errorMessage}`});
+        };
 
         next();
     }
