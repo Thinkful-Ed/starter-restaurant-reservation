@@ -1,5 +1,5 @@
-function validTable(){
-    return function validateTableInfo(req, res, next) {
+function validTable() {
+    return function validateTableInfo(req, _res, next) {
         const { data } = req.body;
 
         switch (true) {
@@ -11,7 +11,7 @@ function validTable(){
                 break;
             default:
                 break;
-        }
+        };
 
         next();
     }

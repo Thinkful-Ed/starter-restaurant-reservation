@@ -7,17 +7,12 @@ const hasRequiredProperties = hasProperties(
   "mobile_number",
   "reservation_date",
   "reservation_time",
-  "people"
+  "people",
 );
 const validateTypes = require("../utils/validateReservationInput");
 const validateInputTypes = validateTypes();
 
-//DON'T FORGET TO REMOVE/EDIT ANY UNUSED next VARS
-//TODO remove unused code
-//TODO split larger functions into helper functions
-//TODO underscore before unused req, res, next vars
-
-async function searchPhoneNum(req, res, next) {
+async function searchPhoneNumber(req, res, next) {
   const { mobile_number } = req.query;
 
   if (mobile_number) {
@@ -26,7 +21,7 @@ async function searchPhoneNum(req, res, next) {
     res.status(200).json({ data: listing });
   } else {
     next();
-  }
+  };
 }
 
 function getTodaysDate() {
@@ -44,7 +39,7 @@ async function list(req, res, _next) {
   !date ? (date = getTodaysDate()) : null;
 
   const listing = await service.list(date);
-  let filtered = listing.filter((eachRes) => eachRes.status !== 'finished');
+  const filtered = listing.filter((eachRes) => eachRes.status !== 'finished');
 
   res.json({ data: filtered });
 }
@@ -66,14 +61,7 @@ async function reservationExists(req, res, next) {
 
   const foundReservation = await service.read(reservation_id);
 
-  if (!foundReservation) {
-    next({
-      status: 404,
-      message: `Reservation with id ${reservation_id} not found`,
-    });
-  }
-
-  res.locals.foundReservation = foundReservation;
+  !foundReservation ? next({ status: 404, message: `Reservation with id ${reservation_id} not found` }) : res.locals.foundReservation = foundReservation;
 
   next();
 }
@@ -85,28 +73,29 @@ async function read(req, res, _next) {
 }
 
 function validateStatusChange(req, res, next) {
-  const resStatus = res.locals.foundReservation.status;
+  const { status, reservation_id } = res.locals.foundReservation;
   const updateStatus = req.body.data.status;
 
-  if (resStatus === 'finished') {
-    next({
-      status: 400,
-      message: `${res.locals.foundReservation.reservation_id} has status: ${resStatus}`,
-    });
-  }
-  if (updateStatus === "unknown") {
-    next({ status: 400, message: `Cannot enter a status of ${updateStatus}` });
+  switch (true) {
+    case status === 'finished':
+      next({ status: 400, message: `${reservation_id} has status: ${status}`});
+      break;
+    case updateStatus == 'unknown':
+      next({ status: 400, message: `cannot enter a status of ${updateStatus}`});
+      break;
+    default:
+      break;
   }
   next();
 }
 
 async function updateStatus(req, res, _next) {
-  const updatedRes = {
+  const updatedReservation = {
     ...res.locals.foundReservation,
     status: req.body.data.status,
   };
 
-  const updated = await service.update(updatedRes);
+  const updated = await service.update(updatedReservation);
 
   res.status(200).json({ data: updated });
 }
@@ -155,24 +144,29 @@ function validateReservationForUpdate(req, _res, next) {
 async function update(req, res, _next) {
   const { foundReservation } = res.locals;
 
-  const updatedRes = {
+  const updatedReservation = {
     ...req.body.data,
     reservation_id: foundReservation.reservation_id,
   };
 
-  const updated = await service.update(updatedRes);
+  const updated = await service.update(updatedReservation);
 
   res.status(200).json({ data: updated });
 }
 
 module.exports = {
-  list: [asyncErrorBoundary(searchPhoneNum), asyncErrorBoundary(list)],
+  list: [
+    asyncErrorBoundary(searchPhoneNumber), 
+    asyncErrorBoundary(list)
+  ],
   create: [
     hasRequiredProperties,
     validateInputTypes,
     asyncErrorBoundary(create),
   ],
-  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
+  read: [
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(read)],
   updateStatus: [
     asyncErrorBoundary(reservationExists),
     validateStatusChange,
