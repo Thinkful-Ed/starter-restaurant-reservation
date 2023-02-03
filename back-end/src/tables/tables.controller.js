@@ -5,8 +5,8 @@ const hasRequiredProperties = hasProperties("table_name", "capacity");
 const validTable = require("../utils/validateTable");
 const validateTable = validTable();
 const tableHasProperties = hasProperties("reservation_id")
-const tableUpdate = require("../utils/tableUpdate");
-const validateTableInfo = tableUpdate();
+const validateTableUpdate = require("../utils/validateTableUpdate");
+const validateTableInfo = validateTableUpdate();
 
 const {update: updateRes, read: readRes } = require("../reservations/reservations.service");
 
