@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { createReservation } from "../utils/api";
-import { useHistory } from "react-router";
+import { useLocation, useHistory } from "react-router-dom";
 
 
 export default function NewReservation() {
     const history = useHistory();
+    let location = useLocation();
+    let query = new URLSearchParams(location.search);
 
     const initialFormState = {
         first_name: "",
@@ -17,20 +19,22 @@ export default function NewReservation() {
 
     const [formData, setFormData] = useState(initialFormState);
 
+
     const handleChange = ({ target }) => {
         setFormData({...formData, [target.name]:target.value});
     };
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
         formData.people = Number(formData.people);
         const reservation = formData;
         
-        console.log(typeof(formData.people))
         async function callCreateReservation() {
             try{
                 const reservationInfo = await createReservation(reservation);
-                history.push(`/reservations?date=${reservationInfo.reservation_date}`);
+                query.set('date', `${formData.reservation_date}`);
+                history.push(`/dashboard?date=${formData.reservation_date}`)
             }
             catch (error) {
                 throw error
@@ -38,6 +42,11 @@ export default function NewReservation() {
         }
         callCreateReservation();
     };
+
+    const goBack = (event) => {
+        event.preventDefault();
+        history.goBack();
+    }
 
     return (
         <form name="create" onSubmit={handleSubmit}>
@@ -113,7 +122,8 @@ export default function NewReservation() {
                                 />
                         </td>
                         <td>
-                            <button type="submit">Submit</button>
+                            <button type="submit" onClick={handleSubmit}>Submit</button>
+                            <button type="cancel" onClick={goBack}>Cancel</button>
                         </td>
                     </tr>
                 </tbody>
