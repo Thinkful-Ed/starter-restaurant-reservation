@@ -3,6 +3,8 @@ import { createReservation } from "../utils/api";
 import { useLocation, useHistory } from "react-router-dom";
 
 
+//TODO take out extra code (reservationInfo ?) & unused imports (useEffect)
+
 export default function NewReservation() {
     const history = useHistory();
     let location = useLocation();

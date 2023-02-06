@@ -15,7 +15,7 @@ import { useParams } from "react-router-dom";
  *
  * @returns {JSX.Element}
  */
-// TODO take out unused code
+// TODO take out extra code & unused imports (useState, useParams)
 
 function Routes() {
   let date = useQuery().get('date') || today();
