@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
@@ -6,7 +6,6 @@ import NewReservation from "../reservations/NewReservation";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
-import { useParams } from "react-router-dom";
 
 /**
  * Defines all the routes for the application.

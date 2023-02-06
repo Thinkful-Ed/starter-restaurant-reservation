@@ -1,3 +1,5 @@
+//TODO need knex transaction per the README (not sure if they go in this file?)
+
 exports.up = function (knex) {
   return knex.schema.createTable("reservations", (table) => {
     table.increments("reservation_id").primary();

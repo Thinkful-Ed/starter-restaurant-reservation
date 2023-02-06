@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { createReservation } from "../utils/api";
 import { useLocation, useHistory } from "react-router-dom";
 
@@ -25,6 +25,7 @@ export default function NewReservation() {
         setFormData({...formData, [target.name]:target.value});
     };
 
+    //TODO do i need this error??? used for the error from the API?
     const [error, setError] = useState(null);
     const [firstNameError, setFirstNameError] = useState();
     const [lastNameError, setLastNameError] = useState();
@@ -56,19 +57,21 @@ export default function NewReservation() {
     
     
     function checkData(reservation){
-        setDateError("")
-        setTimeError("")
-        setDayError("")
-        setFirstNameError("")
-        setLastNameError("")
-        setMobileNumberError("")
-        setPeopleError("")
+        setDateError("");
+        setTimeError("");
+        setDayError("");
+        setFirstNameError("");
+        setLastNameError("");
+        setMobileNumberError("");
+        setPeopleError("");
+
         const {first_name, last_name, mobile_number, reservation_date, reservation_time, people} = formData;
         const reservationDate = new Date(reservation_date);
         const todaysDate = new Date(Date.now());
         const resYear = reservationDate.getUTCFullYear();
         const resMonth = reservationDate.getUTCMonth();
         const resDay = reservationDate.getUTCDate();
+
 
         const thisYear = todaysDate.getUTCFullYear();
         const thisMonth = todaysDate.getUTCMonth();
@@ -77,38 +80,54 @@ export default function NewReservation() {
         const reservationTime = reservation_time;
         const reservationTimeHours = reservationTime.slice(0,2);
         const reservationTimeMinutes = reservationTime.slice(3,5);
+        const resHours = Number(reservationTimeHours.toLocaleString(`en-us`, {minimumIntegerDigits: 2, useGrouping: false}));
+        const resMinutes = Number(reservationTimeMinutes.toLocaleString(`en-us`, {minimumIntegerDigits: 2, useGrouping: false}));
 
-        console.log(people, typeof people)
+
+        const thisHours = todaysDate.getHours();
+        const thisMinutes = todaysDate.getMinutes();
+
 
         if(first_name.length < 1){
             setFirstNameError("A first name is required.");
         }
         if(last_name.length < 1){
-            setLastNameError("A last name is required.")
+            setLastNameError("A last name is required.");
         }
         if(mobile_number.length < 10){
-            setMobileNumberError("A valid mobile number is required.")
+            setMobileNumberError("A valid mobile number is required.");
         }
         if(people < 1){
-            setPeopleError(`People must be at least 1, you entered ${people}`)
+            setPeopleError(`People must be at least 1, you entered ${people}`);
         }
         if(thisYear > resYear){
-            setDateError("Reservation must be for the future")
+            setDateError("Reservation must be for the future");
         }
         if(thisYear === resYear && thisMonth > resMonth){
-            setDateError("Reservation must be for the future")
+            setDateError("Reservation must be for the future");
         }
         if(thisYear === resYear && thisDay > resDay){
-            setDateError("Reservation must be for the future")
+            setDateError("Reservation must be for the future");
         }
-        if(reservationTimeMinutes <= 30 && reservationTimeHours <= 10){
-            setTimeError("Sorry, reservations must be after 10:30")
+        if(!reservationTimeHours){
+            setTimeError("Please enter a valid reservation time");
+        }
+        if(reservationTimeMinutes && reservationTimeMinutes <= 30 && reservationTimeHours <= 10){
+            setTimeError("Rreservations must be after 10:30");
         }
         if(reservationTimeMinutes >= 30 && reservationTimeHours >= 21){
-            setTimeError("Sorry, reservations must be before 21:30")
+            setTimeError("Reservations must be before 21:30");
+        }
+
+        if(thisYear === resYear && thisMonth === resMonth && thisDay === resDay){
+            if(resHours < thisHours){
+                setTimeError('Reservations must be for the future');
+            } else if (resHours === thisHours && resMinutes <= thisMinutes){
+                setTimeError("Reservations must be for the future");
+            }
         }
         if(reservationDate.getUTCDay() === 2){
-            setDayError("Sorry, we are closed on Tuesdays.")
+            setDayError("Sorry, we are closed on Tuesdays.");
         }
     }
 
@@ -125,6 +144,7 @@ export default function NewReservation() {
                 history.push(`/dashboard?date=${formData.reservation_date}`)
             }
             catch (error ) {
+                //TODO get rid of this console.log()
                 console.log(error)
                 setError(error.message)
                 throw error
