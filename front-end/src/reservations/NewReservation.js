@@ -26,19 +26,31 @@ export default function NewReservation() {
         setFormData({...formData, [target.name]:target.value});
     };
 
+    const [error, setError] = useState(null);
+    const errorDiv = error
+    ?   <div className="error alert alert-danger" >
+            <p classname = "alert alert-danger"></p>
+            {error}
+        </div>
+        : '';
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();
         formData.people = Number(formData.people);
         const reservation = formData;
+        setError(null)
         
         async function callCreateReservation() {
             try{
-                const reservationInfo = await createReservation(reservation);
+                await createReservation(reservation);
                 query.set('date', `${formData.reservation_date}`);
                 history.push(`/dashboard?date=${formData.reservation_date}`)
             }
             catch (error) {
+                //TODO remove extra code
+                console.log(error)
+                setError(error.message)
                 throw error
             }
         }
@@ -130,6 +142,10 @@ export default function NewReservation() {
                     </tr>
                 </tbody>
             </table>
+            {/* <div className="alert alert-danger">
+                <p>{error}</p>
+            </div> */}
+            <div>{errorDiv}</div>
         </form>
     )
 
