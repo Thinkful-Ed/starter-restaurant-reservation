@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { createReservation } from "../utils/api";
 import { useLocation, useHistory } from "react-router-dom";
 
 
 //TODO take out extra code (reservationInfo ?) & unused imports (useEffect)
-
+//TODO find better way for error validation
 export default function NewReservation() {
     const history = useHistory();
     let location = useLocation();
@@ -21,34 +21,110 @@ export default function NewReservation() {
 
     const [formData, setFormData] = useState(initialFormState);
 
-
     const handleChange = ({ target }) => {
         setFormData({...formData, [target.name]:target.value});
     };
 
     const [error, setError] = useState(null);
+    const [firstNameError, setFirstNameError] = useState();
+    const [lastNameError, setLastNameError] = useState();
+    const [mobileNumberError, setMobileNumberError] = useState();
+    const [dateError, setDateError] = useState();
+    const [dayError, setDayError]= useState();
+    const [timeError, setTimeError] = useState();
+    const [peopleError, setPeopleError] = useState();
+
     const errorDiv = error
     ?   <div className="error alert alert-danger" >
-            <p classname = "alert alert-danger"></p>
-            {error}
+            <p>
+                {firstNameError}
+                <br></br>
+                {lastNameError}
+                <br></br>
+                {mobileNumberError}
+                <br></br>
+                {peopleError}
+                <br></br>
+                {timeError}
+                <br></br>
+                {dateError}
+                <br></br>
+                {dayError}
+            </p>
         </div>
         : '';
     
+    
+    function checkData(reservation){
+        setDateError("")
+        setTimeError("")
+        setDayError("")
+        setFirstNameError("")
+        setLastNameError("")
+        setMobileNumberError("")
+        setPeopleError("")
+        const {first_name, last_name, mobile_number, reservation_date, reservation_time, people} = formData;
+        const reservationDate = new Date(reservation_date);
+        const todaysDate = new Date(Date.now());
+        const resYear = reservationDate.getUTCFullYear();
+        const resMonth = reservationDate.getUTCMonth();
+        const resDay = reservationDate.getUTCDate();
+
+        const thisYear = todaysDate.getUTCFullYear();
+        const thisMonth = todaysDate.getUTCMonth();
+        const thisDay = todaysDate.getUTCDate();
+
+        const reservationTime = reservation_time;
+        const reservationTimeHours = reservationTime.slice(0,2);
+        const reservationTimeMinutes = reservationTime.slice(3,5);
+
+        console.log(people, typeof people)
+
+        if(first_name.length < 1){
+            setFirstNameError("A first name is required.");
+        }
+        if(last_name.length < 1){
+            setLastNameError("A last name is required.")
+        }
+        if(mobile_number.length < 10){
+            setMobileNumberError("A valid mobile number is required.")
+        }
+        if(people < 1){
+            setPeopleError(`People must be at least 1, you entered ${people}`)
+        }
+        if(thisYear > resYear){
+            setDateError("Reservation must be for the future")
+        }
+        if(thisYear === resYear && thisMonth > resMonth){
+            setDateError("Reservation must be for the future")
+        }
+        if(thisYear === resYear && thisDay > resDay){
+            setDateError("Reservation must be for the future")
+        }
+        if(reservationTimeMinutes <= 30 && reservationTimeHours <= 10){
+            setTimeError("Sorry, reservations must be after 10:30")
+        }
+        if(reservationTimeMinutes >= 30 && reservationTimeHours >= 21){
+            setTimeError("Sorry, reservations must be before 21:30")
+        }
+        if(reservationDate.getUTCDay() === 2){
+            setDayError("Sorry, we are closed on Tuesdays.")
+        }
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
         formData.people = Number(formData.people);
         const reservation = formData;
         setError(null)
-        
+        checkData(reservation)
         async function callCreateReservation() {
             try{
                 await createReservation(reservation);
                 query.set('date', `${formData.reservation_date}`);
                 history.push(`/dashboard?date=${formData.reservation_date}`)
             }
-            catch (error) {
-                //TODO remove extra code
+            catch (error ) {
                 console.log(error)
                 setError(error.message)
                 throw error
@@ -142,9 +218,6 @@ export default function NewReservation() {
                     </tr>
                 </tbody>
             </table>
-            {/* <div className="alert alert-danger">
-                <p>{error}</p>
-            </div> */}
             <div>{errorDiv}</div>
         </form>
     )
