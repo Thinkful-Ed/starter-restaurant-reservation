@@ -64,29 +64,16 @@ export default function NewReservation() {
         setLastNameError("");
         setMobileNumberError("");
         setPeopleError("");
-
+        
         const {first_name, last_name, mobile_number, reservation_date, reservation_time, people} = formData;
-        const reservationDate = new Date(reservation_date);
-        const todaysDate = new Date(Date.now());
-        const resYear = reservationDate.getUTCFullYear();
-        const resMonth = reservationDate.getUTCMonth();
-        const resDay = reservationDate.getUTCDate();
+        
+        const fullReservationDate = new Date(`${reservation_date}T${reservation_time}:00`)
+        const fullTodayDate = new Date();
 
-
-        const thisYear = todaysDate.getUTCFullYear();
-        const thisMonth = todaysDate.getUTCMonth();
-        const thisDay = todaysDate.getUTCDate();
 
         const reservationTime = reservation_time;
         const reservationTimeHours = reservationTime.slice(0,2);
         const reservationTimeMinutes = reservationTime.slice(3,5);
-        const resHours = Number(reservationTimeHours.toLocaleString(`en-us`, {minimumIntegerDigits: 2, useGrouping: false}));
-        const resMinutes = Number(reservationTimeMinutes.toLocaleString(`en-us`, {minimumIntegerDigits: 2, useGrouping: false}));
-
-
-        const thisHours = todaysDate.getHours();
-        const thisMinutes = todaysDate.getMinutes();
-
 
         if(first_name.length < 1){
             setFirstNameError("A first name is required.");
@@ -100,16 +87,10 @@ export default function NewReservation() {
         if(people < 1){
             setPeopleError(`People must be at least 1, you entered ${people}`);
         }
-        if(thisYear > resYear){
-            setDateError("Reservation must be for the future");
+        if(fullTodayDate > fullReservationDate){
+            setDateError("Reservations must be in the future.");
         }
-        if(thisYear === resYear && thisMonth > resMonth){
-            setDateError("Reservation must be for the future");
-        }
-        if(thisYear === resYear && thisDay > resDay){
-            setDateError("Reservation must be for the future");
-        }
-        if(!reservationTimeHours){
+        if(!reservationTimeHours || !reservationTimeMinutes){
             setTimeError("Please enter a valid reservation time");
         }
         if(reservationTimeMinutes && reservationTimeMinutes <= 30 && reservationTimeHours <= 10){
@@ -118,15 +99,7 @@ export default function NewReservation() {
         if(reservationTimeMinutes >= 30 && reservationTimeHours >= 21){
             setTimeError("Reservations must be before 21:30");
         }
-
-        if(thisYear === resYear && thisMonth === resMonth && thisDay === resDay){
-            if(resHours < thisHours){
-                setTimeError('Reservations must be for the future');
-            } else if (resHours === thisHours && resMinutes <= thisMinutes){
-                setTimeError("Reservations must be for the future");
-            }
-        }
-        if(reservationDate.getUTCDay() === 2){
+        if(fullReservationDate.getUTCDay() === 2){
             setDayError("Sorry, we are closed on Tuesdays.");
         }
     }
@@ -135,19 +108,19 @@ export default function NewReservation() {
         event.preventDefault();
         formData.people = Number(formData.people);
         const reservation = formData;
-        setError(null)
-        checkData(reservation)
+        setError(null);
+        checkData(reservation);
         async function callCreateReservation() {
             try{
                 await createReservation(reservation);
                 query.set('date', `${formData.reservation_date}`);
-                history.push(`/dashboard?date=${formData.reservation_date}`)
+                history.push(`/dashboard?date=${formData.reservation_date}`);
             }
             catch (error ) {
                 //TODO get rid of this console.log()
-                console.log(error)
-                setError(error.message)
-                throw error
+                console.log(error);
+                setError(error.message);
+                throw error;
             }
         }
         callCreateReservation();
