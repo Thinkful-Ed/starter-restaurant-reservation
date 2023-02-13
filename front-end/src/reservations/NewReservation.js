@@ -134,9 +134,7 @@ export default function NewReservation() {
         event.preventDefault();
         formData.people = Number(formData.people);
         const reservation = formData;
-        console.log(`TTTTTTTTTTTTTT`, formData.reservation_time)
  
-
         setError(null);
         checkData(reservation);
         async function callCreateReservation() {

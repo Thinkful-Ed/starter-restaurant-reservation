@@ -2,7 +2,7 @@ const knex = require("../db/connection");
 
 function list() {
     return knex("tables")
-        .select("table_name", "status")
+        .select("table_name", "status", "capacity", "table_id")
         .orderBy("table_name")
         .groupBy("table_id")  ;
 }

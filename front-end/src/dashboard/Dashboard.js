@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { Link, useHistory } from "react-router-dom";
 import { previous, next } from "../utils/date-time";
+
 /**
  * Defines the dashboard page.
  * @param date
@@ -12,6 +13,8 @@ import { previous, next } from "../utils/date-time";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
   
   let history = useHistory();
   
@@ -27,6 +30,17 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  useEffect(loadTables, [])
+
+  function loadTables() {
+    const abortController = new AbortController();
+    listTables(abortController.signal)
+      .then(setTables)
+      .catch(setTablesError);
+    return () => abortController.abort();
+  }
+  
+
   function clickPrevious() {
     let previousDay = previous(date)
     history.push(`/dashboard?date=${previousDay}`);
@@ -37,6 +51,7 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${nextDay}`)
   }
 
+  console.log(tables)
   return (
     <main>
       <h1>Dashboard</h1>
@@ -85,6 +100,29 @@ function Dashboard({ date }) {
       <button type="button" onClick={clickNext}>Next</button>
       <p>{date}</p>
       {/* {JSON.stringify(reservations)} */}
+
+      <div className="d-md-flex mb-3">
+        <h4 className="mb-0">Tables</h4>
+      </div>
+      <ErrorAlert error={tablesError} />
+      <table className = "table">
+        <thead>
+          <tr>
+            <th>Table Name</th>
+            <th>Capacity</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tables.map((table, index) => (
+            <tr key={index}>
+              <td>{table.table_name}</td>
+              <td>{table.capacity}</td>
+              <td data-table-id-status="${table.table_id}">{table.status}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </main>
   );
 }
