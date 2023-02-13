@@ -33,6 +33,8 @@ function validType() {
             case fullReservationDate < todaysDate:
                 errorMessage = 'You can only make reservations for the future.';
                 break;
+
+                //THIS IS WRONG THINK THROUGH THE LOGIC
             case reservationTimeMinutes <= 30 && reservationTimeHours <= 10:
                 errorMessage = 'Invalid time.';
                 break;

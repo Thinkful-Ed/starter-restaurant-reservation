@@ -76,7 +76,7 @@ export default function NewReservation() {
         const reservationTimeHours = reservation_time.slice(0,2);
         const reservationTimeMinutes = reservation_time.slice(3,5);
 
-        console.log(fullReservationDate.getUTCDay())
+        console.log(reservationTimeHours, reservationTimeMinutes, fullReservationDate.getUTCDay())
 
         if(first_name.length < 1){
             setFirstNameError("A first name is required.");
@@ -96,11 +96,17 @@ export default function NewReservation() {
         if(!reservationTimeHours || !reservationTimeMinutes){
             setTimeError("Please enter a valid reservation time");
         }
-        if(reservationTimeMinutes && reservationTimeMinutes <= 30 && reservationTimeHours <= 10){
-            setTimeError("Reservations must be after 10:30");
+        if(reservationTimeHours < 10){
+            setTimeError("Reservations must be after 10:30")
         }
-        if(reservationTimeMinutes >= 30 && reservationTimeHours >= 21){
-            setTimeError("Reservations must be before 21:30");
+        if(reservationTimeHours == 10 && reservationTimeMinutes <= 30){
+            setTimeError("Reservations must be after 10:30")
+        }
+        if(reservationTimeHours > 21){
+            setTimeError("Reservations must be before 21:30")
+        }
+        if(reservationTimeHours == 21 && reservationTimeMinutes >= 30){
+            setTimeError("Reservations must be before 21:30")
         }
         if(fullReservationDate.getUTCDay() === 3){
             setDayError("Sorry, we are closed on Tuesdays.");
