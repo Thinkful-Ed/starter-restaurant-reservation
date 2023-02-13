@@ -8,21 +8,15 @@ function validType() {
         
         const reservationDate = new Date(data.reservation_date);
 
-        const todaysDate = new Date(Date.now());
-
-        const resYear = reservationDate.getUTCFullYear();
-        const resMonth = reservationDate.getUTCMonth();
-        const resDay = reservationDate.getUTCDate();
-
-        const thisYear = todaysDate.getUTCFullYear();
-        const thisMonth = todaysDate.getUTCMonth();
-        const thisDay = todaysDate.getUTCDate();
+        const fullReservationDate = new Date(`${data.reservation_date}T${data.reservation_time}:00`);
+        const todaysDate = new Date();
 
         const reservationTime = data.reservation_time;
         const reservationTimeHours = reservationTime.slice(0,2);
         const reservationTimeMinutes = reservationTime.slice(3,5);
         
         let errorMessage = '';
+
         switch (true) {
             case typeof(data.people) !== 'number':
                 errorMessage = 'people must be a number.';
@@ -36,13 +30,7 @@ function validType() {
             case reservationDate.getUTCDay() === 2:
                 errorMessage = 'Sorry, we are closed on Tuesdays.';
                 break;
-            case thisYear > resYear:
-                errorMessage = 'You can only make reservations for the future.';
-                break;
-            case thisYear == resYear && thisMonth > resMonth:
-                errorMessage = 'You can only make reservations for the future.';
-                break;
-            case thisYear == resYear && thisDay > resDay:
+            case fullReservationDate < todaysDate:
                 errorMessage = 'You can only make reservations for the future.';
                 break;
             case reservationTimeMinutes <= 30 && reservationTimeHours <= 10:
@@ -58,7 +46,6 @@ function validType() {
         if(errorMessage){
             next({ status: 400, message: `${errorMessage}`});
         };
-
         next();
     }
 }

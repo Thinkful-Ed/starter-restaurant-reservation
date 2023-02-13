@@ -25,7 +25,7 @@ export default function NewReservation() {
         setFormData({...formData, [target.name]:target.value});
     };
 
-    //TODO do i need this error??? used for the error from the API?
+
     const [error, setError] = useState(null);
     const [firstNameError, setFirstNameError] = useState();
     const [lastNameError, setLastNameError] = useState();
@@ -35,6 +35,8 @@ export default function NewReservation() {
     const [timeError, setTimeError] = useState();
     const [peopleError, setPeopleError] = useState();
 
+
+    
     const errorDiv = error
     ?   <div className="error alert alert-danger" >
             <p>
@@ -71,9 +73,10 @@ export default function NewReservation() {
         const fullTodayDate = new Date();
 
 
-        const reservationTime = reservation_time;
-        const reservationTimeHours = reservationTime.slice(0,2);
-        const reservationTimeMinutes = reservationTime.slice(3,5);
+        const reservationTimeHours = reservation_time.slice(0,2);
+        const reservationTimeMinutes = reservation_time.slice(3,5);
+
+        console.log(fullReservationDate.getUTCDay())
 
         if(first_name.length < 1){
             setFirstNameError("A first name is required.");
@@ -94,12 +97,12 @@ export default function NewReservation() {
             setTimeError("Please enter a valid reservation time");
         }
         if(reservationTimeMinutes && reservationTimeMinutes <= 30 && reservationTimeHours <= 10){
-            setTimeError("Rreservations must be after 10:30");
+            setTimeError("Reservations must be after 10:30");
         }
         if(reservationTimeMinutes >= 30 && reservationTimeHours >= 21){
             setTimeError("Reservations must be before 21:30");
         }
-        if(fullReservationDate.getUTCDay() === 2){
+        if(fullReservationDate.getUTCDay() === 3){
             setDayError("Sorry, we are closed on Tuesdays.");
         }
     }
@@ -214,10 +217,5 @@ export default function NewReservation() {
             <div>{errorDiv}</div>
         </form>
     )
-
-
-
-
-
 
 }
