@@ -23,6 +23,6 @@ router
     .route("/")
     .get(controller.list)
     .post(controller.create)
-    .all(controller.methodNotAllowed);
+    .all(methodNotAllowed);
 
 module.exports = router;
