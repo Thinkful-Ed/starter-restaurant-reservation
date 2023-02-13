@@ -7,6 +7,7 @@ function validType() {
         const reTime = /^\d{1,2}:\d{2}([ap]m)?$/;
         
         const reservationDate = new Date(data.reservation_date);
+    
 
         const fullReservationDate = new Date(`${data.reservation_date}T${data.reservation_time}:00`);
         const todaysDate = new Date();
@@ -33,7 +34,7 @@ function validType() {
             case fullReservationDate < todaysDate:
                 errorMessage = 'You can only make reservations for the future.';
                 break;
-            case reservationTimeHours > 10:
+            case reservationTimeHours > 21:
                 errorMessage = `Invalid time.`
                 break;
             case reservationTimeHours == 21 && reservationTimeMinutes >= 30:
