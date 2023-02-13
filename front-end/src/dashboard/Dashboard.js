@@ -51,7 +51,7 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${nextDay}`)
   }
 
-  console.log(tables)
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -84,6 +84,10 @@ function Dashboard({ date }) {
                 <td>{reservation.reservation_time}</td>
                 <td>{reservation.people}</td>
                 <td>{reservation.status}</td>
+
+                <Link to={`/reservations/${reservation.reservation_id}/seat`}>
+                  <button type="button" Link to="/reservations/${reservation.reservation_id}/seat">Seat</button>
+                </Link>
               </tr>
             ))}
           </tbody>
