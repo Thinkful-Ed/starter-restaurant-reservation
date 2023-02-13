@@ -33,9 +33,14 @@ export default function SeatReservation() {
     useEffect(loadTables, [])
 
 
+    //LEFT OFF HERE.....NEED TO CREATE THE SUBMIT CHECKKER AND HANDLER FOR THE APP
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log(`weeeeee`)
+    }
 
 
-    
+
     return (
         <>
         <h4>Seat Reservation</h4>
@@ -47,9 +52,11 @@ export default function SeatReservation() {
                     </option>
                 ))}
             </select>
-
-
         </div>
+            <button type="submit" onClick={handleSubmit}>Submit</button>
+
+
+
         
         
         
