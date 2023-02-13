@@ -161,6 +161,8 @@ export default function NewReservation() {
     }
 
     return (
+        <>
+        <h3>Create a new Reservation</h3>
         <form name="create" onSubmit={handleSubmit}>
             <table>
                 <tbody>
@@ -242,6 +244,7 @@ export default function NewReservation() {
             </table>
             <div>{errorDiv}</div>
         </form>
+        </>
     )
 
 }
