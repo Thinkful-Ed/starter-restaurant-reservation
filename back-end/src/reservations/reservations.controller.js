@@ -2,7 +2,7 @@ const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 
-onst REQUIRED_PROPERTIES = [
+const REQUIRED_PROPERTIES = [
   "first_name",
   "last_name",
   "mobile_number",

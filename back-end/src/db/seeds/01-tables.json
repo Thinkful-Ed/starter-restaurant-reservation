@@ -1,0 +1,30 @@
+[
+    {
+        "table_name": "Lounge #1",
+        "capacity": "2"
+    },
+    {
+        "table_name":"Lounge #2",
+        "capacity":"2"
+    },
+    {
+        "table_name":"Lounge #3",
+        "capacity":"2"
+    },
+    {
+        "table_name":"Dining #1",
+        "capacity":"6"
+    },
+    {
+        "table_name":"Dining #2",
+        "capacity":"8"
+    },
+    {
+        "table_name":"Dining #3",
+        "capacity":"4"
+    },
+    {
+        "table_name":"Dining #4",
+        "capacity":"4"
+    }  
+ ]
