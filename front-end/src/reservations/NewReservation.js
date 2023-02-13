@@ -69,15 +69,25 @@ export default function NewReservation() {
         
         const {first_name, last_name, mobile_number, reservation_date, reservation_time, people} = formData;
         
-        const fullReservationDate = new Date(`${reservation_date}T${reservation_time}:00`)
+        // const fullReservationDate = new Date(`${reservation_date}T${reservation_time}:00`)
+        const fullReservationDate = new Date(`${reservation_date}T${reservation_time}`)
+
+
         const fullTodayDate = new Date();
 
+        //TESTING
+        let testTime = "1045PM"
+        // let testDate = new Date(`${reservation_date}T${testTime}`)
+        // console.log(`TTTTTTTTTTTTTTTT`, reservation_time)
 
-        const reservationTimeHours = reservation_time.slice(0,2);
-        const reservationTimeMinutes = reservation_time.slice(3,5);
 
-        console.log(reservationTimeHours, reservationTimeMinutes, fullReservationDate.getUTCDay())
 
+        // const reservationTimeHours = Number(reservation_time.slice(0,2));
+        // const reservationTimeMinutes = Number(reservation_time.slice(3,5));
+        const reservationTimeHours = fullReservationDate.getHours();
+        const reservationTimeMinutes = fullReservationDate.getMinutes();
+        
+        
         if(first_name.length < 1){
             setFirstNameError("A first name is required.");
         }
@@ -93,22 +103,23 @@ export default function NewReservation() {
         if(fullTodayDate > fullReservationDate){
             setDateError("Reservations must be in the future.");
         }
-        if(!reservationTimeHours || !reservationTimeMinutes){
-            setTimeError("Please enter a valid reservation time");
+        if(reservationTimeHours == 10 && reservationTimeMinutes <= 30){
+            setTimeError("Reservations must be after 10:30")
         }
         if(reservationTimeHours < 10){
             setTimeError("Reservations must be after 10:30")
         }
-        if(reservationTimeHours == 10 && reservationTimeMinutes <= 30){
-            setTimeError("Reservations must be after 10:30")
-        }
-        if(reservationTimeHours > 21){
-            setTimeError("Reservations must be before 21:30")
-        }
         if(reservationTimeHours == 21 && reservationTimeMinutes >= 30){
             setTimeError("Reservations must be before 21:30")
         }
-        if(fullReservationDate.getUTCDay() === 3){
+        
+        if(reservationTimeHours > 21){
+            setTimeError("Reservations must be before 21:30")
+        }
+        if(typeof(fullReservationDate.getHours()) !== 'number' || typeof(fullReservationDate.getMinutes()) !== 'number'){
+            setTimeError("Please enter a valid reservation time");
+        }
+        if(fullReservationDate.getDay() === 2){
             setDayError("Sorry, we are closed on Tuesdays.");
         }
     }
@@ -116,6 +127,7 @@ export default function NewReservation() {
     const handleSubmit = (event) => {
         event.preventDefault();
         formData.people = Number(formData.people);
+        console.log(`TTTTTTTTTTTTTTTTT`, formData.reservation_time)
         const reservation = formData;
         setError(null);
         checkData(reservation);
@@ -194,7 +206,7 @@ export default function NewReservation() {
                             <input
                                 id="reservation_time"
                                 name="reservation_time"
-                                type="time"
+                                type="string"
                                 onChange={handleChange}
                                 value={formData.reservation_time}
                                 placeholder="HH:MM"
