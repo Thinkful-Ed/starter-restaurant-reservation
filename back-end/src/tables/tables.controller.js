@@ -70,13 +70,13 @@ async function destroy(req, res, next) {
 
     const foundReservation = await readReservation(foundTable.reservation_id);
 
-    await updateReservation({
+    const updatedRes = await updateReservation({
         ...foundReservation,
         status: 'finished',
     });
-    
-    await service.list();
-    res.sendStatus(204);
+    //TODO delete unused code
+    // await service.list();
+    res.status(200).json({data: updatedRes});
 }
 
 
