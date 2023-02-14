@@ -66,7 +66,7 @@ async function update(_req, res, next) {
 async function destroy(req, res, next) {
     const { foundTable } = res.locals;
 
-    foundTable.status === 'free' ? next({ status: 400, message: 'Table is not occupied.'}) : await service.delete(foundTable.table_id);
+    foundTable.reservation_id === null ? next({ status: 400, message: 'Table is not occupied.'}) : await service.delete(foundTable.table_id);
 
     const foundReservation = await readReservation(foundTable.reservation_id);
 
@@ -76,7 +76,7 @@ async function destroy(req, res, next) {
     });
     
     await service.list();
-    res.sendStatus(200);
+    res.sendStatus(204);
 }
 
 

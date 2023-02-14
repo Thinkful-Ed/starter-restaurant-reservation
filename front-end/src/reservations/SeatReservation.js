@@ -35,6 +35,7 @@ export default function SeatReservation() {
     }
     useEffect(loadTables, [reservation_id]);
     
+    let checkDataError = null;
     function checkData(currentReservation, selectedTable){
         // TODO unused variables
         const { table_id, capacity, status } = selectedTable;
@@ -42,10 +43,13 @@ export default function SeatReservation() {
 
         if(status != 'free'){
             setCheckError(`Table is not free`)
+            checkDataError = 'Table is not free'
         }
         if(people > capacity){
             setCheckError(`Party is too large for this table.  Party has ${people} and this table only seats ${capacity}`)
+            checkDataError = `Table is too small.`
         }
+        return checkDataError
     }
 
     const errorDiv = checkError
@@ -65,7 +69,8 @@ export default function SeatReservation() {
     const handleSubmit = (event) => {
         event.preventDefault();
         checkData(currentReservation, selectedTable);
-        if(!checkError){
+        console.log(checkError)
+        if(!checkDataError){
             updateTableData()
         }
     }

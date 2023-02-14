@@ -69,6 +69,7 @@ export async function listReservations(params, signal) {
 }
 
 export async function listTables(signal) {
+  console.log('list tables called')
   const url = `${API_BASE_URL}/tables`;
   return await fetchJson(url, { headers, signal, method: "GET" }, []);
 }
@@ -109,4 +110,9 @@ export async function updateTable(table_id, reservation_id, signal) {
     signal,
   };
   return await fetchJson(url, options, table_id)
+}
+
+export async function finishTable(table_id, signal){
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`
+  return await(fetchJson(url, {headers, signal, method: "DELETE"}, []))
 }

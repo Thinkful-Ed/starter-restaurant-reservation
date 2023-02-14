@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import { listReservations, listTables, deleteTable, finishTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { Link, useHistory } from "react-router-dom";
 import { previous, next } from "../utils/date-time";
+
 
 /**
  * Defines the dashboard page.
@@ -51,6 +52,44 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${nextDay}`)
   }
 
+  function finisable(table){
+    if(table.reservation_id){
+      return (
+        <button 
+          onClick={handleFinish} 
+          value={table.table_id} 
+          data-table-id-finish={table.table_id}>
+          Finish
+        </button>
+      )
+    }
+  }
+
+  const handleFinish = async (event) => {
+    event.preventDefault()
+    if(window.confirm('Is this table ready to seat new guests? \n \nThis cannot be undone.')) {
+      try{
+        await finishTable(event.target.value);
+        loadTables();
+      }
+      catch(error){
+        console.log(error);
+      }
+    }
+  }
+
+  console.log(tables)
+  const mappedTables = tables.map((table, index) => (
+      <>
+      <tr key={index}>
+        <td>{table.table_name}</td>
+        <td>{table.capacity}</td>
+        <td data-table-id-status={table.table_id}>{table.reservation_id ? 'occupied' : 'free'}</td>
+        <td>{finisable(table)}</td>
+        </tr>
+      </>
+    ))
+  
 
   return (
     <main>
@@ -115,16 +154,11 @@ function Dashboard({ date }) {
             <th>Table Name</th>
             <th>Capacity</th>
             <th>Status</th>
+            <th>Finish</th>
           </tr>
         </thead>
         <tbody>
-          {tables.map((table, index) => (
-            <tr key={index}>
-              <td>{table.table_name}</td>
-              <td>{table.capacity}</td>
-              <td data-table-id-status="${table.table_id}">{table.status}</td>
-            </tr>
-          ))}
+          {mappedTables}
         </tbody>
       </table>
     </main>
