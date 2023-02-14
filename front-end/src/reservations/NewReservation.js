@@ -96,7 +96,7 @@ export default function NewReservation() {
         if(fullTodayDate > fullReservationDate){
             setDateError("Reservations must be in the future.");
         }
-        if(reservationTimeHours == 10 && reservationTimeMinutes <= 30){
+        if(reservationTimeHours === 10 && reservationTimeMinutes <= 30){
             setTimeError("Reservations must be after 10:30")
         }
         if(reservationTimeHours < 10){

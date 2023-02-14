@@ -22,7 +22,7 @@ export default function SeatReservation() {
             .catch(setCurrentReservationError);
         return () => abortController.abort();
     }
-    useEffect(loadReservation, []);
+    useEffect(loadReservation, [reservation_id]);
    
 
     // Load the List of tables
@@ -37,8 +37,8 @@ export default function SeatReservation() {
     
     let checkDataError = null;
     function checkData(currentReservation, selectedTable){
-        // TODO unused variables
-        const { table_id, capacity, reservation_id } = selectedTable;
+        //TODO unused variables
+        const { capacity, reservation_id } = selectedTable;
         const { people } = currentReservation;
 
         if(reservation_id){
@@ -59,9 +59,12 @@ export default function SeatReservation() {
             : ``;
 
     const handleChange = ({ target }) => {
+    //    console.log(tables, target.value)
+    
         setSelectedTable(tables.find((table) => (
-            table.table_id == target.value
+            table.table_id === Number(target.value)
         )))
+        console.log(selectedTable.table_id, target.value)
     }
 
     const [updateError, setUpdateError] = useState(null);

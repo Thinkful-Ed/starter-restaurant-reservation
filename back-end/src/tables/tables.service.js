@@ -20,6 +20,7 @@ function read(tableId) {
         .first();
 }
 
+//TODO get rid of unused code
 // async function update(updatedTable) {
 //     return knex("tables")
 //         .select("*")

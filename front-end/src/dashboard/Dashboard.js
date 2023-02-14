@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables, deleteTable, finishTable } from "../utils/api";
+import { listReservations, listTables, finishTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { Link, useHistory } from "react-router-dom";
 import { previous, next } from "../utils/date-time";
@@ -124,9 +124,9 @@ function Dashboard({ date }) {
                 <td>{reservation.reservation_time}</td>
                 <td>{reservation.people}</td>
                 <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
-                {reservation.status == 'seated' ? '' : 
+                {reservation.status === 'seated' ? '' : 
                 <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-                  <button type="button" Link to="/reservations/${reservation.reservation_id}/seat">Seat</button>
+                  <button type="button" Link to="/reservations/{reservation.reservation_id}/seat">Seat</button>
                 </Link>}
               </tr>
             ))}
