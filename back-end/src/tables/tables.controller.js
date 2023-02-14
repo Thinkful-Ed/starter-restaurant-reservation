@@ -40,30 +40,90 @@ async function create(req, res, _next) {
     res.status(201).json({ data });
 }
 
-async function update(_req, res, next) {
-    const { foundTable, thisReservation } = res.locals;
+//TODO get rid of extra code
+// async function update(_req, res, next) {
+//     const { foundTable, thisReservation } = res.locals;
 
+//     const updatedTable = {
+//         reservation_id: thisReservation.reservation_id,
+//         table_id: foundTable.table_id,
+//     };
+
+//     const updated = await service.update(updatedTable);
+
+//     if(thisReservation.status == 'seated') {
+//         next({ status: 400, message: `Reservation is ${thisReservation.status}.`});
+//     };
+
+//     if(foundTable.reservation_id) {
+//         next({ status: 400, message: `Table is occupied`});
+//     };
+
+//     await updateReservation({
+//         ...thisReservation,
+//         status: 'seated',
+//     });
+
+//     res.status(200).json({ data: updated });
+// }
+
+// async function update(_req, res, next) {
+//     const { foundTable, thisReservation } = res.locals;
+
+//     if(thisReservation.status == 'seated') {
+//         next({ status: 400, message: `Reservation is ${thisReservation.status}.`});
+//     };
+//     if(foundTable.reservation_id) {
+//         next({ status: 400, message: `Table is occupied`});
+//     };
+
+//     const updatedTable = {
+//         reservation_id: thisReservation.reservation_id,
+//         table_id: foundTable.table_id,
+//     };
+//     const updatedReservation = {
+//         ...thisReservation,
+//         status: 'seated',
+//     }
+    
+//     const updated = await service.updateBoth(updatedTable, thisReservation.reservation_id)
+//     // const updated = await service.update(updatedTable);
+
+//     // await updateReservation({
+//     //     ...thisReservation,
+//     //     status: 'seated',
+//     // });
+
+//     res.status(200).json({ data: updated });
+// }
+
+async function update(req, res, next) {
+    const { foundTable, thisReservation } = res.locals;
+    if(thisReservation.status == 'seated') {
+        next({ status:400, message: `Reservation is ${thisReservation.status}.`})
+    }
+    if(foundTable.reservation_id) {
+        next({ status:400, message: `Table is occupied`})
+    }
     const updatedTable = {
         reservation_id: thisReservation.reservation_id,
         table_id: foundTable.table_id,
-    };
-
-    const updated = await service.update(updatedTable);
-
-    if(thisReservation.status == 'seated') {
-        next({ status: 400, message: `Reservation is ${thisReservation.status}.`});
-    };
-    if(foundTable.reservation_id) {
-        next({ status: 400, message: `Table is occupied`})
     }
 
-    await updateReservation({
-        ...thisReservation,
-        status: 'seated',
-    });
-
-    res.status(200).json({ data: updated });
+    const data = await service.update(updatedTable, thisReservation.reservation_id);
+    res.status(200).json({ data })
 }
+
+
+
+
+/// USE THIS WITH THE KNEX.TRANSACTION() FROM TABLES.SERVICE
+// async function update(req, res, next) {
+//     const { foundTable, thisReservation } = res.locals;
+//     const updatedTable = {...foundTable}
+//     const data = await service.updateBoth(updatedTable, thisReservation.reservation_id, thisReservation.status);
+//     res.json({ data })
+// }
 
 async function destroy(req, res, next) {
     const { foundTable } = res.locals;
@@ -77,8 +137,8 @@ async function destroy(req, res, next) {
         ...foundReservation,
         status: 'finished',
     });
-    //TODO delete unused code
-    const listing = await service.list();
+
+    await service.list();
 
     res.status(200).json({data: updatedRes});
 }

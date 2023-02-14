@@ -52,7 +52,7 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${nextDay}`)
   }
 
-  function finisable(table){
+  function finishable(table){
     if(table.reservation_id){
       return (
         <button 
@@ -86,7 +86,7 @@ function Dashboard({ date }) {
         <td>{table.table_name}</td>
         <td>{table.capacity}</td>
         <td data-table-id-status={table.table_id}>{table.reservation_id ? 'occupied' : 'free'}</td>
-        <td>{finisable(table)}</td>
+        <td>{finishable(table)}</td>
         </tr>
       </>
     ))
@@ -123,11 +123,11 @@ function Dashboard({ date }) {
                 <td>{reservation.reservation_date}</td>
                 <td>{reservation.reservation_time}</td>
                 <td>{reservation.people}</td>
-                <td>{reservation.status}</td>
-
+                <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
+                {reservation.status == 'seated' ? '' : 
                 <Link to={`/reservations/${reservation.reservation_id}/seat`}>
                   <button type="button" Link to="/reservations/${reservation.reservation_id}/seat">Seat</button>
-                </Link>
+                </Link>}
               </tr>
             ))}
           </tbody>

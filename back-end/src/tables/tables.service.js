@@ -20,12 +20,33 @@ function read(tableId) {
         .first();
 }
 
-function update(updatedTable) {
-    return knex("tables")
-        .select("*")
-        .where({ table_id: updatedTable.table_id })
-        .update(updatedTable, "*")
-        .then((updated) => updated[0]);
+// async function update(updatedTable) {
+//     return knex("tables")
+//         .select("*")
+//         .where({ table_id: updatedTable.table_id })
+//         .update(updatedTable, "*")
+//         .then((updated) => updated[0]);
+// }
+
+
+//THIS IS THE KNEX.TRANSACTION() (USER-STORY 6) 
+// USE IN CONJUNCTION WITH CODE IN TABLES.CONTROLLER
+async function update(updatedTable, reservationId) {
+    try{
+        await knex.transaction(async(trx) => {
+            const returnedUpdatedTable = await trx("tables")
+                .where({ table_id: updatedTable.table_id })
+                .update(updatedTable, "*")
+                .then((updatedTables) => updatedTables[0]);
+
+            const returnedUpdatedReservation = await trx("reservations")
+                .where({ reservation_id: reservationId })
+                .update({status: "seated"})
+                .then((updatedReservations) => updatedReservations[0])
+        });
+    } catch (error){
+        console.error(error)
+    }
 }
 
 //TODO delete extra code
