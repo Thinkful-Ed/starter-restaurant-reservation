@@ -41,10 +41,10 @@ export default function SeatReservation() {
         const { people, reservation_id } = currentReservation;
 
         if(status != 'free'){
-            setCheckError(`Table is not`)
+            setCheckError(`Table is not free`)
         }
         if(people > capacity){
-            setCheckError(`Party is too large for this table`)
+            setCheckError(`Party is too large for this table.  Party has ${people} and this table only seats ${capacity}`)
         }
     }
 
@@ -61,16 +61,19 @@ export default function SeatReservation() {
     }
 
     const [updateError, setUpdateError] = useState(null);
-    
+
     const handleSubmit = (event) => {
         event.preventDefault();
         checkData(currentReservation, selectedTable);
         if(!checkError){
-            updateTable(selectedTable.table_id, currentReservation.reservation_id)
-            .then(() => history.push('/dashboard'))
-            .catch(setUpdateError)
+            updateTableData()
         }
+    }
 
+    async function updateTableData(){
+        updateTable(selectedTable.table_id, currentReservation.reservation_id)
+        .then(() => history.push('/dashboard'))
+        .catch(setUpdateError)
     }
 
     const goBack = (event) => {
