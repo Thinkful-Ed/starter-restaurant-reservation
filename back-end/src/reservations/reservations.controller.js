@@ -14,8 +14,16 @@ const REQUIRED_PROPERTIES = [
 
 //list route handler
 async function list(req, res) {
+  const today = new Date().toLocaleDateString().replace(/\//g, '-');
+  const { date = today, mobile_number } = req.query;
+  let reservations;
+  if (mobile_number) {
+    reservations = await service.search(mobile_number);
+  } else {
+    reservations = await service.list(date);
+  }
   res.json({
-    data: [],
+    data: [...reservations],
   });
 }
 
