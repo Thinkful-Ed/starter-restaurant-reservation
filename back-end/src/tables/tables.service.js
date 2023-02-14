@@ -2,7 +2,7 @@ const knex = require("../db/connection");
 
 function list() {
     return knex("tables")
-        .select("table_name", "status", "capacity", "table_id", "reservation_id")
+        .select("table_name", "capacity", "table_id", "reservation_id")
         .orderBy("table_name")
         .groupBy("table_id") ;
 }
@@ -37,6 +37,7 @@ function update(updatedTable) {
 
 function destroy(tableId) {
     return knex("tables")
+        .select("*")
         .where({ table_id: tableId })
         .update({reservation_id: null})
         .then((updated) => updated[0])

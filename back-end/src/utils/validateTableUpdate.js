@@ -17,7 +17,7 @@ function tableUpdate() {
             case thisReservation.people > foundTable.capacity:
                 next({ status:400, message: `This table has a capacity of ${foundTable.capacity}; the party has a ${thisReservation.people}.`});
                 break;
-            case foundTable.status === 'occupied':
+            case foundTable.reservation_id:
                 next({ status: 400, message: `table ${foundTable.table_name} is occupied.`});
         };
 

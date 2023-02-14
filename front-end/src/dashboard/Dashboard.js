@@ -71,6 +71,7 @@ function Dashboard({ date }) {
       try{
         await finishTable(event.target.value);
         loadTables();
+        loadDashboard();
       }
       catch(error){
         console.log(error);
@@ -78,7 +79,7 @@ function Dashboard({ date }) {
     }
   }
 
-  console.log(tables)
+
   const mappedTables = tables.map((table, index) => (
       <>
       <tr key={index}>

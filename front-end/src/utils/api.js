@@ -109,7 +109,7 @@ export async function updateTable(table_id, reservation_id, signal) {
     body:JSON.stringify({ data: { reservation_id: reservation_id } }),
     signal,
   };
-  return await fetchJson(url, options, table_id)
+  return await fetchJson(url, options)
 }
 
 export async function finishTable(table_id, signal){

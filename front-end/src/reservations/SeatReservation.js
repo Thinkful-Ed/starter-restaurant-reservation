@@ -38,10 +38,10 @@ export default function SeatReservation() {
     let checkDataError = null;
     function checkData(currentReservation, selectedTable){
         // TODO unused variables
-        const { table_id, capacity, status } = selectedTable;
-        const { people, reservation_id } = currentReservation;
+        const { table_id, capacity, reservation_id } = selectedTable;
+        const { people } = currentReservation;
 
-        if(status != 'free'){
+        if(reservation_id){
             setCheckError(`Table is not free`)
             checkDataError = 'Table is not free'
         }
@@ -76,6 +76,7 @@ export default function SeatReservation() {
     }
 
     async function updateTableData(){
+
         updateTable(selectedTable.table_id, currentReservation.reservation_id)
         .then(() => history.push('/dashboard'))
         .catch(setUpdateError)

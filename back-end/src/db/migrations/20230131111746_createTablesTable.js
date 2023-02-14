@@ -8,7 +8,7 @@ exports.up = function( knex) {
             .onDelete("cascade");
         table.string("table_name").notNullable();
         table.integer("capacity").notNullable();
-        table.string("status").notNullable().defaultTo("free");
+        // table.string("status").notNullable().defaultTo("free");
     });
 };
 
