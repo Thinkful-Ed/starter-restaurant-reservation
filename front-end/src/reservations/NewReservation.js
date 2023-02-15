@@ -5,7 +5,7 @@ import { useLocation, useHistory, useParams } from "react-router-dom";
 
 //TODO take out extra code (reservationInfo ?) & unused imports (useEffect)
 //TODO find better way for error validation
-export default function NewReservation({ edit }) {
+export default function NewReservation() {
     const history = useHistory();
     let location = useLocation();
     let query = new URLSearchParams(location.search);

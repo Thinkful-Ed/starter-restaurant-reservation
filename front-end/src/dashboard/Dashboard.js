@@ -92,11 +92,15 @@ function Dashboard({ date }) {
     ))
   
 
+    const handleCancel = (event) => {
+      console.log(event.target.value)
+    }
+
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date {date} </h4>
+        <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
       {reservations.length > 0 ? (
@@ -113,6 +117,7 @@ function Dashboard({ date }) {
               <th>Status</th>
               <th>Seat</th>
               <th>Edit</th>
+              <th>Cancel</th>
             </tr>
           </thead>
           <tbody>
@@ -136,6 +141,15 @@ function Dashboard({ date }) {
                   <Link to={`/reservations/${reservation.reservation_id}/edit`}>
                   <button type="button">Edit</button>
                   </Link>
+                </td>
+
+                <td>
+                  <button 
+                    type="button" 
+                    value={reservation.reservation_id}
+                    data-reservation-id-cancel={reservation.reservation_id}
+                    onClick={handleCancel}
+                    >Cancel</button>
                 </td>
 
               </tr>
