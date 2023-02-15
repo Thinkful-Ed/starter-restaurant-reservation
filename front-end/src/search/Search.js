@@ -1,37 +1,44 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
 import { listReservations } from "../utils/api";
 import { Link } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-
+import { useEffect } from "react";
 
 export default function Search(){
-    const history = useHistory();
     const [phoneNumber, setPhoneNumber] = useState("");
 
     const handleChange = ({ target }) => {
         setPhoneNumber(target.value)
-        console.log(phoneNumber)
     }
 
 
     const [reservations, setReservations] = useState([]);
-    const [reservationsError, setReservationsError] = useState();
+    const [reservationsError, setReservationsError] = useState(null);
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        setReservations([])
-        console.log('clicked submit', event.target)
+    // const handleSubmit = (event) => {
+    //     event.preventDefault();
+    //     // setReservations([])
+    //     // setPhoneNumber(event.target.value)
+    //     console.log('clicked submit', event.target)
 
-        listReservations({mobile_number:phoneNumber})
-            .then(setReservations)
-            .catch(setReservationsError)
+    //     listReservations({mobile_number:phoneNumber})
+    //         .then(setReservations)
+    //         .catch(setReservationsError)
+    //     // loadReservations()
+    // }  
 
-        console.log(reservations)
-        
-    }
+    // useEffect(loadReservations, [submittedNumber]);
 
-    // const mappedReservations = reservations.map((reservation, index) => (
+    // function loadReservations() {
+    //   const abortController = new AbortController();
+    //   setReservationsError(null);
+    //   listReservations({ mobile_number: phoneNumber }, abortController.signal)
+    //     .then(setReservations)
+    //     .catch(setReservationsError);
+    //   return () => abortController.abort();
+    // }
+
+    // const mappedReservations = reservations? reservations.map((reservation, index) => (
     //     <>
     //     <tr key={index}>
     //         <td>{reservation.first_name}</td>
@@ -39,14 +46,25 @@ export default function Search(){
     //     </tr>
     //     </>
 
-    // ))
+    // )) : null;
 
+    function handleSubmit(event) {
+        event.preventDefault();
+        const abortController = new AbortController();
+        setReservationsError(null);
+
+        listReservations({ mobile_number: phoneNumber}, abortController.signal)
+            .then(setReservations)
+            .catch(reservationsError);
+        
+        return () => abortController.abort();
+    }
 
 
     return (
         <main>
         <h3>Search by Phone Number</h3>
-        <form name="search"
+        <form name="mobile_number"
         onSubmit={handleSubmit}
         >
             <input 
@@ -57,13 +75,26 @@ export default function Search(){
             onChange={handleChange}
             value={phoneNumber}
             />
-            <button type="submit">Find</button>
+            <button type="submit" name="mobile_number" onSubmit={handleSubmit}>Find</button>
         </form>
 
-
         <div>
-        <ErrorAlert error={reservationsError} />
+            {/* {mappedReservations ? (
+                <table>
+                    {mappedReservations}
+                </table>
+            ) : (
+                <p>No reservations found</p>
+            )} */}
 
+
+
+
+
+
+        {/* <ErrorAlert error={reservationsError} /> */}
+
+{/* This works!!!!! */}
       {reservations.length > 0 ? (
         <table className = "table">
           <thead>
@@ -88,7 +119,9 @@ export default function Search(){
                 <td>{reservation.reservation_date}</td>
                 <td>{reservation.reservation_time}</td>
                 <td>{reservation.people}</td>
-                <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
+                <td
+                //  data-reservation-id-status={reservation.reservation_id}
+                 >{reservation.status}</td>
                 {reservation.status === 'seated' ? '' : 
                 <Link to={`/reservations/${reservation.reservation_id}/seat`}>
                   <button type="button" Link to="/reservations/{reservation.reservation_id}/seat">Seat</button>
@@ -100,10 +133,7 @@ export default function Search(){
       ) : (
         <p>No reservations found.</p>
       )}
-      </div>
-      <div>
-      </div>
-      
-        </main>
+      </div>  
+    </main>
     )
 }

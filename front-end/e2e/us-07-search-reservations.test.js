@@ -9,7 +9,7 @@ const onPageConsole = (msg) =>
   Promise.all(msg.args().map((event) => event.jsonValue())).then((eventJson) =>
     console.log(`<LOG::page console ${msg.type()}>`, ...eventJson)
   );
-
+console.log(12)
 describe("US-07 - Search reservations - E2E", () => {
   let page;
   let browser;
@@ -30,7 +30,7 @@ describe("US-07 - Search reservations - E2E", () => {
   afterEach(async () => {
     await browser.close();
   });
-
+console.log(33)
   describe("/search page", () => {
     test("entering an existing mobile number and submitting displays the matched records", async () => {
       await page.type("input[name=mobile_number]", "808-555-0140");
@@ -53,7 +53,7 @@ describe("US-07 - Search reservations - E2E", () => {
       });
       await expect(page).toMatch(/Tiger/);
     });
-
+console.log(56)
     test("entering an non-existent phone number and submitting displays a No reservations found message", async () => {
       await page.type("input[name=mobile_number]", "1231231232");
 
@@ -62,14 +62,14 @@ describe("US-07 - Search reservations - E2E", () => {
           ".screenshots/us-07-search-reservations-submit-no-result-before.png",
         fullPage: true,
       });
-
+console.log(65)
       await Promise.all([
         page.click("button[type=submit]"),
         page.waitForResponse((response) =>
           response.url().includes("mobile_number=")
         ),
       ]);
-
+console.log(72)
       await page.screenshot({
         path:
           ".screenshots/us-07-search-reservations-submit-no-result-after.png",
