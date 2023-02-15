@@ -96,7 +96,7 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for date {date} </h4>
       </div>
       <ErrorAlert error={reservationsError} />
       {reservations.length > 0 ? (
@@ -111,6 +111,8 @@ function Dashboard({ date }) {
               <th>Reservation Time</th>
               <th>People</th>
               <th>Status</th>
+              <th>Seat</th>
+              <th>Edit</th>
             </tr>
           </thead>
           <tbody>
@@ -124,10 +126,18 @@ function Dashboard({ date }) {
                 <td>{reservation.reservation_time}</td>
                 <td>{reservation.people}</td>
                 <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
-                {reservation.status === 'seated' ? '' : 
+                <td>{reservation.status === 'seated' ? '' : 
                 <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-                  <button type="button" Link to="/reservations/{reservation.reservation_id}/seat">Seat</button>
+                  <button type="button">Seat</button>
                 </Link>}
+                </td>
+
+                <td>
+                  <Link to={`/reservations/${reservation.reservation_id}/edit`}>
+                  <button type="button">Edit</button>
+                  </Link>
+                </td>
+
               </tr>
             ))}
           </tbody>

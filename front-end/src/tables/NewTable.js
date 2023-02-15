@@ -28,18 +28,6 @@ export default function NewTable() {
         formData.capacity = Number(formData.capacity);
         const table = formData;
        
-        ///ERRROR
-        // uncaught error in promise....need abort controller here??????
-        // async function callCreateTable() {
-        //     try{
-        //         await createTable(table)
-        //         history.push('/dashboard')
-        //     }
-        //     catch(error) {
-        //         console.log(error)
-        //         throw error;
-        //     }
-        // }
         setDisplayError(null);
         let errorExists = false;
         if(!formData.capacity || formData.capacity < 1){
@@ -52,21 +40,16 @@ export default function NewTable() {
         }
 
         if(!errorExists){
-            // console.log('no errors')
-        callCreateTable(table);
+            callCreateTable(table);
         }
-        if(errorExists){
-            console.log('errors')
-        }
-        // console.log(displayError.length)
-        // return displayError
     }
-    const [thisError, setThisError] = useState(null)
+
+    const [createTableError, setCreateTableError] = useState(null)
     function callCreateTable(table) {
         const abortController = new AbortController();
         createTable(table, abortController.signal)
         .then(history.push('/dashboard'))
-        .catch(setThisError)
+        .catch(setCreateTableError)
         return() => abortController.abort()
     }
 

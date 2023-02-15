@@ -107,6 +107,7 @@ export default function Search(){
               <th>Reservation Time</th>
               <th>People</th>
               <th>Status</th>
+              <th>Edit</th>
             </tr>
           </thead>
           <tbody>
@@ -119,14 +120,18 @@ export default function Search(){
                 <td>{reservation.reservation_date}</td>
                 <td>{reservation.reservation_time}</td>
                 <td>{reservation.people}</td>
-                <td
-                //  data-reservation-id-status={reservation.reservation_id}
-                 >{reservation.status}</td>
-                {reservation.status === 'seated' ? '' : 
+                <td>{reservation.status === 'seated' ? '' : 
                 <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-                  <button type="button" Link to="/reservations/{reservation.reservation_id}/seat">Seat</button>
+                  <button type="button">Seat</button>
                 </Link>}
-              </tr>
+                </td>
+
+                <td>
+                  <Link to={`/reservations/${reservation.reservation_id}/edit`}>
+                  <button type="button">Edit</button>
+                  </Link>
+                </td>
+            </tr>
             ))}
           </tbody>
         </table>

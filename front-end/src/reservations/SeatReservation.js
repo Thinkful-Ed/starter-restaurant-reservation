@@ -116,12 +116,6 @@ export default function SeatReservation() {
             </div>
         </form>
 
-
-
-        
-        
-        
-        
         </>
 
     )
