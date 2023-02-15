@@ -59,12 +59,9 @@ export default function SeatReservation() {
             : ``;
 
     const handleChange = ({ target }) => {
-    //    console.log(tables, target.value)
-    
         setSelectedTable(tables.find((table) => (
             table.table_id === Number(target.value)
         )))
-        console.log(selectedTable.table_id, target.value)
     }
 
     const [updateError, setUpdateError] = useState(null);

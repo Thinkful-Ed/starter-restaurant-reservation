@@ -143,7 +143,7 @@ export default function NewReservation() {
                 query.set('date', `${formData.reservation_date}`);
                 history.push(`/dashboard?date=${formData.reservation_date}`);
             }
-            catch (error ) {
+            catch (error) {
                 //TODO get rid of this console.log()
                 console.log(error);
                 setError(error.message);
