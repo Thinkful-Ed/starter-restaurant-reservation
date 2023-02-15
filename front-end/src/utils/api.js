@@ -77,6 +77,8 @@ export async function listTables(signal) {
 export async function readReservation(reservation_id, signal) {
   const url = `${API_BASE_URL}/reservations/${reservation_id}`;
   return await fetchJson(url, {signal}, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime)
 }
 
 export async function createReservation(reservation, signal) {
@@ -115,4 +117,10 @@ export async function updateTable(table_id, reservation_id, signal) {
 export async function finishTable(table_id, signal){
   const url = `${API_BASE_URL}/tables/${table_id}/seat`
   return await(fetchJson(url, {headers, signal, method: "DELETE"}, []))
+}
+
+export async function editReservation(reservation_id, reservation, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+  const body = JSON.stringify({ data: reservation});
+  return await fetchJson(url, { headers, signal, method: "PUT", body }, []);
 }

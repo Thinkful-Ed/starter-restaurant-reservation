@@ -49,6 +49,7 @@ export default function SeatReservation() {
             setCheckError(`Party is too large for this table.  Party has ${people} and this table only seats ${capacity}`)
             checkDataError = `Table is too small.`
         }
+        console.log(checkError)
         return checkDataError
     }
 

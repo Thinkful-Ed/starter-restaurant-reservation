@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { createReservation } from "../utils/api";
-import { useLocation, useHistory } from "react-router-dom";
+import { createReservation, readReservation, editReservation } from "../utils/api";
+import { useLocation, useHistory, useParams } from "react-router-dom";
 
 
 //TODO take out extra code (reservationInfo ?) & unused imports (useEffect)
 //TODO find better way for error validation
-export default function NewReservation() {
+export default function NewReservation({ edit }) {
     const history = useHistory();
     let location = useLocation();
     let query = new URLSearchParams(location.search);
@@ -135,6 +135,26 @@ export default function NewReservation() {
         formData.people = Number(formData.people);
         const reservation = formData;
  
+        //******* *********************/
+        // const abortController = new AbortController();
+        // if(edit) {
+        //     editReservation(reservation_id, formData, abortController.signal)
+        //     .then(setFormData(formData))
+        //     .then(loadDashboard)
+        //     .then(() => 
+        //     history.push(`/dashboard?date=${formData.reservation_date}`)
+        //     )
+        //     .catch((err) => setError(error))
+        // } else {
+        //     createReservation(formData, abortController.signal)
+        //     .then(loadDashboard)
+        //     .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
+        //     .catch((err) => setError(err))
+        // }
+        // return () => abortController.abort();
+        //************^^^^^^^^^^^^^****** */
+
+
         setError(null);
         checkData(reservation);
         async function callCreateReservation() {
@@ -157,6 +177,26 @@ export default function NewReservation() {
         event.preventDefault();
         history.goBack();
     }
+
+    // ********Loads reservation data onto form to edit (per benji/gwynn)*********
+    // useEffect(() => {
+    //     const abortController = new AbortController();
+    //     const signal = abortController.signal;
+    //     async function getReservation(){
+    //       if(edit){
+    //         let reservation= await readReservation(reservation_id,signal)
+    //         console.log(reservation)
+    //         setFormData(reservation)
+    //       }
+    //     }
+    //     getReservation();
+    //     return function cleanup() {
+    //       abortController.abort();
+    //     };
+    //   }, [edit, reservation_id]);
+    //*************************************************** */
+
+
 
     return (
         <>

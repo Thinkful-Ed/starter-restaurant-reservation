@@ -22,26 +22,59 @@ export default function NewTable() {
     const handleChange = ({ target }) => {
         setFormData({...formData, [target.name]:target.value})
     }
-
+    const [displayError, setDisplayError] = useState(null);
     const handleSubmit = (event) => {
         event.preventDefault();
         formData.capacity = Number(formData.capacity);
         const table = formData;
+       
         ///ERRROR
-        //CHECK INPUTS
-        async function callCreateTable() {
-            try{
-                await createTable(table)
-                history.push('/dashboard')
-            }
-            catch(error) {
-                console.log(error)
-                throw error;
-            }
+        // uncaught error in promise....need abort controller here??????
+        // async function callCreateTable() {
+        //     try{
+        //         await createTable(table)
+        //         history.push('/dashboard')
+        //     }
+        //     catch(error) {
+        //         console.log(error)
+        //         throw error;
+        //     }
+        // }
+        setDisplayError(null);
+        let errorExists = false;
+        if(!formData.capacity || formData.capacity < 1){
+            setDisplayError("Capacity must be at least 1")
+            errorExists = true;
         }
-        callCreateTable();
+        if(!formData.table_name || formData.table_name.length < 2){
+            setDisplayError("Table name must be longer")
+            errorExists = true;
+        }
+
+        if(!errorExists){
+            // console.log('no errors')
+        callCreateTable(table);
+        }
+        if(errorExists){
+            console.log('errors')
+        }
+        // console.log(displayError.length)
+        // return displayError
     }
-    
+    const [thisError, setThisError] = useState(null)
+    function callCreateTable(table) {
+        const abortController = new AbortController();
+        createTable(table, abortController.signal)
+        .then(history.push('/dashboard'))
+        .catch(setThisError)
+        return() => abortController.abort()
+    }
+
+    const errorDiv = displayError ? 
+    <div className = "error alert alert-danger">
+      <p>{displayError}</p>
+    </div> : '';
+
     return (
         <>
         <h3>Create a new Table</h3>
@@ -80,6 +113,7 @@ export default function NewTable() {
                 </tr>
             </table>
         </form>
+        {errorDiv}
         </>
     )
 }
