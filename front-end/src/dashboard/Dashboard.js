@@ -3,6 +3,7 @@ import { listReservations, listTables, finishTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { Link, useHistory } from "react-router-dom";
 import { previous, next } from "../utils/date-time";
+import { cancelReservation } from "../utils/api";
 
 
 /**
@@ -66,7 +67,7 @@ function Dashboard({ date }) {
   }
 
   const handleFinish = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     if(window.confirm('Is this table ready to seat new guests? \n \nThis cannot be undone.')) {
       try{
         await finishTable(event.target.value);
@@ -75,6 +76,7 @@ function Dashboard({ date }) {
       }
       catch(error){
         console.log(error);
+        throw error;
       }
     }
   }
@@ -92,8 +94,20 @@ function Dashboard({ date }) {
     ))
   
 
-    const handleCancel = (event) => {
-      console.log(event.target.value)
+    const handleCancel = async (event) => {
+      event.preventDefault();
+      if(window.confirm(`Do you want to cancel this reservation? \n \nThis cannot be undone.`)) {
+        try{
+          await cancelReservation(event.target.value);
+          loadTables();
+          loadDashboard();
+        }
+        catch(error) {
+          console.log(error)
+          throw error
+        }
+      }
+
     }
 
   return (

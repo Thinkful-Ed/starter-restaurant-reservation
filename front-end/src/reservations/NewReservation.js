@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { createReservation, readReservation, editReservation } from "../utils/api";
-import { useLocation, useHistory, useParams } from "react-router-dom";
+import { createReservation } from "../utils/api";
+import { useLocation, useHistory } from "react-router-dom";
 import ReservationForm from "./ReservationForm";
 
 
@@ -10,7 +10,6 @@ export default function NewReservation() {
     const history = useHistory();
     let location = useLocation();
     let query = new URLSearchParams(location.search);
-
    
     const initialFormState = {
         first_name: "",
@@ -74,7 +73,6 @@ export default function NewReservation() {
         const {first_name, last_name, mobile_number, reservation_date, reservation_time, people} = formData;
       
         const fullReservationDate = new Date(`${reservation_date}T${reservation_time}:00`)
-        // const fullReservationDate = new Date(`${reservation_date}T${reservation_time}`)
 
 
         const fullTodayDate = new Date();
@@ -119,13 +117,6 @@ export default function NewReservation() {
             }
         }
 
-        // if(reservationTimeHours == 21 && reservationTimeMinutes >= 30){
-        //     setTimeError("Reservations must be before 21:30")
-        // }
-        
-        // if(reservationTimeHours > 21){
-        //     setTimeError("Reservations must be before 21:30")
-        // }
         if(typeof(fullReservationDate.getHours()) !== 'number' || typeof(fullReservationDate.getMinutes()) !== 'number'){
             setTimeError("Please enter a valid reservation time");
         }
@@ -161,6 +152,7 @@ export default function NewReservation() {
 
         setError(null);
         checkData(reservation);
+        // ValidateReservation(formData)
         async function callCreateReservation() {
             try{
                 await createReservation(reservation);
