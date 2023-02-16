@@ -4,7 +4,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { Link, useHistory } from "react-router-dom";
 import { previous, next } from "../utils/date-time";
 import { cancelReservation } from "../utils/api";
-
+import ReservationsList from "../reservations/ReservationsList";
 
 /**
  * Defines the dashboard page.
@@ -116,7 +116,13 @@ function Dashboard({ date }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
-      <ErrorAlert error={reservationsError} />
+
+      <ReservationsList
+        reservations={reservations}
+        reservationsError={reservationsError}
+        handleCancel={handleCancel}
+        />
+      {/* <ErrorAlert error={reservationsError} />
       {reservations.length > 0 ? (
         <table className = "table">
           <thead>
@@ -151,10 +157,10 @@ function Dashboard({ date }) {
                 </Link>}
                 </td>
 
-                <td>
+                <td>{reservation.status === 'booked' ?
                   <Link to={`/reservations/${reservation.reservation_id}/edit`}>
                   <button type="button">Edit</button>
-                  </Link>
+                  </Link> : ''}
                 </td>
 
                 <td>
@@ -172,7 +178,7 @@ function Dashboard({ date }) {
         </table>
       ) : (
         <p>No reservations found for this date.</p>
-      )}
+      )} */}
       <button type="button" onClick={clickPrevious}>Previous</button>
 
       <Link to="/dashboard">
