@@ -78,7 +78,7 @@ export default function NewReservation() {
 
         const reservationTimeHours = Number(reservation_time.slice(0,2));
         const reservationTimeMinutes = Number(reservation_time.slice(3,5));
-        console.log(reservationTimeHours, reservationTimeMinutes, typeof(reservationTimeHours))
+
         
         
         if(first_name.length < 1){
