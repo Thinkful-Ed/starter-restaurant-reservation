@@ -295,6 +295,7 @@ export default function NewReservation() {
         //     </table>
         //     <div>{errorDiv}</div>
         // </form> */}
+        <div>{errorDiv}</div>
         </>
     )
 
