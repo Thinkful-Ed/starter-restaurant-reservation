@@ -52,7 +52,7 @@ export default function ReservationsList({reservations, reservationsError, handl
                   </Link> : ''}
                 </td>
 
-                <td>{reservation.status != 'finished' ? 
+                <td>{reservation.status === 'booked' ? 
                   <button 
                     type="button" 
                     value={reservation.reservation_id}
