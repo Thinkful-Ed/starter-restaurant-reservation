@@ -37,6 +37,11 @@ export default function NewReservation() {
         setError(null);
         setErrorDiv(ValidateReservation(reservation))
 
+        // TODO fix this
+        // left of here
+        let thisDate = new Date(Date.now())
+        const fullReservationDate = new Date(`${formData.reservation_date}T${formData.reservation_time}:00`);
+
         if(ValidateReservation(reservation).props.className !== "error alert alert-danger"){
         async function callCreateReservation() {
             try{

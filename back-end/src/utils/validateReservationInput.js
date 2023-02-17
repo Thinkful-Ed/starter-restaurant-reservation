@@ -12,7 +12,10 @@ function validType() {
         const reservationDate = new Date(data.reservation_date);
 
         const fullReservationDate = new Date(`${data.reservation_date}T${data.reservation_time}:00`);
-        const todaysDate = new Date();
+        const todaysDate = new Date(Date.now());
+        const newTodaysDate = todaysDate.getTimezoneOffset();
+
+        //TODO SPLIT TIME OFF OF DATE?????? CURRENTLY TIME READING 4HRS IN THE FUTURE FOR LOCAL TIME ON RENDERED VERSION OF SITE
 
         const reservationTime = data.reservation_time;
         const reservationTimeHours = reservationTime.slice(0,2);
@@ -35,7 +38,7 @@ function validType() {
             case reservationDate.getUTCDay() === 2:
                 errorMessage = 'Sorry, we are closed on Tuesdays.';
                 break;
-            case fullReservationDate < todaysDate:
+            case fullReservationDate < newTodaysDate:
                 errorMessage = `You can only make reservations for the future.  Todays date is ${todaysDate}, fullReservationDate is ${fullReservationDate}`;
                 break;
             case reservationTimeHours > 21:
