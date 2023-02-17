@@ -6,12 +6,7 @@ export default function ReservationsList({reservations, reservationsError, handl
 
 
     return (
-        <main>
-            {/* TODO remove extra code */}
-      {/* <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date {date}</h4>
-      </div> */}
+      <main>
       <ErrorAlert error={reservationsError} />
       {reservations.length > 0 ? (
         <table className = "table">
@@ -68,12 +63,7 @@ export default function ReservationsList({reservations, reservationsError, handl
         </table>
       ) : (
         <p>No reservations found.</p>
-      )}
-      {/* {JSON.stringify(reservations)} */}
-
-     
+      )}     
     </main>
   );
-
-    
 }

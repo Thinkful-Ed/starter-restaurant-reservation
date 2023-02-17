@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { readReservation, listTables, updateTable } from "../utils/api";
 import { useParams, useHistory } from "react-router";
-
+import { readReservation, listTables, updateTable } from "../utils/api";
 
 
 export default function SeatReservation() {
@@ -14,7 +13,7 @@ export default function SeatReservation() {
     const [selectedTable, setSelectedTable] = useState("");
     const [checkError, setCheckError] = useState("")
 
-    // Load the current reservation's info
+
     function loadReservation() {
         const abortController = new AbortController();
         readReservation(reservation_id, abortController.signal)
@@ -25,7 +24,6 @@ export default function SeatReservation() {
     useEffect(loadReservation, [reservation_id]);
    
 
-    // Load the List of tables
     function loadTables() {
         const abortController = new AbortController();
         listTables(abortController.signal)
@@ -36,8 +34,8 @@ export default function SeatReservation() {
     useEffect(loadTables, [reservation_id]);
     
     let checkDataError = null;
+
     function checkData(currentReservation, selectedTable){
-        //TODO unused variables
         const { capacity, reservation_id } = selectedTable;
         const { people } = currentReservation;
 
@@ -77,7 +75,6 @@ export default function SeatReservation() {
     }
 
     async function updateTableData(){
-
         updateTable(selectedTable.table_id, currentReservation.reservation_id)
         .then(() => history.push('/dashboard'))
         .catch(setUpdateError)
@@ -115,8 +112,6 @@ export default function SeatReservation() {
                 {errorDiv}
             </div>
         </form>
-
         </>
-
     )
 }

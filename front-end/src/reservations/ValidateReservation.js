@@ -13,7 +13,7 @@ export default function ValidateReservation(reservation) {
     const reservationTimeMinutes = Number(reservation_time.slice(3,5));
 
 
-    if(!mobile_number.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/)){
+    if(!mobile_number.match(/^[\]?[(]?[0-9]{3}[)]?[-\s\]?[0-9]{3}[-\s\]?[0-9]{4,6}$/)){
         errors.push(`Please enter a valid mobile number.`);
     }
     if(first_name.length < 1){
