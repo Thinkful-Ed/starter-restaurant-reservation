@@ -46,6 +46,7 @@ export default function NewReservation() {
             }
             catch (error) {
                 console.log(error);
+                console.log(Date.now())
                 setError(error.message);
                 throw error;
             }
