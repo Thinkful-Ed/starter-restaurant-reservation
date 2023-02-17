@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NewReservation from "../reservations/NewReservation";
@@ -11,16 +10,7 @@ import SeatReservation from "../reservations/SeatReservation";
 import Search from "../search/Search";
 import EditReservation from "../reservations/EditReservation";
 
-/**
- * Defines all the routes for the application.
- *
- * You will need to make changes to this file.
- *
- * @returns {JSX.Element}
- */
 
-
-// TODO take out extra code & unused imports (useState, useParams)
 
 function Routes() {
   let date = useQuery().get('date') || today();

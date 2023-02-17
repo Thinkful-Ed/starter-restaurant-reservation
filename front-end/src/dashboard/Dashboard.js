@@ -185,9 +185,6 @@ function Dashboard({ date }) {
       </Link>
 
       <button type="button" onClick={clickNext}>Next</button>
-      {/* TODO remove extra code */}
-      {/* <p>{date}</p> */}
-      {/* {JSON.stringify(reservations)} */}
 
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Tables</h4>

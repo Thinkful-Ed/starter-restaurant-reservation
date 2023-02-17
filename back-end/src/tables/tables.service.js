@@ -20,18 +20,6 @@ function read(tableId) {
         .first();
 }
 
-//TODO get rid of unused code
-// async function update(updatedTable) {
-//     return knex("tables")
-//         .select("*")
-//         .where({ table_id: updatedTable.table_id })
-//         .update(updatedTable, "*")
-//         .then((updated) => updated[0]);
-// }
-
-//TODO get rid of extra code
-//THIS IS THE KNEX.TRANSACTION() (USER-STORY 6) 
-// USE IN CONJUNCTION WITH CODE IN TABLES.CONTROLLER
 async function update(updatedTable, reservationId) {
     try{
         await knex.transaction(async(trx) => {
@@ -50,12 +38,6 @@ async function update(updatedTable, reservationId) {
     }
 }
 
-//TODO delete extra code
-// function destroy(tableId) {
-//     return knex("tables")
-//         .where({ table_id: tableId })
-//         .del();
-// }
 
 function destroy(tableId) {
     return knex("tables")

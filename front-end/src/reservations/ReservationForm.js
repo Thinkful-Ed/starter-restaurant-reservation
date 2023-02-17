@@ -4,11 +4,6 @@ import React from "react";
 
 export default function ReservationForm({handleSubmit, handleChange, formData, goBack}) {
 
-//TODO get rid of extra code
-// console.log(formData)
-// console.log(`form`, formData.reservation_time)
-
-
 
     return(
     <form onSubmit={handleSubmit}>
@@ -66,8 +61,8 @@ export default function ReservationForm({handleSubmit, handleChange, formData, g
                             type="time"
                             onChange={handleChange}
                             value={formData.reservation_time}
-                            // placeholder="HH:MM"
-                            // pattern="[0-9]{2}:[0-9]{2}"
+                            placeholder="HH:MM"
+                            pattern="[0-9]{2}:[0-9]{2}"
                             />
                     </td>
 

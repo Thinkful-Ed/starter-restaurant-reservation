@@ -130,29 +130,9 @@ export default function NewReservation() {
         formData.people = Number(formData.people);
         const reservation = formData;
  
-        //******* *********************/
-        // const abortController = new AbortController();
-        // if(edit) {
-        //     editReservation(reservation_id, formData, abortController.signal)
-        //     .then(setFormData(formData))
-        //     .then(loadDashboard)
-        //     .then(() => 
-        //     history.push(`/dashboard?date=${formData.reservation_date}`)
-        //     )
-        //     .catch((err) => setError(error))
-        // } else {
-        //     createReservation(formData, abortController.signal)
-        //     .then(loadDashboard)
-        //     .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
-        //     .catch((err) => setError(err))
-        // }
-        // return () => abortController.abort();
-        //************^^^^^^^^^^^^^****** */
-
-
         setError(null);
         checkData(reservation);
-        // ValidateReservation(formData)
+
         async function callCreateReservation() {
             try{
                 await createReservation(reservation);
@@ -160,7 +140,6 @@ export default function NewReservation() {
                 history.push(`/dashboard?date=${formData.reservation_date}`);
             }
             catch (error) {
-                //TODO get rid of this console.log()
                 console.log(error);
                 setError(error.message);
                 throw error;
@@ -174,25 +153,6 @@ export default function NewReservation() {
         history.goBack();
     }
 
-    // ********Loads reservation data onto form to edit (per benji/gwynn)*********
-    // useEffect(() => {
-    //     const abortController = new AbortController();
-    //     const signal = abortController.signal;
-    //     async function getReservation(){
-    //       if(edit){
-    //         let reservation= await readReservation(reservation_id,signal)
-    //         console.log(reservation)
-    //         setFormData(reservation)
-    //       }
-    //     }
-    //     getReservation();
-    //     return function cleanup() {
-    //       abortController.abort();
-    //     };
-    //   }, [edit, reservation_id]);
-    //*************************************************** */
-
-
 
     return (
         <>
@@ -203,90 +163,6 @@ export default function NewReservation() {
             formData={formData}
             goBack={goBack} />
 
-
-    
-
-        {/* // <form name="create" onSubmit={handleSubmit}>
-        //     <table>
-        //         <tbody>
-        //             <tr>
-        //                 <td>
-        //                     <input
-        //                         id="first_name"
-        //                         name="first_name"
-        //                         type="text"
-        //                         onChange={handleChange}
-        //                         value={formData.first_name}
-        //                         placeholder="First Name"
-        //                         />
-        //                 </td>
-
-        //                 <td>
-        //                     <input
-        //                         id="last_name"
-        //                         name="last_name"
-        //                         type="text"
-        //                         onChange={handleChange}
-        //                         value={formData.last_name}
-        //                         placeholder="Last Name"
-        //                         />
-        //                 </td>
-
-        //                 <td>
-        //                     <input
-        //                         id="mobile_number"
-        //                         name="mobile_number"
-        //                         type="text"
-        //                         onChange={handleChange}
-        //                         value={formData.mobile_number}
-        //                         placeholder="Mobile Number"
-        //                         />
-        //                 </td>
-
-        //                 <td>
-        //                     <input
-        //                         id="reservaion_date"
-        //                         name="reservation_date"
-        //                         type="date"
-        //                         onChange={handleChange}
-        //                         value={formData.reservation_date}
-        //                         placeholder="YYYY-MM-DD"
-        //                         pattern="\d{4}-\d{2}-\d{2}"
-        //                         />
-        //                 </td>
-
-        //                 <td>
-        //                     <input
-        //                         id="reservation_time"
-        //                         name="reservation_time"
-        //                         type="time"
-        //                         onChange={handleChange}
-        //                         value={formData.reservation_time}
-        //                         // placeholder="HH:MM"
-        //                         // pattern="[0-9]{2}:[0-9]{2}"
-        //                         />
-        //                 </td>
-
-        //                 <td>
-        //                     <input
-        //                         id="people"
-        //                         name="people"
-        //                         type="number"
-        //                         min="1"
-        //                         onChange={handleChange}
-        //                         value={formData.people}
-        //                         placeholder="Number of people"
-        //                         />
-        //                 </td>
-        //                 <td>
-        //                     <button type="submit" onClick={handleSubmit}>Submit</button>
-        //                     <button type="cancel" onClick={goBack}>Cancel</button>
-        //                 </td>
-        //             </tr>
-        //         </tbody>
-        //     </table>
-        //     <div>{errorDiv}</div>
-        // </form> */}
         <div>{errorDiv}</div>
         </>
     )
