@@ -7,6 +7,7 @@ export default function ReservationsList({reservations, reservationsError, handl
 
     return (
         <main>
+            {/* TODO remove extra code */}
       {/* <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date {date}</h4>

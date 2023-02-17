@@ -1,4 +1,4 @@
-const reservationsService = require("../reservations/reservations.service")
+const reservationsService = require("../reservations/reservations.service");
 
 function tableUpdate() {
     return async function (req, res, next) {
@@ -20,7 +20,6 @@ function tableUpdate() {
             case foundTable.reservation_id:
                 next({ status: 400, message: `table ${foundTable.table_name} is occupied.`});
         };
-
         next();
     }
 }

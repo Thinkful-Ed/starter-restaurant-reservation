@@ -29,7 +29,7 @@ function read(tableId) {
 //         .then((updated) => updated[0]);
 // }
 
-
+//TODO get rid of extra code
 //THIS IS THE KNEX.TRANSACTION() (USER-STORY 6) 
 // USE IN CONJUNCTION WITH CODE IN TABLES.CONTROLLER
 async function update(updatedTable, reservationId) {

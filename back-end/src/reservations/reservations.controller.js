@@ -122,7 +122,7 @@ function validateReservationForUpdate(req, _res, next) {
       errorField = 'mobile_number';
       break;
     case !reservation_time:
-      errorField = 'reservation_time';
+      errorField = `reservation_time`;
       break;
     case !reservation_date:
       errorField = 'reservation_date';
@@ -157,7 +157,7 @@ async function update(req, res, _next) {
 module.exports = {
   list: [
     asyncErrorBoundary(searchPhoneNumber), 
-    asyncErrorBoundary(list)
+    asyncErrorBoundary(list),
   ],
   create: [
     hasRequiredProperties,

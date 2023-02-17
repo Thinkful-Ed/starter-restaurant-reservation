@@ -16,7 +16,6 @@ async function list(_req, res, _next) {
     res.json({ data: tablesList});
 }
 
-
 async function tableExists(req, res, next) {
     const table = await service.read(req.params.table_id);
 
@@ -97,24 +96,22 @@ async function create(req, res, _next) {
 //     res.status(200).json({ data: updated });
 // }
 
-async function update(req, res, next) {
+async function update(_req, res, next) {
     const { foundTable, thisReservation } = res.locals;
     if(thisReservation.status == 'seated') {
-        next({ status:400, message: `Reservation is ${thisReservation.status}.`})
-    }
+        next({ status:400, message: `Reservation is ${thisReservation.status}.`});
+    };
     if(foundTable.reservation_id) {
         next({ status:400, message: `Table is occupied`})
-    }
+    };
     const updatedTable = {
         reservation_id: thisReservation.reservation_id,
         table_id: foundTable.table_id,
-    }
+    };
 
     const data = await service.update(updatedTable, thisReservation.reservation_id);
-    res.status(200).json({ data })
+    res.status(200).json({ data });
 }
-
-
 
 
 /// USE THIS WITH THE KNEX.TRANSACTION() FROM TABLES.SERVICE
@@ -125,7 +122,7 @@ async function update(req, res, next) {
 //     res.json({ data })
 // }
 
-async function destroy(req, res, next) {
+async function destroy(_req, res, next) {
     const { foundTable } = res.locals;
 
     foundTable.reservation_id === null ? next({ status: 400, message: 'Table is not occupied.'}) : await service.delete(foundTable.table_id);
@@ -140,7 +137,7 @@ async function destroy(req, res, next) {
 
     await service.list();
 
-    res.status(200).json({data: updatedRes});
+    res.status(200).json({ data: updatedRes });
 }
 
 

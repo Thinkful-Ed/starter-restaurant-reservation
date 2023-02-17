@@ -10,37 +10,13 @@ import { useParams } from "react-router-dom";
 export default function Search(){
     const [phoneNumber, setPhoneNumber] = useState("");
     const {date} = useParams();
+    
+    const [reservations, setReservations] = useState([]);
+    const [reservationsError, setReservationsError] = useState(null);
+    
     const handleChange = ({ target }) => {
         setPhoneNumber(target.value)
     }
-
-
-    const [reservations, setReservations] = useState([]);
-    const [reservationsError, setReservationsError] = useState(null);
-
-    // const handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     // setReservations([])
-    //     // setPhoneNumber(event.target.value)
-    //     console.log('clicked submit', event.target)
-
-    //     listReservations({mobile_number:phoneNumber})
-    //         .then(setReservations)
-    //         .catch(setReservationsError)
-    //     // loadReservations()
-    // }  
-
-    // useEffect(loadReservations, [submittedNumber]);
-
-    // function loadReservations() {
-    //   const abortController = new AbortController();
-    //   setReservationsError(null);
-    //   listReservations({ mobile_number: phoneNumber }, abortController.signal)
-    //     .then(setReservations)
-    //     .catch(setReservationsError);
-    //   return () => abortController.abort();
-    // }
-
 
 
     function loadDashboard() {
@@ -57,6 +33,7 @@ export default function Search(){
       if(window.confirm(`Do you want to cancel this reservation? \n \nThis cannot be undone.`)) {
         try{
           await cancelReservation(event.target.value);
+          //TODO remove extra code
           // loadTables();
           loadDashboard();
         }
@@ -102,9 +79,10 @@ export default function Search(){
         <div>
   
 
-        {/* <ErrorAlert error={reservationsError} /> */}
-
-{/* This works!!!!! */}
+        <ErrorAlert error={reservationsError} />
+        {reservations.length > 0 ? (
+          <h4>Search results for {phoneNumber}</h4>
+        ): ''}
             <ReservationsList
             reservations={reservations}
             reservationsError={reservationsError}

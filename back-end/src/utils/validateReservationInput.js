@@ -1,13 +1,20 @@
 function validType() {
     return function validateTypes(req, _res, next){
         const { data } = req.body;
-        // regular expression to match required date format
+        // regex to match required date format
         const reDate = /^(\d{4})-(\d{1,2})-(\d{1,2})/;
-        // regular expression to match required time format
+        // regex to match required time format
         const reTime = /^\d{1,2}:\d{2}([ap]m)?$/;
+        // regex to match 24hour clock format
+        const re24Time = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/
         
+        //TODO get rid of extra regex above this line (not incl. reDate)
+        // other regex time from instructions
+        const otherRegex = /^[0-9]{2}:[0-9]{2}/
+
+
+
         const reservationDate = new Date(data.reservation_date);
-    
 
         const fullReservationDate = new Date(`${data.reservation_date}T${data.reservation_time}:00`);
         const todaysDate = new Date();
@@ -25,8 +32,8 @@ function validType() {
             case !data.reservation_date.match(reDate):
                 errorMessage = 'reservation_date is an invalid format.  Please use YYYY:MM:DD format.';
                 break;
-            case !data.reservation_time.match(reTime):
-                errorMessage = 'reservation_time is an invalid format.';
+            case !data.reservation_time.match(otherRegex):
+                errorMessage = `reservation_time is an invalid format. ${data.reservation_time} ${reservationDate}`;
                 break;
             case reservationDate.getUTCDay() === 2:
                 errorMessage = 'Sorry, we are closed on Tuesdays.';
@@ -46,6 +53,7 @@ function validType() {
             case reservationTimeHours == 10 && reservationTimeMinutes <= 30:
                 errorMessage = `Invalid time.`
                 break;
+                //TODO get rix of extra code
             // case reservationTimeMinutes <= 30 && reservationTimeHours <= 10:
             //     errorMessage = 'Invalid time.';
             //     break;
@@ -64,4 +72,4 @@ function validType() {
 }
 
 
-  module.exports = validType;
+module.exports = validType;

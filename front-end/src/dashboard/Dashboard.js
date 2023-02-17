@@ -50,7 +50,7 @@ function Dashboard({ date }) {
 
   function clickNext() {
     let nextDay = next(date)
-    history.push(`/dashboard?date=${nextDay}`)
+    history.push(`/dashboard?date=${nextDay}`);
   }
 
   function finishable(table){
@@ -107,7 +107,6 @@ function Dashboard({ date }) {
           throw error
         }
       }
-
     }
 
   return (
@@ -186,7 +185,8 @@ function Dashboard({ date }) {
       </Link>
 
       <button type="button" onClick={clickNext}>Next</button>
-      <p>{date}</p>
+      {/* TODO remove extra code */}
+      {/* <p>{date}</p> */}
       {/* {JSON.stringify(reservations)} */}
 
       <div className="d-md-flex mb-3">

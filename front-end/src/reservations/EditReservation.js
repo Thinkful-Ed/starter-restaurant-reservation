@@ -4,6 +4,7 @@ import { readReservation } from "../utils/api";
 import { useEffect } from "react";
 import ReservationForm from "./ReservationForm";
 import { useHistory } from "react-router";
+import { editReservation } from "../utils/api";
 
 
 export default function EditReservation(){
@@ -53,10 +54,70 @@ const goBack = (event) => {
     history.goBack();
 }
 
-const handleSubmit = (event) => {
+const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(`submittttttteeeedddd`)
+
+    // updateTheReservation()
+    const updatedReservation = {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        mobile_number: formData.mobile_number,
+        reservation_date: formData.reservation_date,
+        reservation_time: formData.reservation_time,
+        people: Number(formData.people),
+    }
+    console.log(formData.reservation_time)
+        const abortController = new AbortController();
+        try{
+            await editReservation(reservation_id, updatedReservation, abortController.signal);
+            // readReservation(reservation_id)
+            // setFormData(formData)
+            history.push(`/dashboard?date=${updatedReservation.reservation_date}`)
+        }
+        catch(error) {
+            console.log(error);
+            setCurrentReservationError(error.message);
+            // throw error
+        
+    }
+    return () => abortController.abort;
+
+
+
+
+    // const abortController = new AbortController();
+    // editReservation(reservation_id, updatedReservation, abortController.signal)
+    //     .then(setFormData(formData))
+    //     // .then(() =>
+    //     // history.push(`/dashboard?date=${formData.reservation_date}`)
+    //     // )
+    //     .then(readReservation(reservation_id))
+    //     .then(() => history.goBack())
+    //     .catch((error) => setCurrentReservationError(error))
+} 
+const [updateError, setUpdateErorr] = useState();
+
+async function updateTheReservation() {
+    const updatedReservation = {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        mobile_number: formData.mobile_number,
+        reservation_date: formData.reservation_date,
+        reservation_time: formData.reservation_time,
+        people: Number(formData.people),
+    }
+    console.log(`heeeeeeeeerrrrrreeeeee`)
+    editReservation(reservation_id, updatedReservation)
+    .then(() => history.push('/dashboard'))
+    .catch(setUpdateErorr)
 }
+
+
+
+
+
+
 
 const handleChange = ({ target }) => {
     setFormData({...formData, [target.name]:target.value});

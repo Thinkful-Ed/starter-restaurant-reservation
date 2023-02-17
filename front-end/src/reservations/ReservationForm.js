@@ -5,8 +5,8 @@ import React from "react";
 export default function ReservationForm({handleSubmit, handleChange, formData, goBack}) {
 
 //TODO get rid of extra code
-console.log(formData)
-
+// console.log(formData)
+// console.log(`form`, formData.reservation_time)
 
 
 
