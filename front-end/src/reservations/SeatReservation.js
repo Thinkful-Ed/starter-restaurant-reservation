@@ -68,7 +68,6 @@ export default function SeatReservation() {
     const handleSubmit = (event) => {
         event.preventDefault();
         checkData(currentReservation, selectedTable);
-        console.log(`seatReservation-73`, checkError)
         if(!checkDataError){
             updateTableData()
         }

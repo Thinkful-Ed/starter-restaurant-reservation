@@ -36,7 +36,7 @@ function validType() {
                 errorMessage = 'Sorry, we are closed on Tuesdays.';
                 break;
             case fullReservationDate < todaysDate:
-                errorMessage = 'You can only make reservations for the future.';
+                errorMessage = `You can only make reservations for the future.  Todays date is ${todaysDate}, fullReservationDate is ${fullReservationDate}`;
                 break;
             case reservationTimeHours > 21:
                 errorMessage = `Invalid time.`
