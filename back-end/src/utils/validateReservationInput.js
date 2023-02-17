@@ -5,6 +5,8 @@ function validType() {
         const reDate = /^(\d{4})-(\d{1,2})-(\d{1,2})/;
         // regex to match required time format
         const reTime = /^[0-9]{2}:[0-9]{2}/
+        // regex to match phone number format
+        const rePhone = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
 
 
         const reservationDate = new Date(data.reservation_date);
@@ -28,6 +30,8 @@ function validType() {
             case !data.reservation_time.match(reTime):
                 errorMessage = `reservation_time is an invalid format.`;
                 break;
+            case !data.mobile_number.match(rePhone):
+                errorMessage = 'phone number is invalid.';
             case reservationDate.getUTCDay() === 2:
                 errorMessage = 'Sorry, we are closed on Tuesdays.';
                 break;

@@ -5,12 +5,13 @@ import { useEffect } from "react";
 import ReservationForm from "./ReservationForm";
 import { useHistory } from "react-router";
 import { editReservation } from "../utils/api";
+import ValidateReservation from "./ValidateReservation";
 
 
 export default function EditReservation(){
     const { reservation_id } = useParams();
     const [currentReservationError, setCurrentReservationError] = useState(null);
-    
+    const [errorDiv, setErrorDiv] = useState();
     const history = useHistory();
 
     const initialFormState = {
@@ -50,6 +51,8 @@ const goBack = (event) => {
     history.goBack();
 }
 
+const [updateError, setUpdateError] = useState();
+
 const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -62,6 +65,9 @@ const handleSubmit = async (event) => {
         people: Number(formData.people),
     }
 
+    setErrorDiv(ValidateReservation(updatedReservation));
+    
+    if(ValidateReservation(updatedReservation).props.className !== "error alert alert-danger"){
     const abortController = new AbortController();
     try{
         await editReservation(reservation_id, updatedReservation, abortController.signal);
@@ -69,13 +75,13 @@ const handleSubmit = async (event) => {
     }
     catch(error) {
         console.log(error);
-        setCurrentReservationError(error.message);
+        setUpdateError(error.message);
         
     }
     return () => abortController.abort;
-} 
+    } 
+}   
 
-const [updateError, setUpdateErorr] = useState();
 
 
 const handleChange = ({ target }) => {
@@ -91,6 +97,7 @@ const handleChange = ({ target }) => {
             formData={formData}
             goBack={goBack}
             />
+            <div>{!errorDiv ? '' : errorDiv}</div>
         </>
     )
 }
