@@ -42,7 +42,7 @@ export default function NewReservation() {
         let thisDate = new Date(Date.now())
         const fullReservationDate = new Date(`${formData.reservation_date}T${formData.reservation_time}:00`);
 
-        if(ValidateReservation(reservation).props.className !== "error alert alert-danger"){
+        // if(ValidateReservation(reservation).props.className !== "error alert alert-danger"){
         async function callCreateReservation() {
             try{
                 await createReservation(reservation);
@@ -53,13 +53,13 @@ export default function NewReservation() {
                 console.log(error);
                 console.log(Date.now())
                 console.log(reservation.reservation_time, reservation.reservation_date)
-                console.log(re)
+             
                 setError(error.message);
                 throw error;
             }
         }
         callCreateReservation();
-    }
+    // }
     };
 
     const goBack = (event) => {

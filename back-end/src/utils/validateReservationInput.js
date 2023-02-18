@@ -12,33 +12,33 @@ function validType() {
         const reservationDate = new Date(data.reservation_date);
 
         const fullReservationDate = new Date(`${data.reservation_date}T${data.reservation_time}:00`);
-        const todaysDate = new Date(Date.now());
+        const todaysDate = new Date();
 
-        //
+        const reservationTime = data.reservation_time;
+        const reservationTimeHours = reservationTime.slice(0,2);
+        const reservationTimeMinutes = reservationTime.slice(3,5);
+
+        //////////////////////////////////////
         const localTimeToday = Date.parse(todaysDate);
         const localTimeRes = Date.parse(fullReservationDate);
         const localDateToday = todaysDate.toLocaleDateString();
         const localDateRes = fullReservationDate.toLocaleDateString();
 
-        //TODO SPLIT TIME OFF OF DATE?????? CURRENTLY TIME READING 4HRS IN THE FUTURE FOR LOCAL TIME ON RENDERED VERSION OF SITE
-
-        const reservationTime = data.reservation_time;
-        const reservationTimeHours = reservationTime.slice(0,2);
-        const reservationTimeMinutes = reservationTime.slice(3,5);
         
         let errorMessage = '';
 
         switch (true) {
-            // case fullReservationDate < todaysDate:
-            //     errorMessage = `You can only make reservations for the fture.FullReservationDate: ${fullReservationDate}  localTimeToday: ${localTimeToday}, LocalTimeRes: ${localTimeRes}, localDateTOday: ${localDateToday}, localDateRes: ${localDateRes}`;
+
+            // case localTimeRes < localTimeToday:
+            //     errorMessage = `...future. new Date() => ${todaysDate}, ReservationDate=> ${fullReservationDate}, getUTCHours(date.now)=> ${todaysDate.getUTCHours()}, getUTCHours(reservationDat)=> ${fullReservationDate.getUTCHours()}`
             //     break;
-            case localTimeRes < localTimeToday:
-                errorMessage = `...future. Date.Now() => ${Date.now()}, ReservationDate=> ${fullReservationDate}, getUTCHours(date.now)=> ${todaysDate.getUTCHours()}, getUTCHours(reservationDat)=> ${fullReservationDate.getUTCHours()}`
+
+            case todaysDate > fullReservationDate:
+                errorMessage = `Reservations must be for the future.`;
                 break;
-
-
-            case localDateRes === localDateToday && localTimeRes < localTimeToday:
-                errorMessage = `It is already past ${localTimeRes}`
+            // case localDateRes === localDateToday && localTimeRes < localTimeToday:
+            //     errorMessage = `It is already past ${localTimeRes}`;
+            //     break;
 
 //************************************************ */
 
