@@ -21,8 +21,8 @@ function validType() {
         let errorMessage = '';
 
         switch (true) {
-            case todaysDate > reservationDate:
-                errorMessage = 'Reservations must be for the future.';
+            case todaysDate.toISOString() > reservationDate.toISOString():
+                errorMessage = `...future... TODAYSDATE:=> ${todaysDate} /n \n ....RESERVATIONDATE:=> ${reservationDate}..... \n TODAYSDATETOSTRING=> ${todaysDate.toISOString()}; RESERVATIONDATETOSTRING=> ${reservationDate.toISOString()}`;
                 break;
             case typeof(data.people) !== 'number':
                 errorMessage = 'people must be a number.';
