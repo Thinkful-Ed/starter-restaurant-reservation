@@ -13,7 +13,12 @@ function validType() {
 
         const fullReservationDate = new Date(`${data.reservation_date}T${data.reservation_time}:00`);
         const todaysDate = new Date(Date.now());
-        const newTodaysDate = todaysDate.getTimezoneOffset();
+
+        //
+        const localTimeToday = todaysDate.toLocaleTimeString();
+        const localTimeRes = fullReservationDate.toLocaleTimeString();
+        const localDateToday = todaysDate.toLocaleDateString();
+        const localDateRes = fullReservationDate.toLocaleDateString();
 
         //TODO SPLIT TIME OFF OF DATE?????? CURRENTLY TIME READING 4HRS IN THE FUTURE FOR LOCAL TIME ON RENDERED VERSION OF SITE
 
@@ -24,6 +29,12 @@ function validType() {
         let errorMessage = '';
 
         switch (true) {
+            case fullReservationDate < todaysDate:
+                errorMessage = `You can only make reservations for the fture.  localTimeToday: ${localTimeToday}, LocalTimeRes: ${localTimeRes}, localDateTOday: ${localDateToday}, localDateRes: ${localDateRes}`;
+                break;
+
+
+
             case typeof(data.people) !== 'number':
                 errorMessage = 'people must be a number.';
                 break;
@@ -38,9 +49,6 @@ function validType() {
             case reservationDate.getUTCDay() === 2:
                 errorMessage = 'Sorry, we are closed on Tuesdays.';
                 break;
-            case fullReservationDate < newTodaysDate:
-                errorMessage = `You can only make reservations for the future.  todaysDate is ${todaysDate} or the newTodaysDate is ${newTodaysDate} fullReservationDate is ${fullReservationDate}`;
-                break;
             case reservationTimeHours > 21:
                 errorMessage = `Invalid time.`
                 break;
@@ -53,6 +61,8 @@ function validType() {
             case reservationTimeHours == 10 && reservationTimeMinutes <= 30:
                 errorMessage = `Invalid time.`
                 break;    
+            // case fullReservationDate > newTodaysDate:
+            //     errorMessage = `newTodaysDate: ${newTodaysDate}, todaysDate: ${todaysDate} fullReservationDate: ${fullReservationDate}, newFullREservationDate: ${newFullReservationDate}`
             default:
                 break;            
         }
