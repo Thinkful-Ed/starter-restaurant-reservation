@@ -15,8 +15,8 @@ function validType() {
         const todaysDate = new Date(Date.now());
 
         //
-        const localTimeToday = todaysDate.toLocaleTimeString();
-        const localTimeRes = fullReservationDate.toLocaleTimeString();
+        const localTimeToday = Date.parse(todaysDate);
+        const localTimeRes = Date.parse(fullReservationDate);
         const localDateToday = todaysDate.toLocaleDateString();
         const localDateRes = fullReservationDate.toLocaleDateString();
 
@@ -29,10 +29,14 @@ function validType() {
         let errorMessage = '';
 
         switch (true) {
-            case fullReservationDate < todaysDate:
-                errorMessage = `You can only make reservations for the fture.  localTimeToday: ${localTimeToday}, LocalTimeRes: ${localTimeRes}, localDateTOday: ${localDateToday}, localDateRes: ${localDateRes}`;
+            // case fullReservationDate < todaysDate:
+            //     errorMessage = `You can only make reservations for the fture.FullReservationDate: ${fullReservationDate}  localTimeToday: ${localTimeToday}, LocalTimeRes: ${localTimeRes}, localDateTOday: ${localDateToday}, localDateRes: ${localDateRes}`;
+            //     break;
+            case localTimeRes < localTimeToday:
+                errorMessage = `You can only make reservations for the future. ${localTimeRes} ${localTimeToday}`
                 break;
-
+            case localDateRes === localDateToday && localTimeRes < localTimeToday:
+                errorMessage = `It is already past ${localTimeRes}`
 
 
             case typeof(data.people) !== 'number':
