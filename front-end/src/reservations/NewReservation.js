@@ -53,6 +53,7 @@ export default function NewReservation() {
                 console.log(error);
                 console.log(Date.now())
                 console.log(reservation.reservation_time, reservation.reservation_date)
+                console.log(re)
                 setError(error.message);
                 throw error;
             }

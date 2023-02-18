@@ -33,10 +33,15 @@ function validType() {
             //     errorMessage = `You can only make reservations for the fture.FullReservationDate: ${fullReservationDate}  localTimeToday: ${localTimeToday}, LocalTimeRes: ${localTimeRes}, localDateTOday: ${localDateToday}, localDateRes: ${localDateRes}`;
             //     break;
             case localTimeRes < localTimeToday:
-                errorMessage = `You can only make reservations for the future. ${localTimeRes} ${localTimeToday}`
+                errorMessage = `...future. Date.Now() => ${Date.now()}, ReservationDate=> ${fullReservationDate}, getUTCHours(date.now)=> ${todaysDate.getUTCHours()}, getUTCHours(reservationDat)=> ${fullReservationDate.getUTCHours()}`
                 break;
+
+
             case localDateRes === localDateToday && localTimeRes < localTimeToday:
                 errorMessage = `It is already past ${localTimeRes}`
+
+//************************************************ */
+
 
 
             case typeof(data.people) !== 'number':
