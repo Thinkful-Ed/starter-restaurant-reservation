@@ -37,12 +37,7 @@ export default function NewReservation() {
         setError(null);
         setErrorDiv(ValidateReservation(reservation))
 
-        // TODO fix this
-        // left of here
-        let thisDate = new Date(Date.now())
-        const fullReservationDate = new Date(`${formData.reservation_date}T${formData.reservation_time}:00`);
-
-        // if(ValidateReservation(reservation).props.className !== "error alert alert-danger"){
+        if(ValidateReservation(reservation).props.className !== "error alert alert-danger"){
         async function callCreateReservation() {
             try{
                 await createReservation(reservation);
@@ -50,16 +45,13 @@ export default function NewReservation() {
                 history.push(`/dashboard?date=${formData.reservation_date}`);
             }
             catch (error) {
-                console.log(error);
-                console.log(Date.now())
-                console.log(reservation.reservation_time, reservation.reservation_date)
-             
+                console.log(error);          
                 setError(error.message);
                 throw error;
             }
         }
         callCreateReservation();
-    // }
+    }
     };
 
     const goBack = (event) => {

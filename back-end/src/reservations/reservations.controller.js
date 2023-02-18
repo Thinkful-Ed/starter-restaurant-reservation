@@ -25,8 +25,7 @@ async function searchPhoneNumber(req, res, next) {
 }
 
 function getTodaysDate() {
-  const todayDate = new Date(Date.now());
-  console.log(todayDate, Date.now())
+  const todayDate = new Date();
   const year = todayDate.getFullYear();
   const month = todayDate.getMonth() + 1;
   const day = todayDate.getDate();

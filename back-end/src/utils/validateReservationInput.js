@@ -9,41 +9,21 @@ function validType() {
         const rePhone = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
 
 
-        const reservationDate = new Date(data.reservation_date);
 
-        const fullReservationDate = new Date(`${data.reservation_date}T${data.reservation_time}:00`);
+        const reservationDate = new Date(`${data.reservation_date}T${data.reservation_time}:00`);
         const todaysDate = new Date();
 
         const reservationTime = data.reservation_time;
         const reservationTimeHours = reservationTime.slice(0,2);
         const reservationTimeMinutes = reservationTime.slice(3,5);
 
-        //////////////////////////////////////
-        const localTimeToday = Date.parse(todaysDate);
-        const localTimeRes = Date.parse(fullReservationDate);
-        const localDateToday = todaysDate.toLocaleDateString();
-        const localDateRes = fullReservationDate.toLocaleDateString();
 
-        
         let errorMessage = '';
 
         switch (true) {
-
-            // case localTimeRes < localTimeToday:
-            //     errorMessage = `...future. new Date() => ${todaysDate}, ReservationDate=> ${fullReservationDate}, getUTCHours(date.now)=> ${todaysDate.getUTCHours()}, getUTCHours(reservationDat)=> ${fullReservationDate.getUTCHours()}`
-            //     break;
-
-            case todaysDate > fullReservationDate:
-                errorMessage = `Reservations must be for the future.`;
+            case todaysDate > reservationDate:
+                errorMessage = 'Reservations must be for the future.';
                 break;
-            // case localDateRes === localDateToday && localTimeRes < localTimeToday:
-            //     errorMessage = `It is already past ${localTimeRes}`;
-            //     break;
-
-//************************************************ */
-
-
-
             case typeof(data.people) !== 'number':
                 errorMessage = 'people must be a number.';
                 break;
@@ -70,8 +50,6 @@ function validType() {
             case reservationTimeHours == 10 && reservationTimeMinutes <= 30:
                 errorMessage = `Invalid time.`
                 break;    
-            // case fullReservationDate > newTodaysDate:
-            //     errorMessage = `newTodaysDate: ${newTodaysDate}, todaysDate: ${todaysDate} fullReservationDate: ${fullReservationDate}, newFullREservationDate: ${newFullReservationDate}`
             default:
                 break;            
         }
