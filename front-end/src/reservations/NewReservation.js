@@ -37,7 +37,7 @@ export default function NewReservation() {
         setError(null);
         setErrorDiv(ValidateReservation(reservation))
 
-        // if(ValidateReservation(reservation).props.className !== "error alert alert-danger"){
+        if(ValidateReservation(reservation).props.className !== "error alert alert-danger"){
         async function callCreateReservation() {
             try{
                 await createReservation(reservation);
@@ -52,7 +52,7 @@ export default function NewReservation() {
         }
         callCreateReservation();
     }
-    // };
+    };
 
     const goBack = (event) => {
         event.preventDefault();
