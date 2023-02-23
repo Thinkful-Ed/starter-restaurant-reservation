@@ -38,13 +38,13 @@ export default function ReservationsList({reservations, reservationsError, handl
                 <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
                 <td>{reservation.status === 'booked' ? 
                 <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-                  <button type="button">Seat</button>
+                  <button type="button" class="btn btn-info">Seat</button>
                 </Link> : ''}
                 </td>
 
                 <td>{reservation.status === 'booked' ?
                   <Link to={`/reservations/${reservation.reservation_id}/edit`}>
-                  <button type="button">Edit</button>
+                  <button type="button" class="btn btn-primary">Edit</button>
                   </Link> : ''}
                 </td>
 
@@ -54,6 +54,7 @@ export default function ReservationsList({reservations, reservationsError, handl
                     value={reservation.reservation_id}
                     data-reservation-id-cancel={reservation.reservation_id}
                     onClick={handleCancel}
+                    class="btn btn-danger"
                     >Cancel</button> : ''}
                 </td>
 

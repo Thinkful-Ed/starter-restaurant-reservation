@@ -65,8 +65,14 @@ export default function Search(){
             placeholder="Enter a customer's phone number"
             onChange={handleChange}
             value={phoneNumber}
+            class="w-25"
             />
-            <button type="submit" name="mobile_number" onSubmit={handleSubmit}>Find</button>
+            {" "}
+            <button 
+            type="submit"
+            name="mobile_number" 
+            onSubmit={handleSubmit}
+            class="bttn btn-success mb-3">Find</button>
         </form>
 
         <div>

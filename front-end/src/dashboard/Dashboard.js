@@ -59,7 +59,8 @@ function Dashboard({ date }) {
         <button 
           onClick={handleFinish} 
           value={table.table_id} 
-          data-table-id-finish={table.table_id}>
+          data-table-id-finish={table.table_id}
+          class="btn btn-warning">
           Finish
         </button>
       )
@@ -121,70 +122,26 @@ function Dashboard({ date }) {
         reservationsError={reservationsError}
         handleCancel={handleCancel}
         />
-      {/* <ErrorAlert error={reservationsError} />
-      {reservations.length > 0 ? (
-        <table className = "table">
-          <thead>
-            <tr>
-              <th>Reservation ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Mobile Number</th>
-              <th>Reservation Date</th>
-              <th>Reservation Time</th>
-              <th>People</th>
-              <th>Status</th>
-              <th>Seat</th>
-              <th>Edit</th>
-              <th>Cancel</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reservations.map((reservation, index) => (
-              <tr key={index}>
-                <td>{reservation.reservation_id}</td>
-                <td>{reservation.first_name}</td>
-                <td>{reservation.last_name}</td>
-                <td>{reservation.mobile_number}</td>
-                <td>{reservation.reservation_date}</td>
-                <td>{reservation.reservation_time}</td>
-                <td>{reservation.people}</td>
-                <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
-                <td>{reservation.status === 'seated' ? '' : 
-                <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-                  <button type="button">Seat</button>
-                </Link>}
-                </td>
 
-                <td>{reservation.status === 'booked' ?
-                  <Link to={`/reservations/${reservation.reservation_id}/edit`}>
-                  <button type="button">Edit</button>
-                  </Link> : ''}
-                </td>
-
-                <td>
-                  <button 
-                    type="button" 
-                    value={reservation.reservation_id}
-                    data-reservation-id-cancel={reservation.reservation_id}
-                    onClick={handleCancel}
-                    >Cancel</button>
-                </td>
-
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>No reservations found for this date.</p>
-      )} */}
-      <button type="button" onClick={clickPrevious}>Previous</button>
-
+      <button 
+      type="button" 
+      onClick={clickPrevious}
+      class="btn btn-secondary mb-3"
+      >Previous</button>
+      {" "}
       <Link to="/dashboard">
-      <button type="button" Link to="/dashboard">Today</button>
+      <button 
+      type="button" 
+      class="btn btn-success mb-3" 
+      Link to="/dashboard"
+      >Today</button>
       </Link>
-
-      <button type="button" onClick={clickNext}>Next</button>
+      {" "}
+      <button
+       type="button" 
+       onClick={clickNext} 
+       class="btn btn-warning mb-3" 
+       >Next</button>
 
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Tables</h4>

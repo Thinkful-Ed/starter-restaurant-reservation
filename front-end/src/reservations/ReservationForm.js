@@ -18,9 +18,10 @@ export default function ReservationForm({handleSubmit, handleChange, formData, g
                             onChange={handleChange}
                             value={formData.first_name}
                             placeholder="First Name"
+                            className="w-10"
                             />
                     </td>
-
+                <br></br>
                      <td>
                         <input
                             id="last_name"
@@ -31,6 +32,7 @@ export default function ReservationForm({handleSubmit, handleChange, formData, g
                             placeholder="Last Name"
                             />
                     </td>
+
                     <td>
                         <input
                             id="mobile_number"
