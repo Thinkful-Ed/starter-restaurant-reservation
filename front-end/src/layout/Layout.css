@@ -2,3 +2,29 @@
   background-color: #393a44;
   min-width: 200px;
 }
+
+h3{
+  text-align: center;
+  font-weight: bolder;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+form{
+  text-align: center;
+}
+
+table{ 
+  display: inline-block;
+}
+
+.input-field {
+  min-width: 200px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background-color: rgb(239, 236, 236);
+  text-align: center;
+}
+
+.error-div {
+  color: blue;
+}

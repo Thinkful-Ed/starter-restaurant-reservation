@@ -3,7 +3,7 @@ import { createReservation } from "../utils/api";
 import { useLocation, useHistory } from "react-router-dom";
 import ReservationForm from "./ReservationForm";
 import ValidateReservation from "./ValidateReservation";
-
+import "./Reservations.css";
 
 export default function NewReservation() {
     const history = useHistory();
@@ -62,13 +62,13 @@ export default function NewReservation() {
 
     return (
         <>
-        <h3>Create a new Reservation</h3>
+        <h3>Create a New Reservation</h3>
         <ReservationForm
             handleSubmit={handleSubmit}
             handleChange={handleChange}
             formData={formData}
             goBack={goBack} />
-        <div>{!errorDiv ? '' : errorDiv}</div>
+        <div className="error-div">{!errorDiv ? '' : errorDiv}</div>
         </>
     )
 }
