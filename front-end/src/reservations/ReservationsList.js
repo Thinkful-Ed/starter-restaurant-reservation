@@ -9,15 +9,15 @@ export default function ReservationsList({reservations, reservationsError, handl
       <main>
       <ErrorAlert error={reservationsError} />
       {reservations.length > 0 ? (
-        <table className = "table">
+        <table className = "table search-results">
           <thead>
             <tr>
-              <th>Reservation ID</th>
+              <th>ID</th>
               <th>First Name</th>
               <th>Last Name</th>
               <th>Mobile Number</th>
-              <th>Reservation Date</th>
-              <th>Reservation Time</th>
+              <th>Date</th>
+              <th>Time</th>
               <th>People</th>
               <th>Status</th>
               <th>Seat</th>
@@ -44,7 +44,7 @@ export default function ReservationsList({reservations, reservationsError, handl
 
                 <td>{reservation.status === 'booked' ?
                   <Link to={`/reservations/${reservation.reservation_id}/edit`}>
-                  <button type="button" class="btn btn-primary">Edit</button>
+                  <button type="button" class="btn btn-primary ">Edit</button>
                   </Link> : ''}
                 </td>
 

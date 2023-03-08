@@ -3,7 +3,7 @@ import { createReservation } from "../utils/api";
 import { useLocation, useHistory } from "react-router-dom";
 import ReservationForm from "./ReservationForm";
 import ValidateReservation from "./ValidateReservation";
-import "./Reservations.css";
+
 
 export default function NewReservation() {
     const history = useHistory();

@@ -77,7 +77,7 @@ export default function ReservationForm({handleSubmit, handleChange, formData, g
                             value={formData.reservation_time}
                             placeholder="HH:MM"
                             pattern="[0-9]{2}:[0-9]{2}"
-                            className="input-field"
+                            class="input-field"
                             />
                     </td>
                 </tr>
@@ -92,7 +92,7 @@ export default function ReservationForm({handleSubmit, handleChange, formData, g
                             onChange={handleChange}
                             value={formData.people}
                             placeholder="Number of people"
-                            className="input-field"
+                            class="input-field"
                             />
                     </td>
                 </tr>    
