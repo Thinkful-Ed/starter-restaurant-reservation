@@ -62,7 +62,8 @@ export default function NewReservation() {
 
     return (
         <>
-        <h3>Create a New Reservation</h3>
+        <h4>Create a New Reservation</h4>
+        <hr></hr>
         <ReservationForm
             handleSubmit={handleSubmit}
             handleChange={handleChange}

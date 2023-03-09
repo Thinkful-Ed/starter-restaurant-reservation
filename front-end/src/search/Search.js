@@ -55,6 +55,8 @@ export default function Search(){
     return (
         <main>
         <h3>Search by Phone Number</h3>
+        <hr></hr>
+
         <form name="mobile_number"
         onSubmit={handleSubmit}
         >
@@ -65,8 +67,7 @@ export default function Search(){
             placeholder="Enter a customer's phone number"
             onChange={handleChange}
             value={phoneNumber}
-            class="input-field"
-            style={{width: 300}}
+            class="input-field form-control"
             />
             <br></br>
             {" "}
@@ -77,12 +78,13 @@ export default function Search(){
             class="btn btn-success"
             style={{margin: 10}}>Find</button>
         </form>
-
+        <br></br>
         <div style={{textAlign:"center"}}>
         <ErrorAlert error={reservationsError} />
         {reservations.length > 0 ? (
-          <h4>Search results for {phoneNumber}</h4>
+          <h4>Search results for {phoneNumber}:</h4>
         ): ''}
+        <br></br>
             <ReservationsList
             reservations={reservations}
             reservationsError={reservationsError}

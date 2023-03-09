@@ -113,8 +113,10 @@ function Dashboard({ date }) {
   return (
     <main>
       <h1>Dashboard</h1>
+      <hr></hr>
+      <br></br>
       <div>
-        <h4>Reservations for date {date}</h4>
+        <h4>Reservations for {date}</h4>
       </div>
 
       <ReservationsList
@@ -143,7 +145,7 @@ function Dashboard({ date }) {
        class="btn btn-secondary mb-3" 
        >Next</button>
 
-      <div class="d-md-flex mb-3">
+      <div>
         <h4 class="mb-20">Tables</h4>
       </div>
       <ErrorAlert error={tablesError} />

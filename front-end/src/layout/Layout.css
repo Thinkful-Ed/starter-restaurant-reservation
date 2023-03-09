@@ -1,8 +1,23 @@
+body {
+  background-image: url("./pexels-nataliya-vaitkevich-4641452.jpg");
+  background-repeat: no-repeat;
+  background-size:100%;
+  max-height: fit-content;
+  background-color: #544c48;
+  
+}
+
+/* body {
+  background-color: #bbada0;
+  background-image: linear-gradient(#e9e4d8, #BBADA0);
+  background-repeat: no-repeat;
+} */
 .side-bar {
   background-color: #393a44;
   min-width: 200px;
   max-width: 100%;
   height: auto;
+
 }
 
 h1 {
@@ -25,14 +40,17 @@ h3{
 h4{
   text-align: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
 }
 
 form{
   text-align: center;
 }
 
-table { 
-  display: inline-block;
+table, th, td { 
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: bold;
 }
 
 .tables-table {
@@ -52,9 +70,13 @@ table {
 
 .input-field {
   min-width: 200px;
+  max-width: 500px;
   margin-top: 5px;
   margin-bottom: 5px;
-  background-color: rgb(239, 236, 236);
+  background-color: #c0c5be;
+  color: white;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
 }
 

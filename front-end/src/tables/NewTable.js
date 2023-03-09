@@ -60,7 +60,8 @@ export default function NewTable() {
 
     return (
         <>
-        <h3>Create a New Table</h3>
+        <h4>Create a New Table</h4>
+        <hr></hr>
         <form name="createTable" onSubmit={handleSubmit}>
             <table>
                 <tbody>
@@ -73,7 +74,7 @@ export default function NewTable() {
                             onChange={handleChange}
                             value={formData.table_name}
                             placeholder="Table Name"
-                            className="input-field"
+                            className="input-field form-control"
                             />
                     </td>
                     </tr>
@@ -88,8 +89,7 @@ export default function NewTable() {
                             onChange={handleChange}
                             value={formData.capacity}
                             placeHolder="Capacity"
-                            class="input-field"
-                            style={{margin: 5}}
+                            class="input-field form-control"
                             />
                     </td>
                     </tr>
