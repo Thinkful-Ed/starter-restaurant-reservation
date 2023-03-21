@@ -16,7 +16,7 @@ function Menu() {
           className="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
           to="/"
         >
-          <div className="sidebar-brand-text mx-3">
+          <div className="sidebar-brand-text mx-2">
             <span>Periodic Tables</span>
           </div>
         </Link>
