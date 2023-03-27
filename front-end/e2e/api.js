@@ -76,6 +76,7 @@ async function createTable(table, signal) {
     signal,
   };
   return await fetchJson(url, options, table);
+
 }
 
 async function seatReservation(reservation_id, table_id) {

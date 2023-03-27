@@ -67,3 +67,80 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+// create a new reservation
+
+export async function createReservation(data, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  const options = {
+    headers,
+    signal,
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+
+  return await fetchJson(url, options);
+}
+
+export async function createTable(data, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  const options = {
+    headers,
+    signal,
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+  
+  return await fetchJson(url, options);
+}
+
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return await fetchJson(url, { headers, signal }, []);
+}
+
+export async function readReservation(reservationId, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservationId}/seat`);
+  return await fetchJson(url, { headers, signal }, []);
+}
+
+// export async function seatReservation(reservationId, signal) {
+//   const url = new URL(`${API_BASE_URL}/reservations/${reservationId}/seat`);
+//   const options = {
+//     headers,
+//     signal,
+//     method: "PUT",
+//     body: JSON.stringify({ data: reservationId }),
+//   };
+//   return await fetchJson(url, options);
+// }
+
+export async function seatTable(tableId, reservationId, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`);
+  const options = {
+    headers,
+    signal,
+    method: "PUT",
+    body: JSON.stringify({
+      data: {
+        reservation_id: reservationId,
+      },
+    }),
+  };
+  return await fetchJson(url, options);
+}
+
+export async function finishReservation(tableId, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`);
+  const options = {
+    headers,
+    signal,
+    method: "DELETE",
+    body: JSON.stringify({
+      data: {
+        table_id: tableId,
+      },
+    }),
+  };
+  return await fetchJson(url, options);
+}
