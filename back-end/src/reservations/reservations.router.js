@@ -4,9 +4,11 @@
  * @type {Router}
  */
 
-const router = require("express").Router();
+const router = require("express").Router({ mergeParams: true });
 const controller = require("./reservations.controller");
 
-router.route("/").get(controller.list);
+router.route("/:reservation_id").get(controller.read);
+router.route("/").post(controller.create).get(controller.list);
+
 
 module.exports = router;
