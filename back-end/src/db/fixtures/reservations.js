@@ -1,4 +1,4 @@
-[
+module.exports = [
   {
     "first_name": "Rick",
     "last_name": "Sanchez",
@@ -49,4 +49,4 @@
     "created_at": "2020-12-10T08:31:32.326Z",
     "updated_at": "2020-12-10T08:31:32.326Z"
   }
-]
+];
