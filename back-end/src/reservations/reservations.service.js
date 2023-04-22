@@ -10,7 +10,13 @@ function listDate(date) {
     .where({ reservation_date: date })
 }
 
+function create(newReservation) {
+  return knex("reservations")
+    .insert(newReservation)
+}
+
 module.exports = {
   list,
   listDate,
+  create,
 }
