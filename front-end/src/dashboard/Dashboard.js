@@ -40,18 +40,18 @@ function Dashboard({ date, setDate }) {
   return (
     <main>
       <h1>Dashboard</h1>
-      <button className="btn btn-primary mx-2" onClick={prevDate}>
-            Previous Date
-      </button>
-      <button className="btn btn-primary mx-2" onClick={todaysDate}>
-            Today
-      </button>
-      <button className="btn btn-primary mx-2" onClick={nextDate}>
-            Next Date
-      </button>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">{`Reservations for ${date}`}</h4>
       </div>
+      <button className="btn btn-primary mx-2" onClick={prevDate}>
+        Previous
+      </button>
+      <button className="btn btn-primary mx-2" onClick={todaysDate}>
+        Today
+      </button>
+      <button className="btn btn-primary mx-2" onClick={nextDate}>
+        Next
+      </button>
       <ErrorAlert error={reservationsError} />
       <ReservationList reservations={reservations} />
     </main>

@@ -15,7 +15,7 @@ const testDate = "2020-12-30"
  * @returns {JSX.Element}
  */
 function Routes() {
-  const [date, setDate] = useState(today());
+  const [date, setDate] = useState(testDate);
 
   return (
     <Switch>
