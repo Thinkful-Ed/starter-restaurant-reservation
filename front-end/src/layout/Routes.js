@@ -16,7 +16,7 @@ const testDate = "2020-12-30"
  * @returns {JSX.Element}
  */
 function Routes() {
-  const [date, setDate] = useState(testDate);
+  const [date, setDate] = useState(today());
 
   return (
     <Switch>
@@ -24,7 +24,7 @@ function Routes() {
         <Redirect to={"/dashboard"} />
       </Route>
       <Route exact={true} path="/reservations/new">
-        <NewReservation />
+        <NewReservation date={date} setDate={setDate} />
       </Route>
       <Route exact={true} path="/reservations">
         <Redirect to={"/dashboard"} />
