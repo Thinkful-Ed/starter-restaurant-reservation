@@ -28,7 +28,6 @@ function NewReservation({ date, setDate }) {
     event.preventDefault();
     const abortController = new AbortController();
     setCreateReservationError(null)
-    console.log(formData)
     await createReservation(formData, abortController.signal)
       .catch(setCreateReservationError)
     // setFormData({ ...initFormState })
