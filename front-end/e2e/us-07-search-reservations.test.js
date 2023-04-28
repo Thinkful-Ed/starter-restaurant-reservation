@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer");
-const { setDefaultOptions } = require('expect-puppeteer');
+const { setDefaultOptions } = require("expect-puppeteer");
 const fs = require("fs");
 const fsPromises = fs.promises;
 
@@ -58,8 +58,7 @@ describe("US-07 - Search reservations - E2E", () => {
       await page.type("input[name=mobile_number]", "1231231232");
 
       await page.screenshot({
-        path:
-          ".screenshots/us-07-search-reservations-submit-no-result-before.png",
+        path: ".screenshots/us-07-search-reservations-submit-no-result-before.png",
         fullPage: true,
       });
 
@@ -71,8 +70,7 @@ describe("US-07 - Search reservations - E2E", () => {
       ]);
 
       await page.screenshot({
-        path:
-          ".screenshots/us-07-search-reservations-submit-no-result-after.png",
+        path: ".screenshots/us-07-search-reservations-submit-no-result-after.png",
         fullPage: true,
       });
       await expect(page).toMatch(/No reservations found/);

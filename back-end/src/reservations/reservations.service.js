@@ -8,7 +8,7 @@ function listDate(date) {
   return knex("reservations")
     .select("*")
     .where({ reservation_date: date })
-    .orderBy("reservation_time")
+    .orderBy("reservation_time");
 }
 
 function read(reservationId) {
@@ -19,8 +19,7 @@ function read(reservationId) {
 }
 
 function create(newReservation) {
-  return knex("reservations")
-    .insert(newReservation)
+  return knex("reservations").insert(newReservation);
 }
 
 function destroy(reservation_id) {
@@ -33,4 +32,4 @@ module.exports = {
   read,
   create,
   delete: destroy,
-}
+};

@@ -26,15 +26,15 @@ function Dashboard({ date, setDate }) {
   }
 
   function nextDate() {
-    setDate(next(date))
+    setDate(next(date));
   }
 
   function prevDate() {
-    setDate(previous(date))
+    setDate(previous(date));
   }
 
   function todaysDate() {
-    setDate(today())
+    setDate(today());
   }
 
   return (

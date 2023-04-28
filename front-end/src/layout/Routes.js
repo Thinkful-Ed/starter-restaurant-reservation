@@ -6,7 +6,7 @@ import NotFound from "./NotFound";
 import NewReservation from "../reservations/NewReservation";
 import { today } from "../utils/date-time";
 
-const testDate = "2020-12-30"
+const testDate = "2020-12-30";
 
 /**
  * Defines all the routes for the application.

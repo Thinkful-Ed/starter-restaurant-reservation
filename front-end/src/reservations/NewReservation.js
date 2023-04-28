@@ -11,35 +11,37 @@ function NewReservation({ date, setDate }) {
     reservation_date: "",
     reservation_time: "",
     people: 1,
-  }
+  };
 
-  const [formData, setFormData] = useState({ ...initFormState })
-  const [createReservationError, setCreateReservationError] = useState(null)
+  const [formData, setFormData] = useState({ ...initFormState });
+  const [createReservationError, setCreateReservationError] = useState(null);
   const history = useHistory();
 
   const handleChange = ({ target }) => {
-    const value = target.type === "number" ? Number(target.value) : target.value
+    const value =
+      target.type === "number" ? Number(target.value) : target.value;
     setFormData({
       ...formData,
       [target.name]: value,
     });
-  }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const abortController = new AbortController();
-    setCreateReservationError(null)
-    await createReservation(formData, abortController.signal)
-      .catch(setCreateReservationError)
+    setCreateReservationError(null);
+    await createReservation(formData, abortController.signal).catch(
+      setCreateReservationError
+    );
     // setFormData({ ...initFormState })
-    setDate(formData.reservation_date)
-    history.push(`/dashboard`)
+    setDate(formData.reservation_date);
+    history.push(`/dashboard`);
     return () => abortController.abort();
   };
 
   const cancelForm = () => {
-    history.goBack()
-  }
+    history.goBack();
+  };
 
   return (
     <main>
@@ -120,12 +122,15 @@ function NewReservation({ date, setDate }) {
             required
           />
         </div>
-        <button onClick={cancelForm} className="btn btn-secondary mx-2">Cancel</button>
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button onClick={cancelForm} className="btn btn-secondary mx-2">
+          Cancel
+        </button>
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
       </form>
-
     </main>
-  )
+  );
 }
 
-export default NewReservation
+export default NewReservation;

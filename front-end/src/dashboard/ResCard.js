@@ -1,7 +1,6 @@
 import React from "react";
 
 export const ResCard = ({ reservation }) => {
-
   return (
     <article className="card">
       <div className="card-body ">
@@ -15,9 +14,7 @@ export const ResCard = ({ reservation }) => {
         </ul>
       </div>
     </article>
-  )
-
+  );
 };
 
 export default ResCard;
-
