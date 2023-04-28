@@ -47,8 +47,5 @@
   },
   "keywords": [],
   "author": "Thinkful, Inc.",
-  "license": "UNLICENSED",
-  "dependencies": {
-    "puppeteer": "^19.10.1"
-  }
+  "license": "UNLICENSED"
 }
