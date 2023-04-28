@@ -18,9 +18,10 @@ function NewReservation({ date, setDate }) {
   const history = useHistory();
 
   const handleChange = ({ target }) => {
+    const value = target.type === "number" ? Number(target.value) : target.value
     setFormData({
       ...formData,
-      [target.name]: target.value,
+      [target.name]: value,
     });
   }
 
