@@ -1,0 +1,47 @@
+{
+  "name": "starter-restaurant-reservation-back-end",
+  "version": "1.0.0",
+  "description": "Starter code for restaurant reservation backend",
+  "main": "src/server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation",
+    "directory": "/back-end"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "start:dev": "nodemon src/server.js",
+    "test": "npx cross-env LOG_LEVEL=warn jest --runInBand --detectOpenHandles --forceExit --config ./test/jest.config.js",
+    "test:1": "npm run test -- us-01",
+    "test:2": "npm run test -- us-02",
+    "test:3": "npm run test -- us-03",
+    "test:4": "npm run test -- us-04",
+    "test:5": "npm run test -- us-05",
+    "test:6": "npm run test -- us-06",
+    "test:7": "npm run test -- us-07",
+    "test:8": "npm run test -- us-08",
+    "test:drop-database": "node test/drop-database",
+    "test:start": "npx cross-env LOG_LEVEL=warn NODE_ENV=test npm run test:start:run",
+    "test:start:run": "run-s test:drop-database start "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "knex": "^0.21.12",
+    "nanoid": "^3.1.20",
+    "npm-run-all": "^4.1.5",
+    "pg": "^8.5.1",
+    "pino": "^6.11.0",
+    "pino-http": "^5.3.0",
+    "pino-pretty": "^4.3.0"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.6",
+    "supertest": "^6.1.1"
+  }
+}
