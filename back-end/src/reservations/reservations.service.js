@@ -24,9 +24,9 @@ function destroy(reservationId) {
   return knex("reservations").where({ reservation_id: reservationId }).del();
 }
 
-function list() {
-  return knex("reservations").select("*").orderBy("reservation_time");
-}
+// function list() {
+//   return knex("reservations").select("*").orderBy("reservation_time");
+// }
 
 // function listByDate(reservation_date) {
 //   return knex("reservations")
