@@ -16,11 +16,6 @@ async function list(req, res) {
   res.json({ data });
 }
 
-// async function list(req, res) {
-//   const date = req.query.date;
-//   const data = await service.list(date)
-//   res.json({ data });
-// }
 
 function timeValidator(req, res, next) {
   let regEx = new RegExp(/^([01]\d|2[0-3]):?([0-5]\d)$/);
@@ -55,27 +50,34 @@ function peopleValidator(req, res, next) {
 function dateValidator(req, res, next) {
   const { reservation_date } = req.body.data;
   const date = Date.parse(reservation_date);
-  if (date && date > 0) {
-    return next();
-  } else {
+  const today = new Date()
+  const dayCheck = new Date(reservation_date)
+  const day = dayCheck.getDay()
+  if (day == 1 && day < today) {
+    return next({
+      status: 400,
+      message: `the restaurant is closed on Tuesdays, and reservation_date must be in the future.`,
+    });
+  }
+  if (day == 1) {
+    return next({
+      status: 400,
+      message: `the restaurant is closed on Tuesdays`,
+    });
+  } else if (date && date < today) {
+    return next({
+      status: 400,
+      message: `reservation_date must be in the future`,
+    });
+  } else if (!date || date < 0) {
     return next({
       status: 400,
       message: `reservation_date must be a date`,
     });
+  } else {
+    return next();
   }
 }
-
-// function numberValidator(req, res, next) {
-//   const { data: { mobile_number } = {} } = req.body;
-//   const reMatch = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
-//   if (!reMatch.test(mobile_number)) {
-//     next({
-//       status: 400,
-//       message: "mobile_number must be a valid phone number.",
-//     });
-//   }
-//   next();
-// }
 
 function dataExists(req, res, next) {
   const data = req.body.data;
