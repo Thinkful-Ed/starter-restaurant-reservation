@@ -21,8 +21,16 @@ function read(id){
     return knex("restaurants").select("*").where({ reservation_id: id }).first();
 }
 
+function create(reservation) {
+    return knex("reservations")
+      .insert(reservation)
+      .returning("*")
+      .then((createdRecords) => createdRecords[0]);
+  }
+
 module.exports = {
     list,
     search,
     read,
+    create
 }
