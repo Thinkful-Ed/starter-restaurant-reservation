@@ -2,6 +2,17 @@
  * List handler for reservation resources
  */
 const reservationsService = require('./reservations.service');
+const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
+const hasProperties = require('../errors/hasProperties');
+
+const hasRequiredProperties = hasProperties(
+  "first_name",
+  "last_name",
+  "mobile_number",
+  "reservation_date",
+  "reservation_time",
+  "people"
+);
 
 async function list(req, res) {
   const date = req.query.date;
@@ -15,5 +26,5 @@ async function list(req, res) {
 
 
 module.exports = {
-  list,
+  list: asyncErrorBoundary(list),
 };
