@@ -148,15 +148,6 @@ function isBooked(req, res, next) {
   next();
 }
 
-async function list(req, res) {
-  const date = req.query.date;
-  const mobile_number = req.query.mobile_number;
-  const data = await (date
-    ? reservationsService.list(date)
-    : reservationsService.search(mobile_number));
-  res.json({ data });
-}
-
 async function reservationExists(req, res, next){
   const reservationId = 
     req.params.reservation_id || (req.body.data || {}).reservation_id;
@@ -170,6 +161,15 @@ async function reservationExists(req, res, next){
     status: 404,
     message: `Reservation ${reservationId} cannot be found.`
   });
+}
+
+async function list(req, res) {
+  const date = req.query.date;
+  const mobile_number = req.query.mobile_number;
+  const data = await (date
+    ? reservationsService.list(date)
+    : reservationsService.search(mobile_number));
+  res.json({ data });
 }
 
 async function read(req, res ){
