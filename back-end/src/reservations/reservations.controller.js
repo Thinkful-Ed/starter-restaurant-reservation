@@ -182,6 +182,22 @@ async function create(req, res) {
   res.status(201).json({ data });
 }
 
+async function update(req, res) {
+  const updatedRes = {
+    ...req.body.data,
+    reservation_id: res.locals.reservation.reservation_id,
+  };
+  const data = await reservationsService.update(updatedRes);
+  res.status(200).json({ data });
+}
+
+async function updateStatus(req, res) {
+  const { status } = res.locals;
+  const { reservation_id } = res.locals.reservation;
+  const data = await reservationsService.updateStatus(reservation_id, status);
+  res.status(200).json({ data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   read: [reservationExists, asyncErrorBoundary(read)],
@@ -194,4 +210,20 @@ module.exports = {
     isBooked,
     asyncErrorBoundary(create),
   ],
+  update: [
+    hasOnlyValidProperties,
+    hasRequiredProperties,
+    hasValidDate,
+    hasValidTime,
+    hasValidNumber,
+    reservationExists,
+    hasValidStatus,
+    asyncErrorBoundary(update),
+  ],
+  updateStatus: [
+    reservationExists,
+    hasValidStatus,
+    asyncErrorBoundary(updateStatus)
+  ],
+  reservationExists
 };
