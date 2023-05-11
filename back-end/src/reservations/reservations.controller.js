@@ -52,8 +52,8 @@ function dateValidator(req, res, next) {
   const date = Date.parse(reservation_date);
   const today = new Date()
   const dayCheck = new Date(reservation_date)
-  const day = dayCheck.getDay()
-  if (day == 1 && day < today) {
+  const day = dayCheck.getUTCDay()
+  if (day == 2 && day < today) {
     return next({
       status: 400,
       message: `the restaurant is closed on Tuesdays, and reservation_date must be in the future.`,
