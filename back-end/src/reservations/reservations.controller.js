@@ -23,8 +23,28 @@ async function list(req, res) {
   res.json({ data });
 }
 
+async function reservationExists(req, res, next){
+  const reservationId = 
+    req.params.reservation_id || (req.body.data || {}).reservation_id;
+
+  const reservation = await reservationsService.read(reservationId);
+  if(reservation){
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({
+    status: 404,
+    message: `Reservation ${reservationId} cannot be found.`
+  });
+}
+
+async function read(req, res ){
+  const data = await res.locals.reservation;
+  res.json({ data });
+}
 
 
 module.exports = {
   list: asyncErrorBoundary(list),
+  read: [reservationExists, asyncErrorBoundary(read)]
 };
