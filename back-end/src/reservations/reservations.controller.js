@@ -20,13 +20,29 @@ async function list(req, res) {
 function timeValidator(req, res, next) {
   let regEx = new RegExp(/^([01]\d|2[0-3]):?([0-5]\d)$/);
   const { reservation_time } = req.body.data;
-  if (reservation_time == null) {
+  const currentTime = new Date().toLocaleTimeString()
+   if (reservation_time < "10:30") {
+    return next({
+      status: 400,
+      message: `reservation_time must be after 10:30 AM`,
+    });
+  } else if (reservation_time > "21:30") {
+    return next({
+      status: 400,
+      message: `reservation_time must be before 9:30 PM`,
+    });
+  } else if (reservation_time < currentTime) {
+    return next({
+      status: 400,
+      message: `The reservation date and time combination is in the past.`
+    })
+  } else if (regEx.test(reservation_time) == true) {
+    return next();
+  } else if (reservation_time == null) {
     return next({
       status: 400,
       message: `reservation_time isn't valid`,
     });
-  } else if (regEx.test(reservation_time) == true) {
-    return next();
   } else {
     return next({
       status: 400,
@@ -53,21 +69,15 @@ function dateValidator(req, res, next) {
   const today = new Date()
   const dayCheck = new Date(reservation_date)
   const day = dayCheck.getUTCDay()
-  if (day == 2 && day < today) {
+  if (day == 2) {
     return next({
       status: 400,
-      message: `the restaurant is closed on Tuesdays, and reservation_date must be in the future.`,
-    });
-  }
-  if (day == 1) {
-    return next({
-      status: 400,
-      message: `the restaurant is closed on Tuesdays`,
+      message: `The restaurant is closed on Tuesdays`,
     });
   } else if (date && date < today) {
     return next({
       status: 400,
-      message: `reservation_date must be in the future`,
+      message: `The reservation_date and time combination is in the past. Only future reservations are allowed`,
     });
   } else if (!date || date < 0) {
     return next({
@@ -123,9 +133,9 @@ module.exports = {
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   create: [
     asyncErrorBoundary(dataExists),
-    asyncErrorBoundary(timeValidator),
     asyncErrorBoundary(peopleValidator),
     asyncErrorBoundary(dateValidator),
+    asyncErrorBoundary(timeValidator),
     // asyncErrorBoundary(numberValidator),
     asyncErrorBoundary(bodyDataHas("first_name")),
     asyncErrorBoundary(bodyDataHas("last_name")),
