@@ -2,6 +2,7 @@ const tablesService = require('./tables.service');
 const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
 const hasProperties = require('../errors/hasProperties');
 const reservationController = require('../reservations/reservations.controller');
+const { table } = require('../db/connection');
 
 const hasRequiredProperties = hasProperties('table_name', 'capacity');
 const hasReservationId = hasProperties('reservation_id')
@@ -42,8 +43,10 @@ function hasValidCapacity(req, res, next){
 }
 
 function hasSufficientCapacity(req, res, next){
-    const { capacity } = req.body.data; 
-    const { people } = req.body.reservation; 
+    const capacity = res.locals.table.capacity;
+    const people = res.locals.reservation.people;
+    console.log(`Capacity: ${capacity} People: ${people}`)
+
     if(capacity < people){
         return next({
             status: 400,
@@ -90,6 +93,15 @@ async function create(req, res){
     res.status(201).json({ data });
 }
 
+async function update(req, res) {
+    const { reservation_id } = req.body.data;
+    const data = await tablesService.update(
+      reservation_id,
+      res.locals.table.table_id
+    );
+    res.status(200).json({ data });
+}
+
 module.exports = {
     list,
     create: [
@@ -98,4 +110,13 @@ module.exports = {
         hasValidCapacity,
         asyncErrorBoundary(create)
     ],
+    update:[
+        asyncErrorBoundary(tableExists),
+        hasReservationId,
+        reservationController.reservationExists,
+        hasSufficientCapacity,
+        tableIsNotSeated,
+        tableIsFree,
+        asyncErrorBoundary(update)
+    ]
 }
