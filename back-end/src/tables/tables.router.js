@@ -8,4 +8,8 @@ router
     .post(controller.create)
     .all(methodNotAllowed);
 
+router
+    .route('/:tableId/seat')
+    .put(controller.update)
+
 module.exports = router;
