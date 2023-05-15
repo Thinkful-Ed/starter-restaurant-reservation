@@ -102,6 +102,14 @@ async function update(req, res) {
     res.status(200).json({ data });
 }
 
+async function finish(req, res) {
+    const data = await tablesService.finish(
+      res.locals.table.reservation_id,
+      res.locals.table.table_id
+    );
+    res.status(200).json({ data });
+}
+
 module.exports = {
     list,
     create: [
@@ -118,5 +126,10 @@ module.exports = {
         tableIsNotSeated,
         tableIsFree,
         asyncErrorBoundary(update)
+    ],
+    finish: [
+        asyncErrorBoundary(tableExists),
+        tableIsOccupied,
+        asyncErrorBoundary(finish)
     ]
 }
