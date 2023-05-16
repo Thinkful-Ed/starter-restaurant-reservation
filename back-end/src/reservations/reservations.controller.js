@@ -43,6 +43,8 @@ function hasOnlyValidProperties(req, res, next){
   next();
 }
 
+// checks if body contains data
+
 function hasValidDate(req, res, next) {
   const { data = {} } = req.body;
   const date = data["reservation_date"];
@@ -98,6 +100,7 @@ function hasValidTime(req, res, next) {
   }
   next();
 }
+
 
 function hasValidNumber(req, res, next) {
   const { data = {} } = req.body;
@@ -171,6 +174,7 @@ async function list(req, res) {
     : reservationsService.search(mobile_number));
   res.json({ data });
 }
+
 
 async function read(req, res ){
   const data = await res.locals.reservation;
