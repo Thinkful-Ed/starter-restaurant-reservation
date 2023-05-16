@@ -1,6 +1,10 @@
 const knex = require('../db/connection');
 
-function list(reservation_date) {
+function list() {
+  return knex("reservations").select("*").orderBy("reservation_time", "asc");
+}
+
+function listOnDate(reservation_date) {
     return knex("reservations")
       .select("*")
       .where({ reservation_date })
@@ -47,6 +51,7 @@ function updateStatus(reservation_id, status){
 module.exports = {
     create,
     list,
+    listOnDate,
     search,
     read,
     update, 
