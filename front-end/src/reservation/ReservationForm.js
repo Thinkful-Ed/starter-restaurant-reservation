@@ -24,7 +24,7 @@ function ReservationForm({initialFormState, apiHandler}) {
         event.preventDefault()
         try {
             await apiHandler(formData)
-            history.push(`/dashboard/${formData.reservation_date}`)
+            history.push(`/dashboard/?date=${formData.reservation_date}`)
         } catch(error) {
             setErrorMessage(error.message)
         }
@@ -33,6 +33,9 @@ function ReservationForm({initialFormState, apiHandler}) {
     return <div>
         <form onSubmit={submitHandler}>
             <h3>Create a New Reservation</h3>
+            <div>
+                {errorMessage && <p className="alert alert-danger">{errorMessage}</p>}
+            </div>
             <div>
                 <label htmlFor="first_name">
                     First Name
@@ -72,9 +75,6 @@ function ReservationForm({initialFormState, apiHandler}) {
             <div>
                 <button onClick={()=> history.goBack()} className="btn btn-secondary">Cancel</button>
                 <button className="btn btn-primary" type="submit">Submit</button>
-            </div>
-            <div>
-                {errorMessage && <p>{errorMessage}</p>}
             </div>
         </form>
     </div>

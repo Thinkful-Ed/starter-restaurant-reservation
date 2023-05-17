@@ -17,6 +17,6 @@ exports.down = function(knex) {
         table.dropColumn("mobile_number")
         table.dropColumn("reservation_date")
         table.dropColumn("reservation_time")
-        table.dropColumn("party")
+        table.dropColumn("people")
       });
 };

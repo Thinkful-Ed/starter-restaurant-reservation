@@ -17,9 +17,6 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
         <Switch>
-          <Route path={`${path}/:reservationDate`}>
-            <DashboardList date={date}/>
-          </Route>
           <Route path={`${path}`}>
             <DashboardList date={date}/>
           </Route>

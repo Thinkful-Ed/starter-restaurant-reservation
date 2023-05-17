@@ -13,7 +13,7 @@ function Reservation() {
                 <NewReservation />
             </Route>
             <Route path={path}>
-                <div>This is the reservation route</div>
+                <Redirect to={`${path}/new`}/>
             </Route>
         </Switch>
       );

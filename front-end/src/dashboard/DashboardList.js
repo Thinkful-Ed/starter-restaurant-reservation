@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Switch, Route, useRouteMatch, useHistory, useQuery } from "react-router";
+import { Switch, Route, useRouteMatch, useHistory, useQuery, useLocation } from "react-router";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import DashboardItem from "./DashboardItem";
@@ -8,8 +8,11 @@ import { today } from "../utils/date-time";
 function DashboardList({date}) {
     const [reservations, setReservations] = useState([]);
     const [reservationsError, setReservationsError] = useState(null);
-    const {reservationDate} = useParams()
     const history = useHistory()
+
+    const location = useLocation()
+    const queryParams = new URLSearchParams(location.search)
+    const reservationDate = queryParams.get('date')
 
     if(reservationDate) {
         date = reservationDate
@@ -30,20 +33,19 @@ function DashboardList({date}) {
       const currentDate = new Date(date)
       currentDate.setDate(currentDate.getDate() - 1)
       const previousDate = currentDate.toISOString().slice(0,10)
-      history.push(`/dashboard/${previousDate}`)
+      history.push(`/dashboard/?date=${previousDate}`)
     }
 
     function forwardHandler() {
       const currentDate = new Date(date)
       currentDate.setDate(currentDate.getDate() + 1)
       const nextDate = currentDate.toISOString().slice(0,10)
-      history.push(`/dashboard/${nextDate}`)
+      history.push(`/dashboard/?date=${nextDate}`)
     }
 
     function todayHandler() {
       const currentDate = new Date(today())
-      console.log(currentDate.toISOString().slice(0,10))
-      history.push(`/dashboard/${currentDate.toISOString().slice(0,10)}`)
+      history.push(`/dashboard/?date=${currentDate.toISOString().slice(0,10)}`)
     }
     
     return <div>
