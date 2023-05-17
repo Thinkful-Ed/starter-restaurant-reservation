@@ -1,18 +1,17 @@
 const knex = require("../db/connection");
-const tableName = "tables";
 
 function list() {
-  return knex(tableName).orderBy("table_name", "asc");
-}
-
-function create(table) {
-  return knex(tableName)
-    .insert(table, "*")
-    .then((createdRecords) => createdRecords[0]);
+  return knex("tables").orderBy("table_name", "asc");
 }
 
 function read(table_id) {
-  return knex(tableName).where({ table_id: table_id }).first();
+  return knex("tables").where({ table_id}).first();
+}
+
+function create(table) {
+  return knex("tables")
+    .insert(table, "*")
+    .then((createdRecords) => createdRecords[0]);
 }
 
 function seat(table_id, reservation_id) {
@@ -37,7 +36,7 @@ function finish(table) {
       .update({ status: "finished" })
       .transacting(transaction);
 
-    return knex(tableName)
+    return knex("tables")
       .where({ table_id: table.table_id })
       .update({ reservation_id: null }, "*")
       .transacting(transaction)
