@@ -19,7 +19,7 @@ module.exports = {
   development: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL_DEVELOPMENT,
+    connection: "postgres://epajfnph:z5saUX3k_aoNCwOYfdHmDIP9kkVewEzF@isilo.db.elephantsql.com/epajfnph",
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
@@ -31,7 +31,7 @@ module.exports = {
   test: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL_TEST,
+    connection: "postgres://vdpnhwyt:4GOnXVwwffBrb2BzspK-SqMeZNgwgO66@isilo.db.elephantsql.com/vdpnhwyt",
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
@@ -43,7 +43,7 @@ module.exports = {
   preview: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL_PREVIEW,
+    connection: "postgres://hxzgcbfl:0ER_RE2g3_QxuTuw-ia_BfEvjhZ1ErFk@isilo.db.elephantsql.com/hxzgcbfl",
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
@@ -55,7 +55,7 @@ module.exports = {
   production: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL,
+    connection: "postgres://eyqlymhe:bhgMLmwj2SI5qfDk_dX68CITLlZ67IfM@isilo.db.elephantsql.com/eyqlymhe",
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
