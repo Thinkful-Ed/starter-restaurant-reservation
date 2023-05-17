@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { listReservations, updateStatus } from "../utils/api";
-import ReservationsList from "../reservation/ReservationsList";
+import { listReservations, cancelReservation } from "../utils/api";
+import Reservation from "../reservation/ReservationsList";
 
 export const Search = () => {
   const [reservations, setReservations] = useState([]);
   const [mobileNumber, setMobileNumber] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const filterResults = false;
 
   const changeHandler = (event) => {
     setMobileNumber(event.target.value);
@@ -15,36 +13,32 @@ export const Search = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     const abortController = new AbortController();
-
-    let res = await listReservations(
-      { mobile_number: mobileNumber },
-      abortController.signal
-    );
-    await setReservations(res);
-    setSubmitted(true);
-
-    return () => abortController.abort();
-  };
-
-  const cancelHandler = async (event) => {
-    const abortController = new AbortController();
-
-    const result = window.confirm(
-      "Do you want to cancel this reservation? This cannot be undone."
-    );
-
-    if (result) {
-      await updateStatus(event.target.value, "cancelled");
-      let res = await listReservations(
-        { mobile_number: mobileNumber },
-        abortController.signal
-      );
-      await setReservations(res);
-      setSubmitted(true);
+    const formattedNumber = mobileNumber.split('-').join('');
+    if(!Number(formattedNumber)){
+      setReservations([])
+    } else {
+      listReservations({ mobile_number: mobileNumber }, abortController.signal)
+      .then(setReservations)
     }
-
     return () => abortController.abort();
   };
+
+  function onCancel(reservation_id) {
+    const abortController = new AbortController();
+    cancelReservation(reservation_id, abortController.signal)
+
+    return () => abortController.abort();
+  }
+
+  const reservationList = (
+    <ul>
+      {reservations.map((res) => (
+        <li style={{ listStyleType: "none" }} key={res.reservation_id}>
+          <Reservation onCancel={onCancel} reservation={res} />
+        </li>
+      ))}
+    </ul>
+  );
 
   return (
     <section>
@@ -69,14 +63,10 @@ export const Search = () => {
           </button>
         </form>
       </div>
-      {submitted ? (
-        <ReservationsList
-          reservations={reservations}
-          filterResults={filterResults}
-          cancelHandler={cancelHandler}
-        />
-      ) : (
-        ""
+      {reservations.length > 0 ? (
+        reservationList
+            ) : (
+        <p>There are currently no reservations for {mobileNumber}</p>
       )}
     </section>
   );

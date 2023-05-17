@@ -8,22 +8,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Reservation({ onCancel = ()=>{}, reservation = {} }) {
+function Reservation({ onCancel = ()=> {}, reservation = {} }) {
 
   function cancelHandler() {
     if(window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
         onCancel(reservation.reservation_id);
     }
-  }
-  function formatTime(time) {
-    let hours = Number(time.split(":")[0]);
-    let minutes = Number(time.split(":")[1]);
-    const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    const formattedTime = hours + ":" + minutes + " " + ampm;
-    return formattedTime;
   }
   return (
     <>
@@ -39,7 +29,7 @@ function Reservation({ onCancel = ()=>{}, reservation = {} }) {
                   </div>
                   <div>
                     <h5 className="blue inline">
-                      {formatTime(reservation.reservation_time)}
+                      {reservation.reservation_time}
                     </h5>
                     <p className="inline">
                       &nbsp; / &nbsp;mobile : {reservation.mobile_number}
