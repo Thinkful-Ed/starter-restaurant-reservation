@@ -10,23 +10,31 @@ export const Search = () => {
     setMobileNumber(event.target.value);
   };
 
+  async function loadReservations() {
+    const abortController = new AbortController();
+    const formattedNumber = mobileNumber.split('-').join('');
+
+    if(!Number(formattedNumber)){
+      setReservations([]);
+    } else {
+      let response = await listReservations({ mobile_number: mobileNumber }, abortController.signal)
+      setReservations(response)
+    }
+
+    return () => abortController.abort();
+  }
+
   const submitHandler = async (event) => {
     event.preventDefault();
     const abortController = new AbortController();
-    const formattedNumber = mobileNumber.split('-').join('');
-    if(!Number(formattedNumber)){
-      setReservations([])
-    } else {
-      listReservations({ mobile_number: mobileNumber }, abortController.signal)
-      .then(setReservations)
-    }
+    await loadReservations();
     return () => abortController.abort();
   };
 
-  function onCancel(reservation_id) {
+  async function onCancel(reservation_id) {
     const abortController = new AbortController();
-    cancelReservation(reservation_id, abortController.signal)
-
+    let response = await cancelReservation(reservation_id, abortController.signal)
+    onCancel(response)
     return () => abortController.abort();
   }
 
@@ -63,11 +71,7 @@ export const Search = () => {
           </button>
         </form>
       </div>
-      {reservations.length > 0 ? (
-        reservationList
-            ) : (
-        <p>There are currently no reservations for {mobileNumber}</p>
-      )}
+      {reservationList}
     </section>
   );
 };
