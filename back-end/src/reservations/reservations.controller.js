@@ -25,7 +25,6 @@ async function reservationExists(req, res, next) {
   });
 }
 
-// Validate name exists and is not empty
 function nameIsValid(req, _res, next) {
   const { first_name, last_name } = req.body.data;
   const error = { status: 400 };
@@ -91,7 +90,17 @@ function peopleIsValid(req, _res, next) {
     });
   }
   next();
-  
+}
+
+function statusIsValid(req, res, next){
+  const { status } = req.body.data; 
+  if(status === "seated" || status === "finished"){
+    return next({
+      status: 400,
+      message: `Invalid status: ${status}`
+    })
+  }
+  next();
 }
 
 function dateIsInTheFuture(req, _res, next) {
@@ -210,6 +219,7 @@ module.exports = {
     mobileNumberIsValid,
     dateIsValid,
     timeIsValid,
+    statusIsValid,
     peopleIsValid,
     dateIsInTheFuture,
     dateIsNotTuesday,
