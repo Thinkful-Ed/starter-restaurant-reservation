@@ -25,10 +25,6 @@ async function reservationExists(req, res, next) {
   });
 }
 
-function read(_req, res, _next) {
-  res.json({ data: res.locals.reservation });
-}
-
 // Validate name exists and is not empty
 function nameIsValid(req, _res, next) {
   const { first_name, last_name } = req.body.data;
