@@ -1,19 +1,20 @@
+/**
+ * Defines a reservation list item.
+ * @param reservation
+ *  the reservation component for a reservation.
+ * @returns {JSX.Element}
+ */
+
 import React from "react";
 import { Link } from "react-router-dom";
 
-export const ReservationsList = ({
-  reservations,
-  cancelHandler,
-  filterResults,
-}) => {
-  // Filters out reservations that are finished or cancelled
-  function checkStatus(reservation) {
-    return (
-      reservation.status === "finished" || reservation.status === "cancelled"
-    );
-  }
+function Reservation({ onCancel = ()=>{}, reservation = {} }) {
 
-  // Formats HH:MM time as 12-hour AM/PM time
+  function cancelHandler() {
+    if(window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
+        onCancel(reservation.reservation_id);
+    }
+  }
   function formatTime(time) {
     let hours = Number(time.split(":")[0]);
     let minutes = Number(time.split(":")[1]);
@@ -24,15 +25,9 @@ export const ReservationsList = ({
     const formattedTime = hours + ":" + minutes + " " + ampm;
     return formattedTime;
   }
-
-  function renderReservations(reservations) {
-    if (reservations.length) {
-      return reservations.map((reservation) => {
-        // Dashboard shows only booked and seated results, whereas Search shows all results
-        return filterResults && checkStatus(reservation) ? (
-          ""
-        ) : (
-          <div className="reservation" key={reservation.reservation_id}>
+  return (
+    <>
+        <div className="reservation" key={reservation.reservation_id}>
             <div className="group">
               <div className="item-quad">
                 <div className="group-col no-gap">
@@ -77,7 +72,6 @@ export const ReservationsList = ({
                       className="item black"
                       type="button"
                       data-reservation-id-cancel={reservation.reservation_id}
-                      value={reservation.reservation_id}
                       onClick={cancelHandler}
                     >
                       Cancel
@@ -89,18 +83,8 @@ export const ReservationsList = ({
               </div>
             </div>
           </div>
-        );
-      });
-    } else {
-      return (
-        <div className="group">
-          <h4>No reservations found</h4>
-        </div>
-      );
-    }
-  }
+    </>
+  );
+}
 
-  return <div>{renderReservations(reservations)}</div>;
-};
-
-export default ReservationsList;
+export default Reservation;
