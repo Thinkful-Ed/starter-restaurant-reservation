@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Switch, Route, useRouteMatch, useHistory, useQuery, useLocation } from "react-router";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import DashboardItem from "./DashboardItem";
+import DashboardReservationItem from "./DashboardReservationItem";
 import { today } from "../utils/date-time";
 
-function DashboardList({date}) {
+function DashboardReservationList({date}) {
     const [reservations, setReservations] = useState([]);
     const [reservationsError, setReservationsError] = useState(null);
     const history = useHistory()
@@ -57,9 +57,9 @@ function DashboardList({date}) {
           <button onClick={todayHandler}>Today</button>
           <button onClick={forwardHandler}>Next</button>
         </div>
-        {reservations.map(reservation=><DashboardItem reservation={reservation}/>)}
+        {reservations.map(reservation=><DashboardReservationItem reservation={reservation}/>)}
         <ErrorAlert error={reservationsError} />
     </div>
 }
 
-export default DashboardList
+export default DashboardReservationList

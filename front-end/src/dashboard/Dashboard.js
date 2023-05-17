@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, Switch, Route, useRouteMatch } from "react-router";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import DashboardList from "./DashboardList";
+import DashboardReservationList from "./DashboardReservationList";
+import DashboardTableList from "./DashboardTableList";
 
 /**
  * Defines the dashboard page.
@@ -18,7 +19,8 @@ function Dashboard({ date }) {
       <h1>Dashboard</h1>
         <Switch>
           <Route path={`${path}`}>
-            <DashboardList date={date}/>
+            <DashboardReservationList date={date}/>
+            <DashboardTableList />
           </Route>
         </Switch>
     </main>

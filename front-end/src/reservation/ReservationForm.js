@@ -23,6 +23,7 @@ function ReservationForm({initialFormState, apiHandler}) {
     async function submitHandler(event) {
         event.preventDefault()
         try {
+            formData.people = Number(formData.people)
             await apiHandler(formData)
             history.push(`/dashboard/?date=${formData.reservation_date}`)
         } catch(error) {

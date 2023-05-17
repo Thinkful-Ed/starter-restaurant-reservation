@@ -12,6 +12,9 @@ function Reservation() {
             <Route path={`${path}/new`} exact>
                 <NewReservation />
             </Route>
+            <Route path={`${path}/:reservation_id/seat`} exact>
+                <div>this is the reservation seat page</div>
+            </Route>
             <Route path={path}>
                 <Redirect to={`${path}/new`}/>
             </Route>

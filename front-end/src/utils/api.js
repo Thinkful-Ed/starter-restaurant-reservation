@@ -69,7 +69,7 @@ export async function listReservations(params, signal) {
 }
 
 export async function createReservation(reservation, signal) {
-  const url = new URL(`${API_BASE_URL}/reservations/new`)
+  const url = new URL(`${API_BASE_URL}/reservations`)
   const options = {
     method: "POST",
     headers,
@@ -77,6 +77,11 @@ export async function createReservation(reservation, signal) {
     signal,
   }
   return await fetchJson(url, options)
+}
+
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return await fetchJson(url, { headers, signal }, [])
 }
 
 export async function createTable(table, signal) {

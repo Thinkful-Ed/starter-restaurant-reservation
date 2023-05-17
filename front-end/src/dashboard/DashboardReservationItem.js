@@ -1,13 +1,15 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-function DashboardItem({reservation}) {
+function DashboardReservationItem({reservation}) {
     const {
         first_name,
         last_name,
         mobile_number,
         reservation_date,
         reservation_time,
-        people
+        people,
+        reservation_id,
     } = reservation
     return <div>
         <div>
@@ -17,8 +19,9 @@ function DashboardItem({reservation}) {
             <p>Reservation Date: {reservation_date}</p>
             <p>Reservation Time: {reservation_time}</p>
             <p>Party Size: {people}</p>
+            <Link to={`/reservations/${reservation_id}/seat`} className="btn btn-primary" href={`/reservations/${reservation_id}/seat`}>Seat</Link>
         </div>
     </div>
 }
 
-export default DashboardItem
+export default DashboardReservationItem
