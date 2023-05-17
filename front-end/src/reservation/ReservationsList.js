@@ -60,13 +60,13 @@ function Reservation({ onCancel = ()=>{}, reservation = {} }) {
                       className="item button-link"
                       to={`/reservations/${reservation.reservation_id}/seat`}
                     >
-                      Seat
+                      {`Seat`}
                     </Link>
                     <Link
                       className="item button-link"
                       to={`/reservations/${reservation.reservation_id}/edit`}
                     >
-                      Edit
+                      {`Edit`}
                     </Link>
                     <button
                       className="item black"
@@ -74,7 +74,7 @@ function Reservation({ onCancel = ()=>{}, reservation = {} }) {
                       data-reservation-id-cancel={reservation.reservation_id}
                       onClick={cancelHandler}
                     >
-                      Cancel
+                      {`Cancel`}
                     </button>
                   </div>
                 ) : (
