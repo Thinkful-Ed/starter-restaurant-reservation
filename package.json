@@ -5,8 +5,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation",
-    "directory": "/back-end"
+    "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation"
   },
   "scripts": {
     "build": "npm -prefix front-end run build",
