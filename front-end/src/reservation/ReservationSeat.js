@@ -10,11 +10,15 @@ export const ReservationSeat = () => {
   const history = useHistory();
 
   useEffect(() => {
+    const abortController = new AbortController();
     listTables().then(setTables);
+    return () => abortController.abort();
   }, []);
 
   useEffect(() => {
+    const abortController = new AbortController();
     readReservation(reservation_id).then(setReservation);
+    return () => abortController.abort();
   }, [reservation_id]);
 
   const changeHandler = (event) => {
