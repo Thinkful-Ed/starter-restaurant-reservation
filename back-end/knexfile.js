@@ -8,10 +8,10 @@ require('dotenv').config();
 const path = require("path");
 
 const {
-  DATABASE_URL = "postgres://eyqlymhe:bhgMLmwj2SI5qfDk_dX68CITLlZ67IfM@isilo.db.elephantsql.com/eyqlymhe",
-  DATABASE_URL_DEVELOPMENT = "postgres://epajfnph:z5saUX3k_aoNCwOYfdHmDIP9kkVewEzF@isilo.db.elephantsql.com/epajfnph",
-  DATABASE_URL_TEST = "postgres://vdpnhwyt:4GOnXVwwffBrb2BzspK-SqMeZNgwgO66@isilo.db.elephantsql.com/vdpnhwyt",
-  DATABASE_URL_PREVIEW = "postgres://hxzgcbfl:0ER_RE2g3_QxuTuw-ia_BfEvjhZ1ErFk@isilo.db.elephantsql.com/hxzgcbfl",
+  DATABASE_URL,
+  DATABASE_URL_DEVELOPMENT,
+  DATABASE_URL_TEST,
+  DATABASE_URL_PREVIEW,
   DEBUG,
 } = process.env;
 
@@ -19,7 +19,7 @@ module.exports = {
   development: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: "postgres://epajfnph:z5saUX3k_aoNCwOYfdHmDIP9kkVewEzF@isilo.db.elephantsql.com/epajfnph",
+    connection: DATABASE_URL_DEVELOPMENT,
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
@@ -31,7 +31,7 @@ module.exports = {
   test: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: "postgres://vdpnhwyt:4GOnXVwwffBrb2BzspK-SqMeZNgwgO66@isilo.db.elephantsql.com/vdpnhwyt",
+    connection: DATABASE_URL_TEST,
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
@@ -43,7 +43,7 @@ module.exports = {
   preview: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: "postgres://hxzgcbfl:0ER_RE2g3_QxuTuw-ia_BfEvjhZ1ErFk@isilo.db.elephantsql.com/hxzgcbfl",
+    connection: DATABASE_URL_PREVIEW,
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
@@ -55,7 +55,7 @@ module.exports = {
   production: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: "postgres://eyqlymhe:bhgMLmwj2SI5qfDk_dX68CITLlZ67IfM@isilo.db.elephantsql.com/eyqlymhe",
+    connection: DATABASE_URL,
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
