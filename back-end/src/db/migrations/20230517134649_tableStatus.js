@@ -1,7 +1,7 @@
 
 exports.up = function(knex) {
     return knex.schema.alterTable("tables", (table) => {
-        table.string("status").defaultTo("Free")
+        table.string("status").defaultTo('Free')
       });
 };
 

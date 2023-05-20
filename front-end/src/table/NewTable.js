@@ -5,7 +5,8 @@ import { createTable } from "../utils/api";
 function NewTable() {
     const initialFormState = {
         table_name: "",
-        capacity: ""
+        capacity: "",
+        status: "Free",
     }
 
     function apiHandler(formData) {

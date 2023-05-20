@@ -23,6 +23,7 @@ function TableForm({initialFormState, apiHandler}) {
     async function submitHandler(event) {
         event.preventDefault()
         try {
+            formData.capacity = Number(formData.capacity)
             await apiHandler(formData)
             history.push(`/dashboard`)
         } catch(error) {

@@ -9,6 +9,17 @@ async function list(req, res) {
   });
 }
 
+function validateDataIsSent(req, res, next) {
+  if(req.body.data) {
+    next()
+  } else {
+    next({
+      status: 400,
+      message: `Request must include data`
+    })
+  }
+}
+
 //validates that all the fields has a value, stores the value in res.locals for further use
 function validateHasTextFunction(field) {
   function validateHasText(req, res, next) {
@@ -32,12 +43,24 @@ function validateTableNameLength(req, res, next) {
     } else {
       next({
         status: 400,
-        message: `Table name must be at least 2 characters`
+        message: `table_name must be at least 2 characters`
       })
     }
+}
+
+function validateCapacityFormat(req, res, next) {
+  if(typeof res.locals.capacity === "number") {
+    next()
+  } else {
+    next({
+      status: 400,
+      message: `capacity must be an integer`
+    })
   }
+}
 
 function validateCapacity(req, res, next) {
+  console.log(typeof res.locals.capacity)
   if(Number(res.locals.capacity) > 0) {
     next()
   } else {
@@ -92,8 +115,10 @@ module.exports = {
     asyncErrorBoundary(list)
   ],
   create: [
+    validateDataIsSent,
     ["table_name", "capacity"].map(field=>validateHasTextFunction(field)),
     validateTableNameLength,
+    validateCapacityFormat,
     validateCapacity,
     asyncErrorBoundary(create)
   ],
