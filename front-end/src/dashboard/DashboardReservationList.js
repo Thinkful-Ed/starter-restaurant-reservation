@@ -57,7 +57,18 @@ function DashboardReservationList({date}) {
           <button onClick={todayHandler}>Today</button>
           <button onClick={forwardHandler}>Next</button>
         </div>
-        {reservations.map(reservation=><DashboardReservationItem reservation={reservation}/>)}
+        <table>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Mobile Number</th>
+            <th>Reservation Date</th>
+            <th>Reservation Time</th>
+            <th>Party Size</th>
+            <th>Seat Table</th>
+          </tr>
+          {reservations.map(reservation=><DashboardReservationItem reservation={reservation}/>)}
+        </table>
         <ErrorAlert error={reservationsError} />
     </div>
 }

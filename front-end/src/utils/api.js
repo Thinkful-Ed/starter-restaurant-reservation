@@ -85,9 +85,20 @@ export async function listTables(signal) {
 }
 
 export async function createTable(table, signal) {
-  const url = new URL(`${API_BASE_URL}/tables/new`)
+  const url = new URL(`${API_BASE_URL}/tables`)
   const options = {
     method: "POST",
+    headers,
+    body: JSON.stringify({ data: table }),
+    signal,
+  }
+  return await fetchJson(url, options)
+}
+
+export async function seatTable(table, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${table.table_id}/seat`)
+  const options = {
+    method: "PUT",
     headers,
     body: JSON.stringify({ data: table }),
     signal,

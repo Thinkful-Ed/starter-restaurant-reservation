@@ -6,13 +6,11 @@ function DashboardTableItem({table}) {
         capacity,
         status,
     } = table
-    return <div>
-        <div>
-            <p>Table Name: {table_name}</p>
-            <p>Capacity: {capacity}</p>
-            <p data-table-id-status={`${table.table_id}`}>Status: {status}</p>
-        </div>
-    </div>
+    return <tr>
+        <td>{table_name}</td>
+        <td>{capacity}</td>
+        <td data-table-id-status={`${table.table_id}`}>{status}</td>
+    </tr>
 }
 
 export default DashboardTableItem

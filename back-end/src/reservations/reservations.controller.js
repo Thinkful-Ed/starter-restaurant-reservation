@@ -9,6 +9,17 @@ async function list(req, res) {
   });
 }
 
+function validateDataIsSent(req, res, next) {
+  if(req.body.data) {
+    next()
+  } else {
+    next({
+      status: 400,
+      message: `Request must include data`
+    })
+  }
+}
+
 //validates that all the fields has a value, stores the value in res.locals for further use
 function validateHasTextFunction(field) {
   function validateHasText(req, res, next) {
@@ -41,8 +52,32 @@ function validateNumber(req, res, next) {
   }
 }
 
-//checks the reservation date Epoch time vs the current one
 function validateDate(req, res, next) {
+  const reservationDate = new Date(res.locals.reservation_date)
+  if(!isNaN(reservationDate)) {
+    next()
+  } else {
+    next({
+      status: 400,
+      message: `Date (reservation_date) must be in a valid format (YYYY-MM-DD)`
+    })
+  }
+}
+
+function validateTime(req, res, next) {
+  const reservationDate = new Date(`${res.locals.reservation_date} ${res.locals.reservation_time}`)
+  if(!isNaN(reservationDate)) {
+    next()
+  } else {
+    next({
+      status: 400,
+      message: `Time (reservation_time) must be in a valid format (HH:MM)`
+    })
+  }
+}
+
+//checks the reservation date Epoch time vs the current one
+function validateDateToPast(req, res, next) {
   const currentDate = new Date()
   const reservationDate = new Date(`${res.locals.reservation_date} ${res.locals.reservation_time}`)
   const currentDateEpoch = currentDate.getTime()
@@ -53,7 +88,7 @@ function validateDate(req, res, next) {
   } else {
     next({
       status: 400,
-      message: `Reservation cannot be for a past date`
+      message: `Reservation must be in the future`
     })
   }
 }
@@ -95,6 +130,17 @@ function validateTimeOfDay(req,res,next) {
 }
 
 function validatePeople(req, res, next) {
+  if(typeof res.locals.people === "number") {
+    next()
+  } else {
+    next({
+      status: 400,
+      message: `people must be an integer`
+    })
+  }
+}
+
+function validatePeopleSize(req, res, next) {
   if(Number(res.locals.people) > 1) {
     next()
   } else {
@@ -108,7 +154,7 @@ function validatePeople(req, res, next) {
 async function create(req, res) {
   const newReservation = await service.create(req.body.data)
   res.status(201).json({
-    data: newReservation
+    data: newReservation[0]
   })
 }
  
@@ -117,12 +163,16 @@ module.exports = {
     asyncErrorBoundary(list)
   ],
   create: [
+    validateDataIsSent,
     ["first_name", "last_name", "mobile_number", "reservation_date", "reservation_time", "people"].map(field=>validateHasTextFunction(field)), 
     validateNumber,
     validateDate,
+    validateTime,
+    validateDateToPast,
     validateDayOfWeek,
     validateTimeOfDay,
     validatePeople,
+    validatePeopleSize,
     asyncErrorBoundary(create)
   ],
 };

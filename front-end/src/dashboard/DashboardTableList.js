@@ -23,7 +23,14 @@ function DashboardTableList({date}) {
         <div className="d-md-flex mb-3">
           <h4 className="mb-0">Tables</h4>
         </div>
-        {Tables.map(table=><DashboardTableItem table={table}/>)}
+        <table>
+          <tr>
+            <th>Table Name</th>
+            <th>Capacity</th>
+            <th>Status</th>
+          </tr>
+          {Tables.map(table=><DashboardTableItem table={table}/>)}
+        </table>
         <ErrorAlert error={TablesError} />
     </div>
 }

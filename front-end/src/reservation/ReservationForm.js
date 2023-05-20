@@ -33,7 +33,6 @@ function ReservationForm({initialFormState, apiHandler}) {
 
     return <div>
         <form onSubmit={submitHandler}>
-            <h3>Create a New Reservation</h3>
             <div>
                 {errorMessage && <p className="alert alert-danger">{errorMessage}</p>}
             </div>

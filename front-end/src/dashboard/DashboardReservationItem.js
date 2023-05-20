@@ -11,17 +11,15 @@ function DashboardReservationItem({reservation}) {
         people,
         reservation_id,
     } = reservation
-    return <div>
-        <div>
-            <p>First Name: {first_name}</p>
-            <p>Last Name: {last_name}</p>
-            <p>Mobile Number: {mobile_number}</p>
-            <p>Reservation Date: {reservation_date}</p>
-            <p>Reservation Time: {reservation_time}</p>
-            <p>Party Size: {people}</p>
-            <Link to={`/reservations/${reservation_id}/seat`} className="btn btn-primary" href={`/reservations/${reservation_id}/seat`}>Seat</Link>
-        </div>
-    </div>
+    return <tr>
+            <td>{first_name}</td>
+            <td>{last_name}</td>
+            <td>{mobile_number}</td>
+            <td>{reservation_date}</td>
+            <td>{reservation_time}</td>
+            <td>{people}</td>
+            <td><Link to={`/reservations/${reservation_id}/seat`} className="btn btn-primary" href={`/reservations/${reservation_id}/seat`}>Seat</Link></td>
+        </tr>
 }
 
 export default DashboardReservationItem

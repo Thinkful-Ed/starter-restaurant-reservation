@@ -1,4 +1,5 @@
 const service = require("./tables.service")
+const reservationService = require("../reservations/reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 
 async function list(req, res) {
@@ -53,6 +54,38 @@ async function create(req, res) {
     data: newTable
   })
 }
+
+async function validateTableIsFree(req, res, next) {
+  const table = await service.read(req.body.data)
+  if(table[0].status !== "Free") {
+    next( {
+      status: 400,
+      message: `Table is not free`
+    })
+  } else {
+    next()
+  }
+}
+
+async function validateTableHasCapacity(req, res, next) {
+  //lookup the reservation, if the reservation has more people than the capacity, error
+  const reservation = await reservationService.read(res.locals.reservation_id)
+  if(reservation[0].people > res.locals.capacity) {
+    next({
+      status: 400,
+      message: `Table does not have the capacity for this party`
+    })
+  } else {
+    next()
+  }
+}
+
+async function update(req, res) {
+  const updatedTable = await service.update(req.body.data)
+  res.status(201).json({
+    data: updatedTable
+  })
+}
  
 module.exports = {
   list: [
@@ -64,4 +97,10 @@ module.exports = {
     validateCapacity,
     asyncErrorBoundary(create)
   ],
+  update: [
+    ["table_id","table_name", "capacity", "created_at", "updated_at", "status", "reservation_id"].map(field=>validateHasTextFunction(field)),
+    asyncErrorBoundary(validateTableHasCapacity),
+    asyncErrorBoundary(validateTableIsFree),
+    asyncErrorBoundary(update),
+  ]
 };
