@@ -46,7 +46,7 @@ export const ReservationCreate = () => {
 
     try {
       await createReservation(reservation, abortController.signal);
-      history.push(`/dashboard?date=${reservation.reservation_date}`);
+      history.push(`/dashboard`);
     } catch (error) {
       setReservationErrors([error]);
     }
