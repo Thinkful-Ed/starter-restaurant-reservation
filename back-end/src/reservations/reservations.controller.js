@@ -157,6 +157,32 @@ async function create(req, res) {
     data: newReservation[0]
   })
 }
+
+async function validateReservationExists(req, res, next) {
+  if(!req.params.reservation_Id) {
+    next( {
+      status: 400,
+      message: `reservation_id must be included`
+    })
+  }
+  const reservation = await service.read(req.params.reservation_Id)
+  if(!reservation) {
+    next({
+      status: 404,
+      message: `reservation_id ${req.params.reservation_Id} does not exist`
+    })
+  } else {
+    res.locals.reservation = reservation[0]
+    next()
+  }
+}
+
+async function read(req, res) {
+  const reservation = await service.read(Number(req.params.reservation_Id))
+  res.status(200).json({
+    data: reservation
+  })
+}
  
 module.exports = {
   list: [
@@ -175,4 +201,8 @@ module.exports = {
     validatePeopleSize,
     asyncErrorBoundary(create)
   ],
+  read: [
+    validateReservationExists,
+    read
+  ]
 };

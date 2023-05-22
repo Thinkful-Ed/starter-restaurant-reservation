@@ -9,13 +9,7 @@ function SeatForm({tables}) {
     const {reservation_id} = useParams()
 
     const initialFormState = {
-        table_id: "",
-        table_name: "",
-        capacity: "",
-        created_at: "",
-        updated_at: "",
-        status: "",
-        reservation_id,
+        table_id: "3",
     }
 
     //sets form data to initial state passed in so it can be used for edit and new
@@ -28,12 +22,7 @@ function SeatForm({tables}) {
         const index = tables.findIndex(table=>table.table_id===Number(event.target.value))
         setFormData({
             ...formData,
-            table_id: Number(event.target.value),
-            table_name: tables[index].table_name,
-            capacity: tables[index].capacity,
-            created_at: tables[index].created_at,
-            updated_at: tables[index].updated_at,
-            status: "Occupied",
+            table_id: Number(event.target.value)
         })
     }
 
@@ -41,7 +30,7 @@ function SeatForm({tables}) {
     async function submitHandler(event) {
         event.preventDefault()
         try {
-            await seatTable(formData)
+            await seatTable(reservation_id, formData.table_id)
             history.push(`/dashboard/`)
         } catch(error) {
             setErrorMessage(error.message)

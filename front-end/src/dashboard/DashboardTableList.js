@@ -28,8 +28,9 @@ function DashboardTableList({date}) {
             <th>Table Name</th>
             <th>Capacity</th>
             <th>Status</th>
+            <th>Finish Table</th>
           </tr>
-          {Tables.map(table=><DashboardTableItem table={table}/>)}
+          {Tables.map(table=><DashboardTableItem table={table} setTablesError={setTablesError} loadDashboard={loadDashboard}/>)}
         </table>
         <ErrorAlert error={TablesError} />
     </div>
