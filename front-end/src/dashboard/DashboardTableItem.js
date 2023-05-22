@@ -7,13 +7,14 @@ function DashboardTableItem({table, setTablesError}) {
 
     async function clickHandler(event) {
         event.preventDefault()
-        try {
-            await deleteReservation(table.table_id)
-            console.log("hello")
-            history.go(0)
-        } catch(error) {
-            setTablesError(error.message)
-        }
+        if (window.confirm("Is this table ready to seat new guests?\n\nThis cannot be undone.")) {
+            try {
+                await deleteReservation(table.table_id)
+                history.go(0)
+            } catch(error) {
+                setTablesError(error)
+            }
+          }
     }
 
     const {
