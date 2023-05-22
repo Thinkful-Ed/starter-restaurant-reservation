@@ -30,7 +30,7 @@ function DashboardTableList({date}) {
             <th>Status</th>
             <th>Finish Table</th>
           </tr>
-          {Tables.map(table=><DashboardTableItem table={table} setTablesError={setTablesError} loadDashboard={loadDashboard}/>)}
+          {Tables.map(table=><DashboardTableItem table={table} setTablesError={setTablesError} setTables={setTables} loadDashboard={loadDashboard}/>)}
         </table>
         <ErrorAlert error={TablesError} />
     </div>
