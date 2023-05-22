@@ -4,7 +4,7 @@ import { listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import DashboardTableItem from "./DashboardTableItem";
 
-function DashboardTableList({date}) {
+function DashboardTableList({reservations, setReservations, reservationsError, setReservationsError}) {
     const [Tables, setTables] = useState([]);
     const [TablesError, setTablesError] = useState(null);
   
@@ -30,7 +30,7 @@ function DashboardTableList({date}) {
             <th>Status</th>
             <th>Finish Table</th>
           </tr>
-          {Tables.map(table=><DashboardTableItem table={table} setTablesError={setTablesError} setTables={setTables} loadDashboard={loadDashboard}/>)}
+          {Tables.map(table=><DashboardTableItem table={table} setTablesError={setTablesError} setTables={setTables} reservations={reservations} setReservations={setReservations} reservationsError={reservationsError} setReservationsError={setReservationsError}/>)}
         </table>
         <ErrorAlert error={TablesError} />
     </div>

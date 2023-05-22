@@ -12,6 +12,8 @@ import DashboardTableList from "./DashboardTableList";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  const [reservations, setReservations] = useState([]);
+  const [reservationsError, setReservationsError] = useState(null);
   const { path, url } = useRouteMatch()
 
   return (
@@ -19,8 +21,8 @@ function Dashboard({ date }) {
       <h1>Dashboard</h1>
         <Switch>
           <Route path={`${path}`}>
-            <DashboardReservationList date={date}/>
-            <DashboardTableList />
+            <DashboardReservationList date={date} reservations={reservations} setReservations={setReservations} reservationsError={reservationsError} setReservationsError={setReservationsError}/>
+            <DashboardTableList reservations={reservations} setReservations={setReservations} reservationsError={reservationsError} setReservationsError={setReservationsError}/>
           </Route>
         </Switch>
     </main>

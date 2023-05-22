@@ -97,8 +97,8 @@ async function validateTableExists(req, res, next) {
     next()
   } else {
     next({
-      status: 400,
-      message: `table_id does not exist`
+      status: 404,
+      message: `table_id ${req.params.table_id} does not exist`
     })
   }
 }
@@ -107,7 +107,7 @@ async function validateTableIsFree(req, res, next) {
   if(res.locals.table.status !== "Free") {
     next( {
       status: 400,
-      message: `Table is not free`
+      message: `Table is occupied`
     })
   } else {
     next()
@@ -133,7 +133,8 @@ async function update(req, res) {
     status: "Occupied"
   }
   const updatedTable = await service.update(updatedTableData)
-  res.status(201).json({
+  await reservationService.update(res.locals.reservation.reservation_id, "seated")
+  res.status(200).json({
     data: updatedTable
   })
 }
@@ -151,9 +152,34 @@ async function validateReservationExistsFromTable(req, res, next) {
   }
 }
 
+function validateReservationSeated(req, res, next) {
+  if(res.locals.reservation.status === "seated") {
+    next({
+      status: 400,
+      message: `reservation_id ${req.body.data.reservation_id} is already seated`
+    })
+  } else {
+    next()
+  }
+}
+
+async function validateTableIsOccupied(req, res, next) {
+  if(res.locals.table.reservation_id) {
+    next()
+  } else {
+    next({
+      status: 400,
+      message: `table_id ${req.params.table_id} is not occupied`
+    })
+  }
+}
+
 async function destroy(req, res) {
   const deletedEntry = await service.destroy(res.locals.table.table_id, res.locals.reservation.reservation_id)
-  res.sendStatus(200)
+  await reservationService.update(res.locals.reservation.reservation_id, "finished")
+  res.status(200).json({
+    data: deletedEntry
+  })
 }
 
 module.exports = {
@@ -172,6 +198,7 @@ module.exports = {
     validateDataIsSent,
     ["reservation_id"].map(field=>validateHasTextFunction(field)),
     asyncErrorBoundary(validateReservationExists),
+    validateReservationSeated,
     asyncErrorBoundary(validateTableExists),
     validateTableIsFree,
     validateTableHasCapacity,
@@ -179,6 +206,7 @@ module.exports = {
   ],
   destroy: [
     asyncErrorBoundary(validateTableExists),
+    validateTableIsOccupied,
     asyncErrorBoundary(validateReservationExistsFromTable),
     asyncErrorBoundary(destroy)
   ]

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
-import { seatTable } from "../utils/api";
+import { seatTable, updateReservation } from "../utils/api";
 
 function SeatForm({tables}) {
     const [formData, setFormData] = useState({})
@@ -31,6 +31,7 @@ function SeatForm({tables}) {
         event.preventDefault()
         try {
             await seatTable(reservation_id, formData.table_id)
+            await updateReservation("seated", reservation_id)
             history.push(`/dashboard/`)
         } catch(error) {
             setErrorMessage(error.message)

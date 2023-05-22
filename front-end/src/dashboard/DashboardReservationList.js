@@ -5,9 +5,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import DashboardReservationItem from "./DashboardReservationItem";
 import { today } from "../utils/date-time";
 
-function DashboardReservationList({date}) {
-    const [reservations, setReservations] = useState([]);
-    const [reservationsError, setReservationsError] = useState(null);
+function DashboardReservationList({date, setReservationsError, setReservations, reservations, reservationsError}) {
     const history = useHistory()
 
     const location = useLocation()
@@ -68,7 +66,7 @@ function DashboardReservationList({date}) {
             <th>Status</th>
             <th>Seat Table</th>
           </tr>
-          {reservations.map(reservation=><DashboardReservationItem reservation={reservation}/>)}
+          {reservations.map(reservation=><DashboardReservationItem reservation={reservation} />)}
         </table>
         <ErrorAlert error={reservationsError} />
     </div>

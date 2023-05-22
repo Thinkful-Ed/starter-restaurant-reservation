@@ -1,19 +1,23 @@
 import React from "react";
 import { useHistory } from "react-router";
-import { deleteReservation, listTables } from "../utils/api";
+import { deleteReservation, listReservations, listTables, updateReservation } from "../utils/api";
 
-function DashboardTableItem({table, setTablesError, setTables}) {
+function DashboardTableItem({table, setTablesError, setTables, setReservations, setReservationsError}) {
     const history = useHistory()
 
     async function clickHandler(event) {
         event.preventDefault()
         if (window.confirm("Is this table ready to seat new guests?\n\nThis cannot be undone.")) {
             try {
+                await updateReservation("finished", table.reservation_id)
                 await deleteReservation(table.table_id)
                 const abortController = new AbortController();
                 await listTables(abortController.signal)
                     .then(setTables)
                     .catch(setTablesError);
+                await listReservations(abortController.signal)
+                    .then(setReservations)
+                    .catch(setReservationsError);
                 return () => abortController.abort();
             } catch(error) {
                 setTablesError(error)
