@@ -24,6 +24,12 @@ export function hasValidDateAndTime(reservation) {
     if (hours > 21 || (hours === 21 && minutes > 30)) {
       errors.push(new Error("Reservation must be before 9:30PM"));
     }
+
+    // Mobile number must be valid
+    const mobile_number = reservation.mobile_number.split('-').join('');
+    if(!Number(mobile_number)){
+      errors.push(new Error("Reservation mobile number must be a valid integer"))
+    }
   
     return errors;
   }
