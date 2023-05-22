@@ -1,6 +1,6 @@
 import React from "react";
 
-export const TablesList = ({ tables, finishHandler }) => {
+export const TablesList = ({ tables, onFinish }) => {
   return (
     <div className="group-col">
       {tables.map((table) => (
@@ -15,17 +15,17 @@ export const TablesList = ({ tables, finishHandler }) => {
                     className="item inline"
                     data-table-id-status={table.table_id}
                   >
-                    &nbsp;/ &nbsp;{table.occupied ? "occupied" : "free"}
+                    &nbsp;/ &nbsp;{table.reservation_id ? "occupied" : "free"}
                   </p>
                 </div>
               </div>
             </div>
             <div className="item">
-              {table.occupied ? (
+              {table.reservation_id ? (
                 <button
                   className="finish"
                   data-table-id-finish={table.table_id}
-                  onClick={() => finishHandler(table.table_id)}
+                  onClick={() => onFinish(table.table_id)}
                 >
                   Finish
                 </button>
