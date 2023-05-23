@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function DashboardReservationItem({reservation}) {
+function DashboardReservationItem({reservation, statusToDisplay}) {
     const {
         first_name,
         last_name,
@@ -12,7 +12,7 @@ function DashboardReservationItem({reservation}) {
         reservation_id,
         status,
     } = reservation
-    return status !== "finished" && <tr>
+    return statusToDisplay.includes(status) && <tr>
             <td>{first_name}</td>
             <td>{last_name}</td>
             <td>{mobile_number}</td>

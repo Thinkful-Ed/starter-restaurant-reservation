@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { findReservations } from "../utils/api";
 
-function SearchForm( {setReservations, setReservationsError} ) {
+function SearchForm( {setReservations, setReservationsError, setSearchSubmitted} ) {
     const [formData, setFormData] = useState({})
     const [errorMessage, setErrorMessage] = useState(null)
 
@@ -24,9 +24,10 @@ function SearchForm( {setReservations, setReservationsError} ) {
         event.preventDefault()
         try {
             const abortController = new AbortController()
-            await findReservations(formData.mobile_number, abortController.signal)
+            const foundReservations = await findReservations(formData.mobile_number, abortController.signal)
                 .then(setReservations)
-                .catch(setReservationsError);
+                .catch(setReservationsError)
+                .then(setSearchSubmitted(true))
         } catch(error) {
             setErrorMessage(error.message)
         }
