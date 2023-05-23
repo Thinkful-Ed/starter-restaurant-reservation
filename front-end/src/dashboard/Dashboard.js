@@ -72,7 +72,7 @@ function Dashboard({ date }) {
               <button
                 className="item black"
                 type="button"
-                onClick={() => {setReservationDate(previous(date))}}
+                onClick={() => {setReservationDate(previous(reservationDate))}}
                 >
                 Previous
               </button>
@@ -87,7 +87,7 @@ function Dashboard({ date }) {
               <button
                 className="item black"
                 type="button"
-                onClick={() => setReservationDate(next(date))}
+                onClick={() => setReservationDate(next(reservationDate))}
               >
               Next
               </button>
