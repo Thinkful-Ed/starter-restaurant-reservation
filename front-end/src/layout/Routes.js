@@ -4,6 +4,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import Reservation from "../reservation/Reservation"
 import Table from "../table/Table";
+import Search from "../Search/Search";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
 
@@ -28,6 +29,9 @@ function Routes() {
       </Route>
       <Route path="/tables">
         <Table />
+      </Route>
+      <Route path="/search">
+        <Search />
       </Route>
       <Route>
         <NotFound />

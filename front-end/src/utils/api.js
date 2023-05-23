@@ -125,3 +125,10 @@ export async function deleteReservation(table_id, signal) {
   }
   return await fetchJson(url, options)
 }
+
+export async function findReservations(number, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations?mobile_number=${number}`);
+  return await fetchJson(url, { headers, signal }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}
