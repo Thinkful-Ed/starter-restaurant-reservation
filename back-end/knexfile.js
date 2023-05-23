@@ -8,10 +8,10 @@ require('dotenv').config();
 const path = require("path");
 
 const {
-  DATABASE_URL = "postgresql://postgres@localhost/postgres",
-  DATABASE_URL_DEVELOPMENT = "postgresql://postgres@localhost/postgres",
-  DATABASE_URL_TEST = "postgresql://postgres@localhost/postgres",
-  DATABASE_URL_PREVIEW = "postgresql://postgres@localhost/postgres",
+  DATABASE_URL,
+  DATABASE_URL_DEVELOPMENT,
+  DATABASE_URL_TEST,
+  DATABASE_URL_PREVIEW,
   DEBUG,
 } = process.env;
 
@@ -19,7 +19,7 @@ module.exports = {
   development: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL_DEVELOPMENT,
+    connection: "postgres://epajfnph:z5saUX3k_aoNCwOYfdHmDIP9kkVewEzF@isilo.db.elephantsql.com/epajfnph",
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
@@ -55,7 +55,7 @@ module.exports = {
   production: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL,
+    connection: "postgres://eyqlymhe:bhgMLmwj2SI5qfDk_dX68CITLlZ67IfM@isilo.db.elephantsql.com/eyqlymhe",
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
