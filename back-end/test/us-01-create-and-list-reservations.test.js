@@ -366,7 +366,6 @@ describe("US-01 - Create and list reservations", () => {
       const response = await request(app)
         .get("/reservations?date=2020-12-31")
         .set("Accept", "application/json");
-      console.log(response.body.data)
       expect(response.body.data).toHaveLength(1);
       expect(response.body.data[0].first_name).toBe("Rick");
       expect(response.status).toBe(200);

@@ -243,6 +243,17 @@ async function validateCurrentStatus(req, res, next) {
   }
 }
 
+async function validateEditStatus(req, res, next) {
+  if(res.locals.reservation.status === "booked") {
+    next()
+  } else {
+    next({
+      status: 400,
+      message: `reservation with ${res.locals.reservation.status} status cannot be updated`
+    })
+  }
+}
+
 async function updateStatus(req, res) {
   const reservation = await service.updateStatus(res.locals.reservation.reservation_id, req.body.data.status)
   res.status(200).json({
@@ -303,6 +314,7 @@ module.exports = {
     validatePeople,
     validatePeopleSize,
     asyncErrorBoundary(validateReservationExists),
+    validateEditStatus,
     asyncErrorBoundary(updateReservation)
   ]
 };

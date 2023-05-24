@@ -133,7 +133,7 @@ async function update(req, res) {
     status: "Occupied"
   }
   const updatedTable = await service.update(updatedTableData)
-  await reservationService.update(res.locals.reservation.reservation_id, "seated")
+  await reservationService.updateStatus(res.locals.reservation.reservation_id, "seated")
   res.status(200).json({
     data: updatedTable
   })
@@ -176,7 +176,7 @@ async function validateTableIsOccupied(req, res, next) {
 
 async function destroy(req, res) {
   const deletedEntry = await service.destroy(res.locals.table.table_id, res.locals.reservation.reservation_id)
-  await reservationService.update(res.locals.reservation.reservation_id, "finished")
+  await reservationService.updateStatus(res.locals.reservation.reservation_id, "finished")
   res.status(200).json({
     data: deletedEntry
   })
