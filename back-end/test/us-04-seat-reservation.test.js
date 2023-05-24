@@ -170,7 +170,6 @@ describe("US-04 - Seat reservation", () => {
         const response = await request(app)
           .get("/reservations/1")
           .set("Accept", "application/json");
-
         expect(response.body.error).toBeUndefined();
         expect(response.body.data.reservation_id).toBe(1);
         expect(response.status).toBe(200);
