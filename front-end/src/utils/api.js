@@ -132,3 +132,20 @@ export async function findReservations(number, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+export async function getReservationById(reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  return await fetchJson(url, { headers, signal }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}
+
+export async function editReservation(reservation) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation.reservation_id}`)
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+  }
+  return await fetchJson(url, options)
+}

@@ -5,7 +5,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import DashboardReservationItem from "./DashboardReservationItem";
 import { today } from "../utils/date-time";
 
-function DashboardReservationList({reservations, reservationsError, statusToDisplay}) {
+function DashboardReservationList({reservations, reservationsError, statusToDisplay, loadDashboard, setReservationsError}) {
    
     return <div>
         <table>
@@ -18,8 +18,10 @@ function DashboardReservationList({reservations, reservationsError, statusToDisp
             <th>Party Size</th>
             <th>Status</th>
             <th>Seat Table</th>
+            <th>Edit Reservation</th>
+            <th>Cancel Reservation</th>
           </tr>
-          {reservations.map(reservation=><DashboardReservationItem reservation={reservation} statusToDisplay={statusToDisplay}/>)}
+          {reservations.map(reservation=><DashboardReservationItem loadDashboard={loadDashboard} setReservationsError={setReservationsError} reservation={reservation} statusToDisplay={statusToDisplay}/>)}
         </table>
         <ErrorAlert error={reservationsError} />
     </div>

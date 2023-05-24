@@ -183,17 +183,17 @@ async function create(req, res) {
 }
 
 async function validateReservationExists(req, res, next) {
-  if(!req.params.reservation_Id) {
+  if(!req.params.reservation_id) {
     next( {
       status: 400,
       message: `reservation_id must be included`
     })
   }
-  const reservation = await service.read(req.params.reservation_Id)
+  const reservation = await service.read(req.params.reservation_id)
   if(!reservation) {
     next({
       status: 404,
-      message: `reservation_id ${req.params.reservation_Id} does not exist`
+      message: `reservation_id ${req.params.reservation_id} does not exist`
     })
   } else {
     res.locals.reservation = reservation
@@ -202,7 +202,7 @@ async function validateReservationExists(req, res, next) {
 }
 
 async function read(req, res) {
-  const reservation = await service.read(Number(req.params.reservation_Id))
+  const reservation = await service.read(Number(req.params.reservation_id))
   res.status(200).json({
     data: reservation
   })
@@ -212,7 +212,8 @@ function validateUpdatedStatus(req, res, next) {
   const validStatus = [
     "booked",
     "seated",
-    "finished"
+    "finished",
+    "cancelled"
   ]
   if(req.body.data.status) {
     if(validStatus.includes(req.body.data.status)) {
@@ -242,8 +243,20 @@ async function validateCurrentStatus(req, res, next) {
   }
 }
 
-async function update(req, res) {
-  const reservation = await service.update(res.locals.reservation.reservation_id, req.body.data.status)
+async function updateStatus(req, res) {
+  const reservation = await service.updateStatus(res.locals.reservation.reservation_id, req.body.data.status)
+  res.status(200).json({
+    data: reservation[0]
+  })
+}
+
+async function updateReservation(req, res) {
+  const reservationToUpdate = {
+    ...res.locals.reservation,
+    ...req.body.data
+  }
+  const reservation = await service.update(reservationToUpdate)
+  reservation[0].mobile_number = reservation[0].mobile_number.replace(/-/g, "")
   res.status(200).json({
     data: reservation[0]
   })
@@ -271,10 +284,25 @@ module.exports = {
     asyncErrorBoundary(validateReservationExists),
     read
   ],
-  update: [
+  updateStatus: [
     asyncErrorBoundary(validateReservationExists),
     validateUpdatedStatus,
     validateCurrentStatus,
-    asyncErrorBoundary(update)
+    asyncErrorBoundary(updateStatus)
+  ],
+  update: [
+    validateDataIsSent,
+    ["first_name", "last_name", "mobile_number", "reservation_date", "reservation_time", "people"].map(field=>validateHasTextFunction(field)), 
+    validateStatus,
+    validateNumber,
+    validateDate,
+    validateTime,
+    validateDateToPast,
+    validateDayOfWeek,
+    validateTimeOfDay,
+    validatePeople,
+    validatePeopleSize,
+    asyncErrorBoundary(validateReservationExists),
+    asyncErrorBoundary(updateReservation)
   ]
 };

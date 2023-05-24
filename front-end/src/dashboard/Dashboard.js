@@ -59,7 +59,6 @@ function Dashboard({ date }) {
   const statusToDisplay = [
     "seated",
     "booked",
-    "cancelled"
   ]
 
   return (
@@ -75,8 +74,8 @@ function Dashboard({ date }) {
             <button onClick={todayHandler}>Today</button>
             <button onClick={forwardHandler}>Next</button>
           </div>
-            <DashboardReservationList date={date} reservations={reservations} setReservations={setReservations} reservationsError={reservationsError} setReservationsError={setReservationsError} statusToDisplay={statusToDisplay}/>
-            <DashboardTableList reservations={reservations} setReservations={setReservations} reservationsError={reservationsError} setReservationsError={setReservationsError}/>
+            <DashboardReservationList loadDashboard={loadDashboard} date={date} reservations={reservations} setReservations={setReservations} reservationsError={reservationsError} setReservationsError={setReservationsError} statusToDisplay={statusToDisplay}/>
+            <DashboardTableList loadDashboard={loadDashboard} reservations={reservations} setReservations={setReservations} reservationsError={reservationsError} setReservationsError={setReservationsError}/>
           </Route>
         </Switch>
     </main>
