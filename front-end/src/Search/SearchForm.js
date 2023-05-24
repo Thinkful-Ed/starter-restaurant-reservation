@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { findReservations } from "../utils/api";
 
 function SearchForm( {setReservations, setReservationsError, setSearchSubmitted} ) {
-    const [formData, setFormData] = useState({})
+    const [formData, setFormData] = useState({mobile_number: ""})
     const [errorMessage, setErrorMessage] = useState(null)
 
     const initialFormState = {

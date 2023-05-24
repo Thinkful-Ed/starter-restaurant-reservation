@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Switch, Route, useRouteMatch, useHistory, useLocation } from "react-router";
+import { Switch, Route, useRouteMatch, useHistory, useLocation } from "react-router";
 import { listReservations } from "../utils/api";
-import ErrorAlert from "../layout/ErrorAlert";
 import DashboardReservationList from "./DashboardReservationList";
 import DashboardTableList from "./DashboardTableList";
 import { today } from "../utils/date-time";
@@ -15,7 +14,7 @@ import { today } from "../utils/date-time";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const { path, url } = useRouteMatch()
+  const { path } = useRouteMatch()
   const history = useHistory()
 
   const location = useLocation()

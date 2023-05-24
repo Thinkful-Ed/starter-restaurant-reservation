@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Redirect, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ReservationForm from "../reservation/ReservationForm"
-import NotFound from "../layout/NotFound";
-import { createReservation, getReservationById, editReservation } from "../utils/api";
+import { getReservationById, editReservation } from "../utils/api";
 
 function EditReservation() {
     const [reservation, setReservation] = useState({})

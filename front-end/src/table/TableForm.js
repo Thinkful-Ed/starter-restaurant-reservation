@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 function TableForm({initialFormState, apiHandler}) {
-    const [formData, setFormData] = useState({})
+    const [formData, setFormData] = useState({
+        table_name: '',
+        capacity: '',
+        status: 'Free'
+    })
     const [errorMessage, setErrorMessage] = useState(null)
     const history = useHistory()
 
@@ -31,6 +35,7 @@ function TableForm({initialFormState, apiHandler}) {
         }
     }
 
+    console.log(formData)
     return <div>
         <form onSubmit={submitHandler}>
             <h3>Create a New Table</h3>
@@ -50,7 +55,7 @@ function TableForm({initialFormState, apiHandler}) {
                 <input type="number" id="capacity" name="capacity" value={formData.capacity} onChange={changeHandler}/>
             </div>
             <div>
-                <button onClick={()=> history.goBack()} className="btn btn-secondary">Cancel</button>
+                <button type="button" onClick={()=> history.goBack()} className="btn btn-secondary">Cancel</button>
                 <button className="btn btn-primary" type="submit">Submit</button>
             </div>
         </form>

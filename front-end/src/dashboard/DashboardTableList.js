@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route, useRouteMatch, useHistory, useQuery, useLocation } from "react-router";
 import { listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import DashboardTableItem from "./DashboardTableItem";
@@ -24,13 +23,17 @@ function DashboardTableList({loadDashboard, reservations, setReservations, reser
           <h4 className="mb-0">Tables</h4>
         </div>
         <table>
-          <tr>
-            <th>Table Name</th>
-            <th>Capacity</th>
-            <th>Status</th>
-            <th>Finish Table</th>
-          </tr>
-          {Tables.map(table=><DashboardTableItem loadDashboard={loadDashboard} table={table} setTablesError={setTablesError} setTables={setTables} reservations={reservations} setReservations={setReservations} reservationsError={reservationsError} setReservationsError={setReservationsError}/>)}
+          <thead>
+            <tr>
+              <th>Table Name</th>
+              <th>Capacity</th>
+              <th>Status</th>
+              <th>Finish Table</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Tables.map(table=><DashboardTableItem key={table.table_id} loadDashboard={loadDashboard} table={table} setTablesError={setTablesError} setTables={setTables} reservations={reservations} setReservations={setReservations} reservationsError={reservationsError} setReservationsError={setReservationsError}/>)}
+          </tbody>
         </table>
         <ErrorAlert error={TablesError} />
     </div>

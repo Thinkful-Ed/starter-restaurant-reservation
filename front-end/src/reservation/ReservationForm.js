@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 function ReservationForm({initialFormState, apiHandler}) {
     const [formData, setFormData] = useState({})
@@ -31,6 +31,7 @@ function ReservationForm({initialFormState, apiHandler}) {
         }
     }
 
+    console.log(formData)
     return <div>
         <form onSubmit={submitHandler}>
             <div>
@@ -73,7 +74,7 @@ function ReservationForm({initialFormState, apiHandler}) {
                 <input type="number" id="people" name="people" value={formData.people} onChange={changeHandler}/>
             </div>
             <div>
-                <button onClick={()=> history.goBack()} className="btn btn-secondary">Cancel</button>
+                <button type="button" onClick={()=> history.goBack()} className="btn btn-secondary">Cancel</button>
                 <button className="btn btn-primary" type="submit">Submit</button>
             </div>
         </form>

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { seatTable, updateReservation } from "../utils/api";
 
 function SeatForm({tables}) {
@@ -9,7 +9,7 @@ function SeatForm({tables}) {
     const {reservation_id} = useParams()
 
     const initialFormState = {
-        table_id: "3",
+        table_id: 3,
     }
 
     //sets form data to initial state passed in so it can be used for edit and new
@@ -19,7 +19,6 @@ function SeatForm({tables}) {
 
     //updates form STATE when values are changed
     function changeHandler(event) {
-        const index = tables.findIndex(table=>table.table_id===Number(event.target.value))
         setFormData({
             ...formData,
             table_id: Number(event.target.value)
@@ -49,13 +48,13 @@ function SeatForm({tables}) {
                     Table Name
                 </label>
                 <select name="table_id" id="table_id" onChange={changeHandler}>
-                    {tables.map(table=><option value={table.table_id} >
+                    {tables.map(table=><option key={table.table_id} value={table.table_id} >
                         {table.table_name} - {table.capacity}
                     </option>)}
                 </select>
             </div>
             <div>
-                <button onClick={()=> history.goBack()} className="btn btn-secondary">Cancel</button>
+                <button type="button" onClick={()=> history.goBack()} className="btn btn-secondary">Cancel</button>
                 <button className="btn btn-primary" type="submit">Submit</button>
             </div>
         </form>

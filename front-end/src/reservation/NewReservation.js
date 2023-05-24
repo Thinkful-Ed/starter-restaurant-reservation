@@ -1,8 +1,5 @@
 import React from "react";
-
-import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import ReservationForm from "../reservation/ReservationForm"
-import NotFound from "../layout/NotFound";
 import { createReservation } from "../utils/api";
 
 function NewReservation() {

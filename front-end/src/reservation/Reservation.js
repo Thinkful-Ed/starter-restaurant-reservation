@@ -4,10 +4,9 @@ import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import NewReservation from "./NewReservation";
 import Seat from "./Seat";
 import EditReservation from "./EditReservation";
-import NotFound from "../layout/NotFound";
 
 function Reservation() {
-    const { path, url } = useRouteMatch()
+    const { path } = useRouteMatch()
 
     return (
         <Switch>
