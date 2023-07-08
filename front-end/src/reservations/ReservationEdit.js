@@ -2,9 +2,9 @@
 
 import React from "react";
 import ErrorAlert from "../layout/ErrorAlert";
-
 import ReservationForm from "./ReservationForm";
 
-function ReservationCreate() {}
+// User Story #8; change an existing reservation
+function ReservationEdit() {}
 
-export default ReservationCreate;
+export default ReservationEdit;

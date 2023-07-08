@@ -1,0 +1,54 @@
+possible masking for phone number instead of the place holder:
+`npm install react-input-mask
+import React from 'react';
+import InputMask from 'react-input-mask';
+
+
+function PhoneNumberForm() {
+  return (
+    <form>
+      <label htmlFor="phone">Phone Number:</label>
+      <InputMask
+        mask="(999) 999-9999"
+        id="phone"
+        type="text"
+        placeholder=""
+      />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}`
+
+Use a react datepicker in the reservation form
+
+`npm install react-datepicker
+import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+function DateForm() {
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
+  return (
+    <form>
+      <label htmlFor="date">Date:</label>
+      <DatePicker
+        id="date"
+        selected={selectedDate}
+        onChange={handleDateChange}
+        placeholderText="Select a date"
+      />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}`
+
+
+
+
+
+
