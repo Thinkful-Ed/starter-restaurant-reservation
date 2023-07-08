@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationList from "./ReservationList";
-import searchReservations from "./utils/api";
+import { searchReservations } from "../utils/api";
 
 //user story 7: search for a reservation by partial or complete phone number.
 //place holder text is 'Enter a customer's phone number"
