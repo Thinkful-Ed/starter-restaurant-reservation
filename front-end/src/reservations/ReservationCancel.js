@@ -34,7 +34,8 @@ function ReservationCancel({ reservation_id }) {
 	//return jsx code includes ErrorAlert, which displays any error message, and a button with onClick event handler set to clickHandler
 	return (
 		<div>
-			<ErrorAlert />
+			<ErrorAlert error={error} />
+
 			<button
 				className="btn btn-secondary"
 				data-reservation-id-cancel={reservation_id}
