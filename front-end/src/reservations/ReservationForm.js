@@ -7,7 +7,7 @@ function ReservationForm({
 	reservation,
 	submitHandler,
 	changeHandler,
-	cancelHandler,
+	handleCancel,
 }) {
 	const history = useHistory();
 	return (
