@@ -2,6 +2,6 @@
 
 import React from "react";
 
-function TableForm() {}
+function TableForm({ submitHandler, cancelHandler, changeHandler, formData }) {}
 
 export default TableForm;
