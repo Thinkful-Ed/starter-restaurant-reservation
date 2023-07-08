@@ -47,5 +47,9 @@
   },
   "keywords": [],
   "author": "Thinkful, Inc.",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "knex": "^2.4.2",
+    "pg": "^8.11.1"
+  }
 }

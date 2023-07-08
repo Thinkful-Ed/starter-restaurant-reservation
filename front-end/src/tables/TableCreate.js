@@ -42,7 +42,7 @@ function TableCreate() {
 
 	//the change handler updates the formData state with the new value
 	const changeHandler = ({ target: { name, value } }) => {
-		setFormData((previousFormDAta) => ({
+		setFormData((previousFormData) => ({
 			...previousFormData,
 			[name]: value,
 		}));
