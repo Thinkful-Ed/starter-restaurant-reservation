@@ -6,7 +6,7 @@
  *
  * @format
  */
-import knex from "../db/connection";
+const knex = require("..db/connection");
 
 // Insert a new reservation record into the reservations table.
 // Return the newly created record within all ("*") other columns.
