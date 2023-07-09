@@ -2,52 +2,54 @@
 
 import React, { useEffect, useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
+
+//import utility functions
 import { listReservations, listTables, finishTable } from "../utils/api";
 import useQuery from "../utils/useQuery";
 import { today, previous, next } from "../utils/date-time";
+
+//import components
 import ErrorAlert from "../layout/ErrorAlert";
-import ReservationList from "../reservations/ReservationList";
-import TableList from "../tables/TableList";
+import ReservationsList from "../reservations/ReservationsList";
+import TablesList from "../tables/TablesList";
 
 /**
- * Defines the dashboard page, which shows reservations for a specific date
+ * Defines the dashboard page.
  * @param date
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
+
 function Dashboard({ date }) {
-	const query = useQuery();
 	const history = useHistory();
+	const query = useQuery();
 	const route = useRouteMatch();
 
-	// to store the reservation data and to handle errors related to reservations
 	const [reservations, setReservations] = useState([]);
 	const [reservationsError, setReservationsError] = useState(null);
-
-	//to store the tables data and to handle errors related to the tables
-	const [tables, setTables] = useState([]);
-	const [tablesError, setTablesError] = useState(null);
-
-	// to store the current date
 	const [currentDate, setCurrentDate] = useState(date);
+	const [tablesError, setTablesError] = useState(null);
+	const [tables, setTables] = useState([]);
 
-	useEffect(loadDashboard, [date]);
+	useEffect(loadDashboard, [currentDate]);
 
-	// Fetch reservations and tables data for the current date.
-	// Utilize utility functions listReservations() and listTables()
+	//load reservations for current date and all tables
+
 	function loadDashboard() {
 		const abortController = new AbortController();
 		setReservationsError(null);
-		listReservations({ date }, abortController.signal)
+		listReservations({ date: currentDate }, abortController.signal)
 			.then(setReservations)
 			.catch(setReservationsError);
 		listTables(abortController.signal).then(setTables).catch(setTablesError);
 		return () => abortController.abort();
 	}
-	//update the date
+
+	//update date
 	useEffect(() => {
 		function getDate() {
 			const getQueryDate = query.get("date");
+
 			if (getQueryDate) {
 				setCurrentDate(getQueryDate);
 			} else {
@@ -57,7 +59,8 @@ function Dashboard({ date }) {
 		getDate();
 	}, [query, route]);
 
-	// finish button handlers
+	//handler for table's finish button
+
 	const finishButtonHandler = async (event, table_id) => {
 		event.preventDefault();
 		setTablesError(null);
@@ -78,6 +81,7 @@ function Dashboard({ date }) {
 		}
 		return () => abortController.abort();
 	};
+
 	return (
 		<main className="col-md-10 ms-sm-auto col-lg-10 px-md-4">
 			<div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom  d-md-flex">
@@ -128,7 +132,7 @@ function Dashboard({ date }) {
 				</h4>
 				<ErrorAlert error={reservationsError} />
 				{reservations ? (
-					<ReservationList
+					<ReservationsList
 						reservations={reservations}
 						date={currentDate}
 					/>
@@ -141,7 +145,7 @@ function Dashboard({ date }) {
 
 			<div className="row d-md-flex mb-3">
 				{tables ? (
-					<TableList
+					<TablesList
 						tables={tables}
 						error={tablesError}
 						clickHandler={finishButtonHandler}

@@ -2,17 +2,23 @@
 
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+
+//import components
 import Dashboard from "../dashboard/Dashboard";
-import NotFound from "./NotFound";
-import { today } from "../utils/date-time";
-import TableCreate from "../tables/TableCreate";
 import ReservationCreate from "../reservations/ReservationCreate";
-import ReservationEdit from "../reservations/ReservationEdit";
 import ReservationSeat from "../reservations/ReservationSeat";
 import ReservationSearch from "../reservations/ReservationSearch";
+import ReservationEdit from "../reservations/ReservationEdit";
+import TableCreate from "../tables/TableCreate";
+import NotFound from "./NotFound";
+
+//import utility functions
+import { today } from "../utils/date-time";
 
 /**
  * Defines all the routes for the application.
+ *
+ * You will need to make changes to this file.
  *
  * @returns {JSX.Element}
  */

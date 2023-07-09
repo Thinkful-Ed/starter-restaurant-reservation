@@ -1,13 +1,11 @@
 /** @format */
 
 import React from "react";
+
+//import components
 import TableFinish from "./TableFinish";
 
-//user stories 4, 6: list tables and their details(name, capacity, status)
-//add action to finish a reservation at a specific table
-function TableList({ tables, handleClick, error }) {
-	//map the tables array to create table rows
-	//Render TableFinish component within table data cell
+const TablesList = ({ tables, clickHandler, error }) => {
 	const tableRows = tables.map((table) => (
 		<tr key={table.table_id}>
 			<th scope="row">{table.table_name}</th>
@@ -18,13 +16,13 @@ function TableList({ tables, handleClick, error }) {
 			<td data-table-id-finish={table.table_id}>
 				<TableFinish
 					table={table}
-					clickHandler={handleClick}
+					clickHandler={clickHandler}
 					error={error}
 				/>
 			</td>
 		</tr>
 	));
-	//layout and structure of the component:table with header row that displays table name, capacity, status, and action
+
 	return (
 		<>
 			<h4>Tables</h4>
@@ -43,6 +41,6 @@ function TableList({ tables, handleClick, error }) {
 			</div>
 		</>
 	);
-}
+};
 
-export default TableList;
+export default TablesList;

@@ -55,11 +55,7 @@ async function fetchJson(url, options, onCancel) {
 	}
 }
 
-/**
- * Retrieves all existing reservation.
- * @returns {Promise<[reservation]>}
- *  a promise that resolves to a possibly empty array of reservation saved in the database.
- */
+//Retrieves all existing reservations
 
 export async function listReservations(params, signal) {
 	const url = new URL(`${API_BASE_URL}/reservations`);
