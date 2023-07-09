@@ -1,17 +1,20 @@
 /** @format */
 
-import React, { Fragment, useState } from "react";
-
+import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+
+//import components
 import Dashboard from "../dashboard/Dashboard";
-import ReservationForm from "../reservations/ReservationForm";
-import SeatForm from "../seat/SeatForm";
-import Search from "../search/Search";
-import TableForm from "../tables/TableForm";
+import ReservationCreate from "../reservations/ReservationCreate";
+import ReservationSeat from "../reservations/ReservationSeat";
+import ReservationSearch from "../reservations/ReservationSearch";
+import ReservationEdit from "../reservations/ReservationEdit";
+import TableCreate from "../tables/TableCreate";
 import NotFound from "./NotFound";
+
+//import utility functions
 import { today } from "../utils/date-time";
-import useQuery from "../utils/useQuery";
-import Menu from "./Menu";
+
 /**
  * Defines all the routes for the application.
  *
@@ -20,57 +23,40 @@ import Menu from "./Menu";
  * @returns {JSX.Element}
  */
 function Routes() {
-	const query = useQuery();
-	const [date, setDate] = useState(query.get("date") || today());
-
 	return (
-		<Fragment>
-			<Menu />
-			<Switch>
-				<Route
-					exact={true}
-					path="/">
-					<Redirect to={"/dashboard"} />
-				</Route>
-
-				<Route
-					exact={true}
-					path="/reservations">
-					<Redirect to={"/dashboard"} />
-				</Route>
-
-				<Route path="/dashboard">
-					<Dashboard
-						date={date}
-						setDate={setDate}
-					/>
-				</Route>
-
-				<Route
-					exact={true}
-					path="/reservations/:reservation_id/seat">
-					<SeatForm />
-				</Route>
-
-				<Route
-					exact={true}
-					path={["/reservations/new", "/reservations/:reservation_id/edit"]}>
-					<ReservationForm setDate={setDate} />
-				</Route>
-
-				<Route path="/tables/new">
-					<TableForm />
-				</Route>
-
-				<Route path="/search">
-					<Search />
-				</Route>
-
-				<Route>
-					<NotFound />
-				</Route>
-			</Switch>
-		</Fragment>
+		<Switch>
+			<Route
+				exact={true}
+				path="/">
+				<Redirect to={"/dashboard"} />
+			</Route>
+			<Route
+				exact={true}
+				path="/reservations">
+				<Redirect to={"/dashboard"} />
+			</Route>
+			<Route path="/dashboard">
+				<Dashboard date={today()} />
+			</Route>
+			<Route path="/reservations/new">
+				<ReservationCreate />
+			</Route>
+			<Route path="/reservations/:reservation_id/edit">
+				<ReservationEdit />
+			</Route>
+			<Route path="/reservations/:reservation_id/seat">
+				<ReservationSeat />
+			</Route>
+			<Route path="/tables/new">
+				<TableCreate />
+			</Route>
+			<Route path="/search">
+				<ReservationSearch />
+			</Route>
+			<Route>
+				<NotFound />
+			</Route>
+		</Switch>
 	);
 }
 

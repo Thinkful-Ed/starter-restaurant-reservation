@@ -2,39 +2,68 @@
 
 const knex = require("../db/connection");
 
-const create = (newReservation) =>
-	knex("reservations").insert(newReservation).returning("*");
+function create(newReservation) {
+	return knex("reservations")
+		.insert(newReservation)
+		.returning("*")
+		.then((createdRecord) => createdRecord[0]);
+}
 
-const read = (reservationId) =>
-	knex("reservations")
+function read(reservation_id) {
+	return knex("reservations").select("*").where({ reservation_id }).first();
+}
+
+function update(updatedReservation) {
+	return knex("reservations")
 		.select("*")
-		.where({ reservation_id: reservationId })
-		.first();
+		.where({ reservation_id: updatedReservation.reservation_id })
+		.update(updatedReservation, "*")
+		.then((updatedRecords) => updatedRecords[0]);
+}
 
-const update = (reservationId, updatedStatus) =>
-	knex("reservations")
-		.select("status")
-		.where({ reservation_id: reservationId })
-		.update(updatedStatus, "*");
-
-const list = (reservationDate) =>
-	knex("reservations")
+function updateStatus(updatedReservation) {
+	return knex("reservations")
 		.select("*")
-		.where({ reservation_date: reservationDate })
-		.orderBy("reservation_time");
+		.where({ reservation_id: updatedReservation.reservation_id })
+		.update({ status: updatedReservation.status }, "*")
+		.then((updatedRecords) => updatedRecords[0]);
+}
 
-const search = (mobile_number) =>
-	knex("reservations")
+function list() {
+	return knex("reservations")
+		.select("*")
+		.whereIn("status", ["seated", "booked"])
+		.orderBy("reservation_date", "asc")
+		.orderBy("reservation_time", "asc");
+}
+
+//list reservations by date
+
+function listByDate(reservation_date) {
+	return knex("reservations")
+		.select("*")
+		.where({ reservation_date })
+		.whereIn("status", ["seated", "booked"])
+		.orderBy("reservation_time", "asc");
+}
+
+//find reservations by mobile number
+
+function search(mobile_number) {
+	return knex("reservations")
 		.whereRaw(
 			"translate(mobile_number, '() -', '') like ?",
 			`%${mobile_number.replace(/\D/g, "")}%`,
 		)
 		.orderBy("reservation_date");
+}
 
 module.exports = {
 	create,
 	read,
 	update,
+	updateStatus,
 	list,
+	listByDate,
 	search,
 };

@@ -1,66 +1,44 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 //import utility functions
-
-import { readReservation, updateReservation } from "../utils/api";
+import { createReservation } from "../utils/api";
 import { formatAsDate } from "../utils/date-time";
 
 //import components
-
-import ReservationForm from "./ReservationForm";
 import ErrorAlert from "../layout/ErrorAlert";
+import ReservationForm from "./ReservationForm";
 
-const ReservationEdit = () => {
+const ReservationCreate = () => {
 	const history = useHistory();
 
-	const { reservation_id } = useParams();
+	const initialFormState = {
+		first_name: "",
+		last_name: "",
+		mobile_number: "",
+		reservation_date: "",
+		reservation_time: "",
+		people: "",
+	};
 
-	const [reservation, setReservation] = useState({});
+	const [reservation, setReservation] = useState({ ...initialFormState });
 	const [error, setError] = useState(null);
 
-	//load reservation
-	useEffect(() => {
-		setReservation({});
-
-		const abortController = new AbortController();
-
-		async function loadReservation() {
-			try {
-				const loadedReservation = await readReservation(
-					reservation_id,
-					abortController.signal,
-				);
-				setReservation(loadedReservation);
-			} catch (error) {
-				if (error.name !== "AbortError") {
-					setError(error);
-				}
-			}
-		}
-		loadReservation();
-		return () => abortController.abort();
-	}, [reservation_id]);
-
-	const changeHandler = ({ target }) => {
-		setReservation({
-			...reservation,
-			[target.name]: target.value,
-		});
+	const cancelHandler = () => {
+		history.goBack();
 	};
 
 	const submitHandler = async (event) => {
 		event.preventDefault();
-
 		setError(null);
 
 		const abortController = new AbortController();
 		reservation.people = Number(reservation.people);
 
 		try {
-			const response = await updateReservation(
+			const response = await createReservation(
 				reservation,
 				abortController.signal,
 			);
@@ -75,25 +53,25 @@ const ReservationEdit = () => {
 		return () => abortController.abort();
 	};
 
-	const cancelHandler = () => {
-		history.goBack();
+	const changeHandler = ({ target: { name, value } }) => {
+		setReservation((previousReservation) => ({
+			...previousReservation,
+			[name]: value,
+		}));
 	};
 
-	if (reservation.reservation_id) {
-		return (
-			<div>
-				<h2>Edit reservation {reservation.reservation_id}</h2>
-				<ErrorAlert error={error} />
-				<ReservationForm
-					reservation={reservation}
-					changeHandler={changeHandler}
-					submitHandler={submitHandler}
-					cancelHandler={cancelHandler}
-				/>
-			</div>
-		);
-	}
-	return "Loading...";
+	return (
+		<>
+			<h2 className="mb-3 pt-3">Create Reservation</h2>
+			<ErrorAlert error={error} />
+			<ReservationForm
+				reservation={reservation}
+				submitHandler={submitHandler}
+				changeHandler={changeHandler}
+				cancelHandler={cancelHandler}
+			/>
+		</>
+	);
 };
 
-export default ReservationEdit;
+export default ReservationCreate;
