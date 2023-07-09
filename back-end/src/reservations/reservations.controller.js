@@ -115,17 +115,6 @@ function reservationTimeFrameValidation(req, res, next) {
 		});
 	}
 
-	//reservation is not for a day or time in the past
-
-	// if (Date.parse(dateUTC) <= Date.now()) {
-	// 	return next({
-	// 		status: 400,
-	// 		message: "Reservation must be for a future date/time",
-	// 	});
-	// }
-	
-	//reservation is not outside of restaurant's open hours
-
 	if (
 		date.getHours() < 10 ||
 		(date.getHours() === 10 && date.getMinutes() < 30)
