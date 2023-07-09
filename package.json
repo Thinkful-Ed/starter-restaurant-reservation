@@ -50,6 +50,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "knex": "^2.4.2",
-    "pg": "^8.11.1"
+    "pg": "^8.11.1",
+    "text-encoding": "^0.7.0"
   }
 }

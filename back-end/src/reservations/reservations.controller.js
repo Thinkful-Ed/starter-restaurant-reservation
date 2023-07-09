@@ -1,8 +1,4 @@
-/**
- * import error components
- * import service file
- * @format
- */
+
 
 const service = require("./reservations.service");
 
