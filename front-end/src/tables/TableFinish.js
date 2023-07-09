@@ -1,7 +1,7 @@
 /** @format */
 
 import React from "react";
-import ErrorAlert from "./..Layout/ErrorAlert";
+import ErrorAlert from "../layout/ErrorAlert";
 
 //Render a button with optional error alert dependent on the presence of table.reservation_id. The button triggers a "clickHandler" function when clicked, passing the event object and the `table.table_id` as arguments (user story #5)
 //function takes three arguments: table prop represents the table data; error prop is used to display any errors that occur
