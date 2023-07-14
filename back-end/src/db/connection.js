@@ -7,4 +7,13 @@ if (typeof TextEncoder === "undefined") {
 	global.TextEncoder = TextEncoder;
 }
 const knex = require("knex")(config);
+
+// Add a cleanup function to close the connection
+process.on("SIGINT", () => {
+	knex.destroy(() => {
+		console.log("Database connection closed.");
+		process.exit(0);
+	});
+});
+
 module.exports = knex;
