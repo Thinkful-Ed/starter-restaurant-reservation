@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "knex": "^2.5.0",
-    "minimatch": "^9.0.3"
+    "minimatch": "^9.0.3",
+    "react": "^18.2.0"
   }
 }
