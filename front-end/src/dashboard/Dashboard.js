@@ -37,7 +37,6 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard }) {
       <table className="reservations">
         <thead>
           <tr>
-            <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Mobile Number</th>
@@ -55,7 +54,6 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard }) {
             reservationsJSX()
           ) : (
             <tr>
-              <th>--</th>
               <td>--</td>
               <td>--</td>
               <td>--</td>

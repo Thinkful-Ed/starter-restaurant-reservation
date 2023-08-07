@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-
+import { createReservation } from "../utils/api";
 
 function ReservationForm() {
     const history = useHistory();
@@ -22,11 +22,25 @@ function ReservationForm() {
         })
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log("Submitted:", formData);
-        setFormData({ ...initialFormState });
-        history.push("/dashboard");
+        console.log("Submit button clicked!")
+
+        const formDataWithNumber = {
+            ...formData,
+            people: parseInt(formData.people, 10) // Convert to base-10 integer
+          };
+        //make API call
+        try {
+            console.log("Submitted:", formDataWithNumber);
+            await createReservation(formDataWithNumber);
+            setFormData({ ...initialFormState });
+
+            const reservationDate = formData.reservation_date;
+            history.push(`/dashboard?date=${reservationDate}`);
+        } catch (error) {
+            console.error("Error creating reservation:", error);
+        }
     }
 
     return (
@@ -81,7 +95,7 @@ function ReservationForm() {
                 <input
                     id="people"
                     name="people"
-                    type="text"
+                    type="number"
                     onChange={handleChange}
                     value={formData.people}
                     required

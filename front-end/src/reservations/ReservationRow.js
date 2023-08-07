@@ -21,7 +21,6 @@ export default function ReservationRow({ reservation, loadDashboard }) {
 
   return (
     <tr>
-      <th>{reservation.reservation_id}</th>
       <td>{reservation.first_name}</td>
       <td>{reservation.last_name}</td>
       <td>{reservation.mobile_number}</td>
