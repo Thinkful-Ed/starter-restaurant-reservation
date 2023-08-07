@@ -26,6 +26,7 @@ function ReservationForm() {
         event.preventDefault();
         console.log("Submitted:", formData);
         setFormData({ ...initialFormState });
+        history.push("/dashboard");
     }
 
     return (
