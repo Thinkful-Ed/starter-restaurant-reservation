@@ -4,7 +4,9 @@
  * You will not need to make changes to this file.
  */
 
-require('dotenv').config();
+require('dotenv').config({
+  path : '.env.development.local'
+});
 const path = require("path");
 
 const {
