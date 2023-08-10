@@ -1,10 +1,13 @@
-/**
- * List handler for reservation resources
- */
+const service = require("./reservations.service.js");
+
 async function list(req, res) {
-  res.json({
-    data: [],
-  });
+  const { date } = req.query;
+
+  if (date) {
+    res.json({ data: await service.reservationsOnDate(date) });
+  } else {
+    res.json({ data: await service.getAllReservations() })
+  }
 }
 
 module.exports = {
