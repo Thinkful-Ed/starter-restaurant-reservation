@@ -1,9 +1,21 @@
+const P = require('pino');
+const hasProperties = require('../errors/hasProperties')
+const asyncErrorBoundary = require('../errors/asyncErrorBoundary')
+const { peopleValidator, dateValidator, timeValidator } = require('../errors/reservationCreateValidators')
 const service = require('./reservations.service')
 
+
 async function list(req, res) {
-  res.json({
-    data: [],
-  });
+  const { date } = req.query;
+  if(date){
+    res.json({
+      data : await service.listByDate(date)
+    })
+  } else {
+    res.json({ 
+      data: await service.list(),
+    });
+  }
 }
 
 const create = async(req, res, _next) => {
@@ -12,5 +24,15 @@ const create = async(req, res, _next) => {
 
 module.exports = {
   list,
-  create,
+  create : [hasProperties(
+    'first_name',
+    'last_name',
+    'mobile_number',
+    'reservation_date',
+    'reservation_time',
+    'people'
+  ), peopleValidator,
+  dateValidator,
+  timeValidator,
+  asyncErrorBoundary(create)],
 };
