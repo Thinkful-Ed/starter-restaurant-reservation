@@ -9,7 +9,9 @@ function list(date) {
     .orderBy("reservation_time");
 }
 
-
+function getReserveredTimes(){
+    return knex(tableName).select("reservation_time").where({status: "booked"})
+}
 
 function create(reservation) {
   return knex(tableName)

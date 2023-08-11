@@ -100,6 +100,33 @@ function isValidDate(req, res, next) {
   next();
 }
 
+function isValidTime(req, res, next) {
+	const { reservation_date, reservation_time } = req.body.data;
+
+	const date = new Date(`${reservation_date} ${reservation_time}`);
+
+	if (
+		date.getHours() < 10 ||
+		(date.getHours() === 10 && date.getMinutes() < 30)
+	) {
+		return next({
+			status: 400,
+			message: "The earliest reservation time is 10:30am",
+		});
+	}
+
+	if (
+		date.getHours() > 21 ||
+		(date.getHours() === 21 && date.getMinutes() > 30)
+	) {
+		return next({
+			status: 400,
+			message: "The latest reservation time is 9:30pm",
+		});
+	}
+	next();
+}
+
 function isTime(req, res, next) {
   const { data = {} } = req.body;
   // TODO: Change this...
@@ -202,6 +229,7 @@ module.exports = {
     isTime,
     isValidNumber,
     checkStatus,
+    isValidTime,
     asyncErrorBoundary(create),
   ],
   read: [hasReservationId, reservationExists, asyncErrorBoundary(read)],

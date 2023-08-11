@@ -6,30 +6,35 @@ import ReservationForm from "./ReservationForm";
 
 function NewReservation({ reservatations, error, setError, setReservation }) {
   const history = useHistory();
-  const abortController = new AbortController()
-  const signal = abortController.signal;
-  const [reservationsError, setReservationsError] = useState(null);
-  const [form, setForm] = useState({
+  const formData = {
     first_name: "",
     last_name: "",
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
     people: 0,
-  });
+  };
+  const [form, setForm] = useState({ ...formData });
 
-  function handleChange(e){
+  function handleChange(e) {
     setForm({
-        ...form,
-        [e.target.name]: e.target.value
-    })
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   }
 
-  function handleSubmit(e){
+  async function handleSubmit(e) {
     e.preventDefault();
-    form.people = Number(form.people)
-
-    
-
   }
+
+  return (
+    <div>
+      <ReservationForm 
+      formData={formData}
+      handleChange={handleChange}
+      handleSubmit={handleSubmit}
+      />
+    </div>
+  )
+
 }
