@@ -3,6 +3,7 @@ import { listReservations } from "../utils/api";
 import { previous, next, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationRow from "../reservations/ReservationRow";
+import { useHistory } from "react-router-dom";
 
 /**
  * Defines the dashboard page.
@@ -11,7 +12,7 @@ import ReservationRow from "../reservations/ReservationRow";
  * @returns {JSX.Element}
  */
 function Dashboard({ date, reservations, reservationsError, loadDashboard }) {
-  
+  const history = useHistory();
 
   
   const reservationsJSX = () => {
@@ -23,6 +24,29 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard }) {
       />
     ));
   };
+
+  function handleClick({target}) {
+    
+    let useDate
+    let newDate
+
+    //if date is falsey or undefined use current date
+    if (!date) {
+      useDate = today();
+    } else {
+      useDate = date
+    }
+
+    if (target.name === "previous") {
+      newDate = previous(useDate);
+    } else if (target.name === "tomorrow") {
+      newDate = next(useDate);
+    } else {
+      newDate = today();
+    }
+
+    history.push(`/dashboard?date=${newDate}`);
+  }
 
 
   return (
@@ -67,6 +91,26 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard }) {
           )}
         </tbody>
       </table>
+      <div>
+        <button
+          className="prevButton"
+          type="button"
+          name="previous"
+          onClick={handleClick}
+        >Previous</button>
+        <button
+          className="todayButton"
+          type="button"
+          name="today"
+          onClick={handleClick}
+        >Today</button>
+        <button
+          className="nextButton"
+          type="button"
+          name="tomorrow"
+          onClick={handleClick}
+        >Next</button>
+      </div>
     </main>
   );
 }

@@ -4,6 +4,7 @@ import { createReservation } from "../utils/api";
 
 function ReservationForm() {
     const history = useHistory();
+    const [error, setError] = useState(null);
 
     const initialFormState = {
         first_name: "",
@@ -26,6 +27,13 @@ function ReservationForm() {
         event.preventDefault();
         console.log("Submit button clicked!")
 
+        const reservationDate = `${formData.reservation_date}T${formData.reservation_time}`
+        const validationError = validReservationDate(reservationDate);
+
+        if (validationError) {
+            setError(validationError)
+        } else {
+
         const formDataWithNumber = {
             ...formData,
             people: parseInt(formData.people, 10) // Convert to base-10 integer
@@ -41,6 +49,46 @@ function ReservationForm() {
         } catch (error) {
             console.error("Error creating reservation:", error);
         }
+        }
+    }
+
+    //helper function
+    function validReservationDate(reservationDate) {
+        const currentDate = new Date();
+        const selectedDate = new Date(reservationDate);
+
+        //Tuesday index is 1 when using Calendar icon in Reservation Date Form
+        if (selectedDate.getDay() === 1 ) {
+            console.log(selectedDate.getDay())
+            return "The restaurant is closed on Tuesdays.";
+        } 
+
+        if (selectedDate < currentDate) {
+            console.log(selectedDate.getDay())
+            return "Reservation must be future date.";
+        }
+
+        const reservationHours = selectedDate.getHours();
+        const reservationMinutes = selectedDate.getMinutes();
+    
+        if (
+            reservationHours < 10 ||
+            (reservationHours === 10 && reservationMinutes < 30)
+        ) {
+            return "Reservation cannot be made: Restaurant is not open until 10:30AM.";
+        } else if (
+            reservationHours > 22 ||
+            (reservationHours === 22 && reservationMinutes >= 30)
+        ) {
+            return "Reservation cannot be made: Restaurant is closed after 10:30PM.";
+        } else if (
+            reservationHours > 21 ||
+            (reservationHours === 21 && reservationMinutes > 30)
+        ) {
+            return "Reservation cannot be made: Reservation must be made at least an hour before closing (10:30PM).";
+        }
+    
+        return;
     }
 
     return (
@@ -104,6 +152,7 @@ function ReservationForm() {
             
             <button type="button" onClick={history.goBack}>Cancel</button>
             </form>
+            {error && <div className="alert alert-danger">{error}</div>}
         </div>
     )
 }

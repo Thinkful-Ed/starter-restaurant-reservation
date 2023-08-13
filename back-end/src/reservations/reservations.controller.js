@@ -5,6 +5,47 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
+//create function to check restaurant schedule
+async function validReservationDate(req, res, next) {
+  const todaysDate = new Date();
+  const reservationDate = new Date(`${req.body.data.reservation_date}T${req.body.data.reservation_time}:00.000`);
+
+  //Tuesday is 2 for the backend
+  if (reservationDate.getDay() === 2) {
+    return next({
+      status: 400,
+      message: ` The restaurant is closed on Tuesdays`
+    })
+  }
+
+  if (reservationDate < todaysDate) {
+    return next({
+      status: 400,
+      message: `Reservation must be a future date.`
+    })
+  }
+
+  const openingTime = new Date(
+    `${req.body.data.reservation_date}T10:30:00.000`
+  );
+  const closingTime = new Date(
+    `${req.body.data.reservation_date}T21:30:00.000`
+  );
+
+  if (
+    reservationDate < openingTime ||
+    reservationDate > closingTime
+  ) {
+    return next({
+      status: 400,
+      message: `Restaurant is not open for reservations at that time.`,
+    });
+  }
+
+  next();
+
+}
+
 async function list(req, res) {
   const date = req.query.date;
   const mobile_number = req.query.mobile_number;
@@ -69,5 +110,8 @@ function isValidTime(time) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: asyncErrorBoundary(create)
+  create: [
+    asyncErrorBoundary(validReservationDate),
+    asyncErrorBoundary(create)
+  ]
 };
