@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import TableForm from "../Tables/TableForm";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
-import { formatAsDate, today } from "../utils/date-time";
+import { today } from "../utils/date-time";
 import ReservationForm from "../reservations/reservation-form";
 import useQuery from "../utils/useQuery";
+import SeatReservation from "../Seats/SeatReservation";
 /**
  * Defines all the routes for the application.
  *
@@ -17,6 +18,8 @@ import useQuery from "../utils/useQuery";
 function Routes() {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
 
   const query = useQuery();
   const date = query.get("date") ? query.get("date") : today();
@@ -27,9 +30,18 @@ function Routes() {
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
+    setTablesError(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+
+    listTables(abortController.signal)
+    .then((tables) => 
+      tables.sort((tableA, tableB) => tableA.table_id - tableB.table_id)
+    )
+    .then(setTables)
+    .catch(setTablesError)
+
     return () => abortController.abort();
   }
   
@@ -52,8 +64,11 @@ function Routes() {
       <Route path="/reservations/new">
         <ReservationForm />
       </Route>
+      <Route path="/reseravtions/:reservation_id/seat">
+        <SeatReservation />
+      </Route>
       <Route path="/tables/new">
-        <TableForm />
+        <TableForm loadDashboard={loadDashboard} />
       </Route>
       <Route>
         <NotFound />

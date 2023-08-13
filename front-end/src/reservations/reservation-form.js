@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function ReservationForm() {
     const history = useHistory();
@@ -31,6 +32,7 @@ function ReservationForm() {
         const validationError = validReservationDate(reservationDate);
 
         if (validationError) {
+            //console.error(error)
             setError(validationError)
         } else {
 
@@ -57,8 +59,8 @@ function ReservationForm() {
         const currentDate = new Date();
         const selectedDate = new Date(reservationDate);
 
-        //Tuesday index is 1 when using Calendar icon in Reservation Date Form
-        if (selectedDate.getDay() === 1 ) {
+       
+        if (selectedDate.getDay() === 2 ) {
             console.log(selectedDate.getDay())
             return "The restaurant is closed on Tuesdays.";
         } 
@@ -75,17 +77,17 @@ function ReservationForm() {
             reservationHours < 10 ||
             (reservationHours === 10 && reservationMinutes < 30)
         ) {
-            return "Reservation cannot be made: Restaurant is not open until 10:30AM.";
+            return "Restaurant is not open until 10:30AM.";
         } else if (
             reservationHours > 22 ||
             (reservationHours === 22 && reservationMinutes >= 30)
         ) {
-            return "Reservation cannot be made: Restaurant is closed after 10:30PM.";
+            return "Restaurant is closed after 10:30PM.";
         } else if (
             reservationHours > 21 ||
             (reservationHours === 21 && reservationMinutes > 30)
         ) {
-            return "Reservation cannot be made: Reservation must be made at least an hour before closing (10:30PM).";
+            return "Reservation must be made at least an hour before closing (10:30PM).";
         }
     
         return;
@@ -152,7 +154,7 @@ function ReservationForm() {
             
             <button type="button" onClick={history.goBack}>Cancel</button>
             </form>
-            {error && <div className="alert alert-danger">{error}</div>}
+            <ErrorAlert error={error} />
         </div>
     )
 }

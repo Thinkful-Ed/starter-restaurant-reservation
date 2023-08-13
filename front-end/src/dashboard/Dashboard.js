@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import React from "react";
+
 import { previous, next, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationRow from "../reservations/ReservationRow";
 import { useHistory } from "react-router-dom";
+import TableRow from "../Tables/TableRow";
 
 /**
  * Defines the dashboard page.
@@ -11,7 +12,7 @@ import { useHistory } from "react-router-dom";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date, reservations, reservationsError, loadDashboard }) {
+function Dashboard({ date, reservations, reservationsError, loadDashboard, tables }) {
   const history = useHistory();
 
   
@@ -24,6 +25,16 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard }) {
       />
     ));
   };
+
+  function tableRow() {
+    return tables.map((table) => {
+      <TableRow
+        key={table.table_id}
+        table={table}
+        loadDashboard={loadDashboard}
+      />
+    })
+  }
 
   function handleClick({target}) {
     
@@ -110,6 +121,9 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard }) {
           name="tomorrow"
           onClick={handleClick}
         >Next</button>
+      </div>
+      <div>
+        <h4>Tables</h4>
       </div>
     </main>
   );

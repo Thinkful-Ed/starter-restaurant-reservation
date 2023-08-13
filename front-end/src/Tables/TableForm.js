@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createTable } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function TableForm({loadDashboard}) {
     const history = useHistory();
@@ -23,7 +24,7 @@ function TableForm({loadDashboard}) {
 
     async function handleSubmit(event) {
         event.preventDefault();
-        const abortController = new AbortController();
+       // const abortController = new AbortController();
         console.log("Submit clicked");
 
         const validationError = vaildTable(formData);
@@ -66,7 +67,10 @@ function TableForm({loadDashboard}) {
                 <input 
                 id="table_name"
                 name="table_name"
+                type="text"
+                min={2}
                 onChange={handleChange}
+                value={formData.table_name}
                 required
                 />
                 <label>Capacity:</label>
@@ -75,14 +79,15 @@ function TableForm({loadDashboard}) {
                 name="capacity"
                 type="number"
                 onChange={handleChange}
+                value={formData.capacity}
                 required
                 />
-                <button>Submit</button>
+                <button type="submit">Submit</button>
                 <button
                 type="button"
                 onClick={history.goBack}>Cancel</button>
             </form>
-            {error && <div className="alert alert-danger">{error}</div>}
+            <ErrorAlert error={error} />
         </div>
     )
 }
