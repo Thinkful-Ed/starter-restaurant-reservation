@@ -52,7 +52,7 @@ function Routes() {
       <Route path="/reservations/new">
         <ReservationForm />
       </Route>
-      <Route>
+      <Route path="/tables/new">
         <TableForm />
       </Route>
       <Route>
