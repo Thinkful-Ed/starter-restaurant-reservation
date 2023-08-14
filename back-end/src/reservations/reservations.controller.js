@@ -19,7 +19,7 @@ async function list(req, res) {
 }
 
 const create = async(req, res, _next) => {
-  res.status(201).json({data : await service.create(req.body.data)})
+  res.status(201).json({data : await service.create(req.body)})
 }
 
 module.exports = {
@@ -34,5 +34,5 @@ module.exports = {
   ), peopleValidator,
   dateValidator,
   timeValidator,
-  asyncErrorBoundary(create)],
+  asyncErrorBoundary(create)]
 };
