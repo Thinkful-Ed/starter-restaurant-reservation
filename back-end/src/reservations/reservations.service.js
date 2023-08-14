@@ -1,14 +1,9 @@
 const knex = require("../db/connection");
 
-function list() {
-  return knex("reservations").select("*");
-}
-
-function listToday(date) {
+function list(date) {
   return knex("reservations")
     .select("*")
     .where({ reservation_date: date })
-    .whereNot({ status: "finished" })
     .orderBy("reservation_time");
 }
 
@@ -21,6 +16,5 @@ async function create(reservation) {
 
 module.exports = {
   list,
-  listToday,
   create,
 };

@@ -5,9 +5,9 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./reservations.service");
 
-function validator(req, res, next) {
+function validator(field) {
   return function (req, res, next) {
-    const { data = ({ [field]: value } = {}) } = req.body;
+    const { data: { [field]: value } = {} } = req.body;
     if (!value) {
       return next({
         status: 400,
@@ -18,11 +18,11 @@ function validator(req, res, next) {
   };
 }
 
-async function listToday(req, res) {
+async function list(req, res) {
   const { date } = req.query;
-  const response = await service.listToday(date);
+  const data = await service.list(date);
   res.json({
-    data: [response],
+    data,
   });
 }
 
@@ -34,7 +34,7 @@ async function create(req, res) {
 }
 
 module.exports = {
-  listToday: [asyncErrorBoundary(listToday)],
+  list: [asyncErrorBoundary(list)],
   create: [
     validator("first_name"),
     validator("last_name"),

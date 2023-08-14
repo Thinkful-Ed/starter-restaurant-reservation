@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-
+import { today } from "../utils/date-time";
+import useQuery from "../utils/useQuery";
 /**
  * Defines the dashboard page.
  * @param date
@@ -9,15 +10,17 @@ import ErrorAlert from "../layout/ErrorAlert";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  const query = useQuery();
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const thisDate = query.get("date") || today();
 
-  useEffect(loadDashboard, [date]);
+  useEffect(loadDashboard, [thisDate]);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
+    listReservations({ date: thisDate }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
