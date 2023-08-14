@@ -7,6 +7,9 @@ const service = require("./reservations.service");
 
 function validator(field) {
   return function (req, res, next) {
+    //to do: add validation for date and time
+    // add validation for mobile number
+    // add validation for number of people
     const { data: { [field]: value } = {} } = req.body;
     if (!value) {
       return next({
@@ -14,7 +17,61 @@ function validator(field) {
         message: `${field} is missing`,
       });
     }
+
     next();
+  };
+}
+
+function phoneNumberValidator(field) {
+  return function (req, res, next) {
+    const { data: { [field]: value } = {} } = req.body;
+    if (value.length < 10) {
+      return next({
+        status: 400,
+        message: `${field} must be a valid phone number`,
+      });
+    }
+
+    next();
+  };
+}
+function dateValidator(field) {
+  return function (req, res, next) {
+    const { data: { [field]: value } = {} } = req.body;
+    const date = new Date(value);
+    if (!isNaN(date)) {
+      return next({
+        status: 400,
+        message: `${field} must be a valid date`,
+      });
+    }
+    if (date.getDay() === 2) {
+      return next({
+        status: 400,
+        message: `Closed on Tuesdays. Please select a different day.`,
+      });
+    }
+    if (date < new Date()) {
+      return next({
+        status: 400,
+        message: `${field} must be a date in the future`,
+      });
+    }
+
+    next();
+  };
+}
+
+function timeValidator(field) {
+  return function (req, res, next) {
+    const { data: { [field]: value } = {} } = req.body;
+    const time = new Date(value);
+    if (!isNaN(time)) {
+      return next({
+        status: 400,
+        message: `${field} must be a valid time`,
+      });
+    }
   };
 }
 
@@ -38,10 +95,10 @@ module.exports = {
   create: [
     validator("first_name"),
     validator("last_name"),
-    validator("mobile_number"),
-    validator("reservation_date"),
-    validator("reservation_time"),
-    validator("people"),
+    phoneNumberValidator("mobile_number"),
+    dateValidator("reservation_date"),
+    timeValidator("reservation_time"),
+    peopleValidator("people"),
     asyncErrorBoundary(create),
   ],
 };
