@@ -5,7 +5,7 @@
 import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-date";
 
-const API_BASE_URL =
+export const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
 
 /**
@@ -67,3 +67,34 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+export async function createReservation(reservationPost, signal){
+  const url = `${API_BASE_URL}/reservations`;
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({data: reservationPost}),
+    signal,
+  };
+
+  return await fetchJson(url, options, {})
+}
+
+export async function readReservation(reservationId, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservationId}`;
+  return await fetchJson(url, { signal }, {})
+    .then(formatReservationTime)
+    .then(formatReservationDate);
+}
+
+export async function updateReservation(updatedReservation, response, signal){
+  const url = `${API_BASE_URL}/reservations/${updatedReservation}`
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({data: response}),
+    signal
+  };
+  return await fetchJson(url, options, updatedReservation)
+}
+

@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-function ReservationForm({handleChange, handleSubmit }) {
+function ReservationForm({ handleChange, handleSubmit }) {
   const history = useHistory();
 
   function handleCancel() {
@@ -85,4 +85,4 @@ function ReservationForm({handleChange, handleSubmit }) {
   );
 }
 
-export default ReservationForm
+export default ReservationForm;

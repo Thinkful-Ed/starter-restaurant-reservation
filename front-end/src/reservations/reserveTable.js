@@ -14,6 +14,8 @@ function NewReservation({ reservatations, error, setError, setReservation }) {
     reservation_time: "",
     people: 0,
   };
+
+  
   const [form, setForm] = useState({ ...formData });
 
   function handleChange(e) {
@@ -30,7 +32,6 @@ function NewReservation({ reservatations, error, setError, setReservation }) {
   return (
     <div>
       <ReservationForm 
-      formData={formData}
       handleChange={handleChange}
       handleSubmit={handleSubmit}
       />

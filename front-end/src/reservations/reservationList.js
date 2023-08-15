@@ -3,5 +3,11 @@ import {Link, useHistory} from "react-router-dom";
 import { listReservations } from "../utils/api";
 
 function ReservationList(){
-    
+    const history = useHistory();
+
+    return (
+        <div>
+            
+        </div>
+    )
 }
