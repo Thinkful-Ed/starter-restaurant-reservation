@@ -6,7 +6,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./reservations.service");
 
 function validator(field) {
-  return function (req, res, next) {
+  return function (req, _res, next) {
     //to do: add validation for date and time
     // add validation for mobile number
     // add validation for number of people
@@ -23,9 +23,9 @@ function validator(field) {
 }
 
 function phoneNumberValidator(field) {
-  return function (req, res, next) {
+  return function (req, _res, next) {
     const { data: { [field]: value } = {} } = req.body;
-    if (value.length < 10) {
+    if (value.length < 12 || value.length > 12) {
       return next({
         status: 400,
         message: `${field} must be a valid phone number`,
@@ -35,26 +35,16 @@ function phoneNumberValidator(field) {
     next();
   };
 }
+
 function dateValidator(field) {
-  return function (req, res, next) {
+  return function (req, _res, next) {
     const { data: { [field]: value } = {} } = req.body;
     const date = new Date(value);
-    if (!isNaN(date)) {
+
+    if (isNaN(date)) {
       return next({
         status: 400,
         message: `${field} must be a valid date`,
-      });
-    }
-    if (date.getDay() === 2) {
-      return next({
-        status: 400,
-        message: `Closed on Tuesdays. Please select a different day.`,
-      });
-    }
-    if (date < new Date()) {
-      return next({
-        status: 400,
-        message: `${field} must be a date in the future`,
       });
     }
 
@@ -63,15 +53,38 @@ function dateValidator(field) {
 }
 
 function timeValidator(field) {
-  return function (req, res, next) {
+  return function (req, _res, next) {
     const { data: { [field]: value } = {} } = req.body;
-    const time = new Date(value);
-    if (!isNaN(time)) {
+    const timeCheck = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
+    if (!timeCheck.test(value)) {
       return next({
         status: 400,
         message: `${field} must be a valid time`,
       });
     }
+    next();
+  };
+}
+
+function peopleValidator(field) {
+  return function (req, _res, next) {
+    console.log({ field });
+    const { data: { [field]: value } = {} } = req.body;
+    console.log({ value });
+    if (typeof value !== "number") {
+      console.log({ value });
+      return next({
+        status: 400,
+        message: `${field} must be a number`,
+      });
+    }
+    if (value < 1) {
+      return next({
+        status: 400,
+        message: `${field} must be at least 1`,
+      });
+    }
+    next();
   };
 }
 
@@ -93,8 +106,14 @@ async function create(req, res) {
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [
-    validator("first_name"),
-    validator("last_name"),
+    ...[
+      "first_name",
+      "last_name",
+      "mobile_number",
+      "reservation_date",
+      "reservation_time",
+      "people",
+    ].map(validator),
     phoneNumberValidator("mobile_number"),
     dateValidator("reservation_date"),
     timeValidator("reservation_time"),
