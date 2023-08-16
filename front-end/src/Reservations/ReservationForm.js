@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-/* The /reservations/new page will
+import ErrorAlert from '../layout/ErrorAlert';/* The /reservations/new page will
 
     have the following required and not-nullable fields:
         First name: <input name="first_name" />
@@ -15,7 +15,9 @@ import { useHistory } from 'react-router-dom';
  */
 
 export default function ReservationForm({reservation, setReservation, submitHandler}) {
+
 	const history = useHistory();
+	const [error, setError] = useState(null);
 
 
 	function changeHandler({ target: { name, value } }) {
@@ -33,6 +35,7 @@ export default function ReservationForm({reservation, setReservation, submitHand
         <h2>New Reservation</h2>
 				<div className="d-flex justify-content-center card-body">
 					<form onSubmit={submitHandler}>
+						<ErrorAlert error={error}/>
 						<div>
 							<div className="card text-center">
 								<label>First Name</label>
