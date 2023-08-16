@@ -11,15 +11,17 @@ import useQuery from "../utils/useQuery";
  */
 function Dashboard({ date }) {
   const query = useQuery();
+  const thisDate = query.get("date") || today();
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const thisDate = query.get("date") || today();
-
+  // console.log({ thisDate });
   useEffect(loadDashboard, [thisDate]);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
+    // console.log("loadDashboard");
+    // console.log({ date: thisDate });
     listReservations({ date: thisDate }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);

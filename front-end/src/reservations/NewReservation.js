@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -17,16 +17,50 @@ function NewReservation() {
     people: "",
   });
   const [error, setError] = useState(null);
+  const [errorTuesday, setErrorTuesday] = useState(false);
+  const [errorPastDate, setErrorPastDate] = useState(false);
+
+  // useEffect(() => {
+  //   const date = new Date(formData.reservation_date);
+  //   const current = new Date();
+  //   setErrorTuesday(date.getDay() === 1);
+  //   setErrorPastDate(date < current && date.getDate() !== current.getDate());
+  // }, [formData.reservation_date]);
 
   function handleChange({ target }) {
-    setFormData({
+    // console.log("handle change");
+    const updatedFormData = {
       ...formData,
       [target.name]: target.value,
-    });
+    };
+
+    const inputDateParts = updatedFormData.reservation_date.match(
+      /^(\d{4})-(\d{2})-(\d{2})$/
+    );
+
+    // console.log({ formdata: updatedFormData.reservation_date, inputDateParts });
+    if (inputDateParts) {
+      const parsedDate = new Date(
+        `${inputDateParts[2]}-${inputDateParts[3]}-${inputDateParts[1]}`
+      );
+      const currentDate = new Date();
+      // console.log({
+      //   formdata: updatedFormData.reservation_date,
+      //   inputDateParts,
+      //   parsedDate,
+      //   currentDate,
+      // });
+      setErrorTuesday(parsedDate.getDay() === 2);
+
+      if (parsedDate.setHours(0, 0, 0, 0) < currentDate.setHours(0, 0, 0, 0)) {
+        setErrorPastDate(true);
+      } else {
+        setErrorPastDate(false);
+      }
+    }
+
+    setFormData(updatedFormData);
   }
-  const handleCancel = () => {
-    history.goBack();
-  };
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -34,7 +68,7 @@ function NewReservation() {
       alert("Please enter at least 1 person.");
     } else {
       const abortController = new AbortController();
-
+      formData.people = Number(formData.people);
       try {
         axios.post(`${API_BASE_URL}/reservations`, {
           data: formData,
@@ -48,6 +82,9 @@ function NewReservation() {
       return () => abortController.abort();
     }
   }
+  const handleCancel = () => {
+    history.goBack();
+  };
 
   return (
     <div>
@@ -83,7 +120,16 @@ function NewReservation() {
             value={formData.mobile_number}
             required
           />
+
           <label htmlFor="reservation_date">Reservation Date</label>
+          {errorTuesday || errorPastDate ? (
+            <div className="alert alert-danger">
+              {errorTuesday && (
+                <p>Closed on Tuesdays, please select a different day.</p>
+              )}
+              {errorPastDate && <p>Please select a future date.</p>}
+            </div>
+          ) : null}
           <input
             className="form-control"
             id="reservation_date"
@@ -116,7 +162,11 @@ function NewReservation() {
           />
         </div>
         <div className="btn-group">
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={errorTuesday || errorPastDate || formData.people < 1}
+          >
             Submit
           </button>
           <button

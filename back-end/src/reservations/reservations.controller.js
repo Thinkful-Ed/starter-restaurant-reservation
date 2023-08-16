@@ -24,6 +24,7 @@ function validator(field) {
 
 function phoneNumberValidator(field) {
   return function (req, _res, next) {
+    // console.log("phone number validator");
     const { data: { [field]: value } = {} } = req.body;
     if (value.length < 12 || value.length > 12) {
       return next({
@@ -38,6 +39,7 @@ function phoneNumberValidator(field) {
 
 function dateValidator(field) {
   return function (req, _res, next) {
+    // console.log("date validator");
     const { data: { [field]: value } = {} } = req.body;
     const date = new Date(value);
 
@@ -47,6 +49,18 @@ function dateValidator(field) {
         message: `${field} must be a valid date`,
       });
     }
+    if (date.getDay() === 1) {
+      return next({
+        status: 400,
+        message: `closed`,
+      });
+    }
+    if (date < new Date()) {
+      return next({
+        status: 400,
+        message: `${field} must be in the future`,
+      });
+    }
 
     next();
   };
@@ -54,6 +68,7 @@ function dateValidator(field) {
 
 function timeValidator(field) {
   return function (req, _res, next) {
+    // console.log("time validator");
     const { data: { [field]: value } = {} } = req.body;
     const timeCheck = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
     if (!timeCheck.test(value)) {
@@ -68,17 +83,19 @@ function timeValidator(field) {
 
 function peopleValidator(field) {
   return function (req, _res, next) {
-    console.log({ field });
+    // console.log("people validator");
+    // console.log({ field });
     const { data: { [field]: value } = {} } = req.body;
-    console.log({ value });
+
     if (typeof value !== "number") {
-      console.log({ value });
+      // console.log("not a number");
       return next({
         status: 400,
         message: `${field} must be a number`,
       });
     }
     if (value < 1) {
+      // console.log("less than 1");
       return next({
         status: 400,
         message: `${field} must be at least 1`,
@@ -97,6 +114,7 @@ async function list(req, res) {
 }
 
 async function create(req, res) {
+  // console.log("create");
   const response = await service.create(req.body.data);
   res.status(201).json({
     data: response,
