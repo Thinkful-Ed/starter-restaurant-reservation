@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import ReserveTable from "../reservations/ReserveTable";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
@@ -25,6 +25,9 @@ function Routes() {
       </Route>
       <Route path="/dashboard">
         <Dashboard error={error} setError={setError} />
+      </Route>
+      <Route exact path="/reservations/new">
+        <ReserveTable />
       </Route>
       <Route>
         <NotFound />

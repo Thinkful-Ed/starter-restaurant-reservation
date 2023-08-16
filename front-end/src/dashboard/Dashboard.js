@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery"
-import { today } from "../utils/date-time";
+import { today, previous, next } from "../utils/date-time";
 import { Link } from "react-router-dom";
-import { API_BASE_URL } from "../utils/api";
+import ReservationList from "../reservations/ReservationList"
 
 /**
  * Defines the dashboard page.
@@ -21,6 +21,7 @@ function Dashboard({error, setError}) {
     date = today();
   }
 
+
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
@@ -32,49 +33,29 @@ function Dashboard({error, setError}) {
     return () => abortController.abort();
   }
 
-  // allows user to choose which day they see the reservations on
-
-  function chooseWhichDay(date, days){
-    const dateSelected = new Date(date);
-    dateSelected.setDate(dateSelected.getDate() + days);
-    return dateSelected
-  }
-
-
-  async function putStatus(reservationId) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/reservations/${reservationId}/status`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: { status: "finished" } }),
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.message || "An error occurred while processing the request.");
-        return;
-      }
-  
-      const { data } = await listReservations();
-      setReservations(data);
-  
-      const finishedReservation = await response.json();
-      console.log("Reservation status:", finishedReservation);
-    } catch (error) {
-      setError(error.message || "An error occurred.");
-    }
-  }
-
-
+  console.log(reservations)
 
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for: {date} </h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      <div>
+        <Link to={`dashboard?date=${previous(date)}`} className='btn btn-primary'>
+          Previous
+        </Link>
+        <Link to={`dashboard`} className='btn btn-primary'>
+          Today
+        </Link>
+        <Link to={`dashboard?date=${next(date)}`} className='btn btn-primary'>
+          Next
+        </Link>
+      </div>
+      <div>
+      </div>
+      <ReservationList reservations={reservations} loadDashboard={loadDashboard} setError={setError}/>
     </main>
   );
 }

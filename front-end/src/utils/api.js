@@ -69,7 +69,7 @@ export async function listReservations(params, signal) {
 }
 
 export async function createReservation(reservationPost, signal){
-  const url = `${API_BASE_URL}/reservations`;
+  const url = new URL (`${API_BASE_URL}/reservations`);
   const options = {
     method: "POST",
     headers,
@@ -81,14 +81,14 @@ export async function createReservation(reservationPost, signal){
 }
 
 export async function readReservation(reservationId, signal) {
-  const url = `${API_BASE_URL}/reservations/${reservationId}`;
+  const url = new URL(`${API_BASE_URL}/reservations/${reservationId}`);
   return await fetchJson(url, { signal }, {})
     .then(formatReservationTime)
     .then(formatReservationDate);
 }
 
 export async function updateReservation(updatedReservation, response, signal){
-  const url = `${API_BASE_URL}/reservations/${updatedReservation}`
+  const url = new URL(`${API_BASE_URL}/reservations/${updatedReservation}`)
   const options = {
     method: "PUT",
     headers,
@@ -98,3 +98,13 @@ export async function updateReservation(updatedReservation, response, signal){
   return await fetchJson(url, options, updatedReservation)
 }
 
+export async function cancelReservation(reservation_id, signal){
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`)
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify( {data: { status: "cancelled" }}),
+    signal,
+  };
+  return await fetchJson(url, options, []);
+}

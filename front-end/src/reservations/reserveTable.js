@@ -1,22 +1,22 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationForm from "./ReservationForm";
 
-function NewReservation({ reservatations, error, setError, setReservation }) {
+function NewReservation() {
   const history = useHistory();
-  const formData = {
+  const [form, setForm] = useState({
     first_name: "",
     last_name: "",
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
     people: 0,
-  };
+  });
 
-  
-  const [form, setForm] = useState({ ...formData });
+  const [error, setError] = useState(null);
+  const abortController = new AbortController();
 
   function handleChange(e) {
     setForm({
@@ -27,15 +27,33 @@ function NewReservation({ reservatations, error, setError, setReservation }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    try {
+      await createReservation(form, abortController.signal);
+      history.push("/dashboard");
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        setError(error);
+      }
+    }
   }
+
+  useEffect(() => {
+    return () => abortController.abort();
+  }, []);
 
   return (
     <div>
-      <ReservationForm 
-      handleChange={handleChange}
-      handleSubmit={handleSubmit}
+      <ErrorAlert error={error} />
+      <ReservationForm
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        formData={form}
       />
     </div>
-  )
-
+  );
 }
+
+export default NewReservation;
+
+

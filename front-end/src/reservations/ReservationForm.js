@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-function ReservationForm({ handleChange, handleSubmit }) {
+function ReservationForm({ handleChange, handleSubmit, formData }) {
   const history = useHistory();
 
   function handleCancel() {
@@ -19,7 +19,7 @@ function ReservationForm({ handleChange, handleSubmit }) {
             className="formcreation"
             id="first_name"
             placeholder="first_name"
-            value="first_name"
+            value={formData.first_name}
             onChange={handleChange}
             required
           />
@@ -29,7 +29,7 @@ function ReservationForm({ handleChange, handleSubmit }) {
             className="formcreation"
             id="last_name"
             placeholder="last_name"
-            value="last_name"
+            value={formData.last_name}
             onChange={handleChange}
             required
           />
@@ -39,7 +39,7 @@ function ReservationForm({ handleChange, handleSubmit }) {
             className="formcreation"
             id="mobile_number"
             placeholder="mobile_number"
-            value="mobile_number"
+            value={formData.mobile_number}
             onChange={handleChange}
             required
           />
@@ -49,7 +49,7 @@ function ReservationForm({ handleChange, handleSubmit }) {
             className="formcreation"
             id="people"
             placeholder="amount of people"
-            value="people"
+            value={formData.people}
             onChange={handleChange}
             required
           />
@@ -58,18 +58,18 @@ function ReservationForm({ handleChange, handleSubmit }) {
             name="reservation_date"
             className="formcreation"
             id="reservation_date"
-            placeholder="reservation_date"
-            value="reservation_date"
+            placeholder="date"
+            value={formData.reservation_date}
             onChange={handleChange}
             required
           />
           <input
             type="time"
-            name="time"
-            className="formcreation"
+            name="reservation_time"
+            className=""
             id="time"
             placeholder="time"
-            value="time"
+            value={formData.reservation_time}
             onChange={handleChange}
             required
           />
