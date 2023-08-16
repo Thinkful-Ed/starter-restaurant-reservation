@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 const peopleValidator = (req, res, next) => {
     let { people } = req.body.data;
     
@@ -47,8 +49,39 @@ const timeValidator = (req, res, next) => {
     }
 }
 
+const isDateInPast = (req, res, next) => {
+    const {reservation_date} = req.body.data;
+    const submitedDate = moment(reservation_date)
+    const currentDate = moment()
+
+    if(submitedDate.isSameOrBefore(currentDate, 'day')){
+        next({
+            status : 400,
+            message : 'reservation date needs to be in the future'
+        })
+    } else {
+        next();
+    }
+}
+
+const isDateATuesday = (req, res, next) => {
+    const { reservation_date } = req.body.data;
+    const submitedDate = moment(reservation_date)
+
+    if(submitedDate.day() === 2){
+        next({
+            status : 400,
+            message : 'We are closed on Tuesday'
+        })
+    } else {
+        next()
+    }
+}
+
   module.exports = {
     peopleValidator,
     dateValidator,
-    timeValidator
+    timeValidator,
+    isDateInPast,
+    isDateATuesday
   }
