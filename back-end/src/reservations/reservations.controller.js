@@ -19,7 +19,7 @@ async function list(req, res) {
 }
 
 const create = async(req, res, _next) => {
-  res.status(201).json({data : await service.create(req.body)})
+  res.status(201).json({data : await service.create(req.body.data)})
 }
 
 module.exports = {

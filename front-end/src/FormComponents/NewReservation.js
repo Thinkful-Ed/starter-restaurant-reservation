@@ -15,11 +15,14 @@ const NewReservation = ({setReservations, reservations}) => {
         people : null
     }
 
-    const submitHandler = (formData) => {
-        createReservation(formData)
-            .then(data => console.log(data))
-            .then(history.push('/'))
-            .catch(error => console.log("this is the error given",error.message))
+    const submitHandler = async(formData) => {
+        try {
+            const data = await createReservation(formData);
+            setReservations([...reservations, data]);
+            await history.push('/dashboard');  // Wait for navigation to complete
+        } catch (error) {
+            console.log("this is the error given", error.message);
+        }
     }
     return (
         <section>

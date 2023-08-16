@@ -1,10 +1,10 @@
 function hasProperties(...properties) {
     return function (req, res, next) {
-      const { body = {} } = req;
+      const { data = {} } = req.body;
   
       try {
         properties.forEach((property) => {
-          const value = body[property];
+          const value = data[property];
           if (!value) {
             const error = new Error(`A '${property}' property is required.`);
             error.status = 400;

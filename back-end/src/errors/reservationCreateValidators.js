@@ -1,5 +1,6 @@
 const peopleValidator = (req, res, next) => {
-    const { people } = req.body;
+    let { people } = req.body.data;
+    
     if(!Number.isInteger(people)){
         next({
             status : 400,
@@ -17,7 +18,7 @@ const isValidDate = (date) => {
 }
 
 const dateValidator = (req, res, next) => {
-    const { reservation_date } = req.body;
+    const { reservation_date } = req.body.data;
     if(isValidDate(reservation_date)){
         next();
     } else {
@@ -35,7 +36,7 @@ const isValidTime = (time) => {
 }
 
 const timeValidator = (req, res, next) => {
-    const { reservation_time } = req.body;
+    const { reservation_time } = req.body.data;
     if(isValidTime(reservation_time)){
         next();
     } else {
