@@ -78,10 +78,29 @@ const isDateATuesday = (req, res, next) => {
     }
 }
 
+const isDuringBusinessHours = (req, res, next) => {
+    const { reservation_time } = req.body.data;
+
+    const submittedTime = moment(reservation_time, 'YYYY-MM-DD HH:mm')
+    const minTime = moment('10:30 AM', 'h:mm A');
+    const maxTime = moment('9:30 PM', 'h:mm A');
+
+
+    if(submittedTime.isBetween(minTime, maxTime, [])){
+        next();
+    } else {
+        next({
+            status : 400, 
+            message : 'reservation must be between 10:30 am and 9:30 pm'
+        })
+    }
+}
+
   module.exports = {
     peopleValidator,
     dateValidator,
     timeValidator,
     isDateInPast,
-    isDateATuesday
+    isDateATuesday,
+    isDuringBusinessHours
   }
