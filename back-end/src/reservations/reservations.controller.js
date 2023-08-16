@@ -1,7 +1,7 @@
 const P = require('pino');
 const hasProperties = require('../errors/hasProperties')
 const asyncErrorBoundary = require('../errors/asyncErrorBoundary')
-const { peopleValidator, dateValidator, timeValidator } = require('../errors/reservationCreateValidators')
+const { peopleValidator, dateValidator, timeValidator, isDateInPast, isDateATuesday } = require('../errors/reservationCreateValidators')
 const service = require('./reservations.service')
 
 
@@ -34,5 +34,7 @@ module.exports = {
   ), peopleValidator,
   dateValidator,
   timeValidator,
+  isDateInPast,
+  isDateATuesday,
   asyncErrorBoundary(create)]
 };
