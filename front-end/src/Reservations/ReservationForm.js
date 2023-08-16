@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 /* The /reservations/new page will
 
@@ -14,22 +14,33 @@ import { useHistory } from 'react-router-dom';
     display any error messages returned from the API
  */
 
-export default function ReservationForm() {
-	const changeHandler = '';
+export default function ReservationForm({reservation, setReservation, submitHandler}) {
+	const history = useHistory();
+
+
+	function changeHandler({ target: { name, value } }) {
+		setReservation((previousReservation) => ({
+			...previousReservation,
+			[name]: value,
+		}));
+	}
+
+
+
 	return (
 		<div className='card'>
 			<div className="card-header text-center ">
         <h2>New Reservation</h2>
 				<div className="d-flex justify-content-center card-body">
-					<form>
+					<form onSubmit={submitHandler}>
 						<div>
 							<div className="card text-center">
 								<label>First Name</label>
 								<input
 									name="first_name"
 									type="text"
-									value="reservation.first_name"
-									onChange={changeHandler} //<--- still need to write
+									value={reservation.first_name}
+									onChange={changeHandler}
 								/>
 							</div>
 							<div className="card text-center">
@@ -37,7 +48,7 @@ export default function ReservationForm() {
 								<input
 									name="last_name"
 									type="text"
-									value="reservation.last_name"
+									value={reservation.last_name}
 									onChange={changeHandler}
 								/>
 							</div>
@@ -46,7 +57,7 @@ export default function ReservationForm() {
 								<input
 									name="mobile_number"
 									type="tel"
-									value="reservation.mobile_number"
+									value={reservation.mobile_number}
 									onChange={changeHandler}
 								/>
 							</div>
@@ -55,7 +66,7 @@ export default function ReservationForm() {
 								<input
 									name="reservation_date"
 									type="date"
-									value="reservation.reservation_date"
+									value={reservation.reservation_date}
 									onChange={changeHandler}
 								/>
 							</div>
@@ -64,7 +75,7 @@ export default function ReservationForm() {
 								<input
 									name="reservation_time"
 									type="time"
-									value="reservation.reservation_time"
+									value={reservation.reservation_time}
 									onChange={changeHandler}
 								/>
 							</div>
@@ -74,14 +85,14 @@ export default function ReservationForm() {
 									name="people"
 									type="number"
                   min={1}
-									value="reservation.people"
+									value={reservation.people}
 									onChange={changeHandler}
 								/>
 							</div>
 						</div>
 						<div className="card-footer d-flex justify-content-between">
 							<button type="submit">Submit</button>
-							<button type="button" onClick={useHistory}>
+							<button type="button" onClick={history.goBack}>
 								Cancel
 							</button>
 						</div>
