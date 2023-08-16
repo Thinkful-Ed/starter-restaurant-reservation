@@ -1,4 +1,5 @@
 const reservationsService = require('./reservations.service');
+const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
 
 /**
  * List handler for reservation resources
@@ -8,18 +9,11 @@ const reservationsService = require('./reservations.service');
 //then send a GET to `/reservations?date=2035-12-30` to list the reservations for that date).
 //The date is defaulted to today, and the reservations are sorted by time.
 
-async function list(req, res, next) {
-	//const { date } = req.query;
-
-	try {
-		//const data = await reservationsService.list(date);
-		const data = await reservationsService.list();
-		res.json({ data });
-	} catch (error) {
-		next(error);
-	}
+async function list(req, res) {
+  const reservations = await reservationsService.list();
+  res.json({ data: reservations });
 }
 
 module.exports = {
-	list,
+	list: asyncErrorBoundary(list),
 };
