@@ -77,6 +77,12 @@ function timeValidator(field) {
         message: `${field} must be a valid time`,
       });
     }
+    if (value < "10:30" || value > "21:30") {
+      return next({
+        status: 400,
+        message: `${field} must be between 10:30 and 21:30`,
+      });
+    }
     next();
   };
 }
