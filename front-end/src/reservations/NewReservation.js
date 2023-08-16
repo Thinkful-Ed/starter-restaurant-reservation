@@ -82,12 +82,13 @@ function NewReservation() {
     } else {
       if (errorTuesday || errorPastDate || errorTime || formData.people < 1) {
         setError({ message: newErrors });
-        console.log({ error, newErrors });
+        // console.log({ error, newErrors });
         return;
       }
       const abortController = new AbortController();
       formData.people = Number(formData.people);
       try {
+        // console.log({ formData });
         axios.post(`${API_BASE_URL}/reservations`, {
           data: formData,
         });
