@@ -49,6 +49,18 @@ function dateValidator(field) {
         message: `${field} must be a valid date`,
       });
     }
+    if (date.getDay() === 1) {
+      return next({
+        status: 400,
+        message: `closed`,
+      });
+    }
+    if (date < new Date()) {
+      return next({
+        status: 400,
+        message: `${field} must be in the future`,
+      });
+    }
 
     next();
   };
