@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const Form = ({ initialFormData, headerText, submitHandler }) => {
@@ -33,14 +33,15 @@ const Form = ({ initialFormData, headerText, submitHandler }) => {
         <label htmlFor="last_name">Last Name</label>
         <input type='text' name='last_name' id='last_name' required value={formData.last_name} onChange={handleInput}/>
         <label htmlFor="mobile_number">mobile_number</label>
-        <input type='tel' name="mobile_number" id="mobile_number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required value={formData.mobile_number} onChange={handleInput}/>
+        <input type='tel' name="mobile_number" id="mobile_number"  
+        required value={formData.mobile_number} onChange={handleInput}/>
         <label htmlFor="reservation_date">Reservation Date</label>
         <input type='date' name="reservation_date"  id="reservation_date" required value={formData.reservation_date} onChange={handleInput}/>
         <label htmlFor="reservation_time">Reservation Time</label>
         <input type='time' name="reservation_time" id="reservation_time" required value={formData.reservation_time} onChange={handleInput}/>
         <label htmlFor="people">Amount of People</label>
         <input type='number' min='1' max='20' name="people" id="people" required value={formData.people} onChange={handleInput}/>
-        <input type='submit' />
+        <button type='submit'>Submit</button>
         <button onClick={handleCancel}>Cancel</button>
     </form>
   )

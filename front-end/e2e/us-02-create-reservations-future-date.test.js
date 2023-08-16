@@ -54,6 +54,7 @@ describe("US-02 - Create reservation on a future, working date - E2E", () => {
       });
 
       const alerts = await page.$$(".alert-danger");
+      console.log("alers", alerts)
       expect(alerts.length).toBeGreaterThan(0);
     });
 
