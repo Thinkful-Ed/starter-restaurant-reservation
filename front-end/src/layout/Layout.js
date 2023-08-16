@@ -1,6 +1,7 @@
 import React from "react";
 import Menu from "./Menu";
 import Routes from "./Routes";
+import { today } from "../utils/date-time";
 
 import "./Layout.css";
 
@@ -19,7 +20,7 @@ function Layout() {
           <Menu />
         </div>
         <div className="col">
-          <Routes />
+          <Routes date={today()}/>
         </div>
       </div>
     </div>
