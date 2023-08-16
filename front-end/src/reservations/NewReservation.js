@@ -19,16 +19,9 @@ function NewReservation() {
   const [error, setError] = useState(null);
   const [errorTuesday, setErrorTuesday] = useState(false);
   const [errorPastDate, setErrorPastDate] = useState(false);
-
-  // useEffect(() => {
-  //   const date = new Date(formData.reservation_date);
-  //   const current = new Date();
-  //   setErrorTuesday(date.getDay() === 1);
-  //   setErrorPastDate(date < current && date.getDate() !== current.getDate());
-  // }, [formData.reservation_date]);
+  const [errorTime, setErrorTime] = useState(false);
 
   function handleChange({ target }) {
-    // console.log("handle change");
     const updatedFormData = {
       ...formData,
       [target.name]: target.value,
@@ -38,18 +31,12 @@ function NewReservation() {
       /^(\d{4})-(\d{2})-(\d{2})$/
     );
 
-    // console.log({ formdata: updatedFormData.reservation_date, inputDateParts });
     if (inputDateParts) {
       const parsedDate = new Date(
         `${inputDateParts[2]}-${inputDateParts[3]}-${inputDateParts[1]}`
       );
       const currentDate = new Date();
-      // console.log({
-      //   formdata: updatedFormData.reservation_date,
-      //   inputDateParts,
-      //   parsedDate,
-      //   currentDate,
-      // });
+
       setErrorTuesday(parsedDate.getDay() === 2);
 
       if (parsedDate.setHours(0, 0, 0, 0) < currentDate.setHours(0, 0, 0, 0)) {
@@ -59,14 +46,45 @@ function NewReservation() {
       }
     }
 
+    if (target.name === "reservation_time") {
+      const inputTimeParts = target.value.match(/^(\d{2}):(\d{2})$/);
+      if (inputTimeParts) {
+        const parsedTime = new Date(
+          `01/01/2007 ${inputTimeParts[1]}:${inputTimeParts[2]}:00`
+        );
+        const openingTime = new Date("01/01/2007 10:30:00");
+        const closingTime = new Date("01/01/2007 21:30:00");
+        setErrorTime(parsedTime < openingTime || parsedTime > closingTime);
+      }
+    }
+
     setFormData(updatedFormData);
   }
 
   function handleSubmit(event) {
+    //todo add submission validation to only display error after submit button is clicked
+
     event.preventDefault();
+
+    const newErrors = [];
+
+    if (errorTuesday) {
+      newErrors.push("Closed on Tuesdays, please select a different day.");
+    }
+    if (errorPastDate) {
+      newErrors.push("Please select a future date.");
+    }
+    if (errorTime) {
+      newErrors.push("Please select a time between 10:30 AM and 9:30 PM.");
+    }
     if (formData.people < 1) {
-      alert("Please enter at least 1 person.");
+      newErrors.push("Please enter a number of people.");
     } else {
+      if (errorTuesday || errorPastDate || errorTime || formData.people < 1) {
+        setError({ message: newErrors });
+        console.log({ error, newErrors });
+        return;
+      }
       const abortController = new AbortController();
       formData.people = Number(formData.people);
       try {
@@ -122,14 +140,17 @@ function NewReservation() {
           />
 
           <label htmlFor="reservation_date">Reservation Date</label>
-          {errorTuesday || errorPastDate ? (
+          {/* {errorTuesday || errorPastDate || errorTime ? (
             <div className="alert alert-danger">
               {errorTuesday && (
                 <p>Closed on Tuesdays, please select a different day.</p>
               )}
               {errorPastDate && <p>Please select a future date.</p>}
+              {errorTime && (
+                <p>Please select a time between 10:30 AM and 9:30 PM.</p>
+              )}
             </div>
-          ) : null}
+          ) : null} */}
           <input
             className="form-control"
             id="reservation_date"
@@ -165,7 +186,9 @@ function NewReservation() {
           <button
             type="submit"
             className="btn btn-primary"
-            disabled={errorTuesday || errorPastDate || formData.people < 1}
+            // disabled={
+            //   errorTuesday || errorPastDate || formData.people < 1 || errorTime
+            // }
           >
             Submit
           </button>
