@@ -28,20 +28,28 @@ function NewReservation() {
   // }, [formData.reservation_date]);
 
   function handleChange({ target }) {
+    // console.log("handle change");
     const updatedFormData = {
       ...formData,
       [target.name]: target.value,
     };
 
     const inputDateParts = updatedFormData.reservation_date.match(
-      /^(\d{2})(\d{2})(\d{4})$/
+      /^(\d{4})-(\d{2})-(\d{2})$/
     );
+
+    // console.log({ formdata: updatedFormData.reservation_date, inputDateParts });
     if (inputDateParts) {
       const parsedDate = new Date(
-        `${inputDateParts[3]}-${inputDateParts[1]}-${inputDateParts[2]}`
+        `${inputDateParts[2]}-${inputDateParts[3]}-${inputDateParts[1]}`
       );
       const currentDate = new Date();
-
+      // console.log({
+      //   formdata: updatedFormData.reservation_date,
+      //   inputDateParts,
+      //   parsedDate,
+      //   currentDate,
+      // });
       setErrorTuesday(parsedDate.getDay() === 2);
 
       if (parsedDate.setHours(0, 0, 0, 0) < currentDate.setHours(0, 0, 0, 0)) {
@@ -53,9 +61,6 @@ function NewReservation() {
 
     setFormData(updatedFormData);
   }
-  const handleCancel = () => {
-    history.goBack();
-  };
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -77,6 +82,9 @@ function NewReservation() {
       return () => abortController.abort();
     }
   }
+  const handleCancel = () => {
+    history.goBack();
+  };
 
   return (
     <div>
@@ -115,7 +123,7 @@ function NewReservation() {
 
           <label htmlFor="reservation_date">Reservation Date</label>
           {errorTuesday || errorPastDate ? (
-            <div className="alert alert-danger" role="alert">
+            <div className="alert alert-danger">
               {errorTuesday && (
                 <p>Closed on Tuesdays, please select a different day.</p>
               )}
@@ -154,7 +162,11 @@ function NewReservation() {
           />
         </div>
         <div className="btn-group">
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={errorTuesday || errorPastDate || formData.people < 1}
+          >
             Submit
           </button>
           <button
