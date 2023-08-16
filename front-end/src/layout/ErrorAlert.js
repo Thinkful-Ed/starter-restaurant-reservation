@@ -9,6 +9,7 @@ import React from "react";
  */
 
 function ErrorAlert({ error }) {
+  //todo, add a way to check if the error array contains a value
   return (
     error && (
       <div className="alert alert-danger m-2">Error: {error.message}</div>
