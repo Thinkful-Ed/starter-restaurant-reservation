@@ -6,30 +6,31 @@ import ReservationForm from "./ReservationForm";
 
 function NewReservation() {
   const history = useHistory();
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: 0,
+    people: 1,
   });
 
   const [error, setError] = useState(null);
   const abortController = new AbortController();
 
   function handleChange(e) {
-    setForm({
-      ...form,
+    setFormData({
+      ...formData,
       [e.target.name]: e.target.value,
     });
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
+    formData.people = Number(formData.people)
 
     try {
-      await createReservation(form, abortController.signal);
+      await createReservation(formData, abortController.signal);
       history.push("/dashboard");
     } catch (error) {
       if (error.name !== "AbortError") {
@@ -48,7 +49,7 @@ function NewReservation() {
       <ReservationForm
         handleChange={handleChange}
         handleSubmit={handleSubmit}
-        formData={form}
+        formData={formData}
       />
     </div>
   );
