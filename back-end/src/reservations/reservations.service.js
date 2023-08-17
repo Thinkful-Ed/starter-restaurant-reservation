@@ -1,10 +1,19 @@
 const knex = require('../db/connection');
 
-function list(date) {
-  
+
+function listAll() {
+  return knex('reservations')
+    .select('*')
+    .orderBy('reservation_date')
+    .orderBy('reservation_time');
+}
+
+
+function list(date) {  
   return knex("reservations")
+    .select("*")
     .where({ reservation_date: date })
-    .orderBy("reservation_time");
+    .orderBy("reservation_time", "asc");
 }
 
 function create(newReservation) {
@@ -17,6 +26,7 @@ function create(newReservation) {
 
 
 module.exports = {
+  listAll,
 	list,
   create
   
