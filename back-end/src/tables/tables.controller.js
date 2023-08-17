@@ -1,1 +1,0 @@
-const tablesService = require('./tables.service');
