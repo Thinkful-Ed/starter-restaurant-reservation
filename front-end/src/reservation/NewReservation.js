@@ -4,9 +4,6 @@ import { useHistory } from 'react-router-dom';
 import { formatAsDate } from '../utils/date-time';
 import FormReservation from './FormReservation';
 
-
-
-
 export default function NewReservation() {
 	const history = useHistory();
 	const initialFormState = {
@@ -34,7 +31,12 @@ export default function NewReservation() {
 
 	return (
 		<div>
-			<FormReservation reservation={reservation} setReservation={setReservation} submitHandler={submitHandler} error={error}/>
+			<FormReservation
+				reservation={reservation}
+				setReservation={setReservation}
+				submitHandler={submitHandler}
+				error={error}
+			/>
 		</div>
 	);
 }

@@ -2,11 +2,13 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import ErrorAlert from '../layout/ErrorAlert';
 
-export default function FormReservation({reservation, setReservation, submitHandler, error}) {
-
+export default function FormReservation({
+	reservation,
+	setReservation,
+	submitHandler,
+	error,
+}) {
 	const history = useHistory();
-
-
 
 	function changeHandler({ target: { name, value } }) {
 		setReservation((previousReservation) => ({
@@ -15,15 +17,13 @@ export default function FormReservation({reservation, setReservation, submitHand
 		}));
 	}
 
-
-
 	return (
-		<div className='card'>
+		<div className="card">
 			<div className="card-header text-center ">
-        <h2>New Reservation</h2>
+				<h2>New Reservation</h2>
 				<div className="d-flex justify-content-center card-body">
 					<form onSubmit={submitHandler}>
-						<ErrorAlert error={error}/>
+						<ErrorAlert error={error} />
 						<div>
 							<div className="card text-center">
 								<label>First Name</label>
@@ -75,7 +75,7 @@ export default function FormReservation({reservation, setReservation, submitHand
 								<input
 									name="people"
 									type="number"
-                  min={1}
+									min={1}
 									value={reservation.people}
 									onChange={changeHandler}
 								/>

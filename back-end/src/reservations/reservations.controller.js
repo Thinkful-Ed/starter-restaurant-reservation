@@ -32,18 +32,20 @@ function hasData(req, res, next) {
 		}
 	}
 
-	next(); 
+	next();
 }
 
 function validateNames(req, res, next) {
-  const { data } = req.body;
-  const namePattern = /^[A-Za-z]+$/;
+	const { data } = req.body;
+	const namePattern = /^[A-Za-z]+$/;
 
-  if (namePattern.test(data.first_name) && namePattern.test(data.last_name)) {
-    next();
-  } else {
-    return res.status(400).json({ error: 'Invalid first_name or last_name format' });
-  }
+	if (namePattern.test(data.first_name) && namePattern.test(data.last_name)) {
+		next();
+	} else {
+		return res
+			.status(400)
+			.json({ error: 'Invalid first_name or last_name format' });
+	}
 }
 
 function validateReservationDate(req, res, next) {
