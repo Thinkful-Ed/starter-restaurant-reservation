@@ -51,10 +51,8 @@ function Dashboard({ date }) {
 			<div className="text-center">
 				<h1>Dashboard</h1>
 				<div className="card d-md-flex mb-3">
-          <div className=" card-header mb-0">
-					<h4>
-						Reservations for {queryDate || today()}
-					</h4>
+					<div className=" card-header mb-0">
+						<h4>Reservations for {queryDate || today()}</h4>
 						<button className="" onClick={handlePrevious}>
 							Previous
 						</button>
@@ -64,8 +62,11 @@ function Dashboard({ date }) {
 						<button className="" onClick={handleNext}>
 							Next
 						</button>
-          </div>
-					<ReservationsList reservations={reservations} date={queryDate || today()} />
+					</div>
+					<ReservationsList
+						reservations={reservations}
+						date={queryDate || today()}
+					/>
 				</div>
 				<ErrorAlert error={reservationsError} />
 			</div>
