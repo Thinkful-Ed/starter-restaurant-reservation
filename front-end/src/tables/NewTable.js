@@ -13,27 +13,52 @@ function NewTable() {
     capacity: "",
   });
   const [error, setError] = useState(null);
-
+  const [errorCapacity, setErrorCapacity] = useState(false);
+  const [errorTableName, setErrorTableName] = useState(false);
   function handleChange({ target }) {
-    setFormData({
+    const updatedFormData = {
       ...formData,
       [target.name]: target.value,
-    });
+    };
+    if (target.name === "capacity") {
+      setErrorCapacity(updatedFormData.capacity < 1);
+    }
+    if (target.name === "table_name") {
+      setErrorTableName(updatedFormData.table_name.length < 2);
+    }
+    setFormData(updatedFormData);
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    const abortController = new AbortController();
-    formData.capacity = Number(formData.capacity);
-    try {
-      axios.post(`${API_BASE_URL}/tables`, { data: formData });
-      history.push(`/dashboard`);
-    } catch (error) {
-      if (error.name !== "AbortError") {
-        setError(error);
-      }
+    const newErrors = [];
+    if (errorCapacity) {
+      newErrors.push({ message: "Capacity must be 1 or more." });
     }
-    return () => abortController.abort();
+    if (errorTableName) {
+      newErrors.push({ message: "Table name must be 2 or more characters." });
+    }
+    if (errorTableName || errorCapacity) {
+      setError({ message: newErrors });
+      return;
+    } else {
+      const abortController = new AbortController();
+      const signal = abortController.signal;
+      formData.capacity = Number(formData.capacity);
+      try {
+        await axios.post(
+          `${API_BASE_URL}/tables`,
+          { data: formData },
+          { signal }
+        );
+        history.push(`/dashboard`);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          setError(error);
+        }
+      }
+      return () => abortController.abort();
+    }
   }
 
   function handleCancel() {
