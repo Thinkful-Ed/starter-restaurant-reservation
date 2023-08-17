@@ -110,6 +110,12 @@ async function update(req, res) {
   res.status(200).json({ data: response });
 }
 
+async function destroy(req, res) {
+  const { table_id } = req.params;
+  const response = await service.update(table_id, null);
+  res.status(200).json({ data: response });
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [
@@ -122,4 +128,5 @@ module.exports = {
     asyncErrorBoundary(isOccupied),
     asyncErrorBoundary(update),
   ],
+  delete: [asyncErrorBoundary(destroy)],
 };
