@@ -41,6 +41,7 @@ function nameValidator(field) {
 }
 
 async function capacityValidator(req, res, next) {
+  console.log("capacityValidator");
   if (!req.body.data) {
     return next({
       status: 400,
@@ -102,6 +103,9 @@ async function create(req, res) {
 async function update(req, res) {
   const { table_id } = req.params;
   const { reservation_id } = req.body.data;
+  console.log("update");
+  console.log({ reservation_id, table_id });
+  console.log(req.body.data);
   const response = await service.update(table_id, reservation_id);
   res.status(200).json({ data: response });
 }
