@@ -25,25 +25,47 @@ function ReservationList({ reservations, loadDashboard, setError }) {
   }
 
   return (
-    <div>
-      {reservations.map((reservation) => (
-        <div key={reservation.reservation_id}>
-          <p>
-            {reservation.first_name} {reservation.last_name}
-          </p>
-          <p>{reservation.mobile_number}</p>
-          <p>
-            {reservation.reservation_date} {reservation.reservation_time}
-          </p>
-          <p>Party Size: {reservation.people}</p>
-          <p>Status: {reservation.status}</p>
-          {reservation.status === "booked" && (
-            <button onClick={() => handleCancelReservation(reservation.reservation_id)}>
-              Cancel
-            </button>
-          )}
-        </div>
-      ))}
+    <div className="container d-flex justify-content-center px-0">
+      <table className="table">
+        <thead>
+          <tr className="text-center">
+            <th className="border border-dark" >Name</th>
+            <th className="border border-dark" >Mobile Number</th>
+            <th className="border border-dark" >Reservation Date</th>
+            <th className="border border-dark" >Party Size</th>
+            <th className="border border-dark" >Status</th>
+            <th className="border border-dark" >Action</th> 
+          </tr>
+        </thead>
+        <tbody>
+          {reservations.map((reservation) => (
+            <tr key={reservation.reservation_id} className="text-center">
+              <td className="border border-dark">
+                {reservation.first_name} {reservation.last_name}
+              </td>
+              <td className="border border-dark">{reservation.mobile_number}</td>
+              <td className="border border-dark">
+                {reservation.reservation_date} {reservation.reservation_time}
+              </td>
+              <td className="border border-dark" >Party Size: {reservation.people}</td>
+              <td className="border border-dark" >Status: {reservation.status}</td>
+              <td className="text-center border border-dark">
+                {/* Center the button */}
+                {reservation.status === "booked" && (
+                  <button
+                    className="btn btn-danger"
+                    onClick={() =>
+                      handleCancelReservation(reservation.reservation_id)
+                    }
+                  >
+                    Cancel
+                  </button>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

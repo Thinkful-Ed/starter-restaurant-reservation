@@ -42,20 +42,26 @@ function Dashboard({error, setError}) {
         <h4 className="mb-0">Reservations for: {date} </h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      <div>
-        <Link to={`dashboard?date=${previous(date)}`} className='btn btn-primary'>
-          Previous
-        </Link>
-        <Link to={`dashboard`} className='btn btn-primary'>
-          Today
-        </Link>
-        <Link to={`dashboard?date=${next(date)}`} className='btn btn-primary'>
-          Next
-        </Link>
+      <div className="row justify-content-center">
+        <div className="col">
+          <div className="d-flex justify-content-center"> {/* Container for buttons */}
+            <Link to={`dashboard?date=${previous(date)}`} className='btn btn-primary mr-2'>
+              Previous Day
+            </Link>
+            <Link to={`dashboard`} className='btn btn-primary mr-2'>
+              Today
+            </Link>
+            <Link to={`dashboard?date=${next(date)}`} className='btn btn-primary mr-2'>
+              Next Day
+            </Link>
+          </div>
+        </div>
       </div>
       <div>
       </div>
-      <ReservationList reservations={reservations} loadDashboard={loadDashboard} setError={setError}/>
+      <div className="mt-3">
+        <ReservationList reservations={reservations} loadDashboard={loadDashboard} setError={setError}/>
+      </div>
     </main>
   );
 }
