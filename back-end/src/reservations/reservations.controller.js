@@ -62,22 +62,62 @@ function validateNames(req, res, next) {
 
 function validateReservationDate(req, res, next) {
 	const { data } = req.body;
-	if (!isNaN(Date.parse(data.reservation_date))) {
-		next();
-	} else {
-		return res.status(400).json({ error: 'reservation_date is not a date' });
+	
+	// Check if reservation_date is a valid date
+	const parsedDate = Date.parse(data.reservation_date);
+	if (isNaN(parsedDate)) {
+			return res.status(400).json({ error: 'reservation_date is not a valid date' });
 	}
+	
+	const currentDate = new Date();
+	const submittedDate = new Date(parsedDate);
+
+	// Check if reservation_date is in the past
+	if (submittedDate < currentDate) {
+			return res.status(400).json({ error: 'reservation_date must be a future date' });
+	}
+
+	// Check if reservation_date is a Tuesday (day of the week: 2)
+	if (submittedDate.getUTCDay() === 2) { // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+			return res.status(400).json({ error: 'closed' });
+	}
+	
+	next();
 }
+
 
 function validateReservationTime(req, res, next) {
 	const { data } = req.body;
 	const timePattern = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
-	if (timePattern.test(data.reservation_time)) {
-		next();
-	} else {
-		return res.status(400).json({ error: 'reservation_time is not a time' });
+	
+	// Check if reservation_time is a valid time format
+	if (!timePattern.test(data.reservation_time)) {
+			return res.status(400).json({ error: 'reservation_time is not a valid time' });
 	}
+	
+	const submittedTime = data.reservation_time.split(':');
+	const hours = parseInt(submittedTime[0]);
+	const minutes = parseInt(submittedTime[1]);
+
+	// Get the current time
+	const currentTime = new Date();
+	const currentHours = currentTime.getHours();
+	const currentMinutes = currentTime.getMinutes();
+
+	// Check if reservation_time is in the past
+	if (hours < currentHours || (hours === currentHours && minutes < currentMinutes)) {
+			return res.status(400).json({ error: 'reservation_time must be in the future' });
+	}
+
+	// Check if reservation_time is before 10:30am or after 9:30pm
+	if (hours < 10 || (hours === 10 && minutes < 30) || hours > 21 || (hours === 21 && minutes > 30)) {
+			return res.status(400).json({ error: 'reservation_time is not within allowed hours' });
+	}
+	
+	// If all checks pass, move to the next middleware
+	next();
 }
+
 
 function validatePeople(req, res, next) {
 	const { data } = req.body;
