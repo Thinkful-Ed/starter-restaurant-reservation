@@ -61,7 +61,7 @@ function NewReservation() {
     setFormData(updatedFormData);
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     //todo add submission validation to only display error after submit button is clicked
 
     event.preventDefault();
@@ -79,18 +79,24 @@ function NewReservation() {
     }
     if (formData.people < 1) {
       newErrors.push("Please enter a number of people.");
+    }
+    if (errorTuesday || errorPastDate || errorTime || formData.people < 1) {
+      setError({ message: newErrors });
+      // console.log({ error, newErrors });
+      return;
     } else {
-      if (errorTuesday || errorPastDate || errorTime || formData.people < 1) {
-        setError({ message: newErrors });
-        console.log({ error, newErrors });
-        return;
-      }
       const abortController = new AbortController();
+      const signal = abortController.signal;
       formData.people = Number(formData.people);
       try {
-        axios.post(`${API_BASE_URL}/reservations`, {
-          data: formData,
-        });
+        // console.log({ formData });
+        await axios.post(
+          `${API_BASE_URL}/reservations`,
+          {
+            data: formData,
+          },
+          { signal }
+        );
         history.push(`/dashboard?date=${formData.reservation_date}`);
       } catch (error) {
         if (error.name !== "AbortError") {
