@@ -63,6 +63,9 @@ function SeatReservation() {
           { data: { reservation_id: reservation_id } },
           { signal }
         );
+        // i think that this section should be redundant after
+        // implementing knex transaction in the backend
+        // tables put shoould also updaate reservation table
         const reservationUpdate = await axios.put(
           `${API_BASE_URL}/reservations/${reservation_id}/status`,
           { data: { status: "seated" } },
