@@ -17,7 +17,6 @@ function update(table_id, reservation_id) {
   return knex("tables")
     .where({ table_id })
     .update({ reservation_id, occupied: true })
-
     .returning("*");
 }
 

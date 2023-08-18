@@ -90,6 +90,31 @@ async function isOccupied(req, res, next) {
   next();
 }
 
+async function isNotOccupied(req, res, next) {
+  const { table_id } = req.params;
+  const table = await service.read(table_id);
+
+  if (!table.reservation_id) {
+    return next({
+      status: 400,
+      message: "Table is not occupied",
+    });
+  }
+  next();
+}
+
+async function tableExists(req, res, next) {
+  const { table_id } = req.params;
+  const table = await service.read(table_id);
+  if (!table) {
+    return next({
+      status: 404,
+      message: `Table ${table_id} cannot be found.`,
+    });
+  }
+  next();
+}
+
 async function list(req, res) {
   const data = await service.list();
   res.json({ data });
@@ -110,6 +135,12 @@ async function update(req, res) {
   res.status(200).json({ data: response });
 }
 
+async function destroy(req, res) {
+  const { table_id } = req.params;
+  const response = await service.update(table_id, null);
+  res.status(200).json({ data: response });
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [
@@ -121,5 +152,10 @@ module.exports = {
     asyncErrorBoundary(capacityValidator),
     asyncErrorBoundary(isOccupied),
     asyncErrorBoundary(update),
+  ],
+  delete: [
+    asyncErrorBoundary(tableExists),
+    asyncErrorBoundary(isNotOccupied),
+    asyncErrorBoundary(destroy),
   ],
 };
