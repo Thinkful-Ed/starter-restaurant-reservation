@@ -5,6 +5,19 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./reservations.service");
 
+async function reservationExists(req, res, next) {
+  const { reservation_id } = req.params;
+  const reservation = await service.read(reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({
+    status: 404,
+    message: `Reservation ${reservation_id} cannot be found.`,
+  });
+}
+
 function validator(field) {
   return function (req, _res, next) {
     //to do: add validation for date and time
@@ -124,6 +137,21 @@ function createStatusValidator(field) {
   };
 }
 
+function updateStatusValidator(field) {
+  return function (req, _res, next) {
+    const { data: { [field]: value } = {} } = req.body;
+    // console.log("update status validator");
+    if (value === "unknown") {
+      // console.log("unknown");
+      return next({
+        status: 400,
+        message: `${field} cannot be ${value}`,
+      });
+    }
+    next();
+  };
+}
+
 async function list(req, res) {
   const { date } = req.query;
   const data = await service.list(date);
@@ -147,10 +175,10 @@ async function read(req, res) {
 }
 
 async function update(req, res) {
-  const { reservation_id } = req.params;
+  const { reservation_id } = res.locals.reservation;
   const { status } = req.body.data;
   const data = await service.update(reservation_id, status);
-  res.json({ data });
+  res.status(200).json({ data });
 }
 
 module.exports = {
@@ -172,5 +200,9 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(read)],
-  update: [asyncErrorBoundary(update)],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    updateStatusValidator("status"),
+    asyncErrorBoundary(update),
+  ],
 };
