@@ -152,6 +152,17 @@ function updateStatusValidator(field) {
   };
 }
 
+function updateStatusIsNotFinished(req, res, next) {
+  const { reservation: { status } = {} } = res.locals;
+  if (status === "finished") {
+    return next({
+      status: 400,
+      message: "a finished reservation cannot be updated",
+    });
+  }
+  next();
+}
+
 async function list(req, res) {
   const { date } = req.query;
   const data = await service.list(date);
@@ -177,8 +188,11 @@ async function read(req, res) {
 async function update(req, res) {
   const { reservation_id } = res.locals.reservation;
   const { status } = req.body.data;
-  const data = await service.update(reservation_id, status);
-  res.status(200).json({ data });
+  const response = await service.update(reservation_id, status);
+  // this is the response from the service function
+  // i have sppecifically asked for the first item in the array
+  // to accomidate the tests
+  res.status(200).json({ data: response[0] });
 }
 
 module.exports = {
@@ -202,6 +216,7 @@ module.exports = {
   read: [asyncErrorBoundary(read)],
   update: [
     asyncErrorBoundary(reservationExists),
+    updateStatusIsNotFinished,
     updateStatusValidator("status"),
     asyncErrorBoundary(update),
   ],
