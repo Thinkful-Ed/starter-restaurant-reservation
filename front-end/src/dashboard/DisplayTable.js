@@ -11,23 +11,24 @@ function DisplayTable({ table }) {
   const location = useLocation();
   const history = useHistory();
 
-  function finishHandler(table_id, reservation_id) {
-    async function updateTable(table_id) {
+  function finishHandler(table_id, reservationId) {
+    async function updateTable(table_id, reservationId) {
       const abortController = new AbortController();
       const signal = abortController.signal;
       try {
+        console.log("finish handler", { table_id, reservationId });
         const response = await axios.delete(
           `${API_BASE_URL}/tables/${table_id}/seat`,
-          { data: { reservation_id: reservation_id } },
-          { signal }
+          { data: { reservation_id: reservationId } }
         );
-        console.log({ response });
-        const updateReservation = await axios.put(
-          `${API_BASE_URL}/reservations/${reservation_id}/status`,
-          { data: { status: "finished" } },
-          { signal }
-        );
-        console.log({ updateReservation });
+        // console.log({ response });
+        // const updateReservation = await axios.put(
+        //   `${API_BASE_URL}/reservations/${reservation_id}/status`,
+        //   { data: { status: "finished" } },
+        //   { signal }
+        // );
+        // console.log({ updateReservation });
+
         // this is a hack to force a reload of the dashboard
         history.push({
           pathname: `/dashboard`,
@@ -42,7 +43,7 @@ function DisplayTable({ table }) {
         "Is this table ready to seat new guests? This cannot be undone."
       )
     ) {
-      updateTable(table_id);
+      updateTable(table_id, reservationId);
     }
   }
 
@@ -64,7 +65,9 @@ function DisplayTable({ table }) {
             <button
               className="btn btn-primary"
               data-table-id-finish={table.table_id}
-              onClick={() => finishHandler(table.table_id, reservation_id)}
+              onClick={() =>
+                finishHandler(table.table_id, table.reservation_id)
+              }
             >
               Finish
             </button>

@@ -40,6 +40,7 @@ async function update(table_id, reservation_id) {
 }
 
 async function destroy(table_id, reservation_id) {
+  console.log("destroy service", { table_id, reservation_id });
   return knex.transaction(async (trx) => {
     try {
       // Update the 'tables' table

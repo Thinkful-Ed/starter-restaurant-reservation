@@ -91,6 +91,7 @@ async function isOccupied(req, res, next) {
 }
 
 async function isNotOccupied(req, res, next) {
+  console.log("isNotOccupied");
   const { table_id } = req.params;
   const table = await service.read(table_id);
 
@@ -104,6 +105,9 @@ async function isNotOccupied(req, res, next) {
 }
 
 async function tableExists(req, res, next) {
+  console.log("tableExists");
+  console.log(req.body.data);
+  console.log(req.body.reservation_id);
   const { table_id } = req.params;
   const table = await service.read(table_id);
   if (!table) {
@@ -112,6 +116,8 @@ async function tableExists(req, res, next) {
       message: `Table ${table_id} cannot be found.`,
     });
   }
+  res.locals.table = table;
+  console.log({ table });
   next();
 }
 
@@ -151,8 +157,20 @@ async function update(req, res) {
 }
 
 async function destroy(req, res) {
-  const { table_id } = req.params;
-  const { reservation_id } = req.body.data;
+  console.log("line 169", res.locals.table);
+  console.log("destroy");
+  // console.log(
+  //   "req.body.data",
+  //   req.body.data,
+  //   req.body,
+  //   req.body.reservation_id,
+  //   res.locals.table
+  // );
+
+  console.log("line 170", res.locals.table);
+  const { table_id } = res.locals.table;
+  const { reservation_id } = res.locals.table;
+  console.log("line 173");
   const response = await service.destroy(table_id, reservation_id);
   res.status(200).json({ data: response });
 }
