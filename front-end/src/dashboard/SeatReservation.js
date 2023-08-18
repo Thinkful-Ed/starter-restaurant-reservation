@@ -39,6 +39,7 @@ function SeatReservation() {
             signal,
           }
         );
+
         setReservation(response.data.data);
       } catch (error) {
         console.log(error, "error loading reservation");
@@ -62,6 +63,12 @@ function SeatReservation() {
           { data: { reservation_id: reservation_id } },
           { signal }
         );
+        const reservationUpdate = await axios.put(
+          `${API_BASE_URL}/reservations/${reservation_id}/status`,
+          { data: { status: "seated" } },
+          { signal }
+        );
+        console.log({ reservationUpdate });
         setTableId(response.data.data.table_id);
         history.push(`/dashboard`);
       } catch (error) {

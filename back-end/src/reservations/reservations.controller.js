@@ -133,6 +133,13 @@ async function read(req, res) {
   res.json({ data });
 }
 
+async function update(req, res) {
+  const { reservation_id } = req.params;
+  const { status } = req.body.data;
+  const data = await service.update(reservation_id, status);
+  res.json({ data });
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [
@@ -151,4 +158,5 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(read)],
+  update: [asyncErrorBoundary(update)],
 };

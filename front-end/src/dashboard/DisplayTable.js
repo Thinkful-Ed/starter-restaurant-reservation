@@ -11,7 +11,7 @@ function DisplayTable({ table }) {
   const location = useLocation();
   const history = useHistory();
 
-  function finishHandler(table_id) {
+  function finishHandler(table_id, reservation_id) {
     async function updateTable(table_id) {
       const abortController = new AbortController();
       const signal = abortController.signal;
@@ -21,6 +21,13 @@ function DisplayTable({ table }) {
           { data: { reservation_id: reservation_id } },
           { signal }
         );
+        console.log({ response });
+        const updateReservation = await axios.put(
+          `${API_BASE_URL}/reservations/${reservation_id}/status`,
+          { data: { status: "finished" } },
+          { signal }
+        );
+        console.log({ updateReservation });
         // this is a hack to force a reload of the dashboard
         history.push({
           pathname: `/dashboard`,
@@ -47,14 +54,17 @@ function DisplayTable({ table }) {
           <h6 className="card-subtitle mb-2 text-muted">
             Capacity: {table.capacity}
           </h6>
-          <p className="card-text" data-table-id-status={table.table_id}>
+          <div className="card-text" data-table-id-status={table.table_id}>
             Status: {table.reservation_id ? "Occupied" : "Free"}
-          </p>
+            {table.reservation_id ? (
+              <p>Reservation ID: {table.reservation_id}</p>
+            ) : null}
+          </div>
           {table.reservation_id ? (
             <button
               className="btn btn-primary"
               data-table-id-finish={table.table_id}
-              onClick={() => finishHandler(table.table_id)}
+              onClick={() => finishHandler(table.table_id, reservation_id)}
             >
               Finish
             </button>
