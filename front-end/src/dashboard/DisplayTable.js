@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
 
 function DisplayTable({ table }) {
   const { reservation_id } = useParams();
+  const location = useLocation();
   const history = useHistory();
 
   function finishHandler(table_id) {
@@ -21,7 +22,10 @@ function DisplayTable({ table }) {
           { signal }
         );
 
-        history.push(`/dashboard`);
+        history.push({
+          pathname: `/dashboard`,
+          state: { shouldReload: true },
+        });
       } catch (error) {
         console.log(error, "error updating table");
       }
