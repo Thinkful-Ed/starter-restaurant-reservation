@@ -164,8 +164,13 @@ function updateStatusIsNotFinished(req, res, next) {
 }
 
 async function list(req, res) {
-  const { date } = req.query;
-  const data = await service.list(date);
+  const { date, mobile_number } = req.query;
+  let data;
+  if (date) {
+    data = await service.list(date);
+  } else if (mobile_number) {
+    data = await service.search(mobile_number);
+  }
   res.json({ data });
 }
 
