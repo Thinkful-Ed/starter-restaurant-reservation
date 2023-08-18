@@ -152,7 +152,8 @@ async function update(req, res) {
 
 async function destroy(req, res) {
   const { table_id } = req.params;
-  const response = await service.update(table_id, null);
+  const { reservation_id } = req.body.data;
+  const response = await service.destroy(table_id, reservation_id);
   res.status(200).json({ data: response });
 }
 
