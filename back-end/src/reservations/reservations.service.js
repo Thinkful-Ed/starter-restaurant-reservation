@@ -4,6 +4,7 @@ function list(date) {
   return knex("reservations")
     .select("*")
     .where({ reservation_date: date })
+    .andWhereNot({ status: "finished" })
     .orderBy("reservation_time");
 }
 
@@ -18,8 +19,16 @@ function read(reservation_id) {
   return knex("reservations").select("*").where({ reservation_id }).first();
 }
 
+function update(reservation_id, status) {
+  return knex("reservations")
+    .where({ reservation_id })
+    .update({ status })
+    .returning("*");
+}
+
 module.exports = {
   list,
   create,
   read,
+  update,
 };

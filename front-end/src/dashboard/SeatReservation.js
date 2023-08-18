@@ -39,6 +39,7 @@ function SeatReservation() {
             signal,
           }
         );
+
         setReservation(response.data.data);
       } catch (error) {
         console.log(error, "error loading reservation");
@@ -49,6 +50,7 @@ function SeatReservation() {
 
   function handleChange({ target }) {
     setTableId(target.value);
+    console.log({ tableId });
   }
 
   function handleSubmit(table_id) {
@@ -59,10 +61,19 @@ function SeatReservation() {
       try {
         const response = await axios.put(
           `${API_BASE_URL}/tables/${table_id}/seat`,
-          { data: { reservation_id: reservation_id } },
+          { data: { data: { reservation_id: reservation_id } } },
           { signal }
         );
-        setTableId(response.data.data.table_id);
+        // i think that this section should be redundant after
+        // implementing knex transaction in the backend
+        // tables put shoould also updaate reservation table
+        // const reservationUpdate = await axios.put(
+        //   `${API_BASE_URL}/reservations/${reservation_id}/status`,
+        //   { data: { status: "seated" } },
+        //   { signal }
+        // );
+        // console.log({ reservationUpdate });
+        // setTableId(response.data.data.table_id);
         history.push(`/dashboard`);
       } catch (error) {
         console.log(error, "error updating table");

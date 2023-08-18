@@ -5,6 +5,19 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./reservations.service");
 
+async function reservationExists(req, res, next) {
+  const { reservation_id } = req.params;
+  const reservation = await service.read(reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({
+    status: 404,
+    message: `Reservation ${reservation_id} cannot be found.`,
+  });
+}
+
 function validator(field) {
   return function (req, _res, next) {
     //to do: add validation for date and time
@@ -111,6 +124,45 @@ function peopleValidator(field) {
   };
 }
 
+function createStatusValidator(field) {
+  return function (req, _res, next) {
+    const { data: { [field]: value } = {} } = req.body;
+    if (value === "seated" || value === "finished") {
+      return next({
+        status: 400,
+        message: `${field} cannot be seated or finished`,
+      });
+    }
+    next();
+  };
+}
+
+function updateStatusValidator(field) {
+  return function (req, _res, next) {
+    const { data: { [field]: value } = {} } = req.body;
+    // console.log("update status validator");
+    if (value === "unknown") {
+      // console.log("unknown");
+      return next({
+        status: 400,
+        message: `${field} cannot be ${value}`,
+      });
+    }
+    next();
+  };
+}
+
+function updateStatusIsNotFinished(req, res, next) {
+  const { reservation: { status } = {} } = res.locals;
+  if (status === "finished") {
+    return next({
+      status: 400,
+      message: "a finished reservation cannot be updated",
+    });
+  }
+  next();
+}
+
 async function list(req, res) {
   const { date } = req.query;
   const data = await service.list(date);
@@ -133,6 +185,16 @@ async function read(req, res) {
   res.json({ data });
 }
 
+async function update(req, res) {
+  const { reservation_id } = res.locals.reservation;
+  const { status } = req.body.data;
+  const response = await service.update(reservation_id, status);
+  // this is the response from the service function
+  // i have sppecifically asked for the first item in the array
+  // to accomidate the tests
+  res.status(200).json({ data: response[0] });
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [
@@ -148,7 +210,14 @@ module.exports = {
     dateValidator("reservation_date"),
     timeValidator("reservation_time"),
     peopleValidator("people"),
+    createStatusValidator("status"),
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(read)],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    updateStatusIsNotFinished,
+    updateStatusValidator("status"),
+    asyncErrorBoundary(update),
+  ],
 };

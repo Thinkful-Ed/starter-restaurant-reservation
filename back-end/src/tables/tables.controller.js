@@ -41,7 +41,7 @@ function nameValidator(field) {
 }
 
 async function capacityValidator(req, res, next) {
-  console.log("capacityValidator");
+  // console.log("capacityValidator");
   if (!req.body.data) {
     return next({
       status: 400,
@@ -91,6 +91,7 @@ async function isOccupied(req, res, next) {
 }
 
 async function isNotOccupied(req, res, next) {
+  console.log("isNotOccupied");
   const { table_id } = req.params;
   const table = await service.read(table_id);
 
@@ -104,12 +105,29 @@ async function isNotOccupied(req, res, next) {
 }
 
 async function tableExists(req, res, next) {
+  console.log("tableExists");
+  console.log(req.body.data);
+  console.log(req.body.reservation_id);
   const { table_id } = req.params;
   const table = await service.read(table_id);
   if (!table) {
     return next({
       status: 404,
       message: `Table ${table_id} cannot be found.`,
+    });
+  }
+  res.locals.table = table;
+  console.log({ table });
+  next();
+}
+
+async function reservationIsNotSeated(req, res, next) {
+  const { reservation_id } = req.body.data;
+  const reservation = await reservationsService.read(reservation_id);
+  if (reservation.status === "seated") {
+    return next({
+      status: 400,
+      message: "Reservation is already seated",
     });
   }
   next();
@@ -128,16 +146,32 @@ async function create(req, res) {
 async function update(req, res) {
   const { table_id } = req.params;
   const { reservation_id } = req.body.data;
-  console.log("update");
-  console.log({ reservation_id, table_id });
-  console.log(req.body.data);
+  // console.log("update");
+  // console.log({ reservation_id, table_id });
+  // console.log(req.body.data);
+  // console.log(req.params);
+  // console.log({ table_id, reservation_id });
   const response = await service.update(table_id, reservation_id);
+  // console.log(response);
   res.status(200).json({ data: response });
 }
 
 async function destroy(req, res) {
-  const { table_id } = req.params;
-  const response = await service.update(table_id, null);
+  console.log("line 169", res.locals.table);
+  console.log("destroy");
+  // console.log(
+  //   "req.body.data",
+  //   req.body.data,
+  //   req.body,
+  //   req.body.reservation_id,
+  //   res.locals.table
+  // );
+
+  console.log("line 170", res.locals.table);
+  const { table_id } = res.locals.table;
+  const { reservation_id } = res.locals.table;
+  console.log("line 173");
+  const response = await service.destroy(table_id, reservation_id);
   res.status(200).json({ data: response });
 }
 
@@ -151,6 +185,7 @@ module.exports = {
   update: [
     asyncErrorBoundary(capacityValidator),
     asyncErrorBoundary(isOccupied),
+    asyncErrorBoundary(reservationIsNotSeated),
     asyncErrorBoundary(update),
   ],
   delete: [

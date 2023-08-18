@@ -16,7 +16,16 @@ function DisplayReservations({ reservation }) {
           <p className="card-text">Date: {reservation.reservation_date}</p>
           <p className="card-text">Time: {reservation.reservation_time}</p>
           <p className="card-text">Party Size: {reservation.people}</p>
-          {reservation_id ? null : (
+          <p
+            className="card-text"
+            data-reservation-id-status={reservation.reservation_id}
+          >
+            Status: {reservation.status}
+          </p>
+          <p className="card-text">
+            Reservation ID: {reservation.reservation_id}
+          </p>
+          {reservation_id || reservation.status === "seated" ? null : (
             <Link to={`/reservations/${reservation.reservation_id}/seat`}>
               <button className="btn btn-primary">Seat</button>
             </Link>
