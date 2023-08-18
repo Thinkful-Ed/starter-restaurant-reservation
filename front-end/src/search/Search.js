@@ -7,6 +7,7 @@ const API_BASE_URL =
 function Search({ search }) {
   const [formData, setFormData] = useState({});
   const [reservations, setReservations] = useState([]);
+  const [searched, setSearched] = useState(false);
   function handleChange({ target }) {
     setFormData({
       ...formData,
@@ -25,6 +26,7 @@ function Search({ search }) {
           { signal }
         );
         setReservations(response.data.data);
+        setSearched(!searched);
       } catch (error) {
         console.log(error, "error loading tables");
       }
@@ -56,6 +58,7 @@ function Search({ search }) {
               />
             ))
           : null}
+        {searched && !reservations.length ? <p>No reservations found</p> : null}
       </div>
     </div>
   );
