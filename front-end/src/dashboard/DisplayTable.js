@@ -21,7 +21,7 @@ function DisplayTable({ table }) {
           { data: { reservation_id: reservation_id } },
           { signal }
         );
-
+        // this is a hack to force a reload of the dashboard
         history.push({
           pathname: `/dashboard`,
           state: { shouldReload: true },
