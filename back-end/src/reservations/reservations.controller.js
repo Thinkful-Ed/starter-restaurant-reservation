@@ -111,6 +111,19 @@ function peopleValidator(field) {
   };
 }
 
+function createStatusValidator(field) {
+  return function (req, _res, next) {
+    const { data: { [field]: value } = {} } = req.body;
+    if (value === "seated" || value === "finished") {
+      return next({
+        status: 400,
+        message: `${field} cannot be seated or finished`,
+      });
+    }
+    next();
+  };
+}
+
 async function list(req, res) {
   const { date } = req.query;
   const data = await service.list(date);
@@ -155,6 +168,7 @@ module.exports = {
     dateValidator("reservation_date"),
     timeValidator("reservation_time"),
     peopleValidator("people"),
+    createStatusValidator("status"),
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(read)],
