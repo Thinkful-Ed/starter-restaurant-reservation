@@ -80,7 +80,7 @@ function bodyDataHas(propertyName) {
   };
 }
 
-function isValidDate(req, res, next) {
+function validateDate(req, res, next) {
   const { data = {} } = req.body;
   const reservation_date = new Date(data["reservation_date"]);
   const day = reservation_date.getUTCDay();
@@ -149,7 +149,7 @@ function checkStatus(req, res, next) {
   next();
 }
 
-function isValidNumber(req, res, next) {
+function validateNumber(req, res, next) {
   const { data = {} } = req.body;
   if (data["people"] === 0 || !Number.isInteger(data["people"])) {
     return next({ status: 400, message: `Invalid number of people` });
@@ -217,6 +217,9 @@ const has_table_name = bodyDataHas("table_name");
 const has_reservation_id = bodyDataHas("reservation_id");
 
 module.exports = {
+  has_capacity,
+  has_table_name,
+  has_reservation_id,
   create: [
     hasValidFields,
     has_first_name,
@@ -225,9 +228,9 @@ module.exports = {
     has_reservation_date,
     has_reservation_time,
     has_people,
-    isValidDate,
+    validateDate,
     isTime,
-    isValidNumber,
+    validateNumber,
     checkStatus,
     isValidTime,
     asyncErrorBoundary(create),
@@ -249,9 +252,9 @@ module.exports = {
     has_reservation_date,
     has_reservation_time,
     has_people,
-    isValidDate,
+    validateDate,
     isTime,
-    isValidNumber,
+    validateNumber,
     checkStatus,
     hasReservationId,
     reservationExists,
