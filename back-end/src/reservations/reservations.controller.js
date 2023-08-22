@@ -141,6 +141,21 @@ function isNumber(req, res, next) {
 	next();
 }
 
+//returns 200 for an existing id 
+
+function reservationExists(req, res, next) {
+	const { reservation_id } = req.params;
+	const reservation = service.read(reservation_id);
+
+	if (reservation) {
+		res.locals.reservation = reservation;
+		return next();
+	}
+
+	next({ status: 404, message: `reservation_id ${reservation_id} cannot be found.` });
+}
+
+
 async function list(req, res) {
 	const { date } = req.query;
 
@@ -158,6 +173,12 @@ async function create(req, res) {
 	res.status(201).json({ data: newReservation });
 }
 
+async function read(req, res) {
+	const { reservation_id } = req.params;
+	const data = await service.read(reservation_id);
+	res.status(200).json({ data });
+}
+
 module.exports = {
 	list: asyncErrorBoundary(list),
 	create: [
@@ -171,4 +192,7 @@ module.exports = {
 		isNumber,
 		asyncErrorBoundary(create),
 	],
+	read: [
+		reservationExists,
+		asyncErrorBoundary(read)],
 };
