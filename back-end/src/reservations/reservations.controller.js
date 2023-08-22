@@ -122,7 +122,9 @@ function isTooLate(req, res, next) {
 	const [hours, minutes] = reservation_time.split(':').map(Number);
 
 	if (hours > 21 || (hours === 21 && minutes > 30)) {
-		return res.status(400).json({ error: `reservation must be between 10:30am and 9:30pm` });
+		return res
+			.status(400)
+			.json({ error: `reservation must be between 10:30am and 9:30pm` });
 	}
 
 	next();
@@ -141,20 +143,18 @@ function isNumber(req, res, next) {
 	next();
 }
 
-//returns 200 for an existing id 
+//returns 200 for an existing id
 
-function reservationExists(req, res, next) {
+async function reservationExists(req, res, next) {
 	const { reservation_id } = req.params;
-	const reservation = service.read(reservation_id);
-
+	const reservation = await service.read(reservation_id);
 	if (reservation) {
 		res.locals.reservation = reservation;
 		return next();
 	}
-
-	next({ status: 404, message: `reservation_id ${reservation_id} cannot be found.` });
+	return res.status(404).json({ error: `reservation ${reservation_id} not found` });
+	
 }
-
 
 async function list(req, res) {
 	const { date } = req.query;
@@ -192,7 +192,5 @@ module.exports = {
 		isNumber,
 		asyncErrorBoundary(create),
 	],
-	read: [
-		reservationExists,
-		asyncErrorBoundary(read)],
+	read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
 };
