@@ -6,6 +6,7 @@ import { previous, next, today } from '../utils/date-time';
 import { useHistory } from 'react-router-dom';
 import ReservationsList from './ReservationsList';
 
+
 /**
  * Defines the dashboard page.
  * @param date
@@ -32,12 +33,14 @@ function Dashboard({ date }) {
 
 	const handlePrevious = (event) => {
 		event.preventDefault();
-		history.push(`/dashboard?date=${previous(date)}`);
+		const formattedPreviousDate = previous(date); // Use the `previous` function
+		history.push(`/dashboard?date=${formattedPreviousDate}`);
 	};
 
 	const handleNext = (event) => {
 		event.preventDefault();
-		history.push(`/dashboard?date=${next(date)}`);
+		const formattedNextDate = next(date); // Use the `next` function
+		history.push(`/dashboard?date=${formattedNextDate}`);
 	};
 
 	const handleToday = (event) => {

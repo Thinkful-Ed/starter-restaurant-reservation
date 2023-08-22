@@ -1,21 +1,23 @@
 const knex = require('../db/connection');
 
+const tableName = 'reservations';
+
 function listAll() {
-	return knex('reservations')
-		.select('*')
-		.orderBy('reservation_date')
-		.orderBy('reservation_time');
+	return knex(tableName)
+	.select('*')
+	.orderBy('reservation_date');
 }
 
-function list(date) {
-	return knex('reservations')
+function listDate(date) {
+	return knex(tableName)
 		.select('*')
 		.where({ reservation_date: date })
-		.orderBy('reservation_time', 'asc');
+		.orderBy('reservation_time');
+
 }
 
 function create(newReservation) {
-	return knex('reservations')
+	return knex(tableName)
 		.insert(newReservation)
 		.returning('*')
 		.then((createdRecords) => createdRecords[0]);
@@ -23,6 +25,6 @@ function create(newReservation) {
 
 module.exports = {
 	listAll,
-	list,
+	listDate,
 	create,
 };

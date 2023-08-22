@@ -23,7 +23,7 @@ export default function NewReservation() {
 		createReservation(reservation)
 			.then((createdReservation) => {
 				const formattedDate = formatAsDate(createdReservation.reservation_date);
-				setReservation(initialFormState);
+				//setReservation(initialFormState);
 				history.push(`/dashboard?date=${formattedDate}`);
 			})
 			.catch(setError);
