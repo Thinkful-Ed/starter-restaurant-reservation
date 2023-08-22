@@ -61,7 +61,9 @@ function isPast(req, res, next) {
 	const today = new Date();
 
 	if (date < today) {
-		return res.status(400).json({ error: `reservation_date must be in the future` });
+		return res
+			.status(400)
+			.json({ error: `reservation_date must be in the future` });
 	}
 
 	next();
@@ -81,7 +83,6 @@ function isTuesday(req, res, next) {
 	next();
 }
 
-
 //return 400 if reservation_time is not pattern="\d{2}:\d{2}"
 
 function isTime(req, res, next) {
@@ -97,19 +98,47 @@ function isTime(req, res, next) {
 
 	next();
 }
+//return 400 if reservation_time is before 10:30am
 
+function isTooEarly(req, res, next) {
+	const { reservation_time } = req.body.data;
+
+	const [hours, minutes] = reservation_time.split(':').map(Number);
+
+	if (hours < 10 || (hours === 10 && minutes < 30)) {
+		return res
+			.status(400)
+			.json({ error: `reservation must be between 10:30am and 9:30pm` });
+	}
+
+	next();
+}
+
+//return 400 if reservation_time is after 9:30pm
+
+function isTooLate(req, res, next) {
+	const { reservation_time } = req.body.data;
+
+	const [hours, minutes] = reservation_time.split(':').map(Number);
+
+	if (hours > 21 || (hours === 21 && minutes > 30)) {
+		return res.status(400).json({ error: `reservation must be between 10:30am and 9:30pm` });
+	}
+
+	next();
+}
 
 //return 400 id people is not a number
 
 function isNumber(req, res, next) {
-  const { people } = req.body.data;
-  console.log(typeof people, people); // Add this line
+	const { people } = req.body.data;
+	console.log(typeof people, people); // Add this line
 
-  if (typeof people !== 'number') {
-    return res.status(400).json({ error: `people must be a number` });
-  }
+	if (typeof people !== 'number') {
+		return res.status(400).json({ error: `people must be a number` });
+	}
 
-  next();
+	next();
 }
 
 async function list(req, res) {
@@ -131,5 +160,15 @@ async function create(req, res) {
 
 module.exports = {
 	list: asyncErrorBoundary(list),
-	create: [hasData, isDate, isPast, isTuesday, isTime, isNumber, asyncErrorBoundary(create)],
+	create: [
+		hasData,
+		isDate,
+		isPast,
+		isTuesday,
+		isTime,
+		isTooEarly,
+		isTooLate,
+		isNumber,
+		asyncErrorBoundary(create),
+	],
 };
