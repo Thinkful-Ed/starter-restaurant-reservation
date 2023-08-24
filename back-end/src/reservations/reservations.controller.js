@@ -190,8 +190,11 @@ function isNotFinished(req, res, next) {
 
 async function list(req, res) {
 	const { date } = req.query;
-
-	if (date) {
+	const { mobile_number } = req.query;
+	if (mobile_number) {
+		const data = await service.search(mobile_number);
+		res.json({ data });
+	} else if (date) {
 		const data = await service.listDate(date);
 		res.json({ data });
 	} else {
