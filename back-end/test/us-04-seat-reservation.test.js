@@ -224,7 +224,6 @@ describe("US-04 - Seat reservation", () => {
           .put(`/tables/${tableOne.table_id}/seat`)
           .set("Accept", "application/json")
           .send({ data });
-
         expect(response.body.error).toContain("999");
         expect(response.status).toBe(404);
       });
