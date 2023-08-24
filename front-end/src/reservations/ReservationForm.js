@@ -10,8 +10,8 @@ function ReservationForm({ handleChange, handleSubmit, formData }) {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h3 className="mt-2 ml-3">Make A Reservation</h3>
       <fieldset>
-        <h3 className="mt-2 ml-3">Make A Reservation</h3>
         <div className="mt-2">
           <input
             type="text"
@@ -34,7 +34,7 @@ function ReservationForm({ handleChange, handleSubmit, formData }) {
             required
           />
           <input
-            type="number"
+            type="text"
             name="mobile_number"
             className="formcreation ml-3"
             id="mobile_number"
@@ -76,8 +76,14 @@ function ReservationForm({ handleChange, handleSubmit, formData }) {
         </div>
       </fieldset>
       <div className="mt-3">
-        <button className="btn btn-primary ml-3" type="submit">Submit</button>
-        <button className="btn btn-primary ml-3" type="button" onClick={handleCancel}>
+        <button className="btn btn-primary ml-3" type="submit">
+          Submit
+        </button>
+        <button
+          className="btn btn-primary ml-3"
+          type="button"
+          onClick={handleCancel}
+        >
           Cancel
         </button>
       </div>

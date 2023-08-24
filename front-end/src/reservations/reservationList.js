@@ -57,12 +57,22 @@ function ReservationList({ reservations, loadDashboard, setError }) {
                 {reservation.status === "booked" ||
                 reservation.status === "seated" ||
                 reservation.status === "canceled" ? (
-                  <Link
-                    to={`/reservations/${reservation.reservation_id}/edit`}
-                    className="btn btn-secondary mr-1 btn-sm"
-                  >
-                    Edit
-                  </Link>
+                  <div className="btn-group" role="group">
+                    <Link
+                      to={`/reservations/${reservation.reservation_id}/seat`}
+                      className="btn btn-success btn-sm mr-1"
+                      role="button"
+                    >
+                      Seat
+                    </Link>
+                    <Link
+                      to={`/reservations/${reservation.reservation_id}/edit`}
+                      className="btn btn-secondary btn-sm mr-1"
+                      role="button"
+                    >
+                      Edit
+                    </Link>
+                  </div>
                 ) : null}
                 {reservation.status === "booked" && (
                   <button
