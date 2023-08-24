@@ -3,7 +3,14 @@ exports.up = function (knex) {
     table.increments("table_id").primary();
     table.string("table_name").notNullable();
     table.integer("capacity", null).unsigned().notNullable();
-    table.integer("reservation_id").unsigned().nullable().defaultTo(null).index().references("reservation_id").inTable("reservations");
+    table
+      .integer("reservation_id")
+      .unsigned()
+      .nullable()
+      .defaultTo(null)
+      .index()
+      .references("reservation_id")
+      .inTable("reservations");
     table.timestamps(true, true);
   });
 };

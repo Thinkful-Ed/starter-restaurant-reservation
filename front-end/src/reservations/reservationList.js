@@ -1,10 +1,8 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { cancelReservation } from "../utils/api";
 
 function ReservationList({ reservations, loadDashboard, setError }) {
-  const history = useHistory();
-
   async function handleCancelReservation(reservationId) {
     const abortController = new AbortController();
 
@@ -29,12 +27,12 @@ function ReservationList({ reservations, loadDashboard, setError }) {
       <table className="table">
         <thead>
           <tr className="text-center">
-            <th className="border border-dark" >Name</th>
-            <th className="border border-dark" >Mobile Number</th>
-            <th className="border border-dark" >Reservation Date</th>
-            <th className="border border-dark" >Party Size</th>
-            <th className="border border-dark" >Status</th>
-            <th className="border border-dark" >Action</th> 
+            <th className="border border-dark">Name</th>
+            <th className="border border-dark">Mobile Number</th>
+            <th className="border border-dark">Reservation Date</th>
+            <th className="border border-dark">Party Size</th>
+            <th className="border border-dark">Status</th>
+            <th className="border border-dark">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -43,17 +41,32 @@ function ReservationList({ reservations, loadDashboard, setError }) {
               <td className="border border-dark">
                 {reservation.first_name} {reservation.last_name}
               </td>
-              <td className="border border-dark">{reservation.mobile_number}</td>
+              <td className="border border-dark">
+                {reservation.mobile_number}
+              </td>
               <td className="border border-dark">
                 {reservation.reservation_date} {reservation.reservation_time}
               </td>
-              <td className="border border-dark" >Party Size: {reservation.people}</td>
-              <td className="border border-dark" >Status: {reservation.status}</td>
+              <td className="border border-dark">
+                Party Size: {reservation.people}
+              </td>
+              <td className="border border-dark">
+                Status: {reservation.status}
+              </td>
               <td className="text-center border border-dark">
-                {/* Center the button */}
+                {reservation.status === "booked" ||
+                reservation.status === "seated" ||
+                reservation.status === "canceled" ? (
+                  <Link
+                    to={`/reservations/${reservation.reservation_id}/edit`}
+                    className="btn btn-secondary mr-1 btn-sm"
+                  >
+                    Edit
+                  </Link>
+                ) : null}
                 {reservation.status === "booked" && (
                   <button
-                    className="btn btn-danger"
+                    className="btn btn-danger btn-sm"
                     onClick={() =>
                       handleCancelReservation(reservation.reservation_id)
                     }

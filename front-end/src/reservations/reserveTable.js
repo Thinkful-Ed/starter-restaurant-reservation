@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -16,7 +16,7 @@ function NewReservation() {
   });
 
   const [error, setError] = useState(null);
-  const abortController = new AbortController();
+  const abortController = useMemo(() => new AbortController(), []);
 
   function handleChange(e) {
     setFormData({
@@ -27,7 +27,7 @@ function NewReservation() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    formData.people = Number(formData.people)
+    formData.people = Number(formData.people);
 
     try {
       await createReservation(formData, abortController.signal);
@@ -40,8 +40,10 @@ function NewReservation() {
   }
 
   useEffect(() => {
-    return () => abortController.abort();
-  }, []);
+    return () => {
+      abortController.abort();
+    };
+  }, [abortController]);
 
   return (
     <div>
@@ -56,5 +58,3 @@ function NewReservation() {
 }
 
 export default NewReservation;
-
-

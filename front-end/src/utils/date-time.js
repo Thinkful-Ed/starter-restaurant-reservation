@@ -18,6 +18,23 @@ function asDateString(date) {
     .padStart(2, "0")}-${date.getDate().toString(10).padStart(2, "0")}`;
 }
 
+export function isNotOnTuesday(reservation_date, errors) {
+  const [year, month, day] = reservation_date.split("-");
+  const date = new Date(`${month} ${day}, ${year}`);
+  if (date.getDay() === 2) {
+    errors.push(<li key="tuesday">Restaurant is closed on Tuesdays</li>);
+  }
+}
+
+export function isInTheFuture(reservation_date, errors) {
+  const [year, month, day] = reservation_date.split("-");
+  const date = new Date(`${month} ${day}, ${year}`);
+  const today = new Date();
+  if (date < today) {
+    errors.push(<li key="past">Reservation must be in the future</li>);
+  }
+}
+
 /**
  * Format a date string in ISO-8601 format (which is what is returned from PostgreSQL) as YYYY-MM-DD.
  * @param dateString
