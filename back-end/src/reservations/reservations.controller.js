@@ -14,6 +14,7 @@ const requiredFields = [
 	'reservation_date',
 	'reservation_time',
 	'people',
+	'status',
 ];
 
 function hasData(req, res, next) {
@@ -31,6 +32,16 @@ function hasData(req, res, next) {
 		if (typeof data[field] === 'string' && data[field].trim() === '') {
 			return res.status(400).json({ error: `${field} cannot be empty` });
 		}
+	}
+
+	next();
+}
+
+function isBooked(req, res, next) {
+	const { status } = req.body.data;
+
+	if (status !== 'booked') {
+		return res.status(400).json({ error: `status is seated, or finished` });
 	}
 
 	next();
@@ -134,7 +145,6 @@ function isTooLate(req, res, next) {
 
 function isNumber(req, res, next) {
 	const { people } = req.body.data;
-	console.log(typeof people, people); // Add this line
 
 	if (typeof people !== 'number') {
 		return res.status(400).json({ error: `people must be a number` });
@@ -152,8 +162,30 @@ async function reservationExists(req, res, next) {
 		res.locals.reservation = reservation;
 		return next();
 	}
-	return res.status(404).json({ error: `reservation ${reservation_id} not found` });
-	
+	return res
+		.status(404)
+		.json({ error: `reservation ${reservation_id} not found` });
+}
+
+function hasStatus(req, res, next) {
+	const { status } = req.body.data;
+	const validStatus = ['booked', 'seated', 'finished'];
+
+	if (!validStatus.includes(status)) {
+		return res.status(400).json({ error: `status ${status} is unknown` });
+	}
+
+	next();
+}
+
+function isNotFinished(req, res, next) {
+	const { status } = res.locals.reservation;
+	if (status === 'finished') {
+		return next(
+			res.status(400).json({ error: 'reservation is already finished' })
+		);
+	}
+	next();
 }
 
 async function list(req, res) {
@@ -179,10 +211,18 @@ async function read(req, res) {
 	res.status(200).json({ data });
 }
 
+async function updateStatus(req, res) {
+	const { reservation_id } = req.params;
+	const { status } = req.body.data;
+	const data = await service.update(reservation_id, status);
+	res.status(200).json({ data });
+}
+
 module.exports = {
 	list: asyncErrorBoundary(list),
 	create: [
 		hasData,
+		isBooked,
 		isDate,
 		isPast,
 		isTuesday,
@@ -193,5 +233,10 @@ module.exports = {
 		asyncErrorBoundary(create),
 	],
 	read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
-	
+	updateStatus: [
+		asyncErrorBoundary(reservationExists),
+		hasStatus,
+		isNotFinished,
+		asyncErrorBoundary(updateStatus),
+	],
 };

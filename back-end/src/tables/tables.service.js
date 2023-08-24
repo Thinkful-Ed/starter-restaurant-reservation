@@ -39,6 +39,7 @@ function unseat(table_id) {
 }
 
 
+
 module.exports = {
   listAll,
   create,

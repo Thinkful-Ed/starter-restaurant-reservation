@@ -1,6 +1,7 @@
 const service = require('./tables.service');
 const reservationService = require('../reservations/reservations.service');
 const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
+const { table } = require('../db/connection');
 const requiredFields = ['table_name', 'capacity'];
 const seatsRequiredFields = ['reservation_id'];
 
@@ -93,6 +94,17 @@ async function reservationExists(req, res, next) {
 		.json({ error: `reservation ${reservation_id} not found` });
 }
 
+function isNotSeated(req, res, next) {
+	const { status } = res.locals.reservation;
+	if (status !== 'seated') {
+		return next();
+	} else {
+		return next(
+			res.status(400).json({ error: 'reservation is already seated' })
+		);
+	}
+}
+
 function hasEnoughCapacity(req, res, next) {
 	const { people } = res.locals.reservation;
 	const { capacity } = res.locals.table;
@@ -145,13 +157,32 @@ async function seat(req, res) {
 	const { table_id } = req.params;
 	const { reservation_id } = req.body.data;
 	const data = await service.seat(table_id, reservation_id);
-	res.status(200).json({ data });
+	const status = await reservationService.update( reservation_id, 'seated');
+	res.status(200).json({ data: data, status });
 }
 
 async function unseat(req, res) {
 	const { table_id } = req.params;
 	const data = await service.unseat(table_id);
 	res.status(200).json({ data });
+}
+
+async function finish(req, res) {
+	const { table_id } = req.params;
+	console.log(table_id);
+	const { reservation_id } = req.body.data;
+	console.log(reservation_id);
+	const data = await service.unseat(table_id);
+	const status = await reservationService.update( reservation_id, 'finished');
+	res.status(200).json({ data: data, status });
+
+
+
+
+
+
+
+	
 }
 
 module.exports = {
@@ -165,10 +196,13 @@ module.exports = {
 	seat: [
 		seatsHasData,
 		asyncErrorBoundary(reservationExists),
+		isNotSeated,
 		asyncErrorBoundary(tableExists),
 		hasEnoughCapacity,
 		isOccupied,
 		asyncErrorBoundary(seat),
 	],
-	unseat: [tableExists, isNotOccupied, asyncErrorBoundary(unseat)]
+	unseat: [tableExists, isNotOccupied, asyncErrorBoundary(unseat)],
+	finish: [asyncErrorBoundary(finish)],
+
 };	

@@ -12,6 +12,7 @@ function listDate(date) {
 	return knex(tableName)
 		.select('*')
 		.where({ reservation_date: date })
+		.andWhereNot({ status: 'finished' })
 		.orderBy('reservation_time');
 
 }
@@ -30,9 +31,18 @@ function read(reservation_id) {
 		.first();
 }
 
+function update(reservation_id, status) {
+	return knex(tableName)
+		.where({ reservation_id: reservation_id })
+		.update({ status: status })
+		.returning('*')
+		.then((updatedRecords) => updatedRecords[0]);
+}
+
 module.exports = {
 	listAll,
 	listDate,
 	create,
 	read,
+	update,
 };

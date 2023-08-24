@@ -12,7 +12,7 @@ router
 .route('/:table_id/seat')
 .get(controller.read)
 .put(controller.seat)
-.delete(controller.unseat)
+.delete(controller.finish)
 .all(methodNotAllowed);
 
 module.exports = router;
