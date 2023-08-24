@@ -30,11 +30,20 @@ function seat(table_id, reservation_id) {
     .then((updatedRecords) => updatedRecords[0]);
 }
 
+function unseat(table_id) {
+  return knex(tableName)
+    .where({ table_id: table_id })
+    .update({ reservation_id: null })
+    .returning('*')
+    .then((updatedRecords) => updatedRecords[0]);
+}
+
 
 module.exports = {
   listAll,
   create,
   read,
   seat,
+  unseat,
 
 };

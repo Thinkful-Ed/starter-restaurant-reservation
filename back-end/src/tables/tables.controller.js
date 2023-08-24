@@ -114,6 +114,15 @@ function isOccupied(req, res, next) {
 	}
 }
 
+function isNotOccupied(req, res, next) {
+	const { reservation_id } = res.locals.table;
+	if (reservation_id !== null) {
+		return next();
+	} else {
+		return next(res.status(400).json({ error: 'Table is not occupied' }));
+	}
+}
+
 //CRUDL Functions
 
 async function list(req, res) {
@@ -139,6 +148,12 @@ async function seat(req, res) {
 	res.status(200).json({ data });
 }
 
+async function unseat(req, res) {
+	const { table_id } = req.params;
+	const data = await service.unseat(table_id);
+	res.status(200).json({ data });
+}
+
 module.exports = {
 	list: asyncErrorBoundary(list),
 	create: [hasData, hasValidName, hasValidCapacity, asyncErrorBoundary(create)],
@@ -155,4 +170,5 @@ module.exports = {
 		isOccupied,
 		asyncErrorBoundary(seat),
 	],
+	unseat: [tableExists, isNotOccupied, asyncErrorBoundary(unseat)]
 };	

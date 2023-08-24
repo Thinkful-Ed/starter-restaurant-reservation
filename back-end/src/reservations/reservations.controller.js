@@ -193,4 +193,5 @@ module.exports = {
 		asyncErrorBoundary(create),
 	],
 	read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
+	
 };
