@@ -5,21 +5,23 @@ import ErrorAlert from "../layout/ErrorAlert";
 function TablesList({ date }) {
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
-  const abortController = new AbortController();
+  
 
   async function loadDashboard() {
+    const abortController = new AbortController();
     try {
       const tablesData = await listTables(abortController.signal);
       setTables(tablesData);
     } catch (error) {
       setTablesError(error);
     }
+    return () => abortController.abort();
   }
 
   useEffect(() => {
     loadDashboard();
 
-    return () => abortController.abort();
+    
   }, [date]);
 
   async function handleClick(e, table_id) {
@@ -31,6 +33,7 @@ function TablesList({ date }) {
     );
 
     if (confirmation) {
+      const abortController = new AbortController();
       try {
         await finishTable(table_id, abortController.signal);
         await loadDashboard();
@@ -38,9 +41,8 @@ function TablesList({ date }) {
         console.error(error);
         setTablesError(error);
       }
+      return () => abortController.abort();
     }
-
-    abortController.abort();
   }
 
   return (
@@ -65,12 +67,13 @@ function TablesList({ date }) {
                 <td data-table-id-status={table.table_id}>
                   {table.reservation_id === null ? "Free" : "Occupied"}
                 </td>
-                <td data-table-id-finish={table.table_id}>
+                <td >
                   {table.reservation_id && (
                     <div>
                       <button
                         className="btn btn-danger"
                         type="button"
+                        data-table-id-finish={table.table_id}
                         onClick={(e) => handleClick(e, table.table_id)}
                       >
                         Finish

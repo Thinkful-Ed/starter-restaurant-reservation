@@ -50,10 +50,10 @@ function ReservationList({ reservations, loadDashboard, setError }) {
               <td className="border border-dark">
                 Party Size: {reservation.people}
               </td>
-              <td className="border border-dark">
+              <td className="border border-dark" data-reservation-id-status={reservation.reservation_id}>
                 Status: {reservation.status}
               </td>
-              <td className="text-center border border-dark">
+              <td className="text-center border border-dark" >
                 {reservation.status === "booked" ||
                 reservation.status === "seated" ||
                 reservation.status === "canceled" ? (

@@ -8,7 +8,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import ReservationList from "../reservations/ReservationList";
 
 function Search(){
-	const [inputData, setInputData] = useState("");
+	const [input, setinput] = useState("");
 	const [error, setError] = useState(null);
 	const [reservations, setReservations] = useState([]);	
     
@@ -16,9 +16,9 @@ function Search(){
     function handleChange(event){
 		const inputValue = event.target.value;
 	
-		const numericValue = inputValue.replace(/\D/g, "");
+		const digitsOnly = inputValue.replace(/\D/g, "");
 	
-		setInputData(numericValue);
+		setinput(digitsOnly);
 	};
 
 	async function handleSubmit(event){
@@ -28,12 +28,12 @@ function Search(){
 		const abortController = new AbortController();
 		try {
 			const data = await searchReservations(
-				inputData,
+				input,
 				abortController.signal,
 			);
 
 			setReservations(data);
-			setInputData("");
+			setinput("");
 		} catch (error) {
 			if (error.name !== "AbortError") {
 				setError(error);
@@ -59,16 +59,14 @@ function Search(){
 							type="tel"
 							className="form-control"
 							name="mobile_number"
-							placeholder="Search customer's phone number"
-							aria-label="mobile_number"
-							aria-describedby="basic-addon2"
+							placeholder="Search for customer by phone number"
 							required={true}
-							value={inputData}
+							value={input}
 							onChange={handleChange}
 						/>
 						<button
 							className="btn btn-primary ml-2"
-							id="basic-addon2"
+							id="searchBtn"
 							type="submit">
 							Search
 						</button>

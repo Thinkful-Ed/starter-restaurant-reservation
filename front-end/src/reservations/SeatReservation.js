@@ -10,6 +10,11 @@ function SeatReservation() {
   const { reservation_id } = useParams();
   const history = useHistory();
 
+  console.log(reservation_id)
+
+  console.log(tables)
+
+
   useEffect(() => {
     const abortController = new AbortController();
     setError(null);
@@ -59,28 +64,20 @@ function SeatReservation() {
           </h2>
           <div className="form-group">
             <label htmlFor="table_id">Select a Table:</label>
-            <div className="btn-group-vertical w-100" role="group">
-              {tables ? (
+            <select onChange={handleChange} value={formData.table_Id} name="table_id">
+              {
                 tables.map((table) => (
-                  <button
+                  <option
                     key={table.table_id}
-                    name="table_id"
+                    
                     value={table.table_id}
-                    type="button"
-                    className={`btn ${
-                      formData.table_id === table.table_id
-                        ? "btn-primary"
-                        : "btn-secondary"
-                    } btn-block mb-2`}
-                    onClick={handleChange}
+
                   >
-                    {table.table_name} - Capacity : {table.capacity}
-                  </button>
+                    {table.table_name} - {table.capacity}
+                  </option>
                 ))
-              ) : (
-                <p>No tables available.</p>
-              )}
-            </div>
+              }
+            </select>
           </div>
 
           {/* Submit and Cancel Buttons */}
