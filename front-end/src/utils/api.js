@@ -99,7 +99,7 @@ export async function seatReservation(reservation_id, table_id, signal) {
 	const options = {
 		method: 'PUT',
 		headers,
-		body: JSON.stringify({ data: { reservation_id } }),
+		body: JSON.stringify({ data: { reservation_id: reservation_id } }),
 		signal,
 	};
 
@@ -108,8 +108,5 @@ export async function seatReservation(reservation_id, table_id, signal) {
 
 export async function listTables(params, signal) {
 	const url = new URL(`${API_BASE_URL}/tables`);
-	Object.entries(params).forEach(([key, value]) =>
-		url.searchParams.append(key, value.toString())
-	);
 	return await fetchJson(url, { headers, signal }, []);
 }
