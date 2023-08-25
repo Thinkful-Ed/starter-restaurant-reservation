@@ -6,6 +6,7 @@ import NotFound from "./NotFound";
 import EditReservation from "../reservations/EditReservation";
 import TablesCreate from "../tables/TablesCreate";
 import SeatReservation from "../reservations/SeatReservation";
+import Search from "../Search/Search";
 
 function Routes() {
   const [error, setError] = useState(null);
@@ -33,6 +34,9 @@ function Routes() {
       <Route path="/reservations/:reservation_id/seat">
 				<SeatReservation />
 			</Route>
+      <Route>
+        <Search />
+      </Route>
       <Route>
         <NotFound />
       </Route>

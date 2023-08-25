@@ -14,7 +14,6 @@ function TablesList({ date }) {
     } catch (error) {
       setTablesError(error);
     }
-    return () => abortController.abort();
   }
 
   useEffect(() => {
@@ -63,10 +62,10 @@ function TablesList({ date }) {
               <tr key={table.table_id}>
                 <td>{table.table_name}</td>
                 <td>{table.capacity}</td>
-                <td>
-                  {table.reservation_id === null ? "Free" : "Seated"}
+                <td data-table-id-status={table.table_id}>
+                  {table.reservation_id === null ? "Free" : "Occupied"}
                 </td>
-                <td>
+                <td data-table-id-finish={table.table_id}>
                   {table.reservation_id && (
                     <div>
                       <button
