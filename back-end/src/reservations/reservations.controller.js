@@ -14,7 +14,6 @@ const requiredFields = [
 	'reservation_date',
 	'reservation_time',
 	'people',
-	'status',
 ];
 
 function hasData(req, res, next) {
@@ -169,7 +168,7 @@ async function reservationExists(req, res, next) {
 
 function hasStatus(req, res, next) {
 	const { status } = req.body.data;
-	const validStatus = ['booked', 'seated', 'finished'];
+	const validStatus = ['booked', 'seated', 'finished', 'cancelled'];
 
 	if (!validStatus.includes(status)) {
 		return res.status(400).json({ error: `status ${status} is unknown` });
@@ -221,6 +220,12 @@ async function updateStatus(req, res) {
 	res.status(200).json({ data });
 }
 
+async function updateReservation(req, res) {
+	const { reservation_id } = req.params;
+	const data = await service.updateReservation(reservation_id, req.body.data);
+	res.status(200).json({ data });
+}
+
 module.exports = {
 	list: asyncErrorBoundary(list),
 	create: [
@@ -241,5 +246,14 @@ module.exports = {
 		hasStatus,
 		isNotFinished,
 		asyncErrorBoundary(updateStatus),
+	],
+	updateReservation: [
+		asyncErrorBoundary(reservationExists),
+		hasData,
+		isDate,
+		isTime,
+		isPast,
+		isNumber,
+		asyncErrorBoundary(updateReservation),
 	],
 };

@@ -42,6 +42,14 @@ function update(reservation_id, status) {
 		.then((updatedRecords) => updatedRecords[0]);
 }
 
+function updateReservation(reservation_id, reservation) {
+	return knex(tableName)
+		.where({ reservation_id: reservation_id })
+		.update(reservation)
+		.returning('*')
+		.then((updatedRecords) => updatedRecords[0]);
+}
+
 module.exports = {
 	listAll,
 	listDate,
@@ -49,4 +57,5 @@ module.exports = {
 	read,
 	update,
 	search,
+	updateReservation,
 };
