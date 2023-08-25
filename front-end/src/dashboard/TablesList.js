@@ -14,6 +14,9 @@ export default function TablesList({ tables }) {
 								<div className="card-body">
 									<p>Table Name: {table.table_name}</p>
 									<p>Capacity: {table.capacity}</p>
+									<p data-table-id-status={table.table_id}>
+										{table.reservation_id ? 'Occupied' : 'Free'}
+									</p>
 								</div>
 							</div>
 						</div>
