@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, finishTable, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import { today, previous, next } from "../utils/date-time";
@@ -16,22 +16,60 @@ import TablesList from "../tables/TablesList";
 function Dashboard({ error, setError }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
   let date = useQuery().get("date");
 
   if (!date) {
     date = today();
   }
 
-  useEffect(loadDashboard, [date]);
-
-  function loadDashboard() {
+  async function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      .catch(setReservationsError);
+    setTablesError(null);
+
+    try {
+      const [reservationData, tablesData] = await Promise.all([
+        listReservations({ date }, abortController.signal),
+        listTables(abortController.signal)
+      ]);
+
+      setReservations(reservationData);
+      setTables(tablesData);
+    } catch (error) {
+      setReservationsError(error);
+      setTablesError(error);
+    }
+
     return () => abortController.abort();
   }
+
+  useEffect(() => {
+    loadDashboard();
+  }, [date]);
+
+  async function handleClick(e, table_id) {
+    e.preventDefault();
+    setTablesError(null);
+
+    const confirmation = window.confirm(
+      "Is this table ready to seat new guests? This cannot be undone."
+    );
+
+    if (confirmation) {
+      const abortController = new AbortController();
+      try {
+        await finishTable(table_id, abortController.signal);
+        await loadDashboard();
+      } catch (error) {
+        console.error(error);
+        setTablesError(error);
+      }
+      abortController.abort();
+    }
+  }
+
 
   console.log(reservations);
 
@@ -75,7 +113,7 @@ function Dashboard({ error, setError }) {
         />
       </div>
       <div>
-        <TablesList date={date}/>
+        <TablesList tables={tables} tablesError={tablesError} handleClick={handleClick}/>
       </div>
     </main>
   );

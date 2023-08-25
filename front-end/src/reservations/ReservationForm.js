@@ -10,7 +10,7 @@ function ReservationForm({ handleChange, handleSubmit, formData }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h3 className="mt-2 ml-3">Make A Reservation</h3>
+      <h3 className="mt-2 ml-3">Make A Reservation: </h3>
       <fieldset>
         <div className="mt-2">
           <input

@@ -1,49 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { finishTable, listTables } from "../utils/api";
+import React from "react";
+// import { finishTable, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
-function TablesList({ date }) {
-  const [tables, setTables] = useState([]);
-  const [tablesError, setTablesError] = useState(null);
+function TablesList({ tables , tablesError, handleClick}) {
   
 
-  async function loadDashboard() {
-    const abortController = new AbortController();
-    try {
-      const tablesData = await listTables(abortController.signal);
-      setTables(tablesData);
-    } catch (error) {
-      setTablesError(error);
-    }
-    return () => abortController.abort();
-  }
+  // async function loadDashboard() {
+  //   const abortController = new AbortController();
+  //   try {
+  //     const tablesData = await listTables(abortController.signal);
+  //     setTables(tablesData);
+  //   } catch (error) {
+  //     setTablesError(error);
+  //   }
+  //   return () => abortController.abort();
+  // }
 
-  useEffect(() => {
-    loadDashboard();
+  // useEffect(() => {
+  //   loadDashboard();
 
     
-  }, [date]);
+  // }, [date]);
 
-  async function handleClick(e, table_id) {
-    e.preventDefault();
-    setTablesError(null);
 
-    const confirmation = window.confirm(
-      "Is this table ready to seat new guests? This cannot be undone."
-    );
-
-    if (confirmation) {
-      const abortController = new AbortController();
-      try {
-        await finishTable(table_id, abortController.signal);
-        await loadDashboard();
-      } catch (error) {
-        console.error(error);
-        setTablesError(error);
-      }
-      return () => abortController.abort();
-    }
-  }
 
   return (
     <>

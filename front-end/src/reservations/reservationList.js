@@ -54,10 +54,17 @@ function ReservationList({ reservations, loadDashboard, setError }) {
                 Status: {reservation.status}
               </td>
               <td className="text-center border border-dark" >
-                {reservation.status === "booked" ||
-                reservation.status === "seated" ||
-                reservation.status === "canceled" ? (
-                  <div className="btn-group" role="group">
+                {reservation.status === "booked" ? (
+                <div className="btn-group" role="group">
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() =>
+                      handleCancelReservation(reservation.reservation_id)
+                    }
+                  >
+                    Cancel
+                  </button>
+                  
                     <Link
                       to={`/reservations/${reservation.reservation_id}/seat`}
                       className="btn btn-success btn-sm mr-1"
@@ -73,16 +80,8 @@ function ReservationList({ reservations, loadDashboard, setError }) {
                       Edit
                     </Link>
                   </div>
-                ) : null}
-                {reservation.status === "booked" && (
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() =>
-                      handleCancelReservation(reservation.reservation_id)
-                    }
-                  >
-                    Cancel
-                  </button>
+                ) : (
+                " "
                 )}
               </td>
             </tr>
