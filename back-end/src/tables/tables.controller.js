@@ -6,19 +6,42 @@ const requiredFields = ['table_name', 'capacity'];
 const seatsRequiredFields = ['reservation_id'];
 
 //Middleware Functions
+async function tableExists(req, res, next) {
+	const { table_id } = req.params;
+	const table = await service.read(table_id);
+	
+	if (table) {
+		res.locals.table = table;
+		return next();
+	}
+	return res.status(404).json({ error: `table ${table_id} not found` });
+}
+
+async function reservationExists(req, res, next) {
+	const { reservation_id } = req.body.data;
+	const reservation = await reservationService.read(reservation_id);
+	if (reservation) {
+		res.locals.reservation = reservation;
+		return next();
+	}
+	return res
+		.status(404)
+		.json({ error: `reservation ${reservation_id} not found` });
+}
+
 
 function hasData(req, res, next) {
 	const { data } = req.body;
-
+	
 	if (!data) {
 		return res.status(400).json({ error: 'Data is missing' });
 	}
-
+	
 	for (const field of requiredFields) {
 		if (!data[field]) {
 			return res.status(400).json({ error: `${field} is missing` });
 		}
-
+		
 		if (typeof data[field] === 'string' && data[field].trim() === '') {
 			return res.status(400).json({ error: `${field} cannot be empty` });
 		}
@@ -71,28 +94,7 @@ function hasValidCapacity(req, res, next) {
 	next();
 }
 
-async function tableExists(req, res, next) {
-	const { table_id } = req.params;
-	const table = await service.read(table_id);
 
-	if (table) {
-		res.locals.table = table;
-		return next();
-	}
-	return res.status(404).json({ error: `table ${table_id} not found` });
-}
-
-async function reservationExists(req, res, next) {
-	const { reservation_id } = req.body.data;
-	const reservation = await reservationService.read(reservation_id);
-	if (reservation) {
-		res.locals.reservation = reservation;
-		return next();
-	}
-	return res
-		.status(404)
-		.json({ error: `reservation ${reservation_id} not found` });
-}
 
 function isNotSeated(req, res, next) {
 	const { status } = res.locals.reservation;
@@ -135,25 +137,25 @@ function isNotOccupied(req, res, next) {
 	}
 }
 
-//CRUDL Functions
+//crudl///////////////////////////////////////////////////crudl//
 
-async function list(req, res) {
+async function listTables(req, res) {
 	const data = await service.listAll();
 	res.json({ data });
 }
 
-async function create(req, res) {
+async function createTable(req, res) {
 	const data = await service.create(req.body.data);
 	res.status(201).json({ data });
 }
 
-async function read(req, res) {
+async function readTable(req, res) {
 	const { table_id } = req.params;
 	const data = await service.read(table_id);
 	res.status(200).json({ data });
 }
 
-async function seat(req, res) {
+async function seatReservation(req, res) {
 	const { table_id } = req.params;
 	const { reservation_id } = req.body.data;
 	const data = await service.seat(table_id, reservation_id);
@@ -161,16 +163,16 @@ async function seat(req, res) {
 	res.status(200).json({ data: data, status });
 }
 
-async function unseat(req, res) {
+async function unseatResevation(req, res) {
 	const { table_id } = req.params;
 	const data = await service.unseat(table_id);
 	res.status(200).json({ data });
 }
 
-async function finish(req, res) {
+async function finishReservation(req, res) {
 	const { table_id } = req.params;
 	console.log(table_id);
-	const { reservation_id } = req.body.data;
+	const { reservation_id } = res.locals.table;
 	console.log(reservation_id);
 	const data = await service.unseat(table_id);
 	const status = await reservationService.update( reservation_id, 'finished');
@@ -186,12 +188,12 @@ async function finish(req, res) {
 }
 
 module.exports = {
-	list: asyncErrorBoundary(list),
-	create: [hasData, hasValidName, hasValidCapacity, asyncErrorBoundary(create)],
+	list: asyncErrorBoundary(listTables),
+	create: [hasData, hasValidName, hasValidCapacity, asyncErrorBoundary(createTable)],
 	read: [
 		asyncErrorBoundary(tableExists),
 		asyncErrorBoundary(reservationExists),
-		asyncErrorBoundary(read),
+		asyncErrorBoundary(readTable),
 	],
 	seat: [
 		seatsHasData,
@@ -200,9 +202,9 @@ module.exports = {
 		asyncErrorBoundary(tableExists),
 		hasEnoughCapacity,
 		isOccupied,
-		asyncErrorBoundary(seat),
+		asyncErrorBoundary(seatReservation),
 	],
-	unseat: [tableExists, isNotOccupied, asyncErrorBoundary(unseat)],
-	finish: [asyncErrorBoundary(finish)],
+	unseat: [tableExists, isNotOccupied, asyncErrorBoundary(unseatResevation)],
+	finish: [tableExists, isNotOccupied, asyncErrorBoundary(finishReservation)],
 
 };	
