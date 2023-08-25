@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { listReservations } from '../utils/api';
+import { listReservations, listTables } from '../utils/api';
 import ErrorAlert from '../layout/ErrorAlert';
 import useQuery from '../utils/useQuery';
 import { previous, next, today } from '../utils/date-time';
 import { useHistory } from 'react-router-dom';
 import ReservationsList from './ReservationsList';
-
+import TablesList from './TablesList';
 
 /**
  * Defines the dashboard page.
@@ -19,16 +19,29 @@ function Dashboard({ date }) {
 	const queryDate = query.get('date');
 	const [reservations, setReservations] = useState([]);
 	const [reservationsError, setReservationsError] = useState(null);
+	const [tables, setTables] = useState([]);
+	const [tablesError, setTablesError] = useState(null);
 
 	useEffect(loadDashboard, [queryDate]);
 
 	function loadDashboard() {
-		const abortController = new AbortController();
+		const abortControllerR = new AbortController();
+		const abortControllerT = new AbortController();
+
 		setReservationsError(null);
-		listReservations({ date: queryDate || today() }, abortController.signal)
-			.then(setReservations)
-			.catch(setReservationsError);
-		return () => abortController.abort();
+		setTablesError(null);
+
+		Promise.all([
+			listReservations({ date: queryDate || today() }, abortControllerR.signal)
+				.then(setReservations)
+				.catch(setReservationsError),
+			listTables(abortControllerT.signal).then(setTables).catch(setTablesError),
+		]);
+
+		return () => {
+			abortControllerR.abort();
+			abortControllerT.abort();
+		};
 	}
 
 	const handlePrevious = (event) => {
@@ -70,8 +83,10 @@ function Dashboard({ date }) {
 						reservations={reservations}
 						date={queryDate || today()}
 					/>
+					<TablesList tables={tables} />
 				</div>
 				<ErrorAlert error={reservationsError} />
+				<ErrorAlert error={tablesError} />
 			</div>
 		</main>
 	);

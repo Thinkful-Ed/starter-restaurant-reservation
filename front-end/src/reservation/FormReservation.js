@@ -29,7 +29,7 @@ export default function FormReservation({
 				<h2>New Reservation</h2>
 				<div className="d-flex justify-content-center card-body">
 					<form onSubmit={submitHandler}>
-						<ErrorAlert  className="alert alert-danger" error={error} />
+						<ErrorAlert className="alert alert-danger" error={error} />
 						<div>
 							<div className="card text-center">
 								<label>First Name</label>
