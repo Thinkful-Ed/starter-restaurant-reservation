@@ -20,12 +20,18 @@ export default function ReservationsList({ reservations, date }) {
 									<p>Date: {formatAsDate(reservation.reservation_date)}</p>
 									<p>Time: {formatAsTime(reservation.reservation_time)}</p>
 									<p>Party Size: {reservation.people}</p>
+									<p data-reservation-id-status={reservation.reservation_id}>
+										Status: {reservation.status}
+									</p>
 								</div>
+								{reservation.status === 'booked' ? (
 								<div className="card-footer">
 									<Link to={`/reservations/${reservation.reservation_id}/seat`}>
 										<button className="btn btn-primary">Seat</button>
 									</Link>
-								</div>
+								</div>) : (
+									<></>
+								)}
 							</div>
 						</div>
 					))}
