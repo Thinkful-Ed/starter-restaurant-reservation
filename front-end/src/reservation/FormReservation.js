@@ -99,7 +99,7 @@ export default function FormReservation({
               </div>
             </div>
             <div className="card-footer d-flex justify-content-between">
-              <button type="submit">{isEditing ? 'Update' : 'Submit'}</button>
+              <button type="submit">Submit</button>
               <button type="button" onClick={history.goBack}>
                 Cancel
               </button>

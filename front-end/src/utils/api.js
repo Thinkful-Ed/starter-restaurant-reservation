@@ -119,7 +119,7 @@ export async function listTables(params, signal) {
 	return await fetchJson(url, { headers, signal }, []);
 }
 
-export async function EditReservation(reservation_id, reservation, signal) {
+export async function editReservation(reservation_id, reservation, signal) {
 	const url = `${API_BASE_URL}/reservations/${reservation_id}`;
 
 	const options = {
