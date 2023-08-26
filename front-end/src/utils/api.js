@@ -68,6 +68,14 @@ export async function listReservations(params, signal) {
 		.then(formatReservationTime);
 }
 
+export async function searchByMobile(mobile_number, signal) {
+	const url = new URL(`${API_BASE_URL}/reservations`);
+	url.searchParams.append('mobile_number', mobile_number);
+	return await fetchJson(url, { headers, signal }, [])
+		.then(formatReservationDate)
+		.then(formatReservationTime);
+}
+
 export async function createReservation(reservation, signal) {
 	const url = `${API_BASE_URL}/reservations`;
 
