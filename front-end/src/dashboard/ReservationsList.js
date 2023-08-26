@@ -15,10 +15,12 @@ export default function ReservationsList({ reservations, date, handleCancel }) {
       ) : (
         <div>
           {filteredReservations.map((reservation) => (
-            <div key={reservation.reservation_id}>
-              <div className="card">
-                <div className="card-body">
-                  <p> ID#: {reservation.reservation_id}</p>
+            <div key={reservation.reservation_id} className="mb-3">
+              <div className="panel panel-default">
+                <div className="panel-heading">
+                  <h4 className="panel-title"> Reservation ID: {reservation.reservation_id}</h4>
+                </div>
+                <div className="panel-body">
                   <p>First Name: {reservation.first_name}</p>
                   <p>Last Name: {reservation.last_name}</p>
                   <p>Mobile Number: {reservation.mobile_number}</p>
@@ -29,19 +31,17 @@ export default function ReservationsList({ reservations, date, handleCancel }) {
                     Status: {reservation.status}
                   </p>
                 </div>
-                <div className="card-footer">
+                <div className="panel-footer">
                   <Link to={`/reservations/${reservation.reservation_id}/edit`}>
                     <button className="btn btn-primary">Edit</button>
                   </Link>
-                  {reservation.status === 'booked' ? (
+                  {reservation.status === 'booked' && (
                     <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-                      <button className="btn btn-success">Seat</button>
+                      <button className="btn btn-success ml-2">Seat</button>
                     </Link>
-                  ) : (
-                    <></>
                   )}
                   <button
-                    className="btn btn-danger"
+                    className="btn btn-danger ml-2"
                     data-reservation-id-cancel={reservation.reservation_id}
                     onClick={() => handleCancel(reservation.reservation_id)}
                   >
