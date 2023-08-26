@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { listReservations, listTables } from '../utils/api';
+import { listReservations, listTables, finishTable } from '../utils/api';
 import ErrorAlert from '../layout/ErrorAlert';
 import useQuery from '../utils/useQuery';
 import { previous, next, today } from '../utils/date-time';
@@ -13,7 +13,7 @@ import TablesList from './TablesList';
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date }) {
+export default function Dashboard({ date }) {
 	const history = useHistory();
 	const query = useQuery();
 	const queryDate = query.get('date');
@@ -21,6 +21,7 @@ function Dashboard({ date }) {
 	const [reservationsError, setReservationsError] = useState(null);
 	const [tables, setTables] = useState([]);
 	const [tablesError, setTablesError] = useState(null);
+	const [finishError, setFinishError] = useState(null);
 
 	useEffect(loadDashboard, [queryDate]);
 
@@ -62,6 +63,28 @@ function Dashboard({ date }) {
 		history.push(`/dashboard?date=${today()}`);
 	};
 
+	async function handleFinish(event) {
+		event.preventDefault();
+		const abortController = new AbortController();
+		const tableId = event.target.getAttribute('data-table-id-finish');
+		
+		if (
+			window.confirm(
+				'Is this table ready to seat new guests? This cannot be undone.'
+			)
+		) {
+			try {
+				await finishTable(tableId, abortController.signal);
+				loadDashboard(
+					{ date: queryDate || today() },
+					abortController.signal
+				);
+			} catch (error) {
+				setFinishError(error);
+			}
+		}
+	}
+
 	return (
 		<main>
 			<div className="text-center">
@@ -83,13 +106,15 @@ function Dashboard({ date }) {
 						reservations={reservations}
 						date={queryDate || today()}
 					/>
-					<TablesList tables={tables} />
+					<TablesList tables={tables} handleFinish={handleFinish} />
 				</div>
 				<ErrorAlert error={reservationsError} />
 				<ErrorAlert error={tablesError} />
+				<ErrorAlert error={finishError} />
 			</div>
 		</main>
 	);
 }
 
-export default Dashboard;
+
+

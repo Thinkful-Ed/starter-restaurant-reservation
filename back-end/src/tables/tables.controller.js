@@ -171,9 +171,9 @@ async function unseatResevation(req, res) {
 
 async function finishReservation(req, res) {
 	const { table_id } = req.params;
-	console.log(table_id);
+	//console.log(table_id);
 	const { reservation_id } = res.locals.table;
-	console.log(reservation_id);
+	//console.log(reservation_id);
 	const data = await service.unseat(table_id);
 	const status = await reservationService.update( reservation_id, 'finished');
 	res.status(200).json({ data: data, status });

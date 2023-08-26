@@ -1,7 +1,9 @@
 import React from 'react';
 
-export default function TablesList({ tables }) {
-	console.log(tables);
+export default function TablesList({ tables, handleFinish}) {
+
+
+
 	return (
 		<div>
 			{tables.length === 0 ? (
@@ -9,15 +11,31 @@ export default function TablesList({ tables }) {
 			) : (
 				<div>
 					{tables.map((table) => (
-						<div key={table.id}>
+						<div key={table.table_id}>
 							<div className="card">
-								<div className="card-body">
+								<div className="card-header">
 									<p>Table Name: {table.table_name}</p>
+								</div>
+								<div className="card-body">
 									<p>Capacity: {table.capacity}</p>
 									<p data-table-id-status={table.table_id}>
 										{table.reservation_id ? 'Occupied' : 'Free'}
 									</p>
 								</div>
+								<div className='card-footer'>
+									{table.reservation_id ? (
+										<button
+											className="btn btn-primary"
+											data-table-id-finish={table.table_id}
+											onClick={handleFinish}>
+											Finish
+										</button>
+										
+									) : (
+										<></>
+									)}
+								</div>
+								
 							</div>
 						</div>
 					))}
