@@ -2,7 +2,7 @@ import React from 'react';
 import NewReservation from '../reservation/NewReservation';
 import NewTable from '../table/NewTable';
 import SearchReservation from '../reservation/SearchReservation';
-
+import EditReservation from '../reservation/EditReservation';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Dashboard from '../dashboard/Dashboard';
 import NotFound from './NotFound';
@@ -30,6 +30,9 @@ function Routes() {
 			</Route>
 			<Route exact={true} path="/reservations/:reservation_id/seat">
 				<SeatReservation />
+			</Route>
+			<Route exact={true} path="/reservations/:reservation_id/edit">
+				<EditReservation />
 			</Route>
 			<Route path="/search">
 				<SearchReservation />

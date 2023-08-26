@@ -6,6 +6,7 @@ import { previous, next, today } from '../utils/date-time';
 import { useHistory } from 'react-router-dom';
 import ReservationsList from './ReservationsList';
 import TablesList from './TablesList';
+import { updateReservationStatus } from '../utils/api';
 
 /**
  * Defines the dashboard page.
@@ -22,7 +23,7 @@ export default function Dashboard({ date }) {
 	const [tables, setTables] = useState([]);
 	const [tablesError, setTablesError] = useState(null);
 	const [finishError, setFinishError] = useState(null);
-
+  const [cancelError, setCancelError] = useState(null);
 	useEffect(loadDashboard, [queryDate]);
 
 	function loadDashboard() {
@@ -62,6 +63,31 @@ export default function Dashboard({ date }) {
 
 		history.push(`/dashboard?date=${today()}`);
 	};
+
+	async function handleCancel(reservationId) {
+	
+		if (
+			window.confirm(
+				'Do you want to cancel this reservation? This cannot be undone.'
+			)
+		) {
+			const abortController = new AbortController();
+			const cancelled = 'cancelled';
+			try {
+				await updateReservationStatus(
+					reservationId,
+					cancelled,
+					abortController.signal
+				);
+				loadDashboard(
+					{ date: queryDate || today() },
+					abortController.signal
+				);
+			} catch (error) {
+				setCancelError(error);
+			}
+		}
+	}
 
 	async function handleFinish(event) {
 		event.preventDefault();
@@ -105,12 +131,15 @@ export default function Dashboard({ date }) {
 					<ReservationsList
 						reservations={reservations}
 						date={queryDate || today()}
+						mobile_number={query.get('mobile_number')}
+						handleCancel={handleCancel}
 					/>
 					<TablesList tables={tables} handleFinish={handleFinish} />
 				</div>
 				<ErrorAlert error={reservationsError} />
 				<ErrorAlert error={tablesError} />
 				<ErrorAlert error={finishError} />
+				<ErrorAlert error={cancelError} />
 			</div>
 		</main>
 	);
