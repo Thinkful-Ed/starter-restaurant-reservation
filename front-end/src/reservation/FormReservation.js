@@ -7,7 +7,7 @@ export default function FormReservation({
   setReservation,
   submitHandler,
   error,
-  isEditing = false, 
+  isEditing = false,
 }) {
   const history = useHistory();
 
@@ -21,92 +21,104 @@ export default function FormReservation({
   }
 
   return (
-    <div className="card">
-      <div className="card-header text-center ">
+    <div className=' d-flex justify-content-center text-center'>
+    <div className="panel panel-default w-25">
+      <div className="panel-heading text-center">
         <h2>{isEditing ? 'Edit Reservation' : 'New Reservation'}</h2>
-        <div className="d-flex justify-content-center card-body">
-          <form onSubmit={submitHandler}>
-            <ErrorAlert className="alert alert-danger" error={error} />
-            <div>
-              <div className="card text-center">
-                <label>First Name</label>
-                <input
-                  id="first_name"
-                  name="first_name"
-                  required={true}
-                  type="text"
-                  value={reservation.first_name}
-                  onChange={changeHandler}
-                />
-              </div>
-              <div className="card text-center">
-                <label>Last Name</label>
-                <input
-                  id="last_name"
-                  name="last_name"
-                  required={true}
-                  type="text"
-                  value={reservation.last_name}
-                  onChange={changeHandler}
-                />
-              </div>
-              <div className="card text-center">
-                <label>Mobile Number</label>
-                <input
-                  id="mobile_number"
-                  name="mobile_number"
-                  required={true}
-                  type="tel"
-                  value={reservation.mobile_number}
-                  onChange={changeHandler}
-                />
-              </div>
-              <div className="card text-center">
-                <label>Date of Reservation</label>
-                <input
-                  id="reservation_date"
-                  name="reservation_date"
-                  required={true}
-                  type="date"
-                  pattern="\d{4}-\d{2}-\d{2}"
-                  value={reservation.reservation_date}
-                  onChange={changeHandler}
-                />
-              </div>
-              <div className="card text-center">
-                <label>Time of Reservation</label>
-                <input
-                  id="reservation_time"
-                  name="reservation_time"
-                  required={true}
-                  type="time"
-                  pattern="\d{2}:\d{2}"
-                  value={reservation.reservation_time}
-                  onChange={changeHandler}
-                />
-              </div>
-              <div className="card text-center">
-                <label>Number of People</label>
-                <input
-                  id="people"
-                  name="people"
-                  type="number"
-                  required={true}
-                  min="1"
-                  value={reservation.people}
-                  onChange={changeHandler}
-                />
-              </div>
-            </div>
-            <div className="card-footer d-flex justify-content-between">
-              <button type="submit">Submit</button>
-              <button type="button" onClick={history.goBack}>
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
       </div>
+      <div className="panel-body d-flex justify-content-center">
+        <form onSubmit={submitHandler} className="w-100">
+          <ErrorAlert className="alert alert-danger" error={error} />
+          <div className="form-group">
+            <label htmlFor="first_name">First Name</label>
+            <input
+              id="first_name"
+              name="first_name"
+              required={true}
+              type="text"
+              value={reservation.first_name}
+              onChange={changeHandler}
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="last_name">Last Name</label>
+            <input
+              id="last_name"
+              name="last_name"
+              required={true}
+              type="text"
+              value={reservation.last_name}
+              onChange={changeHandler}
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="mobile_number">Mobile Number</label>
+            <input
+              id="mobile_number"
+              name="mobile_number"
+              required={true}
+              type="tel"
+              value={reservation.mobile_number}
+              onChange={changeHandler}
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="reservation_date">Date of Reservation</label>
+            <input
+              id="reservation_date"
+              name="reservation_date"
+              required={true}
+              type="date"
+              pattern="\d{4}-\d{2}-\d{2}"
+              value={reservation.reservation_date}
+              onChange={changeHandler}
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="reservation_time">Time of Reservation</label>
+            <input
+              id="reservation_time"
+              name="reservation_time"
+              required={true}
+              type="time"
+              pattern="\d{2}:\d{2}"
+              value={reservation.reservation_time}
+              onChange={changeHandler}
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="people">Number of People</label>
+            <input
+              id="people"
+              name="people"
+              type="number"
+              required={true}
+              min="1"
+              value={reservation.people}
+              onChange={changeHandler}
+              className="form-control"
+            />
+          </div>
+          <div className="panel-footer d-flex justify-content-between">
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+            <button
+              type="button"
+              onClick={history.goBack}
+              className="btn btn-secondary"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
     </div>
   );
 }

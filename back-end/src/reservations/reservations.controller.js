@@ -77,6 +77,7 @@ function isNotPast(req, res, next) {
 	next();
 }
 
+
 function isNotTuesday(req, res, next) {
 	const { reservation_date } = req.body.data;
 

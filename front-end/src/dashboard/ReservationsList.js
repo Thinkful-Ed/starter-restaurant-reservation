@@ -9,31 +9,31 @@ export default function ReservationsList({ reservations, date, handleCancel }) {
   );
 
   return (
-    <div>
+    <div className='text-center'>
       {filteredReservations.length === 0 ? (
         <p>No reservations found.</p>
       ) : (
-        <div>
+        <div className='d-flex flex-wrap'>
           {filteredReservations.map((reservation) => (
-            <div key={reservation.reservation_id} className="mb-3">
-              <div className="panel panel-default">
-                <div className="panel-heading">
-                  <h4 className="panel-title"> Reservation ID: {reservation.reservation_id}</h4>
+            <div key={reservation.reservation_id} className="w-25 p-3">
+              <div className="card">
+                <div className="card-header">
+                  <h4 className="card-title">Reservation ID: {reservation.reservation_id}</h4>
                 </div>
-                <div className="panel-body">
-                  <p>First Name: {reservation.first_name}</p>
-                  <p>Last Name: {reservation.last_name}</p>
-                  <p>Mobile Number: {reservation.mobile_number}</p>
-                  <p>Date: {formatAsDate(reservation.reservation_date)}</p>
-                  <p>Time: {formatAsTime(reservation.reservation_time)}</p>
-                  <p>Party Size: {reservation.people}</p>
-                  <p data-reservation-id-status={reservation.reservation_id}>
+                <div className="card-body">
+                  <p className="card-text">First Name: {reservation.first_name}</p>
+                  <p className="card-text">Last Name: {reservation.last_name}</p>
+                  <p className="card-text">Mobile Number: {reservation.mobile_number}</p>
+                  <p className="card-text">Date: {formatAsDate(reservation.reservation_date)}</p>
+                  <p className="card-text">Time: {formatAsTime(reservation.reservation_time)}</p>
+                  <p className="card-text">Party Size: {reservation.people}</p>
+                  <p className="card-text" data-reservation-id-status={reservation.reservation_id}>
                     Status: {reservation.status}
                   </p>
                 </div>
-                <div className="panel-footer">
+                <div className="card-footer">
                   <Link to={`/reservations/${reservation.reservation_id}/edit`}>
-                    <button className="btn btn-primary">Edit</button>
+                    <button className="btn btn-primary ml-2">Edit</button>
                   </Link>
                   {reservation.status === 'booked' && (
                     <Link to={`/reservations/${reservation.reservation_id}/seat`}>

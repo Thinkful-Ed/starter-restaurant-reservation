@@ -1,4 +1,15 @@
+/* Layout.css */
+.layout-container {
+  height: 100vh; /* Set container height to 100% of viewport height */
+  
+}
+
 .side-bar {
   background-color: #393a44;
   min-width: 200px;
+  height: 100%; /* Sidebar takes up full height */
+}
+
+.col {
+  height: 100%; /* Content column takes up full height */
 }

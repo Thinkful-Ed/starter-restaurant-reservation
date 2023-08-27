@@ -52,13 +52,15 @@ export default function SearchReservation() {
 
   return (
     <div>
+    <div className='d-flex justify-content-center'>
+      <div className='w-50 text-center'>
       <div>
-        <h1>Search Reservation</h1>
+        <h2>Search Reservation</h2>
         <div>
           <form onSubmit={handleSubmit}>
             <ErrorAlert error={reservationsError} />
             <div className="form-group">
-              <label htmlFor="mobile_number">Mobile Number:</label>
+              <label  htmlFor="mobile_number">Mobile Number:</label>
               <input
                 name="mobile_number"
                 id="mobile_number"
@@ -76,12 +78,15 @@ export default function SearchReservation() {
           </form>
         </div>
       </div>
+      </div>
+      </div>
       <div>
         <ReservationsList
           reservations={filteredReservations}
           handleCancel={handleCancel}
         />
       </div>
+    
     </div>
   );
 }

@@ -18,37 +18,88 @@ export default function Dashboard({ date }) {
   const [tablesError, setTablesError] = useState(null);
   const [finishError, setFinishError] = useState(null);
   const [cancelError, setCancelError] = useState(null);
-  useEffect(loadDashboard, [queryDate]);
 
-  function loadDashboard() {
+  async function fetchData() {
     const abortControllerR = new AbortController();
     const abortControllerT = new AbortController();
 
     setReservationsError(null);
     setTablesError(null);
 
-    Promise.all([
-      listReservations({ date: queryDate || today() }, abortControllerR.signal)
-        .then(setReservations)
-        .catch(setReservationsError),
-      listTables(abortControllerT.signal).then(setTables).catch(setTablesError),
-    ]);
+    try {
+      const reservationsData = await listReservations(
+        { date: queryDate || today() },
+        abortControllerR.signal
+      );
+      setReservations(reservationsData);
+
+      const tablesData = await listTables(abortControllerT.signal);
+      setTables(tablesData);
+    } catch (error) {
+      setReservationsError(error);
+      setTablesError(error);
+    }
 
     return () => {
       abortControllerR.abort();
       abortControllerT.abort();
-    };
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [queryDate]);
+
+  async function handleCancel(reservationId) {
+    if (
+      window.confirm(
+        'Do you want to cancel this reservation? This cannot be undone.'
+      )
+    ) {
+      const abortController = new AbortController();
+      const cancelled = 'cancelled';
+      try {
+        await updateReservationStatus(
+          reservationId,
+          cancelled,
+          abortController.signal
+        );
+        fetchData();
+      } catch (error) {
+        setCancelError(error);
+      }
+    }
+  }
+
+  async function handleFinish(event) {
+    const tableId = event.target.getAttribute('data-table-id-finish');
+
+    if (
+      window.confirm(
+        'Is this table ready to seat new guests? This cannot be undone.'
+      )
+    ) {
+      const abortController = new AbortController();
+      try {
+        await finishTable(tableId, abortController.signal);
+        fetchData();
+      } catch (error) {
+        setFinishError(error);
+      }
+    }
   }
 
   const handlePrevious = (event) => {
     event.preventDefault();
     const formattedPreviousDate = previous(date);
+    console.log('Formatted Previous Date:', formattedPreviousDate); // Debugging
     history.push(`/dashboard?date=${formattedPreviousDate}`);
   };
-
+  
   const handleNext = (event) => {
     event.preventDefault();
     const formattedNextDate = next(date);
+    console.log('Formatted Next Date:', formattedNextDate); // Debugging
     history.push(`/dashboard?date=${formattedNextDate}`);
   };
 
@@ -57,57 +108,30 @@ export default function Dashboard({ date }) {
     history.push(`/dashboard?date=${today()}`);
   };
 
-  async function handleCancel(reservationId) {
-    if (window.confirm('Do you want to cancel this reservation? This cannot be undone.')) {
-      const abortController = new AbortController();
-      const cancelled = 'cancelled';
-      try {
-        await updateReservationStatus(reservationId, cancelled, abortController.signal);
-        loadDashboard({ date: queryDate || today() }, abortController.signal);
-      } catch (error) {
-        setCancelError(error);
-      }
-    }
-  }
-
-  async function handleFinish(event) {
-    event.preventDefault();
-    const abortController = new AbortController();
-    const tableId = event.target.getAttribute('data-table-id-finish');
-
-    if (window.confirm('Is this table ready to seat new guests? This cannot be undone.')) {
-      try {
-        await finishTable(tableId, abortController.signal);
-        loadDashboard({ date: queryDate || today() }, abortController.signal);
-      } catch (error) {
-        setFinishError(error);
-      }
-    }
-  }
-
   return (
     <main>
       <div className="text-center">
         <h1>Dashboard</h1>
         <div className="panel panel-default">
-          <div className="panel-heading">
-            <h4>Reservations for {queryDate || today()}</h4>
-            <div className='btn-group w-50'>
-						
-              <button className="btn btn-secondary w-100" onClick={handlePrevious}>
+          <div>
+            <div className="btn-group w-50">
+              <button
+                className="btn btn-secondary w-100"
+                onClick={handlePrevious}
+              >
                 Previous
               </button>
-							
-							
+
               <button className="btn btn-success w-100" onClick={handleToday}>
                 Today
               </button>
-							
-							
+
               <button className="btn btn-secondary w-100" onClick={handleNext}>
                 Next
               </button>
-							
+            </div>
+            <div className="panel-heading p-3">
+              <h4>Reservations for {queryDate || today()}</h4>
             </div>
           </div>
           <div className="panel-body">
