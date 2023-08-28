@@ -28,8 +28,7 @@ function TablesList({ tables , tablesError, handleClick}) {
     <>
       <h3>Tables:</h3>
       <ErrorAlert error={tablesError} />
-      <div className="table table-responsive table-sm">
-        <table className="table table-hover">
+        <table className="table">
           <thead>
             <tr>
               <th>Table name</th>
@@ -64,7 +63,6 @@ function TablesList({ tables , tablesError, handleClick}) {
             ))}
           </tbody>
         </table>
-      </div>
     </>
   );
 }

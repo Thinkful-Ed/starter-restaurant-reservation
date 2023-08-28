@@ -28,8 +28,11 @@ function SeatReservation() {
     e.preventDefault();
     setError(null);
     const abortController = new AbortController();
+    console.log("formData: ", formData)
     const tableId = Number(formData.table_id);
     const reservationId = Number(reservation_id);
+    console.log("table_id:", tableId)
+    console.log("reservationId: ", reservation_id)
 
     try {
       await seatCustomers(tableId, reservationId, abortController.signal);
@@ -42,6 +45,7 @@ function SeatReservation() {
   }
 
   const handleChange = (event) => {
+    console.log("formData2: ", formData)
     setFormData((formData) => ({
       ...formData,
       [event.target.name]: event.target.value,
@@ -64,7 +68,8 @@ function SeatReservation() {
           </h2>
           <div className="form-group">
             <label htmlFor="table_id">Select a Table:</label>
-            <select onChange={handleChange} value={formData.table_Id} name="table_id">
+            <select onChange={handleChange} value={formData.table_Id} name="table_id" className="ml-2">
+            <option value="">Choose a table</option>
               {
                 tables.map((table) => (
                   <option
