@@ -95,3 +95,11 @@ export async function createReservation(reservation, signal) {
  
   return await fetchJson(url, { headers, signal, method: "GET" }, []);
  }
+
+ export async function seatTable(reservation_id, table_id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+ 
+  const body = JSON.stringify({ data: { reservation_id: reservation_id } });
+ 
+  return await fetchJson(url, { headers, signal, method: "PUT", body }, []);
+ }
