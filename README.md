@@ -5,6 +5,9 @@ You have been hired as a full stack developer at _Periodic Tables_, a startup th
 The software is used only by restaurant personnel when a customer calls to request a reservation.
 At this point, the customers will not access the system online.
 
+
+**Live Project**: [Explore the deployed project here](https://restaurant-reservation-frontend-x28n.onrender.com/dashboard)
+
 Welcome to my **Restaurant Reservation System** project! This repository holds all the source code for the reservation system I've developed as part of my role at _Periodic Tables_, a startup that's dedicated to revolutionizing the reservation experience for fine dining restaurants. As a *full stack developer*, I've built a comprehensive solution that empowers restaurant personnel like me to efficiently manage reservation requests from customers.
 
 ## Project Overview
