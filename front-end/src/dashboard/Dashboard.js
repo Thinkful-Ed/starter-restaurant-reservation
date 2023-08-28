@@ -124,6 +124,28 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
       </div>
       <div>
         <h4>Tables</h4>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Table Name</th>
+              <th>Capacity</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {tables.length ? (
+              tableRow() ) : (
+                <tr>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+              
+            )}
+          </tbody>
+        </table>
       </div>
     </main>
   );
