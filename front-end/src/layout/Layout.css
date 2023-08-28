@@ -1,4 +1,40 @@
+
 .side-bar {
+  font-family: "Space Mono", monospace;
+  letter-spacing: auto;
   background-color: #393a44;
   min-width: 200px;
+  max-height: 350px;
+  padding-right: 2em;
 }
+
+h1 {
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+}
+
+h2 {
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+}
+
+p {
+  font-family: "Montserrat", sans-serif;
+}
+
+table {
+  font-family: "Montserrat", sans-serif;
+}
+
+tr{
+  overflow: auto;
+}
+
+
+
+ul {
+  padding: 0;
+}
+
+
+

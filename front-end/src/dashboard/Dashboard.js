@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import useQuery from "../utils/useQuery";
+import { listReservations } from "../utils/api";
+//import formatDisplayDate from "../utils/date-time";
+import ReservationList from "../reservations/ReservationList";
+import NavigationBtns from "./NavigationBtns";
+import TableList from "../tables/TableList";
 
 /**
  * Defines the dashboard page.
@@ -8,7 +13,12 @@ import ErrorAlert from "../layout/ErrorAlert";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
+
 function Dashboard({ date }) {
+  const dateInUrl = useQuery().get("date");
+  if (dateInUrl) {
+    date = dateInUrl;
+  }
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -23,15 +33,19 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  //JSX
   return (
-    <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+    <>
+      <div>
+        <h1 className="mt-3 mb-4">Dashboard</h1>
+        <NavigationBtns date={date} />
+        <div>
+          <ReservationList reservations={reservations} />
+          <TableList />
+        </div>
+        <ErrorAlert error={reservationsError} />
       </div>
-      <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
-    </main>
+    </>
   );
 }
 
