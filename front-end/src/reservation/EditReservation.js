@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { formatAsDate, formatAsTime} from '../utils/date-time';
 import { useHistory } from 'react-router-dom';
 import { editReservation } from '../utils/api';
+import ErrorAlert from '../layout/ErrorAlert';
 
 export default function EditReservation() {
 	const { reservation_id } = useParams();
@@ -73,6 +74,7 @@ useEffect(() => {
 
 	return (
 		<div>
+      <ErrorAlert error={error} />
 			<FormReservation
 				reservation={reservation}
 				setReservation={setReservation}

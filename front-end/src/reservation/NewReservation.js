@@ -3,6 +3,7 @@ import { createReservation } from '../utils/api';
 import { useHistory } from 'react-router-dom';
 import { formatAsDate } from '../utils/date-time';
 import FormReservation from './FormReservation';
+import ErrorAlert from '../layout/ErrorAlert';
 
 export default function NewReservation() {
 	const history = useHistory();
@@ -44,6 +45,7 @@ export default function NewReservation() {
 
 	return (
 		<div>
+			<ErrorAlert error={error} />
 			<FormReservation
 				reservation={reservation}
 				setReservation={setReservation}

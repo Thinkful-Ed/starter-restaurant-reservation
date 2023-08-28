@@ -1,18 +1,26 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import ErrorAlert from '../layout/ErrorAlert';
+
 
 export default function FormReservation({
   reservation,
   setReservation,
   submitHandler,
-  error,
   isEditing = false,
 }) {
   const history = useHistory();
 
   function changeHandler({ target: { name, value } }) {
-    const newValue = name === 'people' ? parseInt(value, 10) : value;
+    let newValue;
+  
+    if (name === 'people') {
+      newValue = parseInt(value, 10);
+    } else if (name === 'mobile_number') {
+      // Remove non-numeric characters
+      newValue = value.replace(/[^0-9-]/g, '');
+    } else {
+      newValue = value;
+    }
 
     setReservation((previousReservation) => ({
       ...previousReservation,
@@ -28,7 +36,7 @@ export default function FormReservation({
       </div>
       <div className="panel-body d-flex justify-content-center">
         <form onSubmit={submitHandler} className="w-100">
-          <ErrorAlert className="alert alert-danger" error={error} />
+          
           <div className="form-group">
             <label htmlFor="first_name">First Name</label>
             <input

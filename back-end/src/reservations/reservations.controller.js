@@ -258,6 +258,7 @@ module.exports = {
 		isTime,
 		isNotPast,
 		isNumber,
+		isNotTuesday,
 		asyncErrorBoundary(updateReservation),
 	],
 };
