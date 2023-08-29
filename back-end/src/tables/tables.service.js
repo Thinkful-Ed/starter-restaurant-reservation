@@ -6,7 +6,7 @@ function list() {
     return knex(tableName).select("*");
 }
 
-function create() {
+function create(table) {
     return knex(tableName).insert(table).returning("*");
 }
 
