@@ -1,6 +1,8 @@
 const knex = require("../db/connection");
 const { today } = require("../utils/date-time");
 
+
+// Query the database for reservations matching the date and not finished
 function listByDate(date = today()) {
     return knex("reservations")
         .select("*")
@@ -9,6 +11,7 @@ function listByDate(date = today()) {
         .orderBy("reservation_time");
 }
 
+// Query the database for reservations matching the mobile number
 function listByNumber(mobile_number) {
     return (
         knex("reservations")
@@ -22,6 +25,7 @@ function listByNumber(mobile_number) {
     );
 }
 
+// Insert the reservation data into the database
 function create(reservation) {
     return knex("reservations")
         .insert(reservation)
@@ -29,6 +33,7 @@ function create(reservation) {
         .then((createdReservations) => createdReservations[0]);
 }
 
+// Query the database for a reservation with the specified ID
 function read(reservation_id) {
     return knex("reservations")
         .select("*")
@@ -36,6 +41,7 @@ function read(reservation_id) {
         .first();
 }
 
+// Query the database to update the reservation with the specified ID
 function update(reservation_id, updatedReservation) {
     return knex("reservations")
         .select("*")
@@ -45,6 +51,7 @@ function update(reservation_id, updatedReservation) {
         .then((updatedReservation) => updatedReservation[0]);
 }
 
+// Update the reservation's status in the database
 function changeStatus(reservation_id, status) {
     return knex("reservations")
         .select("*")

@@ -3,18 +3,20 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 const hasRequiredProperties = hasProperties("table_name", "capacity");
 
+// Function to retrieve a list of tables for a specific date
 async function list(req, res) {
     const { date } = req.query;
     const allTables = await service.list(date);
     res.status(200).json({ data: allTables });
 }
 
+// Function to create a new table
 async function create(req, res) {
     const data = await service.create(req.body.data);
     res.status(201).json({ data });
 }
 
-//in progress
+// Function to update a table's reservation status
 async function update(req, res) {
     const { tableId } = req.params;
     const data = await service.update(
@@ -24,6 +26,7 @@ async function update(req, res) {
     res.status(200).json({ data });
 }
 
+// Middleware to validate proper name and capacity in the request body
 function hasProperNameAndCapacity(req, res, next) {
     const { table_name, capacity } = req.body.data;
     if (table_name.length < 2) {
@@ -41,6 +44,7 @@ function hasProperNameAndCapacity(req, res, next) {
     next();
 }
 
+// Middleware to ensure the request has a valid body
 function requestHasBody(req, res, next) {
     if (!req.body || !req.body.data || !req.body.data.reservation_id) {
         next({
@@ -53,7 +57,7 @@ function requestHasBody(req, res, next) {
     next();
 }
 
-//in progress
+// Middleware to check if a table has enough seats for a reservation
 async function tableHasEnoughSeats(req, res, next) {
     const { tableId } = req.params;
     const reservation_id = res.locals.reservation.reservation_id
@@ -73,6 +77,7 @@ async function tableHasEnoughSeats(req, res, next) {
     next();
 }
 
+// Middleware to check if a reservation exists
 async function reservationExists(req, res, next) {
     const { reservation_id } = req.body.data;
     res.locals.reservation_id = reservation_id;
@@ -87,6 +92,7 @@ async function reservationExists(req, res, next) {
     next();
 }
 
+// Middleware to check if a table is available
 function tableIsAvailable(req, res, next) {
     let table = res.locals.table;
     if (table.reservation_id) {
@@ -98,6 +104,7 @@ function tableIsAvailable(req, res, next) {
     next();
 }
 
+// Middleware to check if a table exists
 async function tableExists(req, res, next) {
     const { tableId } = req.params;
     const table = await service.getTable(tableId);
@@ -111,6 +118,7 @@ async function tableExists(req, res, next) {
     next();
 }
 
+// Middleware to check if a table is occupied
 function tableIsOccupied(req, res, next) {
     let table = res.locals.table;
     if (!table.reservation_id) {
@@ -122,6 +130,7 @@ function tableIsOccupied(req, res, next) {
     next();
 }
 
+// Middleware to change the status of a reservation or table
 async function changeStatus(req, res, next) {
     if (req.method == "DELETE") {
         let table = res.locals.table;
@@ -134,6 +143,7 @@ async function changeStatus(req, res, next) {
     next();
 }
 
+// Middleware to check if a reservation's status is booked
 function reservationIsBooked(req, res, next) {
     let reservation = res.locals.reservation;
     if (reservation.status !== "booked") {
