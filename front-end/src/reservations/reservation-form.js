@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
+import { createReservation, listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import { useParams } from "react-router-dom/cjs/react-router-dom";
 
-function ReservationForm() {
+function ReservationForm({ loadDashboard, edit }) {
     const history = useHistory();
     const [error, setError] = useState(null);
+    const { reservation_id } = useParams();
+    const [reservationsError, setReservationsError] = useState(null);
 
     const initialFormState = {
         first_name: "",
@@ -16,6 +19,50 @@ function ReservationForm() {
         people: "",
     };
 
+    useEffect(() => {
+        if (edit) {
+          if (!reservation_id) return null;
+    
+          loadReservations()
+            .then((response) =>
+              response.find(
+                (reservation) =>
+                  reservation.reservation_id === Number(reservation_id)
+              )
+            )
+            .then(fillFields);
+        }
+    
+        function fillFields(foundReservation) {
+          if (!foundReservation || foundReservation.status !== "booked") {
+            return <p>Only booked reservations can be edited.</p>;
+          }
+    
+          const date = new Date(foundReservation.reservation_date);
+          const dateString = `${date.getFullYear()}-${(
+            "0" +
+            (date.getMonth() + 1)
+          ).slice(-2)}-${("0" + date.getDate()).slice(-2)}`;
+    
+          setFormData({
+            first_name: foundReservation.first_name,
+            last_name: foundReservation.last_name,
+            mobile_number: foundReservation.mobile_number,
+            reservation_date: dateString,
+            reservation_time: foundReservation.reservation_time,
+            people: foundReservation.people,
+          });
+        }
+    
+        async function loadReservations() {
+          const abortController = new AbortController();
+          return await listReservations(null, abortController.signal).catch(
+            setReservationsError
+          );
+        }
+      }, [edit, reservation_id]);
+
+
     const [formData, setFormData] = useState({ ...initialFormState });
     const handleChange = ({ target }) => {
         setFormData ({
@@ -23,6 +70,7 @@ function ReservationForm() {
             [target.name]: target.value,
         })
     }
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -155,6 +203,7 @@ function ReservationForm() {
             <button type="button" onClick={history.goBack}>Cancel</button>
             </form>
             <ErrorAlert error={error} />
+            <ErrorAlert error={reservationsError} />
         </div>
     )
 }

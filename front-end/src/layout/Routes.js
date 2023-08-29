@@ -60,6 +60,7 @@ function Routes() {
           reservationsError={reservationsError}
           loadDashboard={loadDashboard}
           tables={tables}
+          tablesError={tablesError}
           />
       </Route>
       <Route path="/reservations/new">

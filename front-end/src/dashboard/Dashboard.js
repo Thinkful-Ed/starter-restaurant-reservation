@@ -12,11 +12,11 @@ import TableRow from "../Tables/TableRow";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date, reservations, reservationsError, loadDashboard, tables }) {
+function Dashboard({ date, reservations, reservationsError, loadDashboard, tables, tablesError }) {
   const history = useHistory();
 
   
-  const reservationsJSX = () => {
+  const reservationsRow = () => {
     return reservations.map((reservation) => (
       <ReservationRow
         key={reservation.reservation_id}
@@ -26,15 +26,15 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
     ));
   };
 
-  function tableRow() {
-    return tables.map((table) => {
+  const tablesRow = () => {
+    return tables.map((table) => (
       <TableRow
         key={table.table_id}
         table={table}
         loadDashboard={loadDashboard}
       />
-    })
-  }
+    ))
+  };
 
   function handleClick({target}) {
     
@@ -86,7 +86,7 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
 
         <tbody>
           {reservations.length ? (
-            reservationsJSX()
+            reservationsRow()
           ) : (
             <tr>
               <td>--</td>
@@ -128,21 +128,24 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
         <table>
           <thead>
             <tr>
+              <th>Table ID</th>
               <th>Table Name</th>
               <th>Capacity</th>
               <th>Status</th>
+              <th>Reservation ID</th>
+              <th>Finish</th>
             </tr>
           </thead>
 
           <tbody>
             {tables.length ? (
-              tableRow() ) : (
+              tablesRow()
+              ) : (
                 <tr>
                   <td>-</td>
                   <td>-</td>
                   <td>-</td>
                 </tr>
-              
             )}
           </tbody>
         </table>
