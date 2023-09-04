@@ -28,6 +28,7 @@ function TableForm({loadDashboard}) {
         console.log("Submit clicked");
 
         const validationError = vaildTable(formData);
+        const abortController = new AbortController();
 
         if (validationError) {
             setError(validationError);
@@ -39,7 +40,8 @@ function TableForm({loadDashboard}) {
 
             try {
                 console.log("Submitted:", parseCapacity);
-                await createTable(parseCapacity);
+                await createTable(parseCapacity, abortController.signal);
+                await loadDashboard()
                 setFormData({ ...initialFormState})
                 history.push(`/dashboard`);
             } catch (error) {

@@ -72,6 +72,7 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
       <table className="reservations">
         <thead>
           <tr>
+            <th>Reservation ID</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Mobile Number</th>

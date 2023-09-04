@@ -66,8 +66,11 @@ function Routes() {
       <Route path="/reservations/new">
         <ReservationForm />
       </Route>
-      <Route path="/reseravtions/:reservation_id/seat">
-        <SeatReservation />
+      <Route path="/reservations/:reservation_id/edit">
+        <ReservationForm loadDashboard={loadDashboard} edit={true} />
+      </Route>
+      <Route path="/reservations/:reservation_id/seat">
+        <SeatReservation tables={tables} loadDashboard={loadDashboard} />
       </Route>
       <Route path="/tables/new">
         <TableForm loadDashboard={loadDashboard} />
