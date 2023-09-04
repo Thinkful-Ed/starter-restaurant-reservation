@@ -39,16 +39,33 @@ export default function SearchReservation() {
             if (reservations.length === 0) {
                 return <h4>No reservations found</h4>
             } else {
-                return reservations.map((reservation) => (
+                return (
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Reservation ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Mobile Number</th>
+                        <th>Reservation Date</th>
+                        <th>Reservation Time</th>
+                        <th>People</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                  <tbody>
+                    {reservations.map((reservation) => (
                     <ReservationRow
                     key={reservation.reservation_id}
                     reservation={reservation}
                     />
-                ))
+                ))}
+                </tbody>
+                </table>
+                )
             }
         }
         return null;
-
     }
 
     return (
