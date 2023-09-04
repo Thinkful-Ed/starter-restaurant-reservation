@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { updateReservation } from "../utils/api";
 
 export default function ReservationRow({ reservation, loadDashboard }) {
   if (!reservation || reservation.status === "finished") return null;
@@ -7,14 +8,17 @@ export default function ReservationRow({ reservation, loadDashboard }) {
   /**
    * Allows the user to cancel a reservation.
    */
-  function handleCancel() {
+  async function handleCancel() {
     if (
       window.confirm(
-        "Do you want to cancel this reservation? This cannot be undone."
+        "Do you want to cancel this reservation?"
       )
     ) {
       const abortController = new AbortController();
 
+     await updateReservation(reservation.reservation_id, "cancelled", abortController.status)
+     
+     await loadDashboard();
       return () => abortController.abort();
     }
   }
@@ -28,6 +32,7 @@ export default function ReservationRow({ reservation, loadDashboard }) {
       <td>{reservation.reservation_date.substr(0, 10)}</td>
       <td>{reservation.reservation_time.substr(0, 5)}</td>
       <td>{reservation.people}</td>
+      <td>{reservation.status}</td>
 
 
       {reservation.status === "booked" ? (

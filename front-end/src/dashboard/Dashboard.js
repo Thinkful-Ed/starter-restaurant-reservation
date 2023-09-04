@@ -79,6 +79,7 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
             <th>Date</th>
             <th>Time</th>
             <th>People</th>
+            <th>Status</th>
             <th>Edit</th>
             <th>Cancel</th>
             <th>Seat</th>

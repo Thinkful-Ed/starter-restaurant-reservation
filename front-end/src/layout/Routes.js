@@ -64,7 +64,7 @@ function Routes() {
           />
       </Route>
       <Route path="/reservations/new">
-        <ReservationForm />
+        <ReservationForm loadDashboard={loadDashboard} />
       </Route>
       <Route path="/reservations/:reservation_id/edit">
         <ReservationForm loadDashboard={loadDashboard} edit={true} />

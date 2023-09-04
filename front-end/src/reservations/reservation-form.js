@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createReservation, listReservations } from "../utils/api";
+import { createReservation, editReservation, listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { useParams } from "react-router-dom/cjs/react-router-dom";
 
@@ -78,6 +78,7 @@ function ReservationForm({ loadDashboard, edit }) {
 
         const reservationDate = `${formData.reservation_date}T${formData.reservation_time}`
         const validationError = validReservationDate(reservationDate);
+        const abortController = new AbortController();
 
         if (validationError) {
             //console.error(error)
@@ -91,9 +92,15 @@ function ReservationForm({ loadDashboard, edit }) {
         //make API call
         try {
             console.log("Submitted:", formDataWithNumber);
-            await createReservation(formDataWithNumber);
+            if (edit) {
+                await editReservation(reservation_id, formDataWithNumber, abortController.signal);
+                
+            } else {
+                await createReservation(formDataWithNumber, abortController.signal);
+                
+            }
+            await loadDashboard();
             setFormData({ ...initialFormState });
-
             const reservationDate = formData.reservation_date;
             history.push(`/dashboard?date=${reservationDate}`);
         } catch (error) {
