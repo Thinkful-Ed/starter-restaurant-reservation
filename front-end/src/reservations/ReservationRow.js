@@ -32,7 +32,7 @@ export default function ReservationRow({ reservation, loadDashboard }) {
       <td>{reservation.reservation_date.substr(0, 10)}</td>
       <td>{reservation.reservation_time.substr(0, 5)}</td>
       <td>{reservation.people}</td>
-      <td>{reservation.status}</td>
+      <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
 
 
       {reservation.status === "booked" ? (

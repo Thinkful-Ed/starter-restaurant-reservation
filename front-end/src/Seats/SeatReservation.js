@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import { listReservations, seatTable } from "../utils/api";
+import { listReservations, seatTable, updateReservation } from "../utils/api";
 
 /**
  * Allows the user to choose a table to seat a reservation at.
@@ -44,15 +44,21 @@ export default function SeatReservation({ tables, loadDashboard }) {
   /**
    * Validate and make the API call when a user submits a form.
    */
-  function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const abortController = new AbortController();
 
     if (validateSeat()) {
-      seatTable(reservation_id, table_id, abortController.signal)
-        .then(loadDashboard)
-        .then(() => history.push(`/dashboard`))
-        .catch(setApiError);
+
+        try {
+            await seatTable(reservation_id, table_id, abortController.signal)
+            await loadDashboard();
+        } catch (error) {
+            console.error("Error seating reservation:", error)
+        }
+        await updateReservation(reservation_id, "seated", abortController.status);
+
+        history.push(`/dashboard`)
     }
 
     return () => abortController.abort();
