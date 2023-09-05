@@ -124,9 +124,8 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
           onClick={handleClick}
         >Next</button>
       </div>
-      <div>
+      <div className="tables">
         <h4>Tables</h4>
-
         <table>
           <thead>
             <tr>
