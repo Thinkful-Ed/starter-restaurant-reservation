@@ -1,5 +1,5 @@
 import React from "react";
-
+import "./Dashboard.css"
 import { previous, next, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationRow from "../reservations/ReservationRow";
@@ -68,7 +68,7 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
         
       </div>
       <ErrorAlert error={reservationsError} />
-      
+      <div className="reservationTable">
       <table className="reservations">
         <thead>
           <tr>
@@ -104,7 +104,8 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
           )}
         </tbody>
       </table>
-      <div>
+      </div>
+      <div className="dateButtons">
         <button
           className="prevButton"
           type="button"
@@ -124,9 +125,11 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
           onClick={handleClick}
         >Next</button>
       </div>
-      <div className="tables">
-        <h4>Tables</h4>
-        <table>
+      <div>
+      <h4>Tables</h4>
+      </div>
+      <div className="tablesTable">
+        <table className="tables">
           <thead>
             <tr>
               <th>Table ID</th>

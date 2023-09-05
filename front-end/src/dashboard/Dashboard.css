@@ -1,0 +1,13 @@
+.reservationTable, .tablesTable {
+    display: flex;
+}
+
+button {
+    border-radius: 5px;
+    margin: 5px;
+}
+
+th,td {
+    padding: 5px;
+    text-align: center;
+}
