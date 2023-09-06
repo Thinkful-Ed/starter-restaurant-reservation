@@ -61,8 +61,9 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
 
 
   return (
-    <main>
+    <main className="dashboard">
       <h1>Dashboard</h1>
+      <section>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {date}</h4>
         
@@ -107,28 +108,29 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
       </div>
       <div className="dateButtons">
         <button
-          className="prevButton"
+          className="prevButton btn btn-secondary"
           type="button"
           name="previous"
           onClick={handleClick}
         >Previous</button>
         <button
-          className="todayButton"
+          className="todayButton btn btn-primary"
           type="button"
           name="today"
           onClick={handleClick}
         >Today</button>
         <button
-          className="nextButton"
+          className="nextButton btn btn-secondary"
           type="button"
           name="tomorrow"
           onClick={handleClick}
         >Next</button>
       </div>
+      </section>
+      <div className="tablesTable">
       <div>
       <h4>Tables</h4>
       </div>
-      <div className="tablesTable">
         <table className="tables">
           <thead>
             <tr>

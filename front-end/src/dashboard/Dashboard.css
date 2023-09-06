@@ -1,7 +1,15 @@
-.reservationTable, .tablesTable {
+main, .dashboard {
     display: flex;
+    
 }
 
+.reservationTable {
+    flex-wrap: wrap;
+}
+
+h1 {
+    font-family: 'Limelight', cursive;
+}
 button {
     border-radius: 5px;
     margin: 5px;
@@ -10,4 +18,10 @@ button {
 th,td {
     padding: 5px;
     text-align: center;
+}
+
+.tablesTable {
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
 }

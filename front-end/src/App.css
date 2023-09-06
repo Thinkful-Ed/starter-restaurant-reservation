@@ -1,11 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Limelight&family=Poppins:wght@100&family=Quicksand:wght@300;600&display=swap');
 
-/* body {
-    font-family: 'Limelight', cursive;
-    color: #735443;
+ /* body {
+    background-image: url('./images/chris-liverani-oCsaxvGCehM-unsplash.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
 } */
 
-html, body {
-    height: 100%;
-    width: 100%;
+.app {
+      /* Additional styles for your app container, if needed */
+  width: 100%;
+  height: 100vh; /* Set the container to full viewport height */
+  display: flex;
+
 }
