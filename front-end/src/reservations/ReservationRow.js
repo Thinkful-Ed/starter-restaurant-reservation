@@ -61,9 +61,15 @@ export default function ReservationRow({ reservation, loadDashboard }) {
         </>
       ) : (
         <>
-          <td>--</td>
-          <td>--</td>
-          <td>--</td>
+          <td>
+            <button type="button" disabled>Edit</button>
+          </td>
+          <td>
+            <button type="button" disabled>Cancel</button>
+          </td>
+          <td>
+            <button type="button" disabled>Seat</button>
+          </td>
         </>
       )}
     </tr>

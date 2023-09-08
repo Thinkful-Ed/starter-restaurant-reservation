@@ -1,14 +1,18 @@
-main, .dashboard {
-    display: flex;
-    
+.dashboard {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr;
 }
 
 .reservationTable {
-    flex-wrap: wrap;
+    background-color: aliceblue;
+    border-radius: 2%;
 }
 
 h1 {
     font-family: 'Limelight', cursive;
+    height: fit-content;
+
 }
 button {
     border-radius: 5px;
@@ -24,4 +28,7 @@ th,td {
     display: flex;
     flex-direction: column;
     justify-content: right;
+    background-color: aliceblue;
+    height: fit-content;
+    margin: 15px;
 }

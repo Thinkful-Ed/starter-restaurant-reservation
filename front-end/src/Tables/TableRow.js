@@ -32,6 +32,7 @@ export default function TableRow({ table, loadDashboard }) {
       {table.status === "occupied" ? (
         <td>
           <button
+            className="btn btn-warning"
             data-table-id-finish={table.table_id}
             onClick={handleFinish}
             type="button"

@@ -62,13 +62,33 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
 
   return (
     <main className="dashboard">
+      
+      <section className="reservations-section">
       <h1>Dashboard</h1>
-      <section>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {date}</h4>
-        
       </div>
       <ErrorAlert error={reservationsError} />
+      <div className="dateButtons">
+        <button
+          className="prevButton btn btn-secondary"
+          type="button"
+          name="previous"
+          onClick={handleClick}
+        >Previous</button>
+        <button
+          className="todayButton btn btn-primary"
+          type="button"
+          name="today"
+          onClick={handleClick}
+        >Today</button>
+        <button
+          className="nextButton btn btn-secondary"
+          type="button"
+          name="tomorrow"
+          onClick={handleClick}
+        >Next</button>
+      </div>
       <div className="reservationTable">
       <table className="reservations">
         <thead>
@@ -106,28 +126,8 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
         </tbody>
       </table>
       </div>
-      <div className="dateButtons">
-        <button
-          className="prevButton btn btn-secondary"
-          type="button"
-          name="previous"
-          onClick={handleClick}
-        >Previous</button>
-        <button
-          className="todayButton btn btn-primary"
-          type="button"
-          name="today"
-          onClick={handleClick}
-        >Today</button>
-        <button
-          className="nextButton btn btn-secondary"
-          type="button"
-          name="tomorrow"
-          onClick={handleClick}
-        >Next</button>
-      </div>
       </section>
-      <div className="tablesTable">
+      <section className="tablesTable">
       <div>
       <h4>Tables</h4>
       </div>
@@ -155,7 +155,7 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
             )}
           </tbody>
         </table>
-      </div>
+      </section>
     </main>
   );
 }
