@@ -23,7 +23,7 @@ export default function TableRow({ table, loadDashboard }) {
 
   return (
     <tr>
-      <th>{table.table_id}</th>
+      <th scope="row">{table.table_id}</th>
       <td>{table.table_name}</td>
       <td>{table.capacity}</td>
       <td data-table-id-status={table.table_id}>{table.status}</td>

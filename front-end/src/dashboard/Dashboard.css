@@ -1,12 +1,13 @@
 .dashboard {
     display: grid;
-    justify-content: center;
     grid-template-columns: 1fr 1fr;
+    margin-left: 300px;
 }
 
-.reservationTable {
+.reservations, .tablesTable {
     background-color: aliceblue;
     border-radius: 2%;
+    text-align: center;
 }
 
 h1 {
@@ -14,21 +15,20 @@ h1 {
     height: fit-content;
 
 }
-button {
-    border-radius: 5px;
+.dateButtons > button {
     margin: 5px;
-}
+} 
 
-th,td {
+/* th,td {
     padding: 5px;
     text-align: center;
-}
+} */
+
+
 
 .tablesTable {
-    display: flex;
-    flex-direction: column;
-    justify-content: right;
-    background-color: aliceblue;
+    width: fit-content;
     height: fit-content;
     margin: 15px;
+    padding: 5px;
 }

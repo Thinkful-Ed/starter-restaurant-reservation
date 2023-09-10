@@ -61,7 +61,7 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
 
 
   return (
-    <main className="dashboard">
+    <main className="dashboard container">
       
       <section className="reservations-section">
       <h1>Dashboard</h1>
@@ -90,20 +90,20 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
         >Next</button>
       </div>
       <div className="reservationTable">
-      <table className="reservations">
+      <table className="reservations table">
         <thead>
           <tr>
-            <th>Reservation ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Mobile Number</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>People</th>
-            <th>Status</th>
-            <th>Edit</th>
-            <th>Cancel</th>
-            <th>Seat</th>
+            <th scope="col">ID</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Mobile Number</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col">People</th>
+            <th scope="col"> Status</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Cancel</th>
+            <th scope="col">Seat</th>
           </tr>
         </thead>
 
@@ -112,7 +112,6 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
             reservationsRow()
           ) : (
             <tr>
-              <td>--</td>
               <td>--</td>
               <td>--</td>
               <td>--</td>
@@ -131,15 +130,15 @@ function Dashboard({ date, reservations, reservationsError, loadDashboard, table
       <div>
       <h4>Tables</h4>
       </div>
-        <table className="tables">
+        <table className="tables table">
           <thead>
             <tr>
-              <th>Table ID</th>
-              <th>Table Name</th>
-              <th>Capacity</th>
-              <th>Status</th>
-              <th>Reservation ID</th>
-              <th>Finish</th>
+              <th scope="col">Table ID</th>
+              <th scope="col">Table Name</th>
+              <th scope="col">Capacity</th>
+              <th scope="col">Status</th>
+              <th scope="col">Reservation ID</th>
+              <th scope="col">Finish</th>
             </tr>
           </thead>
 

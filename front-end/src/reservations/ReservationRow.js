@@ -24,8 +24,8 @@ export default function ReservationRow({ reservation, loadDashboard }) {
   }
 
   return (
-    <tr>
-      <td>{reservation.reservation_id}</td>
+    <tr >
+      <th scope="row">{reservation.reservation_id}</th>
       <td>{reservation.first_name}</td>
       <td>{reservation.last_name}</td>
       <td>{reservation.mobile_number}</td>
@@ -39,13 +39,17 @@ export default function ReservationRow({ reservation, loadDashboard }) {
         <>
           <td>
             <Link to={`/reservations/${reservation.reservation_id}/edit`}>
-              <button type="button">Edit</button>
+              <button 
+              type="button"
+              className="btn btn-warning"
+              >Edit</button>
             </Link>
           </td>
 
           <td>
             <button
               type="button"
+              className="btn btn-danger"
               onClick={handleCancel}
               data-reservation-id-cancel={reservation.reservation_id}
             >
@@ -55,20 +59,32 @@ export default function ReservationRow({ reservation, loadDashboard }) {
 
           <td>
             <a href={`/reservations/${reservation.reservation_id}/seat`}>
-              <button type="button">Seat</button>
+              <button 
+              type="button"
+              className="btn btn-primary"
+              >Seat</button>
             </a>
           </td>
         </>
       ) : (
         <>
           <td>
-            <button type="button" disabled>Edit</button>
+            <button 
+            type="button" 
+            className="btn btn-warning"
+            disabled>Edit</button>
           </td>
           <td>
-            <button type="button" disabled>Cancel</button>
+            <button 
+            type="button"
+            className="btn btn-danger"
+            disabled>Cancel</button>
           </td>
           <td>
-            <button type="button" disabled>Seat</button>
+            <button 
+              type="button"
+              className="btn btn-primary"
+              disabled>Seat</button>
           </td>
         </>
       )}
