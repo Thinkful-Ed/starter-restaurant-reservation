@@ -1,7 +1,7 @@
 .dashboard {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    margin-left: 300px;
+    justify-content: center;
 }
 
 .reservations, .tablesTable {
@@ -10,20 +10,19 @@
     text-align: center;
 }
 
+h1, h4 {
+    color: aliceblue;
+
+}
 h1 {
     font-family: 'Limelight', cursive;
     height: fit-content;
-
+    font-size: 60px;
 }
+
 .dateButtons > button {
     margin: 5px;
-} 
-
-/* th,td {
-    padding: 5px;
-    text-align: center;
-} */
-
+}
 
 
 .tablesTable {
