@@ -1,0 +1,30 @@
+.dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+}
+
+.reservations, .tablesTable {
+    background-color: #f1f0ef;
+    border-radius: 2%;
+    text-align: center;
+}
+
+
+h1 {
+    font-family: 'Limelight', cursive;
+    height: fit-content;
+    font-size: 60px;
+}
+
+.dateButtons > button {
+    margin: 5px;
+}
+
+
+.tablesTable {
+    width: fit-content;
+    height: fit-content;
+    margin: 15px;
+    padding: 5px;
+}

@@ -20,7 +20,7 @@ describe("US-04 - Seat reservation - E2E", () => {
   beforeAll(async () => {
     await fsPromises.mkdir("./.screenshots", { recursive: true });
     setDefaultOptions({ timeout: 1000 });
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({ headless: "new"});
   });
 
   afterAll(async () => {
@@ -56,7 +56,8 @@ describe("US-04 - Seat reservation - E2E", () => {
         fullPage: true,
       });
 
-      await expect(page).toMatch(tableName);
+      const textOnPage = await page.evaluate(() => document.body.textContent);
+      await expect(textOnPage).toContain(tableName);
     });
     test("omitting table_name and submitting does not create a new table", async () => {
       await page.type("input[name=capacity]", "3");
@@ -195,7 +196,8 @@ describe("US-04 - Seat reservation - E2E", () => {
       });
 
       expect(page.url()).toContain("/dashboard");
-      expect(page).toMatch(/occupied/i);
+      const textOnPage = await page.evaluate(() => document.body.textContent);
+      expect(textOnPage).toContain("occupied");
     });
 
     test("cannot seat reservation at Bar #1", async () => {

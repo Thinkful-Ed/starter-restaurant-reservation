@@ -20,7 +20,7 @@ describe("US-07 - Search reservations - E2E", () => {
   });
 
   beforeEach(async () => {
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({ headless: "new"});
     page = await browser.newPage();
     page.on("console", onPageConsole);
     await page.setViewport({ width: 1920, height: 1080 });
@@ -51,7 +51,8 @@ describe("US-07 - Search reservations - E2E", () => {
         path: ".screenshots/us-07-search-reservations-submit-valid-after.png",
         fullPage: true,
       });
-      await expect(page).toMatch(/Tiger/);
+      const textOnPage = await page.evaluate(() => document.body.textContent);
+      expect(textOnPage).toContain("Tiger");
     });
 
     test("entering an non-existent phone number and submitting displays a No reservations found message", async () => {
@@ -75,7 +76,8 @@ describe("US-07 - Search reservations - E2E", () => {
           ".screenshots/us-07-search-reservations-submit-no-result-after.png",
         fullPage: true,
       });
-      await expect(page).toMatch(/No reservations found/);
+      const textOnPage = await page.evaluate(() => document.body.textContent);
+expect(textOnPage).toContain("No reservations found");
     });
   });
 });

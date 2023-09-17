@@ -22,7 +22,7 @@ describe("US-08 - Change an existing reservation - E2E", () => {
   beforeAll(async () => {
     await fsPromises.mkdir("./.screenshots", { recursive: true });
     setDefaultOptions({ timeout: 1000 });
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({ headless: "new"});
   });
 
   beforeEach(async () => {
@@ -203,7 +203,8 @@ describe("US-08 - Change an existing reservation - E2E", () => {
         fullPage: true,
       });
 
-      await expect(page).toMatch(/John/);
+    const textOnPage = await page.evaluate(() => document.body.textContent);
+    expect(textOnPage).toContain("John");
     });
   });
 });

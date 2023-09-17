@@ -1,7 +1,7 @@
 import React from "react";
 import Menu from "./Menu";
 import Routes from "./Routes";
-
+import backgroundImage from '../images/chris-liverani-oCsaxvGCehM-unsplash.jpg'
 import "./Layout.css";
 
 /**
@@ -12,6 +12,13 @@ import "./Layout.css";
  * @returns {JSX.Element}
  */
 function Layout() {
+  const backgroundStyle = {
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center center',
+  };
+  
   return (
     <div className="container-fluid">
       <div className="row h-100">
