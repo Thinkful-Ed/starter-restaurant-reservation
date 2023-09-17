@@ -1,7 +1,9 @@
 .side-bar {
-  background-color: #9BA646;
-  min-width: 200px;
+  background-color: #516804;
   max-width: 300px;
   top: 0;
   bottom: 0;
+  border-bottom-left-radius: 125px; /* Half of the width */
+  border-bottom-right-radius: 125px; /* Half of the width */
+  height: 50vh;
 }

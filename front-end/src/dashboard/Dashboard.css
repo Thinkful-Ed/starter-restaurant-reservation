@@ -5,15 +5,11 @@
 }
 
 .reservations, .tablesTable {
-    background-color: aliceblue;
+    background-color: #f1f0ef;
     border-radius: 2%;
     text-align: center;
 }
 
-h1, h4 {
-    color: aliceblue;
-
-}
 
 h1 {
     font-family: 'Limelight', cursive;

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { listReservations } from "../utils/api";
 import ReservationRow from "../reservations/ReservationRow";
 import ErrorAlert from "../layout/ErrorAlert";
+import "./SearchReservation.css"
 
 export default function SearchReservation() {
     const [mobileNumber, setMobileNumber] = useState("");
@@ -81,7 +82,10 @@ export default function SearchReservation() {
                     onChange={handleChange}
                     value={mobileNumber}
                 />
-                <button type="submit">Find</button>
+                <button 
+                type="submit"
+                className="btn btn-primary"
+                >Find</button>
                 <ErrorAlert error={error} />
             </form>
             {searchResults()}

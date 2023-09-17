@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Layout from "./layout/Layout";
 import './App.css'
-import backgroundImage from './images/chris-liverani-oCsaxvGCehM-unsplash.jpg'
+//import backgroundImage from './images/sabri-tuzcu-g-erOiuDxro-unsplash.jpg'
 
 
 /**
@@ -10,15 +10,16 @@ import backgroundImage from './images/chris-liverani-oCsaxvGCehM-unsplash.jpg'
  * @returns {JSX.Element}
  */
 function App() {
-  const backgroundStyle = {
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center center',
-  };
+  // const backgroundStyle = {
+  //   backgroundImage: `url(${backgroundImage})`,
+  //   backgroundSize: 'cover',
+  //   backgroundRepeat: 'no-repeat',
+  //   backgroundPosition: 'center center',
+  //   height: '100%'
+  // };
   
   return (
-    <div className="app" style={backgroundStyle}>
+    <div className="app" >
     <Switch>
       <Route path="/">
         <Layout />
