@@ -74,7 +74,7 @@ function ReservationForm({ loadDashboard, edit }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log("Submit button clicked!")
+        //console.log("Submit button clicked!")
 
         const reservationDate = `${formData.reservation_date}T${formData.reservation_time}`
         const validationError = validReservationDate(reservationDate);

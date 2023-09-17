@@ -25,7 +25,7 @@ function TableForm({loadDashboard}) {
     async function handleSubmit(event) {
         event.preventDefault();
        // const abortController = new AbortController();
-        console.log("Submit clicked");
+        //console.log("Submit clicked");
 
         const validationError = vaildTable(formData);
         const abortController = new AbortController();
