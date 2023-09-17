@@ -56,8 +56,9 @@ describe("US-01 - Create and list reservations - E2E", () => {
         path: ".screenshots/us-01-submit-after.png",
         fullPage: true,
       });
-
-      await expect(page).toMatch(lastName);
+      
+      const textOnPage = await page.evaluate(() => document.body.textContent);
+      expect(textOnPage).toContain(lastName);
     });
 
     test("canceling form returns to previous page", async () => {
