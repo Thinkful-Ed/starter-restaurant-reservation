@@ -3,6 +3,8 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 const propertiesNotEmpty = require("../errors/propertiesNotEmpty");
 const validDateAndNumber = require("../errors/validDateAndNumber");
+const datePassed = require("../errors/datePassed")
+const checkTuesday = require("../errors/checkTuesday")
 /**
  * List handler for reservation resources
  */
@@ -41,9 +43,10 @@ async function create(req,res,next){
   })
 }
 
+
 module.exports = {
   list:asyncErrorBoundary(list),
   read:[asyncErrorBoundary(reservationExist),asyncErrorBoundary(read)],
-  create:[hasProperties('first_name','last_name','mobile_number','reservation_date','reservation_time','people'), propertiesNotEmpty('first_name','last_name','mobile_number','reservation_date','reservation_time'), validDateAndNumber, asyncErrorBoundary(create)],
+  create:[hasProperties('first_name','last_name','mobile_number','reservation_date','reservation_time','people'), propertiesNotEmpty('first_name','last_name','mobile_number','reservation_date','reservation_time'), validDateAndNumber,datePassed, checkTuesday,asyncErrorBoundary(create)],
 };
 
