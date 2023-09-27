@@ -19,9 +19,6 @@ function datePassed(req,res,next) {
       next(error);
     }
 
-
-   return next();
-
 }
 
 module.exports = datePassed;

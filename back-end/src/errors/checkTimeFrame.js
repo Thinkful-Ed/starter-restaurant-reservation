@@ -3,7 +3,7 @@ function checkTimeFrame(req,res,next){
     // const currentDate = new Date();
     // const currentTime = `${currentDate.getUTCHours()}:${currentDate.getUTCMinutes()}:${currentDate.getUTCSeconds()}`
     try{
-        if(reservation_time < "10:30:00" || reservation_time > "09:30:00"){
+        if(reservation_time < "10:30:00" || reservation_time > "21:30:00"){
             const error = new Error("Cannot make a reservation at this time.")
             error.status = 400;
             throw error;

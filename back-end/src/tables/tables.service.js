@@ -34,6 +34,12 @@ function readReservation(id){
             .first();
 }
 
+function updateReservation(data){
+    return knex("reservations")
+              .where({reservation_id:data.reservation_id})
+              .update(data)
+}
+
 function destroy(id){
     return knex("tables")
              .where({table_id:id})
@@ -50,4 +56,5 @@ module.exports = {
     update,
     readReservation,
     destroy,
+    updateReservation,
 }

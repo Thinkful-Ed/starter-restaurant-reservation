@@ -94,16 +94,31 @@ async function update(req,res,next){
     const {table_id} = req.params;
     const table = await service.read(table_id)
     const {reservation_id} = req.body.data;
-    const updatedTable = {...table,reservation_id:reservation_id}
+    const reservation = await service.readReservation(reservation_id)
+    if(reservation.status === 'seated'){
+        next({
+            status:400,
+            message:"reservation already seated"
+        })
+    }else{
 
-    const data = await service.update(updatedTable);
-    res.status(200).json({data:data})
+        const updatedReservation = {...reservation,status:'seated'};
+        const reservationData = await service.updateReservation(updatedReservation)
+        const updatedTable = {...table,reservation_id:reservation_id}
+        const data = await service.update(updatedTable);
+        res.status(200).json({data:data})
+    }
   
     
 }
 
 async function destroy(req,res,next){
     const {table_id} = req.params;
+    const tableData = await service.read(table_id);
+    const {reservation_id} = tableData;
+    const reservation = await service.readReservation(reservation_id);
+    const updatedReservation = {...reservation,status:'finished'};
+    const reservationData = await service.updateReservation(updatedReservation)
     const data = await service.destroy(table_id)
     res.status(200).json({data:data})
 }

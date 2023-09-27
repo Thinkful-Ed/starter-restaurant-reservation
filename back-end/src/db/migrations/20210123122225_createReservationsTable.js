@@ -7,6 +7,7 @@ exports.up = function (knex) {
     table.date("reservation_date");
     table.time('reservation_time',{precesion:6});
     table.integer('people');
+    table.string('status').defaultTo("booked")
     table.timestamps(true, true);
   });
 };
