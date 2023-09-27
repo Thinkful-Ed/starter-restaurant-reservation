@@ -40,10 +40,20 @@ async function reservationExist(req,res,next){
 
 async function list(req, res) {
   const {date} = req.query;
-  const data = await service.list(date);
-  res.json({
-    data: data,
-  });
+  const {mobile_number} = req.query;
+  if(date){
+
+    const data = await service.list(date);
+    res.json({
+      data: data,
+    });
+  };
+  if(mobile_number){
+    const data = await service.readMobileNumber(mobile_number);
+    res.json({
+      data:data
+    })
+  }
 }
 
 async function read(req,res,next){

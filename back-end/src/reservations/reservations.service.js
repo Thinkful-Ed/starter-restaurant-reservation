@@ -20,8 +20,14 @@ function create(data){
              .insert(data)
 }
 
+function readMobileNumber(mb){
+    return knex('reservations')
+            .where("mobile_number","like",`%${mb}%`)
+}
+
 module.exports = {
     list,
     read,
     create,
+    readMobileNumber,
 }
