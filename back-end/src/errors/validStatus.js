@@ -1,4 +1,4 @@
-const valid = ['booked','seated','finished']
+const valid = ['booked','seated','finished','cancelled']
 function validStatus(req,res,next){
   const {status} = req.body.data;
   if(valid.includes(status)){

@@ -79,10 +79,20 @@ async function update(req,res,next){
   res.status(200).json({data:updatedData})
 }
 
+async function updateReservation(req,res,next){
+  const {reservation_id} = req.params;
+  const reservationData = req.body.data;
+  const data = await service.read(reservation_id);
+  const updatedData = {...data,...reservationData}
+  res.status(200).json({data:updatedData})
+}
+
 module.exports = {
   list:asyncErrorBoundary(list),
   read:[asyncErrorBoundary(reservationExist),asyncErrorBoundary(read)],
   create:[hasProperties('first_name','last_name','mobile_number','reservation_date','reservation_time','people'),propertiesNotEmpty('first_name','last_name','mobile_number','reservation_date','reservation_time'),validDateAndNumber,datePassed,checkTuesday, checkTimeFrame,checkReservationStatus,asyncErrorBoundary(create)],
-  update:[reservationExist,unknownStatus,currentStatus,validStatus, update]
+  update:[reservationExist,unknownStatus,currentStatus,validStatus, update],
+  updateReservation:[reservationExist,hasProperties('first_name','last_name','mobile_number','reservation_date','reservation_time','people'),propertiesNotEmpty('first_name','last_name','mobile_number','reservation_date','reservation_time'),validDateAndNumber,updateReservation]
 };
-
+//don't need to specify every key value
+//"first_name":reservationData.first_name, "last_name":reservationData.last_name,"mobile_number":reservationData.mobile_number,"reservation_date":reservationData.reservation_date,"reservation_time":reservationData.reservation_time,"people":reservationData.people
