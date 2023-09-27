@@ -29,6 +29,19 @@ async function tableOccupied(req,res,next){
     }
 };
 
+async function tableNotOccupied(req,res,next){
+    const {table_id} = req.params;
+    const data = await service.read(table_id);
+    if(data.reservation_id){
+        next();
+    }else{
+        next({
+            status:400,
+            message:`Table ${table_id} is not occupied`
+        })
+    }
+};
+
 async function tableHasCapacity(req,res,next){
     const {table_id} = req.params;
     const {reservation_id} = req.body.data;
@@ -89,11 +102,16 @@ async function update(req,res,next){
     
 }
 
+async function destroy(req,res,next){
+    const {table_id} = req.params;
+    const data = await service.destroy(table_id)
+    res.status(200).json({data:data})
+}
+
 module.exports = {
     list,
     read:[asyncErrorBoundary(tableExist), asyncErrorBoundary(read)],
     create:[hasProperties('table_name','capacity'),propertiesNotEmpty('table_name'), numberValidation, lengthValidation,create],
-    update:[hasProperties('reservation_id'),hasReservationId,tableHasCapacity,tableOccupied,update]
+    update:[hasProperties('reservation_id'),hasReservationId,tableHasCapacity,tableOccupied,update],
+    delete:[asyncErrorBoundary(tableExist),tableNotOccupied,asyncErrorBoundary(destroy)],
 }
-
-//hasProperties('reservation_id'), hasReservationId, tableHasCapacity,tableOccupied
