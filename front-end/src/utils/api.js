@@ -38,7 +38,6 @@ async function fetchJson(url, options, onCancel) {
     }
 
     const payload = await response.json();
-
     if (payload.error) {
       return Promise.reject({ message: payload.error });
     }
@@ -66,4 +65,37 @@ export async function listReservations(params, signal) {
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
+}
+
+export async function createReservation(data,signal){
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  const options = {
+    method:"POST",
+    headers,
+    body:JSON.stringify({data:data}),
+    signal,
+  }
+ return await fetchJson(url, options,[])
+}
+
+
+export async function createTable(data,signal){
+  const url = new URL(`${API_BASE_URL}/tables`);
+  const options = {
+    method:"POST",
+    headers,
+    body:JSON.stringify({data:data}),
+    signal,
+  }
+  return await fetchJson(url, options,[])
+}
+
+export async function listTables(signal){
+  const url = new URL(`${API_BASE_URL}/tables`);
+  const options = {
+    method:"GET",
+    headers,
+    signal,
+  }
+  return await fetchJson(url,options,[])
 }

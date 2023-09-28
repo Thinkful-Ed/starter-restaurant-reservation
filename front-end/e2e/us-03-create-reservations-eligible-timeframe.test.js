@@ -16,6 +16,8 @@ describe("US-03 - Create reservation on a future, working date - E2E", () => {
 
   beforeAll(async () => {
     await fsPromises.mkdir("./.screenshots", { recursive: true });
+
+   
     setDefaultOptions({ timeout: 1000 });
   });
 
@@ -25,6 +27,7 @@ describe("US-03 - Create reservation on a future, working date - E2E", () => {
     page.on("console", onPageConsole);
     await page.setViewport({ width: 1920, height: 1080 });
     await page.goto(`${baseURL}/reservations/new`, { waitUntil: "load" });
+    
   });
 
   afterEach(async () => {
@@ -33,6 +36,7 @@ describe("US-03 - Create reservation on a future, working date - E2E", () => {
 
   describe("/reservations/new page", () => {
     beforeEach(async () => {
+     
       await page.type("input[name=first_name]", "John");
       await page.type("input[name=last_name]", "Doe");
       await page.type("input[name=mobile_number]", "1234567890");
@@ -46,7 +50,7 @@ describe("US-03 - Create reservation on a future, working date - E2E", () => {
       await page.screenshot({
         path: ".screenshots/us-02-reservation-too-early-before.png",
       });
-
+      expect(await page.$(".alert-danger")).toBeFalsy();
       await page.click("button[type=submit]");
 
       await page.screenshot({
