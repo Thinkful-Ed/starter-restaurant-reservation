@@ -12,22 +12,51 @@ import { next, previous, today } from "../utils/date-time";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  //State variables
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [dashDate, setDashDate] = useState(date);
+  const [tables, setTables] = useState(null)
 
   useEffect(loadDashboard, [date]);
-
+  useEffect(()=> {
+    async function getTables() {
+      try {
+        const response = await fetch(
+        'http://localhost:5001/tables',
+        {
+          method: "GET",
+          body: JSON.stringify(),
+          headers : {
+            "Content-type": "application/json;charset=UTF-8"
+          }
+        }
+      );
+      const tables = await response.json();
+      setTables(tables)
+      } catch (error) {
+        console.error("Error: ", error)
+      }
+    }
+    getTables()
+  },[])
+  /**
+   * REMINDER TO SELF:
+   * -----------------
+   * ALREADY FETCHED ALL TABLE DATA!!
+   * JUST NEED TO RENDER TABLE DATA ONTO THE DASHBOARD
+   * PICK UP ON USER STORY 04 - #2
+   */
+  console.log(tables)
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
-      // .then((data)=>console.log(`data`, data))
       .then((data)=> setReservations(data))
       .catch(setReservationsError);
-      // .catch(console.log)
     return () => abortController.abort();
   }
+
   //Event Handlers
   return (
     <main>
@@ -57,7 +86,6 @@ function Dashboard({ date }) {
           })}
         </div>
       )}
-      
       
     </main>
   );
