@@ -9,7 +9,7 @@ function ReservationCard({reservation}) {
         <h5>{reservation_date} @ {reservation_time}</h5>
         <p>Ph#: {mobile_number}</p>
         <button>Edit</button>
-        <button>Delete</button>
+        <button>Seat</button>
     </div>
 }
 

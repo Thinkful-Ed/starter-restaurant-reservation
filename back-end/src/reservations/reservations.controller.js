@@ -11,7 +11,7 @@ async function list(req, res) {
     const time1 = new Date(today.toDateString() + ' ' + res1.reservation_time);
     const time2 = new Date(today.toDateString() + ' ' + res2.reservation_time);
     return time1 - time2;
-  });  console.log(sorted)
+  });
   res.json({data: sorted})
 }
 
@@ -23,9 +23,8 @@ const validResProperties = [
   "reservation_time",
   "people"
 ]
-async function ValidReservation(req, res, next) {
+function ValidReservation(req, res, next) {
   const newReservation = req.body;
-  console.log("****", newReservation)
   if (newReservation) {
   const invalidProperties = Object.keys(newReservation).filter((key) => !validResProperties.includes(key));
   if (invalidProperties.length) {
@@ -34,23 +33,91 @@ async function ValidReservation(req, res, next) {
       message: `Invalid reservation field(s): ${invalidProperties.join(", ")}`
     })
   }
-  const reservation = await service.create(newReservation);
-  console.log("***", reservation)
-  res.locals.reservation = reservation;
+  res.locals.newReservation = newReservation
   next()  
   }
 
 }
 
-function create(req, res, next) {
-  const {reservation} = res.locals;
-  res.status(201).json({data: "hello"})
+/**
+ * get reservation date
+ * get current date
+ * if reservation date is in past OR on a tuesday(2) => RETURN ERROR
+ */
+
+//helperFunction
+function getCurrentDate() {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, "0")
+  const day = String(today.getDate()).padStart(2, "0")
+  return `${year}-${month}-${day}`
+}
+
+function dateCompare(reservationDate, currentDate) {
+  const res = new Date(reservationDate);
+  const curr = new Date(currentDate);
+  if (res < curr) {
+    return true
+  }
+  return false
+}
+
+//Function to make sure that the reservations booked during opperation hours
+function opperationHours(req, res, next) {
+  const {newReservation} = res.locals;
+  const time = newReservation.reservation_time;
+  if (time < "10:30" || time > "21:30") {
+    return next({
+      status: 400,
+      message: `Invalid time: ${time}, reserve between 10:30AM and 9:30PM.`
+    })
+
+  }
+  next()
+}
+//Function that doesnt' allow booking before current date
+function noBeforeCurrentDate(req, res, next) {
+  const {newReservation} = res.locals;
+  const resDate = newReservation.reservation_date;//reservation date
+  console.log("RESDATE - ", resDate)
+  const today = getCurrentDate();
+  console.log("currentDate", today)
+  if (dateCompare(resDate, today)) {
+    return next({
+      status: 400,
+      message: "Reservation must be on or after current date."
+    })
+  }
+  next()
+}
+//Function that doesn't allow booking on Tuesdays
+function closedTuesdays(req, res, next) {
+  const {newReservation} = res.locals;//reservation date gotten
+  const resDate = new Date(newReservation.reservation_date)
+  const dayOfWeek = resDate.getDay()
+  if (dayOfWeek === 1) {
+    return next({
+      status: 400,
+      message: "Closed on Tuesdays, sorry for the inconvenience."
+    })
+  }
+  next()
+}
+
+async function create(req, res, next) {
+  const {newReservation} = res.locals
+  const reservation = await service.create(newReservation)
+  res.status(201).json({data: reservation})
 }
 
 module.exports = {
   list,
   create: [
     ValidReservation,
+    noBeforeCurrentDate,
+    closedTuesdays,
+    opperationHours,
     create
-  ]
+  ],
 };

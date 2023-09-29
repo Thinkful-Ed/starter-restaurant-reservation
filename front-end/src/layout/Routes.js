@@ -29,7 +29,7 @@ function Routes() {
       </Route>
 
       <Route path="/reservations/new">
-        <ReservationForm />
+        <ReservationForm date={today()}/>
       </Route>
 
       <Route path="/dashboard">

@@ -29,9 +29,6 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
   //Event Handlers
-  const todayHandler = (e) => {
-    window.location.reload(true)
-  }
   return (
     <main>
       <h1>Dashboard</h1>
@@ -54,6 +51,8 @@ function Dashboard({ date }) {
           {reservations.map((reservation)=> {
             if (dashDate === reservation.reservation_date) {
               return <ReservationCard key={reservation.reservation_id} reservation={reservation}/>              
+            } else {
+              return ""
             }
           })}
         </div>
