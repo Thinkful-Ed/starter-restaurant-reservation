@@ -1,43 +1,43 @@
-import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import React from "react";
+
 import ErrorAlert from "../layout/ErrorAlert";
-import {previous, next} from "../utils/date-time"
+import {previous, next} from "../utils/date-time";
 import Reservation from "../reservation/Reservation";
+import {finishTable} from "../utils/api";
 /**
  * Defines the dashboard page.
  * @param date
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date, setDate }) {
-  const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
-  const [tables, setTables] = useState([])
-  const [tablesError, setTablesError] = useState(null)
+function Dashboard({
+  date,
+  setDate,
+  tables,
+  reservations,
+  reservationsError,
+  tablesError,
+  setLoadTrigger,
+}) {
+  const previousHandler = () => {
+    setDate(() => previous(date));
+  };
+  const nextHandler = () => {
+    setDate(() => next(date));
+  };
 
-  useEffect(()=>{
-    async function loadDashboard() {
+  async function finishHandler(table_id) {
+    if (
+      window.confirm(
+        "Is this table realy to seat new guests? This cannot be undone."
+      )
+    ) {
       const abortController = new AbortController();
-      setReservationsError(null);
-      await listReservations({date}, abortController.signal)
-        .then(setReservations)
-        .catch(setReservationsError);
-      await listTables(abortController.signal)
-             .then(setTables)
-             .catch(setTablesError)
+      await finishTable(table_id, abortController.signal).catch(console.log);
+      setLoadTrigger((prev) => prev + 1);
       return () => abortController.abort();
     }
-    loadDashboard()
-  },[date]);
-
-const previousHandler = () =>{
-  setDate(previous(date))
-}
-const nextHandler = () =>{
-  setDate(next(date))
-}
-
-
+  }
 
   return (
     <main>
@@ -49,11 +49,34 @@ const nextHandler = () =>{
       <button onClick={previousHandler}>Previous</button>
       <button onClick={nextHandler}>Next</button>
       <ErrorAlert error={reservationsError} />
-      {reservations && reservations.map(r=><Reservation key={r.reservation_id} reservation={r} />)}
+      {reservations &&
+        reservations.map((r) => (
+          <React.Fragment key={r.reservation_id}>
+            {r.status === "booked" && <Reservation reservation={r} setLoadTrigger={setLoadTrigger} />}
+          </React.Fragment>
+        ))}
       <h3>Tables</h3>
       <ErrorAlert error={tablesError} />
-      
-      {tables && tables.map(t=><div key={t.table_name}>{t.table_name}</div>)}
+
+      {tables &&
+        tables.map((t) => (
+          <div key={t.table_name}>
+            <div>
+              <h6>{t.table_name}</h6>
+              <p data-table-id-status={t.table_id}>
+                {t.reservation_id ? "Occupied" : "Free"}
+              </p>
+            </div>
+            {t.reservation_id && (
+              <button
+                data-table-id-finish={t.table_id}
+                onClick={() => finishHandler(t.table_id)}
+              >
+                Finish
+              </button>
+            )}
+          </div>
+        ))}
     </main>
   );
 }

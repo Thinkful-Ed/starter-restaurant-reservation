@@ -1,5 +1,7 @@
 //check if number is 0 or not a number
 function numberValidation(req,res,next){
+    const methodName = 'numberValidation';
+  req.log.debug({__filename, methodName, body:req.body})
     const {capacity} = req.body.data;
     if(typeof(capacity) !== 'number' || capacity === 0){
         next({
