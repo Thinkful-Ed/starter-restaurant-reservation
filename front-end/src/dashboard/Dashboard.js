@@ -54,7 +54,7 @@ function Dashboard({
       {reservations &&
         reservations.map((r) => (
           <React.Fragment key={r.reservation_id}>
-            {r.status === "booked" && (
+            {(r.status === "booked" || r.status === "seated") && (
               <Reservation reservation={r} setLoadTrigger={setLoadTrigger} />
             )}
           </React.Fragment>

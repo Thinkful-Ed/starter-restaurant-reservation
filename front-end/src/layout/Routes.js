@@ -123,7 +123,7 @@ function Routes() {
         <Search />
       </Route>
       <Route path="/reservations/:reservation_id/edit">
-        <Edit setLoadTrigger={setLoadTrigger} />
+        <Edit setLoadTrigger={setLoadTrigger} setDate={setDate} />
       </Route>
       <Route>
         <NotFound />

@@ -51,22 +51,22 @@ async function list(req, res) {
     res.json({
       data: data,
     });
-  }
-  if (mobile_number) {
+  } else if (mobile_number) {
     const data = await service.readMobileNumber(mobile_number);
     res.json({
       data: data,
     });
+  } else {
+    let day = new Date();
+    let today = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}-${String(day.getDate()).padStart(2, "0")}`;
+    const data = await service.list(today);
+    res.json({
+      data: data,
+    });
   }
-  let day = new Date();
-  let today = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(
-    2,
-    "0"
-  )}-${String(day.getDate()).padStart(2, "0")}`;
-  const data = await service.list(today);
-  res.json({
-    data: data,
-  });
 }
 
 async function read(req, res, next) {
