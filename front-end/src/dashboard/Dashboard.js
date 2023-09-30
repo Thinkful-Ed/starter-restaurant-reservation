@@ -26,15 +26,17 @@ function Dashboard({
     setDate(() => next(date));
   };
 
-  async function finishHandler(table_id) {
-    if (
-      window.confirm(
-        "Is this table realy to seat new guests? This cannot be undone."
-      )
-    ) {
+  function finishHandler(table_id) {
+    const userConfirmed = window.confirm(
+      "Is this table ready to seat new guests?"
+    );
+    if (userConfirmed) {
       const abortController = new AbortController();
-      await finishTable(table_id, abortController.signal).catch(console.log);
-      setLoadTrigger((prev) => prev + 1);
+      finishTable(table_id, abortController.signal)
+        .then(() => {
+          setLoadTrigger((prev) => prev + 1);
+        })
+        .catch(console.log);
       return () => abortController.abort();
     }
   }
@@ -52,7 +54,9 @@ function Dashboard({
       {reservations &&
         reservations.map((r) => (
           <React.Fragment key={r.reservation_id}>
-            {r.status === "booked" && <Reservation reservation={r} setLoadTrigger={setLoadTrigger} />}
+            {r.status === "booked" && (
+              <Reservation reservation={r} setLoadTrigger={setLoadTrigger} />
+            )}
           </React.Fragment>
         ))}
       <h3>Tables</h3>
@@ -64,7 +68,7 @@ function Dashboard({
             <div>
               <h6>{t.table_name}</h6>
               <p data-table-id-status={t.table_id}>
-                {t.reservation_id ? "Occupied" : "Free"}
+                {t.reservation_id ? "occupied" : "free"}
               </p>
             </div>
             {t.reservation_id && (
