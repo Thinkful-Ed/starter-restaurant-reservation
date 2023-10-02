@@ -1,6 +1,8 @@
 const falseStatus = ['seated','finished'];
 
 function checkReservationStatus(req,res,next){
+  const methodName = 'checkReservationStatus';
+  req.log.debug({__filename, methodName, body:req.body})
   const {status} = req.body.data;
   if(falseStatus.includes(status)){
     next({

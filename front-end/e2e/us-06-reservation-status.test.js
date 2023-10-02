@@ -1,10 +1,10 @@
 const puppeteer = require("puppeteer");
-const { setDefaultOptions } = require('expect-puppeteer');
+const {setDefaultOptions} = require("expect-puppeteer");
 const fs = require("fs");
 const fsPromises = fs.promises;
 
-const { containsText } = require("./utils");
-const { createReservation, createTable, seatReservation } = require("./api");
+const {containsText} = require("./utils");
+const {createReservation, createTable, seatReservation} = require("./api");
 
 const baseURL = process.env.BASE_URL || "http://localhost:3000";
 
@@ -18,8 +18,8 @@ describe("US-06 - Reservation status - E2E", () => {
   let browser;
 
   beforeAll(async () => {
-    await fsPromises.mkdir("./.screenshots", { recursive: true });
-    setDefaultOptions({ timeout: 1000 });
+    await fsPromises.mkdir("./.screenshots", {recursive: true});
+    setDefaultOptions({timeout: 1000});
     browser = await puppeteer.launch();
   });
 
@@ -48,11 +48,11 @@ describe("US-06 - Reservation status - E2E", () => {
 
       page = await browser.newPage();
       page.on("console", onPageConsole);
-      await page.setViewport({ width: 1920, height: 1080 });
+      await page.setViewport({width: 1920, height: 1080});
       await page.goto(`${baseURL}/dashboard?date=2035-01-01`, {
         waitUntil: "networkidle0",
       });
-      await page.reload({ waitUntil: "networkidle0" });
+      await page.reload({waitUntil: "networkidle2"});
     });
 
     test("/dashboard displays status", async () => {
@@ -78,7 +78,8 @@ describe("US-06 - Reservation status - E2E", () => {
 
       await seatReservation(reservation.reservation_id, table.table_id);
 
-      await page.reload({ waitUntil: "networkidle0" });
+      //change 0 to 2 for longer waiting
+      await page.reload({waitUntil: "networkidle2"});
 
       await page.screenshot({
         path: ".screenshots/us-06-seated-after.png",
@@ -102,7 +103,7 @@ describe("US-06 - Reservation status - E2E", () => {
     test("Finishing the table removes the reservation from the list", async () => {
       await seatReservation(reservation.reservation_id, table.table_id);
 
-      await page.reload({ waitUntil: "networkidle0" });
+      await page.reload({waitUntil: "networkidle0"});
 
       await page.screenshot({
         path: ".screenshots/us-06-finish-before.png",

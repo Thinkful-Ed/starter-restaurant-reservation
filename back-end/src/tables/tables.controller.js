@@ -7,6 +7,8 @@ const lengthValidation = require("../errors/lengthValidation");
 const service = require("./tables.service");
 
 async function hasReservationId(req, res, next) {
+  const methodName = "hasReservationId";
+  req.log.debug({__filename, methodName, body: req.body});
   const {reservation_id} = req.body.data;
   const data = await service.readReservation(reservation_id);
   if (data) {
@@ -20,6 +22,8 @@ async function hasReservationId(req, res, next) {
 }
 
 async function tableOccupied(req, res, next) {
+  const methodName = "tableOccupied";
+  req.log.debug({__filename, methodName, body: req.body});
   const {table_id} = req.params;
   const data = await service.read(table_id);
   if (data.reservation_id) {
@@ -33,6 +37,8 @@ async function tableOccupied(req, res, next) {
 }
 
 async function tableNotOccupied(req, res, next) {
+  const methodName = "tableNotOccupied";
+  req.log.debug({__filename, methodName, body: req.body});
   const {table_id} = req.params;
   const data = await service.read(table_id);
   if (data.reservation_id) {
@@ -46,6 +52,8 @@ async function tableNotOccupied(req, res, next) {
 }
 
 async function tableHasCapacity(req, res, next) {
+  const methodName = "tableHasCapacity";
+  req.log.debug({__filename, methodName, body: req.body});
   const {table_id} = req.params;
   const {reservation_id} = req.body.data;
 
@@ -63,6 +71,8 @@ async function tableHasCapacity(req, res, next) {
 }
 
 async function tableExist(req, res, next) {
+  const methodName = "tableExist";
+  req.log.debug({__filename, methodName, body: req.body});
   const {table_id} = req.params;
   const data = await service.read(table_id);
   if (data) {
@@ -76,11 +86,15 @@ async function tableExist(req, res, next) {
 }
 
 async function list(req, res, next) {
+  const methodName = "list";
+  req.log.debug({__filename, methodName, body: req.body});
   const data = await service.list();
   res.status(200).json({data: data});
 }
 
 async function read(req, res, next) {
+  const methodName = "read";
+  req.log.debug({__filename, methodName, body: req.body});
   const {table_id} = req.params;
 
   const data = await service.read(table_id);
@@ -88,11 +102,15 @@ async function read(req, res, next) {
 }
 
 async function create(req, res, next) {
+  const methodName = "creat";
+  req.log.debug({__filename, methodName, body: req.body});
   const newTable = req.body.data;
   const data = await service.create(newTable);
-  res.status(201).json({data: newTable});
+  res.status(201).json({data: data});
 }
 async function update(req, res, next) {
+  const methodName = "update";
+  req.log.debug({__filename, methodName, body: req.body});
   const {table_id} = req.params;
   const table = await service.read(table_id);
   const {reservation_id} = req.body.data;
@@ -112,6 +130,8 @@ async function update(req, res, next) {
 }
 
 async function destroy(req, res, next) {
+  const methodName = "destroy";
+  req.log.debug({__filename, methodName, body: req.body});
   const {table_id} = req.params;
   const tableData = await service.read(table_id);
   const {reservation_id} = tableData;
@@ -123,21 +143,21 @@ async function destroy(req, res, next) {
 }
 
 module.exports = {
-  list,
+  list: asyncErrorBoundary(list),
   read: [asyncErrorBoundary(tableExist), asyncErrorBoundary(read)],
   create: [
     hasProperties("table_name", "capacity"),
     propertiesNotEmpty("table_name"),
     numberValidation,
     lengthValidation,
-    create,
+    asyncErrorBoundary(create),
   ],
   update: [
-    hasProperties("reservation_id"),
-    hasReservationId,
-    tableHasCapacity,
-    tableOccupied,
-    update,
+    asyncErrorBoundary(hasProperties("reservation_id")),
+    asyncErrorBoundary(hasReservationId),
+    asyncErrorBoundary(tableHasCapacity),
+    asyncErrorBoundary(tableOccupied),
+    asyncErrorBoundary(update),
   ],
   delete: [
     asyncErrorBoundary(tableExist),

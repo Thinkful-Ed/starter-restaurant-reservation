@@ -3,7 +3,10 @@ const timeFormat = /\d\d:\d\d/;
 const numberFormat = /\d/;
 
  function validDateAndNumber(req,res,next){
+    const methodName = 'validDateAndNumber';
+    req.log.debug({__filename, methodName, body:req.body})
     const {reservation_date, reservation_time,people} = req.body.data;
+
     try{
         if(!dateFormat.test(reservation_date)){
          const error = new Error("reservation_date needs to be a valid date");

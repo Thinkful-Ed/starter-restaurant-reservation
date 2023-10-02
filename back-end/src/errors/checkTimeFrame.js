@@ -1,4 +1,6 @@
 function checkTimeFrame(req,res,next){
+    const methodName = 'checkTimeFrame';
+    req.log.debug({__filename, methodName, body:req.body})
     const {reservation_time} = req.body.data;
     // const currentDate = new Date();
     // const currentTime = `${currentDate.getUTCHours()}:${currentDate.getUTCMinutes()}:${currentDate.getUTCSeconds()}`
