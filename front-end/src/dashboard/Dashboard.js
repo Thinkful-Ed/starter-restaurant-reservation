@@ -4,6 +4,7 @@ import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationCard from "./ReservationCard";
 import { next, previous, today } from "../utils/date-time";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 /**
  * Defines the dashboard page.
@@ -12,12 +13,14 @@ import { next, previous, today } from "../utils/date-time";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  const history = useHistory();
   //State variables
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [dashDate, setDashDate] = useState(date);
   const [tables, setTables] = useState(null)
-
+  const [tableToDelete, setTableToDelete] = useState(null)
+  // console.log(tables)
   useEffect(loadDashboard, [date]);
   useEffect(()=> {
     async function getTables() {
@@ -47,7 +50,7 @@ function Dashboard({ date }) {
    * JUST NEED TO RENDER TABLE DATA ONTO THE DASHBOARD
    * PICK UP ON USER STORY 04 - #2
    */
-  console.log(tables)
+  // console.log(tables)
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
@@ -58,6 +61,25 @@ function Dashboard({ date }) {
   }
 
   //Event Handlers
+  const finishTable = async (e) => {
+    e.preventDefault()
+    console.log("e.target.value", typeof e.target.value)
+    const tableNum = Number(e.target.value)
+    const finishedTable = tables.find((table)=> table.table_id === tableNum)
+    if (window.confirm(`"Is this table ready to seat new guests? This cannot be undone.`)) {
+      await fetch(
+        `http://localhost:5001/tables/${tableNum}/seat`,
+        {
+          method: "DELETE",
+          body: JSON.stringify(finishedTable),
+          headers: {
+            "Content-type": "application/json;charset=UTF-8"
+          }
+        }
+      );
+      window.location.reload(true)
+    }
+  }
   return (
     <main>
       <h1>Dashboard</h1>
@@ -74,7 +96,6 @@ function Dashboard({ date }) {
       <Link to={`/dashboard?date=${next(dashDate)}`}>
         <button onClick={()=> setDashDate(next(dashDate))}>Next</button>
       </Link>
-      
       {!reservations ? <ErrorAlert error={reservationsError} /> : (
         <div>
           {reservations.map((reservation)=> {
@@ -86,7 +107,17 @@ function Dashboard({ date }) {
           })}
         </div>
       )}
-      
+      <h3>Tables</h3>
+      {tables ? <>
+      {tables.map(({table_name, capacity, table_id, status})=>{
+        return <div className="bg-secondary w-25 p-3" key={table_id}>
+          <h6>{`${table_name}`}</h6>
+          <h4 data-table-id-status={table_id}>{`status: ${status}`}</h4>
+          <p>{`Capacity: ${capacity}`}</p>
+          {status === "Occupied" ? <button data-table-id-finish={table_id} value={table_id} onClick={finishTable}>Finish</button> : ""}
+        </div>
+      })}
+      </> : <p>Loading...</p>}
     </main>
   );
 }

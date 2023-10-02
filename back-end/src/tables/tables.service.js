@@ -9,10 +9,48 @@ function create(newTable) {
 function list() {
     return knex("tables")
       .select("*")
-      .then(table=> table[0])
+}
+
+function read(tableId) {
+  return knex("tables")
+    .select("*")
+    .where({
+      "table_id": tableId
+    })
+    .then(table => table[0])
+}
+
+function update(newTable) {
+  return knex("tables")
+    .select("*")
+    .where({
+      "table_id": newTable.table_id
+    })
+    .update(newTable, "*")
+}
+
+function reservation(reservation_id) {
+  return knex("reservations")
+    .select("*")
+    .where({
+      "reservation_id": reservation_id
+    })
+    .then(reservation => reservation[0])
+}
+
+function destroy(table) {
+  return knex("tables")
+    .delete("reservation_id")
+    .where({
+      "table_id": table.table_id
+    })
 }
 
 module.exports = {
     list,
-    create
+    create,
+    read,
+    update,
+    destroy,
+    reservation
 }

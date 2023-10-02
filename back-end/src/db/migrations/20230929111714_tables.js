@@ -4,6 +4,8 @@ exports.up = function(knex) {
     table.increments("table_id").primary();
     table.string("table_name")
     table.string("capacity")
+    table.string("status")
+    table.integer("reservation_id")
     table.timestamps(true, true);
   })
 };

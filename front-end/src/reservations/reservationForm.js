@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {Link, useHistory} from "react-router-dom"
-import DatePicker from "react-datepicker"
-import { asDateString } from "../utils/date-time"; 
+
 
 //helper functions
 const dateCompare = (reservationDate, currentDate) => {
@@ -24,7 +23,6 @@ function ReservationForm({date}) {
         people: 2
     }
     let [form, setForm] = useState(initFormState);
-    const [selectedDate, setSelectedDate] = useState(null)
     const changeHandler = (event) => {
         setForm({
             ...form,
@@ -49,7 +47,7 @@ function ReservationForm({date}) {
         <label htmlFor="last_name">Last Name</label>
         <input type="text" name="last_name" id="last_name" value={form.last_name} onChange={changeHandler} required/>
         <label htmlFor="mobile_number">Mobile Number</label>
-        <input type="text" name="mobile_number" id="mobile_number" value={form.mobile_number} onChange={changeHandler} required/>
+        <input type="text" name="mobile_number" id="mobile_number" value={form.mobile_number} onChange={changeHandler} maxLength={10} required/>
         <label htmlFor="reservation_date">Reservation Date</label>
         <input type="date" name="reservation_date" id="date" min={date} value={form.reservation_date} onChange={changeHandler} required/>
         {dateCompare(form.reservation_date, date) ? <alert className="alert alert-danger">Reserve after current Date</alert> : dayOfWeek === 1 ? <alert className="alert alert-danger">Closed on Tuesdays</alert> : ""}
