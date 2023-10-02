@@ -93,14 +93,13 @@ function Form({submitHandler, cancelHandler, formError, initialFormData}) {
           onChange={changeHandler}
         ></input>
         <button type="submit">Submit</button>
-        {formData.reservation_id && (
-          <button
-            data-reservation-id-cancel={formData.reservation_id}
-            onClick={() => cancelHandler()}
-          >
-            Cancel
-          </button>
-        )}
+
+        <button
+          data-reservation-id-cancel={formData.reservation_id}
+          onClick={() => cancelHandler()}
+        >
+          Cancel
+        </button>
       </form>
       <ErrorAlert error={formError} />
     </>

@@ -106,7 +106,11 @@ function Routes() {
         />
       </Route>
       <Route path="/reservations/new">
-        <NewReservation setDate={setDate} setLoadTrigger={setLoadTrigger} />
+        <NewReservation
+          setDate={setDate}
+          setLoadTrigger={setLoadTrigger}
+          date={date}
+        />
       </Route>
       <Route path="/tables/new">
         <NewTable setLoadTrigger={setLoadTrigger} />

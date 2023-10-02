@@ -78,7 +78,8 @@ describe("US-06 - Reservation status - E2E", () => {
 
       await seatReservation(reservation.reservation_id, table.table_id);
 
-      await page.reload({waitUntil: "networkidle0"});
+      //change 0 to 2 for longer waiting
+      await page.reload({waitUntil: "networkidle2"});
 
       await page.screenshot({
         path: ".screenshots/us-06-seated-after.png",
