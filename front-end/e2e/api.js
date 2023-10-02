@@ -6,7 +6,7 @@ const API_BASE_URL =
 /**
  * Defines the default headers for these functions to work with `json-server`
  */
-const headers = {"Content-Type": "application/json"};
+const headers = { "Content-Type": "application/json" };
 
 /**
  * Fetch `json` from the specified URL and handle error status codes and ignore `AbortError`s
@@ -34,7 +34,7 @@ async function fetchJson(url, options, onCancel) {
     const payload = await response.json();
 
     if (payload.error) {
-      return Promise.reject({message: payload.error});
+      return Promise.reject({ message: payload.error });
     }
     return payload.data;
   } catch (error) {
@@ -56,7 +56,7 @@ async function createReservation(reservation, signal) {
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify({data: reservation}),
+    body: JSON.stringify({ data: reservation }),
     signal,
   };
   return await fetchJson(url, options, reservation);
@@ -72,7 +72,7 @@ async function createTable(table, signal) {
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify({data: table}),
+    body: JSON.stringify({ data: table }),
     signal,
   };
   return await fetchJson(url, options, table);
@@ -82,7 +82,7 @@ async function seatReservation(reservation_id, table_id) {
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
   const options = {
     method: "PUT",
-    body: JSON.stringify({data: {reservation_id}}),
+    body: JSON.stringify({ data: { reservation_id } }),
     headers,
   };
   return await fetchJson(url, options, {});

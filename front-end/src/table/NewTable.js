@@ -3,7 +3,7 @@ import {useHistory} from "react-router-dom";
 import {createTable} from "../utils/api";
 
 
-function NewTable({setLoadTrigger}) {
+function NewTable() {
   const history = useHistory();
   const initialData = {
     table_name: "",
@@ -12,6 +12,7 @@ function NewTable({setLoadTrigger}) {
   const [formData, setFormData] = useState(initialData);
 
   async function newTable(formData) {
+
     const abortController = new AbortController();
     await createTable(formData, abortController.signal).catch(console.log);
     return () => abortController.abort();
@@ -27,7 +28,6 @@ function NewTable({setLoadTrigger}) {
     event.preventDefault();
     formData.capacity = Number(formData.capacity);
     newTable(formData);
-    setLoadTrigger(prev=>prev+1)
     setFormData(initialData);
     history.push("/dashboard");
   };

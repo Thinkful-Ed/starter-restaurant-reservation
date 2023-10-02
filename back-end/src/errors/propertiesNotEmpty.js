@@ -1,8 +1,6 @@
 function propertiesNotEmpty(...properties){
     return (req,res,next)=>{
         const {data={}} = req.body;
-        const methodName = 'propertiesNotEmpty';
-        req.log.debug({__filename, methodName, body:req.body})
         try{
             properties.forEach(p=>{
                 const value = data[p];

@@ -1,8 +1,6 @@
 // @params 2023-09-26T21:01:59.971Z
 //@return yyyy-mm-dd
 function datePassed(req,res,next) {
-  const methodName = 'datePassed';
-  req.log.debug({__filename, methodName, body:req.body})
   const {reservation_date} = req.body.data;
   const currentDate = new Date();
   const today = `${currentDate.getFullYear().toString(10)}-${(

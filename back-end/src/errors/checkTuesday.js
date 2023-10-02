@@ -1,8 +1,6 @@
 //@params yyyy-mm-dd
 //@return true if it's Tuesday, false not Tuesday
 function checkTuesday(req, res, next) {
-  const methodName = 'checkTuesday';
-  req.log.debug({__filename, methodName, body:req.body})
   const {reservation_date} = req.body.data;
   let date = new Date(reservation_date);
   try {

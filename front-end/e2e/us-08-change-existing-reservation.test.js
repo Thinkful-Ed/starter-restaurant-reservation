@@ -1,9 +1,9 @@
 const puppeteer = require("puppeteer");
-const {setDefaultOptions} = require("expect-puppeteer");
+const { setDefaultOptions } = require('expect-puppeteer');
 const fs = require("fs");
 const fsPromises = fs.promises;
 
-const {createReservation} = require("./api");
+const { createReservation } = require("./api");
 
 const baseURL = process.env.BASE_URL || "http://localhost:3000";
 
@@ -20,8 +20,8 @@ describe("US-08 - Change an existing reservation - E2E", () => {
   const dashboardTestPath = `${baseURL}/dashboard?date=2035-01-04`;
 
   beforeAll(async () => {
-    await fsPromises.mkdir("./.screenshots", {recursive: true});
-    setDefaultOptions({timeout: 1000});
+    await fsPromises.mkdir("./.screenshots", { recursive: true });
+    setDefaultOptions({ timeout: 1000 });
     browser = await puppeteer.launch();
   });
 
@@ -35,7 +35,7 @@ describe("US-08 - Change an existing reservation - E2E", () => {
       people: 4,
     });
     page = await browser.newPage();
-    await page.setViewport({width: 1920, height: 1080});
+    await page.setViewport({ width: 1920, height: 1080 });
     page.on("console", onPageConsole);
   });
 
@@ -61,7 +61,8 @@ describe("US-08 - Change an existing reservation - E2E", () => {
         await page.waitForSelector(hrefSelector);
 
         await page.screenshot({
-          path: ".screenshots/us-08-dashboard-edit-click-after-no-change-expected.png",
+          path:
+            ".screenshots/us-08-dashboard-edit-click-after-no-change-expected.png",
           fullPage: true,
         });
 
@@ -140,7 +141,7 @@ describe("US-08 - Change an existing reservation - E2E", () => {
       await page.goto(
         `${baseURL}/reservations/${reservation.reservation_id}/edit`,
         {
-          waitUntil: "networkidle2",
+          waitUntil: "networkidle0",
         }
       );
     });
@@ -159,21 +160,10 @@ describe("US-08 - Change an existing reservation - E2E", () => {
         fullPage: true,
       });
 
-      // await Promise.all([
-      //   cancelButton.click(),
-      //   page.waitForNavigation({waitUntil: "networkidle2"}),
-      // ]);
-
-      //add dialog, didn't have this part, but necessary
-      page.on("dialog", async (dialog) => {
-        expect(dialog.message()).toContain(
-          "Do you want to cancel this reservation?"
-        );
-        await dialog.accept();
-      });
-      await cancelButton.click();
-      await page.waitForNavigation({waitUntil: "networkidle0"});
-      //to here
+      await Promise.all([
+        cancelButton.click(),
+        page.waitForNavigation({ waitUntil: "networkidle0" }),
+      ]);
 
       await page.screenshot({
         path: ".screenshots/us-08-edit-reservation-cancel-after.png",
@@ -185,7 +175,7 @@ describe("US-08 - Change an existing reservation - E2E", () => {
 
     test("filling and submitting form updates the reservation", async () => {
       const firstNameInput = await page.$("input[name=first_name]");
-      await firstNameInput.click({clickCount: 3});
+      await firstNameInput.click({ clickCount: 3 });
       await firstNameInput.type("John");
 
       const [submitButton] = await page.$x(
@@ -203,14 +193,10 @@ describe("US-08 - Change an existing reservation - E2E", () => {
 
       await Promise.all([
         submitButton.click(),
-        page.waitForNavigation({waitUntil: "networkidle2"}),
+        page.waitForNavigation({ waitUntil: "networkidle0" }),
       ]);
 
       expect(page.url()).toContain("/dashboard");
-
-      //add this
-      await page.waitForTimeout(500);
-      //end
 
       await page.screenshot({
         path: ".screenshots/us-08-edit-reservation-submit-after.png",
