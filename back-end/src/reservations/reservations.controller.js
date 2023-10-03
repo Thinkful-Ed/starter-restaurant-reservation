@@ -56,7 +56,8 @@ const validResProperties = [
   "mobile_number",
   "reservation_date",
   "reservation_time",
-  "people"
+  "people",
+  "status"
 ]
 function ValidReservation(req, res, next) {
   const newReservation = req.body;
@@ -73,8 +74,6 @@ function ValidReservation(req, res, next) {
   }
 
 }
-
-
 
 //Function to make sure that the reservations booked during opperation hours
 function opperationHours(req, res, next) {
@@ -93,9 +92,9 @@ function opperationHours(req, res, next) {
 function noBeforeCurrentDate(req, res, next) {
   const {newReservation} = res.locals;
   const resDate = newReservation.reservation_date;//reservation date
-  console.log("RESDATE - ", resDate)
+  // console.log("RESDATE - ", resDate)
   const today = getCurrentDate();
-  console.log("currentDate", today)
+  // console.log("currentDate", today)
   if (dateCompare(resDate, today)) {
     return next({
       status: 400,
@@ -125,7 +124,7 @@ async function create(req, res, next) {
 }
 
 async function reservationExists(req, res, next) {
-  const {reservation_id} = req.params
+  const {reservation_id} = req.params;
   const reservation_number = Number(reservation_id)
   const reservation = await service.read(reservation_number)
   if (reservation) {
@@ -143,6 +142,21 @@ async function reservationExists(req, res, next) {
   res.status(200).json({data: reservation[0]})
 }
 
+async function destroy(req, res, next) {
+  const bodyData = req.body
+  console.log("REQUEST BODY", bodyData)
+  const updated = await service.update(bodyData)
+  console.log("updated: ", updated)
+  res.status(202).json(updated)
+}
+
+async function update(req, res, next) {
+  const bodyData = req.body
+  console.log("BACKEND UPDATE", bodyData)
+  const finish = await service.finish(bodyData)
+  res.status(200).json("Successful delete")
+}
+
 module.exports = {
   list,
   create: [
@@ -155,5 +169,13 @@ module.exports = {
   read: [
     reservationExists,
     read
+  ],
+  update: [
+    reservationExists,
+    update
+  ],
+  delete: [
+    reservationExists,
+    destroy
   ]
 };

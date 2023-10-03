@@ -66,6 +66,9 @@ function Dashboard({ date }) {
     console.log("e.target.value", typeof e.target.value)
     const tableNum = Number(e.target.value)
     const finishedTable = tables.find((table)=> table.table_id === tableNum)
+    console.log(finishedTable)
+    console.log(reservations)
+    const finishedReservation = reservations.find((res)=> res.reservation_id === finishedTable.reservation_id)
     if (window.confirm(`"Is this table ready to seat new guests? This cannot be undone.`)) {
       await fetch(
         `http://localhost:5001/tables/${tableNum}/seat`,
@@ -77,6 +80,16 @@ function Dashboard({ date }) {
           }
         }
       );
+      await fetch(
+        `http://localhost:5001/reservations/${finishedReservation.reservation_id}/status`,
+        {
+          method: "PUT",
+          body: JSON.stringify({...finishedReservation, "status": "Finished"}),
+          headers: {
+            "Content-type": "application/json;charset=UTF-8"
+          }
+        }
+      )
       window.location.reload(true)
     }
   }
@@ -100,7 +113,10 @@ function Dashboard({ date }) {
         <div>
           {reservations.map((reservation)=> {
             if (dashDate === reservation.reservation_date) {
-              return <ReservationCard key={reservation.reservation_id} reservation={reservation}/>              
+              if (reservation.status === "Booked" || reservation.status === "Seated") {
+                return <ReservationCard key={reservation.reservation_id} reservation={reservation}/> 
+              }
+                           
             } else {
               return ""
             }

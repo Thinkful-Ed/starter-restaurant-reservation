@@ -47,7 +47,7 @@ async function create(req, res) {
 async function tableExists(req, res, next) {
     const {table_id} = req.params
     const tableNum = Number(table_id)
-    console.log(typeof tableNum)
+    // console.log(typeof tableNum)
     const table = await service.read(tableNum)
     if (table) {
         res.locals.table = table
@@ -68,11 +68,11 @@ async function tableCap(req, res, next) {
     const newTable = req.body
     const {reservation_id} = newTable
     const resNum = Number(reservation_id)
-    console.log("RESERVATION_ID ", reservation_id)
+    // console.log("RESERVATION_ID ", reservation_id)
     const reservation = await service.reservation(resNum)
     if (reservation) {
-        console.log("newTable.capacity ", typeof newTable.capacity)
-        console.log("reservation ", reservation.people)
+        // console.log("newTable.capacity ", typeof newTable.capacity)
+        // console.log("reservation ", reservation.people)
         const capacity = Number(newTable.capacity)
         const partySize = Number(reservation.people)
         if (capacity >= partySize ) {
@@ -106,7 +106,7 @@ function occupiedOrFree(req, res, next) {
 
 async function update(req, res) {
     const newTable = req.body
-    console.log(newTable)
+    // console.log(newTable)
     const changedTable = await service.update(newTable)
     res.status(201).json({data: changedTable})
 }

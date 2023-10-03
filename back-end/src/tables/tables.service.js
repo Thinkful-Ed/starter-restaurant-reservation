@@ -40,9 +40,12 @@ function reservation(reservation_id) {
 
 function destroy(table) {
   return knex("tables")
-    .delete("reservation_id")
     .where({
       "table_id": table.table_id
+    })
+    .update({
+      "reservation_id": 0,
+      "status": "Free"
     })
 }
 

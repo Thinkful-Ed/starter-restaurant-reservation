@@ -19,6 +19,7 @@ function ReservationForm({date}) {
         last_name: "",
         mobile_number: "",
         reservation_date: "",
+        status: "Booked",
         reservation_time: "",
         people: 2
     }
