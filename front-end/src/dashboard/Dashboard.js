@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { listReservations, listTables } from "../utils/api";
-import ListReservations from "./ListReservations";;
-import ListTables from "./ListTables";
-import ErrorAlert from "../layout/ErrorAlert";
 import { previous, today, next } from "../utils/date-time";
+import ErrorAlert from "../layout/ErrorAlert";
+import ListReservations from "./ListReservations";
+import ListTables from "./ListTables";
 import { Link, useLocation } from "react-router-dom";
-import queryString from "querystring";
+import queryString from "query-string";
 
 /**
  * Defines the dashboard page.
@@ -16,7 +16,9 @@ import queryString from "querystring";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+
   const [dateOfReservations, setDateOfReservations] = useState(date);
+
   const { search } = useLocation();
   const searchDate = queryString.parse(search).date;
   const [tables, setTables] = useState([]);
@@ -30,6 +32,7 @@ function Dashboard({ date }) {
     const abortController = new AbortController();
     setTablesError(null);
     listTables(abortController.signal).then(setTables).catch(setTablesError);
+
     return () => abortController.abort();
   }
 

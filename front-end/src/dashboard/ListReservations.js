@@ -2,20 +2,20 @@ import React, { useState } from "react";
 import { updateReservationStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
-function ListReservations({ reservations, loadDashboard }) {
+export default function ListReservations({ reservations, loadDashboard }) {
   const [cancelReservationError, setCancelReservationError] = useState(null);
 
   const handleCanceled = async (reservation_id) => {
     if (
       window.confirm(
-        "Do you want to cancel this Reservation? This cannot be undone."
+        "Do you want to cancel this reservation? This cannot be undone."
       )
     ) {
       const abortController = new AbortController();
       setCancelReservationError(null);
       await updateReservationStatus(
         reservation_id,
-        { data: { status: "cancelled " } },
+        { data: { status: "cancelled" } },
         abortController.signal
       )
         .then(loadDashboard)
@@ -99,5 +99,3 @@ function ListReservations({ reservations, loadDashboard }) {
     </>
   );
 }
-
-export default ListReservations;

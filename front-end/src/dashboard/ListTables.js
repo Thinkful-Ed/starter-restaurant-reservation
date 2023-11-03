@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { finishTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
-function ListTables({ tables, loadDashboard, loadTables }) {
+export default function ListTables({ tables, loadDashboard, loadTables }) {
   const [finishTableError, setFinishTableError] = useState(null);
 
-  function handleFinish(table_id) {
+  function handleFinished(table_id) {
     if (
       window.confirm(
         "Is this table ready to seat new guests? This cannot be undone."
@@ -82,5 +82,3 @@ function ListTables({ tables, loadDashboard, loadTables }) {
     </>
   );
 }
-
-export default ListTables;
