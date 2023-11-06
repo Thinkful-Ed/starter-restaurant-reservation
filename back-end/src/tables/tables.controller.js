@@ -2,6 +2,13 @@ const tablesService = require('./tables.service.js');
 const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
 const reservationsController = require('../reservations/reservations.controller');
 
+function numChecker(req, res, next) {
+  if (typeof req.body.data.capacity !== 'number') {
+    return next({ status: 400, message: "'capacity' field must be a number" });
+  }
+  next();
+}
+
 function hasProperties(...properties) {
   return function (req, res, next) {
     const { data = {} } = req.body;
@@ -131,6 +138,7 @@ async function finish(req, res) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
+    numChecker,
     hasRequiredProperties,
     hasValidName,
     hasValidCapacity,
