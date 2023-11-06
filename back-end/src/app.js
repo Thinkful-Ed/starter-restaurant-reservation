@@ -10,14 +10,21 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors());
+// <-- ------Body Parser----- -->
 app.use(express.json());
+
+// <-- ------Cors----- -->
+app.use(cors());
 app.options('*', cors());
 
+// <-- ------ Routes ----- -->
 app.use('/reservations', reservationsRouter);
 app.use('/tables', tablesRouter);
 
+// <-- ------404 Not Found----- -->
 app.use(notFound);
+
+// <-- ------Global Error Handler----- -->
 app.use(errorHandler);
 
 module.exports = app;

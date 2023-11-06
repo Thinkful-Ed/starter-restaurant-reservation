@@ -2,13 +2,7 @@ const tablesService = require('./tables.service.js');
 const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
 const reservationsController = require('../reservations/reservations.controller');
 
-function numChecker(req, res, next) {
-  if (typeof req.body.data.capacity !== 'number') {
-    return next({ status: 400, message: "'capacity' field must be a number" });
-  }
-  next();
-}
-
+// <-- ------ hasProperties Checker iterates through the provided args and throws errors when the body misses those args ----- -->
 function hasProperties(...properties) {
   return function (req, res, next) {
     const { data = {} } = req.body;
@@ -28,6 +22,7 @@ function hasProperties(...properties) {
   };
 }
 
+// <-- ------Validation----- -->
 const hasRequiredProperties = hasProperties('table_name', 'capacity');
 const hasReservationId = hasProperties('reservation_id');
 
@@ -38,7 +33,7 @@ async function tableExists(req, res, next) {
     res.locals.table = table;
     return next();
   }
-  next({ status: 404, message: `Table ${table_id} cannot be found.` });
+  next({ status: 404, message: `Table ${table_id} not found.` });
 }
 
 function hasValidName(req, res, next) {
@@ -47,19 +42,35 @@ function hasValidName(req, res, next) {
   if (table_name.length < 2) {
     return next({
       status: 400,
-      message: `Invalid table_name`,
+      message: `Invalid table_name. Please try again!`,
     });
   }
   next();
 }
 
 function hasValidCapacity(req, res, next) {
-  const capacity = req.body.data.capacity;
-
-  if (capacity < 1 || isNaN(capacity)) {
+  if (!req.body.data.table_name || req.body.data.table_name === '') {
     return next({
       status: 400,
-      message: `Invalid capacity`,
+      message: "'table_name' field is empty!",
+    });
+  }
+  if (req.body.data.table_name.length < 2) {
+    return next({
+      status: 400,
+      message: "'table_name' field must contain at least 2 characters",
+    });
+  }
+  if (!req.body.data.capacity || req.body.data.capacity === '') {
+    return next({ status: 400, message: "'capacity' field cannot be empty" });
+  }
+  if (typeof req.body.data.capacity !== 'number') {
+    return next({ status: 400, message: "'capacity' field must be a number" });
+  }
+  if (req.body.data.capacity < 1) {
+    return next({
+      status: 400,
+      message: "'capacity' field must be at least 1",
     });
   }
   next();
@@ -92,7 +103,7 @@ function tableIsNotSeated(req, res, next) {
   if (res.locals.reservation.status === 'seated') {
     return next({
       status: 400,
-      message: `Table is already seated`,
+      message: `Table already seated!`,
     });
   }
   next();
@@ -102,7 +113,7 @@ function tableIsOccupied(req, res, next) {
   if (!res.locals.table.occupied) {
     return next({
       status: 400,
-      message: `Table is not occupied`,
+      message: `Table not occupied`,
     });
   }
   next();
@@ -138,7 +149,6 @@ async function finish(req, res) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
-    numChecker,
     hasRequiredProperties,
     hasValidName,
     hasValidCapacity,

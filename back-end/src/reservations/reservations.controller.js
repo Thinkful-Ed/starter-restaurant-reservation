@@ -1,9 +1,7 @@
-/**
- * List handler for reservation resources
- */
 const reservationsService = require('./reservations.service.js');
 const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
 
+// <-- ------ hasProperties Checker iterates through the provided args and throws errors when the body misses those args ----- -->
 function hasProperties(...properties) {
   return function (req, res, next) {
     const { data = {} } = req.body;
@@ -23,11 +21,12 @@ function hasProperties(...properties) {
   };
 }
 
+// <-- ------Validation----- -->
 const hasRequiredProperties = hasProperties(
   'first_name',
   'last_name',
-  'mobile_number',
   'reservation_date',
+  'mobile_number',
   'reservation_time',
   'people'
 );
@@ -37,12 +36,12 @@ const VALID_PROPERTIES = [
   'last_name',
   'mobile_number',
   'reservation_date',
-  'reservation_time',
   'people',
-  'status',
+  'reservation_time',
   'reservation_id',
-  'created_at',
+  'status',
   'updated_at',
+  'created_at',
 ];
 
 function hasOnlyValidProperties(req, res, next) {
@@ -133,25 +132,24 @@ function hasValidStatus(req, res, next) {
   const { status } = req.body.data;
   const currentStatus = res.locals.reservation.status;
 
-  if (currentStatus === 'finished' || currentStatus === 'cancelled') {
+  const validStatuses = ['booked', 'seated', 'finished', 'cancelled'];
+
+  if (['finished', 'cancelled'].includes(currentStatus)) {
     return next({
       status: 400,
-      message: `Reservation status is finished`,
+      message: 'Reservation is finished',
     });
   }
-  if (
-    status === 'booked' ||
-    status === 'seated' ||
-    status === 'finished' ||
-    status === 'cancelled'
-  ) {
-    res.locals.status = status;
-    return next();
+
+  if (!validStatuses.includes(status)) {
+    return next({
+      status: 400,
+      message: `Invalid status: ${status}`,
+    });
   }
-  next({
-    status: 400,
-    message: `Invalid status: ${status}`,
-  });
+
+  res.locals.status = status;
+  return next();
 }
 
 function isBooked(req, res, next) {
@@ -166,6 +164,7 @@ function isBooked(req, res, next) {
   next();
 }
 
+// <-- reservation checker -->
 async function reservationExists(req, res, next) {
   const reservation_id =
     req.params.reservation_id || (req.body.data || {}).reservation_id;
@@ -180,44 +179,47 @@ async function reservationExists(req, res, next) {
     message: `Reservation ${reservation_id} cannot be found.`,
   });
 }
-
-/**
- * List handler for reservation resources
- */
+// <-- resource -->
 async function list(req, res) {
-  const date = req.query.date;
-  const mobile_number = req.query.mobile_number;
-  const data = await (date
-    ? reservationsService.list(date)
-    : reservationsService.search(mobile_number));
+  const { date, mobile_number } = req.query;
+
+  const data = date
+    ? await reservationsService.list(date)
+    : await reservationsService.search(mobile_number);
+
   res.json({ data });
 }
 
+//<-- Read -->
 async function read(req, res) {
-  const data = res.locals.reservation;
-  res.json({ data });
+  res.json({ data: res.locals.reservation });
 }
 
+//<-- Create -->
 async function create(req, res) {
-  if (req.body.data == null) return res.status(400);
+  if (!req.body.data) return res.status(400);
 
   const data = await reservationsService.create(req.body.data);
   res.status(201).json({ data });
 }
 
+//<-- Update -->
 async function update(req, res) {
-  const updatedRes = {
+  const data = await reservationsService.update({
     ...req.body.data,
     reservation_id: res.locals.reservation.reservation_id,
-  };
-  const data = await reservationsService.update(updatedRes);
+  });
+
   res.status(200).json({ data });
 }
 
+//<-- Update Status -->
 async function updateStatus(req, res) {
   const { status } = res.locals;
   const { reservation_id } = res.locals.reservation;
+
   const data = await reservationsService.updateStatus(reservation_id, status);
+
   res.status(200).json({ data });
 }
 
