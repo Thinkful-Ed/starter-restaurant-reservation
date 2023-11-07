@@ -21,7 +21,7 @@ function SearchReservation() {
         <input
           name="mobile_number"
           id="mobile_number"
-          type="number"
+          type="text"
           value={phoneNumber}
           onChange={(event) => setPhoneNumber(event.target.value)}
         />

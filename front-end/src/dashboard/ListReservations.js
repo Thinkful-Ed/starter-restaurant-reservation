@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { updateReservationStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import { Link } from "react-router-dom";
 
 export default function ListReservations({ reservations, loadDashboard }) {
   const [cancelReservationError, setCancelReservationError] = useState(null);
@@ -42,22 +43,12 @@ export default function ListReservations({ reservations, loadDashboard }) {
         <td>
           {reservation.status !== "booked" ? null : (
             <>
-              <a
-                href={`/reservations/${reservation.reservation_id}/seat`}
-                className="btn btn-outline-primary mx-1"
-              >
-                Seat
-              </a>
+            <Link to={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-outline-primary mx-1">Seat</Link>
             </>
           )}
           {reservation.status !== "booked" ? null : (
             <>
-              <a
-                href={`/reservations/${reservation.reservation_id}/edit`}
-                className="btn btn-outline-primary mx-1"
-              >
-                Edit
-              </a>
+              <Link to={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-outline-primary mx-1">Edit</Link>
             </>
           )}
           {reservation.status !== "booked" ? null : (

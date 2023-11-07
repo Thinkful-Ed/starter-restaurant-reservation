@@ -36,7 +36,7 @@ function ReservationForm({
         <input
           name="mobile_number"
           id="mobile_number"
-          type="number"
+          type="text"
           value={newReservation.mobile_number}
           onChange={changeHandler}
         />
