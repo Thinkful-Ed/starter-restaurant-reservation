@@ -1,0 +1,41 @@
+.header-dashboard {
+  width: full;
+  background-color: rgb(139, 241, 139);
+
+  padding: 15px;
+  text-align: center;
+  font-weight: 700;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+.dashboard-button {
+  background-color: rgb(12, 14, 12);
+  border: none;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  margin-inline: 10px;
+  width: 200px;
+}
+
+.dashboard-button-center {
+  background-color: rgb(83, 204, 83);
+  border: none;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  width: 200px;
+}
+
+.dashboard-tables {
+  width: 50%;
+  background-color: rgb(238, 65, 35);
+
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-weight: 700;
+  margin-top: 10px;
+  border-radius: 10px;
+}

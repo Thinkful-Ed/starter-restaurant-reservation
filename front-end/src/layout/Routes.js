@@ -1,28 +1,46 @@
-import React from "react";
+import React from 'react';
 
-import { Redirect, Route, Switch } from "react-router-dom";
-import Dashboard from "../dashboard/Dashboard";
-import NotFound from "./NotFound";
-import { today } from "../utils/date-time";
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { BookReservation } from '../components/BookReservation';
+import { BookSeat } from '../components/BookSeat';
+import { ReservationEdit } from '../components/ReservationEdit';
+import { SearchReservation } from '../components/SearchReservation';
+import { TableMaker } from '../components/tables/TableMaker';
+import Dashboard from '../dashboard/Dashboard';
+import { today } from '../utils/date-time';
+import useQuery from '../utils/useQuery';
+import NotFound from './NotFound';
 
-/**
- * Defines all the routes for the application.
- *
- * You will need to make changes to this file.
- *
- * @returns {JSX.Element}
- */
 function Routes() {
+  const queries = useQuery();
+  const date = queries.get('date');
+
   return (
     <Switch>
-      <Route exact={true} path="/">
-        <Redirect to={"/dashboard"} />
+      <Route exact={true} path='/'>
+        <Redirect to={'/dashboard'} />
       </Route>
-      <Route exact={true} path="/reservations">
-        <Redirect to={"/dashboard"} />
+      <Route exact={true} path='/reservations'>
+        <Redirect to={'/dashboard'} />
       </Route>
-      <Route path="/dashboard">
-        <Dashboard date={today()} />
+      <Route path='/dashboard'>
+        {/* Takes in todays date by default if no date query is present in URL */}
+        <Dashboard date={date || today()} />
+      </Route>
+      <Route path='/reservations/new'>
+        <BookReservation />
+      </Route>
+      <Route path='/reservations/:reservation_id/seat'>
+        <BookSeat />
+      </Route>
+      <Route path='/reservations/:reservation_id/edit'>
+        <ReservationEdit />
+      </Route>
+      <Route path='/tables/new'>
+        <TableMaker />
+      </Route>
+      <Route path='/search'>
+        <SearchReservation />
       </Route>
       <Route>
         <NotFound />

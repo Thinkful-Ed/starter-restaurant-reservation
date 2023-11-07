@@ -1,4 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 .side-bar {
   background-color: #393a44;
   min-width: 200px;
+}
+
+@media screen and (min-width: 768px) {
+  .side-bar {
+    min-height: 100svh;
+  }
 }
