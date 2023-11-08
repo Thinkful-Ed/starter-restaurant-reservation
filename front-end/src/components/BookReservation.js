@@ -6,20 +6,17 @@ import { hasValidDateAndTime } from './RSVPValidate';
 import { ReservationError } from './ReservationError';
 
 export const BookReservation = () => {
-  const initialReservationState = {
+  const [reservation, setReservation] = useState({
     first_name: '',
     last_name: '',
     mobile_number: '',
     reservation_date: '',
     reservation_time: '',
     people: 0,
-  };
-
-  const [reservation, setReservation] = useState({
-    ...initialReservationState,
   });
-  const [reservationErrors, setReservationErrors] = useState(null);
+
   const history = useHistory();
+  const [reservationErrors, setReservationErrors] = useState(null);
 
   const changeHandler = (event) => {
     if (event.target.name === 'people') {
@@ -55,7 +52,7 @@ export const BookReservation = () => {
   };
 
   return (
-    <section>
+    <div>
       <h2 className='header-dashboard'>Create a Reservation:</h2>
       <ReservationError errors={reservationErrors} />
       <Form
@@ -63,6 +60,6 @@ export const BookReservation = () => {
         changeHandler={changeHandler}
         submitHandler={submitHandler}
       />
-    </section>
+    </div>
   );
 };

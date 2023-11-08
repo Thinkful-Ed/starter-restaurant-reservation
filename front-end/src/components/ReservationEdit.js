@@ -6,20 +6,16 @@ import { hasValidDateAndTime } from './RSVPValidate';
 import { ReservationError } from './ReservationError';
 
 export const ReservationEdit = () => {
-  const initialReservationState = {
+  const [reservation, setReservation] = useState({
     first_name: '',
     last_name: '',
     mobile_number: '',
     reservation_date: '',
     reservation_time: '',
     people: 0,
-  };
-
-  const [reservation, setReservation] = useState({
-    ...initialReservationState,
   });
-  const [reservationErrors, setReservationErrors] = useState(null);
   const { reservation_id } = useParams();
+  const [reservationErrors, setReservationErrors] = useState(null);
   const history = useHistory();
 
   useEffect(() => {

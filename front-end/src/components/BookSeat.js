@@ -12,6 +12,7 @@ export const BookSeat = () => {
   const [tables, setTables] = useState([]);
   const [tableId, setTableId] = useState('');
   const [reservation, setReservation] = useState({});
+
   const history = useHistory();
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export const BookSeat = () => {
   };
 
   return (
-    <section>
+    <div>
       <h2 className='header-dashboard'>Seat Reservation</h2>
       <form onSubmit={submitHandler}>
         <fieldset>
@@ -75,6 +76,6 @@ export const BookSeat = () => {
           </div>
         </fieldset>
       </form>
-    </section>
+    </div>
   );
 };

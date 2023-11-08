@@ -16,7 +16,7 @@ export const Form = ({ reservation, changeHandler, submitHandler }) => {
               type='text'
               required={true}
               value={reservation.first_name}
-              maxLength='100'
+              maxLength={100}
               onChange={changeHandler}
             />
           </div>
@@ -28,7 +28,7 @@ export const Form = ({ reservation, changeHandler, submitHandler }) => {
               type='text'
               required={true}
               value={reservation.last_name}
-              maxLength='100'
+              maxLength={100}
               onChange={changeHandler}
             />
           </div>
@@ -54,7 +54,7 @@ export const Form = ({ reservation, changeHandler, submitHandler }) => {
               pattern='\d{4}-\d{2}-\d{2}'
               required={true}
               value={reservation.reservation_date}
-              maxLength='100'
+              maxLength={100}
               onChange={changeHandler}
             />
           </div>
@@ -64,11 +64,11 @@ export const Form = ({ reservation, changeHandler, submitHandler }) => {
               id='reservation_time'
               name='reservation_time'
               type='time'
-              placeholder='HH:MM'
               pattern='[0-9]{2}:[0-9]{2}'
+              placeholder='HH:MM'
               required={true}
               value={reservation.reservation_time}
-              maxLength='100'
+              maxLength={100}
               onChange={changeHandler}
             />
           </div>
@@ -84,17 +84,11 @@ export const Form = ({ reservation, changeHandler, submitHandler }) => {
               onChange={changeHandler}
             />
           </div>
-          <div className='group-row'>
-            <button
-              className='red'
-              type='button'
-              onClick={() => history.goBack()}
-            >
+          <div>
+            <button type='button' onClick={() => history.goBack()}>
               Cancel
             </button>
-            <button className='black' type='submit'>
-              Submit
-            </button>
+            <button type='submit'>Submit</button>
           </div>
         </fieldset>
       </form>

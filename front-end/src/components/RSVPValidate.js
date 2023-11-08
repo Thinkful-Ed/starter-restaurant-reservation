@@ -3,19 +3,17 @@ export function hasValidDateAndTime(reservation) {
   const time = reservation.reservation_time;
   const errors = [];
 
-  // No reservations on Tuesdays
+  // Reservation for Tuesday Validator
   const day = new Date(date).getUTCDay();
   if (day === 2) {
-    errors.push(new Error('Restaurant is closed on Tuesdays'));
+    errors.push(new Error('Restaurant is closed on Tuesdays!'));
   }
 
-  // No reservations in the past
   const formattedDate = new Date(`${date}T${time}`);
   if (formattedDate <= new Date()) {
     errors.push(new Error('Reservation must be in the future'));
   }
 
-  // No reservations before 10:30AM or after 9:30PM
   const hours = Number(time.split(':')[0]);
   const minutes = Number(time.split(':')[1]);
   if (hours < 10 || (hours === 10 && minutes < 30)) {

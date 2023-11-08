@@ -60,7 +60,7 @@ export const SearchReservation = () => {
               required={true}
               placeholder="Enter a customer's phone number"
               value={mobileNumber}
-              maxLength='12'
+              maxLength={12}
               onChange={changeHandler}
             />
           </div>
