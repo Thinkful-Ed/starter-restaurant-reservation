@@ -9,15 +9,21 @@ async function reservationExists(req, res, next) {
     res.locals.reservation = reservation;
     return next();
   }
-  return next({ status: 404, message: `Reservation with the ID ${req.params.reservationId} cannot be found.` });
+  return next({
+    status: 404,
+    message: `Reservation with the ID ${req.params.reservationId} cannot be found.`,
+  });
 }
 
 // validates data property of request
 
 function validateReservationData(req, res, next) {
-  const {data = {}} = req.body;
+  const { data = {} } = req.body;
   if (!data) {
-    return next( {status: 400, message: "Request must be have a data property."})
+    return next({
+      status: 400,
+      message: "Request must be have a data property.",
+    });
   }
   return next();
 }
@@ -25,11 +31,21 @@ function validateReservationData(req, res, next) {
 // validates all required properties exist and are not empty
 
 function validateReservationProperties(req, res, next) {
-  const {data = {}} = req.body;
-  const requiredProperties = ["first_name", "last_name", "mobile_number", "reservation_date", "reservation_time", "people"];
+  const { data = {} } = req.body;
+  const requiredProperties = [
+    "first_name",
+    "last_name",
+    "mobile_number",
+    "reservation_date",
+    "reservation_time",
+    "people",
+  ];
   for (const property of requiredProperties) {
     if (!data.hasOwnProperty(property) || data[property] === "") {
-      return next({ status: 400, message: `Reservation must include a ${property} property.` });
+      return next({
+        status: 400,
+        message: `Reservation must include a ${property} property.`,
+      });
     }
   }
   return next();
@@ -38,11 +54,17 @@ function validateReservationProperties(req, res, next) {
 // date is valid
 
 function validateDate(req, res, next) {
-  const { data: { reservation_date } } = req.body;
+  const {
+    data: { reservation_date },
+  } = req.body;
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
   if (!reservation_date || !dateRegex.test(reservation_date)) {
-    return next({ status: 400, message: "Invalid reservation_date format. Please use the YYYY-MM-DD format." });
+    return next({
+      status: 400,
+      message:
+        "Invalid reservation_date format. Please use the YYYY-MM-DD format.",
+    });
   }
 
   return next();
@@ -51,11 +73,16 @@ function validateDate(req, res, next) {
 // time is valid
 
 function validateTime(req, res, next) {
-  const { data: { reservation_time } } = req.body;
+  const {
+    data: { reservation_time },
+  } = req.body;
   const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
   if (!reservation_time || !timeRegex.test(reservation_time)) {
-    return next({ status: 400, message: "Invalid reservation_time format. Please use the HH:mm format." });
+    return next({
+      status: 400,
+      message: "Invalid reservation_time format. Please use the HH:mm format.",
+    });
   }
 
   return next();
@@ -64,10 +91,15 @@ function validateTime(req, res, next) {
 // people is a number over 0
 
 function validatePeople(req, res, next) {
-  const { data: { people } } = req.body;
+  const {
+    data: { people },
+  } = req.body;
 
   if (typeof people !== "number" || people <= 0) {
-    return next({ status: 400, message: `Property 'people' must be a number greater than 0.` });
+    return next({
+      status: 400,
+      message: `Property 'people' must be a number greater than 0.`,
+    });
   }
 
   return next();
@@ -97,13 +129,11 @@ async function list(req, res) {
     const timeA = A.reservation_time;
     const timeB = B.reservation_time;
     return timeA.localeCompare(timeB);
-  })
+  });
   res.json({
-    data
+    data,
   });
 }
-
-
 
 module.exports = {
   create: [
@@ -112,7 +142,7 @@ module.exports = {
     validateDate,
     validateTime,
     validatePeople,
-    asyncErrorBoundary(create)
+    asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), read],
   list: asyncErrorBoundary(list),
