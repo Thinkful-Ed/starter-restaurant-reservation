@@ -10,14 +10,13 @@ import { today, previous, next } from "../utils/date-time";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
-  console.log("date", date);
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [currDate, setCurrDate] = useState(date);
 
-  useEffect(loadDashboard, [date]);
+  useEffect(loadDashboard, [currDate]);
 
   function loadDashboard() {
-    console.log("date changed");
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
@@ -43,6 +42,19 @@ function Dashboard({ date }) {
     console.log(date);
   }
 
+  const tableRows = reservations.map((reservation) => {
+    return (
+      <tr key={reservation.reservation_id}>
+        <td>{reservation.first_name}</td>
+        <td>{reservation.last_name}</td>
+        <td>{reservation.mobile_number}</td>
+        <td>{reservation.reservation_date}</td>
+        <td>{reservation.reservation_time}</td>
+        <td>{reservation.people}</td>
+      </tr>
+    );
+  });
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -50,7 +62,19 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      <table className="table">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Mobile Number</th>
+            <th>Reservation Date</th>
+            <th>Reservation Time</th>
+            <th>Party Size</th>
+          </tr>
+        </thead>
+        <tbody>{tableRows}</tbody>
+      </table>
       <div>
         <button onClick={buttonHandler} name="previous">
           Previous

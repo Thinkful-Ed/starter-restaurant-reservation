@@ -7,7 +7,8 @@ const hasProperties = require("../errors/hasProperties");
  */
 
 async function list(req, res) {
-  const data = await reservationService.list();
+  const date = req.query.date;
+  const data = await reservationService.list(date);
   res.status(200).json({ data });
 }
 
@@ -27,5 +28,5 @@ async function create(req, res, next) {
 
 module.exports = {
   list,
-  create,
+  create: [hasRequiredProperties, create],
 };
