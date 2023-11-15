@@ -24,7 +24,6 @@ function Dashboard({ date }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const queryDate = searchParams.get("date");
-  console.log("QUERY DATE:", queryDate)
 
   useEffect(() => {
     if (queryDate && queryDate !== currentDate) {

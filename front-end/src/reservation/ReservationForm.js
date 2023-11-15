@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function ReservationForm({ initialFormState, submitAction }) {
     const [formData, setFormData] = useState(initialFormState);
+    const history = useHistory();
 
     const handleChange = ({ target }) => {
       setFormData({
@@ -14,6 +15,10 @@ function ReservationForm({ initialFormState, submitAction }) {
     function handleSubmit(event) {
       event.preventDefault();
       submitAction(formData);
+    }
+
+    function handleCancel() {
+        history.goBack();
     }
 
 
@@ -101,9 +106,9 @@ function ReservationForm({ initialFormState, submitAction }) {
             />
           </div>
           <div>
-            <Link to="/" className="btn btn-secondary m-1">
+            <button onClick={handleCancel} className="btn btn-secondary m-1">
               Cancel
-            </Link>
+            </button>
             <button
               onClick={handleSubmit}
               type="submit"
