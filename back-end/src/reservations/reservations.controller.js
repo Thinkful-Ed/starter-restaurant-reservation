@@ -18,8 +18,7 @@ async function reservationExists(req, res, next) {
 // validates data property of request
 
 function validateReservationData(req, res, next) {
-  const { data = {} } = req.body;
-  if (!data) {
+  if (!req.body.hasOwnProperty("data")) {
     return next({
       status: 400,
       message: "Request must be have a data property.",

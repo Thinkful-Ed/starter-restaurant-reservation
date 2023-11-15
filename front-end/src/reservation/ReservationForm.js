@@ -14,13 +14,12 @@ function ReservationForm({ initialFormState, submitAction }) {
     function handleSubmit(event) {
       event.preventDefault();
       submitAction(formData);
-        console.log(formData)
     }
 
 
     return (
         <div>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="first_name">First Name:</label>
             <input
