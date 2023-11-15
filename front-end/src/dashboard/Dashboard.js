@@ -23,6 +23,8 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  console.log(reservations)
+
   return (
     <main>
       <h1>Dashboard</h1>
