@@ -19,7 +19,7 @@ function Dashboard({ date }) {
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
+    listReservations({ date: currDate }, abortController.signal)
       .then(setReservations)
       .then(() => console.log(date))
       .then(() => console.log("reservations", reservations))
@@ -30,16 +30,16 @@ function Dashboard({ date }) {
   function buttonHandler(event) {
     switch (event.target.name) {
       case "previous":
-        date = previous(date);
+        setCurrDate(previous(currDate));
         break;
       case "next":
-        date = next(date);
+        setCurrDate(next(currDate));
         break;
       default:
-        date = today();
+        setCurrDate(today());
         break;
     }
-    console.log(date);
+    console.log(currDate);
   }
 
   const tableRows = reservations.map((reservation) => {
@@ -59,7 +59,7 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for {currDate}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
       <table className="table">
