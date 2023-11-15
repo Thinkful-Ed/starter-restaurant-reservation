@@ -1,6 +1,7 @@
 const reservationService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
+const hasValidProperties = require("../errors/hasValidProperties");
 
 /**
  * List handler for reservation resources
@@ -21,6 +22,8 @@ const hasRequiredProperties = hasProperties(
   "people"
 );
 
+const checksValidProperties = hasValidProperties();
+
 async function create(req, res, next) {
   const data = await reservationService.create(req.body.data);
   res.status(201).json({ data });
@@ -28,5 +31,5 @@ async function create(req, res, next) {
 
 module.exports = {
   list,
-  create: [hasRequiredProperties, create],
+  create: [hasRequiredProperties, checksValidProperties, create],
 };
