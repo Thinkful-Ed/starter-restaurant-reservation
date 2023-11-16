@@ -22,7 +22,7 @@ function hasValidProperties(...properties) {
       //people is anumber
       const people = data["people"];
 
-      if (typeof people !== "number" || people <= 0) {
+      if (typeof Number(people) !== "number" || people <= 0) {
         const error = new Error(`A valid number for people is required.`);
         error.status = 400;
         throw error;
