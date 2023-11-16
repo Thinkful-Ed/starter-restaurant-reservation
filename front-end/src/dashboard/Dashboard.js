@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today, previous, next } from "../utils/date-time";
+import { useLocation, useHistory } from "react-router-dom/cjs/react-router-dom";
 
 /**
  * Defines the dashboard page.
@@ -13,16 +14,24 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [currDate, setCurrDate] = useState(date);
+  const location = useLocation();
+  const history = useHistory();
+  const dateParam = new URLSearchParams(location.search).get("date");
 
+  useEffect(() => {
+    console.log(dateParam);
+    if (dateParam) {
+      setCurrDate(dateParam);
+    }
+  }, []);
   useEffect(loadDashboard, [currDate]);
 
   function loadDashboard() {
+    history.push(`/dashboard/?date=${currDate}`);
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date: currDate }, abortController.signal)
       .then(setReservations)
-      .then(() => console.log(date))
-      .then(() => console.log("reservations", reservations))
       .catch(setReservationsError);
     return () => abortController.abort();
   }
@@ -39,7 +48,6 @@ function Dashboard({ date }) {
         setCurrDate(today());
         break;
     }
-    console.log(currDate);
   }
 
   const tableRows = reservations.map((reservation) => {

@@ -10,15 +10,16 @@ function ReservationForm() {
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: "",
+    people: 0,
   };
 
   const [formData, setFormData] = useState(initialFormData);
 
   const onChangeHandler = (event) => {
+    console.log(event.target.value);
     setFormData({
       ...formData,
-      [event.target.name]: event.target.value,
+      [event.target.name]: `${event.target.value}`,
     });
   };
 
@@ -77,7 +78,7 @@ function ReservationForm() {
         setFormData(initialFormData);
       })
       .then(() => {
-        history.push(`/dashboard`);
+        history.push(`/dashboard?date=${formData.reservation_date}`);
       });
   };
 
@@ -105,49 +106,45 @@ function ReservationForm() {
             value={formData.last_name}
           />
         </label>
-        <label htmlFor="mobile_number">
-          Mobile Number
-          <input
-            type="text"
-            id="mobile_number"
-            name="mobile_number"
-            onChange={onChangeHandler}
-            value={formData.mobile_number}
-          />
-        </label>
-        <label htmlFor="reservation_date">
-          Date of Reservation
-          <input
-            type="date"
-            id="reservation_date"
-            name="reservation_date"
-            onChange={onChangeHandler}
-            value={formData.reservation_date}
-          />
-        </label>
-        <label htmlFor="reservation_time">
-          Time of Reservation
-          <input
-            type="time"
-            id="reservation_time"
-            name="reservation_time"
-            onChange={onChangeHandler}
-            value={formData.reservation_time}
-          />
-        </label>
-        <label htmlFor="people">
-          Number of People in the party
-          <input
-            type="number"
-            id="people"
-            name="people"
-            onChange={onChangeHandler}
-            value={formData.people}
-          />
-        </label>
+        <label htmlFor="mobile_number">Mobile Number</label>
+        <input
+          type="text"
+          id="mobile_number"
+          name="mobile_number"
+          onChange={onChangeHandler}
+          value={formData.mobile_number}
+        />
+        <label htmlFor="reservation_date">Date of Reservation</label>
+        <input
+          type="date"
+          id="reservation_date"
+          name="reservation_date"
+          onChange={onChangeHandler}
+          value={formData.reservation_date}
+        />
+        <label htmlFor="reservation_time">Time of Reservation</label>
+        <input
+          type="time"
+          id="reservation_time"
+          name="reservation_time"
+          onChange={onChangeHandler}
+          value={formData.reservation_time}
+        />
+        <label htmlFor="people">Number of People in the party</label>
+        <input
+          type="number"
+          id="people"
+          name="people"
+          onChange={onChangeHandler}
+          value={formData.people}
+        />
         <div>
-          <button onClick={cancelHandler}>Cancel</button>
-          <button onClick={submitHandler}>Submit</button>
+          <button type="button" onClick={cancelHandler}>
+            Cancel
+          </button>
+          <button type="submit" onClick={submitHandler}>
+            Submit
+          </button>
         </div>
       </form>
     </div>
