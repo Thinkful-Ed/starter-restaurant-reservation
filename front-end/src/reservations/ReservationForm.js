@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { createReservation } from "../utils/api";
 
@@ -16,10 +16,14 @@ function ReservationForm() {
   const [formData, setFormData] = useState(initialFormData);
 
   const onChangeHandler = (event) => {
-    console.log(event.target.value);
+    const value =
+      event.target.name === "people"
+        ? Number(event.target.value)
+        : event.target.value;
+
     setFormData({
       ...formData,
-      [event.target.name]: `${event.target.value}`,
+      [event.target.name]: value,
     });
   };
 
@@ -29,6 +33,9 @@ function ReservationForm() {
   };
 
   const validateExists = (value) => {
+    if (typeof value === "number") {
+      return value;
+    }
     return value && value.trim();
   };
 
@@ -136,8 +143,9 @@ function ReservationForm() {
           id="people"
           name="people"
           onChange={onChangeHandler}
-          value={formData.people}
+          value={String(formData.people)}
         />
+        {formData.people}
         <div>
           <button type="button" onClick={cancelHandler}>
             Cancel
