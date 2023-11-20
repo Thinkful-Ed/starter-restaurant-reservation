@@ -6,16 +6,22 @@ function ReservationForm({ initialFormState, submitAction }) {
     const history = useHistory();
 
     const handleChange = ({ target }) => {
-      setFormData({
-        ...formData,
-        [target.name]: target.value,
-      });
-    };
-  
+        setFormData((prevFormData) => {
+          const updatedFormData = {
+            ...prevFormData,
+            [target.name]: target.value,
+          };
+          console.log(updatedFormData); // Log the updated state
+          return updatedFormData;
+        });
+      };
+
     function handleSubmit(event) {
       event.preventDefault();
       submitAction(formData);
     }
+
+    // pass in a function as a prop to allow for different cancel actions when the form is reused
 
     function handleCancel() {
         history.goBack();
