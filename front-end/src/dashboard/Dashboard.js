@@ -50,8 +50,6 @@ function Dashboard({ date }) {
         <div>
           <Link to={`/dashboard?date=${previous(currentDate)}`} className="btn btn-info">Previous Day</Link>
           <Link to={`/dashboard?date=${next(currentDate)}`} className="btn btn-info">Next Day</Link>
-        {/* <button onClick={()=>history.push(`/dashboard?date=${previous(currentDate)}`)}>Previous Day</button>
-        <button onClick={()=>history.push(`/dashboard?date=${next(currentDate)}`)}>Next Day</button> */}
         </div>
       </div>
       {reservations.map((reservation) => <ReservationView key={reservation.reservation_id} reservation={reservation} />)}
