@@ -14,12 +14,30 @@ function ReservationForm() {
   };
 
   const [formData, setFormData] = useState(initialFormData);
+  const [isTuesday, setIsTuesday] = useState(false);
+  const [isPastDate, setIsPastDate] = useState(false);
+
+  const validateReservation = (date) => {
+    setIsTuesday(false);
+    setIsPastDate(false);
+    const dateAsDateObject = new Date(date);
+    if (dateAsDateObject.getDay() === 1) {
+      setIsTuesday(true);
+    }
+    const today = new Date();
+    if (dateAsDateObject < today) {
+      setIsPastDate(true);
+    }
+  };
 
   const onChangeHandler = (event) => {
+    const property = event.target.name;
     const value =
-      event.target.name === "people"
-        ? Number(event.target.value)
-        : event.target.value;
+      property === "people" ? Number(event.target.value) : event.target.value;
+
+    if (property === "reservation_date") {
+      validateReservation(value);
+    }
 
     setFormData({
       ...formData,
@@ -129,6 +147,22 @@ function ReservationForm() {
           onChange={onChangeHandler}
           value={formData.reservation_date}
         />
+        {isTuesday ? (
+          <div className="alert alert-danger">
+            We're sorry, the restaurant is closed on Tuesdays. Please choose a
+            reservation date on another day of the week.
+          </div>
+        ) : (
+          <></>
+        )}
+        {isPastDate ? (
+          <div className="alert alert-danger">
+            You cannot make a reservation for a past date. Please choose a
+            future date.
+          </div>
+        ) : (
+          <></>
+        )}
         <label htmlFor="reservation_time">Time of Reservation</label>
         <input
           type="time"

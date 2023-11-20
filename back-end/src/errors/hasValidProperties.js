@@ -25,11 +25,14 @@ function hasValidProperties(...properties) {
 
       //checks if a reservation date is a future date
       const today = new Date();
-      if (resDateAsDateObject <= today) {
+      if (resDateAsDateObject < today) {
         const error = new Error(`The reservation_date must be a future date.`);
         error.status = 400;
         throw error;
       }
+
+      console.log("today", today);
+      console.log("resDateAsObject", resDateAsDateObject);
 
       //reservation time
       const reservationTime = data["reservation_time"];
