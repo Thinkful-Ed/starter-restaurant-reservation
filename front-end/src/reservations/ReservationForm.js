@@ -41,26 +41,26 @@ function ReservationForm() {
       (reservationHour === 10 && reservationMinutes < 30)
     ) {
       setIsInvalidTime(true);
+      return false;
     }
     if (
       reservationHour > 21 ||
       (reservationHour === 21 && reservationMinutes >= 31)
     ) {
       setIsInvalidTime(true);
+      return false;
     }
+    return true;
   };
 
   const onChangeHandler = (event) => {
+    setIsInvalidTime(false);
     const property = event.target.name;
     const value =
       property === "people" ? Number(event.target.value) : event.target.value;
 
     if (property === "reservation_date") {
       validateReservationDate(value);
-    }
-
-    if (property === "reservation_time") {
-      validateReservationTime(value);
     }
 
     setFormData({
@@ -119,6 +119,10 @@ function ReservationForm() {
         //Find the specific error element
         alert(errors[key]);
       });
+      return false;
+    }
+
+    if (!validateReservationTime(formData["reservation_time"])) {
       return false;
     }
 
