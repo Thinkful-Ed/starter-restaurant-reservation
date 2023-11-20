@@ -24,11 +24,14 @@ function ReservationForm() {
     const dateAsDateObject = new Date(date);
     if (dateAsDateObject.getDay() === 1) {
       setIsTuesday(true);
+      return false;
     }
     const today = new Date();
     if (dateAsDateObject < today) {
       setIsPastDate(true);
+      return false;
     }
+    return true;
   };
 
   const validateReservationTime = (time) => {
@@ -55,13 +58,11 @@ function ReservationForm() {
 
   const onChangeHandler = (event) => {
     setIsInvalidTime(false);
+    setIsPastDate(false);
+    setIsTuesday(false);
     const property = event.target.name;
     const value =
       property === "people" ? Number(event.target.value) : event.target.value;
-
-    if (property === "reservation_date") {
-      validateReservationDate(value);
-    }
 
     setFormData({
       ...formData,
@@ -123,6 +124,10 @@ function ReservationForm() {
     }
 
     if (!validateReservationTime(formData["reservation_time"])) {
+      return false;
+    }
+
+    if (!validateReservationDate(formData["reservation_date"])) {
       return false;
     }
 
