@@ -16,8 +16,9 @@ function ReservationForm() {
   const [formData, setFormData] = useState(initialFormData);
   const [isTuesday, setIsTuesday] = useState(false);
   const [isPastDate, setIsPastDate] = useState(false);
+  const [isInvalidTime, setIsInvalidTime] = useState(false);
 
-  const validateReservation = (date) => {
+  const validateReservationDate = (date) => {
     setIsTuesday(false);
     setIsPastDate(false);
     const dateAsDateObject = new Date(date);
@@ -30,13 +31,36 @@ function ReservationForm() {
     }
   };
 
+  const validateReservationTime = (time) => {
+    setIsInvalidTime(false);
+    const timeSplit = time.split(":");
+    const reservationHour = Number(timeSplit[0]);
+    const reservationMinutes = Number(timeSplit[1]);
+    if (
+      reservationHour < 10 ||
+      (reservationHour === 10 && reservationMinutes < 30)
+    ) {
+      setIsInvalidTime(true);
+    }
+    if (
+      reservationHour > 21 ||
+      (reservationHour === 21 && reservationMinutes >= 31)
+    ) {
+      setIsInvalidTime(true);
+    }
+  };
+
   const onChangeHandler = (event) => {
     const property = event.target.name;
     const value =
       property === "people" ? Number(event.target.value) : event.target.value;
 
     if (property === "reservation_date") {
-      validateReservation(value);
+      validateReservationDate(value);
+    }
+
+    if (property === "reservation_time") {
+      validateReservationTime(value);
     }
 
     setFormData({
@@ -171,6 +195,15 @@ function ReservationForm() {
           onChange={onChangeHandler}
           value={formData.reservation_time}
         />
+        {isInvalidTime ? (
+          <div className="alert alert-danger">
+            We're sorry. Our resturant opens at 10:30AM and takes reservations
+            until 9:30PM. Please choose a reservation time within our available
+            hours.
+          </div>
+        ) : (
+          <></>
+        )}
         <label htmlFor="people">Number of People in the party</label>
         <input
           type="number"
