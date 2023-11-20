@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function ReservationForm({ initialFormState, submitAction }) {
     const [formData, setFormData] = useState(initialFormState);
+    // const [isTuesday, setIsTuesday] = useState(false);
+    // const [isFuture, setIsFuture] = useState(true);
     const history = useHistory();
 
     const handleChange = ({ target }) => {
@@ -11,7 +13,7 @@ function ReservationForm({ initialFormState, submitAction }) {
             ...prevFormData,
             [target.name]: target.value,
           };
-          console.log("CURRENT FORM STATE:",updatedFormData);
+          // console.log("CURRENT FORM STATE:",updatedFormData);
           return updatedFormData;
         });
       };
