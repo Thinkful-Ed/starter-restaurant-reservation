@@ -11,7 +11,7 @@ function ReservationForm({ initialFormState, submitAction }) {
             ...prevFormData,
             [target.name]: target.value,
           };
-          console.log(updatedFormData); // Log the updated state
+          console.log("CURRENT FORM STATE:",updatedFormData);
           return updatedFormData;
         });
       };
