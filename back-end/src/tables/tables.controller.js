@@ -1,4 +1,5 @@
 const tableService = require("./tables.service");
+const reservationService = require("../reservations/reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 /**
@@ -16,6 +17,33 @@ async function tableExists(req, res, next) {
   }
 }
 
+async function validateCapacity(req, res, next) {
+  const table = res.locals.table;
+  const reservation = await reservationService.read(
+    req.body.data.reservation_id
+  );
+  if (reservation) {
+    if (table.capacity < reservation.people) {
+      next({
+        status: 400,
+        message: `Reservation ${reservation.reservation_id} has a party size of ${reservation.people} but Table ${table.table_id} can only seat ${table.capacity}.`,
+      });
+    }
+    if (table.status === "Occupied") {
+      next({
+        status: 400,
+        message: `Table ${table.table_id} is already occupied by Reservation ${table.reservation_id}.`,
+      });
+    }
+    next();
+  } else {
+    next({
+      status: 404,
+      message: `Reservation Id${reservation_id} does not exist`,
+    });
+  }
+}
+
 async function update(req, res) {
   const table_id = res.locals.table.table_id;
   const reservation_id = req.body.data.reservation_id;
@@ -24,5 +52,5 @@ async function update(req, res) {
 }
 
 module.exports = {
-  update: [tableExists, update],
+  update: [tableExists, validateCapacity, update],
 };
