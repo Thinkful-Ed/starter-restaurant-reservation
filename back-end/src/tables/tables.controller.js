@@ -17,16 +17,29 @@ async function tableExists(req, res, next) {
   }
 }
 
-async function validateCapacity(req, res, next) {
+async function validateInput(req, res, next) {
+  if (!req.body.data) {
+    next({
+      status: 400,
+      message: `Data is missing.`,
+    });
+  }
+  const reservation_id = req.body.data.reservation_id;
+  if (!reservation_id) {
+    console.log("reservation ID error");
+    next({
+      status: 400,
+      message: `The property reservation_id is missing.`,
+    });
+  }
+
   const table = res.locals.table;
-  const reservation = await reservationService.read(
-    req.body.data.reservation_id
-  );
+  const reservation = await reservationService.read(reservation_id);
   if (reservation) {
     if (table.capacity < reservation.people) {
       next({
         status: 400,
-        message: `Reservation ${reservation.reservation_id} has a party size of ${reservation.people} but Table ${table.table_id} can only seat ${table.capacity}.`,
+        message: `Table ${table.table_id} does not have sufficient capacity since it fits ${table.capacity} but Reservation ${reservation.reservation_id} which has a party size of ${reservation.people} .`,
       });
     }
     if (table.status === "Occupied") {
@@ -39,7 +52,7 @@ async function validateCapacity(req, res, next) {
   } else {
     next({
       status: 404,
-      message: `Reservation Id${reservation_id} does not exist`,
+      message: `Reservation Id ${reservation_id} does not exist`,
     });
   }
 }
@@ -52,5 +65,9 @@ async function update(req, res) {
 }
 
 module.exports = {
-  update: [tableExists, validateCapacity, update],
+  update: [
+    asyncErrorBoundary(tableExists),
+    asyncErrorBoundary(validateInput),
+    asyncErrorBoundary(update),
+  ],
 };
