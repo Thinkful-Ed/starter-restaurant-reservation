@@ -6,6 +6,11 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
  * Update handler for assigning a reservation to a table.
  */
 
+async function list(req, res, next) {
+  const data = await tableService.list();
+  res.status(200).json({ data });
+}
+
 async function tableExists(req, res, next) {
   const table_id = req.params.table_id;
   const table = await tableService.read(table_id);
@@ -26,7 +31,6 @@ async function validateInput(req, res, next) {
   }
   const reservation_id = req.body.data.reservation_id;
   if (!reservation_id) {
-    console.log("reservation ID error");
     next({
       status: 400,
       message: `The property reservation_id is missing.`,
@@ -65,6 +69,7 @@ async function update(req, res) {
 }
 
 module.exports = {
+  list,
   update: [
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(validateInput),
