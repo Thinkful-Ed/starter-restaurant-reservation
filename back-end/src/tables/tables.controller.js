@@ -1,6 +1,8 @@
 const tableService = require("./tables.service");
 const reservationService = require("../reservations/reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const hasProperties = require("../errors/hasProperties");
+const hasValidTableProperties = require("../errors/hasValidTableProperties");
 
 /**
  * Update handler for assigning a reservation to a table.
@@ -9,6 +11,24 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 async function list(req, res, next) {
   const data = await tableService.list();
   res.status(200).json({ data });
+}
+
+const dataExists = (req, res, next) => {
+  if (!req.body.data) {
+    next({
+      status: 400,
+      message: `Data is missing.`,
+    });
+  }
+  next();
+};
+
+const hasTableProperties = hasProperties("table_name", "capacity");
+
+async function create(req, res, next) {
+  const table = req.body.data;
+  const data = await tableService.create(table);
+  res.status(201).json({ data });
 }
 
 async function tableExists(req, res, next) {
@@ -70,6 +90,7 @@ async function update(req, res) {
 
 module.exports = {
   list,
+  create: [dataExists, hasTableProperties, create],
   update: [
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(validateInput),
