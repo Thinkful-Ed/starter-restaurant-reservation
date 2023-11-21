@@ -74,12 +74,11 @@ function validateFutureDate(req, res, next) {
     data: { reservation_date },
   } = req.body;
   const selectedDate = new Date(reservation_date);
-    const currentDate = new Date();
+  const currentDate = new Date();
   if (selectedDate < currentDate) {
     return next({
       status: 400,
-      message:
-        "Reservation date must be in the future.",
+      message: "Reservation date must be in the future.",
     });
   }
   return next();
@@ -93,8 +92,7 @@ function validateIsNotTuesday(req, res, next) {
   if (selectedDate.getDay() === 1) {
     return next({
       status: 400,
-      message:
-        "The restaurant is closed on Tuesdays.",
+      message: "The restaurant is closed on Tuesdays.",
     });
   }
   return next();
