@@ -24,6 +24,7 @@ const dataExists = (req, res, next) => {
 };
 
 const hasTableProperties = hasProperties("table_name", "capacity");
+const hasValidProperties = hasValidTableProperties("table_name", "capacity");
 
 async function create(req, res, next) {
   const table = req.body.data;
@@ -90,7 +91,7 @@ async function update(req, res) {
 
 module.exports = {
   list,
-  create: [dataExists, hasTableProperties, create],
+  create: [dataExists, hasTableProperties, hasValidProperties, create],
   update: [
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(validateInput),
