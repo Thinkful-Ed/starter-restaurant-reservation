@@ -5,7 +5,11 @@ function ReservationForm({ initialFormState, submitAction }) {
     const [formData, setFormData] = useState(initialFormState);
     const [isTuesday, setIsTuesday] = useState(false);
     const [isFuture, setIsFuture] = useState(true);
+    const [showErrors, setShowErrors] = useState(false);
     const history = useHistory();
+
+    // console.log("isTuesday:", isTuesday)
+    // console.log("isFuture:", isFuture)
 
     const handleChange = ({ target }) => {
       setFormData((prevFormData) => {
@@ -37,7 +41,12 @@ function ReservationForm({ initialFormState, submitAction }) {
 
     function handleSubmit(event) {
       event.preventDefault();
-      submitAction(formData);
+      // Show errors only if there are validation issues
+      if (isTuesday || !isFuture) {
+        setShowErrors(true);
+      } else {
+        submitAction(formData);
+      }
     }
 
     // pass in a function as a prop to allow for different cancel actions when the form is reused
@@ -102,7 +111,7 @@ function ReservationForm({ initialFormState, submitAction }) {
               value={formData.reservation_date}
               required
             />
-            {isTuesday || !isFuture ? <div className="alert alert-danger">
+            {showErrors || isTuesday || !isFuture ? <div className="alert alert-danger">
               {isTuesday ? <p>restaurant is not open on Tuesdays</p> : <></>}
               {!isFuture ? <p>please select a future date</p> : <></>}
               </div> : <></>}
