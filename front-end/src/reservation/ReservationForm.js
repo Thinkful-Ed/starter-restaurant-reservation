@@ -1,21 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function ReservationForm({ initialFormState, submitAction }) {
     const [formData, setFormData] = useState(initialFormState);
+    const [isTuesday, setIsTuesday] = useState(false);
+    const [isFuture, setIsFuture] = useState(true);
     const history = useHistory();
 
     const handleChange = ({ target }) => {
-      setFormData({
-        ...formData,
-        [target.name]: target.value,
+      setFormData((prevFormData) => {
+        const updatedFormData = {
+          ...prevFormData,
+          [target.name]: target.value,
+        };
+        return updatedFormData;
       });
     };
+
+    useEffect(() => {
+      // Check date validity whenever formData or its dependencies change
+      isTuesdayValidator(formData.reservation_date);
+      isFutureValidator(formData.reservation_date);
+    }, [formData.reservation_date]);
   
+  
+    const isTuesdayValidator = (date) => {
+      const selectedDate = new Date(date);
+      setIsTuesday(selectedDate.getDay() === 1);
+    };
+  
+    const isFutureValidator = (date) => {
+      const selectedDate = new Date(date);
+      const currentDate = new Date();
+      setIsFuture(selectedDate > currentDate);
+    };
+
     function handleSubmit(event) {
       event.preventDefault();
       submitAction(formData);
     }
+
+    // pass in a function as a prop to allow for different cancel actions when the form is reused
 
     function handleCancel() {
         history.goBack();
@@ -77,6 +102,10 @@ function ReservationForm({ initialFormState, submitAction }) {
               value={formData.reservation_date}
               required
             />
+            {isTuesday || !isFuture ? <div className="alert alert-danger">
+              {isTuesday ? <p>restaurant is not open on Tuesdays</p> : <></>}
+              {!isFuture ? <p>please select a future date</p> : <></>}
+              </div> : <></>}
           </div>
           <div className="form-group">
             <label htmlFor="reservation_time">Time:</label>

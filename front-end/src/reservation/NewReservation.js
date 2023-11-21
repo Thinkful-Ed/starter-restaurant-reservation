@@ -24,7 +24,7 @@ function NewReservation() {
     createReservation(newReservation)
       .then((data) => {
         const dateQueryParam = newReservation.reservation_date;
-        console.log("RESERVATION DATE:", dateQueryParam);
+        // console.log("RESERVATION DATE:", dateQueryParam);
         history.push(`/dashboard?date=${dateQueryParam}`);
       })
       .catch((error) => {
