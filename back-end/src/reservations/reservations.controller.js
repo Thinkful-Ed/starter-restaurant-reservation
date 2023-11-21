@@ -52,7 +52,7 @@ function validateReservationProperties(req, res, next) {
 
 // date is valid
 
-function validateDate(req, res, next) {
+function validateDateFormat(req, res, next) {
   const {
     data: { reservation_date },
   } = req.body;
@@ -66,6 +66,35 @@ function validateDate(req, res, next) {
     });
   }
 
+  return next();
+}
+
+function validateFutureDate(req, res, next) {
+  const {
+    data: { reservation_date },
+  } = req.body;
+  const selectedDate = new Date(reservation_date);
+  const currentDate = new Date();
+  if (selectedDate < currentDate) {
+    return next({
+      status: 400,
+      message: "Reservation date must be in the future.",
+    });
+  }
+  return next();
+}
+
+function validateIsNotTuesday(req, res, next) {
+  const {
+    data: { reservation_date },
+  } = req.body;
+  const selectedDate = new Date(reservation_date);
+  if (selectedDate.getDay() === 1) {
+    return next({
+      status: 400,
+      message: "The restaurant is closed on Tuesdays.",
+    });
+  }
   return next();
 }
 
@@ -138,7 +167,9 @@ module.exports = {
   create: [
     validateReservationData,
     validateReservationProperties,
-    validateDate,
+    validateDateFormat,
+    validateFutureDate,
+    validateIsNotTuesday,
     validateTime,
     validatePeople,
     asyncErrorBoundary(create),

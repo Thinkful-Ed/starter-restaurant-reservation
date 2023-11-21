@@ -8,9 +8,6 @@ function ReservationForm({ initialFormState, submitAction }) {
     const [showErrors, setShowErrors] = useState(false);
     const history = useHistory();
 
-    // console.log("isTuesday:", isTuesday)
-    // console.log("isFuture:", isFuture)
-
     const handleChange = ({ target }) => {
       setFormData((prevFormData) => {
         const updatedFormData = {
