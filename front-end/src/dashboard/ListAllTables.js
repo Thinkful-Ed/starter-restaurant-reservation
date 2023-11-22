@@ -22,7 +22,6 @@ function ListAllTables() {
         <td>{table.capacity}</td>
         <td>{table.status}</td>
         <td>{table.reservation_id ? table.reservation_id : ""}</td>
-        <td></td>
       </tr>
     );
   });

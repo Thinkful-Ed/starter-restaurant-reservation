@@ -81,7 +81,7 @@ export async function createReservation(reservation, signal) {
   return await fetchJson(url, options);
 }
 
-export async function listTables(signal) {
+export async function listTables(params, signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
   return await fetchJson(url, { headers, signal }, []);
 }
