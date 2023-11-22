@@ -3,6 +3,7 @@ import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today, previous, next } from "../utils/date-time";
 import { useLocation, useHistory } from "react-router-dom/cjs/react-router-dom";
+import ListAllTables from "./ListAllTables";
 
 /**
  * Defines the dashboard page.
@@ -19,7 +20,6 @@ function Dashboard({ date }) {
   const dateParam = new URLSearchParams(location.search).get("date");
 
   useEffect(() => {
-    console.log(dateParam);
     if (dateParam) {
       setCurrDate(dateParam);
     }
@@ -66,34 +66,39 @@ function Dashboard({ date }) {
   return (
     <main>
       <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {currDate}</h4>
-      </div>
-      <ErrorAlert error={reservationsError} />
-      <table className="table">
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Mobile Number</th>
-            <th>Reservation Date</th>
-            <th>Reservation Time</th>
-            <th>Party Size</th>
-          </tr>
-        </thead>
-        <tbody>{tableRows}</tbody>
-      </table>
+      {/* RESERVATIONS */}
       <div>
-        <button onClick={buttonHandler} name="previous">
-          Previous
-        </button>
-        <button onClick={buttonHandler} name="today">
-          Today
-        </button>
-        <button onClick={buttonHandler} name="next">
-          Next
-        </button>
+        <div className="d-md-flex mb-3">
+          <h4 className="mb-0">Reservations for {currDate}</h4>
+        </div>
+        <ErrorAlert error={reservationsError} />
+        <table className="table">
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Mobile Number</th>
+              <th>Reservation Date</th>
+              <th>Reservation Time</th>
+              <th>Party Size</th>
+            </tr>
+          </thead>
+          <tbody>{tableRows}</tbody>
+        </table>
+        <div>
+          <button onClick={buttonHandler} name="previous">
+            Previous
+          </button>
+          <button onClick={buttonHandler} name="today">
+            Today
+          </button>
+          <button onClick={buttonHandler} name="next">
+            Next
+          </button>
+        </div>
       </div>
+      {/* Tables */}
+      <ListAllTables />
     </main>
   );
 }
