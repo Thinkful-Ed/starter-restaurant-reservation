@@ -22,11 +22,7 @@ function ListAllTables() {
         <td>{table.capacity}</td>
         <td>{table.status}</td>
         <td>{table.reservation_id ? table.reservation_id : ""}</td>
-        <td>
-          <a href={`/reservations/${table.reservation_id}/seat`}>
-            <button>Seat</button>
-          </a>
-        </td>
+        <td></td>
       </tr>
     );
   });
