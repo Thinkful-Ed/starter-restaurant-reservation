@@ -110,7 +110,8 @@ export async function readTable(table_id, signal) {
 }
 
 export async function createTable(table, signal) {
-  const url = `${API_BASE_URL}/tables/new`;
+  console.log("create table");
+  const url = `${API_BASE_URL}/tables`;
   const options = {
     method: "POST",
     headers,

@@ -7,7 +7,7 @@ function hasValidTableProperties(...properties) {
       const table_name = data["table_name"];
 
       //checks if table name has at least two characters
-      if (table_name.match(/\S\S{2}/) === null) {
+      if (table_name.match(/\S{2}/) === null) {
         const error = new Error(
           `The table_name must have at least 2 characters.`
         );
