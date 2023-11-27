@@ -43,6 +43,11 @@ async function tableExists(req, res, next) {
   }
 }
 
+function read(req, res, next) {
+  const data = res.locals.table;
+  res.status(200).json({ data });
+}
+
 async function validateInput(req, res, next) {
   if (!req.body.data) {
     next({
@@ -91,6 +96,7 @@ async function update(req, res) {
 
 module.exports = {
   list,
+  read: [tableExists, read],
   create: [dataExists, hasTableProperties, hasValidProperties, create],
   update: [
     asyncErrorBoundary(tableExists),
