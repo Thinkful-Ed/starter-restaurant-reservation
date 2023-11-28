@@ -86,7 +86,7 @@ const validateReservationTime = (time, today, sameDay) => {
   }
 };
 
-function hasValidProperties(...properties) {
+function hasValidReservationProperties(...properties) {
   return function (res, req, next) {
     const { data = {} } = res.body;
 
@@ -124,4 +124,4 @@ function hasValidProperties(...properties) {
   };
 }
 
-module.exports = hasValidProperties;
+module.exports = hasValidReservationProperties;

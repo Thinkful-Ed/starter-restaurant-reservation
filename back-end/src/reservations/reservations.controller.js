@@ -1,7 +1,7 @@
 const reservationService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
-const hasValidProperties = require("../errors/hasValidProperties");
+const hasValidReservationProperties = require("../errors/hasValidReservationProperties");
 
 /**
  * List handler for reservation resources
@@ -40,7 +40,7 @@ const hasRequiredProperties = hasProperties(
   "people"
 );
 
-const checksValidProperties = hasValidProperties();
+const checksValidProperties = hasValidReservationProperties();
 
 async function create(req, res, next) {
   const data = await reservationService.create(req.body.data);
