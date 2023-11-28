@@ -103,7 +103,6 @@ function ReservationForm() {
           onChange={onChangeHandler}
           value={String(formData.people)}
         />
-        {formData.people}
         <div>
           <button type="button" onClick={cancelHandler}>
             Cancel

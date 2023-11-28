@@ -4,7 +4,6 @@ import ReservationForm from "./ReservationForm";
 function NewReservation() {
   return (
     <div>
-      "Hello"
       <ReservationForm />
     </div>
   );
