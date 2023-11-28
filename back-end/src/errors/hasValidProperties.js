@@ -3,7 +3,7 @@ function hasValidProperties(...properties) {
     const { data = {} } = res.body;
 
     try {
-      //reservation date
+      //RESERVATION DATE
       const reservationDate = data["reservation_date"];
 
       //checks if reservation date is a date
@@ -34,7 +34,8 @@ function hasValidProperties(...properties) {
       console.log("today", today);
       console.log("resDateAsObject", resDateAsDateObject);
 
-      //reservation time
+      //RESERVATION TIME
+      //checks time is in the right format
       const reservationTime = data["reservation_time"];
       if (
         reservationTime.match(/^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$/) === null
@@ -43,7 +44,35 @@ function hasValidProperties(...properties) {
         error.status = 400;
         throw error;
       }
-      //people is anumber
+
+      //extracts hour and minute from time object
+      const time = data["reservation_time"];
+      const timeSplit = time.split(":");
+      const reservationHour = Number(timeSplit[0]);
+      const reservationMinutes = Number(timeSplit[1]);
+      if (
+        reservationHour < 10 ||
+        (reservationHour === 10 && reservationMinutes < 30)
+      ) {
+        const error = new Error(
+          `The reservation_time must be after opening at 10:30AM.`
+        );
+        error.status = 400;
+        throw error;
+      }
+      if (
+        reservationHour > 21 ||
+        (reservationHour === 21 && reservationMinutes >= 31)
+      ) {
+        const error = new Error(
+          `The reservation_time must be at least 1 hour before closing at 9:30PM.`
+        );
+        error.status = 400;
+        throw error;
+      }
+
+      //PARTY SIZE
+      //checks that people is a number
       const people = data["people"];
 
       if (typeof people !== "number" || people <= 0) {
