@@ -13,9 +13,21 @@ async function list(req, res) {
   res.status(200).json({ data });
 }
 
-async function read(req, res, next) {
+async function reservationExists(req, res, next) {
   const reservation_id = req.params.reservation_id;
-  const data = await reservationService.read(reservation_id);
+  const reservation = await reservationService.read(reservation_id);
+  if (reservation) {
+    next();
+    res.locals.reservation = reservation;
+  }
+  next({
+    status: 404,
+    message: `Reservation id ${reservation_id} does not exist.`,
+  });
+}
+
+function read(req, res, next) {
+  const data = res.locals.reservation;
   res.status(200).json({ data });
 }
 
@@ -36,7 +48,11 @@ async function create(req, res, next) {
 }
 
 module.exports = {
-  list,
-  read,
-  create: [hasRequiredProperties, checksValidProperties, create],
+  list: [asyncErrorBoundary(list)],
+  read: [asyncErrorBoundary(reservationExists), read],
+  create: [
+    hasRequiredProperties,
+    checksValidProperties,
+    asyncErrorBoundary(create),
+  ],
 };

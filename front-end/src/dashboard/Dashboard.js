@@ -23,8 +23,8 @@ function Dashboard({ date }) {
     if (dateParam) {
       setCurrDate(dateParam);
     }
-  }, []);
-  useEffect(loadDashboard, [currDate]);
+  }, [dateParam]);
+  useEffect(loadDashboard, [currDate, history]);
 
   function loadDashboard() {
     history.push(`/dashboard/?date=${currDate}`);

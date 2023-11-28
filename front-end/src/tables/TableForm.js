@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { createTable } from "../utils/api";
-import TableErrors from "./TableErrors";
 import ErrorAlert from "../layout/ErrorAlert";
 
 export const TableForm = () => {
   const history = useHistory();
-  // const initialFormData = {
-  //   table_name: "",
-  //   capacity: 0,
-  // };
   const [formData, setFormData] = useState({});
   const [tableErrors, setTableErrors] = useState(null);
 

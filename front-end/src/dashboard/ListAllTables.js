@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { listTables } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function ListAllTables() {
   //get a list of the tables
@@ -28,6 +29,7 @@ function ListAllTables() {
 
   return (
     <div>
+      <ErrorAlert error={tablesError} />
       <h1>Tables</h1>
       <table className="table">
         <thead>

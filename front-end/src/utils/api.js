@@ -105,10 +105,6 @@ export async function listTables(params, signal) {
   return await fetchJson(url, { headers, signal }, []);
 }
 
-export async function readTable(table_id, signal) {
-  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
-}
-
 export async function createTable(table, signal) {
   console.log("create table");
   const url = `${API_BASE_URL}/tables`;
