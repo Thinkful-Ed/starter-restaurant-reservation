@@ -24,10 +24,10 @@ function Dashboard({ date }) {
       setCurrDate(dateParam);
     }
   }, [dateParam]);
-  useEffect(loadDashboard, [currDate, history]);
+
+  useEffect(loadDashboard, [currDate]);
 
   function loadDashboard() {
-    history.push(`/dashboard/?date=${currDate}`);
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date: currDate }, abortController.signal)
@@ -39,10 +39,10 @@ function Dashboard({ date }) {
   function buttonHandler(event) {
     switch (event.target.name) {
       case "previous":
-        setCurrDate(previous(currDate));
+        history.push(`/dashboard/?date=${previous(currDate)}`);
         break;
       case "next":
-        setCurrDate(next(currDate));
+        history.push(`/dashboard/?date=${next(currDate)}`);
         break;
       default:
         setCurrDate(today());
