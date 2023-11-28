@@ -45,30 +45,10 @@ function SeatReservation() {
       </option>
     );
   });
-  const validateReservationRequest = () => {
-    const errors = {};
-
-    //selected a table
-    if (selectedTable_id === "") {
-      errors.table_selection = "Please select a table";
-    }
-    //reservationId exists
-
-    //table capacity <= party-size
-    if (selectedTableObj.capacity < reservation.people) {
-      console.log("not enough table space");
-    }
-    // if (selectedTableObj.capacity)
-    //table not occupied
-  };
 
   async function submitHandler(event) {
     event.preventDefault();
-
-    const table = await readTable(selectedTable_id);
-    setSelectedTableObj(table);
-    console.log("table obj", selectedTableObj);
-    validateReservationRequest();
+    // validateReservationRequest();
     assignReservationToTable(selectedTable_id, reservation_id);
   }
 
