@@ -7,34 +7,55 @@ function ReservationForm({ initialFormState, submitAction }) {
   const [isFuture, setIsFuture] = useState(true);
   const [isValidTime, setIsValidTime] = useState(true);
   const [showDateErrors, setShowDateErrors] = useState(false);
+  const [showTimeError, setShowTimeError] = useState(false);
   const history = useHistory();
 
 
 
-  const isValidTimeValidator = (selectedTime) => {
-    if (selectedTime) {
-      const openingTime = "10:30";
-      const closingTime = "21:30";
+  // const isValidTimeValidator = (selectedTime) => {
+  //   if (selectedTime) {
+  //     const openingTime = "10:30";
+  //     const closingTime = "21:30";
   
-      const timeStamp = new Date();
-      const currentTime = timeStamp.getHours() * 60 + timeStamp.getMinutes();
-      const selectedTimeMinutes = parseInt(selectedTime.split(":")[0]) * 60 + parseInt(selectedTime.split(":")[1]);
+  //     const timeStamp = new Date();
+  //     const currentTime = timeStamp.getHours() * 60 + timeStamp.getMinutes();
+  //     const selectedTimeMinutes = parseInt(selectedTime.split(":")[0]) * 60 + parseInt(selectedTime.split(":")[1]);
   
-      if (formData.reservation_date === timeStamp.toISOString().split('T')[0] && currentTime > selectedTimeMinutes) {
-        setIsValidTime(false);
-      } else if (selectedTimeMinutes >= parseInt(openingTime.split(":")[0]) * 60 + parseInt(openingTime.split(":")[1]) &&
-        selectedTimeMinutes <= parseInt(closingTime.split(":")[0]) * 60 + parseInt(closingTime.split(":")[1])) {
-        setIsValidTime(true);
-      } else {
-        setIsValidTime(false);
-      }
-    }
-  };
+  //     if (formData.reservation_date === timeStamp.toISOString().split('T')[0] && currentTime > selectedTimeMinutes) {
+  //       setIsValidTime(false);
+  //     } else if (selectedTimeMinutes >= parseInt(openingTime.split(":")[0]) * 60 + parseInt(openingTime.split(":")[1]) &&
+  //       selectedTimeMinutes <= parseInt(closingTime.split(":")[0]) * 60 + parseInt(closingTime.split(":")[1])) {
+  //       setIsValidTime(true);
+  //     } else {
+  //       setIsValidTime(false);
+  //     }
+  //   }
+  // };
 
 
   useEffect(() => {
+    const isValidTimeValidator = (selectedTime) => {
+      if (selectedTime) {
+        const openingTime = "10:30";
+        const closingTime = "21:30";
+    
+        const timeStamp = new Date();
+        const currentTime = timeStamp.getHours() * 60 + timeStamp.getMinutes();
+        const selectedTimeMinutes = parseInt(selectedTime.split(":")[0]) * 60 + parseInt(selectedTime.split(":")[1]);
+    
+        if (formData.reservation_date === timeStamp.toISOString().split('T')[0] && currentTime > selectedTimeMinutes) {
+          setIsValidTime(false);
+        } else if (selectedTimeMinutes >= parseInt(openingTime.split(":")[0]) * 60 + parseInt(openingTime.split(":")[1]) &&
+          selectedTimeMinutes <= parseInt(closingTime.split(":")[0]) * 60 + parseInt(closingTime.split(":")[1])) {
+          setIsValidTime(true);
+        } else {
+          setIsValidTime(false);
+        }
+      }
+    };
+
     isValidTimeValidator(formData.reservation_time)
-  }, [formData.reservation_time])
+  }, [formData.reservation_time, formData.reservation_date])
 
 
   const handleChange = ({ target }) => {
@@ -85,10 +106,17 @@ function ReservationForm({ initialFormState, submitAction }) {
 
   function handleSubmit(event) {
     event.preventDefault();
+  
     // Show errors only if there are validation issues
     if (isTuesday || !isFuture) {
       setShowDateErrors(true);
-    } else {
+    }
+  
+    if (!isValidTime && !showTimeError) {
+      setShowTimeError(true);
+    }
+  
+    if (!isTuesday && isFuture && isValidTime) {
       submitAction(formData);
     }
   }
@@ -154,7 +182,7 @@ function ReservationForm({ initialFormState, submitAction }) {
             value={formData.reservation_date}
             required
           />
-          {(showDateErrors || isTuesday || !isFuture) && (
+          {(showDateErrors) && (
             <div className="alert alert-danger">
               {isTuesday ? <p>restaurant is not open on Tuesdays</p> : <></>}
               {!isFuture ? <p>please select a future date</p> : <></>}
@@ -174,9 +202,9 @@ function ReservationForm({ initialFormState, submitAction }) {
             value={formData.reservation_time}
             required
           />
-          {(!isValidTime) && (
+          {(showTimeError) && (
             <div className="alert alert-danger">
-              <p>The restaurant is not open this time</p>
+              <p>Please select a future time between 10:30 AM and 9:30 PM.</p>
             </div>
           )}
         </div>
