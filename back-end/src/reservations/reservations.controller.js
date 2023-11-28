@@ -13,6 +13,12 @@ async function list(req, res) {
   res.status(200).json({ data });
 }
 
+async function read(req, res, next) {
+  const reservation_id = req.params.reservation_id;
+  const data = await reservationService.read(reservation_id);
+  res.status(200).json({ data });
+}
+
 const hasRequiredProperties = hasProperties(
   "first_name",
   "last_name",
@@ -31,5 +37,6 @@ async function create(req, res, next) {
 
 module.exports = {
   list,
+  read,
   create: [hasRequiredProperties, checksValidProperties, create],
 };
