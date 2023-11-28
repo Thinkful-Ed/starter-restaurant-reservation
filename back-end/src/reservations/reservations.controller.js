@@ -116,6 +116,36 @@ function validateTime(req, res, next) {
   return next();
 }
 
+// validate reservation time is between 10:30 AM and 9:30 PM
+
+function validateReservationTime(req, res, next) {
+  const {
+    data: { reservation_time },
+  } = req.body;
+
+  const isValidTime = isTimeValid(reservation_time);
+
+  if (!isValidTime) {
+    return next({
+      status: 400,
+      message: "Invalid reservation_time. Please select a time between 10:30 AM and 9:30 PM.",
+    });
+  }
+
+  return next();
+}
+
+function isTimeValid(reservation_time) {
+  const openingTime = "10:30";
+  const closingTime = "21:30";
+
+  const selectedTime = new Date(`2000-01-01T${reservation_time}`);
+  const openingDateTime = new Date(`2000-01-01T${openingTime}`);
+  const closingDateTime = new Date(`2000-01-01T${closingTime}`);
+
+  return selectedTime >= openingDateTime && selectedTime <= closingDateTime;
+}
+
 // people is a number over 0
 
 function validatePeople(req, res, next) {
@@ -171,6 +201,7 @@ module.exports = {
     validateFutureDate,
     validateIsNotTuesday,
     validateTime,
+    validateReservationTime,
     validatePeople,
     asyncErrorBoundary(create),
   ],
