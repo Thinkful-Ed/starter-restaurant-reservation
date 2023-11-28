@@ -45,7 +45,8 @@ function Dashboard({ date }) {
         history.push(`/dashboard/?date=${next(currDate)}`);
         break;
       default:
-        setCurrDate(today());
+        history.push(`/dashboard/?date=${today()}`);
+        // setCurrDate(today());
         break;
     }
   }
