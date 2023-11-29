@@ -6,7 +6,11 @@ import {
 import { assignReservationToTable, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
-//Page: /reservations/:reservation_id/seat
+/**
+ * Defines the seat reservation page.
+ * @returns {JSX.Element}
+ */
+
 function SeatReservation() {
   const history = useHistory();
   const { reservation_id } = useParams();

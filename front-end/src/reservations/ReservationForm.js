@@ -3,6 +3,11 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
+/**
+ * Defines reservation form for creating a new reservation.
+ * @returns {JSX.Element}
+ */
+
 function ReservationForm() {
   const history = useHistory();
   const initialFormData = {

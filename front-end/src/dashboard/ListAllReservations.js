@@ -1,3 +1,6 @@
+/**
+ * @returns {JSX.Element} a table with a list of all reservations.
+ */
 function ListAllReservations({ reservations }) {
   const tableRows = reservations.map((reservation) => {
     return (
