@@ -13,6 +13,10 @@ async function list(req, res) {
   res.status(200).json({ data });
 }
 
+/**
+ * Exists handler for reservation resources
+ */
+
 async function reservationExists(req, res, next) {
   const reservation_id = req.params.reservation_id;
   const reservation = await reservationService.read(reservation_id);
@@ -26,11 +30,18 @@ async function reservationExists(req, res, next) {
   });
 }
 
+/**
+ * Read handler for reservation resources
+ */
+
 function read(req, res, next) {
   const data = res.locals.reservation;
   res.status(200).json({ data });
 }
 
+/**
+ * Handler to check if the create request has required properties for reservation resources
+ */
 const hasRequiredProperties = hasProperties(
   "first_name",
   "last_name",
@@ -40,6 +51,9 @@ const hasRequiredProperties = hasProperties(
   "people"
 );
 
+/**
+ * Handler to check if the create request has valid properties for reservation resources
+ */
 const checksValidProperties = hasValidReservationProperties();
 
 async function create(req, res, next) {
