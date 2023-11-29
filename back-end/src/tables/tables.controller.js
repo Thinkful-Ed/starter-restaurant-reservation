@@ -122,6 +122,16 @@ async function update(req, res) {
   res.status(200).json({ data });
 }
 
+async function destroy(req, res, next) {
+  const table = res.locals.table;
+  if (table.status === "Free") {
+    next({ status: 400, message: `Table ${table.table_id} is not occupied.` });
+  } else {
+    await tableService.destroy(table.table_id);
+    res.sendStatus(200);
+  }
+}
+
 module.exports = {
   list,
   read: [asyncErrorBoundary(tableExists), read],
@@ -136,4 +146,5 @@ module.exports = {
     asyncErrorBoundary(validateInput),
     asyncErrorBoundary(update),
   ],
+  destroy: [tableExists, destroy],
 };
