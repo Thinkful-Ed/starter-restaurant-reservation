@@ -1,7 +1,7 @@
 const knex = require("../db/connection");
 
 /**
- * Makes read request to the database for reservations.
+ * Makes read request to the database for a reservation.
  */
 function read(reservation_id) {
   return knex("reservations")
@@ -21,7 +21,7 @@ function list(date) {
 }
 
 /**
- * Makes create request to the database for a reservation.
+ * Makes create request to the database for a new reservation.
  */
 function create(reservation) {
   return knex("reservations")

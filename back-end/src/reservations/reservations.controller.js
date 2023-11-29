@@ -14,7 +14,7 @@ async function list(req, res) {
 }
 
 /**
- * Exists handler for reservation resources
+ * Exists handler for a reservation
  */
 
 async function reservationExists(req, res, next) {
@@ -31,7 +31,7 @@ async function reservationExists(req, res, next) {
 }
 
 /**
- * Read handler for reservation resources
+ * Read handler for a reservation
  */
 
 function read(req, res, next) {
@@ -40,7 +40,7 @@ function read(req, res, next) {
 }
 
 /**
- * Handler to check if the create request has required properties for reservation resources
+ * Handler to check if the create request has required properties for a new reservation
  */
 const hasRequiredProperties = hasProperties(
   "first_name",
@@ -52,7 +52,7 @@ const hasRequiredProperties = hasProperties(
 );
 
 /**
- * Handler to check if the create request has valid properties for reservation resources
+ * Handler to check if the create request has valid properties for a new reservation
  */
 const checksValidProperties = hasValidReservationProperties();
 
