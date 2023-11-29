@@ -74,14 +74,17 @@ function validateFutureDate(req, res, next) {
     data: { reservation_date },
   } = req.body;
 
-  const selectedDate = new Date(reservation_date);
-  const currentDate = new Date();
+  let selectedDate = new Date(reservation_date);
+  let currentDate = new Date();
 
   // Get the time zone offset in minutes
   const timeZoneOffset = currentDate.getTimezoneOffset();
 
   // Adjust the selected date by adding the time zone offset
-  const adjustedSelectedDate = new Date(selectedDate.getTime() + timeZoneOffset * 60 * 1000);
+  let adjustedSelectedDate = new Date(selectedDate.getTime() + timeZoneOffset * 60 * 1000);
+
+  adjustedSelectedDate = adjustedSelectedDate.toISOString().split('T')[0]
+  currentDate = currentDate.toISOString().split('T')[0]
 
   if (adjustedSelectedDate < currentDate) {
     return next({
@@ -158,20 +161,27 @@ function isTimeValid(reservation_time, reservation_date) {
   const openingTime = "10:30";
   const closingTime = "21:30";
 
-  const selectedDateTime = new Date(`${reservation_date}T${reservation_time}`);
-  const currentTime = new Date();
+  const selectedTime = `${reservation_date}T${reservation_time}`;
+  
+  // Adjust the selected time to the client's time zone
+  const selectedDateTime = new Date(selectedTime);
+  const timeZoneOffset = selectedDateTime.getTimezoneOffset();
+  const selectedTimeAdjusted = new Date(selectedDateTime.getTime() - timeZoneOffset * 60 * 1000)
+    .toISOString()
+    .split('T')[1];
 
-  // Check if the reservation_date is the same as the current date
-  const isSameDate = selectedDateTime.toISOString().split('T')[0] === currentTime.toISOString().split('T')[0];
+  // Adjust the current time to the client's time zone
+  // const currentTime = new Date();
+  // const currentTimeAdjusted = new Date(currentTime.getTime() - timeZoneOffset * 60 * 1000)
+  //   .toISOString()
+  //   .split('T')[1];
 
-  if (isSameDate && selectedDateTime < currentTime) {
-    return false;
-  }
 
-  const openingDateTime = new Date(`2000-01-01T${openingTime}`);
-  const closingDateTime = new Date(`2000-01-01T${closingTime}`);
 
-  return selectedDateTime >= openingDateTime && selectedDateTime <= closingDateTime;
+  return (
+    reservation_time >= openingTime &&
+    reservation_time <= closingTime
+  );
 }
 
 // people is a number over 0

@@ -83,3 +83,8 @@ export async function listReservationsByDate(date, signal) {
   const url = `${API_BASE_URL}/reservations?date=${date}`;
   return await fetchJson(url, { signal }, []);
 }
+
+export async function listTables(signal) {
+  const url = `${API_BASE_URL}/tables`;
+  return await fetchJson(url, { signal }, []);
+}
