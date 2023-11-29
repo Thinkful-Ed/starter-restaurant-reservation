@@ -1,9 +1,7 @@
 /**
- * Creates a middleware function that validates that req.body.data has the specified non-falsey properties.
- * @param properties
- *  one or more property name strings.
+ * Creates a middleware function that validates that req.body.data has the valid reservation properties.
  * @returns {function(*, *, *): void}
- *    a middleware function that validates that req.body.data has the specified non-falsey properties.
+ *    a middleware function that validates that req.body.data has the valid reservation properties.
  */
 
 const validateReservationDate = (reservationDate, today, sameDay) => {
@@ -115,12 +113,12 @@ function hasValidReservationProperties(people) {
       const today = new Date();
 
       //RESERVATION DATE
-
       //checks if reservation dates are valid and also returns if the date is the same day as today
       const isSameDay = validateReservationDate(
         data["reservation_date"],
         today
       );
+
       //RESERVATION TIME
       validateReservationTime(data["reservation_time"], today, isSameDay);
 

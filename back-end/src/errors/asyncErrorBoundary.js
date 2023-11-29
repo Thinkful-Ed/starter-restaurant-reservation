@@ -1,3 +1,6 @@
+/**
+ * Wraps around async functions in the controller files to handle any errors.
+ */
 function asyncErrorBoundary(delegate, defaultStatus) {
   return (request, response, next) => {
     Promise.resolve()
