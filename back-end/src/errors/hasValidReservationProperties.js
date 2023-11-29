@@ -1,3 +1,11 @@
+/**
+ * Creates a middleware function that validates that req.body.data has the specified non-falsey properties.
+ * @param properties
+ *  one or more property name strings.
+ * @returns {function(*, *, *): void}
+ *    a middleware function that validates that req.body.data has the specified non-falsey properties.
+ */
+
 const validateReservationDate = (reservationDate, today, sameDay) => {
   //checks if reservation date is a date
   if (reservationDate.match(/^\d{4}-\d{2}-\d{2}$/) === null) {
@@ -86,7 +94,20 @@ const validateReservationTime = (time, today, sameDay) => {
   }
 };
 
-function hasValidReservationProperties(...properties) {
+const validatesReservationPartySize = (people) => {
+  //checks that people is a number
+  if (typeof people !== "number" || people <= 0) {
+    const error = new Error(
+      `A valid number for people is required. ${typeof people !== "number"} ${
+        data["people"]
+      }`
+    );
+    error.status = 400;
+    throw error;
+  }
+};
+
+function hasValidReservationProperties(people) {
   return function (res, req, next) {
     const { data = {} } = res.body;
 
@@ -104,18 +125,7 @@ function hasValidReservationProperties(...properties) {
       validateReservationTime(data["reservation_time"], today, isSameDay);
 
       //PARTY SIZE
-      //checks that people is a number
-      const people = data["people"];
-
-      if (typeof people !== "number" || people <= 0) {
-        const error = new Error(
-          `A valid number for people is required. ${
-            typeof people !== "number"
-          } ${data["people"]}`
-        );
-        error.status = 400;
-        throw error;
-      }
+      validatesReservationPartySize(data["people"]);
 
       next();
     } catch (error) {

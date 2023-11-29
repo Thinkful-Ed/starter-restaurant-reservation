@@ -11,7 +11,7 @@ function ReservationForm() {
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: 0,
+    people: "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -98,6 +98,7 @@ function ReservationForm() {
         <label htmlFor="people">Number of People in the party</label>
         <input
           type="number"
+          min="0"
           id="people"
           name="people"
           onChange={onChangeHandler}
