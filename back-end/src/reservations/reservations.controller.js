@@ -21,8 +21,8 @@ async function reservationExists(req, res, next) {
   const reservation_id = req.params.reservation_id;
   const reservation = await reservationService.read(reservation_id);
   if (reservation) {
-    next();
     res.locals.reservation = reservation;
+    next();
   }
   next({
     status: 404,

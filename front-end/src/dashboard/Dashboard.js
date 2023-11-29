@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today, previous, next } from "../utils/date-time";
-import { useLocation, useHistory } from "react-router-dom/cjs/react-router-dom";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import ListAllTables from "./ListAllTables";
 import ListAllReservations from "./ListAllReservations";
 import useQuery from "../utils/useQuery";
@@ -17,7 +17,6 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [currDate, setCurrDate] = useState(date);
-  const location = useLocation();
   const history = useHistory();
   const query = useQuery();
   const dateParam = query.get("date");

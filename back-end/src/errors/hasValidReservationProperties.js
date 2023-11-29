@@ -96,16 +96,16 @@ const validatesReservationPartySize = (people) => {
   //checks that people is a number
   if (typeof people !== "number" || people <= 0) {
     const error = new Error(
-      `A valid number for people is required. ${typeof people !== "number"} ${
-        data["people"]
-      }`
+      `A valid number for people is required. ${
+        typeof people !== "number"
+      } ${people}`
     );
     error.status = 400;
     throw error;
   }
 };
 
-function hasValidReservationProperties(people) {
+function hasValidReservationProperties() {
   return function (res, req, next) {
     const { data = {} } = res.body;
 
