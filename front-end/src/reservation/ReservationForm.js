@@ -76,7 +76,6 @@ function ReservationForm({ initialFormState, submitAction }) {
     const adjustedSelectedDate = new Date(selectedDate.getTime() + timeZoneOffset * 60 * 1000);
   
     currentDate.setHours(0, 0, 0, 0);
-    console.log("CURRENT:", currentDate, "SELECTED:", adjustedSelectedDate);
   
     setIsFuture(adjustedSelectedDate >= currentDate);
   };

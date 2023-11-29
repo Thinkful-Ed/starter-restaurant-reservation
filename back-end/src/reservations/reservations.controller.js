@@ -73,14 +73,23 @@ function validateFutureDate(req, res, next) {
   const {
     data: { reservation_date },
   } = req.body;
+
   const selectedDate = new Date(reservation_date);
   const currentDate = new Date();
-  if (selectedDate < currentDate) {
+
+  // Get the time zone offset in minutes
+  const timeZoneOffset = currentDate.getTimezoneOffset();
+
+  // Adjust the selected date by adding the time zone offset
+  const adjustedSelectedDate = new Date(selectedDate.getTime() + timeZoneOffset * 60 * 1000);
+
+  if (adjustedSelectedDate < currentDate) {
     return next({
       status: 400,
       message: "Reservation date must be in the future.",
     });
   }
+
   return next();
 }
 
@@ -88,13 +97,23 @@ function validateIsNotTuesday(req, res, next) {
   const {
     data: { reservation_date },
   } = req.body;
+
   const selectedDate = new Date(reservation_date);
-  if (selectedDate.getDay() === 1) {
+  const currentDate = new Date();
+
+  // Get the time zone offset in minutes
+  const timeZoneOffset = currentDate.getTimezoneOffset();
+
+  // Adjust the selected date by adding the time zone offset
+  const adjustedSelectedDate = new Date(selectedDate.getTime() + timeZoneOffset * 60 * 1000);
+
+  if (adjustedSelectedDate.getDay() === 2) {
     return next({
       status: 400,
       message: "The restaurant is closed on Tuesdays.",
     });
   }
+
   return next();
 }
 
@@ -120,10 +139,10 @@ function validateTime(req, res, next) {
 
 function validateReservationTime(req, res, next) {
   const {
-    data: { reservation_time },
+    data: { reservation_time, reservation_date },
   } = req.body;
 
-  const isValidTime = isTimeValid(reservation_time);
+  const isValidTime = isTimeValid(reservation_time, reservation_date);
 
   if (!isValidTime) {
     return next({
@@ -135,15 +154,24 @@ function validateReservationTime(req, res, next) {
   return next();
 }
 
-function isTimeValid(reservation_time) {
+function isTimeValid(reservation_time, reservation_date) {
   const openingTime = "10:30";
   const closingTime = "21:30";
 
-  const selectedTime = new Date(`2000-01-01T${reservation_time}`);
+  const selectedDateTime = new Date(`${reservation_date}T${reservation_time}`);
+  const currentTime = new Date();
+
+  // Check if the reservation_date is the same as the current date
+  const isSameDate = selectedDateTime.toISOString().split('T')[0] === currentTime.toISOString().split('T')[0];
+
+  if (isSameDate && selectedDateTime < currentTime) {
+    return false;
+  }
+
   const openingDateTime = new Date(`2000-01-01T${openingTime}`);
   const closingDateTime = new Date(`2000-01-01T${closingTime}`);
 
-  return selectedTime >= openingDateTime && selectedTime <= closingDateTime;
+  return selectedDateTime >= openingDateTime && selectedDateTime <= closingDateTime;
 }
 
 // people is a number over 0
