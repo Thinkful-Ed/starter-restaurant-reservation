@@ -8,7 +8,7 @@ function TableForm() {
   });
   const [nameIsTwoChars, setNameIsTwoChars] = useState(true);
   const [capacityIsOverOne, setCapacityIsOverOne] = useState(true);
-  const [formSubmitted, setFormSubmitted] = useState(false); // New state
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const history = useHistory();
 
   const handleChange = ({ target }) => {
@@ -17,7 +17,6 @@ function TableForm() {
         ...prevFormData,
         [target.name]: target.value,
       };
-      console.log(updatedFormData);
       return updatedFormData;
     });
   };
@@ -39,7 +38,7 @@ function TableForm() {
       }
     
       function validateCapacity(capacity) {
-        return formSubmitted ? Number(capacity) >= 2 : true;
+        return formSubmitted ? Number(capacity) >= 1 : true;
       }
 
 
