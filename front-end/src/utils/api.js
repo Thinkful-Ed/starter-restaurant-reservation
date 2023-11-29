@@ -68,14 +68,24 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+/**
+ * Retrieves a specific reservation id.
+ * @returns {Promise<[reservation]>}
+ *  a promise that resolves to a possibly empty array of reservation saved in the database.
+ */
 export async function readReservation(reservation_id, signal) {
   console.log("api.js", reservation_id);
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
   return await fetchJson(url, { headers, signal }, []);
 }
 
+/**
+ * Creates a new reservation.
+ * @returns {Promise<[reservation]>}
+ * a promise that resolves to the created reservation.
+ */
 export async function createReservation(reservation, signal) {
-  const url = `${API_BASE_URL}/reservations/new`;
+  const url = `${API_BASE_URL}/reservations/`;
   const options = {
     method: "POST",
     headers,
@@ -85,6 +95,11 @@ export async function createReservation(reservation, signal) {
   return await fetchJson(url, options);
 }
 
+/**
+ * Assigns a reservation to a table.
+ * @returns {Promise<[table]>}
+ * a promise that resolves to the updated table.
+ */
 export async function assignReservationToTable(
   table_id,
   reservation_id,
@@ -100,11 +115,21 @@ export async function assignReservationToTable(
   return await fetchJson(url, options);
 }
 
+/**
+ * Retrieves all existing tables.
+ * @returns {Promise<[table]>}
+ *  a promise that resolves to a possibly empty array of reservation saved in the database.
+ */
 export async function listTables(params, signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
   return await fetchJson(url, { headers, signal }, []);
 }
 
+/**
+ * Creates a new table.
+ * @returns {Promise<[table]>}
+ * a promise that resolves to the created table.
+ */
 export async function createTable(table, signal) {
   console.log("create table");
   const url = `${API_BASE_URL}/tables`;

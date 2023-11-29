@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
+/**
+ * @returns {JSX.Element} a table with a list of all tables.
+ *
+ */
+
 function ListAllTables() {
-  //get a list of the tables
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
 

@@ -1,5 +1,8 @@
 const knex = require("../db/connection");
 
+/**
+ * Makes read request to the database for a reservation.
+ */
 function read(reservation_id) {
   return knex("reservations")
     .select("*")
@@ -7,6 +10,9 @@ function read(reservation_id) {
     .first();
 }
 
+/**
+ * Makes list request to the database for reservations ordered by reservation time.
+ */
 function list(date) {
   return knex("reservations")
     .select("*")
@@ -14,6 +20,9 @@ function list(date) {
     .orderBy("reservation_time");
 }
 
+/**
+ * Makes create request to the database for a new reservation.
+ */
 function create(reservation) {
   return knex("reservations")
     .insert(reservation)

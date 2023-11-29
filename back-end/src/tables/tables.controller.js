@@ -5,14 +5,16 @@ const hasProperties = require("../errors/hasProperties");
 const hasValidTableProperties = require("../errors/hasValidTableProperties");
 
 /**
- * Update handler for assigning a reservation to a table.
+ * List handler for table resources
  */
-
 async function list(req, res, next) {
   const data = await tableService.list();
   res.status(200).json({ data });
 }
 
+/**
+ * Handler to check that data exists for a create table request
+ */
 const dataExists = (req, res, next) => {
   if (!req.body.data) {
     next({
@@ -23,14 +25,29 @@ const dataExists = (req, res, next) => {
   next();
 };
 
-const hasTableProperties = hasProperties("table_name", "capacity");
+/**
+ * Handler to check if the create request has required table properties
+ */
+
+const hasRequiredProperties = hasProperties("table_name", "capacity");
+/**
+ * Handler to check if the create request has valid table properties
+ */
 const hasValidProperties = hasValidTableProperties("table_name", "capacity");
+
+/**
+ * Create handler for a new reservation
+ */
 
 async function create(req, res, next) {
   const table = req.body.data;
   const data = await tableService.create(table);
   res.status(201).json({ data });
 }
+
+/**
+ * Handler to check that data exists for an update table request
+ */
 
 async function tableExists(req, res, next) {
   const table_id = req.params.table_id;
@@ -43,10 +60,17 @@ async function tableExists(req, res, next) {
   }
 }
 
+/**
+ * Read handler for a reservation
+ */
 function read(req, res, next) {
   const data = res.locals.table;
   res.status(200).json({ data });
 }
+
+/**
+ * Handler to validate input for updating a table
+ */
 
 async function validateInput(req, res, next) {
   if (!req.body.data) {
@@ -87,6 +111,10 @@ async function validateInput(req, res, next) {
   }
 }
 
+/**
+ * Update handler for assigning a reservation to a table
+ */
+
 async function update(req, res) {
   const table_id = res.locals.table.table_id;
   const reservation_id = req.body.data.reservation_id;
@@ -96,8 +124,13 @@ async function update(req, res) {
 
 module.exports = {
   list,
-  read: [tableExists, read],
-  create: [dataExists, hasTableProperties, hasValidProperties, create],
+  read: [asyncErrorBoundary(tableExists), read],
+  create: [
+    dataExists,
+    hasRequiredProperties,
+    hasValidProperties,
+    asyncErrorBoundary(create),
+  ],
   update: [
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(validateInput),

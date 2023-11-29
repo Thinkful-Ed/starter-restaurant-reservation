@@ -1,7 +1,7 @@
 const reservationService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
-const hasValidProperties = require("../errors/hasValidProperties");
+const hasValidReservationProperties = require("../errors/hasValidReservationProperties");
 
 /**
  * List handler for reservation resources
@@ -13,12 +13,16 @@ async function list(req, res) {
   res.status(200).json({ data });
 }
 
+/**
+ * Exists handler for a reservation
+ */
+
 async function reservationExists(req, res, next) {
   const reservation_id = req.params.reservation_id;
   const reservation = await reservationService.read(reservation_id);
   if (reservation) {
-    next();
     res.locals.reservation = reservation;
+    next();
   }
   next({
     status: 404,
@@ -26,11 +30,18 @@ async function reservationExists(req, res, next) {
   });
 }
 
+/**
+ * Read handler for a reservation
+ */
+
 function read(req, res, next) {
   const data = res.locals.reservation;
   res.status(200).json({ data });
 }
 
+/**
+ * Handler to check if the create request has required properties for a new reservation
+ */
 const hasRequiredProperties = hasProperties(
   "first_name",
   "last_name",
@@ -40,7 +51,10 @@ const hasRequiredProperties = hasProperties(
   "people"
 );
 
-const checksValidProperties = hasValidProperties();
+/**
+ * Handler to check if the create request has valid properties for a new reservation
+ */
+const checksValidProperties = hasValidReservationProperties();
 
 async function create(req, res, next) {
   const data = await reservationService.create(req.body.data);

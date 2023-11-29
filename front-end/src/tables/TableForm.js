@@ -3,6 +3,11 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { createTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
+/**
+ * Defines tables form for creating a new table.
+ * @returns {JSX.Element}
+ */
+
 export const TableForm = () => {
   const history = useHistory();
   const [formData, setFormData] = useState({});

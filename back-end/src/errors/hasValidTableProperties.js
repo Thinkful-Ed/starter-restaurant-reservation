@@ -1,3 +1,9 @@
+/**
+ * Creates a middleware function that validates that req.body.data has the valid table properties.
+ * @returns {function(*, *, *): void}
+ *    a middleware function that validates that req.body.data has the valid table properties.
+ */
+
 function hasValidTableProperties(...properties) {
   return function (req, res, next) {
     const { data = {} } = req.body;
