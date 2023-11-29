@@ -5,6 +5,7 @@ import { today, previous, next } from "../utils/date-time";
 import { useLocation, useHistory } from "react-router-dom/cjs/react-router-dom";
 import ListAllTables from "./ListAllTables";
 import ListAllReservations from "./ListAllReservations";
+import useQuery from "../utils/useQuery";
 
 /**
  * Defines the dashboard page.
@@ -18,7 +19,8 @@ function Dashboard({ date }) {
   const [currDate, setCurrDate] = useState(date);
   const location = useLocation();
   const history = useHistory();
-  const dateParam = new URLSearchParams(location.search).get("date");
+  const query = useQuery();
+  const dateParam = query.get("date");
 
   useEffect(() => {
     if (dateParam) {
@@ -54,13 +56,12 @@ function Dashboard({ date }) {
   return (
     <main>
       <h1>Dashboard</h1>
-      {/* RESERVATIONS */}
+
       <div>
         <div className="d-md-flex mb-3">
           <h4 className="mb-0">Reservations for {currDate}</h4>
         </div>
         <ErrorAlert error={reservationsError} />
-
         <ListAllReservations reservations={reservations} />
         <div>
           <button onClick={buttonHandler} name="previous">
@@ -74,7 +75,6 @@ function Dashboard({ date }) {
           </button>
         </div>
       </div>
-      {/* Tables */}
       <ListAllTables />
     </main>
   );
