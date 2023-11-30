@@ -2,6 +2,7 @@ const reservationService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 const hasValidReservationProperties = require("../errors/hasValidReservationProperties");
+const hasValidUpdateResStatusProperties = require("../errors/hasValidUpdateResStatusProperties");
 
 /**
  * List handler for reservation resources
@@ -23,11 +24,12 @@ async function reservationExists(req, res, next) {
   if (reservation) {
     res.locals.reservation = reservation;
     next();
+  } else {
+    next({
+      status: 404,
+      message: `Reservation id ${reservation_id} does not exist.`,
+    });
   }
-  next({
-    status: 404,
-    message: `Reservation id ${reservation_id} does not exist.`,
-  });
 }
 
 /**
@@ -61,6 +63,19 @@ async function create(req, res, next) {
   res.status(201).json({ data });
 }
 
+const checkUpdateProperties = hasValidUpdateResStatusProperties();
+
+async function updateStatus(req, res, next) {
+  const reservation = res.locals.reservation;
+  const newStatus = req.body.data.status;
+  const data = await reservationService.update(
+    reservation.reservation_id,
+    newStatus
+  );
+  console.log("****checking***", reservation.status, data);
+  res.status(200).json({ data });
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   read: [asyncErrorBoundary(reservationExists), read],
@@ -68,5 +83,10 @@ module.exports = {
     hasRequiredProperties,
     checksValidProperties,
     asyncErrorBoundary(create),
+  ],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(checkUpdateProperties),
+    asyncErrorBoundary(updateStatus),
   ],
 };
