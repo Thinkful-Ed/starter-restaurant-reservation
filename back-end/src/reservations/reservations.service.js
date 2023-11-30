@@ -21,14 +21,20 @@ function read(reservation_id) {
       .first();
   }
 
-function list(date) {
+function listByDate(date) {
     return knex("reservations")
     .select("*")
     .where({ "reservations.reservation_date": date })
 }
 
+function list() {
+  return knex("reservations")
+  .select("*")
+}
+
 module.exports = {
     create,
     read,
-    list
+    list,
+    listByDate
 }

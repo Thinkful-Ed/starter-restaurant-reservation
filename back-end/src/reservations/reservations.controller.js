@@ -176,6 +176,8 @@ function isTimeValid(reservation_time, reservation_date) {
   //   .toISOString()
   //   .split('T')[1];
 
+  // optional later, add functionality to check if the time is earlier on the current day
+
 
 
   return (
@@ -220,15 +222,22 @@ function read(req, res) {
 
 async function list(req, res) {
   const date = req.query.date;
-  const data = await reservationsService.list(date);
-  data.sort((A, B) => {
-    const timeA = A.reservation_time;
-    const timeB = B.reservation_time;
-    return timeA.localeCompare(timeB);
-  });
-  res.json({
-    data,
-  });
+  if (date) {
+    const data = await reservationsService.listByDate(date);
+    data.sort((A, B) => {
+      const timeA = A.reservation_time;
+      const timeB = B.reservation_time;
+      return timeA.localeCompare(timeB);
+    });
+    res.json({
+      data,
+    });
+  } else {
+    const data = await reservationsService.list();
+    res.json({
+      data,
+    })
+  }
 }
 
 module.exports = {
