@@ -131,7 +131,6 @@ export async function listTables(params, signal) {
  * a promise that resolves to the created table.
  */
 export async function createTable(table, signal) {
-  console.log("create table");
   const url = `${API_BASE_URL}/tables`;
   const options = {
     method: "POST",
@@ -140,4 +139,10 @@ export async function createTable(table, signal) {
     signal,
   };
   return await fetchJson(url, options);
+}
+
+export async function deleteReservationFromTable(table_id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = { method: "DELETE", signal };
+  return await fetchJson(url, options, {});
 }
