@@ -124,11 +124,11 @@ async function update(req, res) {
 
 async function destroy(req, res, next) {
   const table = res.locals.table;
-  if (table.status === "Free") {
+  if (table.reservation_id === null) {
     next({ status: 400, message: `Table ${table.table_id} is not occupied.` });
   } else {
     await tableService.destroy(table.table_id);
-    res.sendStatus(200);
+    res.status(200).json({ data: "Deleted" });
   }
 }
 
@@ -146,5 +146,5 @@ module.exports = {
     asyncErrorBoundary(validateInput),
     asyncErrorBoundary(update),
   ],
-  destroy: [tableExists, destroy],
+  destroy: [asyncErrorBoundary(tableExists), asyncErrorBoundary(destroy)],
 };
