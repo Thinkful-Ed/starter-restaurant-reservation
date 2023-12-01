@@ -23,15 +23,20 @@ function ListAllTables({}) {
     return () => abortController.abort();
   }
 
-  function finishHandler(table_id) {
+  function finishHandler(table_id, reservation_id) {
     if (
       window.confirm(
         "Is this table ready to seat new guests? This cannot be undone."
       )
     ) {
-      deleteReservationFromTable(table_id).then(() => {
-        loadTables();
-      });
+      const abortController = new AbortController();
+      deleteReservationFromTable(table_id, abortController.signal)
+        .then(() => {
+          window.location.reload();
+        })
+        .catch(setTablesError);
+
+      return () => abortController.abort();
     }
   }
 
@@ -46,7 +51,9 @@ function ListAllTables({}) {
           {table.reservation_id ? (
             <button
               data-table-id-finish={`${table.table_id}`}
-              onClick={() => finishHandler(table.table_id)}
+              onClick={() =>
+                finishHandler(table.table_id, table.reservation_id)
+              }
             >
               Finish
             </button>
