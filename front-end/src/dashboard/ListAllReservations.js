@@ -26,23 +26,27 @@ function ListAllReservations({ reservations }) {
     );
   });
 
-  return (
-    <table className="table">
-      <thead>
-        <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Mobile Number</th>
-          <th>Status</th>
-          <th>Reservation Date</th>
-          <th>Reservation Time</th>
-          <th>Party Size</th>
-          <th>Seat</th>
-        </tr>
-      </thead>
-      <tbody>{tableRows}</tbody>
-    </table>
-  );
+  if (reservations.length === 0) {
+    return <p>No reservations found</p>;
+  } else {
+    return (
+      <table className="table">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Mobile Number</th>
+            <th>Status</th>
+            <th>Reservation Date</th>
+            <th>Reservation Time</th>
+            <th>Party Size</th>
+            <th>Seat</th>
+          </tr>
+        </thead>
+        <tbody>{tableRows}</tbody>
+      </table>
+    );
+  }
 }
 
 export default ListAllReservations;

@@ -7,7 +7,7 @@ import ErrorAlert from "../layout/ErrorAlert";
  *
  */
 
-function ListAllTables({}) {
+function ListAllTables() {
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
 
