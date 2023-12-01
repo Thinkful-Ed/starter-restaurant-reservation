@@ -21,9 +21,6 @@ function ReservationForm({ initialFormState, submitAction }) {
         const currentTime = timeStamp.getHours() * 60 + timeStamp.getMinutes();
         const selectedTimeMinutes = parseInt(selectedTime.split(":")[0]) * 60 + parseInt(selectedTime.split(":")[1]);
 
-        console.log("CURRENT",timeStamp)
-        console.log("SELECTED", selectedTime)
-
         if (formData.reservation_date === timeStamp.toISOString().split('T')[0] && currentTime > selectedTimeMinutes) {
           setIsValidTime(false);
         } else if (selectedTimeMinutes >= parseInt(openingTime.split(":")[0]) * 60 + parseInt(openingTime.split(":")[1]) &&

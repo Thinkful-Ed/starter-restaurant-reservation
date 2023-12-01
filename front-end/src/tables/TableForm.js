@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { createTable } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function TableForm() {
   const [formData, setFormData] = useState({
@@ -9,7 +11,22 @@ function TableForm() {
   const [nameIsTwoChars, setNameIsTwoChars] = useState(true);
   const [capacityIsOverOne, setCapacityIsOverOne] = useState(true);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [tablesError, setTablesError] = useState(null);
   const history = useHistory();
+
+  function handleNewTableSubmit(newTable) {
+    newTable = { ...newTable, capacity: Number(newTable.capacity) };
+    setTablesError(null); // Clear any previous errors
+    createTable(newTable)
+      .then((data) => {
+        history.push("/dashboard");
+      })
+      .catch((error) => {
+        // Handle API request errors here
+        console.error("Error creating table:", error);
+        setTablesError(error); // Set the error state for rendering in UI
+      });
+  }
 
   const handleChange = ({ target }) => {
     setFormData((prevFormData) => {
@@ -29,23 +46,25 @@ function TableForm() {
     event.preventDefault();
     setFormSubmitted(true); // Set the formSubmitted state to true
     // Additional logic or API calls can be added here
+    if (capacityIsOverOne && nameIsTwoChars) {
+      handleNewTableSubmit(formData)
+    }
   }
 
-
   useEffect(() => {
-    function validateTableName(name) {
-        return formSubmitted ? name.length >= 2 : true;
-      }
     
-      function validateCapacity(capacity) {
-        return formSubmitted ? Number(capacity) >= 1 : true;
-      }
-
-
+    function validateTableName(name) {
+      return name.length >= 2;
+    }
+  
+    function validateCapacity(capacity) {
+      return Number(capacity) >= 1;
+    }
+  
     // Validate functions return boolean values
     const isNameValid = validateTableName(formData.table_name);
     const isCapacityValid = validateCapacity(formData.capacity);
-
+  
     // Update state based on validation results
     setNameIsTwoChars(isNameValid);
     setCapacityIsOverOne(isCapacityValid);
@@ -53,6 +72,7 @@ function TableForm() {
 
   return (
     <div>
+      <ErrorAlert error={tablesError} />
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="table_name">Table Name:</label>

@@ -1,6 +1,14 @@
 const tablesService = require("./tables.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
+
+async function create(req, res) {
+  const { data } = req.body;
+  await tablesService.create(data);
+  res.status(201).json({ data });
+}
+
+
 async function list(req, res, next) {
     const data = await tablesService.list();
     data.sort((A, B) => {
@@ -14,5 +22,6 @@ async function list(req, res, next) {
   }
 
 module.exports = {
+    create: asyncErrorBoundary(create),
     list: asyncErrorBoundary(list),
 }
