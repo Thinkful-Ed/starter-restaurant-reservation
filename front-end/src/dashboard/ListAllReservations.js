@@ -8,14 +8,20 @@ function ListAllReservations({ reservations }) {
         <td>{reservation.first_name}</td>
         <td>{reservation.last_name}</td>
         <td>{reservation.mobile_number}</td>
+        <td data-reservation-id-status={`${reservation.reservation_id}`}>
+          {reservation.status}
+        </td>
         <td>{reservation.reservation_date}</td>
         <td>{reservation.reservation_time}</td>
         <td>{reservation.people}</td>
-        <td>
-          <a href={`/reservations/${reservation.reservation_id}/seat`}>
-            <button>Seat</button>
-          </a>
-        </td>
+
+        {reservation.status === "booked" ? (
+          <td>
+            <a href={`/reservations/${reservation.reservation_id}/seat`}>
+              <button>Seat</button>
+            </a>
+          </td>
+        ) : null}
       </tr>
     );
   });
@@ -27,6 +33,7 @@ function ListAllReservations({ reservations }) {
           <th>First Name</th>
           <th>Last Name</th>
           <th>Mobile Number</th>
+          <th>Status</th>
           <th>Reservation Date</th>
           <th>Reservation Time</th>
           <th>Party Size</th>

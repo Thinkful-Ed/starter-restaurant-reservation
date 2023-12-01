@@ -105,6 +105,30 @@ const validatesReservationPartySize = (people) => {
   }
 };
 
+const validateReservationStatus = (status = "booked") => {
+  if (status !== "booked" && status !== "seated" && status !== "finished") {
+    const error = new Error(
+      `The reservation_status cannot be ${status}. The status must be either "booked", "seated", or "finished.`
+    );
+    error.status = 400;
+    throw error;
+  }
+  if (status === "seated") {
+    const error = new Error(
+      `The reservation_status of a new reservation cannot be "seated". It must be "booked".`
+    );
+    error.status = 400;
+    throw error;
+  }
+  if (status === "finished") {
+    const error = new Error(
+      `The reservation_status of a new reservation cannot be "finished". It must be "booked".`
+    );
+    error.status = 400;
+    throw error;
+  }
+};
+
 function hasValidReservationProperties() {
   return function (res, req, next) {
     const { data = {} } = res.body;
@@ -124,6 +148,9 @@ function hasValidReservationProperties() {
 
       //PARTY SIZE
       validatesReservationPartySize(data["people"]);
+
+      //RESERVATION STATUS
+      validateReservationStatus(data["status"]);
 
       next();
     } catch (error) {

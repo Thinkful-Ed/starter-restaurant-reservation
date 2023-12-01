@@ -11,12 +11,13 @@ function read(reservation_id) {
 }
 
 /**
- * Makes list request to the database for reservations ordered by reservation time.
+ * Makes list request to the database for reservations on a given date, ordered by reservation time.
  */
 function list(date) {
   return knex("reservations")
     .select("*")
-    .where({ reservation_date: date })
+    .whereNot({ status: "finished" })
+    .andWhere({ reservation_date: date })
     .orderBy("reservation_time");
 }
 
@@ -29,8 +30,20 @@ function create(reservation) {
     .returning("*")
     .then((createdRecords) => createdRecords[0]);
 }
+
+function update(reservation_id, newStatus) {
+  return knex("reservations")
+    .select("*")
+    .where({ reservation_id: reservation_id })
+    .update({
+      status: newStatus,
+    })
+    .returning("*")
+    .then((updatedRecords) => updatedRecords[0]);
+}
 module.exports = {
   read,
   list,
   create,
+  update,
 };

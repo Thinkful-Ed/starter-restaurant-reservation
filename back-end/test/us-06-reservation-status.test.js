@@ -268,6 +268,7 @@ describe("US-06 - Reservation status", () => {
       expect(finishResponse.body.error).toBeUndefined();
       expect(finishResponse.status).toBe(200);
 
+      console.log("reservationOne", reservationOne);
       const reservationsResponse = await request(app)
         .get(
           `/reservations?date=${asDateString(reservationOne.reservation_date)}`
@@ -286,6 +287,7 @@ describe("US-06 - Reservation status", () => {
 });
 
 function asDateString(date) {
+  console.log(date);
   return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
     .toString(10)
     .padStart(2, "0")}-${date.getDate().toString(10).padStart(2, "0")}`;

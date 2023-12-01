@@ -3,7 +3,11 @@ import {
   useHistory,
   useParams,
 } from "react-router-dom/cjs/react-router-dom.min";
-import { assignReservationToTable, listTables } from "../utils/api";
+import {
+  assignReservationToTable,
+  listTables,
+  updateReservationStatus,
+} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 /**
@@ -45,6 +49,9 @@ function SeatReservation() {
       reservation_id,
       abortController.signal
     )
+      .then(() => history.push(`/dashboard`))
+      .catch(setReservationsError);
+    updateReservationStatus(reservation_id, "seated", abortController.signal)
       .then(() => history.push(`/dashboard`))
       .catch(setReservationsError);
     return () => abortController.abort();
