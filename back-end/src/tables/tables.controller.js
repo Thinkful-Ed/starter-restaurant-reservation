@@ -1,5 +1,6 @@
 const tableService = require("./tables.service");
 const reservationService = require("../reservations/reservations.service");
+const reservationController = require("../reservations/reservations.controller");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 const hasValidTableProperties = require("../errors/hasValidTableProperties");
@@ -102,6 +103,12 @@ async function validateInput(req, res, next) {
         message: `Table ${table.table_id} is already occupied by Reservation ${table.reservation_id}.`,
       });
     }
+    if (reservation.status === "seated") {
+      next({
+        status: 400,
+        message: `Reservation ${reservation.reservation_id} is already seated at another table.`,
+      });
+    }
     next();
   } else {
     next({
@@ -120,6 +127,12 @@ async function update(req, res) {
   const reservation_id = req.body.data.reservation_id;
   const data = await tableService.update(table_id, reservation_id);
   res.status(200).json({ data });
+  //updates reservation status to "seated"
+  const reservationData = await reservationService.update(
+    reservation_id,
+    "seated"
+  );
+  res.status(200).json({ data: reservationData });
 }
 
 async function destroy(req, res, next) {
@@ -129,6 +142,8 @@ async function destroy(req, res, next) {
   } else {
     await tableService.destroy(table.table_id);
     res.status(200).json({ data: "Deleted" });
+    //calls the reservation server to update the deleted reservation's status to "finished".
+    reservationService.update(table.reservation_id, "finished");
   }
 }
 
