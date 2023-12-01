@@ -5,12 +5,15 @@ const hasValidReservationProperties = require("../errors/hasValidReservationProp
 const hasValidUpdateResStatusProperties = require("../errors/hasValidUpdateResStatusProperties");
 
 /**
- * List handler for reservation resources
+ * List handler for reservation resources for a particular reservation_date or mobile_number
  */
 
 async function list(req, res) {
   const date = req.query.date;
-  const data = await reservationService.list(date);
+  const mobile_number = req.query.mobile_number;
+  const data = mobile_number
+    ? await reservationService.search(mobile_number)
+    : await reservationService.list(date);
   res.status(200).json({ data });
 }
 
