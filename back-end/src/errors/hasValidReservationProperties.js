@@ -105,7 +105,7 @@ const validatesReservationPartySize = (people) => {
   }
 };
 
-const validateReservationStatus = (status) => {
+const validateReservationStatus = (status = "booked") => {
   if (status !== "booked" && status !== "seated" && status !== "finished") {
     const error = new Error(
       `The reservation_status cannot be ${status}. The status must be either "booked", "seated", or "finished.`

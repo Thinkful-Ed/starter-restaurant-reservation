@@ -72,7 +72,6 @@ async function updateStatus(req, res, next) {
     reservation.reservation_id,
     newStatus
   );
-  console.log("****checking***", reservation.status, data);
   res.status(200).json({ data });
 }
 
