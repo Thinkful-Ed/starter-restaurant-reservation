@@ -6,7 +6,8 @@ function hasValidUpdateResStatusProperties(req, res, next) {
       if (
         newStatus !== "booked" &&
         newStatus !== "seated" &&
-        newStatus !== "finished"
+        newStatus !== "finished" &&
+        newStatus !== "cancelled"
       ) {
         const error = new Error(
           `The reservation_status cannot be ${newStatus}. The status must be either "booked", "seated", or "finished.`
@@ -16,9 +17,13 @@ function hasValidUpdateResStatusProperties(req, res, next) {
       }
 
       //checks if the existing status is finished, if so no update because a table that is finished cannot be seated or booked again
-      if (reservation.status === "finished") {
+
+      if (
+        reservation.status === "finished" ||
+        reservation.status === "cancelled"
+      ) {
         const error = new Error(
-          `This reservation has already been finished. You cannot change the status of a reservation once it is finished. Please submit a new reservation if needed.`
+          `This reservation has already been ${reservation.status}. You cannot change the status of a reservation once it is ${reservation.status}. Please submit a new reservation if needed.`
         );
         error.status = 400;
         throw error;

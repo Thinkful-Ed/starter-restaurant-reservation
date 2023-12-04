@@ -367,7 +367,6 @@ describe("US-08 - Change an existing reservation", () => {
         .put(`/reservations/${reservation.reservation_id}/status`)
         .set("Accept", "application/json")
         .send({ data: { status } });
-
       expect(response.body.data).toHaveProperty("status", status);
       expect(response.status).toBe(200);
     });
