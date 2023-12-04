@@ -1,5 +1,6 @@
-function validateReservationDate(reservationDate, today, sameDay) {
+function validateReservationDate(reservationDate, today) {
   //checks if reservation date is a date
+
   if (reservationDate.match(/^\d{4}-\d{2}-\d{2}$/) === null) {
     const error = new Error(`A valid reservation_date is required.`);
     error.status = 400;

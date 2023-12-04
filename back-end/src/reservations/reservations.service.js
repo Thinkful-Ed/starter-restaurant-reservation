@@ -31,7 +31,7 @@ function create(reservation) {
     .then((createdRecords) => createdRecords[0]);
 }
 
-function update(reservation_id, newStatus) {
+function updateStatus(reservation_id, newStatus) {
   return knex("reservations")
     .select("*")
     .where({ reservation_id: reservation_id })
@@ -50,10 +50,20 @@ function search(mobile_number) {
     )
     .orderBy("reservation_date");
 }
+
+function editReservation(reservation) {
+  return knex("reservations")
+    .select("*")
+    .where({ reservation_id: reservation.reservation_id })
+    .update(reservation)
+    .returning("*")
+    .then((updatedRecords) => updatedRecords[0]);
+}
 module.exports = {
   read,
   list,
   create,
-  update,
+  updateStatus,
   search,
+  editReservation,
 };

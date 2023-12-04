@@ -101,9 +101,7 @@ describe("US-04 - Seat reservation - E2E", () => {
         fullPage: true,
       });
 
-      console.log("before submitted");
       await page.click("button[type=submit]");
-      console.log("submitted");
 
       await page.screenshot({
         path: ".screenshots/us-04-omit-capacity-after.png",
