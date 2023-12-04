@@ -79,6 +79,11 @@ export async function createReservation(reservation, signal) {
   return await fetchJson(url, options, reservation);
 }
 
+export async function readReservation(reservationId, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservationId}`;
+  return await fetchJson(url, { signal }, {});
+}
+
 export async function listReservationsByDate(date, signal) {
   const url = `${API_BASE_URL}/reservations?date=${date}`;
   return await fetchJson(url, { signal }, []);
@@ -86,6 +91,11 @@ export async function listReservationsByDate(date, signal) {
 
 export async function listTables(signal) {
   const url = `${API_BASE_URL}/tables`;
+  return await fetchJson(url, { signal }, []);
+}
+
+export async function listAvailableTables(signal) {
+  const url = `${API_BASE_URL}/tables?free=true`;
   return await fetchJson(url, { signal }, []);
 }
 
@@ -98,4 +108,17 @@ export async function createTable(table, signal) {
     signal,
   };
   return await fetchJson(url, options, table);
+}
+
+export async function updateTable(updatedTable, signal) {
+  const url = `${API_BASE_URL}/tables/${updatedTable.table_id}/seat`;
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({data: updatedTable}),
+    signal,
+  };
+  return await fetchJson(url, options);
 }

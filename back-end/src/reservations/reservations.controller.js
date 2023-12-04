@@ -207,8 +207,8 @@ function validatePeople(req, res, next) {
 
 async function create(req, res) {
   const { data } = req.body;
-  await reservationsService.create(data);
-  res.status(201).json({ data });
+  const newReservation = await reservationsService.create(data);
+  res.status(201).json({ data: newReservation[0] });
 }
 
 function read(req, res) {

@@ -12,13 +12,34 @@ function create(newTable) {
   }
 
 
+  function read(table_id) {
+    return knex("tables").select("*").where({ table_id }).first();
+  }
+
+
 function list() {
     return knex("tables")
     .select("*")
 }
 
+function listAvailable() {
+    return knex("tables")
+    .select("*")
+    .where({ "tables.reservation_id": null })
+}
+
+function update(updatedTable) {
+    return knex("tables")
+      .where({ table_id: updatedTable.table_id })
+      .update({ reservation_id: updatedTable.reservation_id })
+      .returning("*");
+  }
+
 
 module.exports = {
     create,
-    list
+    read,
+    list,
+    listAvailable,
+    update
 }

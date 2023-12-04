@@ -92,7 +92,7 @@ function Dashboard({ date }) {
       <div>
       <h4 className="mb-0">All Reservations</h4>
         {allReservations.map((reservation)=> <AllReservationsView key={reservation.reservation_id} reservation={reservation} />)}
-      </div>
+      </div> 
 
 
       <ErrorAlert error={reservationsError} />
