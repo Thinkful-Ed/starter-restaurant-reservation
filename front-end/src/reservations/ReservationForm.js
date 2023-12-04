@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { createReservation } from "../utils/api";
+import { createReservation, editReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 /**
@@ -8,19 +8,17 @@ import ErrorAlert from "../layout/ErrorAlert";
  * @returns {JSX.Element}
  */
 
-function ReservationForm() {
+function ReservationForm({ initialFormData, isEditing = false }) {
   const history = useHistory();
-  const initialFormData = {
-    first_name: "",
-    last_name: "",
-    mobile_number: "",
-    reservation_date: "",
-    reservation_time: "",
-    people: "",
-  };
-
   const [formData, setFormData] = useState(initialFormData);
   const [reservationsErrors, setReservationsErrors] = useState(null);
+
+  useEffect(() => {
+    if (initialFormData) {
+    }
+    console.log("initialFormData", initialFormData);
+    setFormData(initialFormData);
+  }, []);
 
   const onChangeHandler = (event) => {
     const property = event.target.name;
@@ -31,6 +29,7 @@ function ReservationForm() {
       ...formData,
       [event.target.name]: value,
     });
+    console.log(value);
   };
 
   const cancelHandler = (event) => {
@@ -43,11 +42,17 @@ function ReservationForm() {
 
     const abortController = new AbortController();
 
-    createReservation(formData, abortController.signal)
-      .then(() => {
-        history.push(`/dashboard?date=${formData.reservation_date}`);
-      })
-      .catch(setReservationsErrors);
+    if (isEditing) {
+      editReservation(formData, abortController.signal).then(() => {
+        history.goBack().catch(setReservationsErrors);
+      });
+    } else {
+      createReservation(formData, abortController.signal)
+        .then(() => {
+          history.push(`/dashboard?date=${formData.reservation_date}`);
+        })
+        .catch(setReservationsErrors);
+    }
     return () => abortController.abort();
   };
 
@@ -63,7 +68,7 @@ function ReservationForm() {
             id="first_name"
             name="first_name"
             onChange={onChangeHandler}
-            value={formData.first_name}
+            value={formData.first_name ? formData.first_name : ""}
           />
         </label>
         <label htmlFor="last_name">
@@ -73,7 +78,7 @@ function ReservationForm() {
             id="last_name"
             name="last_name"
             onChange={onChangeHandler}
-            value={formData.last_name}
+            value={formData.last_name ? formData.last_name : ""}
           />
         </label>
         <label htmlFor="mobile_number">Mobile Number</label>
@@ -82,7 +87,7 @@ function ReservationForm() {
           id="mobile_number"
           name="mobile_number"
           onChange={onChangeHandler}
-          value={formData.mobile_number}
+          value={formData.mobile_number ? formData.mobile_number : ""}
         />
         <label htmlFor="reservation_date">Date of Reservation</label>
         <input
@@ -90,7 +95,7 @@ function ReservationForm() {
           id="reservation_date"
           name="reservation_date"
           onChange={onChangeHandler}
-          value={formData.reservation_date}
+          value={formData.reservation_date ? formData.reservation_date : ""}
         />
         <label htmlFor="reservation_time">Time of Reservation</label>
         <input
@@ -98,7 +103,7 @@ function ReservationForm() {
           id="reservation_time"
           name="reservation_time"
           onChange={onChangeHandler}
-          value={formData.reservation_time}
+          value={formData.reservation_time ? formData.reservation_time : ""}
         />
         <label htmlFor="people">Number of People in the party</label>
         <input
@@ -107,7 +112,7 @@ function ReservationForm() {
           id="people"
           name="people"
           onChange={onChangeHandler}
-          value={String(formData.people)}
+          value={formData.people ? String(formData.people) : ""}
         />
         <div>
           <button type="button" onClick={cancelHandler}>

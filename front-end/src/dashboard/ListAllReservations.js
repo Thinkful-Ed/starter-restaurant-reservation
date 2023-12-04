@@ -14,6 +14,11 @@ function ListAllReservations({ reservations }) {
         <td>{reservation.reservation_date}</td>
         <td>{reservation.reservation_time}</td>
         <td>{reservation.people}</td>
+        <td>
+          <a href={`/reservations/${reservation.reservation_id}/edit`}>
+            <button>Edit</button>
+          </a>
+        </td>
 
         {reservation.status === "booked" ? (
           <td>
@@ -40,6 +45,7 @@ function ListAllReservations({ reservations }) {
             <th>Reservation Date</th>
             <th>Reservation Time</th>
             <th>Party Size</th>
+            <th>Edit</th>
             <th>Seat</th>
           </tr>
         </thead>
