@@ -170,6 +170,7 @@ describe("US-04 - Seat reservation - E2E", () => {
     });
 
     test("seating reservation at table #1 makes the table occupied", async () => {
+
       await page.waitForSelector('option:not([value=""])');
 
       await page.screenshot({
