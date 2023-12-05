@@ -86,7 +86,7 @@ function Dashboard({ date }) {
 
       <div>
       <h4 className="mb-0">Tables</h4>
-        {tables.map((table)=> <TableView key={table.table_id} table={table} />)}
+        {tables.map((table)=> <TableView key={table.table_id} table={table} setTables={setTables} />)}
       </div>
 
       <div>
