@@ -32,9 +32,17 @@ function list() {
   .select("*")
 }
 
+function update(updatedReservation) {
+  return knex("reservations")
+    .where({ reservation_id: updatedReservation.reservation_id })
+    .update({ status: updatedReservation.status })
+    .returning("*");
+}
+
 module.exports = {
     create,
     read,
     list,
-    listByDate
+    listByDate,
+    update
 }

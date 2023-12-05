@@ -240,6 +240,15 @@ async function list(req, res) {
   }
 }
 
+async function update(req, res, next) {
+  const updatedReservation = {
+    ...req.body.data,
+    reservation_id: res.locals.reservation.reservation_id,
+  };
+  const data = await reservationsService.update(updatedReservation);
+  res.json({ data });
+}
+
 module.exports = {
   create: [
     validateReservationData,
@@ -254,4 +263,5 @@ module.exports = {
   ],
   read: [asyncErrorBoundary(reservationExists), read],
   list: asyncErrorBoundary(list),
+  update: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(update)]
 };
