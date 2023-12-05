@@ -9,7 +9,7 @@ async function tableExists(req, res, next) {
     res.locals.table = table;
     return next();
   }
-  next({ status: 404, message: "Table cannot be found." });
+  next({ status: 404, message: `Table ${req.params.table_id} cannot be found.` });
 }
 
 function validateTableHasData(req, res, next) {
@@ -105,6 +105,15 @@ function validateTableIsAvailable(req, res, next) {
   }
 }
 
+function validateTableIsNotOccupied(req, res, next) {
+  const table = res.locals.table;
+  if (!table.reservation_id) {
+    return next({ status: 400, message: "This table is not occupied." });
+  } else {
+    return next();
+  }
+}
+
 // CRUD
 
 async function create(req, res) {
@@ -152,6 +161,12 @@ async function list(req, res, next) {
     res.json({ data });
   }
 
+  async function deleteReservationId(req, res, next) {
+    const table_id= res.locals.table.table_id
+    await tablesService.deleteReservationId(table_id);
+    res.sendStatus(200);
+  }
+
 module.exports = {
     create: [
       validateTableHasData,
@@ -169,5 +184,9 @@ module.exports = {
       validateSufficientCapacity,
       validateTableIsAvailable,
       asyncErrorBoundary(update)
-    ]
+    ],
+    delete: [
+      asyncErrorBoundary(tableExists),
+      validateTableIsNotOccupied,
+      asyncErrorBoundary(deleteReservationId)]
 }

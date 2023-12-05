@@ -122,3 +122,29 @@ export async function updateTable(updatedTable, signal) {
   };
   return await fetchJson(url, options);
 }
+
+export async function deleteReservationIdFromTable(tableId, reservationId, signal) {
+  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
+  const options = { method: "DELETE", signal };
+
+  try {
+    const response = await fetch(url, options);
+    if (response.ok) {
+      return response;
+    } else {
+      console.error(`Error: ${response.status} - ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error("Error deleting reservation:", error.message);
+    throw error;
+  }
+}
+
+// export async function deleteReservationIdFromTable(table_id, reservation_id) {
+//   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+//   const options = {
+//     method: "DELETE",
+//     headers,
+//   };
+//   return await fetchJson(url, options, {});
+// }
