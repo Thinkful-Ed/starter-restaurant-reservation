@@ -6,7 +6,7 @@ function create(newTable) {
       .insert({
         table_name: newTable.table_name,
         capacity: newTable.capacity,
-        reservation_id: null
+        reservation_id: newTable.reservation_id
       })
       .returning("*");
   }

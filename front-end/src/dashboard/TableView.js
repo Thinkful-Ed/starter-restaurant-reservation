@@ -25,11 +25,9 @@ function TableView({ table, setTables }) {
         <p>Name: {table.table_name} - Capacity: {table.capacity}</p>
         <p data-table-id-status={table.table_id}>
         {table.reservation_id ? 
-          // <p className={`data-table-id-status=${table.table_id}`}>Occupied</p>
-          "Occupied"
+          "occupied"
          : 
-          // <p className={`data-table-id-status=${table.table_id}`}>Free</p>
-          "Free"
+          "free"
         }</p>
         {table.reservation_id ? (
         <button onClick={finishTable} data-table-id-finish={table.table_id} data-reservation-id-finish={table.reservation_id} className="btn btn-primary m-1">
