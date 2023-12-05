@@ -43,7 +43,6 @@ export const TableForm = () => {
   };
 
   const submitHandler = (event) => {
-    console.log("submitting form");
     event.preventDefault();
 
     const abortController = new AbortController();

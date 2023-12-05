@@ -59,8 +59,6 @@ async function fetchJson(url, options, onCancel) {
  */
 
 export async function listReservations(params, signal) {
-  console.log("being called");
-  console.log("params", params);
   const url = new URL(`${API_BASE_URL}/reservations`);
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
@@ -76,7 +74,6 @@ export async function listReservations(params, signal) {
  *  a promise that resolves to a possibly empty array of reservation saved in the database.
  */
 export async function readReservation(reservation_id, signal) {
-  console.log("api.js", reservation_id);
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
   return await fetchJson(url, { headers, signal }, []);
 }
@@ -164,12 +161,12 @@ export async function updateReservationStatus(
   return await fetchJson(url, options);
 }
 
-export async function editReservation(reservation, signal) {
-  const url = `${API_BASE_URL}/reservations/${reservation.reservation_id}}`;
+export async function editReservation(reservation, reservation_id, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({ data: { reservation } }),
+    body: JSON.stringify({ data: reservation }),
     signal,
   };
   return await fetchJson(url, options);

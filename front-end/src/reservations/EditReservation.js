@@ -11,19 +11,29 @@ import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 function EditReservation() {
   const { reservation_id } = useParams();
   const [reservation, setReservation] = useState(null);
+  const [reservationsErrors, setReservationsErrors] = useState(null);
   const [initialFormData, setInitialFormData] = useState({});
 
   useEffect(loadReservation, [reservation_id]);
 
+  //get reservation query
+  //load reservation
+  //set form data
+  //load form with form data
+
   function loadReservation() {
     if (reservation_id !== null) {
-      readReservation(reservation_id).then(setReservation);
+      const abortController = new AbortController();
+
+      readReservation(reservation_id, abortController.signal)
+        .then(setReservation)
+        .catch(setReservationsErrors);
+      return () => abortController.abort();
     }
   }
 
   useEffect(() => {
-    console.log(reservation);
-    if (reservation) {
+    if (reservation !== null) {
       setInitialFormData({
         first_name: reservation.first_name,
         last_name: reservation.last_name,
@@ -35,15 +45,18 @@ function EditReservation() {
     }
   }, [reservation]);
 
-  console.log("reservation_id", reservation_id);
-  console.log(initialFormData);
-
-  return initialFormData ? (
+  return reservation !== null ? (
     <div>
-      <ReservationForm initialFormData={initialFormData} isEditing={true} />
+      <ReservationForm
+        initialFormData={initialFormData}
+        isEditing={true}
+        setReservationsErrors={setReservationsErrors}
+        reservationsErrors={reservationsErrors}
+        reservation_id={reservation_id}
+      />
     </div>
   ) : (
-    <div>loading</div>
+    <h1>Loading...</h1>
   );
 }
 

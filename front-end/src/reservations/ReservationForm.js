@@ -8,17 +8,21 @@ import ErrorAlert from "../layout/ErrorAlert";
  * @returns {JSX.Element}
  */
 
-function ReservationForm({ initialFormData, isEditing = false }) {
+function ReservationForm({
+  initialFormData,
+  isEditing = false,
+  reservationsErrors,
+  setReservationsErrors,
+  reservation_id = false,
+}) {
   const history = useHistory();
   const [formData, setFormData] = useState(initialFormData);
-  const [reservationsErrors, setReservationsErrors] = useState(null);
 
   useEffect(() => {
     if (initialFormData) {
     }
-    console.log("initialFormData", initialFormData);
     setFormData(initialFormData);
-  }, []);
+  }, [initialFormData]);
 
   const onChangeHandler = (event) => {
     const property = event.target.name;
@@ -29,7 +33,6 @@ function ReservationForm({ initialFormData, isEditing = false }) {
       ...formData,
       [event.target.name]: value,
     });
-    console.log(value);
   };
 
   const cancelHandler = (event) => {
@@ -43,9 +46,12 @@ function ReservationForm({ initialFormData, isEditing = false }) {
     const abortController = new AbortController();
 
     if (isEditing) {
-      editReservation(formData, abortController.signal).then(() => {
-        history.goBack().catch(setReservationsErrors);
-      });
+      editReservation(formData, reservation_id, abortController.signal)
+        .then()
+        .then(() => {
+          history.goBack();
+        })
+        .catch(setReservationsErrors);
     } else {
       createReservation(formData, abortController.signal)
         .then(() => {
