@@ -3,7 +3,7 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 function ReservationView({reservation}) {
 
-  const {first_name, last_name, people, mobile_number, reservation_id, reservation_time, reservation_date} = reservation
+  const {first_name, last_name, people, mobile_number, status, reservation_id, reservation_time, reservation_date} = reservation
 
     return (
         <div>
@@ -18,7 +18,8 @@ function ReservationView({reservation}) {
       Reservation Time: {reservation_time}
     </p>
     <p>RESERVATION DATE: {reservation_date}</p>
-    {reservation_id && <Link to={`/reservations/${reservation_id}/seat`} className="btn btn-info">Seat</Link>}
+    <p data-reservation-id-status={reservation_id}>Status: {status}</p>
+    {(status === "booked") && <Link to={`/reservations/${reservation_id}/seat`} className="btn btn-info">Seat</Link>}
   </div>
 </div>
         </div>
