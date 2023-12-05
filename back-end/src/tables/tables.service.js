@@ -39,6 +39,12 @@ function update(updatedTable) {
       .returning("*");
   }
 
+  function deleteReservationId(table_id) {
+    return knex("tables")
+      .where({ table_id })
+      .update({ reservation_id: null });
+  }
+
 
 module.exports = {
     create,
@@ -46,5 +52,6 @@ module.exports = {
     readReservation,
     list,
     listAvailable,
-    update
+    update,
+    deleteReservationId
 }
