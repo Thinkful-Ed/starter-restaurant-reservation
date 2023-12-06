@@ -34,6 +34,9 @@ function Dashboard({ date }) {
     setReservationsError(null);
     listReservations({ date: currDate }, abortController.signal)
       .then(setReservations)
+      .then(() => {
+        console.log(reservations);
+      })
       .catch(setReservationsError);
     return () => abortController.abort();
   }
@@ -55,7 +58,6 @@ function Dashboard({ date }) {
   return (
     <main>
       <h1>Dashboard</h1>
-
       <div>
         <div className="d-md-flex mb-3">
           <h4 className="mb-0">Reservations for {currDate}</h4>

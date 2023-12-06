@@ -3,6 +3,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 const hasValidReservationProperties = require("../errors/hasValidReservationProperties");
 const hasValidUpdateResStatusProperties = require("../errors/hasValidUpdateResStatusProperties");
+const hasValidTableProperties = require("../errors/hasValidTableProperties");
 
 /**
  * List handler for reservation resources for a particular reservation_date or mobile_number
@@ -71,10 +72,22 @@ const checkUpdateProperties = hasValidUpdateResStatusProperties();
 async function updateStatus(req, res, next) {
   const reservation = res.locals.reservation;
   const newStatus = req.body.data.status;
-  const data = await reservationService.update(
+  const data = await reservationService.updateStatus(
     reservation.reservation_id,
     newStatus
   );
+  res.status(200).json({ data });
+}
+
+const checksEditProperties = hasValidReservationProperties(true);
+
+async function editReservation(req, res, next) {
+  const currReservation = res.locals.reservation;
+  const updatedReservation = {
+    reservation_id: currReservation.reservation_id,
+    ...req.body.data,
+  };
+  const data = await reservationService.editReservation(updatedReservation);
   res.status(200).json({ data });
 }
 
@@ -90,5 +103,11 @@ module.exports = {
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(checkUpdateProperties),
     asyncErrorBoundary(updateStatus),
+  ],
+  editReservation: [
+    asyncErrorBoundary(reservationExists),
+    hasRequiredProperties,
+    checksEditProperties,
+    asyncErrorBoundary(editReservation),
   ],
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReservationForm from "./ReservationForm";
 
 /**
@@ -7,9 +7,23 @@ import ReservationForm from "./ReservationForm";
  */
 
 function NewReservation() {
+  const [reservationsErrors, setReservationsErrors] = useState(null);
+  const initialFormData = {
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    reservation_date: "",
+    reservation_time: "",
+    people: "",
+  };
+
   return (
     <div>
-      <ReservationForm />
+      <ReservationForm
+        initialFormData={initialFormData}
+        setReservationsErrors={setReservationsErrors}
+        reservationsErrors={reservationsErrors}
+      />
     </div>
   );
 }
