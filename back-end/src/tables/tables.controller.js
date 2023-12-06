@@ -80,7 +80,9 @@ async function validateInput(req, res, next) {
       message: `Data is missing.`,
     });
   }
+  console.log("data", req.body.data);
   const reservation_id = req.body.data.reservation_id;
+  console.log(reservation_id);
   if (!reservation_id) {
     next({
       status: 400,
@@ -91,7 +93,13 @@ async function validateInput(req, res, next) {
   const table = res.locals.table;
   const reservation = await reservationService.read(reservation_id);
   if (reservation) {
+    console.log("reservation", reservation);
+    console.log("table", table);
+    console.log("table capacity", table.capacity);
+    console.log("reservation", reservation.people);
+
     if (table.capacity < reservation.people) {
+      console.log("throwing error");
       next({
         status: 400,
         message: `Table ${table.table_id} does not have sufficient capacity since it fits ${table.capacity} but Reservation ${reservation.reservation_id} which has a party size of ${reservation.people} .`,
