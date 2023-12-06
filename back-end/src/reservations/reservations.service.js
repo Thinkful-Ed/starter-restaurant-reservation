@@ -21,11 +21,18 @@ function read(reservation_id) {
       .first();
   }
 
-function listByDate(date) {
+  function listByDate(date) {
     return knex("reservations")
-    .select("*")
-    .where({ "reservations.reservation_date": date })
-}
+      .select("*")
+      .where({
+        "reservations.reservation_date": date,
+        "reservations.status": "seated"
+      })
+      .orWhere({
+        "reservations.reservation_date": date,
+        "reservations.status": "booked"
+      });
+  }
 
 function list() {
   return knex("reservations")
