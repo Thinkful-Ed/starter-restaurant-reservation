@@ -123,7 +123,7 @@ export async function updateTable(updatedTable, signal) {
   return await fetchJson(url, options);
 }
 
-export async function deleteReservationIdFromTable(tableId, reservationId, signal) {
+export async function deleteReservationIdFromTable(tableId, signal) {
   const url = `${API_BASE_URL}/tables/${tableId}/seat`;
   const options = { method: "DELETE", signal };
 

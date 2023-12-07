@@ -35,15 +35,31 @@ function listAvailable() {
 function update(updatedTable) {
     return knex("tables")
       .where({ table_id: updatedTable.table_id })
-      .update({ reservation_id: updatedTable.reservation_id })
+      .update({
+        reservation_id: updatedTable.reservation_id,
+      })
       .returning("*");
   }
+
+function updateReservationStatusToSeated(reservation_id) {
+  return knex("reservations")
+  .where({ reservation_id })
+  .update({ status: "seated" })
+  .returning("*");
+}
 
   function deleteReservationId(table_id) {
     return knex("tables")
       .where({ table_id })
       .update({ reservation_id: null });
   }
+
+function updateReservationStatusToFinished(reservation_id) {
+  return knex("reservations")
+  .where({ reservation_id })
+  .update( {status: "finished"} )
+  .returning("*")
+}
 
 
 module.exports = {
@@ -53,5 +69,7 @@ module.exports = {
     list,
     listAvailable,
     update,
+    updateReservationStatusToSeated,
+    updateReservationStatusToFinished,
     deleteReservationId
 }

@@ -21,20 +21,35 @@ function read(reservation_id) {
       .first();
   }
 
-function listByDate(date) {
+  function listByDate(date) {
     return knex("reservations")
-    .select("*")
-    .where({ "reservations.reservation_date": date })
-}
+      .select("*")
+      .where({
+        "reservations.reservation_date": date,
+        "reservations.status": "seated"
+      })
+      .orWhere({
+        "reservations.reservation_date": date,
+        "reservations.status": "booked"
+      });
+  }
 
 function list() {
   return knex("reservations")
   .select("*")
 }
 
+function update(updatedReservation) {
+  return knex("reservations")
+    .where({ reservation_id: updatedReservation.reservation_id })
+    .update({ status: updatedReservation.status })
+    .returning("*");
+}
+
 module.exports = {
     create,
     read,
     list,
-    listByDate
+    listByDate,
+    update
 }

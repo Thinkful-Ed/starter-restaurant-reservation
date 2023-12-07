@@ -1,7 +1,7 @@
 import React from "react";
-import { deleteReservationIdFromTable, listTables } from "../utils/api";
+import { deleteReservationIdFromTable, listTables, listReservationsByDate } from "../utils/api";
 
-function TableView({ table, setTables }) {
+function TableView({ table, setTables, setReservations, date }) {
 
   async function finishTable() {
     const shouldFinish = window.confirm(
@@ -10,8 +10,10 @@ function TableView({ table, setTables }) {
 
     if (shouldFinish) {
       try {
-        await deleteReservationIdFromTable(table.table_id, table.reservation_id);
+        await deleteReservationIdFromTable(table.table_id);
         const updatedTables = await listTables();
+        const updatedReservations = await listReservationsByDate(date);
+        setReservations(updatedReservations)
         setTables(updatedTables);
       } catch (error) {
         console.error("Error finishing table:", error.message);

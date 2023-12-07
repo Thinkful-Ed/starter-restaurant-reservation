@@ -196,10 +196,51 @@ function validatePeople(req, res, next) {
   if (typeof people !== "number" || people <= 0) {
     return next({
       status: 400,
-      message: `Property 'people' must be a number greater than 0.`,
+      message: "Property 'people' must be a number greater than 0.",
     });
   }
 
+  return next();
+}
+
+// VALIDATION FOR US-05 RESERVATION STATUS
+
+function validateStatusIsNotSeatedOrFinished(req, res, next) {
+  const {
+    data: { status },
+  } = req.body;
+   if (status === "seated" || status === "finished") {
+    return next({
+      status: 400,
+      message: `New reservation cannot have a ${status} status.`,
+    });
+  }
+  return next();
+}
+
+function validateStatusIsUnknown(req, res, next) {
+  const {
+    data: { status },
+  } = req.body;
+  const validStatuses = ["booked", "seated", "finished"];
+
+  if (!validStatuses.includes(status)) {
+    return next({
+      status: 400,
+      message: `Reservation cannot have a ${status} status. Valid statuses are: ${validStatuses.join(", ")}.`,
+    });
+  }
+  return next();
+}
+
+function validateIsNotCurrentlyFinished(req, res, next) {
+  const reservation = res.locals.reservation;
+  if (reservation.status === "finished") {
+    return next({
+      status: 400,
+      message: "This reservation is already finished and cannot be updated.",
+    });
+  }
   return next();
 }
 
@@ -232,12 +273,24 @@ async function list(req, res) {
     res.json({
       data,
     });
+
+    // the response below lists all reservations and may be used by a feature in the future
+
   } else {
     const data = await reservationsService.list();
     res.json({
       data,
     })
   }
+}
+
+async function update(req, res, next) {
+  const updatedReservation = {
+    ...req.body.data,
+    reservation_id: res.locals.reservation.reservation_id,
+  };
+  const data = await reservationsService.update(updatedReservation);
+  res.status(200).json({ data: data[0] });
 }
 
 module.exports = {
@@ -250,8 +303,13 @@ module.exports = {
     validateTime,
     validateReservationTime,
     validatePeople,
+    validateStatusIsNotSeatedOrFinished,
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), read],
   list: asyncErrorBoundary(list),
+  update: [asyncErrorBoundary(reservationExists),
+    validateStatusIsUnknown,
+    validateIsNotCurrentlyFinished,
+    asyncErrorBoundary(update)]
 };
