@@ -221,7 +221,7 @@ function validateStatusIsUnknown(req, res, next) {
   const {
     data: { status },
   } = req.body;
-  const validStatuses = ["booked", "seated", "finished"];
+  const validStatuses = ["booked", "seated", "finished", "cancelled"];
 
   if (!validStatuses.includes(status)) {
     return next({
@@ -318,5 +318,17 @@ module.exports = {
   update: [asyncErrorBoundary(reservationExists),
     validateStatusIsUnknown,
     validateIsNotCurrentlyFinished,
-    asyncErrorBoundary(update)]
+    asyncErrorBoundary(update)],
+  updateInfo: [
+    asyncErrorBoundary(reservationExists),
+    validateReservationData,
+    validateReservationProperties,
+    validateDateFormat,
+    validateFutureDate,
+    validateIsNotTuesday,
+    validateTime,
+    validateReservationTime,
+    validatePeople,
+    asyncErrorBoundary(update)
+  ]
 };

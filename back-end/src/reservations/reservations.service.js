@@ -51,7 +51,7 @@ function list() {
 function update(updatedReservation) {
   return knex("reservations")
     .where({ reservation_id: updatedReservation.reservation_id })
-    .update({ status: updatedReservation.status })
+    .update(updatedReservation, "reservations.*")
     .returning("*");
 }
 
