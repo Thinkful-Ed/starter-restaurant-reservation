@@ -58,6 +58,8 @@ function validateDateFormat(req, res, next) {
   } = req.body;
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
+  
+
   if (!reservation_date || !dateRegex.test(reservation_date)) {
     return next({
       status: 400,
