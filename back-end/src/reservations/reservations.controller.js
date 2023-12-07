@@ -276,7 +276,6 @@ async function list(req, res) {
     
 
   } if (mobile_number) {
-    console.log(mobile_number)
     const data = await reservationsService.listByMobileNumber(mobile_number);
     res.json({
       data,
