@@ -49,9 +49,13 @@ function SeatReservation() {
       reservation_id,
       abortController.signal
     )
-      .then(() => history.push(`/dashboard`))
-      .catch(setReservationsError);
-    updateReservationStatus(reservation_id, "seated", abortController.signal)
+      .then(() => {
+        updateReservationStatus(
+          reservation_id,
+          "seated",
+          abortController.signal
+        );
+      })
       .then(() => history.push(`/dashboard`))
       .catch(setReservationsError);
     return () => abortController.abort();
