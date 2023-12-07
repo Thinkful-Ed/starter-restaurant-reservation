@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-function ReservationForm({ initialFormState, submitAction }) {
+function ReservationForm({ initialFormState, submitAction, handleCancel }) {
   const [formData, setFormData] = useState(initialFormState);
   const [isTuesday, setIsTuesday] = useState(false);
   const [isFuture, setIsFuture] = useState(true);
   const [isValidTime, setIsValidTime] = useState(true);
   const [showDateErrors, setShowDateErrors] = useState(false);
   const [showTimeError, setShowTimeError] = useState(false);
-  const history = useHistory();
-
 
   useEffect(() => {
     const isValidTimeValidator = (selectedTime) => {
@@ -100,9 +97,6 @@ function ReservationForm({ initialFormState, submitAction }) {
 
   // pass in a function as a prop to allow for different cancel actions when the form is reused
 
-  function handleCancel() {
-    history.goBack();
-  }
 
   return (
     <div>
@@ -200,14 +194,14 @@ function ReservationForm({ initialFormState, submitAction }) {
         </div>
         <div>
           <button onClick={handleCancel} className="btn btn-secondary m-1">
-            Cancel
+            cancel
           </button>
           <button
             onClick={handleSubmit}
             type="submit"
             className="btn btn-primary m-1"
           >
-            Submit
+            submit
           </button>
         </div>
       </form>

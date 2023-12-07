@@ -34,6 +34,11 @@ function NewReservation() {
       });
   }
 
+  function handleCancel() {
+    console.log("NEW RESERVATION CANCEL")
+    history.push("/dashboard");
+}
+
   return (
     <div>
       <h1>Create a new reservation</h1>
@@ -41,6 +46,7 @@ function NewReservation() {
       <ReservationForm
         initialFormState={initialFormState}
         submitAction={handleNewReservationSubmit}
+        handleCancel={handleCancel}
       />
     </div>
   );

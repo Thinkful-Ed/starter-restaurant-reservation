@@ -252,6 +252,8 @@ describe("US-06 - Reservation status", () => {
       expect(tableOne).not.toBeUndefined();
       expect(reservationOne).not.toBeUndefined();
 
+      console.log("RESERVATION ONE: ",reservationOne)
+
       const seatResponse = await request(app)
         .put(`/tables/${tableOne.table_id}/seat`)
         .set("Accept", "application/json")
@@ -273,7 +275,8 @@ describe("US-06 - Reservation status", () => {
           `/reservations?date=${asDateString(reservationOne.reservation_date)}`
         )
         .set("Accept", "application/json");
-
+        
+        console.log("RESERVATIONS RESPONSE BODY: ",reservationsResponse.body)
       expect(reservationsResponse.body.error).toBeUndefined();
 
       const finishedReservations = reservationsResponse.body.data.filter(
@@ -286,6 +289,7 @@ describe("US-06 - Reservation status", () => {
 });
 
 function asDateString(date) {
+  console.log("DATE: ",date)
   return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
     .toString(10)
     .padStart(2, "0")}-${date.getDate().toString(10).padStart(2, "0")}`;

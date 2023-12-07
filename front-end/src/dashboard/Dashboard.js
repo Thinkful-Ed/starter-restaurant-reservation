@@ -21,7 +21,7 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
   const [tablesError, setTablesError] = useState(null);
   const [currentDate, setCurrentDate] = useState(date);
-  date = currentDate;
+  // date = currentDate;
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -33,13 +33,13 @@ function Dashboard({ date }) {
     }
   }, [queryDate, currentDate]);
 
-  useEffect(loadDashboard, [date, currentDate]);
+  useEffect(loadDashboard, [currentDate]);
 
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservationsByDate(date, abortController.signal)
+    listReservationsByDate(currentDate, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
@@ -67,7 +67,7 @@ function Dashboard({ date }) {
           <Link to={`/dashboard?date=${next(currentDate)}`} className="btn btn-info">Next Day</Link>
         </div>
       </div>
-      {reservations.map((reservation) => <ReservationView key={reservation.reservation_id} reservation={reservation} />)}
+      {reservations.map((reservation) => <ReservationView key={reservation.reservation_id} reservation={reservation} date={date} setReservations={setReservations} />)}
 
       <div>
       <h4 className="mb-0">Tables</h4>
