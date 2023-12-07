@@ -77,16 +77,15 @@ function validateFutureDate(req, res, next) {
   let selectedDate = new Date(reservation_date);
   let currentDate = new Date();
 
-  // Get the time zone offset in minutes
+  // Adjust the selected date by considering the time zone offset
   const timeZoneOffset = currentDate.getTimezoneOffset();
+  selectedDate = new Date(selectedDate.getTime() + timeZoneOffset * 60 * 1000);
+  
+  // Reset the time components to midnight for accurate date comparison
+  selectedDate.setHours(0, 0, 0, 0);
+  currentDate.setHours(0, 0, 0, 0);
 
-  // Adjust the selected date by adding the time zone offset
-  let adjustedSelectedDate = new Date(selectedDate.getTime() + timeZoneOffset * 60 * 1000);
-
-  adjustedSelectedDate = adjustedSelectedDate.toISOString().split('T')[0]
-  currentDate = currentDate.toISOString().split('T')[0]
-
-  if (adjustedSelectedDate < currentDate) {
+  if (selectedDate < currentDate) {
     return next({
       status: 400,
       message: "Reservation date must be in the future.",
@@ -263,6 +262,7 @@ function read(req, res) {
 
 async function list(req, res) {
   const date = req.query.date;
+  const mobile_number = req.query.mobile_number;
   if (date) {
     const data = await reservationsService.listByDate(date);
     data.sort((A, B) => {
@@ -273,9 +273,16 @@ async function list(req, res) {
     res.json({
       data,
     });
+    
+
+  } if (mobile_number) {
+    const data = await reservationsService.listByMobileNumber(mobile_number);
+    res.json({
+      data,
+    });
+
 
     // the response below lists all reservations and may be used by a feature in the future
-
   } else {
     const data = await reservationsService.list();
     res.json({

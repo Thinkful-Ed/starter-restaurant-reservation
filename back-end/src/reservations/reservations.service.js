@@ -34,6 +34,15 @@ function read(reservation_id) {
       });
   }
 
+  function listByMobileNumber(mobile_number) {
+    return knex("reservations")
+    .whereRaw(
+      "translate(mobile_number, '() -', '') like ?",
+      `%${mobile_number.replace(/\D/g, "")}%`
+    )
+    .orderBy("reservation_date");
+  }
+
 function list() {
   return knex("reservations")
   .select("*")
@@ -51,5 +60,6 @@ module.exports = {
     read,
     list,
     listByDate,
+    listByMobileNumber,
     update
 }
