@@ -4,6 +4,11 @@ import SearchMobileNumber from "./SearchMobileNumber";
 import { listReservations } from "../utils/api";
 import useQuery from "../utils/useQuery";
 
+/**
+ * Defines the search reservation page by mobile_number.
+ * @returns {JSX.Element}
+ */
+
 function SearchPage() {
   const [reservations, setReservations] = useState([]);
   const [, setReservationsError] = useState(null);
@@ -18,6 +23,7 @@ function SearchPage() {
     return () => abortController.abort();
   }
 
+  //reloads the search page if the mobile num param changes
   useEffect(loadSearchPage, [mobileNumParam]);
 
   return (

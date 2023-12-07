@@ -73,17 +73,17 @@ function read(req, res, next) {
  * Update handler for assigning a reservation to a table
  */
 
-async function update(req, res) {
-  const table_id = res.locals.table.table_id;
-  const reservation_id = req.body.data.reservation_id;
-  const data = await tableService.update(table_id, reservation_id);
-  res.status(200).json({ data });
-  //updates reservation status to "seated"
-  const reservationData = await reservationService.updateStatus(
-    reservation_id,
-    "seated"
-  );
-  res.status(200).json({ data: reservationData });
+async function update(req, res, next) {
+  const table = res.locals.table;
+  if (table.reservation_id !== null) {
+    next({ status: 400, message: `Table ${table.table_id} is occupied.` });
+  } else {
+    const reservation_id = req.body.data.reservation_id;
+    const data = await tableService.update(table.table_id, reservation_id);
+    res.status(200).json({ data });
+    //updates reservation status to "seated"
+    await reservationService.updateStatus(reservation_id, "seated");
+  }
 }
 
 /**
@@ -97,11 +97,7 @@ async function destroy(req, res, next) {
     await tableService.destroy(table.table_id);
     res.status(200).json({ data: "Deleted" });
     //calls the reservation server to update the deleted reservation's status to "finished".
-    const reservationData = reservationService.updateStatus(
-      table.reservation_id,
-      "finished"
-    );
-    res.status(200).json({ data: reservationData });
+    await reservationService.updateStatus(table.reservation_id, "finished");
   }
 }
 

@@ -4,7 +4,7 @@ import { readReservation } from "../utils/api";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 
 /**
- * Defines the new reservation page.
+ * Defines the edit reservation page.
  * @returns {JSX.Element}
  */
 
@@ -15,11 +15,6 @@ function EditReservation() {
   const [initialFormData, setInitialFormData] = useState({});
 
   useEffect(loadReservation, [reservation_id]);
-
-  //get reservation query
-  //load reservation
-  //set form data
-  //load form with form data
 
   function loadReservation() {
     if (reservation_id !== null) {
@@ -32,6 +27,7 @@ function EditReservation() {
     }
   }
 
+  //once the reservation is loaded, set the initial form data to the existing reservation
   useEffect(() => {
     if (reservation !== null) {
       setInitialFormData({
@@ -45,6 +41,7 @@ function EditReservation() {
     }
   }, [reservation]);
 
+  //checks if reservation has loaded. If it hasn't loaded, say "loading". If not, return the ReservationForm component.
   return reservation !== null ? (
     <div>
       <ReservationForm

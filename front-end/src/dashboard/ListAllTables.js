@@ -31,8 +31,11 @@ function ListAllTables() {
     ) {
       const abortController = new AbortController();
       deleteReservationFromTable(table_id, abortController.signal)
+        .then((reservation) => {
+          console.log("reservation", reservation);
+        })
         .then(() => {
-          window.location.reload();
+          // window.location.reload();
         })
         .catch(setTablesError);
 

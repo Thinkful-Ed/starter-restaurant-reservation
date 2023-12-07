@@ -7,6 +7,7 @@ import ErrorAlert from "../layout/ErrorAlert";
  */
 function ListAllReservations({ reservations }) {
   const [reservationErrors, setReservationErrors] = useState(null);
+
   const cancelReservationHandler = (reservation_id) => {
     if (
       window.confirm(
