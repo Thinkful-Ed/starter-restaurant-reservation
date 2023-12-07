@@ -4,10 +4,10 @@
  *    a middleware function that validates that req.body.data has the valid reservation properties.
  */
 
-const validateReservationDate = require("./reservations/validateReservationDate");
-const validatesReservationPartySize = require("./reservations/validateReservationPartySize");
-const validateReservationTime = require("./reservations/validateReservationTime");
-const validateReservationStatus = require("./reservations/validatesReservationStatus");
+const validateReservationDate = require("./validateReservationDate");
+const validatesReservationPartySize = require("./validateReservationPartySize");
+const validateReservationTime = require("./validateReservationTime");
+const validateReservationStatus = require("./validatesReservationStatus");
 
 function hasValidReservationProperties(isEdit = false) {
   return function (res, req, next) {

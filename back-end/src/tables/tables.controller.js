@@ -1,9 +1,8 @@
 const tableService = require("./tables.service");
 const reservationService = require("../reservations/reservations.service");
-const reservationController = require("../reservations/reservations.controller");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
-const hasValidTableProperties = require("../errors/hasValidTableProperties");
+const hasValidTableProperties = require("../errors/table_errors/hasValidTableProperties");
 
 /**
  * List handler for table resources
