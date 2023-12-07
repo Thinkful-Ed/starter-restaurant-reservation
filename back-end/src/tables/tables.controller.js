@@ -80,9 +80,7 @@ async function validateInput(req, res, next) {
       message: `Data is missing.`,
     });
   }
-  console.log("data", req.body.data);
   const reservation_id = req.body.data.reservation_id;
-  console.log(reservation_id);
   if (!reservation_id) {
     next({
       status: 400,
@@ -93,13 +91,7 @@ async function validateInput(req, res, next) {
   const table = res.locals.table;
   const reservation = await reservationService.read(reservation_id);
   if (reservation) {
-    console.log("reservation", reservation);
-    console.log("table", table);
-    console.log("table capacity", table.capacity);
-    console.log("reservation", reservation.people);
-
     if (table.capacity < reservation.people) {
-      console.log("throwing error");
       next({
         status: 400,
         message: `Table ${table.table_id} does not have sufficient capacity since it fits ${table.capacity} but Reservation ${reservation.reservation_id} which has a party size of ${reservation.people} .`,
@@ -136,7 +128,7 @@ async function update(req, res) {
   const data = await tableService.update(table_id, reservation_id);
   res.status(200).json({ data });
   //updates reservation status to "seated"
-  const reservationData = await reservationService.update(
+  const reservationData = await reservationService.updateStatus(
     reservation_id,
     "seated"
   );
@@ -151,7 +143,7 @@ async function destroy(req, res, next) {
     await tableService.destroy(table.table_id);
     res.status(200).json({ data: "Deleted" });
     //calls the reservation server to update the deleted reservation's status to "finished".
-    reservationService.update(table.reservation_id, "finished");
+    reservationService.updateStatus(table.reservation_id, "finished");
   }
 }
 
