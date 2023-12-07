@@ -1,8 +1,16 @@
+/**
+ * Creates a middleware function that validates that req.body.data has the valid properties for updating/editing a reservation status.
+ * Note: The function for validating a reservation status for creating a reservation is in validatesReservationStatus.js
+ * @returns {function(*, *, *): void}
+ *    a middleware function that validates that req.body.data has theproperties for updating a reservation status.
+ */
+
 function hasValidUpdateResStatusProperties(req, res, next) {
   return function (req, res, next) {
     try {
       const reservation = res.locals.reservation;
       const newStatus = req.body.data.status;
+      //makes sure the new status is either "booked", "seated", "finished", or "cancelled"
       if (
         newStatus !== "booked" &&
         newStatus !== "seated" &&
@@ -16,8 +24,7 @@ function hasValidUpdateResStatusProperties(req, res, next) {
         throw error;
       }
 
-      //checks if the existing status is finished, if so no update because a table that is finished cannot be seated or booked again
-
+      //makes sure the existing reservation status isn't finished or cancelled
       if (
         reservation.status === "finished" ||
         reservation.status === "cancelled"
@@ -28,13 +35,6 @@ function hasValidUpdateResStatusProperties(req, res, next) {
         error.status = 400;
         throw error;
       }
-      //send error if reservation status is finished
-      //   const capacity = data["capacity"];
-      //   if (typeof capacity !== "number") {
-      //     const error = new Error(`The capacity must be a number.`);
-      //     error.status = 400;
-      //     throw error;
-      //   }
       next();
     } catch (error) {
       next(error);

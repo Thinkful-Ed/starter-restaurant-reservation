@@ -31,6 +31,9 @@ function create(reservation) {
     .then((createdRecords) => createdRecords[0]);
 }
 
+/**
+ * Makes an update request to the database for a new reservation status.
+ */
 function updateStatus(reservation_id, newStatus) {
   return knex("reservations")
     .select("*")
@@ -42,6 +45,9 @@ function updateStatus(reservation_id, newStatus) {
     .then((updatedRecords) => updatedRecords[0]);
 }
 
+/**
+ * Makes a list request to the database for reservations the partial(or complete) mobile_number string.
+ */
 function search(mobile_number) {
   return knex("reservations")
     .whereRaw(
@@ -51,6 +57,9 @@ function search(mobile_number) {
     .orderBy("reservation_date");
 }
 
+/**
+ * Makes an update to the database to edit a reservation.
+ */
 function editReservation(reservation) {
   return knex("reservations")
     .select("*")

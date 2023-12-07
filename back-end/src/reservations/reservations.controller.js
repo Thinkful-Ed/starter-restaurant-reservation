@@ -5,7 +5,7 @@ const hasValidReservationProperties = require("../errors/reservations_errors/has
 const hasValidUpdateResStatusProperties = require("../errors/reservations_errors/hasValidUpdateResStatusProperties");
 
 /**
- * List handler for reservation resources for a particular reservation_date or mobile_number
+ * List handler for reservation resources for a specific reservation_date or part of a mobile_number
  */
 
 async function list(req, res) {

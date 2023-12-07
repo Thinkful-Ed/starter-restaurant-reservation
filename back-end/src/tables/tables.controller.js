@@ -62,61 +62,12 @@ async function tableExists(req, res, next) {
 }
 
 /**
- * Read handler for a reservation
+ * Read handler for a table
  */
 function read(req, res, next) {
   const data = res.locals.table;
   res.status(200).json({ data });
 }
-
-// /**
-//  * Handler to validate input for updating a table
-//  */
-
-// async function validateInput(req, res, next) {
-//   if (!req.body.data) {
-//     next({
-//       status: 400,
-//       message: `Data is missing.`,
-//     });
-//   }
-//   const reservation_id = req.body.data.reservation_id;
-//   if (!reservation_id) {
-//     next({
-//       status: 400,
-//       message: `The property reservation_id is missing.`,
-//     });
-//   }
-
-//   const table = res.locals.table;
-//   const reservation = await reservationService.read(reservation_id);
-//   if (reservation) {
-//     if (table.capacity < reservation.people) {
-//       next({
-//         status: 400,
-//         message: `Table ${table.table_id} does not have sufficient capacity since it fits ${table.capacity} but Reservation ${reservation.reservation_id} which has a party size of ${reservation.people} .`,
-//       });
-//     }
-//     if (table.status === "Occupied") {
-//       next({
-//         status: 400,
-//         message: `Table ${table.table_id} is already occupied by Reservation ${table.reservation_id}.`,
-//       });
-//     }
-//     if (reservation.status === "seated") {
-//       next({
-//         status: 400,
-//         message: `Reservation ${reservation.reservation_id} is already seated at another table.`,
-//       });
-//     }
-//     next();
-//   } else {
-//     next({
-//       status: 404,
-//       message: `Reservation Id ${reservation_id} does not exist`,
-//     });
-//   }
-// }
 
 /**
  * Update handler for assigning a reservation to a table
@@ -135,6 +86,9 @@ async function update(req, res) {
   res.status(200).json({ data: reservationData });
 }
 
+/**
+ * Delete handler for removing a reservation from a table and marking the reservation as finished
+ */
 async function destroy(req, res, next) {
   const table = res.locals.table;
   if (table.reservation_id === null) {
@@ -143,7 +97,11 @@ async function destroy(req, res, next) {
     await tableService.destroy(table.table_id);
     res.status(200).json({ data: "Deleted" });
     //calls the reservation server to update the deleted reservation's status to "finished".
-    reservationService.updateStatus(table.reservation_id, "finished");
+    const reservationData = reservationService.updateStatus(
+      table.reservation_id,
+      "finished"
+    );
+    res.status(200).json({ data: reservationData });
   }
 }
 

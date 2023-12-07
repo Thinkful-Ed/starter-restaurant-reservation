@@ -1,5 +1,5 @@
 /**
- * Creates a middleware function that validates that req.body.data has the valid reservation properties.
+ * Creates a middleware function that validates that req.body.data has the valid reservation properties for creating or editing a reservation.
  * @returns {function(*, *, *): void}
  *    a middleware function that validates that req.body.data has the valid reservation properties.
  */
@@ -39,7 +39,8 @@ function hasValidReservationProperties(isEdit = false) {
       //PARTY SIZE
       validatesReservationPartySize(data["people"]);
 
-      //RESERVATION STATUS
+      //RESERVATION STATUS - validates status only for new reservations
+      //Note: The function for validating a reservation status for editing a reservation is in hasValidUpdateResStatusProperties.js
       if (!isEdit) {
         validateReservationStatus(data["status"]);
       }
