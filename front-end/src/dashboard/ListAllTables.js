@@ -35,7 +35,7 @@ function ListAllTables() {
           console.log("reservation", reservation);
         })
         .then(() => {
-          // window.location.reload();
+          window.location.reload();
         })
         .catch(setTablesError);
 

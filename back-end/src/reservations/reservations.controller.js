@@ -100,7 +100,7 @@ module.exports = {
   ],
   update: [
     asyncErrorBoundary(reservationExists),
-    asyncErrorBoundary(checkUpdateProperties),
+    checkUpdateProperties,
     asyncErrorBoundary(updateStatus),
   ],
   editReservation: [
