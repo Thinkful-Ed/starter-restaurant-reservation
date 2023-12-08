@@ -20,6 +20,9 @@ function NewReservation() {
 
   function handleNewReservationSubmit(newReservation) {
     newReservation = { ...newReservation, people: Number(newReservation.people) };
+    if (newReservation.reservation_time.length === 5) {
+      newReservation = { ...newReservation, reservation_time: (newReservation.reservation_time + ":00")}
+  }
     setReservationError(null); // Clear any previous errors
     createReservation(newReservation)
       .then((data) => {

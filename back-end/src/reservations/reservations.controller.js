@@ -56,11 +56,14 @@ function validateDateFormat(req, res, next) {
   const {
     data: { reservation_date },
   } = req.body;
+
+  const dateOnly = reservation_date.split("T")[0]
+
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
   
 
-  if (!reservation_date || !dateRegex.test(reservation_date)) {
+  if (!reservation_date || !dateRegex.test(dateOnly)) {
     return next({
       status: 400,
       message:
@@ -127,12 +130,29 @@ function validateTime(req, res, next) {
   const {
     data: { reservation_time },
   } = req.body;
-  const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
-  if (!reservation_time || !timeRegex.test(reservation_time)) {
+  const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+  const timeRegexSeconds = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
+
+  if (!reservation_time) {
     return next({
       status: 400,
-      message: "Invalid reservation_time format. Please use the HH:mm format.",
+      message: "Must have a reservation_time property.",
+    });
+  } else if (reservation_time.length === 5 && !timeRegex.test(reservation_time)) {
+      return next({
+        status: 400,
+        message: "Invalid reservation_time format. Please use the HH:mm or HH:mm:ss format.",
+      });
+  } else if (reservation_time.length === 8 && !timeRegexSeconds.test(reservation_time)) {
+      return next({
+        status: 400,
+        message: "Invalid reservation_time format. Please use the HH:mm or HH:mm:ss format.",
+      });
+  } else if (reservation_time.length !== 5 && reservation_time.length !== 8) {
+    return next({
+      status: 400,
+      message: "Invalid reservation_time format. Please use the HH:mm or HH:mm:ss format.",
     });
   }
 

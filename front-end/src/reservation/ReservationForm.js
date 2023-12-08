@@ -91,6 +91,9 @@ function ReservationForm({ initialFormState, submitAction, handleCancel }) {
     }
   
     if (!isTuesday && isFuture && isValidTime) {
+      // if (formData.reservation_time.length === 5) {
+      //   formData.time = formData.reservation_time + ":00"
+      // }
       submitAction(formData);
     }
   }

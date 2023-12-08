@@ -10,13 +10,21 @@ function EditReservation() {
     const { reservationId } = useParams();
     const history = useHistory();
 
+    console.log(reservation)
+
     useEffect(() => {
         const abortController = new AbortController();
+        
     
         // Load tables only once
         setReservationError(null);
         readReservation(reservationId, abortController.signal)
-          .then(setReservation)
+        .then((reservation) => {
+            setReservation({
+              ...reservation,
+              reservation_date: reservation.reservation_date.split("T")[0],
+            });
+          })
           .catch(setReservationError);
     
         return () => abortController.abort();
@@ -24,6 +32,9 @@ function EditReservation() {
 
       function handleEditSubmit(updatedReservation) {
         updatedReservation = { ...updatedReservation, people: Number(updatedReservation.people) };
+        if (updatedReservation.reservation_time.length === 5) {
+            updatedReservation = { ...updatedReservation, reservation_time: (updatedReservation.reservation_time + ":00")}
+        }
         setReservationError(null); // Clear any previous errors
         updateReservation(updatedReservation)
           .then((data) => {
