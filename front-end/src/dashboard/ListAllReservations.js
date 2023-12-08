@@ -43,7 +43,7 @@ function ListAllReservations({ reservations }) {
         <td>
           {reservation.status === "booked" ? (
             <a href={`/reservations/${reservation.reservation_id}/seat`}>
-              <button>Seat</button>
+              <button className="btn btn-primary">Seat</button>
             </a>
           ) : (
             " "
@@ -52,7 +52,7 @@ function ListAllReservations({ reservations }) {
         <td>
           {reservation.status === "booked" ? (
             <a href={`/reservations/${reservation.reservation_id}/edit`}>
-              <button>Edit</button>
+              <button className="btn btn-secondary">Edit</button>
             </a>
           ) : (
             " "
@@ -61,6 +61,7 @@ function ListAllReservations({ reservations }) {
         <td>
           {reservation.status === "booked" ? (
             <button
+              className="btn btn-danger"
               data-reservation-id-cancel={reservation.reservation_id}
               onClick={() => {
                 cancelReservationHandler(reservation.reservation_id);

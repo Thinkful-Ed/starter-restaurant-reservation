@@ -120,11 +120,19 @@ function ReservationForm({
           value={formData.people ? String(formData.people) : ""}
         />
         <div>
-          <button type="button" onClick={cancelHandler}>
-            Cancel
-          </button>
-          <button type="submit" onClick={submitHandler}>
+          <button
+            className="btn btn-primary"
+            type="submit"
+            onClick={submitHandler}
+          >
             Submit
+          </button>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={cancelHandler}
+          >
+            Cancel
           </button>
         </div>
       </form>

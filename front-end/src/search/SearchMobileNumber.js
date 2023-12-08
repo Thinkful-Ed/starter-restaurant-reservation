@@ -19,19 +19,26 @@ function SearchMobileNumber() {
     <div>
       <h1>Search for reservations by phone number</h1>
       <form>
-        <label htmlFor="mobile_number">
-          <input
-            id="mobile_number"
-            type="text"
-            name="mobile_number"
-            placeholder="Enter a customer’s phone number"
-            onChange={handleChange}
-            value={mobile_number}
-          />
-        </label>
-        <button type="submit" onSubmit={handleSubmit}>
-          Find
-        </button>
+        <div className="form-group">
+          <label htmlFor="mobile_number">
+            <input
+              id="mobile_number"
+              type="text"
+              name="mobile_number"
+              placeholder="Enter a customer’s phone number"
+              onChange={handleChange}
+              value={mobile_number}
+            />
+          </label>
+          <div></div>
+          <button
+            className="btn btn-primary"
+            type="submit"
+            onSubmit={handleSubmit}
+          >
+            Find
+          </button>
+        </div>
       </form>
     </div>
   );

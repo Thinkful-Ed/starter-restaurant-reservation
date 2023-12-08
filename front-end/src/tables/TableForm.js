@@ -57,29 +57,39 @@ export const TableForm = () => {
     <div>
       <ErrorAlert error={tableErrors} />
       <form>
-        <label htmlFor="table_name">
-          Table Name
-          <input
-            type="text"
-            id="table_name"
-            name="table_name"
-            onChange={onChangeHandler}
-            value={formData.table_name ? formData.table_name : ""}
-          ></input>
-        </label>
-        <label htmlFor="capacity">
-          Capacity
-          <input
-            type="number"
-            id="capacity"
-            name="capacity"
-            onChange={onChangeHandler}
-            value={formData.capacity ? formData.capacity : ""}
-          ></input>
-        </label>
-        <button onClick={cancelHandler}>Cancel</button>
-        <button type="submit" onClick={submitHandler}>
+        <div>
+          <label htmlFor="table_name">
+            Table Name
+            <input
+              type="text"
+              id="table_name"
+              name="table_name"
+              onChange={onChangeHandler}
+              value={formData.table_name ? formData.table_name : ""}
+            ></input>
+          </label>
+        </div>
+        <div>
+          <label htmlFor="capacity">
+            Capacity
+            <input
+              type="number"
+              id="capacity"
+              name="capacity"
+              onChange={onChangeHandler}
+              value={formData.capacity ? formData.capacity : ""}
+            ></input>
+          </label>
+        </div>
+        <button
+          className="btn btn-primary"
+          type="submit"
+          onClick={submitHandler}
+        >
           Submit
+        </button>
+        <button className="btn btn-danger" onClick={cancelHandler}>
+          Cancel
         </button>
       </form>
     </div>

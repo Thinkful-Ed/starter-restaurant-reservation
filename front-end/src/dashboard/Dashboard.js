@@ -64,18 +64,34 @@ function Dashboard({ date }) {
         </div>
         <ErrorAlert error={reservationsError} />
         <ListAllReservations reservations={reservations} />
-        <div>
-          <button onClick={buttonHandler} name="previous">
+        <div className="btn-group">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={buttonHandler}
+            name="previous"
+          >
             Previous
           </button>
-          <button onClick={buttonHandler} name="today">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={buttonHandler}
+            name="today"
+          >
             Today
           </button>
-          <button onClick={buttonHandler} name="next">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={buttonHandler}
+            name="next"
+          >
             Next
           </button>
         </div>
       </div>
+      <br></br>
       <ListAllTables />
     </main>
   );
