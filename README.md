@@ -9,13 +9,13 @@ The New Reservation page allows you to create a new reservation by providing a f
 ### New Table Page
 The New Table page allows you to add a new table to the restaurant by providing a table name and table capacity.
 
-## Edit Reservation
+### Edit Reservation
 The Edit Reservation page allows you to edit the reservation you selected.
 
-## Seat Reservation
+### Seat Reservation
 The Seat Reservation page allows you to assign a reservation to a particular table.
 
-## Search
+### Search
 The Search page allows you to search for a reservation by a partial or completey mobile number.
 
 # API
