@@ -1,5 +1,9 @@
 # [Restaurant Reservation System](https://restaurantreservationsystem-frontend.onrender.com)
 
+# Summary
+
+
+# Client Descriptions
 ### Dashboard 
 The Dashboard page displays all reservations for a given date and all tables. Each reservation has an option to seat, edit or, cancel the reservation. Each table displays the capacity and status. If the table is occupied, it also displays the reservation_id and a button to clear the table once its done.
 
@@ -13,7 +17,7 @@ The New Table page allows you to add a new table to the restaurant by providing 
 The Edit Reservation page allows you to edit the reservation you selected.
 
 ### Seat Reservation
-The Seat Reservation page allows you to assign a reservation to a particular table.
+The Seat Reservation page allows you to assign the reservation you selected to a particular table.
 
 ### Search
 The Search page allows you to search for a reservation by a partial or completey mobile number.
