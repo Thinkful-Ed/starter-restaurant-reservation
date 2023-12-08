@@ -1,9 +1,23 @@
 # [Restaurant Reservation System](https://restaurantreservationsystem-frontend.onrender.com)
 
-# Summary
+## Summary
+I created a restaurant reservation system for my final capstone at my Chegg Skills Engineering program.
 
+The project required the following technologies: 
+* React for the client
+* Node.js and Express for the API
+* PostgreSQL for the database
 
-# Client Descriptions
+From the assignment,
+> "You have been hired as a full stack developer at Periodic Tables, a startup that is creating a reservation system for fine dining restaurants. 
+> The software is used only by restaurant personnel when a customer calls to request a reservation. 
+> At this point, the customers will not access the system online." 
+
+Chegg skills gave user stories to inform what functions the user would need such as listing reservations, creating reservations, creating tables, assigning reservations to tables, updating the status of a reservation and table once its assigned.
+
+You can find the original assignment here [Thinkful-Ed/starter-restaurant-reservation](https://github.com/Thinkful-Ed/starter-restaurant-reservation).
+
+## Client Descriptions
 ### Dashboard 
 The Dashboard page displays all reservations for a given date and all tables. Each reservation has an option to seat, edit or, cancel the reservation. Each table displays the capacity and status. If the table is occupied, it also displays the reservation_id and a button to clear the table once its done.
 
