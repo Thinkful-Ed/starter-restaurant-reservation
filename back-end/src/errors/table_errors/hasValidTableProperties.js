@@ -20,11 +20,7 @@ function hasValidTableProperties(...properties) {
         throw error;
       }
 
-<<<<<<< HEAD:back-end/src/errors/hasValidTableProperties.js
-      //makes sure capacity is a number
-=======
       //makes sure that capacity is a number
->>>>>>> 853a97ee46a30013b0fa07f76a5a50180511830a:back-end/src/errors/table_errors/hasValidTableProperties.js
       const capacity = data["capacity"];
       if (typeof capacity !== "number") {
         const error = new Error(`The capacity must be a number.`);
