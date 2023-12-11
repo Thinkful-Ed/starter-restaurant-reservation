@@ -74,6 +74,7 @@ export const TableForm = () => {
             Capacity
             <input
               type="number"
+              min="0"
               id="capacity"
               name="capacity"
               onChange={onChangeHandler}

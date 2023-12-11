@@ -34,9 +34,6 @@ function Dashboard({ date }) {
     setReservationsError(null);
     listReservations({ date: currDate }, abortController.signal)
       .then(setReservations)
-      .then(() => {
-        console.log(reservations);
-      })
       .catch(setReservationsError);
     return () => abortController.abort();
   }

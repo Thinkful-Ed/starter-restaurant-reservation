@@ -21,10 +21,17 @@ function hasValidTableProperties(...properties) {
         throw error;
       }
 
-      //checks if capacity is a number
+      //makes sure capacity is a number
       const capacity = data["capacity"];
       if (typeof capacity !== "number") {
         const error = new Error(`The capacity must be a number.`);
+        error.status = 400;
+        throw error;
+      }
+
+      //makes sure capacity is greater than 0
+      if (capacity <= 0) {
+        const error = new Error(`The capacity must be at least 1.`);
         error.status = 400;
         throw error;
       }

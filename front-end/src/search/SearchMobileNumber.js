@@ -7,7 +7,6 @@ function SearchMobileNumber() {
 
   const handleChange = (event) => {
     setMobile_number(event.target.value);
-    console.log(mobile_number);
   };
 
   const handleSubmit = (event) => {

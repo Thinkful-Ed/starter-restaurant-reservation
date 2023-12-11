@@ -16,11 +16,6 @@ function EditReservation() {
 
   useEffect(loadReservation, [reservation_id]);
 
-  //get reservation query
-  //load reservation
-  //set form data
-  //load form with form data
-
   function loadReservation() {
     if (reservation_id !== null) {
       const abortController = new AbortController();
