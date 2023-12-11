@@ -1,3 +1,7 @@
+/**
+ * A function used to validate reservation status property for creating a new reservation.
+ * Note: The function for validating a reservation status for editing a reservation is hasValidUpdateResStatusProperties.js
+ */
 function validateReservationStatus(status = "booked", isEdit = false) {
   if (status !== "booked" && status !== "seated" && status !== "finished") {
     const error = new Error(

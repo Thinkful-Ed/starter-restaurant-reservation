@@ -4,7 +4,7 @@ import { createReservation, editReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 /**
- * Defines reservation form for creating a new reservation.
+ * Defines reservation form components used in creating a new reservation or editing a new reservation.
  * @returns {JSX.Element}
  */
 
@@ -18,12 +18,14 @@ function ReservationForm({
   const history = useHistory();
   const [formData, setFormData] = useState(initialFormData);
 
+  //once the initialFormData is received, set the formData to that info.
   useEffect(() => {
     if (initialFormData) {
     }
     setFormData(initialFormData);
   }, [initialFormData]);
 
+  //handler for if any of the form inputs change
   const onChangeHandler = (event) => {
     const property = event.target.name;
     const value =
@@ -35,22 +37,26 @@ function ReservationForm({
     });
   };
 
+  //handler for if the user cancels creating or editing a reservation
   const cancelHandler = (event) => {
     event.preventDefault();
     history.goBack();
   };
 
+  //handler for if the user submits the form for either creating or editing a reservation
   const submitHandler = (event) => {
     event.preventDefault();
 
     const abortController = new AbortController();
 
+    //for editing reservations, uses the editReservation api call
     if (isEditing) {
       editReservation(formData, reservation_id, abortController.signal)
         .then(() => {
           history.push(`/dashboard?date=${formData.reservation_date}`);
         })
         .catch(setReservationsErrors);
+      //for creating a reservation, uses the createReservation api call
     } else {
       createReservation(formData, abortController.signal)
         .then(() => {

@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
+/**
+ * Defines the search form used in the search reservation page by mobile_number.
+ * @returns {JSX.Element}
+ */
+
 function SearchMobileNumber() {
   const [mobile_number, setMobile_number] = useState("");
   const history = useHistory();

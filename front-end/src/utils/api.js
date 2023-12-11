@@ -20,7 +20,7 @@ headers.append("Content-Type", "application/json");
  * This function is NOT exported because it is not needed outside of this file.
  *
  * @param url
- *  the url for the requst.
+ *  the url for the request.
  * @param options
  *  any options for fetch
  * @param onCancel
@@ -117,7 +117,7 @@ export async function assignReservationToTable(
 /**
  * Retrieves all existing tables.
  * @returns {Promise<[table]>}
- *  a promise that resolves to a possibly empty array of reservation saved in the database.
+ *  a promise that resolves to a possibly empty array of tables saved in the database.
  */
 export async function listTables(params, signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
@@ -140,12 +140,22 @@ export async function createTable(table, signal) {
   return await fetchJson(url, options);
 }
 
+/**
+ * Deletes a reservation from a table.
+ * * @returns {Promise<[status]>}
+ * a promise that resolves to the "Deleted" status of the table.
+ */
 export async function deleteReservationFromTable(table_id, signal) {
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
   const options = { method: "DELETE", signal };
   return await fetchJson(url, options, {});
 }
 
+/**
+ * Updates a reservation status.
+ * @returns {Promise<[status]>}
+ * a promise that resolves to the updated reservation status.
+ */
 export async function updateReservationStatus(
   reservation_id,
   newStatus,
@@ -161,6 +171,11 @@ export async function updateReservationStatus(
   return await fetchJson(url, options);
 }
 
+/**
+ * Updates/Edits a reservation.
+  @returns {Promise<[status]>}
+ * a promise that resolves to the updated reservation status.
+ */
 export async function editReservation(reservation, reservation_id, signal) {
   const url = `${API_BASE_URL}/reservations/${reservation_id}`;
   const options = {

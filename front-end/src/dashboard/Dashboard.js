@@ -21,12 +21,14 @@ function Dashboard({ date }) {
   const query = useQuery();
   const dateParam = query.get("date");
 
+  //updates the curr date if the date param changes
   useEffect(() => {
     if (dateParam) {
       setCurrDate(dateParam);
     }
   }, [dateParam]);
 
+  //reloads the dashboard page if the currDate changes
   useEffect(loadDashboard, [currDate]);
 
   function loadDashboard() {
@@ -38,6 +40,7 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  //enters a new dateparam into the dashboard url depending on if they previous, today, or next day buttons
   function buttonHandler(event) {
     switch (event.target.name) {
       case "previous":

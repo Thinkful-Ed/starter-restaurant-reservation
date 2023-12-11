@@ -1,12 +1,11 @@
 const reservationService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
-const hasValidReservationProperties = require("../errors/hasValidReservationProperties");
-const hasValidUpdateResStatusProperties = require("../errors/hasValidUpdateResStatusProperties");
-const hasValidTableProperties = require("../errors/hasValidTableProperties");
+const hasValidReservationProperties = require("../errors/reservations_errors/hasValidReservationProperties");
+const hasValidUpdateResStatusProperties = require("../errors/reservations_errors/hasValidUpdateResStatusProperties");
 
 /**
- * List handler for reservation resources for a particular reservation_date or mobile_number
+ * List handler for reservation resources for a specific reservation_date or part of a mobile_number
  */
 
 async function list(req, res) {
@@ -101,7 +100,7 @@ module.exports = {
   ],
   update: [
     asyncErrorBoundary(reservationExists),
-    asyncErrorBoundary(checkUpdateProperties),
+    checkUpdateProperties,
     asyncErrorBoundary(updateStatus),
   ],
   editReservation: [

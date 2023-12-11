@@ -1,14 +1,16 @@
-function validateReservationDate(reservationDate, today) {
-  //checks if reservation date is a date
+/**
+ * A function used to validate reservation date property for creating or editing a reservation.
+ */
 
+function validateReservationDate(reservationDate, today) {
+  //makes sure reservation date is formatted correctly "2023-12-04"
   if (reservationDate.match(/^\d{4}-\d{2}-\d{2}$/) === null) {
     const error = new Error(`A valid reservation_date is required.`);
     error.status = 400;
     throw error;
   }
 
-  //checks if reservation date is not a tuesday
-
+  //makes sure reservation date is not a Tuesday
   const resDateAsDateObject = new Date(reservationDate);
   if (resDateAsDateObject.getDay() === 1) {
     const error = new Error(
@@ -18,10 +20,9 @@ function validateReservationDate(reservationDate, today) {
     throw error;
   }
 
-  //if the date is today, makes sure the reservation time is at least 1 hour later than current time
-
+  //checks if the reservationTime is past reservationDate
   if (reservationDate === today.toISOString().split("T")[0]) {
-    //see if the reservationTime is past reservationDate
+    //if the reservationTime is today returns true to be used in validateReservationTime function
     return true;
   } else {
     if (resDateAsDateObject < today) {

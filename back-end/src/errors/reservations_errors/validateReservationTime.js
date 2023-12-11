@@ -1,5 +1,8 @@
+/**
+ * A function used to validate reservation time property for creating or editing a reservation.
+ */
 function validateReservationTime(time, today, sameDay) {
-  //checks time is in the right format
+  //makes sure time is in the right format
   if (time.match(/^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$/) === null) {
     const error = new Error(`A valid reservation_time is required.`);
     error.status = 400;
@@ -10,11 +13,11 @@ function validateReservationTime(time, today, sameDay) {
   const reservationHour = Number(timeSplit[0]);
   const reservationMinutes = Number(timeSplit[1]);
 
-  //checks if the reservation is same day, if so checks if time is valid
+  //if the reservation is same day, makes sure the reservation time is at least one minute later than the current time
   if (sameDay) {
     const todayHour = today.getHours();
     const todayMinutes = today.getMinutes();
-    //if its past the time do this
+    //if its before the valid time, do this
     if (
       todayHour > reservationHour ||
       (todayHour === reservationHour && todayMinutes + 1 > reservationMinutes)
@@ -28,7 +31,7 @@ function validateReservationTime(time, today, sameDay) {
     //if it not pass the time, keep going
   }
 
-  //checks if reservation is after 10:30AM opening
+  //for a future date, makes sure reservation is after 10:30AM opening
   if (
     reservationHour < 10 ||
     (reservationHour === 10 && reservationMinutes < 30)
@@ -40,7 +43,7 @@ function validateReservationTime(time, today, sameDay) {
     throw error;
   }
 
-  //checks if reservation is made at least 1 hour before 9:30PM closing
+  //for a future date, makes sure the reservation is made at least 1 hour before 9:30PM closing
   if (
     reservationHour > 21 ||
     (reservationHour === 21 && reservationMinutes >= 31)
