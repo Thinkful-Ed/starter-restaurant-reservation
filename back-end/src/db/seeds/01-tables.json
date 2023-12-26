@@ -1,0 +1,98 @@
+[
+  {
+    "table_name": "21 Bar",
+    "capacity": 1
+  },
+  {
+    "table_name": "22 Bar",
+    "capacity": 1
+  },
+  {
+    "table_name": "23 Bar",
+    "capacity": 1
+  },
+  {
+    "table_name": "24 Bar",
+    "capacity": 1
+  },
+  {
+    "table_name": "25 Bar",
+    "capacity": 1
+  },
+  {
+    "table_name": "26 Bar",
+    "capacity": 1
+  },
+  {
+    "table_name": "27 Bar",
+    "capacity": 1
+  },
+  {
+    "table_name": "28 Bar",
+    "capacity": 1
+  },
+  {
+    "table_name": "29 Bar",
+    "capacity": 1
+  },
+  {
+    "table_name": "31 Cocktail",
+    "capacity": 4
+  },
+  {
+    "table_name": "32 Cocktail",
+    "capacity": 4
+  },
+  {
+    "table_name": "33 Cocktail",
+    "capacity": 4
+  },
+  {
+    "table_name": "34 Cocktail",
+    "capacity": 4
+  },
+  {
+    "table_name": "41 Floor",
+    "capacity": 6
+  },
+  {
+    "table_name": "42 Floor",
+    "capacity": 6
+  },
+  {
+    "table_name": "43 Floor",
+    "capacity": 6
+  },
+  {
+    "table_name": "44 Floor",
+    "capacity": 6
+  },
+  {
+    "table_name": "45 Floor",
+    "capacity": 8
+  },
+  {
+    "table_name": "46 Floor",
+    "capacity": 8
+  },
+  {
+    "table_name": "51 Booth",
+    "capacity": 6
+  },
+  {
+    "table_name": "52 Booth",
+    "capacity": 6
+  },
+  {
+    "table_name": "53 Booth",
+    "capacity": 6
+  },
+  {
+    "table_name": "54 Booth",
+    "capacity": 6
+  },
+  {
+    "table_name": "55 Booth",
+    "capacity": 6
+  }
+]
