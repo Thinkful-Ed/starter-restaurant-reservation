@@ -6,6 +6,7 @@ const service = require("./reservations.service");
 async function reservationExists(req, res, next) {
 	// find ID in params
 	const id = req.params.reservation_id;
+	// call API
 	const reservation = await service.read(id);
 	// load result to locals or break with 404 not found
 	if (reservation) {
@@ -14,7 +15,7 @@ async function reservationExists(req, res, next) {
 	}
 	next({
 		status: 404,
-		message: `Reservation ${req.params.reservation_id} cannot be found.`,
+		message: `Reservation ${id} cannot be found.`,
 	});
 }
 /**
@@ -23,9 +24,10 @@ async function reservationExists(req, res, next) {
 function isValidReservation(req, res, next) {
 	// find reservation in req body
 	const reservation = { ...req.body };
+	console.log("Here's the reservation: ", reservation);
 	// store errors
 	const errors = [];
-	// check for missing form fields
+	// check for invalid form fields
 	if (!reservation.first_name) errors.push("First name is required.");
 	if (!reservation.last_name) errors.push("Last name is required.");
 	if (!reservation.mobile_number) errors.push("Mobile number is required.");
@@ -69,7 +71,11 @@ function isValidReservation(req, res, next) {
 	if (errors.length !== 0) {
 		return next({ status: 400, message: errors.join(" ") });
 	}
+	console.log("Phew! We made it.");
+	// validation
+	if (!reservation.status) reservation.status = "booked";
 	res.locals.validReservation = reservation;
+	console.log("Validated: ", res.locals.validReservation);
 	return next();
 }
 /**
@@ -99,8 +105,8 @@ function isStatusBooked(req, res, next) {
 	// cancelled is allowed so that cancelled reservations can be
 	// directly added to system for record keeping
 	const validStatuses = ["booked", "cancelled"];
-	// find status in req body
-	const status = req.body.data.status;
+	// find status in locals
+	const status = res.locals.validReservation.status;
 	// return next or break with 400 invalid status
 	if (validStatuses.includes(status)) return next();
 	return next({

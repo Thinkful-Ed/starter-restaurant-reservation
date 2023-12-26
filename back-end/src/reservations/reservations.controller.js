@@ -2,7 +2,7 @@ const service = require("./reservations.service");
 const validation = require("./reservations.validation");
 
 /**
- * List handler for reservation resources
+ * Handlers for reservation resources
  */
 async function list(req, res) {
 	const date = req.query.date;
@@ -21,23 +21,18 @@ async function list(req, res) {
 	// return result
 	res.json({ data });
 }
-/**
- * Create handler for reservation resources
- */
 async function create(req, res) {
-	const data = await service.create(res.locals.validReservation);
+	// find validated reservation in locals
+	const { validReservation } = res.locals;
+	// call API and return response
+	const data = await service.create(validReservation);
 	res.status(201).json({ data });
 }
-/**
- * Read handler for reservation resources
- */
 function read(req, res) {
-	const data = res.locals.foundReservation;
-	res.json({ data });
+	// find existing reservation in locals and return
+	const { foundReservation } = res.locals;
+	res.json({ data: foundReservation });
 }
-/**
- * Update handler for reservation resources
- */
 async function update(req, res) {
 	const data = await service.update(
 		res.locals.validReservation,
@@ -58,7 +53,6 @@ async function updateStatus(req, res) {
 	);
 	res.json({ data });
 }
-
 /**
  * Return with required validation in order
  */
