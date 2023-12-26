@@ -44,12 +44,12 @@ async function update(req, res) {
  * Update status handler for reservation resources
  */
 async function updateStatus(req, res) {
-	const { reservation } = res.locals;
+	const { foundReservation, validStatus } = res.locals;
 	// set reservation status to validated status
-	reservation.status = res.locals.status;
+	foundReservation.status = validStatus;
 	const data = await service.update(
-		res.locals.validReservation,
-		res.locals.foundReservation.reservation_id,
+		foundReservation,
+		foundReservation.reservation_id,
 	);
 	res.json({ data });
 }

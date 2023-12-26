@@ -25,17 +25,20 @@ function read(req, res) {
  * Handlers for table assignment resources
  */
 async function updateTableAssignment(req, res, next) {
-	// find table in locals
+	// find table in locals, reservation ID in req body
 	const { foundTable } = res.locals;
+	const { reservation_id } = req.body;
 	// update table
-	if (req.body.data) foundTable.reservation_id = req.body.data.reservation_id;
+	foundTable.reservation_id = reservation_id;
 	const data = await service.update(foundTable, foundTable.table_id);
 	// update reservation
-	const reservation = await ReservationsService.read(table.reservation_id);
+	const reservation = await ReservationsService.read(
+		foundTable.reservation_id,
+	);
 	if (reservation.status === "seated") {
 		return next({
 			status: 400,
-			message: "reservation already seated. ",
+			message: "Reservation already seated. ",
 		});
 	} else {
 		reservation.status = "seated";

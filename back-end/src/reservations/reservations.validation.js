@@ -24,7 +24,6 @@ async function reservationExists(req, res, next) {
 function isValidReservation(req, res, next) {
 	// find reservation in req body
 	const reservation = { ...req.body };
-	console.log("Here's the reservation: ", reservation);
 	// store errors
 	const errors = [];
 	// check for invalid form fields
@@ -71,11 +70,9 @@ function isValidReservation(req, res, next) {
 	if (errors.length !== 0) {
 		return next({ status: 400, message: errors.join(" ") });
 	}
-	console.log("Phew! We made it.");
 	// validation
 	if (!reservation.status) reservation.status = "booked";
 	res.locals.validReservation = reservation;
-	console.log("Validated: ", res.locals.validReservation);
 	return next();
 }
 /**
@@ -85,10 +82,10 @@ function isValidStatus(req, res, next) {
 	// define valid statuses
 	const validStatuses = ["booked", "seated", "cancelled", "finished"];
 	// find status in req body
-	const status = req.body.data.status;
+	const status = req.body.status;
 	// load result to locals or break with 400 unknown status
 	if (validStatuses.includes(status)) {
-		res.locals.status = status;
+		res.locals.validStatus = status;
 		return next();
 	}
 	return next({

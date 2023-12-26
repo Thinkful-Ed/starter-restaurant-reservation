@@ -50,17 +50,17 @@ function isValidTable(req, res, next) {
  */
 function isAvailable(req, res, next) {
 	const { foundTable } = res.locals;
-	if (foundTable.reservation_id === null) {
+	if (!foundTable.reservation_id) {
 		return next();
 	}
-	next({ status: 400, message: "Table is already occupied." });
+	return next({ status: 400, message: "Table is already occupied." });
 }
 function isUnavailable(req, res, next) {
 	const { foundTable } = res.locals;
 	if (foundTable.reservation_id !== null) {
 		return next();
 	}
-	next({ status: 400, message: "Table is not occupied." });
+	return next({ status: 400, message: "Table is not occupied." });
 }
 /**
  * Middleware to check if table resource in locals is large enough
@@ -69,36 +69,29 @@ function isUnavailable(req, res, next) {
 async function isLargeEnough(req, res, next) {
 	// find table in locals
 	const { foundTable } = res.locals;
-	if (req.body.data) {
-		const id = req.body.data.reservation_id;
-		if (id) {
-			const reservation = await ReservationsService.read(id);
-			if (!reservation[0]) {
-				return next({
-					status: 404,
-					message: `table ${id} not found.`,
-				});
-			}
-			if (reservation[0].people > foundTable.capacity) {
-				return next({
-					status: 400,
-					message:
-						"table capacity is not large enough for party size.",
-				});
-			}
-		} else {
+	// find reservation ID in req body
+	const { reservation_id } = req.body;
+	if (reservation_id) {
+		const reservation = await ReservationsService.read(reservation_id);
+		if (!reservation) {
+			return next({
+				status: 404,
+				message: `Table ${reservation_id} not found.`,
+			});
+		}
+		if (reservation.people > foundTable.capacity) {
 			return next({
 				status: 400,
-				message: "invalid reservation_id. ",
+				message: "Table capacity is not large enough for party size.",
 			});
 		}
 	} else {
 		return next({
 			status: 400,
-			message: "no data provided.",
+			message: "Invalid reservation ID. ",
 		});
 	}
-	next();
+	return next();
 }
 
 module.exports = {

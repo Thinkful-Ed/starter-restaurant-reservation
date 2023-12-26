@@ -14,13 +14,17 @@ function create(table) {
     .then((createdTables) => createdTables[0])
 }
 function read(id) {
-  return knex("tables").select("*").where({ table_id: id })
+  return knex("tables")
+		.select("*")
+		.where({ table_id: id })
+		.then((foundTables) => foundTables[0]);
 }
 function update(updatedTable, id) {
   return knex("tables")
-    .select("*")
-    .where({ table_id: id })
-    .update(updatedTable, "*")
+		.select("*")
+		.where({ table_id: id })
+		.update(updatedTable, "*")
+		.then((updatedTables) => updatedTables[0]);
 }
 
 module.exports = {
