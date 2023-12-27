@@ -4,7 +4,9 @@ const knex = require("../db/connection");
  * List services for reservation resources
  */
 function list() {
-	return knex("reservations as r").select("*").orderBy("r.reservation_time");
+	return knex("reservations as r")
+		.select("*")
+		.orderBy("r.reservation_time", "asc");
 }
 function listDate(date) {
 	return knex("reservations as r")

@@ -27,23 +27,23 @@ function isValidReservation(req, res, next) {
 	// store errors
 	const errors = [];
 	// check for invalid form fields
-	if (!reservation.first_name) errors.push("First name is required.");
-	if (!reservation.last_name) errors.push("Last name is required.");
-	if (!reservation.mobile_number) errors.push("Mobile number is required.");
+	if (!reservation.first_name) errors.push("first_name is required.");
+	if (!reservation.last_name) errors.push("last_name is required.");
+	if (!reservation.mobile_number) errors.push("mobile_number is required.");
 	if (
 		!reservation.reservation_date ||
 		!/^\d{4}-\d{2}-\d{2}$/.test(reservation.reservation_date)
 	)
-		errors.push("Reservation date is not valid.");
+		errors.push("reservation_date is not valid.");
 	if (
 		!reservation.reservation_time ||
 		!/^([0-1][0-9]|2[0-3]):([0-5][0-9])$/.test(
 			reservation.reservation_time.slice(0, 5),
 		)
 	)
-		errors.push("Reservation time is not valid.");
+		errors.push("reservation_time is not valid.");
 	if (!reservation.people || typeof reservation.people != "number")
-		errors.push("Reservation size is required.");
+		errors.push("Reservation size people is required.");
 	// check if date & time are valid
 	const reqDate = reservation.reservation_date;
 	const reqTime = reservation.reservation_time;
@@ -52,7 +52,7 @@ function isValidReservation(req, res, next) {
 		const dateTime = Date.parse(reqDate + " " + reqTime);
 		const now = new Date().getTime();
 		if (dateTime < now)
-			errors.push("Reservation date must be in the future.");
+			errors.push("reservation_date must be in the future.");
 		// Compare request's date to restaurant's operating days
 		const dateString = new Date(reqDate).toDateString();
 		if (dateString.includes("Mon"))
