@@ -23,7 +23,7 @@ async function reservationExists(req, res, next) {
  */
 function isValidReservation(req, res, next) {
 	// find reservation in req body
-	const reservation = { ...req.body };
+	const reservation = { ...req.body.data };
 	// store errors
 	const errors = [];
 	// check for invalid form fields
@@ -82,7 +82,7 @@ function isValidStatus(req, res, next) {
 	// define valid statuses
 	const validStatuses = ["booked", "seated", "cancelled", "finished"];
 	// find status in req body
-	const status = req.body.status;
+	const status = req.body.data.status;
 	// load result to locals or break with 400 unknown status
 	if (validStatuses.includes(status)) {
 		res.locals.validStatus = status;
@@ -108,7 +108,8 @@ function isStatusBooked(req, res, next) {
 	if (validStatuses.includes(status)) return next();
 	return next({
 		status: 400,
-		message: "Invalid status for a new reservation.",
+		message:
+			"Invalid status for a new reservation (cannot be seated or finished).",
 	});
 }
 /**

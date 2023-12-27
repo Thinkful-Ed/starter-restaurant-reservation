@@ -27,9 +27,8 @@ function read(req, res) {
 async function updateTableAssignment(req, res, next) {
 	// find table in locals, reservation ID in req body
 	const { foundTable } = res.locals;
-	const { reservation_id } = req.body;
 	// update table
-	foundTable.reservation_id = reservation_id;
+	if (req.body.data) foundTable.reservation_id = req.body.data.reservation_id;
 	const data = await service.update(foundTable, foundTable.table_id);
 	// update reservation
 	const reservation = await ReservationsService.read(
@@ -49,20 +48,17 @@ async function updateTableAssignment(req, res, next) {
 async function destroyTableAssignment(req, res) {
 	// find table in locals
 	const { foundTable } = res.locals;
-	// update table
-	foundTable.reservation_id = null;
-	const data = await service.update(foundTable, foundTable.table_id);
 	// update reservation
 	const reservation = await ReservationsService.read(
 		foundTable.reservation_id,
 	);
-	if (reservation) {
-		reservation.status = "finished";
-		await ReservationsService.update(
-			reservation,
-			reservation.reservation_id,
-		);
-	}
+	await ReservationsService.update(
+		{ ...reservation, status: "finished" },
+		reservation.reservation_id,
+	);
+	// update table
+	foundTable.reservation_id = null;
+	const data = await service.update(foundTable, foundTable.table_id);
 	res.json({ data });
 }
 /**

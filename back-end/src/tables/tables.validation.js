@@ -24,14 +24,12 @@ async function tableExists(req, res, next) {
  */
 function isValidTable(req, res, next) {
 	// find table in req body
-	const table = { ...req.body };
-	// validate types
-	table.capacity = Number(table.capacity);
+	const table = { ...req.body.data };
 	// store errors
 	const errors = [];
 	// check for invalid form fields
 	if (!table.table_name || table.table_name.length < 2)
-		errors.push("Table name must be at least two characters.");
+		errors.push("table_name must be at least two characters.");
 	if (
 		!table.capacity ||
 		table.capacity < 1 ||
@@ -70,25 +68,34 @@ async function isLargeEnough(req, res, next) {
 	// find table in locals
 	const { foundTable } = res.locals;
 	// find reservation ID in req body
-	const { reservation_id } = req.body;
-	if (reservation_id) {
-		const reservation = await ReservationsService.read(reservation_id);
-		if (!reservation) {
-			return next({
-				status: 404,
-				message: `Table ${reservation_id} not found.`,
-			});
-		}
-		if (reservation.people > foundTable.capacity) {
+	const { data } = req.body;
+	if (data) {
+		const { reservation_id } = data;
+		if (reservation_id) {
+			const reservation = await ReservationsService.read(reservation_id);
+			if (!reservation) {
+				return next({
+					status: 404,
+					message: `Table ${reservation_id} not found.`,
+				});
+			}
+			if (reservation.people > foundTable.capacity) {
+				return next({
+					status: 400,
+					message:
+						"Table capacity is not large enough for party size.",
+				});
+			}
+		} else {
 			return next({
 				status: 400,
-				message: "Table capacity is not large enough for party size.",
+				message: "Invalid reservation_id.",
 			});
 		}
 	} else {
 		return next({
 			status: 400,
-			message: "Invalid reservation ID. ",
+			message: "No data found.",
 		});
 	}
 	return next();
