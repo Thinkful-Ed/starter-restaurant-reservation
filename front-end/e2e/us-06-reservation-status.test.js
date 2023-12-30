@@ -35,7 +35,7 @@ describe("US-06 - Reservation status - E2E", () => {
       reservation = await createReservation({
         first_name: "Status",
         last_name: Date.now().toString(10),
-        mobile_number: "800-555-1313",
+        mobile_number: "555-1313",
         reservation_date: "2035-01-01",
         reservation_time: "13:45",
         people: 4,

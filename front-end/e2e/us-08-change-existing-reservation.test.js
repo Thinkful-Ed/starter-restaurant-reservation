@@ -29,7 +29,7 @@ describe("US-08 - Change an existing reservation - E2E", () => {
     reservation = await createReservation({
       first_name: "Change",
       last_name: Date.now().toString(10),
-      mobile_number: "800-555-1616",
+      mobile_number: "555-1616",
       reservation_date: "2035-01-04",
       reservation_time: "14:00",
       people: 4,
