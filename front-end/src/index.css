@@ -61,6 +61,7 @@ header {
 
 .side-bar,
 .bg-dark {
+	transition: all ease-in-out .3s;
 	background-color: #212529 !important;
 }
 
@@ -75,6 +76,11 @@ hr {
 
 .form-component form {
 	max-width: 750px;
+}
+
+.collapse-btn {
+	transition: all ease-in-out .3s;
+	cursor: pointer;
 }
 
 .rotate {

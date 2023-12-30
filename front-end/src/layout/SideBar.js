@@ -28,7 +28,9 @@ export default function SideBar({ isHide, setIsHide }) {
 						<FontAwesomeIcon
 							icon={faThumbtack}
 							onClick={handleHide}
-							className={isHide ? "rotate" : ""}
+							className={
+								isHide ? "collapse-btn rotate" : "collapse-btn"
+							}
 						/>
 					</div>
 				</div>
