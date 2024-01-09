@@ -16,11 +16,11 @@ function ReservationForm({
             <input
               type="text"
               id="first-name"
-              name="firstName"
+              name="first_name"
               placeholder="First Name"
               required
               onChange={handleChange}
-              value={newReservation.firstName}
+              value={newReservation.first_name}
               className="form-control"
             />
           </label>
@@ -31,11 +31,11 @@ function ReservationForm({
             <input
               type="text"
               id="last-name"
-              name="lastName"
+              name="last_name"
               placeholder="Last Name"
               required
               onChange={handleChange}
-              value={newReservation.lastName}
+              value={newReservation.last_name}
               className="form-control"
             />
           </label>
@@ -46,11 +46,11 @@ function ReservationForm({
             <input
               type="text"
               id="mobile-number"
-              name="mobileNumber"
+              name="mobile_number"
               placeholder="555-555-5555"
               required
               onChange={handleChange}
-              value={newReservation.mobileNumber}
+              value={newReservation.mobile_number}
               className="form-control"
             />
           </label>
@@ -59,13 +59,13 @@ function ReservationForm({
           <label htmlFor="date">
             Reservation Date
             <input
-              type="text"
+              type="date"
               id="date"
-              name="date"
+              name="reservation_date"
               required
-              placeholder="DD/MM/YYYY"
+              placeholder="YYYY-MM-DD"
               onChange={handleChange}
-              value={newReservation.date}
+              value={newReservation.reservation_date}
               className="form-control"
             />
           </label>
@@ -74,13 +74,13 @@ function ReservationForm({
           <label htmlFor="time">
             Reservation Time
             <input
-              type="text"
+              type="time"
               id="time"
-              name="time"
-              placeholder="HH:MM"
+              name="reservation_time"
+              placeholder="HH:MM:SS"
               required
               onChange={handleChange}
-              value={newReservation.time}
+              value={newReservation.reservation_time}
               className="form-control"
             />
           </label>
@@ -91,11 +91,11 @@ function ReservationForm({
             <input
               type="number"
               id="partySize"
-              name="partySize"
+              name="people"
               placeholder="2"
               required
               onChange={handleChange}
-              value={newReservation.partySize}
+              value={newReservation.people}
               className="form-control"
             />
           </label>

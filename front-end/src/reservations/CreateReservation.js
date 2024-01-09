@@ -6,12 +6,12 @@ import ReservationForm from "../reservations/ReservationForm";
 function CreateReservation() {
   const history = useHistory();
   const createNewReservation = {
-    firstName: "",
-    lastName: "",
-    mobileNumber: "",
-    date: "",
-    time: "",
-    partySize: "",
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    reservation_date: "",
+    reservation_time: "",
+    people: null,
   };
   const [newReservation, setNewReservation] = useState({
     ...createNewReservation,
