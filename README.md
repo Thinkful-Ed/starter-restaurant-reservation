@@ -74,8 +74,8 @@ The table below describes the existing files in the `./front-end` folder:
 
 ## Database setup
 
-1. Set up four new PostgreSQL database instances - development, test, preview, and production - by following the instructions in the "PostgreSQL: Creating & Deleting Databases" lesson.
-1. After setting up your database instances, connect DBeaver to your new database instances by following the instructions in the "PostgreSQL: Installing DBeaver" checkpoint.
+1. Set up a new PostgreSQL database instance by following the instructions in the "PostgreSQL: Creating & Installing Databases" lesson.
+1. After setting up your database instance, connect DBeaver to your new database instances by following the instructions in the "PostgreSQL: Installing DBeaver" lesson.
 
 ### Knex
 
