@@ -1,5 +1,6 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const { isValid, parseISO, parse } = require("date-fns");
 
 //Validation middleware
 
@@ -22,7 +23,7 @@ function dateIsValid(req, res, next) {
   if (reservation_date && isValid(parseISO(reservation_date))) {
     return next();
   }
-  next({ status: 400, message: `Reservation date: ${reservation_date}.` });
+  next({ status: 400, message: `reservation_date` });
 }
 
 //Validates that the inputted time is in the correct format
@@ -40,17 +41,20 @@ function timeIsValid(req, res, next) {
     }
   }
 
-  next({ status: 400, message: `Reservation time: ${reservation_time}.` });
+  next({ status: 400, message: `reservation_time` });
 }
 
 //Validates that the provided party size, "people", is a legitimate number
 function peopleNumberIsValid(req, res, next) {
   const { data: { people } = {} } = req.body;
   if (people <= 0 || !Number.isInteger(people)) {
-    return next();
+    return next({
+      status: 400,
+      message: `people`,
+    });
   }
 
-  next({ status: 400, message: `Party size: ${people}.` });
+  next();
 }
 
 /**

@@ -11,15 +11,15 @@ function CreateReservation() {
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: null,
+    people: "",
   };
-  const [newReservation, setNewReservation] = useState({
+  const [reservation, setReservation] = useState({
     ...createNewReservation,
   });
 
   const handleChange = ({ target }) => {
-    setNewReservation({
-      ...newReservation,
+    setReservation({
+      ...reservation,
       [target.name]: target.value,
     });
   };
@@ -27,9 +27,9 @@ function CreateReservation() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const abortController = new AbortController();
-    createReservation(newReservation, abortController.signal)
-      .then(setNewReservation({ ...createNewReservation }))
-      .then(history.push(`/dashboard`));
+    createReservation(reservation, abortController.signal)
+      .then(setReservation({ ...createNewReservation }))
+      .then(history.push(`/dashboard/?date=${reservation.reservation_date}`));
   };
 
   return (
@@ -44,8 +44,7 @@ function CreateReservation() {
           <ReservationForm
             handleChange={handleChange}
             handleSubmit={handleSubmit}
-            newReservation={newReservation}
-            setNewReservation={setNewReservation}
+            reservation={reservation}
           />
         </div>
       </div>
