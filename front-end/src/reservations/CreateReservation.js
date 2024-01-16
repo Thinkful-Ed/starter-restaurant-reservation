@@ -22,15 +22,17 @@ function CreateReservation() {
       ...reservation,
       [target.name]: target.value,
     });
+    console.log(reservation);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const abortController = new AbortController();
     console.log("reservation: ", { ...reservation }, createNewReservation);
-    createReservation(reservation, abortController.signal)
-      .then(setReservation({ ...reservation }))
+    createReservation(reservation)
+      .then(setReservation({ ...createNewReservation }))
       .then(history.push(`/dashboard/?date=${reservation.reservation_date}`));
+      console.log(reservation);
   };
 
   return (

@@ -2,7 +2,6 @@ const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const { isValid, parseISO, parse } = require("date-fns");
 
-const validArray = ["first_name", "last_name"]
 
 //Validation middleware
 
