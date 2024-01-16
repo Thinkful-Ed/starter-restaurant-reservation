@@ -3,9 +3,9 @@ exports.up = function (knex) {
     table.increments("reservation_id").primary();
     table.string("first_name");
     table.string("last_name");
-    table.text("mobile_number");
+    table.string("mobile_number");
     table.date("reservation_date");
-    table.time("reservations_time");
+    table.time("reservation_time");
     table.integer("people");
     table.timestamps(true, true);
   });

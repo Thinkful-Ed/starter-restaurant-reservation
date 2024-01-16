@@ -2,13 +2,15 @@ const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const { isValid, parseISO, parse } = require("date-fns");
 
+const validArray = ["first_name", "last_name"]
+
 //Validation middleware
 
 //Validates that new Reservations have the correct properties
 function bodyDataHas(propertyName) {
   return function (req, res, next) {
     const { data = {} } = req.body;
-
+    console.log(req.body);
     if (data[propertyName]) {
       return next();
     }
