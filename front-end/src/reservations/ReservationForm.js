@@ -12,11 +12,11 @@ function ReservationForm({
     <>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="first-name">
+          <label htmlFor="first_name">
             First Name
             <input
               type="text"
-              id="first-name"
+              id="first_name"
               name="first_name"
               placeholder="First Name"
               required
@@ -27,11 +27,11 @@ function ReservationForm({
           </label>
         </div>
         <div className="form-group">
-          <label htmlFor="last-name">
+          <label htmlFor="last_name">
             Last Name
             <input
               type="text"
-              id="last-name"
+              id="last_name"
               name="last_name"
               placeholder="Last Name"
               required
@@ -42,11 +42,11 @@ function ReservationForm({
           </label>
         </div>
         <div className="form-group">
-          <label htmlFor="mobile-number">
+          <label htmlFor="mobile_number">
             Mobile Number
             <input
-              type="text"
-              id="mobile-number"
+              type="tel"
+              id="mobile_number"
               name="mobile_number"
               placeholder="555-555-5555"
               required
@@ -57,11 +57,11 @@ function ReservationForm({
           </label>
         </div>
         <div className="form-group">
-          <label htmlFor="date">
+          <label htmlFor="reservation_date">
             Reservation Date
             <input
               type="date"
-              id="date"
+              id="reservation_date"
               name="reservation_date"
               required
               placeholder="YYYY-MM-DD"
@@ -72,11 +72,11 @@ function ReservationForm({
           </label>
         </div>
         <div className="form-group">
-          <label htmlFor="time">
+          <label htmlFor="reservation_time">
             Reservation Time
             <input
               type="time"
-              id="time"
+              id="reservation_time"
               name="reservation_time"
               placeholder="HH:MM:SS"
               required
@@ -87,11 +87,11 @@ function ReservationForm({
           </label>
         </div>
         <div className="form-group">
-          <label htmlFor="party-size">
+          <label htmlFor="people">
             Party Size
             <input
               type="number"
-              id="partySize"
+              id="people"
               name="people"
               placeholder="2"
               required

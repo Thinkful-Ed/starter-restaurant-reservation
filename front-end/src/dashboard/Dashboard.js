@@ -12,7 +12,7 @@ import useQuery from "../utils/useQuery";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard() {
+function Dashboard({ date }) {
   let history = useHistory();
   const query = useQuery();
 

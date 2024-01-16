@@ -92,9 +92,9 @@ async function list(req, res) {
 async function create(req, res) {
   const newReservation = await service.create(req.body.data);
 
-  newReservation.reservation_id++;
+  //newReservation.reservation_id++;
 
-  res.status(201).json({ data: newReservation });
+  res.status(201).json({ newReservation });
 }
 
 module.exports = {
