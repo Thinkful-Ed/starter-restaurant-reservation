@@ -9,7 +9,7 @@ const methodNotAllowed = require("../errors/methodNotAllowed");
  */
 
 router.route("/")
-.get(controller.listByDate)
+.get(controller.list)
 .post(controller.create)
 .all(methodNotAllowed);
 
