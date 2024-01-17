@@ -1,11 +1,11 @@
 import React from "react";
 
-function ReservationList({ reservations, loadDashboard }) {
+function ReservationList({ reservations, loadDashboard, date }) {
   let reservationsMap;
   if (reservations.length === 0) {
     reservationsMap = (
       <tr>
-        <td colSpan="5">There are no reservations for today.</td>
+        <td colSpan="5">There are no reservations for this day.</td>
       </tr>
     );
   } else {

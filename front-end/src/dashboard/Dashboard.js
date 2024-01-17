@@ -57,17 +57,17 @@ function Dashboard({ date }) {
         />
       </div>
       <div className="d-flex justify-content-between p-2">
-        <button type="button" className="btn btn-dark" onClick={handlePrevious}>
+        <button type="button" className="btn btn-secondary" onClick={handlePrevious}>
           Previous
         </button>
         <button
           type="button"
-          className="btn btn-secondary"
+          className="btn btn-outline-secondary"
           onClick={handleToday}
         >
           Today
         </button>
-        <button type="button" className="btn btn-dark" onClick={handleNext}>
+        <button type="button" className="btn btn-secondary" onClick={handleNext}>
           Next
         </button>
       </div>
