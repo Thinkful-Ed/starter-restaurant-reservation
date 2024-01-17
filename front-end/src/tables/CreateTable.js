@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
+import { createTable } from "../utils/api";
 
 function CreateTable() {
   const initialFormState = {
@@ -15,7 +16,7 @@ function CreateTable() {
 
   const handleChange = (event) => {
     let { name, value } = event.target;
-    if (name === "people") {
+    if (name === "capacity") {
       value = Number(value);
     }
     setNewTable({
@@ -28,7 +29,7 @@ function CreateTable() {
     event.preventDefault();
     const abortController = new AbortController();
     try {
-      await setNewTable(initialFormState);
+      await createTable(newTable);
       history.push(`/dashboard`);
     } catch (error) {
       setReservationsError(error);

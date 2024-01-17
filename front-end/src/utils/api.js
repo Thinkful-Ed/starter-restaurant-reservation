@@ -87,3 +87,34 @@ export async function createReservation(reservation, signal) {
   };
   return await fetchJson(url, options, reservation);
 }
+
+/**
+ * Retrieves all existing tables.
+ * @returns {Promise<[table]>}
+ *  a promise that resolves to a possibly empty array of table saved in the database.
+ */
+
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return await fetchJson(url, { headers, signal }, []);
+}
+
+/**
+ * Creates a new table.
+ * @param {Object} tableData - The data for the new table.
+ * @param {AbortSignal} signal - The AbortSignal for handling aborts.
+ * @returns {Promise<table>}
+ *   A promise that resolves to the newly created table.
+ */
+
+export async function createTable(table, signal) {
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method: "POST",
+    mode: "cors",
+    headers,
+    body: JSON.stringify({ data: table }),
+    signal,
+  };
+  return await fetchJson(url, options, table);
+}
