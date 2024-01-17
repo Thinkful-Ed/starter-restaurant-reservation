@@ -2,8 +2,9 @@ const knex = require("../db/connection");
 
 function list() {
     return knex("tables")
-    .select("*");
-}
+      .select("*")
+      .orderBy("table_name");
+  }
 
 function read(table_id) {
     return knex("tables")
@@ -12,7 +13,15 @@ function read(table_id) {
     .first();
 }
 
+function create(table) {
+    return knex("tables")
+      .insert(table)
+      .returning("*")
+      .then((createdRecords) => createdRecords[0]);
+  }
+
 module.exports = {
     list,
     read,
+    create,
 }
