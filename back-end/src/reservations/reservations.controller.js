@@ -20,6 +20,24 @@ const VALID_PROPERTIES = [
   "people",
 ];
 
+function isValidTimeMiddleware(req, res, next) {
+  const { data = {} } = req.body;
+  const { reservation_time } = data;
+
+  if (reservation_time && !isValidTime(reservation_time)) {
+    return next({
+      status: 400,
+      message: `Invalid field: reservation_time. Must be a valid time in the format HH:mm.`,
+    });
+  }
+  next();
+}
+
+function isValidTime(timeString) {
+  const regex = /^(?:[01]\d|2[0-3]):[0-5]\d$/; // Time format HH:mm
+  return regex.test(timeString);
+}
+
 function isValidDateMiddleware(req, res, next) {
   const { data = {} } = req.body;
   const { reservation_date } = data;
@@ -42,7 +60,9 @@ function isValidDate(dateString) {
 
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
-  const invalidFields = Object.keys(data).filter((field) => !VALID_PROPERTIES.includes(field));
+  const invalidFields = Object.keys(data).filter(
+    (field) => !VALID_PROPERTIES.includes(field)
+  );
 
   if (invalidFields.length) {
     return next({
@@ -70,5 +90,11 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [isValidDateMiddleware, hasOnlyValidProperties, hasRequiredProperties, asyncErrorBoundary(create)],
+  create: [
+    isValidDateMiddleware,
+    isValidTimeMiddleware,
+    hasOnlyValidProperties,
+    hasRequiredProperties,
+    asyncErrorBoundary(create),
+  ],
 };
