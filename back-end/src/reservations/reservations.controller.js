@@ -20,6 +20,26 @@ const VALID_PROPERTIES = [
   "people",
 ];
 
+function isValidDateMiddleware(req, res, next) {
+  const { data = {} } = req.body;
+  const { reservation_date } = data;
+
+  if (reservation_date && !isValidDate(reservation_date)) {
+    return next({
+      status: 400,
+      message: `Invalid field: reservation_date. Must be a valid date in the format YYYY-MM-DD.`,
+    });
+  }
+  next();
+}
+
+function isValidDate(dateString) {
+  const regex = /^\d{4}-\d{2}-\d{2}$/; // Date format YYYY-MM-DD
+  if (!regex.test(dateString)) return false;
+  const date = new Date(dateString);
+  return !isNaN(date.getTime());
+}
+
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
   const invalidFields = Object.keys(data).filter((field) => !VALID_PROPERTIES.includes(field));
@@ -35,7 +55,10 @@ function hasOnlyValidProperties(req, res, next) {
 
 async function list(req, res) {
   const { date } = req.query;
-  const data = await reservationsService.listByDate(date);
+  let data;
+  if (date) {
+    data = await reservationsService.listByDate(date);
+  }
   res.json({ data });
 }
 
@@ -47,5 +70,5 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [hasOnlyValidProperties, hasRequiredProperties, asyncErrorBoundary(create)],
+  create: [isValidDateMiddleware, hasOnlyValidProperties, hasRequiredProperties, asyncErrorBoundary(create)],
 };
