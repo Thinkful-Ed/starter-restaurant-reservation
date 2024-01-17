@@ -20,7 +20,6 @@ const VALID_PROPERTIES = [
   "people",
 ];
 
-//  ✕ returns 201 if data is valid (305 ms), still need this to pass.
 function hasData(req, res, next) {
   const data = req.body.data;
   if (!data) {
@@ -30,6 +29,11 @@ function hasData(req, res, next) {
     });
   }
   next();
+}
+
+function isValidTime(timeString) {
+  const regex = /^(?:[01]\d|2[0-3]):[0-5]\d$/; // Time format HH:mm
+  return regex.test(timeString);
 }
 
 function isValidTimeMiddleware(req, res, next) {
@@ -43,11 +47,6 @@ function isValidTimeMiddleware(req, res, next) {
     });
   }
   next();
-}
-
-function isValidTime(timeString) {
-  const regex = /^(?:[01]\d|2[0-3]):[0-5]\d$/; // Time format HH:mm
-  return regex.test(timeString);
 }
 
 function isValidDateMiddleware(req, res, next) {
@@ -123,6 +122,26 @@ function dateIsNotInPast(req, res, next) {
   next();
 }
 
+function isValidBusinessHours(req, res, next) {
+  const { reservation_time } = req.body.data;
+  const openingTime = new Date(`1970-01-01T10:30:00`);
+  const closingTime = new Date(`1970-01-01T21:30:00`);
+  const reservationDateTime = new Date(`1970-01-01T${reservation_time}`);
+  if (reservationDateTime < openingTime) {
+    return next({
+      status: 400,
+      message: `Reservation time must be after 10:30 AM.`
+    })
+  }
+  if (reservationDateTime > closingTime) {
+    return next({
+      status: 400,
+      message: `Reservation time must be before 9:30 PM.`
+    })
+  }
+  next();
+}
+
 async function list(req, res) {
   const { date } = req.query;
   let data;
@@ -165,6 +184,7 @@ module.exports = {
     hasRequiredProperties,
     dateIsNotInPast,
     isNotTuesday,
+    isValidBusinessHours,
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)]
