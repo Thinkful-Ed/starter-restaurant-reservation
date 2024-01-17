@@ -57,6 +57,7 @@ function CreateTable() {
         <div className="col-md-12 p-2">
           <input
             name="capacity"
+            type="number"
             placeholder="Capacity"
             className="form-control"
             id="capacity"
