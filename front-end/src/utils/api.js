@@ -83,8 +83,17 @@ export async function createReservation(reservation, signal, data) {
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify({ data }),
+    body: JSON.stringify(reservation),
     signal,
   };
-  return await fetchJson(url, options, {});
+
+  try {
+    const response = await fetchJson(url, options, {});
+    console.log("Create Reservation Response:", response); // Log the entire response
+    return response;
+  } catch (error) {
+    // Handle errors as needed
+    console.error("Error in createReservation:", error);
+    return Promise.reject(error);
+  }
 }

@@ -27,15 +27,14 @@ function CreateReservation() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const abortController = new AbortController();
-    console.log("reservation: ", { ...reservation });
+
     reservation.people = Number(reservation.people);
-    createReservation(reservation, abortController.signal)
-      .then((data) => {
-        history.push(`/dashboard?date=${reservation.reservation_date}`);
-      })
-      .catch(setError);
-    console.log(reservation);
-    return () => abortController.abort();
+
+    createReservation(reservation).then((response) => {
+      console.log(reservation);
+      setReservation({ ...reservation });
+      return response;
+    });
   };
 
   return (

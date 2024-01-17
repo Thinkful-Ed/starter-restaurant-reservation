@@ -2,7 +2,6 @@ const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const { isValid, parseISO, parse } = require("date-fns");
 
-
 //Validation middleware
 
 //Validates that new Reservations have the correct properties
@@ -10,7 +9,7 @@ function bodyDataHas(propertyName) {
   return function (req, res, next) {
     const { data = {} } = req.body;
     console.log(req.body);
-    if (data[propertyName]) {
+    if (reservation[propertyName]) {
       return next();
     }
     next({ status: 400, message: `Must include a ${propertyName} property.` });
@@ -35,11 +34,7 @@ function timeIsValid(req, res, next) {
   const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
   if (reservation_time && regex.test(reservation_time)) {
-    const time = parse(reservation_time, "HH:mm", new Date());
-
-    if (isValid(time)) {
-      return next();
-    }
+    return next();
   }
 
   next({ status: 400, message: `reservation_time` });
@@ -94,7 +89,7 @@ async function create(req, res) {
 
   //newReservation.reservation_id++;
 
-  res.status(201).json({ newReservation });
+  res.status(201).json(newReservation);
 }
 
 module.exports = {
@@ -103,8 +98,8 @@ module.exports = {
     bodyDataHas("first_name"),
     bodyDataHas("last_name"),
     bodyDataHas("mobile_number"),
-    bodyDataHas("reservation_time"),
     bodyDataHas("reservation_date"),
+    bodyDataHas("reservation_time"),
     bodyDataHas("people"),
     peopleNumberIsValid,
     dateIsValid,
