@@ -22,7 +22,7 @@ async function tableExists(req, res, next) {
     }
     next({
       status: 404,
-      message: `${req.params.table_id} cannot be found.`
+      message: `Table ${req.params.table_id} cannot be found.`
     })
   }
   
