@@ -71,7 +71,13 @@ function CreateTable() {
           </button>
         </div>
         <div className="col-6 p-2 d-flex justify-content-end">
-          <button onClick={() => history.goBack()} className="btn btn-danger ">
+          <button
+            onClick={(event) => {
+              event.preventDefault();
+              history.goBack();
+            }}
+            className="btn btn-danger "
+          >
             Cancel
           </button>
         </div>
