@@ -58,6 +58,18 @@ function isValidDate(dateString) {
   return !isNaN(date.getTime());
 }
 
+function isValidNumber(req, res, next) {
+  const { data = {} } = req.body;
+  const { people } = data;
+  if (!Number.isInteger(people)) {
+    return next({
+      status: 400,
+      message: `Invalid field: people. Must be a valid number.`
+    });
+  }
+  next();
+}
+
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
   const invalidFields = Object.keys(data).filter(
@@ -72,6 +84,8 @@ function hasOnlyValidProperties(req, res, next) {
   }
   next();
 }
+
+
 
 async function list(req, res) {
   const { date } = req.query;
@@ -93,6 +107,7 @@ module.exports = {
   create: [
     isValidDateMiddleware,
     isValidTimeMiddleware,
+    isValidNumber,
     hasOnlyValidProperties,
     hasRequiredProperties,
     asyncErrorBoundary(create),
