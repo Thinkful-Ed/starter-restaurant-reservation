@@ -104,11 +104,23 @@ function isNotTuesday(req, res, next) {
   if (dayOfTheWeek.getUTCDay() == 2) {
     return next({
       status: 400,
-      message: `Reservations cannot be made on this day. The restaurant is closed.`
+      message: `Reservations cannot be made on a Tuesday. The restaurant is closed.`
     });
   } else if (date && date > 0) {
     return next();
   }
+}
+
+function dateIsNotInPast(req, res, next) {
+  const { reservation_date, reservation_time } = req.body.data;
+  const day = new Date(`${reservation_date} ${reservation_time}`);
+  if (day < new Date()) {
+    return next({
+      status: 400, 
+      message: `The reservation must be in the future.`
+    })
+  }
+  next();
 }
 
 async function list(req, res) {
@@ -151,6 +163,7 @@ module.exports = {
     isValidNumber,
     hasOnlyValidProperties,
     hasRequiredProperties,
+    dateIsNotInPast,
     isNotTuesday,
     asyncErrorBoundary(create),
   ],
