@@ -1,25 +1,32 @@
 import React from "react";
 
 function ReservationList({ reservations, loadDashboard }) {
-    return (
-        <div>
-              {/* create a separate component for reservation list on dashboard  */}
-        <ul className="list-group">
-        {reservations.map((reservation) => (
-          <li className="list-group-item w-75 mx-auto" key={reservation.reservation_id}>
-            Name: {reservation.first_name} {reservation.last_name} 
-            <br />
-            Phone Number: {reservation.mobile_number}
-            <br />
-            Party Size: {reservation.people}
-            <br />
-            Date: {reservation.reservation_date}
-            <br />
-            Time: {reservation.reservation_time}
-          </li>
-        ))}
-      </ul>
-        </div>
+  const reservationsMap = reservations.map((reservation) => (
+        <tr key={reservation.reservation_id}>
+          <td>{reservation.first_name} {reservation.last_name}</td>
+          <td>{reservation.mobile_number}</td>
+          <td>{reservation.reservation_date}</td>
+          <td>{reservation.reservation_time}</td>
+          <td>{reservation.people}</td>
+          </tr>
+  ));
+
+  return (
+    <div className="table-hover">
+    <table className="table table-sm w-75 text-center mb-5">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Phone Number</th>
+          <th scope="col">Reservation Date</th>
+          <th scope="col">Reservation Time</th>
+          <th scope="col">Party Size</th>
+        </tr>
+      </thead>
+
+      <tbody className="table-group-divider">{reservationsMap}</tbody>
+    </table>
+  </div>
     )
 }
 
