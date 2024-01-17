@@ -20,6 +20,18 @@ const VALID_PROPERTIES = [
   "people",
 ];
 
+//  ✕ returns 201 if data is valid (305 ms), still need this to pass.
+function hasData(req, res, next) {
+  const data = req.body.data;
+  if (!data) {
+    return next({
+      status: 400,
+      message: `Request body must have data.`,
+    });
+  }
+  next();
+}
+
 function isValidTimeMiddleware(req, res, next) {
   const { data = {} } = req.body;
   const { reservation_time } = data;
@@ -64,7 +76,7 @@ function isValidNumber(req, res, next) {
   if (!Number.isInteger(people)) {
     return next({
       status: 400,
-      message: `Invalid field: people. Must be a valid number.`
+      message: `Invalid field: people. Must be a valid number.`,
     });
   }
   next();
@@ -85,8 +97,6 @@ function hasOnlyValidProperties(req, res, next) {
   next();
 }
 
-
-
 async function list(req, res) {
   const { date } = req.query;
   let data;
@@ -105,6 +115,7 @@ async function create(req, res) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
+    hasData,
     isValidDateMiddleware,
     isValidTimeMiddleware,
     isValidNumber,
