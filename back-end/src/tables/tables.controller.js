@@ -44,6 +44,18 @@ function isValidNumber(req, res, next) {
   next();
 }
 
+function validTableName(req, res, next) {
+  const { table_name } = req.body.data;
+  const table = String(table_name);
+  if (table.length < 2) {
+    return next({
+      status: 400,
+      message: `table_name must be longer than one character.`,
+    });
+  }
+  return next();
+}
+
 async function list(req, res) {
   const data = await tablesService.list();
   res.json({ data });
@@ -78,6 +90,7 @@ module.exports = {
     isValidNumber,
     hasRequiredProperties,
     hasOnlyValidProperties,
+    validTableName,
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
