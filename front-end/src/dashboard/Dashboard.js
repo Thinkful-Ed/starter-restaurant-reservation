@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
+import { next, previous, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 
 /**
@@ -15,15 +16,28 @@ function Dashboard({ date }) {
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
-    const today = new Date().toISOString().split("T")[0];
-    const selectedDate = date || today;
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date: selectedDate }, abortController.signal)
+    listReservations({ date }, abortController.signal)
     .then(setReservations)
     .catch(setReservationsError);
-    return abortController;
+    return () => abortController.abort();
   }
+
+  const handlePrevious = () => {
+    const previousDate = previous(date);
+    loadDashboard(previousDate);
+  };
+
+  const handleToday = () => {
+    const todayDate = today();
+    loadDashboard(todayDate);
+  };
+
+  const handleNext = () => {
+    const nextDate = next(date);
+    loadDashboard(nextDate);
+  };
 
   return (
     <main>
@@ -33,6 +47,8 @@ function Dashboard({ date }) {
         <h4 className="mb-0 mx-auto">Reservations for {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
+
+      {/* create a separate component for reservation list on dashboard  */}
         <ul className="list-group">
         {reservations.map((reservation) => (
           <li className="list-group-item w-75 mx-auto" key={reservation.reservation_id}>
@@ -49,13 +65,22 @@ function Dashboard({ date }) {
         ))}
       </ul>
       <div className="d-flex justify-content-between p-2">
-        <button type="submit" className="btn btn-primary">
+        <button 
+        type="button" 
+        className="btn btn-dark"
+        onClick={handlePrevious}>
           Previous
         </button>
-        <button className="btn btn-danger">
+        <button 
+        type="button" 
+        className="btn btn-secondary"
+        onClick={handleToday}>
           Today
         </button>
-        <button className="btn btn-danger">
+        <button 
+        type="button"
+        className="btn btn-dark"
+        onClick={handleNext}>
           Next
         </button>
       </div>
