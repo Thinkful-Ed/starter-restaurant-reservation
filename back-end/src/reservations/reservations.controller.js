@@ -97,6 +97,20 @@ function hasOnlyValidProperties(req, res, next) {
   next();
 }
 
+function isNotTuesday(req, res, next) {
+  const { reservation_date } = req.body.data;
+  const date = Date.parse(reservation_date);
+  const dayOfTheWeek = new Date(date);
+  if (dayOfTheWeek.getUTCDay() == 2) {
+    return next({
+      status: 400,
+      message: `Reservations cannot be made on this day. The restaurant is closed.`
+    });
+  } else if (date && date > 0) {
+    return next();
+  }
+}
+
 async function list(req, res) {
   const { date } = req.query;
   let data;
@@ -111,6 +125,23 @@ async function create(req, res) {
   res.status(201).json({ data });
 }
 
+async function reservationExists(req, res, next) {
+  const reservation = await reservationsService.read(req.params.reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({
+    status: 404,
+    message: `${req.params.reservation_id} cannot be found.`
+  })
+}
+
+async function read(req, res) {
+  const { reservation: data } = res.locals;
+  res.json({ data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -120,6 +151,8 @@ module.exports = {
     isValidNumber,
     hasOnlyValidProperties,
     hasRequiredProperties,
+    isNotTuesday,
     asyncErrorBoundary(create),
   ],
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)]
 };
