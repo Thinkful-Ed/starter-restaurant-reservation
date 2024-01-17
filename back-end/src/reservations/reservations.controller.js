@@ -187,5 +187,5 @@ module.exports = {
     isValidBusinessHours,
     asyncErrorBoundary(create),
   ],
-  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)]
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
 };

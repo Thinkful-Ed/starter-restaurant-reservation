@@ -8,6 +8,12 @@ const methodNotAllowed = require("../errors/methodNotAllowed");
  * @type {Router}
  */
 
+router.route("/")
+.get(controller.list)
+.all(methodNotAllowed);
 
+router.route("/:table_id")
+.get(controller.read)
+.all(methodNotAllowed);
 
 module.exports = router;
