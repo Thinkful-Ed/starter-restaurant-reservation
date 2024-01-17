@@ -13,7 +13,7 @@ function ReservationList({ reservations, loadDashboard }) {
 
   return (
     <div className="table-hover">
-    <table className="table table-sm w-75 text-center mb-5">
+    <table className="table text-center table-sm">
       <thead>
         <tr>
           <th scope="col">Name</th>

@@ -43,14 +43,15 @@ function Dashboard({ date }) {
   return (
     <main>
       <h1 className="p-4 m-4 text-center">Dashboard</h1>
-      <div className="p-4 m-4 flex w-75 mx-auto bg-light">
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0 mx-auto">Reservations for {date}</h4>
+      <div className="align-items-center pt-3 border bg-light">
+      <div className="d-md-flex mb-3 ">
+        <h4 className="mb-0 mx-auto text-center">Reservations for {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
       <ReservationList
       reservations={reservations}
       loadDashboard={loadDashboard} />
+      </div>
       <div className="d-flex justify-content-between p-2">
         <button 
         type="button" 
@@ -70,7 +71,6 @@ function Dashboard({ date }) {
         onClick={handleNext}>
           Next
         </button>
-      </div>
       </div>
     </main>
   );
