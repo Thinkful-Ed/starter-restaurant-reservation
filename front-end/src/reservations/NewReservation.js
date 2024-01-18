@@ -8,15 +8,16 @@ import { createReservation } from "../utils/api";
 export default function NewReservation() {
   const history = useHistory();
 
-  const [formData, setFormData] = useState({});
-  // const initialFormState = {
-  //   first_name: "",
-  //   last_name: "",
-  //   mobile_number: "",
-  //   reservation_date: "",
-  //   reservation_time: "",
-  //   people: 1,
-  // };
+  const initialFormState = {
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    reservation_date: "",
+    reservation_time: "",
+    people: 1,
+  };
+  const [formData, setFormData] = useState({ ...initialFormState });
+
   const [formErrors, setFormErrors] = useState([]);
 
   const handleChange = ({ target }) => {
