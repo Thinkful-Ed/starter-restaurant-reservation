@@ -1,4 +1,4 @@
-export default function hasProperties(...properties) {
+function hasProperties(...properties) {
   return function (req, res, next) {
     const { data = {} } = req.body;
 
@@ -18,3 +18,5 @@ export default function hasProperties(...properties) {
     }
   };
 }
+
+module.exports = hasProperties;
