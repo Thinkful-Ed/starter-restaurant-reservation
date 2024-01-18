@@ -173,6 +173,15 @@ async function read(req, res) {
   res.json({ data });
 }
 
+async function update(req, res) {
+  const updatedReservation = {
+    ...req.body.data,
+    reservation_id: res.locals.reservation.reservation_id,
+  };
+  const data = await reservationsService.update(updatedReservation);
+  res.json({ data })
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -188,4 +197,16 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
+  update: [
+    asyncErrorBoundary(reservationExists), 
+    hasData,
+    isValidDateMiddleware, 
+    isValidTimeMiddleware,
+    isValidNumber,
+    hasOnlyValidProperties,
+    hasRequiredProperties,
+    dateIsNotInPast,
+    isNotTuesday,
+    isValidBusinessHours,
+    asyncErrorBoundary(update)],
 };
