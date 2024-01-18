@@ -7,7 +7,7 @@ const { isValid, parseISO, parse } = require("date-fns");
 //Validates that new Reservations have the correct properties
 function bodyDataHas(propertyName) {
   return function (req, res, next) {
-    const { data = {} } = req.body;
+    const { reservation = {} } = req.body;
     console.log(req.body);
     if (reservation[propertyName]) {
       return next();
@@ -18,7 +18,7 @@ function bodyDataHas(propertyName) {
 
 //Validates that the inputted date is a real date
 function dateIsValid(req, res, next) {
-  const { data: { reservation_date } = {} } = req.body;
+  const { reservation: { reservation_date } = {} } = req.body;
 
   if (reservation_date && isValid(parseISO(reservation_date))) {
     return next();
@@ -28,7 +28,7 @@ function dateIsValid(req, res, next) {
 
 //Validates that the inputted time is in the correct format
 function timeIsValid(req, res, next) {
-  const { data: { reservation_time } = {} } = req.body;
+  const { reservation: { reservation_time } = {} } = req.body;
 
   //Regex to ensure the right format
   const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
@@ -42,7 +42,7 @@ function timeIsValid(req, res, next) {
 
 //Validates that the provided party size, "people", is a legitimate number
 function peopleNumberIsValid(req, res, next) {
-  const { data: { people } = {} } = req.body;
+  const { reservation: { people } = {} } = req.body;
   if (people <= 0 || !Number.isInteger(people)) {
     return next({
       status: 400,
@@ -85,7 +85,7 @@ async function list(req, res) {
 
 //Executive function to create a new reservation
 async function create(req, res) {
-  const newReservation = await service.create(req.body.data);
+  const newReservation = await service.create(req.body.reservation);
 
   //newReservation.reservation_id++;
 

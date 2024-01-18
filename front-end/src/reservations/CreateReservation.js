@@ -30,11 +30,29 @@ function CreateReservation() {
 
     reservation.people = Number(reservation.people);
 
-    createReservation(reservation).then((response) => {
-      console.log(reservation);
-      setReservation({ ...reservation });
-      return response;
-    });
+    createReservation(reservation)
+      .then((response) => {
+        setReservation({ ...reservation });
+        return response;
+      })
+      .then((updatedReservation) => {
+        if (updatedReservation && updatedReservation.reservation_date) {
+          const formattedDate = new Date(
+            updatedReservation.reservation_date
+          ).toLocaleDateString();
+          history.push(`/dashboard/?date=${formattedDate}`);
+        } else {
+          console.error(
+            "Invalid or missing reservation data:",
+            updatedReservation
+          );
+          // Handle the error or log accordingly
+        }
+      })
+      .catch((error) => {
+        console.error("Error during reservation creation:", error);
+        // Handle the error or log accordingly
+      });
   };
 
   return (
