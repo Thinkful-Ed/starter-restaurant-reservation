@@ -1,6 +1,6 @@
 import React from "react";
 
-function ReservationList({ reservations, loadDashboard, date }) {
+function ReservationList({ reservations }) {
   let reservationsMap;
   if (reservations.length === 0) {
     reservationsMap = (

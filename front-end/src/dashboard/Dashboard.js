@@ -81,7 +81,6 @@ function Dashboard({ date }) {
         <ErrorAlert error={reservationsError} />
         <ReservationList
           reservations={reservations}
-          loadDashboard={loadDashboard}
         />
       </div>
       <div className="d-flex justify-content-between p-2">
@@ -107,7 +106,7 @@ function Dashboard({ date }) {
           Next
         </button>
       </div>
-      <div className="align-items-center mt-5 border bg-light">
+      <div className="align-items-center mt-5 mb-5 border bg-light">
         <TableList tables={tables} handleFinish={handleFinish} />
         <ErrorAlert error={tablesError} />
       </div>

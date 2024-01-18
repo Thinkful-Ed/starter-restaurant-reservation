@@ -131,8 +131,7 @@ async function create(req, res) {
 }
 
 async function read(req, res) {
-  const { table: data } = res.locals;
-  res.json({ data });
+  res.json({ data: res.locals.table });
 }
 
 async function update(req, res) {
