@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import { listTables } from "../utils/api";
+import { listTables, seatTables } from "../utils/api";
 
 function SeatReservation() {
   const [tables, setTables] = useState([]);
-  const [tableId, setTableId] = useState([]);
+  const [tableId, setTableId] = useState();
   const [seatError, setSeatError] = useState(null);
 
   const history = useHistory();
@@ -19,7 +19,7 @@ function SeatReservation() {
       setTables(() => APITable);
     }
     loadTables();
-    return abortController.abort();
+    return () => abortController.abort();
   }, [reservation_id]);
 
   const handleChange = ({ target }) => {
@@ -30,7 +30,7 @@ function SeatReservation() {
     event.preventDefault();
     const abortController = new AbortController();
     try {
-      // API for seat goes here
+      await seatTables(reservation_id, tableId);
       history.push(`/dashboard`);
     } catch (error) {
       setSeatError(error);
@@ -46,35 +46,35 @@ function SeatReservation() {
 
   return (
     <div>
+      <h1 className="p-4 m-4 text-center">Select a Table</h1>
       <form
-        className="row row-cols-lg-auto g-3 align-items-center p-4 m-4 flex w-75 mx-auto bg-light"
+        className="p-4 m-4 bg-light border border-info-subtle d-flex align-items-center"
         onSubmit={handleSubmit}
       >
-        <h1 className="text-center col-md-12">Select a Table</h1>
-        <div className="col-12 p-2">
+        <div className="w-50 p-2">
           <select 
-          className="form-select w-100" 
+          className="custom-select" 
           required={true}
           name="table_id"
           aria-label="Default select example"
           onChange={handleChange}
           >
-            <option defaultValue={0}>Select a table</option>
+            <option defaultValue={0}>Select a Table</option>
             {tableOptions}
           </select>
         </div>
-        <div className="col-6 p-2 d-flex justify-content-start">
-          <button type="submit" className="btn btn-primary">
+        <div className="ml-auto pr-3">
+          <button type="submit" className="btn btn-primary d-flex justify-content-end">
             Submit
           </button>
         </div>
-        <div className="col-6 p-2 d-flex justify-content-end">
+        <div className="">
           <button
             onClick={(event) => {
               event.preventDefault();
               history.goBack();
             }}
-            className="btn btn-danger "
+            className="btn btn-danger d-flex justify-content-end"
           >
             Cancel
           </button>

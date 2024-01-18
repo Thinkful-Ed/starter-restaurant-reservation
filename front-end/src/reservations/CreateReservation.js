@@ -49,10 +49,10 @@ function CreateReservation() {
   return (
     <div>
       <form
-        className="row g-3 p-4 m-4 flex w-75 mx-auto bg-light"
+        className="row g-3 p-4 m-4 flex w-75 mx-auto border border-secondary-subtle bg-light"
         onSubmit={handleSubmit}
       >
-        <h1 className="text-center col-md-12">Make a Reservation</h1>
+        <h1 className="text-center col-md-12">Create a Reservation</h1>
         <div className="col-md-6 p-2">
           <input
             name="first_name"

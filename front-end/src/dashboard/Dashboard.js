@@ -58,7 +58,7 @@ function Dashboard({ date }) {
     <main>
       <h1 className="p-4 m-4 text-center">Dashboard</h1>
       <div className="align-items-center pt-3 border bg-light">
-        <div className="d-md-flex mb-3 ">
+        <div className="d-md-flex mb-3">
           <h4 className="mb-0 mx-auto text-center">Reservations for {date}</h4>
         </div>
         <ErrorAlert error={reservationsError} />

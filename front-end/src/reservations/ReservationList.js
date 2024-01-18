@@ -23,7 +23,7 @@ function ReservationList({ reservations, loadDashboard, date }) {
           <a 
           href={`/reservations/${reservation.reservation_id}/seat`}
           type="button"
-          className="btn btn-outline-info">
+          className="btn btn-outline-info btn-sm">
             Seat
           </a>
         </td>
@@ -33,10 +33,10 @@ function ReservationList({ reservations, loadDashboard, date }) {
 
   return (
     <div className="table-hover">
-      <table className="table text-center table-sm">
+      <table className="table text-center table-sm mb-1">
         <thead>
           <tr>
-            <th scope="col" className="align-middle">Name</th>
+            <th scope="col" className="align-middle">Full Name</th>
             <th scope="col" className="align-middle">Phone Number</th>
             <th scope="col" className="align-middle">Reservation Date</th>
             <th scope="col" className="align-middle">Reservation Time</th>
