@@ -12,14 +12,14 @@ function ReservationList({ reservations, loadDashboard, date }) {
     reservationsMap = reservations.map((reservation) => (
       <tr 
       key={reservation.reservation_id}>
-        <td>
+        <td className="align-middle">
           {reservation.first_name} {reservation.last_name}
         </td>
-        <td>{reservation.mobile_number}</td>
-        <td>{reservation.reservation_date}</td>
-        <td>{reservation.reservation_time}</td>
-        <td>{reservation.people}</td>
-        <td>
+        <td className="align-middle">{reservation.mobile_number}</td>
+        <td className="align-middle">{reservation.reservation_date}</td>
+        <td className="align-middle">{reservation.reservation_time}</td>
+        <td className="align-middle">{reservation.people}</td>
+        <td className="align-middle">
           <a 
           href={`/reservations/${reservation.reservation_id}/seat`}
           type="button"
