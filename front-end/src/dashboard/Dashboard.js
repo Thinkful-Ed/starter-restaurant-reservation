@@ -54,6 +54,10 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${nextDate}`);
   };
 
+  const finishReservation = () => {
+    
+  }
+
   return (
     <main>
       <h1 className="p-4 m-4 text-center">Dashboard</h1>
@@ -77,7 +81,7 @@ function Dashboard({ date }) {
         </button>
         <button
           type="button"
-          className="btn btn-outline-secondary"
+          className="btn btn-outline-info"
           onClick={handleToday}
         >
           Today

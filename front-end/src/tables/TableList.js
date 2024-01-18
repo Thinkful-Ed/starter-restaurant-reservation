@@ -8,6 +8,20 @@ function TableList({ tables }) {
       <td className="align-middle" data-table-id-status={table.table_id}>
         {table.reservation_id ? "Occupied" : "Free"}
       </td>
+      {table.reservation_id !== null ? (
+        <td>
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-info"
+            data-table-id-finish={table.table_id}
+            //onClick={() => }
+          >
+            Finish
+          </button>
+        </td>
+      ) : (
+        <td> {null}</td>
+      )}
     </tr>
   ));
 
@@ -16,12 +30,13 @@ function TableList({ tables }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0 pt-3 mx-auto text-center">Tables</h4>
       </div>
-      <table className="table text-center table-sm">
+      <table className="table text-center table-sm mb-1">
         <thead>
           <tr>
             <th scope="col">Table Name</th>
             <th scope="col">Capacity</th>
             <th scope="col">Table Status</th>
+            <th scope="col">Finish</th>
           </tr>
         </thead>
 
