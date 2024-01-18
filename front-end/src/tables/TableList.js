@@ -1,0 +1,29 @@
+import React from "react";
+
+function TableList({ tables }) {
+  const tablesMap = tables.map((table) => (
+    <tr key={table.table_id}>
+      <td className="align-middle">{table.table_name}</td>
+      <td className="align-middle">{table.capacity}</td>
+      <td className="align-middle">Free or Occupied</td>
+    </tr>
+  ));
+
+  return (
+    <div className="table-hover">
+      <table className="table text-center table-sm">
+        <thead>
+          <tr>
+            <th scope="col">Table Name</th>
+            <th scope="col">Capacity</th>
+            <th scope="col">Table Status</th>
+          </tr>
+        </thead>
+
+        <tbody className="table-group-divider">{tablesMap}</tbody>
+      </table>
+    </div>
+  );
+}
+
+export default TableList;

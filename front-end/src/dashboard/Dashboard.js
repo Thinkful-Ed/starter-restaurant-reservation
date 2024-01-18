@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import ReservationList from "../reservations/ReservationList";
+import TableList from "../tables/TableList";
 import { listReservations } from "../utils/api";
 import { next, previous, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -13,6 +14,7 @@ import ErrorAlert from "../layout/ErrorAlert";
  */
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
+  const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
   const history = useHistory();
@@ -57,7 +59,11 @@ function Dashboard({ date }) {
         />
       </div>
       <div className="d-flex justify-content-between p-2">
-        <button type="button" className="btn btn-secondary" onClick={handlePrevious}>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={handlePrevious}
+        >
           Previous
         </button>
         <button
@@ -67,9 +73,18 @@ function Dashboard({ date }) {
         >
           Today
         </button>
-        <button type="button" className="btn btn-secondary" onClick={handleNext}>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={handleNext}
+        >
           Next
         </button>
+      </div>
+      <div>
+        <br /> <br />
+        <br /> <br />
+        <TableList tables={tables} />
       </div>
     </main>
   );
