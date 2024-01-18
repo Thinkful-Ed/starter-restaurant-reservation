@@ -10,7 +10,7 @@ function CreateTable() {
   };
 
   const [newTable, setNewTable] = useState(initialFormState);
-  const [reservationsError, setReservationsError] = useState(null);
+  const [tablesError, setTablesError] = useState(null);
 
   const history = useHistory();
 
@@ -32,7 +32,7 @@ function CreateTable() {
       await createTable(newTable);
       history.push(`/dashboard`);
     } catch (error) {
-      setReservationsError(error);
+      setTablesError(error);
     }
     return abortController;
   };
@@ -82,7 +82,7 @@ function CreateTable() {
           </button>
         </div>
       </form>
-      <ErrorAlert error={reservationsError} />
+      <ErrorAlert error={tablesError} />
     </div>
   );
 }

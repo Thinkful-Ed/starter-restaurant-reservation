@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import ReservationList from "../reservations/ReservationList";
 import TableList from "../tables/TableList";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import { next, previous, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 
@@ -16,6 +16,7 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tablesError, setTablesError] = useState(null);
 
   const history = useHistory();
 
@@ -27,6 +28,16 @@ function Dashboard({ date }) {
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+    return () => abortController.abort();
+  }
+
+  useEffect(loadTables, []);
+
+  function loadTables() {
+    const abortController = new AbortController();
+    listTables(abortController.signal)
+    .then(setTables)
+    .catch(setTablesError);
     return () => abortController.abort();
   }
 
@@ -81,10 +92,9 @@ function Dashboard({ date }) {
           Next
         </button>
       </div>
-      <div>
-        <br /> <br />
-        <br /> <br />
+      <div className="align-items-center mt-5 border bg-light">
         <TableList tables={tables} />
+        <ErrorAlert error={tablesError} />
       </div>
     </main>
   );
