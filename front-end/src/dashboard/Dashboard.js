@@ -64,13 +64,11 @@ function Dashboard({ date }) {
         await finishReservation(table_id, abortController.signal);
         loadDashboard();
         loadTables();
-      } catch(error) {
+      } catch (error) {
         console.log(error);
       }
-      return () => abortController.abort();
     }
-
-    return () => abortController.signal();
+    return () => abortController.abort();
   };
 
   return (
@@ -110,8 +108,7 @@ function Dashboard({ date }) {
         </button>
       </div>
       <div className="align-items-center mt-5 border bg-light">
-        <TableList tables={tables}
-        handleFinish={handleFinish} />
+        <TableList tables={tables} handleFinish={handleFinish} />
         <ErrorAlert error={tablesError} />
       </div>
     </main>
