@@ -35,9 +35,7 @@ function Dashboard({ date }) {
 
   function loadTables() {
     const abortController = new AbortController();
-    listTables(abortController.signal)
-    .then(setTables)
-    .catch(setTablesError);
+    listTables(abortController.signal).then(setTables).catch(setTablesError);
     return () => abortController.abort();
   }
 
@@ -92,7 +90,12 @@ function Dashboard({ date }) {
           Next
         </button>
       </div>
-      <div className="align-items-center mt-5 border bg-light">
+      <div className="align-items-center mt-5 border bg-light" >
+        <div className="d-md-flex mb-3">
+          <h4 className="mb-0 pt-3 mx-auto text-center">
+            Tables
+          </h4>
+        </div>
         <TableList tables={tables} />
         <ErrorAlert error={tablesError} />
       </div>
