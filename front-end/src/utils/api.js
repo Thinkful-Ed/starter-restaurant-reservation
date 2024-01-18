@@ -60,14 +60,26 @@ async function fetchJson(url, options, onCancel) {
  *  a promise that resolves to a possibly empty array of reservation saved in the database.
  */
 
-export async function listReservations(params, signal) {
-  const url = new URL(`${API_BASE_URL}/reservations`);
-  Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.append(key, value.toString())
-  );
-  return await fetchJson(url, { headers, signal }, [])
-    .then(formatReservationDate)
-    .then(formatReservationTime);
+// Example modification in listReservations function
+export function listReservations(date, signal) {
+  return fetchJson(`${API_BASE_URL}/reservations?date=${date}`, {
+    signal,
+  }).then((reservations) => {
+    // Check if formatting is needed
+    if (reservations && reservations.length > 0) {
+      const firstReservation = reservations[0];
+      if (
+        firstReservation.reservation_date &&
+        firstReservation.reservation_time
+      ) {
+        // Reservation data is already formatted, no need to apply formatting functions
+        return reservations;
+      }
+    }
+
+    // Apply formatting functions if needed
+    return formatReservationDate(formatReservationTime(reservations));
+  });
 }
 
 /**

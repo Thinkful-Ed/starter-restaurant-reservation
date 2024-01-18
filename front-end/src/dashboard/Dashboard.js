@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { listReservations } from "../utils/api";
-import { today, previous, next } from "../utils/date-time";
+import useQuery from "../utils/useQuery";
+import {
+  today,
+  previous,
+  next,
+  formatAsDate,
+  formatAsTime,
+  dateFormat,
+  timeFormat
+} from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "./ReservationsList";
-import useQuery from "../utils/useQuery";
 
 /**
  * Defines the dashboard page.
@@ -27,12 +35,20 @@ function Dashboard({ date }) {
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations(currentDate, abortController.signal)
-      .then(setReservations)
-      .catch(setReservationsError);
-    return () => abortController.abort();
+      .then((response) => {
+        const formattedReservations = response.data.map((reservation) => {
+          return {
+            ...reservation,
+            reservation_date: formatAsDate(reservation.reservation_date),
+            reservation_time: formatAsTime(reservation.reservation_time),
+          };
+        });
+        setReservations(formattedReservations);
+      })
+      .catch(setReservationsError)
+      .finally(() => abortController.abort());
   }
 
-  //Grabs current date from parameter, then allows us to change date from on-screen form
   useEffect(() => {
     if (queryDate) {
       setCurrentDate(queryDate);
@@ -52,11 +68,47 @@ function Dashboard({ date }) {
     history.push("/dashboard");
   }
 
+  // Check if currentDate is defined and in the correct format before rendering ErrorAlert
+  if (!currentDate || !dateFormat.test(currentDate)) {
+    return (
+      <main>
+        <h1>Dashboard</h1>
+        <div className="d-md-flex mb-3">
+          <h4 className="mb-0">Reservations for date: {currentDate}</h4>
+        </div>
+        <div>
+          <button
+            onClick={() => handlePrevious()}
+            type="button"
+            className="btn btn-secondary btn-sm"
+          >
+            Previous Day
+          </button>
+          <button
+            onClick={() => handleToday()}
+            type="button"
+            className="btn btn-primary btn-sm"
+          >
+            Today
+          </button>
+          <button
+            onClick={() => handleNext()}
+            type="button"
+            className="btn btn-secondary btn-sm"
+          >
+            Next Day
+          </button>
+        </div>
+        <ErrorAlert error="Invalid date format" />
+      </main>
+    );
+  }
+
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date: {currentDate}</h4>
+        <h4 className="mb-0">Reservations for date: { date }</h4>
       </div>
       <div>
         <button
@@ -98,7 +150,7 @@ function Dashboard({ date }) {
           {reservations.map((reservation, index) => (
             <ReservationsList
               reservation={reservation}
-              currentDate={currentDate}
+              date={date}
               key={index}
             />
           ))}

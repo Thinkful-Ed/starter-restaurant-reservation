@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { formatAsDate } from "../utils/date-time";
 import { createReservation } from "../utils/api";
 import ReservationForm from "../reservations/ReservationForm";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -37,9 +38,9 @@ function CreateReservation() {
       })
       .then((updatedReservation) => {
         if (updatedReservation && updatedReservation.reservation_date) {
-          const formattedDate = new Date(
+          const formattedDate = formatAsDate(
             updatedReservation.reservation_date
-          ).toLocaleDateString();
+          );
           history.push(`/dashboard/?date=${formattedDate}`);
         } else {
           console.error(

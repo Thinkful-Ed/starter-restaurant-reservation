@@ -1,8 +1,8 @@
 import React from "react";
 
-function ReservationsList({ reservation, currentDate }) {
+function ReservationsList({ reservation, date }) {
   //If the reservations date is todays date, return the reservation info.
-  if (reservation.reservation_date === currentDate) {
+  if (reservation.reservation_date === date) {
     return (
       <tr>
         <td>{reservation.first_name}</td>
