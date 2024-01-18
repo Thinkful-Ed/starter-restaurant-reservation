@@ -2,7 +2,6 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 const tablesService = require("./tables.service");
 const reservationsService = require("../reservations/reservations.service");
-const { table } = require("../db/connection");
 
 const hasRequiredProperties = hasProperties("table_name", "capacity");
 
@@ -75,6 +74,25 @@ async function tableExists(req, res, next) {
   });
 }
 
+async function reservationExists(req, res, next) {
+  const { reservation_id } = req.body.data;
+  if (!reservation_id) {
+    next({
+      status: 400,
+      message: `reservation_id is missing.`
+    });
+  }
+  const reservation = await reservationsService.read(reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({
+    status: 404,
+    message: `Reservation ID ${reservation_id} cannot be found.`
+  });
+}
+
 async function create(req, res) {
   const data = await tablesService.create(req.body.data);
   res.status(201).json({ data });
@@ -91,11 +109,11 @@ async function update(req, res) {
     table_id: res.locals.table.table_id,
   };
 
-  // const updatedReservation = {
-  //   ...res.locals.reservation,
-  //   reservation_id: res.locals.reservation.reservation_id,
-  // }
-
+  const updatedReservation = {
+    ...res.locals.reservation,
+    reservation_id: res.locals.reservation.reservation_id,
+  }
+  await reservationsService.update(updatedReservation);
   const data = await tablesService.update(updatedTable);
   res.json({ data })
 }
@@ -112,6 +130,7 @@ module.exports = {
   ],
   read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
   update: [
+    asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(tableExists),
     hasData,
     isValidNumber,
