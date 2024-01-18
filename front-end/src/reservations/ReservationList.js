@@ -36,12 +36,12 @@ function ReservationList({ reservations, loadDashboard, date }) {
       <table className="table text-center table-sm">
         <thead>
           <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Phone Number</th>
-            <th scope="col">Reservation Date</th>
-            <th scope="col">Reservation Time</th>
-            <th scope="col">Party Size</th>
-            <th scope="col">Seat</th>
+            <th scope="col" className="align-middle">Name</th>
+            <th scope="col" className="align-middle">Phone Number</th>
+            <th scope="col" className="align-middle">Reservation Date</th>
+            <th scope="col" className="align-middle">Reservation Time</th>
+            <th scope="col" className="align-middle">Party Size</th>
+            <th scope="col" className="align-middle">Seat</th>
           </tr>
         </thead>
 
