@@ -34,15 +34,15 @@ function hasOnlyValidProperties(req, res, next) {
 }
 
 function isValidNumber(req, res, next) {
-  const { data = {} } = req.body;
-  const { capacity } = data;
-  if (!Number.isInteger(capacity) || capacity < 1) {
+  const { data: { capacity } = {} } = req.body;
+  if (Number.isInteger(capacity)) {
+    next()
+  } else {
     return next({
       status: 400,
       message: `Invalid field: capacity. Must be a valid number greater than or equal to 1.`,
     });
   }
-  next();
 }
 
 function validTableName(req, res, next) {
@@ -93,6 +93,17 @@ async function reservationExists(req, res, next) {
   });
 }
 
+function validTableCapacity(req, res, next) {
+  const capacity = res.locals.table.capacity;
+  if (capacity < res.locals.reservation.people) {
+    next({
+      status: 400,
+      message: `Table does not have sufficient capacity.`
+    })
+  }
+  next();
+}
+
 async function create(req, res) {
   const data = await tablesService.create(req.body.data);
   res.status(201).json({ data });
@@ -130,13 +141,12 @@ module.exports = {
   ],
   read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
   update: [
+    hasData,
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(tableExists),
-    hasData,
     isValidNumber,
-    hasRequiredProperties,
-    hasOnlyValidProperties,
     validTableName,
+    validTableCapacity,
     asyncErrorBoundary(update),
   ]
 };
