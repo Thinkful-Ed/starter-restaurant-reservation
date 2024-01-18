@@ -5,7 +5,9 @@ function TableList({ tables }) {
     <tr key={table.table_id}>
       <td className="align-middle">{table.table_name}</td>
       <td className="align-middle">{table.capacity}</td>
-      <td className="align-middle">Free or Occupied</td>
+      <td className="align-middle" data-table-id-status={table.table_id}>
+        {table.reservation_id ? "Occupied" : "Free"}
+      </td>
     </tr>
   ));
 
