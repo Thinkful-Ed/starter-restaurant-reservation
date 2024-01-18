@@ -104,6 +104,17 @@ function validTableCapacity(req, res, next) {
   next();
 }
 
+function validTableAvailability(req, res, next) {
+  const reservation = res.locals.table.reservation_id;
+  if (reservation !== null) {
+    next({
+      status: 400,
+      message: `Table ${res.locals.table.table_id} is occupied.`
+    })
+  }
+  next();
+}
+
 async function create(req, res) {
   const data = await tablesService.create(req.body.data);
   res.status(201).json({ data });
@@ -144,9 +155,9 @@ module.exports = {
     hasData,
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(tableExists),
-    isValidNumber,
     validTableName,
     validTableCapacity,
+    validTableAvailability,
     asyncErrorBoundary(update),
   ]
 };
