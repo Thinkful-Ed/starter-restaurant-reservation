@@ -139,6 +139,12 @@ async function update(req, res) {
   res.json({ data })
 }
 
+async function destroy(req, res) {
+  const { table } = res.locals;
+  await tablesService.delete(table.table_id);
+  res,sendStatus(204);
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -158,5 +164,9 @@ module.exports = {
     validTableCapacity,
     validTableAvailability,
     asyncErrorBoundary(update),
+  ],
+  delete: [
+    asyncErrorBoundary(tableExists),
+    asyncErrorBoundary(destroy),
   ]
 };
