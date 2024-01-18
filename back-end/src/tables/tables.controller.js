@@ -1,6 +1,8 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 const tablesService = require("./tables.service");
+const reservationsService = require("../reservations/reservations.service");
+const { table } = require("../db/connection");
 
 const hasRequiredProperties = hasProperties("table_name", "capacity");
 
@@ -89,9 +91,11 @@ async function update(req, res) {
     table_id: res.locals.table.table_id,
   };
 
-  const updatedReservation = {
-    // create update reservation 
-  }
+  // const updatedReservation = {
+  //   ...res.locals.reservation,
+  //   reservation_id: res.locals.reservation.reservation_id,
+  // }
+
   const data = await tablesService.update(updatedTable);
   res.json({ data })
 }
@@ -107,4 +111,13 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
+  update: [
+    asyncErrorBoundary(tableExists),
+    hasData,
+    isValidNumber,
+    hasRequiredProperties,
+    hasOnlyValidProperties,
+    validTableName,
+    asyncErrorBoundary(update),
+  ]
 };
