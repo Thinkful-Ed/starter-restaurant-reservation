@@ -35,14 +35,13 @@ function hasOnlyValidProperties(req, res, next) {
 
 function isValidNumber(req, res, next) {
   const { data: { capacity } = {} } = req.body;
-  if (Number.isInteger(capacity)) {
-    next()
-  } else {
+  if (!Number.isInteger(capacity) || capacity < 1) {
     return next({
       status: 400,
       message: `Invalid field: capacity. Must be a valid number greater than or equal to 1.`,
     });
   }
+  next();
 }
 
 function validTableName(req, res, next) {
