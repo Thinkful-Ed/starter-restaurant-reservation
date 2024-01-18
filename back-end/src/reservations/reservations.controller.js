@@ -5,12 +5,17 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
  * List handler for reservation resources
  */
 async function list(req, res) {
-  res.json({ data: await service.list() });
+  const { date } = req.query;
+  if (date) {
+    res.json({ data: await service.listByDate(date) });
+  } else {
+    res.json({ data: await service.list() });
+  }
 }
 
 function isValid(req, res, next) {
   if (!req.body.data) return next({ status: 400, message: "No date selected" });
-  const { reservation_date, reservation_time, people, status } = req.body.data;
+  const { reservation_date, reservation_time, people } = req.body.data;
   const requiredFields = [
     "first_name",
     "last_name",
@@ -40,13 +45,12 @@ function isValid(req, res, next) {
   next();
 }
 
-async function create() {
-  const newReservation = res.locals.validReservation;
-  const newRes = await service.create(newReservation);
-  res.status(201).json({ data: newRes[0] });
+async function create(req, res) {
+  const data = await service.create(req.body.data);
+  res.status(201).json({ data });
 }
 
 module.exports = {
-  list: [asyncErrorBoundary(list)], 
-  create: [asyncErrorBoundary(isValid), asyncErrorBoundary(create)]
+  list: [asyncErrorBoundary(list)],
+  create: [asyncErrorBoundary(isValid), asyncErrorBoundary(create)],
 };
