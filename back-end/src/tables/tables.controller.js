@@ -56,11 +56,6 @@ function validTableName(req, res, next) {
   return next();
 }
 
-async function list(req, res) {
-  const data = await tablesService.list();
-  res.json({ data });
-}
-
 async function tableExists(req, res, next) {
   const table = await tablesService.read(req.params.table_id);
   if (table) {
@@ -112,6 +107,11 @@ function validTableAvailability(req, res, next) {
     })
   }
   next();
+}
+
+async function list(req, res) {
+  const data = await tablesService.list();
+  res.json({ data });
 }
 
 async function create(req, res) {
