@@ -9,7 +9,7 @@ import {
   formatAsDate,
   formatAsTime,
   dateFormat,
-  timeFormat
+  timeFormat,
 } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "./ReservationsList";
@@ -36,7 +36,9 @@ function Dashboard({ date }) {
     setReservationsError(null);
     listReservations(currentDate, abortController.signal)
       .then((response) => {
-        const formattedReservations = response.data.map((reservation) => {
+        console.log("response:", response);
+        console.log("resonse.data:", response.data);
+        const formattedReservations = response.map((reservation) => {
           return {
             ...reservation,
             reservation_date: formatAsDate(reservation.reservation_date),
@@ -45,7 +47,7 @@ function Dashboard({ date }) {
         });
         setReservations(formattedReservations);
       })
-      .catch(setReservationsError)
+      //.catch(setReservationsError)
       .finally(() => abortController.abort());
   }
 
@@ -108,7 +110,7 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date: { date }</h4>
+        <h4 className="mb-0">Reservations for date: {date}</h4>
       </div>
       <div>
         <button
