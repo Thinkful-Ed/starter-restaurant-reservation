@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import ReservationList from "../reservations/ReservationList";
 import TableList from "../tables/TableList";
-import { listReservations, listTables } from "../utils/api";
+import { finishReservation, listReservations, listTables } from "../utils/api";
 import { next, previous, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 
@@ -54,9 +54,24 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${nextDate}`);
   };
 
-  const finishReservation = () => {
-    
-  }
+  const handleFinish = async (table_id) => {
+    const abortController = new AbortController();
+    const confirm = window.confirm(
+      "Is this table ready to seat new guests?\nThis cannot be undone."
+    );
+    if (confirm) {
+      try {
+        await finishReservation(table_id, abortController.signal);
+        loadDashboard();
+        loadTables();
+      } catch(error) {
+        console.log(error);
+      }
+      return () => abortController.abort();
+    }
+
+    return () => abortController.signal();
+  };
 
   return (
     <main>
@@ -95,7 +110,8 @@ function Dashboard({ date }) {
         </button>
       </div>
       <div className="align-items-center mt-5 border bg-light">
-        <TableList tables={tables} />
+        <TableList tables={tables}
+        handleFinish={handleFinish} />
         <ErrorAlert error={tablesError} />
       </div>
     </main>

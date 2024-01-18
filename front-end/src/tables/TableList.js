@@ -1,6 +1,6 @@
 import React from "react";
 
-function TableList({ tables }) {
+function TableList({ tables, handleFinish }) {
   const tablesMap = tables.map((table) => (
     <tr key={table.table_id}>
       <td className="align-middle">{table.table_name}</td>
@@ -14,7 +14,7 @@ function TableList({ tables }) {
             type="button"
             className="btn btn-sm btn-outline-info"
             data-table-id-finish={table.table_id}
-            //onClick={() => }
+            onClick={() => handleFinish(table.table_id, table.reservation_id)}
           >
             Finish
           </button>
