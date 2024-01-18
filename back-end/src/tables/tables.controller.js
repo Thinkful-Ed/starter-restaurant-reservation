@@ -83,6 +83,19 @@ async function read(req, res) {
   res.json({ data });
 }
 
+async function update(req, res) {
+  const updatedTable = {
+    ...req.body.data,
+    table_id: res.locals.table.table_id,
+  };
+
+  const updatedReservation = {
+    // create update reservation 
+  }
+  const data = await tablesService.update(updatedTable);
+  res.json({ data })
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
