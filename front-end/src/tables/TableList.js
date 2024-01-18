@@ -13,6 +13,9 @@ function TableList({ tables }) {
 
   return (
     <div className="table-hover">
+      <div className="d-md-flex mb-3">
+        <h4 className="mb-0 pt-3 mx-auto text-center">Tables</h4>
+      </div>
       <table className="table text-center table-sm">
         <thead>
           <tr>
