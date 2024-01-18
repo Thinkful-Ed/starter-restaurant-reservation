@@ -10,7 +10,8 @@ function ReservationList({ reservations, loadDashboard, date }) {
     );
   } else {
     reservationsMap = reservations.map((reservation) => (
-      <tr key={reservation.reservation_id}>
+      <tr 
+      key={reservation.reservation_id}>
         <td>
           {reservation.first_name} {reservation.last_name}
         </td>
@@ -18,6 +19,14 @@ function ReservationList({ reservations, loadDashboard, date }) {
         <td>{reservation.reservation_date}</td>
         <td>{reservation.reservation_time}</td>
         <td>{reservation.people}</td>
+        <td>
+          <a 
+          href={`/reservations/${reservation.reservation_id}/seat`}
+          type="button"
+          className="btn btn-outline-info">
+            Seat
+          </a>
+        </td>
       </tr>
     ));
   }
@@ -32,6 +41,7 @@ function ReservationList({ reservations, loadDashboard, date }) {
             <th scope="col">Reservation Date</th>
             <th scope="col">Reservation Time</th>
             <th scope="col">Party Size</th>
+            <th scope="col">Seat</th>
           </tr>
         </thead>
 
