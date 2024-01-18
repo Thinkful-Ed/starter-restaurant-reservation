@@ -15,5 +15,5 @@ knex.migrate
   });
 
 function listener() {
-  console.log(`Listening on Port ${PORT}!`);
+  console.log("Good morning Seattle.  I'm listening");
 }
