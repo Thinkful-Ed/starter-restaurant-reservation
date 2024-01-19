@@ -5,7 +5,7 @@ const reservationsService = require("../reservations/reservations.service");
 
 const hasRequiredProperties = hasProperties("table_name", "capacity");
 
-const VALID_PROPERTIES = ["table_name", "capacity"];
+const VALID_PROPERTIES = ["table_name", "capacity", "reservation_id"];
 
 function hasData(req, res, next) {
   const data = req.body.data;
