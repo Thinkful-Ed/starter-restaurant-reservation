@@ -46,11 +46,11 @@ function isValid(req, res, next) {
 }
 
 async function create(req, res) {
-  const data = await service.create(req.body.data);
+  const data = await service.create(res.locals.validReservation);
   res.status(201).json({ data });
 }
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  create: [asyncErrorBoundary(isValid), asyncErrorBoundary(create)],
+  create: [isValid, asyncErrorBoundary(create)],
 };
