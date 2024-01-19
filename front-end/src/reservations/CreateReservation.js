@@ -47,13 +47,14 @@ function CreateReservation() {
             "Invalid or missing reservation data:",
             updatedReservation
           );
-          // Handle the error or log accordingly
+          setError(error);
         }
       })
       .catch((error) => {
         console.error("Error during reservation creation:", error);
-        // Handle the error or log accordingly
-      });
+        setError(error);
+      })
+      .finally(() => abortController.abort());
   };
 
   return (

@@ -110,7 +110,7 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date: {date}</h4>
+        <h4 className="mb-0">Reservations for date: {currentDate}</h4>
       </div>
       <div>
         <button
@@ -152,7 +152,7 @@ function Dashboard({ date }) {
           {reservations.map((reservation, index) => (
             <ReservationsList
               reservation={reservation}
-              date={date}
+              date={currentDate}
               key={index}
             />
           ))}
