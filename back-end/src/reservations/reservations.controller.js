@@ -87,6 +87,22 @@ function dateIsInFuture(req, res, next) {
   });
 }
 
+//Validates that the time of the reservation is during business hours
+function isDuringBusinessHours(req, res, next) {
+  const { data: { reservation_time } = {} } = req.body;
+  let open = "10:30";
+  let close = "21:30";
+
+  if (reservation_time < open || reservation_time > close) {
+    return next({
+      status: 400,
+      message:
+        "Reservation must be during our business hours of 10:30AM and 9:30PM.",
+    });
+  }
+  next();
+}
+
 //Executive Function to list reservations
 async function list(req, res) {
   const date = req.query.date;
@@ -135,6 +151,7 @@ module.exports = {
     bodyDataHas("people"),
     dateIsOpen,
     dateIsInFuture,
+    isDuringBusinessHours,
     peopleNumberIsValid,
     dateIsValid,
     timeIsValid,
