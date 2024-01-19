@@ -103,6 +103,8 @@ function isDuringBusinessHours(req, res, next) {
   next();
 }
 
+//Executive Functions
+
 //Executive Function to list reservations
 async function list(req, res) {
   const date = req.query.date;
