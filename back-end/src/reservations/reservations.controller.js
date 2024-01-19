@@ -53,9 +53,41 @@ function peopleNumberIsValid(req, res, next) {
   next();
 }
 
-/**
- * List handler for reservation resources
- */
+//Validates that the date of the reservation is during open days
+function dateIsOpen(req, res, next) {
+  const { data: { reservation_date } = {} } = req.body;
+  const day = new Date(reservation_date).getUTCDay();
+  console.log("Day:", day);
+
+  if (day !== 2) {
+    return next();
+  }
+
+  next({
+    status: 400,
+    message: "Restaurant is closed on Tuesdays, unable to accept reservation.",
+  });
+}
+
+//Validates that the date of the reservation is not in the past
+function dateIsInFuture(req, res, next) {
+  const { data: { reservation_date, reservation_time } = {} } = req.body;
+  const today = Date.now();
+  console.log("Today:", today);
+  const date = new Date(`${reservation_date} ${reservation_time}`).valueOf();
+  console.log("Date:", date);
+
+  if (date > today) {
+    return next();
+  }
+
+  next({
+    status: 400,
+    message: "Reservation date must be in the future.",
+  });
+}
+
+//Executive Function to list reservations
 async function list(req, res) {
   const date = req.query.date;
 
@@ -101,6 +133,8 @@ module.exports = {
     bodyDataHas("reservation_date"),
     bodyDataHas("reservation_time"),
     bodyDataHas("people"),
+    dateIsOpen,
+    dateIsInFuture,
     peopleNumberIsValid,
     dateIsValid,
     timeIsValid,
