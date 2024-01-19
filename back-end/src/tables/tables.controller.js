@@ -120,6 +120,17 @@ function validOccupiedStatus(req, res, next) {
   next();
 }
 
+function isSeated(req, res, next) {
+  const { status } = res.locals.reservation;
+  if (status === "seated") {
+    return ({
+      next: 400,
+      message: `This reservation is seated.`
+    })
+  }
+  next();
+}
+
 async function list(req, res) {
   const data = await tablesService.list();
   res.json({ data });
@@ -173,6 +184,7 @@ module.exports = {
     hasData,
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(tableExists),
+    isSeated,
     validTableName,
     validTableCapacity,
     validTableAvailability,
