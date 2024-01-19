@@ -166,6 +166,17 @@ function isValidStatus(req, res, next) {
   next();
 }
 
+function isValidFinishedReservation(req, res, next) {
+  const { reservation } = res.locals;
+  if (reservation.status === "finished") {
+    return next({
+      status: 400, 
+      message: `Invalid status transition. Can only set status to "finished" when the current status is "seated".`
+    })
+  }
+  next();
+}
+
 async function list(req, res) {
   const { date } = req.query;
   let data;
@@ -225,6 +236,7 @@ module.exports = {
   updateStatus: [
     asyncErrorBoundary(reservationExists),
     isValidStatus,
+    isValidFinishedReservation,
     asyncErrorBoundary(update),
   ],
 };
