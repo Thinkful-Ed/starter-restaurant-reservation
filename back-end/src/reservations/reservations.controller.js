@@ -103,7 +103,7 @@ function isNotTuesday(req, res, next) {
   if (dayOfTheWeek.getUTCDay() == 2) {
     return next({
       status: 400,
-      message: `Reservations cannot be made on a Tuesday. The restaurant is closed.`
+      message: `Reservations cannot be made on a Tuesday. The restaurant is closed.`,
     });
   } else if (date && date > 0) {
     return next();
@@ -115,9 +115,9 @@ function dateIsNotInPast(req, res, next) {
   const day = new Date(`${reservation_date} ${reservation_time}`);
   if (day < new Date()) {
     return next({
-      status: 400, 
-      message: `The reservation must be in the future.`
-    })
+      status: 400,
+      message: `The reservation must be in the future.`,
+    });
   }
   next();
 }
@@ -130,15 +130,39 @@ function isValidBusinessHours(req, res, next) {
   if (reservationDateTime < openingTime) {
     return next({
       status: 400,
-      message: `Reservation time must be after 10:30 AM.`
-    })
+      message: `Reservation time must be after 10:30 AM.`,
+    });
   }
   if (reservationDateTime > closingTime) {
     return next({
       status: 400,
-      message: `Reservation time must be before 9:30 PM.`
+      message: `Reservation time must be before 9:30 PM.`,
+    });
+  }
+  next();
+}
+
+async function reservationExists(req, res, next) {
+  const reservation = await reservationsService.read(req.params.reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({
+    status: 404,
+    message: `${req.params.reservation_id} cannot be found.`,
+  });
+}
+
+function isValidStatus(req, res, next) {
+  const { status } = req.body.data;
+  if (!["booked", "seated", "finished"].includes(status)) {
+    return next({
+      status: 400,
+      message: `Invalid status: ${status}. Must be one of booked, seated, or finished.`
     })
   }
+  res.locals.status = status;
   next();
 }
 
@@ -156,18 +180,6 @@ async function create(req, res) {
   res.status(201).json({ data });
 }
 
-async function reservationExists(req, res, next) {
-  const reservation = await reservationsService.read(req.params.reservation_id);
-  if (reservation) {
-    res.locals.reservation = reservation;
-    return next();
-  }
-  next({
-    status: 404,
-    message: `${req.params.reservation_id} cannot be found.`
-  })
-}
-
 async function read(req, res) {
   const { reservation: data } = res.locals;
   res.json({ data });
@@ -179,7 +191,7 @@ async function update(req, res) {
     reservation_id: res.locals.reservation.reservation_id,
   };
   const data = await reservationsService.update(updatedReservation);
-  res.json({ data })
+  res.json({ data });
 }
 
 module.exports = {
@@ -197,10 +209,10 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
-  update: [
-    asyncErrorBoundary(reservationExists), 
+  updateReservation: [
+    asyncErrorBoundary(reservationExists),
     hasData,
-    isValidDateMiddleware, 
+    isValidDateMiddleware,
     isValidTimeMiddleware,
     isValidNumber,
     hasOnlyValidProperties,
@@ -208,5 +220,11 @@ module.exports = {
     dateIsNotInPast,
     isNotTuesday,
     isValidBusinessHours,
-    asyncErrorBoundary(update)],
+    asyncErrorBoundary(update),
+  ],
+  updateStatus: [
+    asyncErrorBoundary(reservationExists),
+    isValidStatus,
+    asyncErrorBoundary(update),
+  ],
 };
