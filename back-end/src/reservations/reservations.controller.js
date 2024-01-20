@@ -37,10 +37,23 @@ function isValidTime(timeString) {
   return regex.test(timeString);
 }
 
-function isValidTimeMiddleware(req, res, next) {
-  const { data = {} } = req.body;
-  const { reservation_time } = data;
 
+function isValidDate(dateString) {
+  const regex = /^\d{4}-\d{2}-\d{2}$/; // Date format YYYY-MM-DD
+  if (!regex.test(dateString)) return false;
+  const date = new Date(dateString);
+  return !isNaN(date.getTime());
+}
+
+function isValidDateTimeMiddleware(req, res, next) {
+  const { data = {} } = req.body;
+  const { reservation_date, reservation_time } = data;
+  if (reservation_date && !isValidDate(reservation_date)) {
+    return next({
+      status: 400,
+      message: `Invalid field: reservation_date. Must be a valid date in the format YYYY-MM-DD.`,
+    });
+  }
   if (reservation_time && !isValidTime(reservation_time)) {
     return next({
       status: 400,
@@ -48,26 +61,6 @@ function isValidTimeMiddleware(req, res, next) {
     });
   }
   next();
-}
-
-function isValidDateMiddleware(req, res, next) {
-  const { data = {} } = req.body;
-  const { reservation_date } = data;
-
-  if (reservation_date && !isValidDate(reservation_date)) {
-    return next({
-      status: 400,
-      message: `Invalid field: reservation_date. Must be a valid date in the format YYYY-MM-DD.`,
-    });
-  }
-  next();
-}
-
-function isValidDate(dateString) {
-  const regex = /^\d{4}-\d{2}-\d{2}$/; // Date format YYYY-MM-DD
-  if (!regex.test(dateString)) return false;
-  const date = new Date(dateString);
-  return !isNaN(date.getTime());
 }
 
 function isValidNumber(req, res, next) {
@@ -158,11 +151,11 @@ async function reservationExists(req, res, next) {
 function isValidBookedReservation(req, res, next) {
   const { status } = req.body.data;
   if (status && (status == "seated" || status == "finished")) {
-      return next({
-        status: 400,
-        message: `Cannot create a "seated" or "finished" reservation.`
-      });
-    }
+    return next({
+      status: 400,
+      message: `Cannot create a "seated" or "finished" reservation.`,
+    });
+  }
   next();
 }
 
@@ -221,8 +214,7 @@ module.exports = {
   list: asyncErrorBoundary(list),
   create: [
     hasData,
-    isValidDateMiddleware,
-    isValidTimeMiddleware,
+    isValidDateTimeMiddleware,
     isValidNumber,
     hasOnlyValidProperties,
     hasRequiredProperties,
@@ -236,8 +228,7 @@ module.exports = {
   updateReservation: [
     asyncErrorBoundary(reservationExists),
     hasData,
-    isValidDateMiddleware,
-    isValidTimeMiddleware,
+    isValidDateTimeMiddleware,
     isValidNumber,
     hasOnlyValidProperties,
     hasRequiredProperties,
