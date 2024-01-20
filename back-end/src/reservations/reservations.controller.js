@@ -18,6 +18,7 @@ const VALID_PROPERTIES = [
   "reservation_date",
   "reservation_time",
   "people",
+  "status",
 ];
 
 function hasData(req, res, next) {
@@ -154,13 +155,25 @@ async function reservationExists(req, res, next) {
   });
 }
 
+function isValidBookedReservation(req, res, next) {
+  const { status } = req.body.data;
+  if (status && (status == "seated" || status == "finished")) {
+      return next({
+        status: 400,
+        message: `Cannot create a "seated" or "finished" reservation.`
+      });
+    }
+  next();
+}
+
 function isValidStatus(req, res, next) {
   const { status } = req.body.data;
-  if (!["booked", "seated", "finished"].includes(status)) {
+  const validStatus = ["booked", "seated", "finished"];
+  if (!validStatus.includes(status)) {
     return next({
       status: 400,
-      message: `Invalid status: ${status}. Must be one of booked, seated, or finished.`
-    })
+      message: `Invalid status: ${status}. Must be one of booked, seated, or finished.`,
+    });
   }
   res.locals.status = status;
   next();
@@ -170,9 +183,9 @@ function isValidFinishedReservation(req, res, next) {
   const { reservation } = res.locals;
   if (reservation.status === "finished") {
     return next({
-      status: 400, 
-      message: `Invalid status transition. Can only set status to "finished" when the current status is "seated".`
-    })
+      status: 400,
+      message: `Invalid status transition. Can only set status to "finished" when the current status is "seated".`,
+    });
   }
   next();
 }
@@ -192,8 +205,7 @@ async function create(req, res) {
 }
 
 async function read(req, res) {
-  const { reservation: data } = res.locals;
-  res.json({ data });
+  res.json({ data: res.locals.reservation });
 }
 
 async function update(req, res) {
@@ -217,6 +229,7 @@ module.exports = {
     dateIsNotInPast,
     isNotTuesday,
     isValidBusinessHours,
+    isValidBookedReservation,
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
@@ -231,6 +244,7 @@ module.exports = {
     dateIsNotInPast,
     isNotTuesday,
     isValidBusinessHours,
+    isValidBookedReservation,
     asyncErrorBoundary(update),
   ],
   updateStatus: [
