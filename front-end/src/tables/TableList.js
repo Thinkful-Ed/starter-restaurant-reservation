@@ -26,15 +26,12 @@ function TableList({ tables, handleFinish }) {
   ));
 
   return (
-    <div className="table-hover">
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0 pt-3 mx-auto text-center">Tables</h4>
-      </div>
+    <div className="table-responsive table-hover">
       <table className="table text-center table-sm">
         <thead>
           <tr>
-            <th scope="col">Table Name</th>
-            <th scope="col">Capacity</th>
+            <th scope="col align-middle">Table Name</th>
+            <th scope="col align-middle">Capacity</th>
             <th scope="col">Table Status</th>
             <th scope="col">Finish</th>
           </tr>
