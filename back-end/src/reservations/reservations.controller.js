@@ -160,11 +160,11 @@ function isValidBookedReservation(req, res, next) {
 
 function isValidStatus(req, res, next) {
   const { status } = req.body.data;
-  const validStatus = ["booked", "seated", "finished"];
+  const validStatus = ["booked", "seated", "finished", "cancelled"];
   if (!validStatus.includes(status)) {
     return next({
       status: 400,
-      message: `Invalid status: ${status}. Must be one of booked, seated, or finished.`,
+      message: `Invalid status: ${status}. Must be one of booked, seated, finished, or cancelled.`,
     });
   }
   res.locals.status = status;
@@ -245,7 +245,6 @@ module.exports = {
     hasData,
     isValidDateTimeMiddleware,
     isValidNumber,
-    hasOnlyValidProperties,
     hasRequiredProperties,
     dateIsNotInPast,
     isNotTuesday,

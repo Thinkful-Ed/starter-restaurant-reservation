@@ -15,7 +15,6 @@ function create(reservation) {
       message: `Invalid field: mobile_number. Must be a 10-digit number.`,
     };
   }
-
   if (!/^\d+$/.test(reservation.mobile_number)) {
     throw {
       status: 400,
@@ -36,6 +35,7 @@ function update(updatedReservation) {
   return knex("reservations")
     .select("*")
     .where({ reservation_id: updatedReservation.reservation_id })
+    .whereNot({ status: "finished "})
     .update(updatedReservation, "*")
     .then((updatedRecords) => updatedRecords[0]);
 }
