@@ -88,6 +88,51 @@ export async function createReservation(reservation, signal) {
   return await fetchJson(url, options, reservation);
 }
 
+export async function finishReservation(table_id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = {
+    method: "DELETE",
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+export async function editReservation(updatedReservation, signal) {
+  const url = `${API_BASE_URL}/reservations/${updatedReservation.reservation_id}`;
+  const options = {
+    method: "PUT", 
+    headers,
+    body: JSON.stringify({
+      data: updatedReservation, 
+    }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+export async function cancelReservation(reservation_id, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+  const options = {
+    method: "PUT",
+    mode: "cors",
+    headers,
+    body: JSON.stringify({
+      data: {
+        status: "cancelled",
+      },
+    }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+export async function searchByMobileNumber(mobile_number, signal) {
+  const url = `${API_BASE_URL}/reservations?mobile_number=${mobile_number}`;
+  return await fetchJson(url, { signal })
+  .then(formatReservationDate)
+  .then(formatReservationTime);
+}
+
 /**
  * Retrieves all existing tables.
  * @returns {Promise<[table]>}
@@ -129,20 +174,4 @@ export async function seatTables(reservation_id, table_id, signal) {
     signal,
   };
   return await fetchJson(url, options);
-}
-
-export async function finishReservation(table_id, signal) {
-  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
-  const options = {
-    method: "DELETE",
-    signal,
-  };
-  return await fetchJson(url, options);
-}
-
-export async function searchByMobileNumber(mobile_number, signal) {
-  const url = `${API_BASE_URL}/reservations?mobile_number=${mobile_number}`;
-  return await fetchJson(url, { signal })
-  .then(formatReservationDate)
-  .then(formatReservationTime);
 }
