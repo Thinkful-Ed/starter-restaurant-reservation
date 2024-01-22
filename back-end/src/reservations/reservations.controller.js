@@ -159,6 +159,7 @@ async function list(req, res) {
 
 //Executive function to create a new reservation
 async function create(req, res) {
+  console.log("Request Body:", req.body);
   const newReservation = await service.create(req.body.data);
 
   //newReservation.reservation_id++;

@@ -1,7 +1,9 @@
 import { formatAsDate } from "./date-time";
 
 function formatDate(reservation) {
-  reservation.reservation_date = formatAsDate(reservation.reservation_date);
+  if (reservation && reservation.reservation_date) {
+    reservation.reservation_date = formatAsDate(reservation.reservation_date);
+  }
   return reservation;
 }
 
@@ -23,4 +25,4 @@ export default function formatReservationDate(reservations) {
     : formatDate(reservations);
 }
 
-export {formatDate};
+export { formatDate };

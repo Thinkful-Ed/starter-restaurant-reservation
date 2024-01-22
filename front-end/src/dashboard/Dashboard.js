@@ -9,52 +9,46 @@ import {
   formatAsDate,
   formatAsTime,
   dateFormat,
-  timeFormat,
 } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "./ReservationsList";
 import TablesList from "./TablesList";
 
-/**
- * Defines the dashboard page.
- * @param date
- *  the date for which the user wants to view reservations.
- * @returns {JSX.Element}
- */
-function Dashboard({ date }) {
-  let history = useHistory();
+function Dashboard() {
+  const history = useHistory();
   const query = useQuery();
-
   const [reservations, setReservations] = useState([]);
-  const [currentTable, setCurrentTable] = useState();
+  const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [queryDate, setQueryDate] = useState(query.get("date"));
-  let [currentDate, setCurrentDate] = useState(today());
+  const [currentDate, setCurrentDate] = useState(today());
 
-  useEffect(loadDashboard, [currentDate], [currentTable]);
+  useEffect(loadDashboard, [currentDate]);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listTables(abortController.signal)
-      .then(setCurrentTable)
-      .then(console.log("Current Table:", currentTable))
-      .catch(setReservationsError)
-      .finally(() => abortController.abort());
+
+    // Fetch reservations
     listReservations(currentDate, abortController.signal)
       .then((response) => {
-        console.log("response:", response);
-        console.log("resonse.data:", response.data);
-        const formattedReservations = response.map((reservation) => {
-          return {
+        if (response) {
+          const formattedReservations = response.map((reservation) => ({
             ...reservation,
             reservation_date: formatAsDate(reservation.reservation_date),
             reservation_time: formatAsTime(reservation.reservation_time),
-          };
-        });
-        setReservations(formattedReservations);
+          }));
+          setReservations(formattedReservations);
+        } else {
+          setReservations([]); // Set empty array or handle it based on your requirements
+        }
       })
-      //.catch(setReservationsError)
+      .catch(setReservationsError);
+
+    // Fetch tables
+    listTables(abortController.signal)
+      .then(setTables)
+      .catch(setReservationsError)
       .finally(() => abortController.abort());
   }
 
@@ -77,7 +71,6 @@ function Dashboard({ date }) {
     history.push("/dashboard");
   }
 
-  // Check if currentDate is defined and in the correct format before rendering ErrorAlert
   if (!currentDate || !dateFormat.test(currentDate)) {
     return (
       <main>
@@ -173,7 +166,7 @@ function Dashboard({ date }) {
           </tr>
         </thead>
         <tbody>
-          {currentTable.map((table, index) => (
+          {tables.map((table, index) => (
             <TablesList table={table} key={index} />
           ))}
         </tbody>
