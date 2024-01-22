@@ -152,7 +152,7 @@ function isValidBookedReservation(req, res, next) {
   if (status && (status == "seated" || status == "finished")) {
     return next({
       status: 400,
-      message: `Cannot create a "seated" or "finished" reservation.`,
+      message: `Cannot create/edit a "seated" or "finished" reservation.`,
     });
   }
   next();

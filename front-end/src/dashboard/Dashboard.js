@@ -102,7 +102,7 @@ function Dashboard({ date }) {
           </div>
         </div>
         <ErrorAlert error={reservationsError} />
-        <ReservationList reservations={reservations} />
+        <ReservationList reservations={reservations} loadDashboard={loadDashboard} />
       </section>
       <section>
         <h4 className="mb-lg-0">Tables</h4>

@@ -3,8 +3,9 @@ import {
   getBadgeVariantReservation,
   formatPhoneNumber,
 } from "../utils/helpers";
+import CancelReservation from "./CancelReservation";
 
-function ReservationList({ reservations }) {
+function ReservationList({ reservations, loadDashboard }) {
   let reservationsMap;
   if (reservations.length === 0) {
     reservationsMap = (
@@ -52,13 +53,10 @@ function ReservationList({ reservations }) {
             >
               Edit
             </a>
-            <button
-              data-reservation-id-cancel={reservation.reservation_id}
-              type="button"
-              className="btn btn-outline-danger btn-sm m-2"
-            >
-              Cancel
-            </button>
+            <CancelReservation
+              reservation_id={reservation.reservation_id}
+              loadDashboard={loadDashboard}
+            />
           </div>
         </td>
       </tr>

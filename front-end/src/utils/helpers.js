@@ -7,6 +7,8 @@ function getBadgeVariantReservation(status) {
       return "info";
     case "finished":
       return "secondary";
+    case "cancelled":
+      return "danger";
     default:
       return "light";
   }
