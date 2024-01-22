@@ -1,12 +1,18 @@
 import React from "react";
+import { getTableStatusBadgeVariant } from "../utils/helpers";
 
 function TableList({ tables, handleFinish }) {
   const tablesMap = tables.map((table) => (
     <tr key={table.table_id}>
       <td className="align-middle">{table.table_name}</td>
       <td className="align-middle">{table.capacity}</td>
-      <td className="align-middle" data-table-id-status={table.table_id}>
-        {table.reservation_id ? "Occupied" : "Free"}
+      <td className="align-middle">
+        <span
+          className={`badge bg-${getTableStatusBadgeVariant(table.reservation_id)}`}
+          data-table-id-status={table.table_id}
+        >
+          {table.reservation_id ? "Occupied" : "Free"}
+        </span>
       </td>
       {table.reservation_id !== null ? (
         <td>
@@ -27,7 +33,7 @@ function TableList({ tables, handleFinish }) {
 
   return (
     <div className="table-responsive table-hover">
-      <table className="table text-center table-sm">
+      <table className="table text-center table-sm table-striped">
         <thead>
           <tr>
             <th scope="col align-middle">Table Name</th>
