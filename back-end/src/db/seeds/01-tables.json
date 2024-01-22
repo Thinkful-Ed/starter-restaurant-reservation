@@ -8,11 +8,11 @@
     "capacity": 1
   },
   {
-    "table_name": "#1",
+    "table_name": "#10",
     "capacity": 6
   },
   {
-    "table_name": "#2",
+    "table_name": "#20",
     "capacity": 6
   }
 ]
