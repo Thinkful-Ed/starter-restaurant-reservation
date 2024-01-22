@@ -21,6 +21,8 @@ export default function EditReservation() {
   const [formData, setFormData] = useState({ ...initialFormState });
   const [formErrors, setFormErrors] = useState([]);
 
+  const { reservation_id } = useParams();
+
   useEffect(() => {
     async function displayReservation() {
       const abortController = new AbortController();
@@ -36,7 +38,7 @@ export default function EditReservation() {
       return () => abortController.abort();
     }
     displayReservation();
-  }, [reservation_is_]);
+  }, [reservation_id]);
 
   const handleChange = ({ target }) => {
     if (target.name === "mobile_number") addDashes(target);
@@ -105,7 +107,7 @@ export default function EditReservation() {
     setFormErrors(errors);
 
     !errors.length &&
-      createReservation(formData, abortController.signal)
+      updateReservation(formData, abortController.signal)
         .then((_) => {
           //redirect to the dashboard with date of reservation newly created
           history.push(`/dashboard?date=${formData.reservation_date}`);

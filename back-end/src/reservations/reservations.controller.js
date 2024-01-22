@@ -20,7 +20,7 @@ async function validateProperties(req, res, next) {
     // validating the reservation date format
     if (!validateDate(reservation_date)) {
       const error = new Error(
-        `"${reservation_date}" is invalid. Please use this format: YYYY-MM_DD`
+        `"${reservation_date}" reservation_date is invalid. Please use this format: YYYY-MM_DD`
       );
       error.status = 400;
       throw error;
@@ -29,7 +29,7 @@ async function validateProperties(req, res, next) {
     // validating the reservation time format
     if (!validateTime(reservation_time)) {
       const error = new Error(
-        `"${reservation_time}" is invalid. Please use this format: HH:MM:SS`
+        `"${reservation_time}" reservation_time is invalid. Please use this format: HH:MM:SS`
       );
       error.status = 400;
       throw error;
