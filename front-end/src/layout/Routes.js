@@ -44,7 +44,7 @@ function Routes() {
       <Route path="/search">
         <SearchReservation />
       </Route>
-      <Route>
+      <Route path="/reservations/:reservation_id/edit">
         <EditReservation />
       </Route>
       <Route>

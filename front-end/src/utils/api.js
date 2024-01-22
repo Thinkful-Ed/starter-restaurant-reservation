@@ -68,6 +68,13 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+export async function readReservation(reservation_id, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+  return await fetchJson(url, { signal }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}
+
 /**
  * Creates a new reservation.
  * @param {Object} reservationData - The data for the new reservation.
@@ -100,10 +107,10 @@ export async function finishReservation(table_id, signal) {
 export async function editReservation(updatedReservation, signal) {
   const url = `${API_BASE_URL}/reservations/${updatedReservation.reservation_id}`;
   const options = {
-    method: "PUT", 
+    method: "PUT",
     headers,
     body: JSON.stringify({
-      data: updatedReservation, 
+      data: updatedReservation,
     }),
     signal,
   };
@@ -129,8 +136,8 @@ export async function cancelReservation(reservation_id, signal) {
 export async function searchByMobileNumber(mobile_number, signal) {
   const url = `${API_BASE_URL}/reservations?mobile_number=${mobile_number}`;
   return await fetchJson(url, { signal })
-  .then(formatReservationDate)
-  .then(formatReservationTime);
+    .then(formatReservationDate)
+    .then(formatReservationTime);
 }
 
 /**

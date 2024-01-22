@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { formatAsTime } from "../utils/date-time";
-import { useHistory } from "react-router-dom";
 
 function ReservationForm({
   handleSubmit,
+  handleCancel,
   initialFormState,
   reservationsError,
 }) {
   const [reservationData, setReservationData] = useState({...initialFormState});
-
-  const history = useHistory();
 
   const handleChange = (event) => {
     let { name, value } = event.target;
@@ -52,7 +50,7 @@ function ReservationForm({
           placeholder="First Name"
           required={true}
           onChange={handleChange}
-          value={reservationData.first_name}
+          value={reservationData.first_name || ""}
         />
       </div>
       <div className="col-md-6 p-2">
@@ -64,7 +62,7 @@ function ReservationForm({
           placeholder="Last Name"
           required={true}
           onChange={handleChange}
-          value={reservationData.last_name}
+          value={reservationData.last_name || ""}
         />
       </div>
       <div className="col-md-6 p-2">
@@ -76,7 +74,7 @@ function ReservationForm({
           placeholder="Phone Number"
           required={true}
           onChange={handleChange}
-          value={reservationData.mobile_number}
+          value={reservationData.mobile_number || ""}
         />
       </div>
       <div className="col-md-6 p-2">
@@ -88,7 +86,7 @@ function ReservationForm({
           placeholder="Party Size"
           required={true}
           onChange={handleChange}
-          value={reservationData.people}
+          value={reservationData.people || ""}
         />
       </div>
       <div className="col-md-6 p-2">
@@ -100,7 +98,7 @@ function ReservationForm({
           placeholder="YYYY-MM-DD"
           pattern="\d{4}-\d{2}-\d{2}"
           onChange={handleChange}
-          value={reservationData.reservation_date}
+          value={reservationData.reservation_date || ""}
         />
       </div>
       <div className="col-md-6 p-2">
@@ -112,7 +110,7 @@ function ReservationForm({
           placeholder="HH:MM"
           pattern="[0-9]{2}:[0-9]{2}"
           onChange={handleChange}
-          value={reservationData.reservation_time}
+          value={reservationData.reservation_time || ""} 
         />
       </div>
 
@@ -122,7 +120,7 @@ function ReservationForm({
         </button>
       </div>
       <div className="col-6 p-2 d-flex justify-content-end">
-        <button onClick={() => history.goBack()} className="btn btn-danger ">
+        <button onClick={handleCancel} className="btn btn-danger ">
           Cancel
         </button>
       </div>
