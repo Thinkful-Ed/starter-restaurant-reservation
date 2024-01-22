@@ -25,7 +25,7 @@ function TableList({ tables, handleFinish }) {
             Finish
           </button>
       ) : (
-        <td> {null}</td>
+       <> {null} </>
       )}
       </td>
     </tr>
@@ -39,7 +39,7 @@ function TableList({ tables, handleFinish }) {
             <th scope="col align-middle">Table Name</th>
             <th scope="col align-middle">Capacity</th>
             <th scope="col align-middle">Table Status</th>
-            <th scope="col align-middle"> </th>
+            <th scope="col align-middle"></th>
           </tr>
         </thead>
 
