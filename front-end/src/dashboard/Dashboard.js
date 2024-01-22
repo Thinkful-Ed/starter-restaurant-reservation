@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import useQuery from "../utils/useQuery";
 import {
   today,
@@ -13,6 +13,7 @@ import {
 } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "./ReservationsList";
+import TablesList from "./TablesList";
 
 /**
  * Defines the dashboard page.
@@ -25,15 +26,21 @@ function Dashboard({ date }) {
   const query = useQuery();
 
   const [reservations, setReservations] = useState([]);
+  const [currentTable, setCurrentTable] = useState();
   const [reservationsError, setReservationsError] = useState(null);
   const [queryDate, setQueryDate] = useState(query.get("date"));
   let [currentDate, setCurrentDate] = useState(today());
 
-  useEffect(loadDashboard, [currentDate]);
+  useEffect(loadDashboard, [currentDate], [currentTable]);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
+    listTables(abortController.signal)
+      .then(setCurrentTable)
+      .then(console.log("Current Table:", currentTable))
+      .catch(setReservationsError)
+      .finally(() => abortController.abort());
     listReservations(currentDate, abortController.signal)
       .then((response) => {
         console.log("response:", response);
@@ -155,6 +162,19 @@ function Dashboard({ date }) {
               date={currentDate}
               key={index}
             />
+          ))}
+        </tbody>
+      </table>
+      <table>
+        <thead>
+          <tr>
+            <th>Table Name</th>
+            <th>Table Capacity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentTable.map((table, index) => (
+            <TablesList table={table} key={index} />
           ))}
         </tbody>
       </table>

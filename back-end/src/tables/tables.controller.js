@@ -19,7 +19,7 @@ function bodyDataHas(propertyName) {
 function nameIsValid(req, res, next) {
   const { data: { table_name } = {} } = req.body;
 
-  if (table_name && table_name.length > 1) {
+  if (table_name && table_name.length >= 2) {
     return next();
   }
   next({ status: 400, message: `table_name` });
@@ -34,7 +34,7 @@ function capacityIsNumber(req, res, next) {
   }
   next({
     status: 400,
-    message: "Table capacity must be a number.",
+    message: "Table capacity must be at least a two-digit number.",
   });
 }
 
