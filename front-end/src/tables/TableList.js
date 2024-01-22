@@ -14,32 +14,32 @@ function TableList({ tables, handleFinish }) {
           {table.reservation_id ? "Occupied" : "Free"}
         </span>
       </td>
+      <td className="align-middle">
       {table.reservation_id !== null ? (
-        <td>
           <button
             type="button"
-            className="btn btn-sm btn-outline-info"
+            className="btn btn-outline-info btn-sm align-middle"
             data-table-id-finish={table.table_id}
             onClick={() => handleFinish(table.table_id, table.reservation_id)}
           >
             Finish
           </button>
-        </td>
       ) : (
         <td> {null}</td>
       )}
+      </td>
     </tr>
   ));
 
   return (
     <div className="table-responsive table-hover">
-      <table className="table text-center table-sm table-striped">
+      <table className="table text-center table-sm table-striped border bg-light">
         <thead>
           <tr>
             <th scope="col align-middle">Table Name</th>
             <th scope="col align-middle">Capacity</th>
-            <th scope="col">Table Status</th>
-            <th scope="col">Finish</th>
+            <th scope="col align-middle">Table Status</th>
+            <th scope="col align-middle"> </th>
           </tr>
         </thead>
 

@@ -44,7 +44,7 @@ function ReservationList({ reservations }) {
 
   return (
     <div className="table-responsive table-hover">
-      <table className="table text-center table-sm mb-1 table-striped">
+      <table className="table text-center table-sm mb-1 mt-1 table-striped border bg-light">
         <thead>
           <tr>
             <th scope="col" className="align-middle">

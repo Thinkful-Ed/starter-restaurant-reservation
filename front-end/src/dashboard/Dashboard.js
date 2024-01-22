@@ -72,47 +72,43 @@ function Dashboard({ date }) {
   };
 
   return (
-    <main>
-      <h1 className="p-4 m-4 text-center">Dashboard</h1>
-      <div className="align-items-center pt-3 border bg-light">
-        <div className="d-md-flex mb-3">
-          <h4 className="mb-0 mx-auto text-center">Reservations for {date}</h4>
+    <main className="container mt-5">
+      <h1 className="mb-5 text-center">Dashboard</h1>
+      <section className="mb-4">
+        <div className="d-md-flex justify-content-between align-items-center">
+          <h4 className="mb-0">Reservations for {date}</h4>
+          <div className="mb-md-0">
+            <button
+              type="button"
+              className="btn btn-outline-secondary m-1"
+              onClick={handlePrevious}
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              className="btn btn-info m-1"
+              onClick={handleToday}
+            >
+              Today
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline-secondary m-1"
+              onClick={handleNext}
+            >
+              Next
+            </button>
+          </div>
         </div>
         <ErrorAlert error={reservationsError} />
-        <ReservationList
-          reservations={reservations}
-        />
-      </div>
-      <div className="d-flex justify-content-between p-2">
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={handlePrevious}
-        >
-          Previous
-        </button>
-        <button
-          type="button"
-          className="btn btn-outline-info"
-          onClick={handleToday}
-        >
-          Today
-        </button>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={handleNext}
-        >
-          Next
-        </button>
-      </div>
-      <div className="align-items-center mt-5 mb-5 border bg-light">
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0 pt-3 mx-auto text-center">Tables</h4>
-      </div>
-        <TableList tables={tables} handleFinish={handleFinish} />
+        <ReservationList reservations={reservations} />
+      </section>
+      <section>
+        <h4 className="mb-lg-0">Tables</h4>
         <ErrorAlert error={tablesError} />
-      </div>
+        <TableList tables={tables} handleFinish={handleFinish} />
+      </section>
     </main>
   );
 }
