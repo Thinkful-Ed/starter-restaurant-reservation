@@ -12,15 +12,15 @@ function create(reservation) {
   if (!/^\d{10}$/.test(reservation.mobile_number)) {
     throw {
       status: 400,
-      message: `Invalid field: mobile_number. Must be a 10-digit number.`
+      message: `Invalid field: mobile_number. Must be a 10-digit number.`,
     };
   }
 
   if (!/^\d+$/.test(reservation.mobile_number)) {
     throw {
       status: 400,
-      message: `Invalid field: mobile_number. Must contain only numeric characters.`
-    }
+      message: `Invalid field: mobile_number. Must contain only numeric characters.`,
+    };
   }
   return knex("reservations")
     .insert(reservation)
@@ -29,27 +29,18 @@ function create(reservation) {
 }
 
 function read(reservation_id) {
-  return knex("reservations")
-  .select("*")
-  .where({ reservation_id })
-  .first();
+  return knex("reservations").select("*").where({ reservation_id }).first();
 }
 
 function update(updatedReservation) {
   return knex("reservations")
-  .select("*")
-  .where({ reservation_id: updatedReservation.reservation_id })
-  .update(updatedReservation, "*")
-  .then((updatedRecords) => updatedRecords[0]);
+    .select("*")
+    .where({ reservation_id: updatedReservation.reservation_id })
+    .update(updatedReservation, "*")
+    .then((updatedRecords) => updatedRecords[0]);
 }
 
 function search(mobile_number) {
-  if (!/^\d+$/.test(mobile_number)) {
-    throw {
-      status: 400,
-      message: `Invalid field: mobile_number. Must contain only numeric characters.`
-    }
-  }
   return knex("reservations")
     .whereRaw(
       "translate(mobile_number, '() -', '') like ?",

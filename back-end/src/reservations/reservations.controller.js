@@ -37,7 +37,6 @@ function isValidTime(timeString) {
   return regex.test(timeString);
 }
 
-
 function isValidDate(dateString) {
   const regex = /^\d{4}-\d{2}-\d{2}$/; // Date format YYYY-MM-DD
   if (!regex.test(dateString)) return false;
@@ -183,6 +182,17 @@ function isValidFinishedReservation(req, res, next) {
   next();
 }
 
+function isValidMobileNumber(req, res, next) {
+  const { mobile_number } = req.body.data;
+  if (!/^\d+$/.test(mobile_number)) {
+    return next({
+      status: 400,
+      message: `Invalid field: mobile_number. Must contain only numeric characters.`,
+    });
+  }
+  next();
+}
+
 async function list(req, res) {
   const { date } = req.query;
   const { mobile_number } = req.query;
@@ -190,7 +200,7 @@ async function list(req, res) {
   if (date) {
     data = await reservationsService.listByDate(date);
   }
-  if (mobile_number){
+  if (mobile_number) {
     data = await reservationsService.search(mobile_number);
   }
   res.json({ data });
@@ -226,6 +236,7 @@ module.exports = {
     isNotTuesday,
     isValidBusinessHours,
     isValidBookedReservation,
+    isValidMobileNumber,
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
