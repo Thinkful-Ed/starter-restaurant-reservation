@@ -52,6 +52,13 @@ function ReservationList({ reservations }) {
             >
               Edit
             </a>
+            <button
+              data-reservation-id-cancel={reservation.reservation_id}
+              type="button"
+              className="btn btn-outline-danger btn-sm m-2"
+            >
+              Cancel
+            </button>
           </div>
         </td>
       </tr>
