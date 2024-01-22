@@ -105,6 +105,30 @@ function isDuringBusinessHours(req, res, next) {
 
 //Executive Functions
 
+//Function to verify that a provided reservation ID exists
+async function reservationExists(req, res, next) {
+  const { reservation_id } = req.params;
+  const reservation = await service.read(reservation_id);
+  console.log("Reservation ID:", reservation_id);
+  console.log("Reservation information:", reservation);
+
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+
+  next({
+    status: 404,
+    message: `The provided reservation ID: ${reservation_id} does not exist`,
+  });
+}
+
+//Executive function to read the information of a provided reservation
+async function read(req, res) {
+  const data = res.locals.reservation;
+  res.json({ data });
+}
+
 //Executive Function to list reservations
 async function list(req, res) {
   const date = req.query.date;
@@ -144,6 +168,7 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   create: [
     bodyDataHas("first_name"),
     bodyDataHas("last_name"),
