@@ -21,13 +21,13 @@ function readReservation(reservation_id) {
 function seatReservation(reservation_id, table_id) {
   return knex("reservations")
     .where({ reservation_id })
-    .update({ status: "seated" })
+    //.update({ status: "seated" })
     .then(() => {
       return knex("tables")
         .where({ table_id })
         .update({
           reservation_id: reservation_id,
-          table_status: "occupied",
+          status: "occupied",
         })
         .returning("*");
     });

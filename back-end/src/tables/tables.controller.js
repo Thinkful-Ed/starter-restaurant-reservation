@@ -129,13 +129,13 @@ function openTable(req, res, next) {
 //Validates that the party size of the reservation is smaller than the capacity of the requested table
 function canAccommodateRes(req, res, next) {
   const { reservation, table } = res.locals;
-  if (reservation.people > table.capacity) {
-    next({
-      status: 400,
-      message: "Table capacity is smaller than party size",
-    });
+  if (reservation.people <= table.capacity) {
+    return next();
   }
-  return next();
+  next({
+    status: 400,
+    message: "Table capacity is smaller than party size",
+  });
 }
 
 //Executive function to create a new Table
