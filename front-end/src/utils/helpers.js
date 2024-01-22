@@ -2,9 +2,9 @@
 function getBadgeVariantReservation(status) {
   switch (status) {
     case "booked":
-      return "info";
-    case "seated":
       return "success";
+    case "seated":
+      return "info";
     case "finished":
       return "secondary";
     default:
