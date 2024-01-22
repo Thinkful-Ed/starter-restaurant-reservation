@@ -24,7 +24,6 @@ describe("US-07 - Search reservation by phone number", () => {
       const response = await request(app)
         .get("/reservations?mobile_number=808")
         .set("Accept", "application/json");
-
       expect(response.body.error).toBeUndefined();
       expect(response.body.data).toHaveLength(2);
     });
