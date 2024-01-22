@@ -85,7 +85,7 @@ async function tableExists(req, res, next) {
 
 //Executive function to determine if the inputted reservation exists
 async function reservationExists(req, res, next) {
-  const { reservation_id } = req.params;
+  const { data: { reservation_id } = {} } = req.body;
   const reservation = await service.readReservation(reservation_id);
   console.log("Reservation ID:", reservation_id);
   console.log("Reservation information:", reservation);
