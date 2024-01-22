@@ -9,6 +9,13 @@ function listByDate(date) {
 }
 
 function create(reservation) {
+  if (!/^\d{10}$/.test(reservation.mobile_number)) {
+    throw {
+      status: 400,
+      message: `Invalid field: mobile_number. Must be a 10-digit number.`
+    };
+  }
+
   if (!/^\d+$/.test(reservation.mobile_number)) {
     throw {
       status: 400,

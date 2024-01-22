@@ -1,5 +1,5 @@
 import React from "react";
-import { getBadgeVariantReservation } from "../utils/helpers";
+import { getBadgeVariantReservation, formatPhoneNumber } from "../utils/helpers";
 
 function ReservationList({ reservations }) {
   let reservationsMap;
@@ -15,7 +15,7 @@ function ReservationList({ reservations }) {
         <td className="align-middle">
           {reservation.first_name} {reservation.last_name}
         </td>
-        <td className="align-middle">{reservation.mobile_number}</td>
+        <td className="align-middle">{formatPhoneNumber(reservation.mobile_number)}</td>
         <td className="align-middle">{reservation.reservation_date}</td>
         <td className="align-middle">{reservation.reservation_time}</td>
         <td className="align-middle">{reservation.people}</td>
