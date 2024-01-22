@@ -16,6 +16,7 @@ function TableForm({ handleSubmit, handleChange, handleCancel, table }) {
               name="table_name"
               placeholder="Table Numb i.e. Bar #3"
               required
+              minLength="2"
               onChange={handleChange}
               value={table.table_name}
               className="form-control"
