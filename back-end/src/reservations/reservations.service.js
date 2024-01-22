@@ -9,18 +9,21 @@ function listByDate(date) {
 }
 
 function create(reservation) {
-  if (!/^\d{10}$/.test(reservation.mobile_number)) {
-    throw {
-      status: 400,
-      message: `Invalid field: mobile_number. Must be a 10-digit number.`,
-    };
-  }
-  if (!/^\d+$/.test(reservation.mobile_number)) {
-    throw {
-      status: 400,
-      message: `Invalid field: mobile_number. Must contain only numeric characters.`,
-    };
-  }
+  // validation to add in the future
+  // if (!/^\d{10}$/.test(reservation.mobile_number)) {
+  //   throw {
+  //     status: 400,
+  //     message: `Invalid field: mobile_number. Must be a 10-digit number.`,
+  //   };
+  // }
+
+  // validation to add in the future
+  // if (!/^\d+$/.test(reservation.mobile_number)) {
+  //   throw {
+  //     status: 400,
+  //     message: `Invalid field: mobile_number. Must contain only numeric characters.`,
+  //   };
+  // }
   return knex("reservations")
     .insert(reservation)
     .returning("*")
@@ -35,7 +38,7 @@ function update(updatedReservation) {
   return knex("reservations")
     .select("*")
     .where({ reservation_id: updatedReservation.reservation_id })
-    .whereNot({ status: "finished "})
+    .whereNot({ status: "finished " })
     .update(updatedReservation, "*")
     .then((updatedRecords) => updatedRecords[0]);
 }

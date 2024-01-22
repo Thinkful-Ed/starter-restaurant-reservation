@@ -182,16 +182,17 @@ function isValidFinishedReservation(req, res, next) {
   next();
 }
 
-function isValidMobileNumber(req, res, next) {
-  const { mobile_number } = req.body.data;
-  if (!/^\d+$/.test(mobile_number)) {
-    return next({
-      status: 400,
-      message: `Invalid field: mobile_number. Must contain only numeric characters.`,
-    });
-  }
-  next();
-}
+// phone number validation to add in the future
+// function isValidMobileNumber(req, res, next) {
+//   const { mobile_number } = req.body.data;
+//   if (!/^\d+$/.test(mobile_number)) {
+//     return next({
+//       status: 400,
+//       message: `Invalid field: mobile_number. Must contain only numeric characters.`,
+//     });
+//   }
+//   next();
+// }
 
 async function list(req, res) {
   const { date } = req.query;
@@ -236,7 +237,6 @@ module.exports = {
     isNotTuesday,
     isValidBusinessHours,
     isValidBookedReservation,
-    isValidMobileNumber,
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
