@@ -31,6 +31,12 @@ function update(updatedReservation) {
 }
 
 function search(mobile_number) {
+  if (!/^\d+$/.test(mobile_number)) {
+    throw {
+      status: 400,
+      message: `Invalid field: mobile_number. Must contain only numeric characters.`
+    }
+  }
   return knex("reservations")
     .whereRaw(
       "translate(mobile_number, '() -', '') like ?",

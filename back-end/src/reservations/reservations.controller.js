@@ -37,6 +37,7 @@ function isValidTime(timeString) {
   return regex.test(timeString);
 }
 
+
 function isValidDate(dateString) {
   const regex = /^\d{4}-\d{2}-\d{2}$/; // Date format YYYY-MM-DD
   if (!regex.test(dateString)) return false;
@@ -189,7 +190,7 @@ async function list(req, res) {
   if (date) {
     data = await reservationsService.listByDate(date);
   }
-  if (mobile_number) {
+  if (mobile_number){
     data = await reservationsService.search(mobile_number);
   }
   res.json({ data });
