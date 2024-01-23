@@ -26,6 +26,7 @@ function EditReservation() {
   };
 
   const handleSubmit = async (reservation) => {
+    const abortController = new AbortController();
     try {
       const formattedDate = formatAsDate(reservation.reservation_date);
       await editReservation({
@@ -35,6 +36,7 @@ function EditReservation() {
     } catch (error) {
       setReservationsError(error);
     }
+    return () => abortController.abort();
   };
 
   return (

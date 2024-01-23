@@ -35,7 +35,7 @@ function SeatReservation() {
     } catch (error) {
       setSeatError(error);
     }
-    return abortController;
+    return () => abortController.abort();
   };
 
   const tableOptions = tables.map((table) => (

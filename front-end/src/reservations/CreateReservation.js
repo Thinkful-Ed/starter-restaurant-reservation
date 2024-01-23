@@ -29,7 +29,7 @@ function CreateReservation() {
     } catch (error) {
       setReservationsError(error);
     }
-    return abortController;
+    return () => abortController.abort();
   };
 
   // add bootstrap validation
