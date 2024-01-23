@@ -1,5 +1,6 @@
 const service = require("./tables.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const { table } = require("../db/connection");
 
 //Validation middleware
 
@@ -63,6 +64,57 @@ function resHasId(req, res, next) {
   });
 }
 
+//Validates that the reservation has not already been seated
+function reservationNotSeated(req, res, next) {
+  const reservation = res.locals.reservation;
+  if (reservation.status !== "seated") {
+    return next();
+  }
+
+  next({
+    status: 400,
+    message: "Reservation has already been seated",
+  });
+}
+
+//Validates that the table does not already have a reservation seated at it
+function openTable(req, res, next) {
+  const table = res.locals.table;
+  console.log("Open Table table:", table);
+  if (!table.reservation_id) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: "table_id is already occupied",
+  });
+}
+
+//Validates that the table currently has a party seated at it
+function filledTable(req, res, next) {
+  const table = res.locals.table;
+  console.log("Filled table table:", table);
+  if (table.reservation_id) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Table ${table.table_id} is not occupied`,
+  });
+}
+
+//Validates that the party size of the reservation is smaller than the capacity of the requested table
+function canAccommodateRes(req, res, next) {
+  const { reservation, table } = res.locals;
+  if (reservation.people <= table.capacity) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: "Table capacity is smaller than party size",
+  });
+}
+
 //Executive functions
 
 //Executive function to determine if the inputted tableID exists
@@ -103,44 +155,6 @@ async function reservationExists(req, res, next) {
   });
 }
 
-//Validates that the reservation has not already been seated
-function reservationNotSeated(req, res, next) {
-  const reservation = res.locals.reservation;
-  if (reservation.status !== "seated") {
-    return next();
-  }
-
-  next({
-    status: 400,
-    message: "Reservation has already been seated",
-  });
-}
-
-//Validates that the table does not already have a reservation seated at it
-function openTable(req, res, next) {
-  const table = res.locals.table;
-  console.log("Open Table table:", table);
-  if (!table.reservation_id) {
-    return next();
-  }
-  next({
-    status: 400,
-    message: "table_id is already occupied",
-  });
-}
-
-//Validates that the party size of the reservation is smaller than the capacity of the requested table
-function canAccommodateRes(req, res, next) {
-  const { reservation, table } = res.locals;
-  if (reservation.people <= table.capacity) {
-    return next();
-  }
-  next({
-    status: 400,
-    message: "Table capacity is smaller than party size",
-  });
-}
-
 //Executive function to create a new Table
 async function create(req, res) {
   const newTable = await service.create(req.body.data);
@@ -172,6 +186,16 @@ async function seatReservation(req, res) {
   res.json({ data });
 }
 
+//Executive function to remove a party from a table and "free" it
+async function destroy(req, res) {
+  const table = res.locals.table;
+  const data = await service.resetTableStatus(
+    table.reservation_id,
+    table.table_id
+  );
+  res.json({ data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
@@ -191,5 +215,10 @@ module.exports = {
     openTable,
     canAccommodateRes,
     asyncErrorBoundary(seatReservation),
+  ],
+  destroy: [
+    asyncErrorBoundary(tableExists),
+    filledTable,
+    asyncErrorBoundary(destroy),
   ],
 };

@@ -33,4 +33,16 @@ function seatReservation(reservation_id, table_id) {
     });
 }
 
-module.exports = { list, create, readTable, readReservation, seatReservation };
+function resetTableStatus(reservation_id, table_id) {
+  return knex("reservations")
+    .where({ reservation_id })
+    //.update({ status: "finished" })
+    .then(() => {
+      return knex("tables")
+        .where({ table_id })
+        .update({ reservation_id: null}, "*")
+        .then((results) => (updatedTable = results[0]))
+    })
+}
+
+module.exports = { list, create, readTable, readReservation, seatReservation, resetTableStatus };
