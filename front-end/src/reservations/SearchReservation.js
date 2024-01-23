@@ -29,7 +29,7 @@ function SearchReservation() {
 
   return (
     <div>
-      <h1 className="p-4 m-4 text-center">Find a Reservation</h1>
+      <h2 className="p-4 m-4 text-center">Find a Reservation</h2>
       <form onSubmit={handleSubmit}>
         <div className="row p-4 m-4 w-75 mx-auto border border-secondary-subtle bg-light">
           <input

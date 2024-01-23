@@ -35,7 +35,7 @@ function CreateReservation() {
   // add bootstrap validation
   return (
     <div>
-      <h1 className="p-4 m-4 text-center">Create a Reservation</h1>
+      <h2 className="p-4 m-4 text-center">Create a Reservation</h2>
       <ReservationForm
         handleSubmit={handleSubmit}
         handleCancel={history.goBack}

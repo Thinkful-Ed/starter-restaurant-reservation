@@ -40,7 +40,7 @@ function CreateTable() {
   // add bootstrap validation
   return (
     <div>
-      <h1 className="p-4 m-4 text-center">Create a Table</h1>
+      <h2 className="p-4 m-4 text-center">Create a Table</h2>
       <form
         className="row g-3 p-4 m-4 flex w-75 mx-auto border border-secondary-subtle bg-light"
         onSubmit={handleSubmit}

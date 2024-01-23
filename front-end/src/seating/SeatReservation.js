@@ -43,7 +43,7 @@ function SeatReservation() {
 
   return (
     <div>
-      <h1 className="p-4 m-4 text-center">Select a Table</h1>
+      <h2 className="p-4 m-4 text-center">Select a Table</h2>
       <form
         className="p-4 m-4 bg-light border border-info-subtle d-flex align-items-center"
         onSubmit={handleSubmit}

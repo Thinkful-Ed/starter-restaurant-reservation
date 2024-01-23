@@ -41,7 +41,7 @@ function EditReservation() {
 
   return (
     <div>
-      <h1 className="p-4 m-4 text-center">Edit a Reservation</h1>
+      <h2 className="p-4 m-4 text-center">Edit a Reservation</h2>
       <ReservationForm
         handleSubmit={handleSubmit}
         handleCancel={handleCancel}
