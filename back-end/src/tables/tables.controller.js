@@ -211,7 +211,7 @@ module.exports = {
     resHasId,
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(reservationExists),
-    //reservationNotSeated,
+    reservationNotSeated,
     openTable,
     canAccommodateRes,
     asyncErrorBoundary(seatReservation),

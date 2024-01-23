@@ -146,6 +146,7 @@ function Dashboard() {
             <th>Reservation Date</th>
             <th>Reservation Time</th>
             <th>Party Size</th>
+            <th>Reservation Status</th>
             <th>Seat the Party</th>
           </tr>
         </thead>

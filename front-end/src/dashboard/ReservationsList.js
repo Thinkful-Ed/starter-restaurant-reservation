@@ -12,10 +12,17 @@ function ReservationsList({ reservation, date }) {
         <td>{reservation.reservation_date}</td>
         <td>{reservation.reservation_time}</td>
         <td>{reservation.people}</td>
+        <td data-reservation-id-status={reservation.reservation_id}>
+          {reservation.status}
+        </td>
         <td>
-          <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-            <button>Seat</button>
-          </Link>
+          {reservation.status === "booked" ? (
+            <Link to={`/reservations/${reservation.reservation_id}/seat`}>
+              <button>Seat</button>
+            </Link>
+          ) : (
+            <></>
+          )}
         </td>
       </tr>
     );

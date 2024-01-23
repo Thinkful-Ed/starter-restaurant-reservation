@@ -103,6 +103,36 @@ function isDuringBusinessHours(req, res, next) {
   next();
 }
 
+//Validates the current status of the reservation
+function checkStatus(req, res, next) {
+  const { status } = req.body.data;
+  if (req.method === "POST" && status && status !== "booked") {
+    next({
+      status: 400,
+      message: `Reservation cannot have status of ${status}.`,
+    });
+  }
+  if (req.method === "PUT" && status && status === "unknown") {
+    next({
+      status: 400,
+      message: "Reservation is an unknown status.",
+    });
+  }
+  return next();
+}
+
+//Validates whether or not the status of the reservation is "finished"
+function reservationFinished(req, res, next) {
+  const { reservation } = res.locals;
+  if (reservation && reservation.status !== "finished") {
+    return next();
+  }
+  next({
+    status: 400,
+    message: "A finished reservation cannot be updated.",
+  });
+}
+
 //Executive Functions
 
 //Function to verify that a provided reservation ID exists
@@ -131,28 +161,13 @@ async function read(req, res) {
 
 //Executive Function to list reservations
 async function list(req, res) {
-  const date = req.query.date;
-
-  const data = await service.list();
-
-  const formatting = data.filter((element) => {
-    const formattedDate = element.reservation_date.toISOString().split("T")[0];
-    return formattedDate === date;
-  });
-
-  let sortedData = formatting.sort((a, b) => {
-    if (a.reservation_time > b.reservation_time) {
-      return 1;
-    } else if (b.reservation_time > a.reservation_time) {
-      return -1;
-    } else {
-      return 0;
-    }
-  });
+  const { date } = req.query;
 
   if (date) {
-    res.json({ data: sortedData });
+    const data = await service.listForDate(date);
+    res.json({ data });
   } else {
+    const data = await service.list();
     res.json({ data });
   }
 }
@@ -162,9 +177,19 @@ async function create(req, res) {
   console.log("Request Body:", req.body);
   const newReservation = await service.create(req.body.data);
 
-  //newReservation.reservation_id++;
   console.log(newReservation);
   res.status(201).json({ data: newReservation });
+}
+
+//Executive function to update the status of a reservation
+async function updateStatus(req, res) {
+  const { reservation } = res.locals;
+  const newReservation = {
+    ...reservation,
+    status: req.body.data.status,
+  };
+  const data = await service.updateStatus(newReservation);
+  res.json({ data });
 }
 
 module.exports = {
@@ -183,6 +208,13 @@ module.exports = {
     dateIsInFuture,
     isDuringBusinessHours,
     peopleNumberIsValid,
+    checkStatus,
     asyncErrorBoundary(create),
+  ],
+  updateStatus: [
+    asyncErrorBoundary(reservationExists),
+    checkStatus,
+    reservationFinished,
+    asyncErrorBoundary(updateStatus),
   ],
 };

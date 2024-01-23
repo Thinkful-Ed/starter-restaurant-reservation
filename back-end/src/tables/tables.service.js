@@ -18,31 +18,45 @@ function readReservation(reservation_id) {
   return knex("reservations").select("*").where({ reservation_id }).first();
 }
 
-function seatReservation(reservation_id, table_id) {
-  return knex("reservations")
+async function seatReservation(reservation_id, table_id) {
+  const trx = await knex.transaction();
+  let updatedTable = {};
+  return trx("reservations")
     .where({ reservation_id })
-    //.update({ status: "seated" })
-    .then(() => {
-      return knex("tables")
+    .update({ status: "seated" }, "*")
+    .then(() =>
+      trx("tables")
         .where({ table_id })
-        .update({
-          reservation_id: reservation_id,
-          status: "occupied",
-        })
-        .returning("*");
-    });
-}
-
-function resetTableStatus(reservation_id, table_id) {
-  return knex("reservations")
-    .where({ reservation_id })
-    //.update({ status: "finished" })
-    .then(() => {
-      return knex("tables")
-        .where({ table_id })
-        .update({ reservation_id: null}, "*")
+        .update({ reservation_id }, "*")
         .then((results) => (updatedTable = results[0]))
-    })
+    )
+    .then(trx.commit)
+    .then(() => updatedTable)
+    .catch(trx.rollback);
 }
 
-module.exports = { list, create, readTable, readReservation, seatReservation, resetTableStatus };
+async function resetTableStatus(reservation_id, table_id) {
+  const trx = await knex.transaction();
+  let updatedTable = {};
+  return trx("reservations")
+    .where({ reservation_id })
+    .update({ status: "finished" })
+    .then(() =>
+      trx("tables")
+        .where({ table_id })
+        .update({ reservation_id: null }, "*")
+        .then((results) => (updatedTable = results[0]))
+    )
+    .then(trx.commit)
+    .then(() => updatedTable)
+    .catch(trx.rollback);
+}
+
+module.exports = {
+  list,
+  create,
+  readTable,
+  readReservation,
+  seatReservation,
+  resetTableStatus,
+};
