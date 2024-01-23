@@ -1,33 +1,85 @@
-.side-bar {
-  background-color: #1F271B; /* Updated background color */
-  min-width: 250px;
-}
-
-/* Add font styles for headings */
+/* Font styles for headings */
 h1, h2 {
   font-family: "Bona Nova", serif;
   font-weight: 700;
   color: #1F271B; /* Primary color */
 }
 
-/* Add font styles for body and buttons */
+/* Font styles for body and buttons */
 body, button {
   font-family: "Almarai", sans-serif;
   font-weight: 400;
   color: #19647E; /* Secondary color */
 }
 
-/* Add font style for buttons */
+/* Font style for buttons */
 button {
   font-weight: 700;
 }
 
-/* ... (existing styles) */
+/* Add styles for button colors */
+.btn-outline-info {
+  color: #28AFB0;
+  border-color: #28AFB0;
+  background-color: transparent;
+}
+
+.btn-outline-info:hover {
+  color: #ffffff;
+  background-color: #28AFB0;
+  border-color: #28AFB0;
+}
+
+.btn-outline-secondary {
+  color: #19647E;
+  border-color: #19647E;
+}
+
+.btn-outline-secondary:hover {
+  color: #ffffff;
+  background-color: #19647E;
+  border-color: #19647E;
+}
+
+.btn-outline-danger {
+  color: #EE964B;
+  border-color: #EE964B;
+  background-color: transparent;
+}
+
+.btn-info {
+  border-color: #28AFB0;
+  background-color: #28AFB0;
+}
+
+/* Custom badge styles for specific colors */
+.badge-booked {
+  background-color: #19647E;
+  color: #ffffff; /* White text for visibility */
+}
+
+.badge-seated {
+  background-color: #28AFB0;
+}
+
+.badge-finished {
+  background-color: #1F271B;
+  color: #ffffff; /* White text for visibility */
+}
+
+.badge-cancelled {
+  background-color: #EE964B;
+}
 
 
-
-/* Add font styles for the brand text */
+/* Menu */
 .sidebar-brand-text {
   font-family: "Bona Nova", serif;
   font-weight: 700;
 }
+
+.side-bar {
+  background-color: #1F271B; /* Updated background color */
+  min-width: 250px;
+}
+

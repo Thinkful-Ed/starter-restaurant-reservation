@@ -18,7 +18,7 @@ function ReservationList({ reservations, loadDashboard }) {
       <tr key={reservation.reservation_id}>
         <td className="align-middle text-capitalize">
           <span
-            className={`badge bg-${getBadgeVariantReservation(
+            className={`badge ${getBadgeVariantReservation(
               reservation.status
             )}`}
             data-reservation-id-status={reservation.reservation_id}

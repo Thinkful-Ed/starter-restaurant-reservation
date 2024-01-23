@@ -8,7 +8,7 @@ function TableList({ tables, handleFinish }) {
       <td className="align-middle">{table.capacity}</td>
       <td className="align-middle">
         <span
-          className={`badge bg-${getTableStatusBadgeVariant(table.reservation_id)}`}
+          className={`badge ${getTableStatusBadgeVariant(table.reservation_id)}`}
           data-table-id-status={table.table_id}
         >
           {table.reservation_id ? "Occupied" : "Free"}

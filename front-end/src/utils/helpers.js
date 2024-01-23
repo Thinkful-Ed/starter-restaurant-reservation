@@ -2,13 +2,13 @@
 function getBadgeVariantReservation(status) {
   switch (status) {
     case "booked":
-      return "success";
+      return "badge-booked";
     case "seated":
-      return "info";
+      return "badge-seated";
     case "finished":
-      return "secondary";
+      return "badge-finished";
     case "cancelled":
-      return "danger";
+      return "badge-cancelled";
     default:
       return "light";
   }
@@ -16,7 +16,7 @@ function getBadgeVariantReservation(status) {
 
 // tables status badges
 function getTableStatusBadgeVariant(reservationId) {
-  return reservationId ? "info" : "success";
+  return reservationId ? "badge-seated" : "badge-booked";
 }
 
 function formatPhoneNumber(phoneNumber) {
