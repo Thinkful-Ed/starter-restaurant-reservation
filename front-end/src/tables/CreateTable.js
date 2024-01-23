@@ -73,13 +73,13 @@ function CreateTable() {
               event.preventDefault();
               history.goBack();
             }}
-            className="btn btn-danger "
+            className="btn btn-outline-danger "
           >
             Cancel
           </button>
         </div>
         <div className="col-6 p-2 d-flex justify-content-end">
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-outline-secondary">
             Submit
           </button>
         </div>

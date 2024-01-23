@@ -32,13 +32,13 @@ button {
   border-color: #28afb0;
 }
 
-.btn-outline-secondary {
-  color: #19647e;
+.btn-secondary {
+  background-color: #19647e;
   border-color: #19647e;
 }
 
-.btn-secondary {
-  background-color: #19647e;
+.btn-outline-secondary {
+  color: #19647e;
   border-color: #19647e;
 }
 
@@ -52,6 +52,12 @@ button {
   color: #ee964b;
   border-color: #ee964b;
   background-color: transparent;
+}
+
+.btn-outline-danger:hover {
+  color: #ffffff;
+  background-color: #ee964b;
+  border-color: #ee964b;
 }
 
 .btn-info {

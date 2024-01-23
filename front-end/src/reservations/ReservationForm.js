@@ -116,13 +116,13 @@ function ReservationForm({
         />
       </div>
       <div className="col-6 p-2 d-flex justify-content-start">
-        <button onClick={handleCancel} className="btn btn-danger ">
+        <button onClick={handleCancel} className="btn btn-outline-danger ">
           Cancel
         </button>
       </div>
 
       <div className="col-6 p-2 d-flex justify-content-end">
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-outline-secondary">
           Submit
         </button>
       </div>

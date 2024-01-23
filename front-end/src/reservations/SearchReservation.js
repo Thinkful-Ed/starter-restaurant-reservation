@@ -43,7 +43,7 @@ function SearchReservation() {
             value={reservations.mobile_number}
           />
           <div className="mx-auto">
-            <button type="submit" className="btn btn-secondary">
+            <button type="submit" className="btn btn-outline-secondary">
               Find
             </button>
           </div>
