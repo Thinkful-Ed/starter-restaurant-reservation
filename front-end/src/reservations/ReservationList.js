@@ -53,10 +53,13 @@ function ReservationList({ reservations, loadDashboard }) {
             >
               Edit
             </a>
-            <CancelReservation
+            {reservation.status !== "cancelled" && (
+              <CancelReservation
               reservation_id={reservation.reservation_id}
               loadDashboard={loadDashboard}
             />
+            )}
+            
           </div>
         </td>
       </tr>

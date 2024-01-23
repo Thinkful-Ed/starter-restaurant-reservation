@@ -116,7 +116,7 @@ function ReservationForm({
 
       <div className="col-6 p-2 d-flex justify-content-start">
         <button type="submit" className="btn btn-primary">
-          Confirm Reservation
+          Submit
         </button>
       </div>
       <div className="col-6 p-2 d-flex justify-content-end">
