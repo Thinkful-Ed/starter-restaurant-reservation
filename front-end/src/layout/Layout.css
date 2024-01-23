@@ -80,14 +80,22 @@ button {
 
 .side-bar {
   background-color: #1F271B; /* Updated background color */
-  
-  height: auto;
 }
+
+.navbar-brand {
+  font-size: 1.5rem; /* Adjust font size for larger text */
+  text-align: left; /* Align text to the left */
+}
+
 
 /* Responsive styles for larger screens */
 @media (min-width: 767px) {
   .side-bar {
-    min-width: 250px;
+    min-width: 220px;
     height: 100vh;
+  }
+
+  .navbar-brand {
+    font-size: 1.2rem; /* Adjust font size for larger text */
   }
 }

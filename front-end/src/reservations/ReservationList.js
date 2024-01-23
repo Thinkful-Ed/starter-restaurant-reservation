@@ -41,7 +41,7 @@ function ReservationList({ reservations, loadDashboard }) {
               <a
                 href={`/reservations/${reservation.reservation_id}/seat`}
                 type="button"
-                className="btn btn-outline-info btn-sm m-2"
+                className="btn btn-outline-info btn-sm m-1"
               >
                 Seat
               </a>
@@ -49,7 +49,7 @@ function ReservationList({ reservations, loadDashboard }) {
             <a
               href={`/reservations/${reservation.reservation_id}/edit`}
               type="button"
-              className="btn btn-outline-secondary btn-sm m-2"
+              className="btn btn-outline-secondary btn-sm m-1"
             >
               Edit
             </a>

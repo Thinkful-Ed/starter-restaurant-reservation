@@ -25,7 +25,7 @@ function CancelReservation({ reservation_id, loadDashboard }) {
     <button
       data-reservation-id-cancel={reservation_id}
       type="button"
-      className="btn btn-outline-danger btn-sm m-2"
+      className="btn btn-outline-danger btn-sm m-1"
       onClick={handleCancel}
     >
       Cancel

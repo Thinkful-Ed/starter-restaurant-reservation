@@ -80,21 +80,21 @@ function Dashboard({ date }) {
           <div className="mb-md-0">
             <button
               type="button"
-              className="btn btn-outline-secondary m-1"
+              className="btn btn-outline-secondary btn-sm m-1"
               onClick={handlePrevious}
             >
               Previous
             </button>
             <button
               type="button"
-              className="btn btn-info m-1"
+              className="btn btn-info btn-sm m-1"
               onClick={handleToday}
             >
               Today
             </button>
             <button
               type="button"
-              className="btn btn-outline-secondary m-1"
+              className="btn btn-outline-secondary btn-sm m-1"
               onClick={handleNext}
             >
               Next
