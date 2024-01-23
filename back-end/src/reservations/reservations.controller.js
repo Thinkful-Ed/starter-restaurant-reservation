@@ -50,13 +50,13 @@ async function validateProperties(req, res, next) {
     }
 
     // validating the reservation status is booked
-    if (status !== "booked") {
-      const error = new Error(
-        `Reservation status nmust be "booked" not ${status}`
-      );
-      error.status = 400;
-      throw error;
-    }
+    // if (status !== "booked") {
+    //   const error = new Error(
+    //     `Reservation status nmust be "booked" not ${status}`
+    //   );
+    //   error.status = 400;
+    //   throw error;
+    // }
 
     next();
   } catch (error) {
@@ -172,7 +172,6 @@ async function list(req, res) {
   let reservations;
   if (mobile_number) {
     reservations = await service.search(mobile_number);
-    console.log("ressys", reservations);
   } else {
     reservations = await service.list(date);
   }

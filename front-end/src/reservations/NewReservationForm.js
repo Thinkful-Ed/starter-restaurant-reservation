@@ -16,7 +16,7 @@ export default function ReservationForm({
           type="text"
           id="first_name"
           name="first_name"
-          onchange={handleChange}
+          onChange={handleChange}
           placeholder="First Name"
           value={formData.first_name}
           required
