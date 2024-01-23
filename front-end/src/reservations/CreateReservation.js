@@ -29,7 +29,7 @@ function CreateReservation() {
     } catch (error) {
       setReservationsError(error);
     }
-    return () => abortController.abort();
+    return abortController;
   };
 
   // add bootstrap validation
@@ -38,7 +38,6 @@ function CreateReservation() {
       <h2 className="p-4 m-4 text-center">Create a Reservation</h2>
       <ReservationForm
         handleSubmit={handleSubmit}
-        handleCancel={history.goBack}
         initialFormState={initialFormState}
         reservationsError={reservationsError}
       />

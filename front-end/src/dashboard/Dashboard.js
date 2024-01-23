@@ -72,7 +72,7 @@ function Dashboard({ date }) {
   };
 
   return (
-    <main className="container mt-5">
+    <main className="container m-5 mx-auto">
       <h2 className="mb-5 text-center">Dashboard</h2>
       <section className="mb-4">
         <div className="d-md-flex justify-content-between align-items-center">

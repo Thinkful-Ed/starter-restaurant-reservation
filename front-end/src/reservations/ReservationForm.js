@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { formatAsTime } from "../utils/date-time";
 
 function ReservationForm({
   handleSubmit,
-  handleCancel,
   initialFormState,
   reservationsError,
 }) {
   const [reservationData, setReservationData] = useState({
     ...initialFormState,
   });
+
+  const history = useHistory();
 
   const handleChange = (event) => {
     let { name, value } = event.target;
@@ -116,7 +118,10 @@ function ReservationForm({
         />
       </div>
       <div className="col-6 p-2 d-flex justify-content-start">
-        <button onClick={handleCancel} className="btn btn-outline-danger ">
+        <button onClick={(event) =>{
+          event.preventDefault(); 
+          history.goBack();
+          }} className="btn btn-outline-danger ">
           Cancel
         </button>
       </div>

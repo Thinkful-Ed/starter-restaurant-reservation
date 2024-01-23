@@ -20,6 +20,16 @@ button {
 }
 
 /* Add styles for button colors */
+.btn-info {
+  border-color: #28afb0;
+  background-color: #28afb0;
+}
+
+.btn-info:hover {
+  border-color: #19647e;
+  background-color: #19647e;
+}
+
 .btn-outline-info {
   color: #28afb0;
   border-color: #28afb0;
@@ -60,11 +70,6 @@ button {
   border-color: #ee964b;
 }
 
-.btn-info {
-  border-color: #28afb0;
-  background-color: #28afb0;
-}
-
 /* Custom badge styles for specific colors */
 .badge-booked {
   background-color: #19647e;
@@ -100,7 +105,7 @@ button {
 }
 
 /* Responsive styles for larger screens */
-@media (min-width: 767px) {
+@media (min-width: 768px) {
   .side-bar {
     min-width: 220px;
     height: 100vh;

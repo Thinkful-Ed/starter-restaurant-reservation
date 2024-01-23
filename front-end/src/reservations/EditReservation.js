@@ -20,13 +20,12 @@ function EditReservation() {
     return () => abortController.abort();
   }, [reservation_id]);
 
-  const handleCancel = (event) => {
-    event.preventDefault();
-    history.goBack();
-  };
+  // const handleCancel = (event) => {
+  //   event.preventDefault();
+  //   history.goBack();
+  // };
 
   const handleSubmit = async (reservation) => {
-    const abortController = new AbortController();
     try {
       const formattedDate = formatAsDate(reservation.reservation_date);
       await editReservation({
@@ -36,7 +35,6 @@ function EditReservation() {
     } catch (error) {
       setReservationsError(error);
     }
-    return () => abortController.abort();
   };
 
   return (
@@ -44,7 +42,6 @@ function EditReservation() {
       <h2 className="p-4 m-4 text-center">Edit a Reservation</h2>
       <ReservationForm
         handleSubmit={handleSubmit}
-        handleCancel={handleCancel}
         initialFormState={currentReservation}
         reservationsError={reservationsError}
       />
