@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function ReservationsList({ reservation, date }) {
-  //If the reservations date is todays date, return the reservation info.
+  //If there are reservations on the passed in date, lists those
   if (reservation.reservation_date === date) {
     return (
       <tr>

@@ -61,25 +61,14 @@ async function fetchJson(url, options, onCancel) {
  */
 
 // Example modification in listReservations function
-export function listReservations(date, signal) {
-  return fetchJson(`${API_BASE_URL}/reservations?date=${date}`, {
-    signal,
-  }).then((reservations) => {
-    // Check if formatting is needed
-    if (reservations && reservations.length > 0) {
-      const firstReservation = reservations[0];
-      if (
-        firstReservation.reservation_date &&
-        firstReservation.reservation_time
-      ) {
-        // Reservation data is already formatted, no need to apply formatting functions
-        return reservations;
-      }
-    }
-
-    // Apply formatting functions if needed
-    return formatReservationDate(formatReservationTime(reservations));
-  });
+export async function listReservations(params, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  Object.entries(params).forEach(([key, value]) =>
+    url.searchParams.append(key, value.toString())
+  );
+  return await fetchJson(url, { headers, signal }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
 }
 
 /**
@@ -127,4 +116,24 @@ export async function createTable(table, signal) {
 export async function listTables(signal) {
   const url = `${API_BASE_URL}/tables`;
   return await fetchJson(url, { headers, signal }, []);
+}
+
+export async function sitReservation(table_id, reservation_id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { reservation_id } }),
+    signal,
+  };
+  console.log("Sit Options:", options);
+  try {
+  const response = await fetchJson(url, options);
+  console.log("Sit Reservation Response:", response);
+  return response;
+  } catch (error) {
+    console.error("Error in sitReservation:", error);
+    return Promise.reject(error);
+  }
 }

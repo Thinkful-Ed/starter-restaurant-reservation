@@ -71,7 +71,7 @@ function Dashboard() {
     history.push("/dashboard");
   }
 
-  if (!currentDate || !dateFormat.test(currentDate)) {
+  /* if (!currentDate || !dateFormat.test(currentDate)) {
     return (
       <main>
         <h1>Dashboard</h1>
@@ -104,7 +104,7 @@ function Dashboard() {
         <ErrorAlert error="Invalid date format" />
       </main>
     );
-  }
+  } */
 
   return (
     <main>
@@ -164,6 +164,7 @@ function Dashboard() {
           <tr>
             <th>Table Name</th>
             <th>Table Capacity</th>
+            <th>Table Status</th>
           </tr>
         </thead>
         <tbody>

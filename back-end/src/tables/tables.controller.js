@@ -53,8 +53,8 @@ function hasData(req, res, next) {
 //Verifies that the reservation, in fact, has an ID when seating
 function resHasId(req, res, next) {
   console.log("Req body:", req.body);
-  const { data: { reservation_id } = {} } = req.body;
-  if (reservation_id) {
+  const resId = req.body.data.reservation_id;
+  if (resId) {
     return next();
   }
   next({
@@ -85,9 +85,11 @@ async function tableExists(req, res, next) {
 
 //Executive function to determine if the inputted reservation exists
 async function reservationExists(req, res, next) {
-  const { data: { reservation_id } = {} } = req.body;
-  const reservation = await service.readReservation(reservation_id);
-  console.log("Reservation ID:", reservation_id);
+  console.log("Res Exists Req Body:", req.body);
+  const resId = req.body.data.reservation_id;
+  console.log("Res exists ResID:", resId);
+  const reservation = await service.readReservation(resId);
+  //console.log("Reservation ID:", reservation.reservation_id);
   console.log("Reservation information:", reservation);
 
   if (reservation) {
@@ -97,7 +99,7 @@ async function reservationExists(req, res, next) {
 
   next({
     status: 404,
-    message: `The provided reservation ID: ${reservation_id} does not exist`,
+    message: `The provided reservation ID: ${resId} does not exist`,
   });
 }
 
@@ -117,6 +119,7 @@ function reservationNotSeated(req, res, next) {
 //Validates that the table does not already have a reservation seated at it
 function openTable(req, res, next) {
   const table = res.locals.table;
+  console.log("Open Table table:", table);
   if (!table.reservation_id) {
     return next();
   }
@@ -184,7 +187,7 @@ module.exports = {
     resHasId,
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(reservationExists),
-    reservationNotSeated,
+    //reservationNotSeated,
     openTable,
     canAccommodateRes,
     asyncErrorBoundary(seatReservation),

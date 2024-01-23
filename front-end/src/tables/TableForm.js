@@ -14,7 +14,7 @@ function TableForm({ handleSubmit, handleChange, handleCancel, table }) {
               type="text"
               id="table_name"
               name="table_name"
-              placeholder="Table Numb i.e. Bar #3"
+              placeholder="Table Name i.e. Bar #3"
               required
               minLength="2"
               onChange={handleChange}
