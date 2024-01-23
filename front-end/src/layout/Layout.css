@@ -70,6 +70,12 @@ button {
   border-color: #ee964b;
 }
 
+/* border color for create and edit forms */
+
+.custom-border-color {
+  border-color: #1f271b !important;
+}
+
 /* Custom badge styles for specific colors */
 .badge-booked {
   background-color: #19647e;
@@ -89,29 +95,33 @@ button {
   background-color: #ee964b;
 }
 
-/* Menu */
-.sidebar-brand-text {
-  font-family: "Bona Nova", serif;
-  font-weight: 700;
-}
 
-.side-bar {
+.navbar {
   background-color: #1f271b; /* Updated background color */
+  color: #ffffff; /* Updated text color */
 }
 
 .navbar-brand {
-  font-size: 1.5rem; /* Adjust font size for larger text */
-  text-align: left; /* Align text to the left */
+  font-family: "Bona Nova", serif;
+  font-weight: 700;
+  color: #ffffff; /* Updated text color */
 }
 
-/* Responsive styles for larger screens */
-@media (min-width: 768px) {
-  .side-bar {
-    min-width: 220px;
-    height: 100vh;
-  }
+.navbar-nav .nav-link {
+  font-family: "Almarai", sans-serif;
+  font-weight: 400;
+  color: #ffffff; /* Updated text color */
+}
 
-  .navbar-brand {
-    font-size: 1.2rem; /* Adjust font size for larger text */
-  }
+.navbar-nav .nav-item {
+  margin-right: 15px; /* Adjust spacing between menu items */
+}
+
+.navbar-nav .nav-link:hover {
+  color: #28afb0; /* Highlight color on hover */
+}
+
+/* Add a subtle box-shadow on the navbar when scrolled down */
+.navbar-scrolled {
+  box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1);
 }

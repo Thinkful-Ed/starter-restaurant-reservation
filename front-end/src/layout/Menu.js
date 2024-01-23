@@ -1,59 +1,46 @@
 import React from "react";
-
 import { Link } from "react-router-dom";
-
-/**
- * Defines the menu for this application.
- *
- * @returns {JSX.Element}
- */
 
 function Menu() {
   return (
-    <nav className="navbar navbar-dark align-items-start p-0">
-      <div className="container-fluid d-flex flex-column p-0">
-        <Link
-          className="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
-          to="/"
-        >
-          <div className="sidebar-brand-text">
-            <span>Periodic Tables</span>
-          </div>
-        </Link>
-        <hr className="sidebar-divider my-0" />
-        <ul className="nav navbar-nav text-light" id="accordionSidebar">
+    <nav className="navbar navbar-expand-md navbar-dark">
+      <Link className="navbar-brand" to="/">
+        Periodic Tables
+      </Link>
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon"></span>
+      </button>
+      <div className="collapse navbar-collapse" id="navbarNav">
+        <ul className="navbar-nav ml-auto">
           <li className="nav-item">
             <Link className="nav-link" to="/dashboard">
-              <span className="oi oi-dashboard mr-1" />
-              &nbsp;Dashboard
+              Dashboard
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/search">
-              <span className="oi oi-magnifying-glass mr-1" />
-              &nbsp;Search
+              Search
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/reservations/new">
-              <span className="oi oi-plus mr-1" />
-              &nbsp;New Reservation
+              New Reservation
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/tables/new">
-              <span className="oi oi-layers mr-1" />
-              &nbsp;New Table
+              New Table
             </Link>
           </li>
         </ul>
-        <div className="text-center d-none d-md-inline">
-          <button
-            className="btn rounded-circle border-0"
-            id="sidebarToggle"
-            type="button"
-          />
-        </div>
       </div>
     </nav>
   );

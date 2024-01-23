@@ -28,39 +28,41 @@ function SearchReservation() {
   };
 
   return (
-    <div>
-      <h2 className="p-4 m-4 text-center">Find a Reservation</h2>
+    <div className="container mt-5">
+      <h2 className="text-center mb-4">Find a Reservation</h2>
       <form onSubmit={handleSubmit}>
-        <div className="row p-4 m-4 w-75 mx-auto border border-secondary-subtle bg-light">
-          <input
-            className="form-control mb-3"
-            name="mobile_number"
-            type="text"
-            maxLength="10"
-            placeholder="Enter a customer's phone number"
-            aria-label="Enter a custoner's phone number"
-            onChange={handleChange}
-            value={reservations.mobile_number}
-          />
-          <div className="mx-auto">
-            <button type="submit" className="btn btn-outline-secondary">
-              Find
-            </button>
+        <div className="row justify-content-center">
+          <div className="col-lg-6 col-md-8 col-sm-12">
+            <div className="input-group mb-3">
+              <input
+                className="form-control"
+                name="mobile_number"
+                type="text"
+                maxLength="10"
+                placeholder="Enter a customer's phone number"
+                aria-label="Enter a customer's phone number"
+                onChange={handleChange}
+                value={number}
+              />
+              <div className="input-group-append">
+                <button type="submit" className="btn btn-outline-info">
+                  Find
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </form>
       <ErrorAlert error={searchError} />
-      <div>
-        {searchPerformed && (
-          <div>
-            {reservations.length > 0 ? (
-              <ReservationList reservations={reservations} />
-            ) : (
-              <p className="text-center">No reservations found</p>
-            )}
-          </div>
-        )}
-      </div>
+      {searchPerformed && (
+        <div className="mt-4">
+          {reservations.length > 0 ? (
+            <ReservationList reservations={reservations} />
+          ) : (
+            <p className="text-center">No reservations found</p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

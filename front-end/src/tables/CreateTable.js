@@ -42,7 +42,7 @@ function CreateTable() {
     <div>
       <h2 className="p-4 m-4 text-center">Create a Table</h2>
       <form
-        className="row g-3 p-4 m-4 flex w-75 mx-auto border border-secondary-subtle bg-light"
+        className="row g-3 p-4 m-4 flex w-75 mx-auto border custom-border-color rounded bg-light"
         onSubmit={handleSubmit}
       >
         <div className="col-md-12 p-2">

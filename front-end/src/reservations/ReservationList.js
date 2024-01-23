@@ -10,7 +10,7 @@ function ReservationList({ reservations, loadDashboard }) {
   if (reservations.length === 0) {
     reservationsMap = (
       <tr>
-        <td colSpan="8">There are no reservations for this day.</td>
+        <td colSpan="7">There are no reservations for this day.</td>
       </tr>
     );
   } else {
