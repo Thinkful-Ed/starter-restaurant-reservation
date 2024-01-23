@@ -80,6 +80,14 @@ button {
 
 .side-bar {
   background-color: #1F271B; /* Updated background color */
-  min-width: 250px;
+  
+  height: auto;
 }
 
+/* Responsive styles for larger screens */
+@media (min-width: 767px) {
+  .side-bar {
+    min-width: 250px;
+    height: 100vh;
+  }
+}

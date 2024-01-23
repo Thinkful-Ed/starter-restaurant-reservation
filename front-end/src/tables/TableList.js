@@ -33,7 +33,7 @@ function TableList({ tables, handleFinish }) {
 
   return (
     <div className="table-responsive table-hover">
-      <table className="table text-center table-sm table-striped border bg-light">
+      <table className="table text-center table-sm border bg-light">
         <thead>
           <tr>
             <th scope="col align-middle">Table Name</th>
