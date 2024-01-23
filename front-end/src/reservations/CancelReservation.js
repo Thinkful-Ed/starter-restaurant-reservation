@@ -2,8 +2,6 @@ import React from "react";
 import { cancelReservation } from "../utils/api";
 
 function CancelReservation({ reservation_id, loadDashboard }) {
-
-  
   const handleCancel = async () => {
     const abortController = new AbortController();
     const confirm = window.confirm(
@@ -19,17 +17,17 @@ function CancelReservation({ reservation_id, loadDashboard }) {
     }
     return () => abortController.abort();
   };
-  
+
   return (
     <div>
-    <button
-      data-reservation-id-cancel={reservation_id}
-      type="button"
-      className="btn btn-outline-danger btn-sm m-1"
-      onClick={handleCancel}
-    >
-      Cancel
-    </button>
+      <button
+        data-reservation-id-cancel={reservation_id}
+        type="button"
+        className="btn btn-outline-danger btn-sm m-1"
+        onClick={handleCancel}
+      >
+        Cancel
+      </button>
     </div>
   );
 }

@@ -55,11 +55,10 @@ function ReservationList({ reservations, loadDashboard }) {
             </a>
             {reservation.status !== "cancelled" && (
               <CancelReservation
-              reservation_id={reservation.reservation_id}
-              loadDashboard={loadDashboard}
-            />
+                reservation_id={reservation.reservation_id}
+                loadDashboard={loadDashboard}
+              />
             )}
-            
           </div>
         </td>
       </tr>

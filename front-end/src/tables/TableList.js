@@ -8,14 +8,16 @@ function TableList({ tables, handleFinish }) {
       <td className="align-middle">{table.capacity}</td>
       <td className="align-middle">
         <span
-          className={`badge ${getTableStatusBadgeVariant(table.reservation_id)}`}
+          className={`badge ${getTableStatusBadgeVariant(
+            table.reservation_id
+          )}`}
           data-table-id-status={table.table_id}
         >
           {table.reservation_id ? "Occupied" : "Free"}
         </span>
       </td>
       <td className="align-middle">
-      {table.reservation_id !== null ? (
+        {table.reservation_id !== null ? (
           <button
             type="button"
             className="btn btn-outline-info btn-sm align-middle"
@@ -24,9 +26,9 @@ function TableList({ tables, handleFinish }) {
           >
             Finish
           </button>
-      ) : (
-       <> {null} </>
-      )}
+        ) : (
+          <> {null} </>
+        )}
       </td>
     </tr>
   ));

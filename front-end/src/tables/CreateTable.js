@@ -66,12 +66,8 @@ function CreateTable() {
             value={newTable.capacity}
           />
         </div>
+
         <div className="col-6 p-2 d-flex justify-content-start">
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </div>
-        <div className="col-6 p-2 d-flex justify-content-end">
           <button
             onClick={(event) => {
               event.preventDefault();
@@ -80,6 +76,11 @@ function CreateTable() {
             className="btn btn-danger "
           >
             Cancel
+          </button>
+        </div>
+        <div className="col-6 p-2 d-flex justify-content-end">
+          <button type="submit" className="btn btn-primary">
+            Submit
           </button>
         </div>
       </form>

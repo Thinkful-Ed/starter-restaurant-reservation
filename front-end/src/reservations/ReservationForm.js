@@ -7,7 +7,9 @@ function ReservationForm({
   initialFormState,
   reservationsError,
 }) {
-  const [reservationData, setReservationData] = useState({...initialFormState});
+  const [reservationData, setReservationData] = useState({
+    ...initialFormState,
+  });
 
   const handleChange = (event) => {
     let { name, value } = event.target;
@@ -110,18 +112,18 @@ function ReservationForm({
           placeholder="HH:MM"
           pattern="[0-9]{2}:[0-9]{2}"
           onChange={handleChange}
-          value={reservationData.reservation_time || ""} 
+          value={reservationData.reservation_time || ""}
         />
       </div>
-
       <div className="col-6 p-2 d-flex justify-content-start">
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-      </div>
-      <div className="col-6 p-2 d-flex justify-content-end">
         <button onClick={handleCancel} className="btn btn-danger ">
           Cancel
+        </button>
+      </div>
+
+      <div className="col-6 p-2 d-flex justify-content-end">
+        <button type="submit" className="btn btn-primary">
+          Submit
         </button>
       </div>
     </form>

@@ -52,14 +52,14 @@ function SearchReservation() {
       <ErrorAlert error={searchError} />
       <div>
         {searchPerformed && (
-        <div>
+          <div>
             {reservations.length > 0 ? (
-          <ReservationList reservations={reservations} />
-        ) : (
-          <p className="text-center">No reservations found</p>
-        )}
-            </div>
+              <ReservationList reservations={reservations} />
+            ) : (
+              <p className="text-center">No reservations found</p>
             )}
+          </div>
+        )}
       </div>
     </div>
   );
