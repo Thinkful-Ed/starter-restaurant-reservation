@@ -16,33 +16,33 @@ function Menu() {
           className="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
           to="/"
         >
-          <div className="sidebar-brand-text mx-3">
-            <span>Periodic Tables</span>
+          <div className="sidebar-brand-text">
+            <span>Reservation Manager</span>
           </div>
         </Link>
         <hr className="sidebar-divider my-0" />
         <ul className="nav navbar-nav text-light" id="accordionSidebar">
           <li className="nav-item">
             <Link className="nav-link" to="/dashboard">
-              <span className="oi oi-dashboard" />
+              <span className="oi oi-dashboard mr-1" />
               &nbsp;Dashboard
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/search">
-              <span className="oi oi-magnifying-glass" />
+              <span className="oi oi-magnifying-glass mr-1" />
               &nbsp;Search
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/reservations/new">
-              <span className="oi oi-plus" />
+              <span className="oi oi-plus mr-1" />
               &nbsp;New Reservation
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/tables/new">
-              <span className="oi oi-layers" />
+              <span className="oi oi-layers mr-1" />
               &nbsp;New Table
             </Link>
           </li>

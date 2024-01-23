@@ -1,4 +1,33 @@
 .side-bar {
-  background-color: #393a44;
-  min-width: 200px;
+  background-color: #1F271B; /* Updated background color */
+  min-width: 250px;
+}
+
+/* Add font styles for headings */
+h1, h2 {
+  font-family: "Bona Nova", serif;
+  font-weight: 700;
+  color: #1F271B; /* Primary color */
+}
+
+/* Add font styles for body and buttons */
+body, button {
+  font-family: "Almarai", sans-serif;
+  font-weight: 400;
+  color: #19647E; /* Secondary color */
+}
+
+/* Add font style for buttons */
+button {
+  font-weight: 700;
+}
+
+/* ... (existing styles) */
+
+
+
+/* Add font styles for the brand text */
+.sidebar-brand-text {
+  font-family: "Bona Nova", serif;
+  font-weight: 700;
 }
