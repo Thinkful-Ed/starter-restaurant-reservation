@@ -169,7 +169,7 @@ function Dashboard() {
         </thead>
         <tbody>
           {tables.map((table, index) => (
-            <TablesList table={table} key={index} />
+            <TablesList table={table} key={index} loadDashboard={loadDashboard}/>
           ))}
         </tbody>
       </table>

@@ -129,11 +129,31 @@ export async function sitReservation(table_id, reservation_id, signal) {
   };
   console.log("Sit Options:", options);
   try {
-  const response = await fetchJson(url, options);
-  console.log("Sit Reservation Response:", response);
-  return response;
+    const response = await fetchJson(url, options);
+    console.log("Sit Reservation Response:", response);
+    return response;
   } catch (error) {
     console.error("Error in sitReservation:", error);
+    return Promise.reject(error);
+  }
+}
+
+export async function finishTable(table_id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+
+  const options = {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify({ data: { table_id } }),
+    signal,
+  };
+  console.log("FinishTable Options:", options);
+  try {
+    const response = await fetchJson(url, options);
+    console.log("FinishTable Response:", response);
+    return response;
+  } catch (error) {
+    console.error("Error in finishTable:", error);
     return Promise.reject(error);
   }
 }
