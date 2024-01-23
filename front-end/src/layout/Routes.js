@@ -35,17 +35,17 @@ function Routes() {
       <Route path="/reservations/new">
         <CreateReservation />
       </Route>
-      <Route path="/tables/new">
-        <CreateTable />
-      </Route>
       <Route path="/reservations/:reservation_id/seat">
         <SeatReservation />
       </Route>
-      <Route path="/search">
-        <SearchReservation />
-      </Route>
       <Route path="/reservations/:reservation_id/edit">
         <EditReservation />
+      </Route>
+      <Route path="/tables/new">
+        <CreateTable />
+      </Route>
+      <Route path="/search">
+        <SearchReservation />
       </Route>
       <Route>
         <NotFound />

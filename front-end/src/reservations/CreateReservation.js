@@ -38,6 +38,7 @@ function CreateReservation() {
       <h1 className="p-4 m-4 text-center">Create a Reservation</h1>
       <ReservationForm
         handleSubmit={handleSubmit}
+        handleCancel={history.goBack}
         initialFormState={initialFormState}
         reservationsError={reservationsError}
       />
