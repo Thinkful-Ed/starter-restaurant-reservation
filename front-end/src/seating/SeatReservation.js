@@ -13,12 +13,9 @@ function SeatReservation() {
 
   useEffect(() => {
     const abortController = new AbortController();
-    async function loadTables() {
-      const response = await listTables(abortController.signal);
-      const APITable = response;
-      setTables(() => APITable);
-    }
-    loadTables();
+    listTables(abortController.signal)
+      .then((response) => setTables(response))
+      .catch((error) => setSeatError(error));
     return () => abortController.abort();
   }, [reservation_id]);
 
