@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function ReservationsList({ reservation, date }) {
   //If there are reservations on the passed in date, lists those
-  if (reservation.reservation_date === date) {
+  if (reservation.reservation_date === date && reservation.status !== "finished") {
     return (
       <tr>
         <td>{reservation.first_name}</td>
@@ -16,7 +16,7 @@ function ReservationsList({ reservation, date }) {
           {reservation.status}
         </td>
         <td>
-          {reservation.status === "booked" ? (
+          {reservation.status === "booked" || reservation.status === null ? (
             <Link to={`/reservations/${reservation.reservation_id}/seat`}>
               <button>Seat</button>
             </Link>

@@ -25,31 +25,29 @@ function Dashboard() {
 
   useEffect(loadDashboard, [currentDate]);
 
-  function loadDashboard() {
+  async function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
 
-    // Fetch reservations
-    listReservations(currentDate, abortController.signal)
-      .then((response) => {
-        if (response) {
-          const formattedReservations = response.map((reservation) => ({
-            ...reservation,
-            reservation_date: formatAsDate(reservation.reservation_date),
-            reservation_time: formatAsTime(reservation.reservation_time),
-          }));
-          setReservations(formattedReservations);
-        } else {
-          setReservations([]); // Set empty array or handle it based on your requirements
-        }
-      })
-      .catch(setReservationsError);
+    try {
+      const [reservationsResponse, tablesResponse] = await Promise.all([
+        listReservations(currentDate, abortController.signal),
+        listTables(abortController.signal),
+      ]);
 
-    // Fetch tables
-    listTables(abortController.signal)
-      .then(setTables)
-      .catch(setReservationsError)
-      .finally(() => abortController.abort());
+      const formattedReservations = reservationsResponse.map((reservation) => ({
+        ...reservation,
+        reservation_date: formatAsDate(reservation.reservation_date),
+        reservation_time: formatAsTime(reservation.reservation_time),
+      }));
+
+      setReservations(formattedReservations);
+      setTables(tablesResponse);
+    } catch (error) {
+      setReservationsError(error);
+    } finally {
+      abortController.abort();
+    }
   }
 
   useEffect(() => {
@@ -170,7 +168,11 @@ function Dashboard() {
         </thead>
         <tbody>
           {tables.map((table, index) => (
-            <TablesList table={table} key={index} loadDashboard={loadDashboard}/>
+            <TablesList
+              table={table}
+              key={index}
+              loadDashboard={loadDashboard}
+            />
           ))}
         </tbody>
       </table>
