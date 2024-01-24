@@ -45,10 +45,10 @@ function SeatReservation() {
     <div>
       <h2 className="p-4 m-4 text-center">Select a Table</h2>
       <form
-        className="p-4 m-4 bg-light border border-info-subtle d-flex align-items-center"
+        className="row g-3 p-4 m-4 flex w-50 mx-auto border custom-border-color rounded bg-light"
         onSubmit={handleSubmit}
       >
-        <div className="w-50 p-2">
+        <div className="w-50">
           <select 
           className="custom-select" 
           required={true}
@@ -61,19 +61,19 @@ function SeatReservation() {
           </select>
         </div>
         <div className="ml-auto pr-3">
-          <button type="submit" className="btn btn-primary d-flex justify-content-end">
-            Submit
-          </button>
-        </div>
-        <div className="">
           <button
             onClick={(event) => {
               event.preventDefault();
               history.goBack();
             }}
-            className="btn btn-danger d-flex justify-content-end"
+            className="btn btn-outline-danger d-flex justify-content-end"
           >
             Cancel
+          </button>
+        </div>
+        <div className="">
+          <button type="submit" className="btn btn-outline-secondary d-flex justify-content-end">
+            Submit
           </button>
         </div>
       </form>
