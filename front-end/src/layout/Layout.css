@@ -109,7 +109,6 @@ button {
 .navbar {
   background-color: #1f271b; /* Updated background color */
   color: #ffffff; /* Updated text color */
-  width: 100vh;
 }
 
 .navbar-brand {
@@ -126,13 +125,4 @@ button {
 
 .navbar-nav .nav-item {
   margin-right: 15px; /* Adjust spacing between menu items */
-}
-
-.navbar-nav .nav-link:hover {
-  color: #28afb0; /* Highlight color on hover */
-}
-
-/* Add a subtle box-shadow on the navbar when scrolled down */
-.navbar-scrolled {
-  box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1);
 }
