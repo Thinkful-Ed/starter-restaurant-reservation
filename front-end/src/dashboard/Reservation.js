@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { cancelReservation } from "../utils/api";
 
 export default function Reservation({ reservation, loadDashboard }) {
@@ -77,9 +78,9 @@ export default function Reservation({ reservation, loadDashboard }) {
               </div>
 
               <div>
-                <a href={`/reservations/${reservation_id}/edit`}>
+                <Link to={`/reservations/${reservation_id}/edit`}>
                   <button>Edit</button>
-                </a>
+                </Link>
                 <button
                   data-reservation-id-cancel={reservation.reservation_id}
                   onClick={handleClick}
@@ -92,9 +93,9 @@ export default function Reservation({ reservation, loadDashboard }) {
         </div>
 
         {status === "booked" && (
-          <a href={`/reservations/${reservation_id}/seat`} role="button">
-            <h5>Seat</h5>
-          </a>
+          <button>
+            <a href={`/reservations/${reservation_id}/seat`}>Seat</a>
+          </button>
         )}
       </div>
     </>

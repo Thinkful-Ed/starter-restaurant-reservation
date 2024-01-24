@@ -23,8 +23,8 @@ export default function Seat() {
     setTableId(target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const abortController = new AbortController();
     setFormErrors([]);
 
