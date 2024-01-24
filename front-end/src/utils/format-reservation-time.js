@@ -14,6 +14,11 @@ function formatTime(reservation) {
  */
 export default function formatReservationTime(reservations) {
   return Array.isArray(reservations)
-    ? reservations.map(formatTime)
+    ? reservations.map((reservation) => {
+        if (reservation.reservation_time) {
+          return reservation; // Already formatted
+        }
+        return formatTime(reservation);
+      })
     : formatTime(reservations);
 }

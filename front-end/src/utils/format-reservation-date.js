@@ -1,7 +1,9 @@
 import { formatAsDate } from "./date-time";
 
 function formatDate(reservation) {
-  reservation.reservation_date = formatAsDate(reservation.reservation_date);
+  if (reservation && reservation.reservation_date) {
+    reservation.reservation_date = formatAsDate(reservation.reservation_date);
+  }
   return reservation;
 }
 
@@ -14,6 +16,13 @@ function formatDate(reservation) {
  */
 export default function formatReservationDate(reservations) {
   return Array.isArray(reservations)
-    ? reservations.map(formatDate)
+    ? reservations.map((reservation) => {
+        if (reservation.reservation_date) {
+          return reservation; // Already formatted
+        }
+        return formatDate(reservation);
+      })
     : formatDate(reservations);
 }
+
+export { formatDate };
