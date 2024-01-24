@@ -1,3 +1,7 @@
+body {
+  overflow-x: hidden;
+}
+
 /* Font styles for headings */
 h1,
 h2 {
@@ -105,6 +109,7 @@ button {
 .navbar {
   background-color: #1f271b; /* Updated background color */
   color: #ffffff; /* Updated text color */
+  width: 100vh;
 }
 
 .navbar-brand {

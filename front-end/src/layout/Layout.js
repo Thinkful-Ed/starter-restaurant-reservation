@@ -8,10 +8,8 @@ function Layout() {
   return (
     <div>
       <Menu />
-      <div className="row">
-        <div className="col">
-          <Routes />
-        </div>
+      <div className="col">
+        <Routes />
       </div>
     </div>
   );
