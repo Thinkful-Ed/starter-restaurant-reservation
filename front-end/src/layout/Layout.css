@@ -7,6 +7,12 @@ h2 {
 }
 
 /* Font styles for body and buttons */
+h4 {
+  font-family: "Almarai", sans-serif;
+  font-weight: 700;
+  color: #19647e; /* Secondary color */
+}
+
 body,
 button {
   font-family: "Almarai", sans-serif;

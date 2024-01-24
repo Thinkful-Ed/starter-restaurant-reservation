@@ -34,14 +34,14 @@ function TableList({ tables, handleFinish }) {
   ));
 
   return (
-    <div className="table-responsive table-hover">
-      <table className="table text-center table-sm border bg-light">
-        <thead>
+    <div className="table-responsive">
+      <table className="table table-hover table-sm table-bordered text-center ">
+        <thead className="thead-light">
           <tr>
             <th scope="col align-middle">Table Name</th>
             <th scope="col align-middle">Capacity</th>
             <th scope="col align-middle">Table Status</th>
-            <th scope="col align-middle"></th>
+            <th scope="col align-middle">Actions</th>
           </tr>
         </thead>
 

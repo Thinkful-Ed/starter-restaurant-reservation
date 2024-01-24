@@ -26,7 +26,7 @@ function ReservationList({ reservations, loadDashboard }) {
             {reservation.status}
           </span>
         </td>
-        <td className="align-middle">
+        <td className="align-middle text-capitalize">
           {reservation.first_name} {reservation.last_name}
         </td>
         <td className="align-middle">
