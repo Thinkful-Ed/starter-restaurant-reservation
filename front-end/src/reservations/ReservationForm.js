@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { formatAsTime } from "../utils/date-time";
-import ErrorAlert from "../layout/ErrorAlert";
 
 function ReservationForm({
   handleSubmit,
@@ -46,7 +45,6 @@ function ReservationForm({
       className="row g-3 p-4 m-4 flex w-75 mx-auto border custom-border-color rounded bg-light"
       onSubmit={onSubmit}
     >
-      <ErrorAlert error={reservationsError} />
       <div className="col-md-6 p-2">
         <input
           className="form-control"
