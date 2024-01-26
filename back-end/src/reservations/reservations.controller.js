@@ -106,7 +106,6 @@ function isNotTuesday(req, res, next) {
 function dateIsNotInPast(req, res, next) {
   const { reservation_date, reservation_time } = req.body.data;
   const day = new Date(`${reservation_date} ${reservation_time}`);
-  console.log('Constructed Date:', day);
   if (day < new Date()) {
     return next({
       status: 400,
