@@ -14,28 +14,28 @@ The user stories defined the scope of the project, addressing the needs of resta
 
 ## Screenshot Demo
 #### Create and Manage Reservations
-![Create a Reservation](image-2.png)
+![Create a Reservation](/images/image-2.png)
 
 #### Dashboard Overview - Reservations for January 27, 2024
-![Dashboard showing reservations for today and tables](image-1.png)
+![Dashboard showing reservations for today and tables](/images/image-1.png)
 
 #### Edit Existing Reservation
-![Edit a Reservation](image-3.png)
+![Edit a Reservation](/images/image-3.png)
 
 #### Search Reservations by Phone Number
-![Search](image-4.png)
+![Search](/images/image-4.png)
 
-![Search Completed](image-5.png)
+![Search Completed](/images/image-5.png)
 
 #### Seat a Guest and Manage Reservations
-![Select a table](image-6.png)
+![Select a table](/images/image-6.png)
 
 #### Cancel Reservation and Finish Dining
-![Cancel Reservation](image-7.png)
+![Cancel Reservation](/images/image-7.png)
 
-![Finish Reservation](image-8.png)
+![Finish Reservation](/images/image-8.png)
 
-![Final Dashboard View](image-9.png)
+![Final Dashboard View](/images/image-9.png)
 
 ---
 
