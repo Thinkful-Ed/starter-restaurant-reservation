@@ -152,6 +152,7 @@ The following provides an overview of the API endpoints used in the frontend of 
 
 ## Future Goals
 In the next phases of building Periodic Tables, I'm excited to: 
+
 I. **Fine-Tuning Validation:** enhance validation checks to ensure that only accurate and valid reservation data makes its way into the system. This will help maintain data integrity and reliability.
 
 II. **Sleek User Interface:** add some design enhancements! Expect updates that will not only make the application more visually appealing but also provide users with an even smoother and more enjoyable experience.
