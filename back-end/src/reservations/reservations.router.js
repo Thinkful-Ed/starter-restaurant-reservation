@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const controller = require('./reservations.controller');
 
-router.route('/').post(controller.create).get(controller.list);
+// Route for listing reservations
+router.route('/')
+  .get(controller.list)
+  .post(controller.create);
 
 module.exports = router;

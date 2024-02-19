@@ -1,37 +1,40 @@
+const service = require('./reservations.service');
 
-async function list(req, res) {
-  const { date } = req.query;
-  // Assuming 'service.list' fetches reservations for a specific date from the DB
-  const reservations = await service.list(date);
-  res.json({ data: reservations });
-}
-
+// Validation function for reservation data
 function hasRequiredFields(req, res, next) {
   const { data = {} } = req.body;
   const requiredFields = ['first_name', 'last_name', 'mobile_number', 'reservation_date', 'reservation_time', 'people'];
 
   for (let field of requiredFields) {
     if (!data[field]) {
-      return res.status(400).json({ error: `Field required: ${field}` });
+      return next({
+        status: 400,
+        message: `Field required: ${field}`,
+      });
     }
   }
 
-  next(); // Proceed to the next middleware/function if validation passes
+  // Additional validations 
+
+  next();
 }
 
-async function create(req, res) {
-  const newReservation = req.body.data;
+async function create(req, res, next) {
+  try {
+    const data = await service.create(req.body.data);
+    res.status(201).json({ data });
+  } catch (error) {
+    next(error);
+  }
+}
 
-
-  
-  const createdReservation = await service.create(newReservation);
-  res.status(201).json({ data: createdReservation });
+async function list(req, res, next) {
+  const { date } = req.query;
+  const data = await service.list(date);
+  res.json({ data });
 }
 
 module.exports = {
-  list,
-  create: [hasRequiredFields, create], // Apply the validation middleware before the create function
-};
-module.exports = {
+  create: [hasRequiredFields, create],
   list,
 };
