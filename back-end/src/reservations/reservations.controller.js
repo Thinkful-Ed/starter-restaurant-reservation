@@ -14,10 +14,34 @@ function hasRequiredFields(req, res, next) {
     }
   }
 
-  // Additional validations 
+  //  validation for reservation_date
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(data.reservation_date)) {
+    return next({
+      status: 400,
+      message: `Invalid date format: reservation_date`,
+    });
+  }
+
+  //  validation for reservation_time
+  if (!/^\d{2}:\d{2}$/.test(data.reservation_time)) {
+    return next({
+      status: 400,
+      message: `Invalid time format: reservation_time`,
+    });
+  }
+
+  // Example validation for people
+  if (typeof data.people !== 'number' || data.people < 1) {
+    return next({
+      status: 400,
+      message: `Invalid number of people: people`,
+    });
+  }
 
   next();
 }
+
+
 
 async function create(req, res, next) {
   try {
