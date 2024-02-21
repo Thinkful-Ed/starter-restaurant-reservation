@@ -88,29 +88,54 @@ async function create(req, res) {
   res.status(201).json({ data });
 }
 
-// Update table with reservation_id (seat a reservation)
-async function update(req, res) {
+async function update(req, res, next) {
   const { table_id } = req.params;
   const { reservation_id } = req.body.data;
 
-  await service.update(table_id, reservation_id);
+  // Retrieve the current reservation to check its status
+  const currentReservation = await knex('reservations')
+    .where({ reservation_id })
+    .first();
+
+  // Check if the reservation is already seated
+  if (currentReservation.status === 'seated') {
+    return next({ status: 400, message: 'Reservation is already seated.' });
+  }
+
+  // Update the table with the reservation_id and set it as occupied
+  await knex('tables')
+    .where({ table_id })
+    .update({ reservation_id, occupied: true });
+
+  // Update the reservation status to 'seated'
+  await knex('reservations')
+    .where({ reservation_id })
+    .update({ status: 'seated' });
+
   res.status(200).json({ data: { status: 'seated' } });
 }
 
 
 async function finish(req, res, next) {
   const { table_id } = req.params;
-  const table = await service.read(table_id);
-
-  if (!table) {
-    return next({ status: 404, message: `Table ${table_id} does not exist.` });
-  }
+  const table = await knex('tables')
+    .where({ table_id })
+    .first();
 
   if (!table.occupied) {
     return next({ status: 400, message: 'Table is not occupied.' });
   }
 
-  await service.finishTable(table_id);
+  // Update the associated reservation status to 'finished'
+  await knex('reservations')
+    .where({ reservation_id: table.reservation_id })
+    .update({ status: 'finished' });
+
+  // Mark the table as available again
+  await knex('tables')
+    .where({ table_id })
+    .update({ reservation_id: null, occupied: false });
+
   res.status(200).json({ data: { status: 'finished' } });
 }
 

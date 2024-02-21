@@ -18,10 +18,16 @@ async function create(req, res, next) {
 }
 
 
-async function list(req, res, next) {
-  const { date } = req.query;
-  const data = await service.list(date);
-  res.json({ data });
+async function list(req, res) {
+  const { date } = req.query; 
+
+  // Fetch all reservations for the specified date
+  const reservations = await service.list(date);
+
+  // Filter out 'finished' reservations
+  const filteredReservations = reservations.filter(reservation => reservation.status !== 'finished');
+
+  res.json({ data: filteredReservations });
 }
 
 
