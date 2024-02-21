@@ -4,6 +4,11 @@ const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
 
 
 async function create(req, res, next) {
+  const { status } = req.body.data;
+  if (status && status !== "booked") {
+    return next({ status: 400, message: `Status '${status}' is not allowed upon creation.` });
+  }
+
   try {
     const data = await service.create(req.body.data);
     res.status(201).json({ data });
@@ -11,6 +16,7 @@ async function create(req, res, next) {
     next(error);
   }
 }
+
 
 async function list(req, res, next) {
   const { date } = req.query;
@@ -162,9 +168,36 @@ function validateReservationDateTime(req, res, next) {
   next();
 }
 
+async function updateReservationStatus(req, res, next) {
+  const { reservation_id } = req.params;
+  const { status } = req.body.data;
+
+  const reservation = await service.read(reservation_id);
+  if (!reservation) {
+    return next({ status: 404, message: `Reservation ${reservation_id} cannot be found.` });
+  }
+
+  // Add validation for the new status
+  const validStatuses = ['booked', 'seated', 'finished'];
+  if (!validStatuses.includes(status)) {
+    return next({ status: 400, message: `Status '${status}' is not valid.` });
+  }
+
+  if (reservation.status === 'finished') {
+    return next({ status: 400, message: 'A finished reservation cannot be updated.' });
+  }
+
+  await service.updateStatus(reservation_id, status);
+  res.status(200).json({ data: { status } });
+}
+
+
+
 
 module.exports = {
   create: [hasRequiredFields, validateReservationDate, validateReservationDateTime, create],
   list,
   read: asyncErrorBoundary(read),
+  updateReservationStatus: asyncErrorBoundary(updateReservationStatus),
+
 };
