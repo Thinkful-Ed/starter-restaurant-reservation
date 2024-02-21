@@ -118,23 +118,29 @@ async function update(req, res, next) {
 
 async function finish(req, res, next) {
   const { table_id } = req.params;
-  const table = await knex('tables')
-    .where({ table_id })
-    .first();
 
+  // First, check if the table exists
+  const table = await knex('tables').where({ table_id }).first();
+
+  // If the table doesn't exist, return a 404 error
+  if (!table) {
+    return next({ status: 404, message: `Table ${table_id} cannot be found.` });
+  }
+
+  // If the table exists but is not occupied, return a 400 error
   if (!table.occupied) {
     return next({ status: 400, message: 'Table is not occupied.' });
   }
 
-  // Update the associated reservation status to 'finished'
-  await knex('reservations')
-    .where({ reservation_id: table.reservation_id })
-    .update({ status: 'finished' });
-
-  // Mark the table as available again
+  // If the table is occupied, proceed with finishing the table
   await knex('tables')
     .where({ table_id })
     .update({ reservation_id: null, occupied: false });
+
+  // Update the reservation status to 'finished'
+  await knex('reservations')
+    .where({ reservation_id: table.reservation_id })
+    .update({ status: 'finished' });
 
   res.status(200).json({ data: { status: 'finished' } });
 }
