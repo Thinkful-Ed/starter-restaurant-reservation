@@ -1,4 +1,7 @@
 const service = require("./reservations.service");
+const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
+
+
 
 async function create(req, res, next) {
   try {
@@ -13,6 +16,18 @@ async function list(req, res, next) {
   const { date } = req.query;
   const data = await service.list(date);
   res.json({ data });
+}
+
+
+async function read(req, res) {
+  const { reservation_id } = req.params;
+  const reservation = await service.read(reservation_id); // Assuming you have a 'read' method in your service
+
+  if (reservation) {
+    return res.json({ data: reservation });
+  } else {
+    return res.status(404).json({ error: `Reservation not found: ${reservation_id}` });
+  }
 }
 
 function isTuesday(date) {
@@ -151,4 +166,5 @@ function validateReservationDateTime(req, res, next) {
 module.exports = {
   create: [hasRequiredFields, validateReservationDate, validateReservationDateTime, create],
   list,
+  read: asyncErrorBoundary(read),
 };

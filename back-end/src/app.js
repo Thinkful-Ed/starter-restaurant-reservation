@@ -1,5 +1,5 @@
 const path = require("path");
-//const tablesRouter = require("./tables/tables.router");
+const tablesRouter = require("./tables/tables.router");
 
 
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
@@ -16,7 +16,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//app.use("/tables", tablesRouter);
+app.use("/tables", tablesRouter);
 
 app.use("/reservations", reservationsRouter);
 
