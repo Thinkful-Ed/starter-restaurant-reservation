@@ -97,6 +97,23 @@ async function update(req, res) {
   res.status(200).json({ data: { status: 'seated' } });
 }
 
+
+async function finish(req, res, next) {
+  const { table_id } = req.params;
+  const table = await service.read(table_id);
+
+  if (!table) {
+    return next({ status: 404, message: `Table ${table_id} does not exist.` });
+  }
+
+  if (!table.occupied) {
+    return next({ status: 400, message: 'Table is not occupied.' });
+  }
+
+  await service.finishTable(table_id);
+  res.status(200).json({ data: { status: 'finished' } });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [hasData, hasValidTableName, hasValidCapacity, asyncErrorBoundary(create)],
@@ -108,4 +125,6 @@ module.exports = {
     asyncErrorBoundary(isTableFree),
     asyncErrorBoundary(update)
   ],
+  finish: asyncErrorBoundary(finish),
+
 };

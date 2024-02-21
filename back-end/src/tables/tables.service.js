@@ -27,10 +27,21 @@ function removeReservation(table_id) {
     .update({ reservation_id: null, occupied: false });
 }
 
+
+function finishTable(table_id) {
+  return knex('tables')
+    .where({ table_id })
+    .update({
+      reservation_id: null,
+      occupied: false
+    });
+}
+
 module.exports = {
   list,
   create,
   read,
   update,
   removeReservation,
+  finishTable,
 };
