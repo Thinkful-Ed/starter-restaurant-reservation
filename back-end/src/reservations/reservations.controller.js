@@ -198,6 +198,11 @@ async function updateReservationStatus(req, res, next) {
 }
 
 
+async function search(req, res, next) {
+  const { mobile_number } = req.query;
+  const results = await service.search(mobile_number);
+  res.json({ data: results });
+}
 
 
 module.exports = {
@@ -205,5 +210,6 @@ module.exports = {
   list,
   read: asyncErrorBoundary(read),
   updateReservationStatus: asyncErrorBoundary(updateReservationStatus),
+  search,
 
 };

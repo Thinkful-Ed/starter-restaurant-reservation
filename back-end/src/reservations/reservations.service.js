@@ -10,10 +10,13 @@ function create(reservation) {
 
 // List all reservations for a specific date
 function list(reservation_date) {
-  return knex('reservations')
-    .select('*')  // Selects all columns
-    .where({ reservation_date })  // Filters by the provided date
-    .orderBy('reservation_time');  // Orders by reservation time
+  const query = knex('reservations').select('*').orderBy('reservation_time');
+
+  if (reservation_date) {
+    query.where({ reservation_date });
+  }
+
+  return query;
 }
 
 
@@ -29,9 +32,21 @@ function updateStatus(reservation_id, status) {
 }
 
 
+function search(mobile_number) {
+  return knex("reservations")
+    .whereRaw(
+      "translate(mobile_number, '() -', '') like ?",
+      `%${mobile_number.replace(/\D/g, "")}%`
+    )
+    .orderBy("reservation_date");
+}
+
+
 module.exports = {
   create,
   list,
   read,
-  updateStatus
+  updateStatus,
+  search,
+
 };
