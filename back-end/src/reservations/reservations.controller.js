@@ -96,7 +96,7 @@ function validateReservationDate(req, res, next) {
   }
 
   if (isInThePast(reservationDate)) {
-    errors.push("Reservations must be made for a future date."); // Updated error message
+    errors.push("Reservations must be made for a future date."); 
   }
 
   if (errors.length) {
@@ -106,7 +106,49 @@ function validateReservationDate(req, res, next) {
   next();
 }
 
+
+function isValidTime(timeString) {
+  const [hours, minutes] = timeString.split(':').map(Number);
+  const reservationTime = new Date();
+  reservationTime.setHours(hours, minutes, 0, 0);
+
+  const openingTime = new Date();
+  openingTime.setHours(10, 30, 0, 0); // 10:30 AM
+
+  const closingTime = new Date();
+  closingTime.setHours(21, 30, 0, 0); // 9:30 PM
+
+  return reservationTime >= openingTime && reservationTime <= closingTime;
+}
+
+function isReservationDateTimeInFuture(dateString, timeString) {
+  const reservationDateTime = new Date(`${dateString}T${timeString}`);
+  return reservationDateTime > new Date();
+}
+
+
+function validateReservationDateTime(req, res, next) {
+  const { reservation_date, reservation_time } = req.body.data;
+
+  const errors = [];
+
+  if (!isValidTime(reservation_time)) {
+    errors.push("Reservation time must be between 10:30 AM and 9:30 PM.");
+  }
+
+  if (!isReservationDateTimeInFuture(reservation_date, reservation_time)) {
+    errors.push("Reservation must be set for a future date and time.");
+  }
+
+  if (errors.length) {
+    return next({ status: 400, message: errors.join(" ") });
+  }
+
+  next();
+}
+
+
 module.exports = {
-  create: [hasRequiredFields, validateReservationDate, create],
+  create: [hasRequiredFields, validateReservationDate, validateReservationDateTime, create],
   list,
 };
