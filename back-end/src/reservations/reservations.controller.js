@@ -36,7 +36,7 @@ async function list(req, res) {
 
 async function read(req, res) {
   const { reservation_id } = req.params;
-  const reservation = await service.read(reservation_id); // Assuming you have a 'read' method in your service
+  const reservation = await service.read(reservation_id); 
 
   if (reservation) {
     return res.json({ data: reservation });
@@ -181,24 +181,33 @@ async function updateReservationStatus(req, res, next) {
   const { reservation_id } = req.params;
   const { status } = req.body.data;
 
+  // Read the current reservation details
   const reservation = await service.read(reservation_id);
   if (!reservation) {
     return next({ status: 404, message: `Reservation ${reservation_id} cannot be found.` });
   }
 
-  // Add validation for the new status
-  const validStatuses = ['booked', 'seated', 'finished'];
+  // Include 'cancelled' in the list of valid statuses
+  const validStatuses = ['booked', 'seated', 'finished', 'cancelled'];
   if (!validStatuses.includes(status)) {
     return next({ status: 400, message: `Status '${status}' is not valid.` });
   }
 
+  // Prevent updating a finished reservation
   if (reservation.status === 'finished') {
     return next({ status: 400, message: 'A finished reservation cannot be updated.' });
   }
 
-  await service.updateStatus(reservation_id, status);
-  res.status(200).json({ data: { status } });
+  // Additional check to prevent a reservation from being updated to 'booked' or 'seated' if it's already 'cancelled'
+  if (reservation.status === 'cancelled' && (status === 'booked' || status === 'seated')) {
+    return next({ status: 400, message: 'A cancelled reservation cannot be updated to booked or seated.' });
+  }
+
+  // Update the reservation status in the database
+  const updatedReservation = await service.updateStatus(reservation_id, status);
+  res.status(200).json({ data: updatedReservation });
 }
+
 
 
 async function search(req, res, next) {
@@ -208,11 +217,73 @@ async function search(req, res, next) {
 }
 
 
+async function update(req, res, next) {
+  const { reservation_id } = req.params;
+  const updatedReservationData = req.body.data;
+
+  // Input validation: check for required fields and their validity
+  const errors = validateReservationData(updatedReservationData);
+  if (errors.length) {
+    return next({ status: 400, message: errors.join(", ") });
+  }
+
+  try {
+    // Check if the reservation exists
+    const existingReservation = await service.read(reservation_id);
+    if (!existingReservation) {
+      return next({ status: 404, message: `Reservation ${reservation_id} cannot be found.` });
+    }
+
+    // Update the reservation
+    const data = await service.update(reservation_id, updatedReservationData);
+    res.status(200).json({ data });
+  } catch (error) {
+    next(error);
+  }
+}
+
+// Utility function to validate reservation data
+function validateReservationData(data) {
+  const errors = [];
+  const requiredFields = ["first_name", "last_name", "mobile_number", "reservation_date", "reservation_time", "people"];
+  const datePattern = /^\d{4}-\d{2}-\d{2}$/; // YYYY-MM-DD format
+  const timePattern = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/; // HH:MM format, 24-hour clock
+
+if (data.reservation_date && !datePattern.test(data.reservation_date)) {
+  errors.push("reservation_date is not a valid date");
+}
+
+if (data.reservation_time && !timePattern.test(data.reservation_time)) {
+  errors.push("reservation_time is not a valid time");
+}
+  requiredFields.forEach(field => {
+    if (!data[field]) {
+      errors.push(`Field required: ${field}`);
+    }
+  });
+
+
+  if (data.people !== undefined) {
+    if (typeof data.people !== 'number' || isNaN(data.people)) {
+      errors.push("people must be a number");
+    } else if (data.people < 1) {
+      errors.push("people must be at least 1");
+    }
+  }
+
+  // Add more specific validation for fields like reservation_date, reservation_time, and people as needed
+
+  return errors;
+}
+
+
+
 module.exports = {
   create: [hasRequiredFields, validateReservationDate, validateReservationDateTime, create],
   list,
   read: asyncErrorBoundary(read),
   updateReservationStatus: asyncErrorBoundary(updateReservationStatus),
   search,
-
+  update,
+  validateReservationData,
 };
