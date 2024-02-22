@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from 'react-router-dom';
 import { createReservation } from '../utils/api';
 import { today } from "../utils/date-time"; // Ensure this utility function is correctly imported
- 
- 
- 
+
 // Initial state for a new reservation
 const initialReservation = {
     first_name: "",
@@ -14,9 +12,7 @@ const initialReservation = {
     reservation_date: "",
     reservation_time: ""
 };
- 
- 
- 
+
 // Utility function to get the day of the week from a date string
 function getWeekDay(input) {
     const dateArray = input.split("-");
@@ -26,14 +22,12 @@ function getWeekDay(input) {
     const date = new Date(year, month, day);
     return date.getDay(); // 0 (Sunday) to 6 (Saturday)
 }
- 
+
 function NewReservationForm() {
- 
- 
     const history = useHistory();
     const [formData, setFormData] = useState({ ...initialReservation }); // Using formData for form state management
     const [errors, setError] = useState([]); // To store any validation errors
- 
+
     // Handler for form inputs
     const handleChange = ({ target }) => {
         setFormData({
@@ -41,16 +35,16 @@ function NewReservationForm() {
             [target.name]: target.value,
         });
     };
- 
+
     // Time and date validation handler
     const timeHandler = (dateInput, timeInput) => {
         const errors = [];
         const reservationDate = new Date(dateInput);
         const reservationTime = timeInput.split(":").map(Number);
         const reservationDateTime = new Date(reservationDate.getFullYear(), reservationDate.getMonth(), reservationDate.getDate(), reservationTime[0], reservationTime[1]);
- 
+
         // Validation rules
-        if (reservationDate < today()) {
+        if (reservationDate < new Date(today())) {
             errors.push({ message: "Reservation date cannot be in the past." });
         }
         if (getWeekDay(dateInput) === 2) { // 2 corresponds to Tuesday
@@ -62,11 +56,11 @@ function NewReservationForm() {
         if (reservationDateTime.getHours() > 21 || (reservationDateTime.getHours() === 21 && reservationDateTime.getMinutes() > 30)) {
             errors.push({ message: "Reservation cannot be after 9:30 PM." });
         }
- 
+
         setError(errors);
         return errors.length === 0;
     };
- 
+
     // Form submission handler
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -84,11 +78,12 @@ function NewReservationForm() {
             return () => abortController.abort();
         }
     };
- 
+
     // Handler for the Cancel button
     const handleCancel = () => {
         history.goBack(); // Use history.goBack() to return to the previous page
     };
+
     return (
         <form onSubmit={handleSubmit}>
             <div className="form-group">
@@ -103,7 +98,7 @@ function NewReservationForm() {
                     required
                 />
             </div>
- 
+
             <div className="form-group">
                 <label htmlFor="last_name">Last Name:</label>
                 <input
@@ -116,7 +111,7 @@ function NewReservationForm() {
                     required
                 />
             </div>
- 
+
             <div className="form-group">
                 <label htmlFor="mobile_number">Mobile Number:</label>
                 <input
@@ -129,7 +124,7 @@ function NewReservationForm() {
                     required
                 />
             </div>
- 
+
             <div className="form-group">
                 <label htmlFor="reservation_date">Date of Reservation:</label>
                 <input
@@ -142,7 +137,7 @@ function NewReservationForm() {
                     required
                 />
             </div>
- 
+
             <div className="form-group">
                 <label htmlFor="reservation_time">Time of Reservation:</label>
                 <input
@@ -155,7 +150,7 @@ function NewReservationForm() {
                     required
                 />
             </div>
- 
+
             <div className="form-group">
                 <label htmlFor="people">Number of People:</label>
                 <input
@@ -169,12 +164,12 @@ function NewReservationForm() {
                     required
                 />
             </div>
- 
+
             <div className="form-group">
                 <button type="submit" className="btn btn-primary">Submit</button>
                 <button type="button" className="btn btn-secondary" onClick={handleCancel}>Cancel</button>            
-                </div>
- 
+            </div>
+
             {/* Displaying errors */}
             {errors.length > 0 && (
                 <div className="alert alert-danger" role="alert">
@@ -187,7 +182,6 @@ function NewReservationForm() {
             )}
         </form>
     );
- 
 }
- 
+
 export default NewReservationForm;
