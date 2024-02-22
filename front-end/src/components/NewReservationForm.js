@@ -36,24 +36,31 @@ function NewReservationForm() {
         });
     };
 
-    // Time and date validation handler
+    // Enhanced time and date validation handler
     const timeHandler = (dateInput, timeInput) => {
         const errors = [];
-        const reservationDate = new Date(dateInput);
-        const reservationTime = timeInput.split(":").map(Number);
-        const reservationDateTime = new Date(reservationDate.getFullYear(), reservationDate.getMonth(), reservationDate.getDate(), reservationTime[0], reservationTime[1]);
+        const reservationDate = new Date(dateInput + 'T' + timeInput); // Combine date and time for accurate comparison
+        const now = new Date();
 
-        // Validation rules
-        if (reservationDate < new Date(today())) {
-            errors.push({ message: "Reservation date cannot be in the past." });
+        if (reservationDate < now) {
+            errors.push({ message: "Reservations cannot be in the past." });
         }
-        if (getWeekDay(dateInput) === 2) { // 2 corresponds to Tuesday
-            errors.push({ message: "Restaurant is closed on Tuesdays." });
+
+        if (getWeekDay(dateInput) === 2) {
+            errors.push({ message: "The restaurant is closed on Tuesdays." });
         }
-        if (reservationDateTime.getHours() < 10 || (reservationDateTime.getHours() === 10 && reservationDateTime.getMinutes() < 30)) {
+
+        const reservationTime = new Date(reservationDate);
+        const openingTime = new Date(reservationDate);
+        openingTime.setHours(10, 30, 0, 0); // Set opening time to 10:30 AM
+        const closingTime = new Date(reservationDate);
+        closingTime.setHours(21, 30, 0, 0); // Set latest reservation time to 9:30 PM
+
+        if (reservationTime < openingTime) {
             errors.push({ message: "Reservation cannot be before 10:30 AM." });
         }
-        if (reservationDateTime.getHours() > 21 || (reservationDateTime.getHours() === 21 && reservationDateTime.getMinutes() > 30)) {
+
+        if (reservationTime > closingTime) {
             errors.push({ message: "Reservation cannot be after 9:30 PM." });
         }
 
@@ -69,7 +76,7 @@ function NewReservationForm() {
             const abortController = new AbortController();
             createReservation({
                 ...formData,
-                people: Number(formData.people) // Ensure 'people' is sent as a number
+                people: Number(formData.people) // Convert 'people' to number
             }, abortController.signal)
             .then(() => {
                 history.push(`/dashboard?date=${formData.reservation_date}`);
@@ -81,7 +88,7 @@ function NewReservationForm() {
 
     // Handler for the Cancel button
     const handleCancel = () => {
-        history.goBack(); // Use history.goBack() to return to the previous page
+        history.goBack(); // Return to the previous page
     };
 
     return (
