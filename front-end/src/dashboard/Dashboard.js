@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api"; // Import listTables
 import ErrorAlert from "../layout/ErrorAlert";
 import { today } from "../utils/date-time";
 
 function Dashboard() {
     const [reservations, setReservations] = useState([]);
+    const [tables, setTables] = useState([]); // State to store tables
     const [error, setError] = useState(null);
     const history = useHistory();
     const location = useLocation();
@@ -15,9 +16,21 @@ function Dashboard() {
     useEffect(() => {
         const abortController = new AbortController();
         setError(null); // Reset error state
-        listReservations({ date }, abortController.signal)
-            .then(reservations => setReservations(reservations.sort((a, b) => a.reservation_time.localeCompare(b.reservation_time))))
-            .catch(setError);
+
+        async function fetchData() {
+            try {
+                const reservations = await listReservations({ date }, abortController.signal);
+                setReservations(reservations.sort((a, b) => a.reservation_time.localeCompare(b.reservation_time)));
+
+                const tables = await listTables(abortController.signal); // Fetch tables
+                setTables(tables);
+            } catch (error) {
+                setError(error);
+            }
+        }
+
+        fetchData();
+
         return () => abortController.abort();
     }, [date]);
 
@@ -56,7 +69,15 @@ function Dashboard() {
                   <p>Date of Reservation: {reservation.reservation_date}</p>
                   <p>Time of Reservation: {reservation.reservation_time}</p>
                   <p>Number of People: {reservation.people}</p>
-                  {/* more reservation details if needed */}
+                  <a href={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary">Seat</a>
+              </div>
+          ))}
+          <h2>Tables</h2>
+          {tables.map((table, index) => (
+              <div key={index} className="table-card">
+                  <p>Table Name: {table.table_name}</p>
+                  <p>Capacity: {table.capacity}</p>
+                  <p data-table-id-status={table.table_id}>{table.reservation_id ? "Occupied" : "Free"}</p>
               </div>
           ))}
           <div className="date-navigation">

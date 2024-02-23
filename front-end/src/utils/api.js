@@ -86,3 +86,30 @@ export async function createReservation(reservationData) {
     // Handle error, e.g., by returning a rejected promise
   }
 }
+
+export async function createTable(tableData) {
+  const url = new URL("/tables", API_BASE_URL);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: tableData }),
+  };
+
+  return await fetchJson(url, options);
+}
+
+export async function listTables(signal) {
+  const url = new URL("/tables", API_BASE_URL);
+  return await fetchJson(url, { headers, signal }, []);
+}
+
+export async function seatReservation(tableId, reservationId) {
+  const url = new URL(`/tables/${tableId}/seat`, API_BASE_URL);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { reservation_id: reservationId } }),
+  };
+
+  return await fetchJson(url, options);
+}
