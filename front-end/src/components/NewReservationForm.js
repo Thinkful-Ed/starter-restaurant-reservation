@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from 'react-router-dom';
 import { createReservation } from '../utils/api';
-import { today } from "../utils/date-time"; // Ensure this utility function is correctly imported
+//import { today } from "../utils/date-time"; 
 
 // Initial state for a new reservation
 const initialReservation = {

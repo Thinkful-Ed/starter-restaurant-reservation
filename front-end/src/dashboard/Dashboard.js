@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { listReservations, listTables } from "../utils/api"; // Import listTables
+import { listReservations, listTables, finishTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today } from "../utils/date-time";
 
 function Dashboard() {
     const [reservations, setReservations] = useState([]);
-    const [tables, setTables] = useState([]); // State to store tables
+    const [tables, setTables] = useState([]);
     const [error, setError] = useState(null);
     const history = useHistory();
     const location = useLocation();
@@ -15,15 +15,14 @@ function Dashboard() {
 
     useEffect(() => {
         const abortController = new AbortController();
-        setError(null); // Reset error state
+        setError(null);
 
         async function fetchData() {
             try {
-                const reservations = await listReservations({ date }, abortController.signal);
-                setReservations(reservations.sort((a, b) => a.reservation_time.localeCompare(b.reservation_time)));
-
-                const tables = await listTables(abortController.signal); // Fetch tables
-                setTables(tables);
+                const loadedReservations = await listReservations({ date }, abortController.signal);
+                setReservations(loadedReservations.sort((a, b) => a.reservation_time.localeCompare(b.reservation_time)));
+                const loadedTables = await listTables(abortController.signal);
+                setTables(loadedTables);
             } catch (error) {
                 setError(error);
             }
@@ -54,6 +53,21 @@ function Dashboard() {
         navigateTo(today());
     };
 
+    const finishHandler = async (tableId) => {
+      const confirmation = window.confirm("Is this table ready to seat new guests? This cannot be undone.");
+      if (confirmation) {
+          try {
+              await finishTable(tableId);
+              const updatedTables = await listTables(); // Re-fetch tables to ensure we have the latest state
+              setTables(updatedTables); // Update state with the latest tables
+          } catch (error) {
+              console.error(error);
+              setError(error); // Properly set error state if there's an issue
+          }
+      }
+  };
+  
+
     return (
       <main>
           <h1>Dashboard</h1>
@@ -78,6 +92,15 @@ function Dashboard() {
                   <p>Table Name: {table.table_name}</p>
                   <p>Capacity: {table.capacity}</p>
                   <p data-table-id-status={table.table_id}>{table.reservation_id ? "Occupied" : "Free"}</p>
+                  {table.reservation_id && (
+                      <button
+                          data-table-id-finish={table.table_id}
+                          className="btn btn-danger"
+                          onClick={() => finishHandler(table.table_id)}
+                      >
+                          Finish
+                      </button>
+                  )}
               </div>
           ))}
           <div className="date-navigation">
@@ -86,7 +109,7 @@ function Dashboard() {
               <button onClick={handleNextDay} className="btn btn-secondary">Next</button>
           </div>
       </main>
-  );
+    );
 }
 
 export default Dashboard;

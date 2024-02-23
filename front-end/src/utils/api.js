@@ -113,3 +113,14 @@ export async function seatReservation(tableId, reservationId) {
 
   return await fetchJson(url, options);
 }
+
+
+export async function finishTable(tableId) {
+  const url = new URL(`/tables/${tableId}/seat`, API_BASE_URL);
+  const options = {
+      method: "DELETE",
+      headers,
+  };
+
+  return await fetchJson(url, options);
+}
