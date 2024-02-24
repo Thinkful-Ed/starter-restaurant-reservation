@@ -58,8 +58,10 @@ function Dashboard() {
       if (confirmation) {
           try {
               await finishTable(tableId);
+              const updatedReservations = await listReservations({ date }, new AbortController().signal);
               const updatedTables = await listTables(); // Re-fetch tables to ensure we have the latest state
               setTables(updatedTables); // Update state with the latest tables
+              setReservations(updatedReservations);
           } catch (error) {
               console.error(error);
               setError(error); // Properly set error state if there's an issue
