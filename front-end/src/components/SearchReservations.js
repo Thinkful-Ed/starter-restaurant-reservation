@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { listReservationsByPhoneNumber } from '../utils/api'; 
+import { listReservationsByPhoneNumber } from '../utils/api'; // Ensure this function is implemented in api.js
 
 function SearchReservations() {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [reservations, setReservations] = useState([]);
     const [searchError, setSearchError] = useState(null);
+    const [searchSubmitted, setSearchSubmitted] = useState(false); // New state to track if a search has been submitted
 
     const handleInputChange = (event) => {
         setPhoneNumber(event.target.value);
@@ -13,6 +14,7 @@ function SearchReservations() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         setSearchError(null);
+        setSearchSubmitted(true); // Set searchSubmitted to true when the form is submitted
         try {
             const foundReservations = await listReservationsByPhoneNumber(phoneNumber);
             setReservations(foundReservations);
@@ -36,21 +38,19 @@ function SearchReservations() {
 
             {searchError && <div>Error: {searchError.message}</div>}
 
-            {reservations.length > 0 ? (
-                reservations.map((reservation, index) => (
-                    <div key={index} className="reservation-card">
-                        <p>First Name: {reservation.first_name}</p>
-                        <p>Last Name: {reservation.last_name}</p>
-                        <p>Mobile Number: {reservation.mobile_number}</p>
-                        <p>Date of Reservation: {reservation.reservation_date}</p>
-                        <p>Time of Reservation: {reservation.reservation_time}</p>
-                        <p>Number of People: {reservation.people}</p>
-                        <p>Status: {reservation.status}</p>
-                    </div>
-                ))
-            ) : (
-                <p>No reservations found.</p>
-            )}
+            {searchSubmitted && reservations.length === 0 && <p>No reservations found.</p>}
+
+            {reservations.map((reservation, index) => (
+                <div key={index} className="reservation-card">
+                    <p>First Name: {reservation.first_name}</p>
+                    <p>Last Name: {reservation.last_name}</p>
+                    <p>Mobile Number: {reservation.mobile_number}</p>
+                    <p>Date of Reservation: {reservation.reservation_date}</p>
+                    <p>Time of Reservation: {reservation.reservation_time}</p>
+                    <p>Number of People: {reservation.people}</p>
+                    <p>Status: {reservation.status}</p>
+                </div>
+            ))}
         </div>
     );
 }
