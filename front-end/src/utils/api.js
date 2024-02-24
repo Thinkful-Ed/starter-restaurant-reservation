@@ -124,3 +124,12 @@ export async function finishTable(tableId) {
 
   return await fetchJson(url, options);
 }
+
+export async function listReservationsByPhoneNumber(mobileNumber) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  url.searchParams.append("mobile_number", mobileNumber);
+
+  return await fetchJson(url, { headers }, [])
+      .then(reservations => reservations.map(formatReservationDate)) 
+      .then(reservations => reservations.map(formatReservationTime)); 
+}
