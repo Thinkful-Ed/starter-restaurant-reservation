@@ -83,9 +83,17 @@ function Dashboard() {
                   <p>Date of Reservation: {reservation.reservation_date}</p>
                   <p>Time of Reservation: {reservation.reservation_time}</p>
                   <p>Number of People: {reservation.people}</p>
-                  <a href={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary">Seat</a>
               </div>
           ))}
+          {reservations.map((reservation, index) => (
+    <div key={index} className="reservation-card">
+        
+        <p>Status: <span data-reservation-id-status={reservation.reservation_id}>{reservation.status}</span></p>
+        {reservation.status === "booked" && (
+            <a href={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary">Seat</a>
+        )}
+    </div>
+))}
           <h2>Tables</h2>
           {tables.map((table, index) => (
               <div key={index} className="table-card">
@@ -95,7 +103,7 @@ function Dashboard() {
                   {table.reservation_id && (
                       <button
                           data-table-id-finish={table.table_id}
-                          className="btn btn-danger"
+                                                    className="btn btn-danger"
                           onClick={() => finishHandler(table.table_id)}
                       >
                           Finish
