@@ -8,7 +8,7 @@ import SeatReservation from "../components/SeatReservation";
 import { today } from "../utils/date-time";
 import SearchReservations from '../components/SearchReservations';
 
-
+ 
 
 function Routes() {
   return (
