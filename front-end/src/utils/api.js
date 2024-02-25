@@ -67,3 +67,92 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+
+
+export async function createReservation(reservationData) {
+  const url = new URL('/reservations', API_BASE_URL);
+  const options = {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ data: reservationData }),
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) throw new Error('Network response was not ok');
+    return await response.json();
+  } catch (error) {
+    // Handle error, e.g., by returning a rejected promise
+  }
+}
+
+export async function createTable(tableData) {
+  const url = new URL("/tables", API_BASE_URL);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: tableData }),
+  };
+
+  return await fetchJson(url, options);
+}
+
+export async function listTables(signal) {
+  const url = new URL("/tables", API_BASE_URL);
+  return await fetchJson(url, { headers, signal }, []);
+}
+
+export async function seatReservation(tableId, reservationId) {
+  const url = new URL(`/tables/${tableId}/seat`, API_BASE_URL);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { reservation_id: reservationId } }),
+  };
+
+  return await fetchJson(url, options);
+}
+
+
+export async function finishTable(tableId) {
+  const url = new URL(`/tables/${tableId}/seat`, API_BASE_URL);
+  const options = {
+      method: "DELETE",
+      headers,
+  };
+
+  return await fetchJson(url, options);
+}
+
+export async function listReservationsByPhoneNumber(mobileNumber) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  url.searchParams.append("mobile_number", mobileNumber);
+
+  return await fetchJson(url, { headers }, [])
+      .then(reservations => reservations.map(formatReservationDate)) 
+      .then(reservations => reservations.map(formatReservationTime)); 
+}
+
+
+export async function updateReservation(updatedReservationData, signal) {
+  const { reservation_id } = updatedReservationData;
+  const url = new URL(`/reservations/${reservation_id}`, API_BASE_URL);
+  const options = {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({ data: updatedReservationData }),
+      signal,
+  };
+
+  return await fetchJson(url, options);
+}
+
+
+
+export async function readReservation(reservationId, signal) {
+  const url = new URL(`/reservations/${reservationId}`, API_BASE_URL);
+  return await fetchJson(url, { headers, signal }, [])
+      .then(formatReservationDate) // Assuming you have a function to format the reservation date
+      .then(formatReservationTime); // Assuming you have a function to format the reservation time
+}
