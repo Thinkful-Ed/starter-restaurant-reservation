@@ -31,6 +31,9 @@ function Routes() {
       <Route path="/search">
     <SearchReservations />
 </Route>
+<Route path="/reservations/:reservation_id/edit">
+        <NewReservationForm /> 
+      </Route>
       <Route>
         <NotFound />
       </Route>

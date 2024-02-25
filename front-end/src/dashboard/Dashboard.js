@@ -68,6 +68,22 @@ function Dashboard() {
           }
       }
   };
+
+
+  const cancelReservationHandler = async (reservationId) => {
+    // Confirmation dialog and API call to cancel the reservation
+    const abortController = new AbortController();
+    try {
+        const loadedReservations = await listReservations({ date }, abortController.signal);
+        setReservations(loadedReservations.sort((a, b) => a.reservation_time.localeCompare(b.reservation_time)));
+        // Additional logic for refreshing tables or other parts of the dashboard
+    } catch (error) {
+        setError(error);
+    }
+
+    return () => abortController.abort();
+};
+
   
 
     return (
@@ -94,6 +110,16 @@ function Dashboard() {
         {reservation.status === "booked" && (
             <a href={`/reservations/${reservation.reservation_id}/seat`} className="btn btn-primary">Seat</a>
         )}
+{reservation.status === "booked" && (
+    <a href={`/reservations/${reservation.reservation_id}/edit`} className="btn btn-secondary">Edit</a>
+)}
+        <button
+            data-reservation-id-cancel={reservation.reservation_id}
+            className="btn btn-danger"
+            onClick={() => cancelReservationHandler(reservation.reservation_id)}
+        >
+            Cancel
+        </button>
     </div>
 ))}
           <h2>Tables</h2>

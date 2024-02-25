@@ -133,3 +133,26 @@ export async function listReservationsByPhoneNumber(mobileNumber) {
       .then(reservations => reservations.map(formatReservationDate)) 
       .then(reservations => reservations.map(formatReservationTime)); 
 }
+
+
+export async function updateReservation(updatedReservationData, signal) {
+  const { reservation_id } = updatedReservationData;
+  const url = new URL(`/reservations/${reservation_id}`, API_BASE_URL);
+  const options = {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({ data: updatedReservationData }),
+      signal,
+  };
+
+  return await fetchJson(url, options);
+}
+
+
+
+export async function readReservation(reservationId, signal) {
+  const url = new URL(`/reservations/${reservationId}`, API_BASE_URL);
+  return await fetchJson(url, { headers, signal }, [])
+      .then(formatReservationDate) // Assuming you have a function to format the reservation date
+      .then(formatReservationTime); // Assuming you have a function to format the reservation time
+}

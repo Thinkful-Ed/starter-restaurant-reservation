@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useHistory } from 'react-router-dom';
-import { createReservation } from '../utils/api';
+import React, { useState, useEffect } from "react";
+import { useHistory, useParams } from 'react-router-dom';
+import { createReservation, readReservation, updateReservation } from '../utils/api';
 //import { today } from "../utils/date-time"; 
 
 // Initial state for a new reservation
@@ -27,6 +27,28 @@ function NewReservationForm() {
     const history = useHistory();
     const [formData, setFormData] = useState({ ...initialReservation }); // Using formData for form state management
     const [errors, setError] = useState([]); // To store any validation errors
+    const { reservation_id } = useParams(); // Extract the reservation ID from the URL
+    const isEditMode = reservation_id != null; // Determine if the form is in edit mode
+
+
+    useEffect(() => {
+        if (isEditMode) {
+            const abortController = new AbortController();
+            readReservation(reservation_id, abortController.signal)
+                .then(reservationData => {
+                    // Format reservation_time to ensure it's in "HH:MM" format
+                    const formattedTime = reservationData.reservation_time.slice(0, 5);
+                    setFormData({
+                        ...reservationData,
+                        reservation_time: formattedTime,
+                    });
+                })
+                .catch(setError);
+            return () => abortController.abort();
+        }
+    }, [reservation_id, isEditMode]);
+    
+
 
     // Handler for form inputs
     const handleChange = ({ target }) => {
@@ -74,17 +96,27 @@ function NewReservationForm() {
         const isValid = timeHandler(formData.reservation_date, formData.reservation_time);
         if (isValid) {
             const abortController = new AbortController();
-            createReservation({
+            const submitAction = isEditMode ? updateReservation : createReservation;
+            submitAction({
                 ...formData,
-                people: Number(formData.people) // Convert 'people' to number
+                // Include the reservation_id only if in edit mode
+                ...(isEditMode && { reservation_id }), 
+                people: Number(formData.people)
             }, abortController.signal)
-            .then(() => {
-                history.push(`/dashboard?date=${formData.reservation_date}`);
-            })
-            .catch((errors) => setError([...errors]));
+            .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
+            .catch((caughtErrors) => {
+                // Ensure errors is always an array
+                const processedErrors = Array.isArray(caughtErrors) ? caughtErrors : [caughtErrors];
+                setError(processedErrors.map(error => 
+                    // Check if error is an object with a message property; otherwise, create a new object with the error as a message
+                    typeof error === 'object' && error.message ? error : { message: error.toString() }
+                ));
+            });
             return () => abortController.abort();
         }
     };
+    
+    
 
     // Handler for the Cancel button
     const handleCancel = () => {
