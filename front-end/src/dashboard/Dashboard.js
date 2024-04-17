@@ -5,6 +5,7 @@ import TableList from "../tables/TableList";
 import { finishReservation, listReservations, listTables } from "../utils/api";
 import { next, previous, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
+import "./Dashboard.css";
 
 /**
  * Defines the dashboard page.
@@ -17,6 +18,7 @@ function Dashboard({ date }) {
   const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [tablesError, setTablesError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const history = useHistory();
 
@@ -24,10 +26,18 @@ function Dashboard({ date }) {
 
   function loadDashboard() {
     const abortController = new AbortController();
+
+    setLoading(true);
+
     setReservationsError(null);
+
     listReservations({ date }, abortController.signal)
       .then(setReservations)
-      .catch(setReservationsError);
+      .catch(setReservationsError)
+      .finally(() => {
+        setLoading(false);
+      });
+
     return () => abortController.abort();
   }
 
@@ -109,8 +119,16 @@ function Dashboard({ date }) {
       </section>
       <section>
         <h4 className="mb-lg-0">Tables</h4>
-        <ErrorAlert error={tablesError} />
-        <TableList tables={tables} handleFinish={handleFinish} />
+        {loading ? (
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+          </div>
+        ) : (
+          <>
+            <ErrorAlert error={tablesError} />
+            <TableList tables={tables} handleFinish={handleFinish} />
+          </>
+        )}
       </section>
     </main>
   );
