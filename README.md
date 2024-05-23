@@ -19,7 +19,7 @@ The table below describes the folders in this starter repository:
 | Folder/file path | Description                                                      |
 | ---------------- | ---------------------------------------------------------------- |
 | `./back-end`     | The backend project, which runs on `localhost:5001` by default.  |
-| `./front-end`    | The frontend project, which runs on `localhost:3000` by default. |
+| `./front-end`    | The frontend project, which you will create, runs on `localhost:3000` by default. |
 
 This starter code closely follows the best practices and patterns established in the Robust Server Structure module.
 
@@ -48,29 +48,7 @@ The table below describes the existing files in the `./back-end` folder:
 
 ### Frontend Existing files
 
-The `./front-end` folder contains all the code for the frontend project.
-
-The table below describes the existing files in the `./front-end` folder:
-
-| Folder/file path                                   | Description                                                                                            |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `./front-end/e2e`                                  | Contains all of the end-to-end tests. You will not need to make changes to the files in this folder.   |
-| `./front-end/jest-puppeteer.config.js`             | A configuration file used by the end-to-end tests. You will not need to make changes to this file.     |
-| `./front-end/src/App.js`                           | Defines the root application component. You will not need to make changes to this file.                |
-| `./front-end/src/App.test.js`                      | Contains the tests for the root application component. You will not need to make changes to this file. |
-| `./front-end/src/dashboard/Dashboard.js`           | Defines the Dashboard page.                                                                            |
-| `./front-end/src/index.js`                         | The main entry point for the React application.                                                        |
-| `./front-end/src/layout/ErrorAlert.js`             | Defines an error alert component that display only when an error is specified.                         |
-| `./front-end/src/layout/Layout.css`                | The css for the Layout component.                                                                      |
-| `./front-end/src/layout/Layout.js`                 | Defines the main layout of the application.                                                            |
-| `./front-end/src/layout/Menu.js`                   | Defines the menu for the application.                                                                  |
-| `./front-end/src/layout/NotFound.js`               | Defines the "Not found" component that is displayed when no route matches.                             |
-| `./front-end/src/layout/Routes.js`                 | Defines all the routes for the application.                                                            |
-| `./front-end/src/utils/api.js`                     | Defines the functions used to access the backend API                                                   |
-| `./front-end/src/utils/date-time.js`               | Defines functions to format date and time strings.                                                     |
-| `./front-end/src/utils/format-reservation-date.js` | Defines a function to format the date on a single reservation or an array of reservations.             |
-| `./front-end/src/utils/format-reservation-time.js` | Defines a function to format the time on a single reservation or an array of reservations.             |
-| `./front-end/src/utils/useQuery.js`                | Defines a custom hook to parse the query parameters from the URL.                                      |
+The `./front-end` folder will contain your code for the frontend project. You will start by creating a new React application in this directory; see Installation, below.
 
 ## Database setup
 
@@ -86,12 +64,11 @@ Run `npx knex` commands from within the `back-end` folder, which is where the `k
 1. Fork and clone this repository.
 1. Run `cp ./back-end/.env.sample ./back-end/.env`.
 1. Update the `./back-end/.env` file with the connection URL's to your PostgreSQL database instance.
-1. Run `cp ./front-end/.env.sample ./front-end/.env`.
-1. You should not need to make changes to the `./front-end/.env` file unless you want to connect to a backend at a location other than `http://localhost:5001`.
+1. Run `npx create-react-app front-end` to initialize a new React application in the `front-end` directory.
 1. Run `npm install` to install project dependencies.
 1. Run `npm run start:dev` to start your server in development mode.
 
-If you have trouble getting the server to run, reach out for assistance.
+If you have trouble getting the server to run, reach out for assistance. Note that you can also `cd` into the `backend` directory to run `nodemon` for your backend code.
 
 ## Running tests
 
@@ -290,8 +267,6 @@ so that I can seat new guests at that table.<br/>
    - the "Finish" button must have a `data-table-id-finish={table.table_id}` attribute, so it can be found by the tests.
    - Clicking the "Finish" button will display the following confirmation: "Is this table ready to seat new guests? This cannot be undone." If the user selects "Ok" the system will: - Send a `DELETE` request to `/tables/:table_id/seat` in order to remove the table assignment. The tests do not check the body returned by this request. - The server should return 400 if the table is not occupied. - Refresh the list of tables to show that the table is now available.
    - Clicking the "Cancel" makes no changes.
-
-> **Hint** The end-to-end test waits for the tables list to be refreshed before checking the free/occupied status of the table, so be sure to send a GET request to `/tables` to refresh the tables list.
 
 ### US-06 Reservation Status
 
