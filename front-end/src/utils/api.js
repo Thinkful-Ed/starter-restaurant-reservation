@@ -58,26 +58,49 @@ async function fetchJson(url, options, onCancel) {
  *  a promise that resolves to a possibly empty array of reservation saved in the database.
  */
 
-export async function listReservations(params, signal) {
-  const url = new URL(`${API_BASE_URL}/reservations`);
-  Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.append(key, value.toString())
-  );
-  return await fetchJson(url, { headers, signal }, [])
-    .then(formatReservationDate)
-    .then(formatReservationTime);
+// export async function listReservations(params, signal) {
+//   const url = new URL(`${API_BASE_URL}/reservations`);
+//   Object.entries(params).forEach(([key, value]) =>
+//     url.searchParams.append(key, value.toString())
+//   );
+//   return await fetchJson(url, { headers, signal }, [])
+//     .then(formatReservationDate)
+//     .then(formatReservationTime);
+// }
+
+export async function listReservations(signal) {
+    return reservations;
+  }
+
+
+// export async function createReservation(reservation, signal) {
+
+//   const url = new URL (`${API_BASE_URL}/reservations`);
+//    const options = {
+//       method: "POST",
+//       headers,
+//       body: JSON.stringify({ data: reservation }),
+//       signal,
+//      };
+
+//   return await fetchJson(url, options);
+// }
+
+const reservations = [];
+
+function nextId() {
+  const uint32 = window.crypto.getRandomValues(new Uint32Array(1))[0];
+  return uint32.toString(16);
 }
 
 export async function createReservation(reservation, signal) {
-
-
-  const url = new URL (`${API_BASE_URL}/reservations`);
-   const options = {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ data: reservation }),
-      signal,
-     };
-
-  return await fetchJson(url, options);
+  const now = new Date().toISOString();
+  const newReservation = {
+    ...reservation,
+    reservation_id: nextId(),
+    created_at: now,
+    updated_at: now,
+  };
+  reservations.push(newReservation);
+  return newReservation;
 }

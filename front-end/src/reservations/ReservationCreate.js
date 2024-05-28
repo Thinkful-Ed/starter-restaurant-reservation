@@ -87,7 +87,7 @@ function changeHandler({ target: { name, value } }) {
                     <input
                         className="form-control"
                         id="reservation_date"
-                        name="reservatin_date"
+                        name="reservation_date"
                         type="date"
                         value={reservation.reservation_date}
                         onChange={changeHandler}
@@ -101,7 +101,7 @@ function changeHandler({ target: { name, value } }) {
                     <input
                         className="form-control"
                         id="reservation_time"
-                        name="reservatin_time"
+                        name="reservation_time"
                         type="time"
                         value={reservation.reservation_time}
                         onChange={changeHandler}
