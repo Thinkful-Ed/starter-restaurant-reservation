@@ -2,8 +2,8 @@
  * Defines the base URL for the API.
  * The default values is overridden by the `API_BASE_URL` environment variable.
  */
-import formatReservationDate from "./format-reservation-date";
-import formatReservationTime from "./format-reservation-date";
+// import formatReservationDate from "./format-reservation-date";
+// import formatReservationTime from "./format-reservation-date";
 
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
@@ -69,38 +69,40 @@ async function fetchJson(url, options, onCancel) {
 // }
 
 export async function listReservations(signal) {
-    return reservations;
+    // return reservations;
+      return [];
   }
 
 
-// export async function createReservation(reservation, signal) {
+export async function createReservation(reservation, signal) {
+  
+  // const url = new URL (`${API_BASE_URL}/reservations`);
+ const url = `${API_BASE_URL}/reservations`;
+   const options = {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ data: reservation }),
+      signal,
+     };
 
-//   const url = new URL (`${API_BASE_URL}/reservations`);
-//    const options = {
-//       method: "POST",
-//       headers,
-//       body: JSON.stringify({ data: reservation }),
-//       signal,
-//      };
+  return await fetchJson(url, options);
+}
 
-//   return await fetchJson(url, options);
+// const reservations = [];
+
+// function nextId() {
+//   const uint32 = window.crypto.getRandomValues(new Uint32Array(1))[0];
+//   return uint32.toString(16);
 // }
 
-const reservations = [];
-
-function nextId() {
-  const uint32 = window.crypto.getRandomValues(new Uint32Array(1))[0];
-  return uint32.toString(16);
-}
-
-export async function createReservation(reservation, signal) {
-  const now = new Date().toISOString();
-  const newReservation = {
-    ...reservation,
-    reservation_id: nextId(),
-    created_at: now,
-    updated_at: now,
-  };
-  reservations.push(newReservation);
-  return newReservation;
-}
+// export async function createReservation(reservation, signal) {
+//   const now = new Date().toISOString();
+//   const newReservation = {
+//     ...reservation,
+//     reservation_id: nextId(),
+//     created_at: now,
+//     updated_at: now,
+//   };
+//   reservations.push(newReservation);
+//   return newReservation;
+// }

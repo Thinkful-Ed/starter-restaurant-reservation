@@ -14,14 +14,15 @@ import ReservationCreate from "../reservations/ReservationCreate";
 function Routes() {
   return (
     <Switch>
-      <Route path="/reservations/new">
-        <ReservationCreate />
-      </Route>
+     
       <Route exact={true} path="/">
         <Redirect to={"/dashboard"} />
       </Route>
       <Route exact={true} path="/reservations">
         <Redirect to={"/dashboard"} />
+      </Route>
+      <Route path="/reservations/new">
+        <ReservationCreate />
       </Route>
       <Route path="/dashboard">
         <Dashboard date={today()} />
