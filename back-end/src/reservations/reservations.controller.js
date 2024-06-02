@@ -26,11 +26,11 @@ function hasFirstAndLastName(req, res, next) {
   return next();
 }
 
-function hasPhoneNumber(req, res, next) {
-  const {phone_number } = req.body.data;
-  const regPhoneNum = /^\d{3}-\d{3}-\d{4}$/
-  if(!regPhoneNum.test(phone_number)){
-    next({status: 400, message: "Must include valid phone_number (ex. ddd-ddd-dddd)."})
+function hasMobileNumber(req, res, next) {
+  const {mobile_number } = req.body.data;
+  const regMobileNum = /^\d{3}-\d{3}-\d{4}$/
+  if(!regMobileNum.test(mobile_number)){
+    next({status: 400, message: "Must include valid mobile number (ex. ddd-ddd-dddd)."})
   }
   return next();
 }
@@ -87,5 +87,5 @@ async function list(req, res) {
 
 module.exports = {
   list,
-  create : [hasData,hasFirstAndLastName, hasPhoneNumber,hasReservationDate,hasReservationTime,hasPeople, create],
+  create : [hasData,hasFirstAndLastName, hasMobileNumber,hasReservationDate,hasReservationTime,hasPeople, create],
 };
