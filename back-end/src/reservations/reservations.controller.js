@@ -1,6 +1,7 @@
 /**
  * List handler for reservation resources
  */
+const reservationsService = require("./reservations.service");
 
 
 
