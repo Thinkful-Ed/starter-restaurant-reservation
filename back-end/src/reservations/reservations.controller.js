@@ -40,6 +40,7 @@ function hasReservationDate(req, res, next) {
   const regDate =/^\d{1,2}\/\d{1,2}\/\d{4}$/;
   console.log( reservation_date);
   if(!regDate.test(reservation_date)){
+    console.log( reservation_date);
     next({status: 400, message: "Must include valid reservation date (ex. dd/mm/yyyy). reservation_date",reservation_date})
   }
   return next();
