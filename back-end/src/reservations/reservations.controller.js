@@ -15,7 +15,7 @@ function hasData(req, res, next) {
 function hasFirstAndLastName(req, res, next) {
   const regName =/^[a-zA-z'-. ]+$/;
   const {first_name,last_name} =req.body.data;
-  if(!regName.test(fisrt_name)){
+  if(!regName.test(first_name)){
     next({status: 400, message: "Must include valid first name."})
   }
 
