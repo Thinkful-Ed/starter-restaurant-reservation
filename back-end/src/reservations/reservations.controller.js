@@ -1,12 +1,90 @@
 /**
  * List handler for reservation resources
  */
+
+
+
+function hasData(req, res, next) {
+  if (req.body.data) {
+    return next()
+  }
+  next({status: 400,message: "body must have data property"})
+}
+
+function hasFirstAndLastName(req, res, next) {
+  const regName =/^[a-zA-z'-. ]+$/;
+  const {first_name,last_name} =req.body.data;
+  if(!regName.test(fisrt_name)){
+    next({status: 400, message: "Must include valid first name."})
+  }
+
+  if(!regName.test(last_name)){
+    next({status: 400, message: "Must include valid last name."})
+  }
+
+  return next();
+}
+
+function hasPhoneNumber(req, res, next) {
+  const {phone_number } = req.body.data;
+  const regPhoneNum = /^\d{3}-\d{3}-\d{4}$/
+  if(!regPhoneNum.test(phone_number)){
+    next({status: 400, message: "Must include valid phone_number (ex. ddd-ddd-dddd)."})
+  }
+  return next();
+}
+
+function hasReservationDate(req, res, next) {
+  const { reservation_date } = req.body.data;
+  const regDate =/^\d{1,2}\/\d{1,2}\/\d{4}$/;
+  if(!regDate.test(reservation_date)){
+    next({status: 400, message: "Must include valid reservation date (ex. dd/mm/yyyy)."})
+  }
+  return next();
+}
+function hasReservationTime(req, res, next) {
+  const { reservation_time } = req.body.data;
+  const regTime = /^(\d{1,2}):(\d{2})(:00)?([ap]m)?$/;
+  if(!regTime.test(reservation_time)){
+    next({status: 400, message: "Must include valid reservation time (ex. hh:mm:[ap]m)."})
+  }
+   return next();
+}
+
+  function hasPeople(req, res, next) {
+    const { people } = req.body.data;
+    if( people < 1){
+      next({status: 400, message: "Must have 1 or more people."})
+    }
+   return next();
+  }
+
+
+let nextId = 1;
+const reservations = [];
+
+async function create(req, res) {
+  const newReservation = req.body.data;
+
+  const now = new Date().toISOString();
+  newReservation.reservation_id = nextId++;
+  newReservation.created_at = now;
+  newReservation.updated_at = now;
+
+  reservations.push(newReservation);
+
+  res.status(201).json({
+    data: newReservation,
+  });
+}
+
 async function list(req, res) {
   res.json({
-    data: [],
+    data: reservations,
   });
 }
 
 module.exports = {
   list,
+  create : [hasData,hasFirstAndLastName, hasPhoneNumber,hasReservationDate,hasReservationTime,hasPeople, create],
 };

@@ -1,11 +1,11 @@
 {
-  "name": "starter-restaurant-reservation-front-end",
+  "name": "restaurant-reservation-system-front-end",
   "version": "1.0.0",
-  "description": "Starter code for restaurant reservation frontend",
+  "description": "Code for restaurant reservation system frontend",
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation",
+    "url": "https://github.com/halbert-anderson/restaurant-reservation-system",
     "directory": "/front-end"
   },
   "private": true,
