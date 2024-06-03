@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import { today, previous, next } from "../utils/date-time";
 
 /**
  * Defines the dashboard page.
@@ -14,7 +15,7 @@ function Dashboard({ date }) {
 
   useEffect(loadDashboard, [date]);
 
-  function loadDashboard() {
+  function loadDashboard( { date} ) {
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
@@ -23,6 +24,7 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  
   const tableRows = reservations.map((reservation) =>(
     <tr key={reservations.reservation_id}>
       <th scope="row">{reservation.reservation_id}</th>
@@ -41,6 +43,28 @@ function Dashboard({ date }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
+      <div className="mb-3"> 
+                    <button         
+                        type="button" 
+                        className="btn btn-secondary mr-2"
+                        onClick={loadDashboard(date={previous})}
+                    >Previous
+                    </button>
+                  
+                    <button         
+                        type="button" 
+                        className="btn btn-secondary mr-2"
+                        onClick={loadDashboard(date={today})}
+                    >Today
+                    </button>
+
+                    <button         
+                        type="button" 
+                        className="btn btn-secondary mr-2"
+                        onClick={loadDashboard(date={next})}
+                    >Next
+                    </button>
+        </div>       
       <ErrorAlert error={reservationsError} />
       {/* {JSON.stringify(reservations)} */}
       <table className="table">
