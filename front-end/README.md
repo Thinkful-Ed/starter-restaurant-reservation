@@ -1,5 +1,5 @@
 # Capstone: Restaurant Reservation System Frontend
 
-This starter code for the backend of the capstone project in the Thinkful curriculum.
+This directory is for the frontend of the restaurant reservation capstone project in the Chegg Skills curriculum.
 
-See [../README.md](../README.md) for detailed instructions.
+You should initialize a new React project in this directory. See [../README.md](../README.md) for detailed instructions.
