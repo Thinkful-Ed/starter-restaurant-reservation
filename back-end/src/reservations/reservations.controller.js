@@ -2,7 +2,7 @@
  * List handler for reservation resources
  */
 const reservationsService = require("./reservations.service");
-
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 
 function hasData(req, res, next) {
@@ -76,19 +76,21 @@ async function create(req, res) {
 
   // reservations.push(newReservation);
  const newReservation = await reservationsService.create(req.body.data);
- 
+
   res.status(201).json({
     data: newReservation,
   });
 }
 
 async function list(req, res) {
+  const data = await reservationsService.list();
   res.json({
-    data: reservations,
+    // data: reservations,
+    data,
   });
 }
 
 module.exports = {
-  list,
-  create : [hasData,hasFirstAndLastName, hasMobileNumber,hasReservationDate,hasReservationTime,hasPeople, create],
+  list: asyncErrorBoundary(list),
+  create : [hasData, hasFirstAndLastName, hasMobileNumber, hasReservationDate, hasReservationTime, hasPeople, asyncErrorBoundary(create)],
 };
