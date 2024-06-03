@@ -52,7 +52,7 @@ The `./front-end` folder will contain your code for the frontend project. You wi
 
 ## Database setup
 
-1. Set up a new PostgreSQL database instance by following the instructions in the "PostgreSQL: Creating & Installing Databases" lesson.
+1. Set up a new PostgreSQL database instance by following the instructions in the "PostgreSQL: Creating & Installing Databases" lesson.  Make sure to append `?ssl=true` to the end of the URL to ensure a secure connection
 1. After setting up your database instance, connect DBeaver to your new database instances by following the instructions in the "PostgreSQL: Installing DBeaver" lesson.
 
 ### Knex
