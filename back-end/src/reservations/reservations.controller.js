@@ -37,7 +37,7 @@ function hasMobileNumber(req, res, next) {
 
 function hasReservationDate(req, res, next) {
   const { reservation_date } = req.body.data;
-  const regDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+  const regDate =  /^\d{4}\-\d{1,2}\-\d{1,2}$/;
   console.log( reservation_date );
   if(!regDate.test(reservation_date)){
     console.log( reservation_date);
@@ -89,5 +89,5 @@ async function list(req, res) {
 
 module.exports = {
   list,
-  create : [hasData,hasFirstAndLastName, hasMobileNumber,hasReservationTime,hasPeople, create],
+  create : [hasData,hasFirstAndLastName, hasMobileNumber,hasReservationDate,hasReservationTime,hasPeople, create],
 };
