@@ -2,7 +2,7 @@
  * List handler for reservation resources
  */
 const reservationsService = require("./reservations.service");
-
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 
 function hasData(req, res, next) {
@@ -64,17 +64,18 @@ function hasReservationTime(req, res, next) {
 
 
 let nextId = 1;
-const reservations = [];
+// const reservations = [];
 
 async function create(req, res) {
-  const newReservation = req.body.data;
+  // const newReservation = req.body.data;
 
-  const now = new Date().toISOString();
-  newReservation.reservation_id = nextId++;
-  newReservation.created_at = now;
-  newReservation.updated_at = now;
+  // const now = new Date().toISOString();
+  // newReservation.reservation_id = nextId++;
+  // newReservation.created_at = now;
+  // newReservation.updated_at = now;
 
-  reservations.push(newReservation);
+  // reservations.push(newReservation);
+ const newReservation = await reservationsService.create(req.body.data);
 
   res.status(201).json({
     data: newReservation,
@@ -82,12 +83,14 @@ async function create(req, res) {
 }
 
 async function list(req, res) {
+  const data = await reservationsService.list();
   res.json({
-    data: reservations,
+    // data: reservations,
+    data,
   });
 }
 
 module.exports = {
-  list,
-  create : [hasData,hasFirstAndLastName, hasMobileNumber,hasReservationDate,hasReservationTime,hasPeople, create],
+  list: asyncErrorBoundary(list),
+  create : [hasData, hasFirstAndLastName, hasMobileNumber, hasReservationDate, hasReservationTime, hasPeople, asyncErrorBoundary(create)],
 };

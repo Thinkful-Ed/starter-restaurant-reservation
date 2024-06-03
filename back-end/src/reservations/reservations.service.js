@@ -1,6 +1,6 @@
 const knex = require("../db/connection");
 
-function list() {
+async function list() {
   return knex("reservations").select("*");
 }
 
