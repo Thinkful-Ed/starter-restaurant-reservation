@@ -14,7 +14,7 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
   const[dateOfReservations, setDateOfReservations] = useState(date);
 
-  useEffect(loadDashboard, [dateOfReservtions]);
+  useEffect(loadDashboard, [dateOfReservations]);
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -26,11 +26,7 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
-  function dateHandler() {
-      
-       setDate()
-  }
- 
+   
   
   const tableRows = reservations.map((reservation) =>(
     <tr key={reservations.reservation_id}>
