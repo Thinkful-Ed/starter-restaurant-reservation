@@ -12,18 +12,25 @@ import { today, previous, next } from "../utils/date-time";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const[dateOfReservations, setDateOfReservations] = useState(date);
 
-  useEffect(loadDashboard, [date]);
+  useEffect(loadDashboard, [dateOfReservtions]);
 
-  function loadDashboard( date ) {
+  function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
+    listReservations({ dateOfReservations
+     }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
   }
 
+  function dateHandler() {
+      
+       setDate()
+  }
+ 
   
   const tableRows = reservations.map((reservation) =>(
     <tr key={reservations.reservation_id}>
@@ -47,24 +54,24 @@ function Dashboard({ date }) {
                     <button         
                         type="button" 
                         className="btn btn-secondary mr-2"
-                        onClick={loadDashboard(date={previous})}
+                        onClick={() => setDateOfReservations(previous)}
                     >Previous
                     </button>
                   
                     <button         
                         type="button" 
                         className="btn btn-secondary mr-2"
-                        onClick={loadDashboard(date={today})}
+                        onClick={()=> setDateOfReservations(today)}
                     >Today
                     </button>
 
                     <button         
                         type="button" 
                         className="btn btn-secondary mr-2"
-                        onClick={loadDashboard(date={next})}
+                        onClick={() => setDateOfReservations(next)}
                     >Next
                     </button>
-        </div>       
+      </div>       
       <ErrorAlert error={reservationsError} />
       {/* {JSON.stringify(reservations)} */}
       <table className="table">
