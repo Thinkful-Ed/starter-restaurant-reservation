@@ -44,7 +44,7 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date {date}</h4>
+        <h4 className="mb-0">Reservations for date {dateOfReservations}</h4>
       </div>
       <div className="mb-3"> 
                     <button         
