@@ -1,7 +1,8 @@
 const knex = require("../db/connection");
 
 async function list(date) {
-  return knex("reservations").select("*").where({ reservation_date: date }).orderBy("reservation_time");
+  const reservation_date = date;
+  return knex("reservations").select("*").where({ reservation_date }).orderBy("reservation_time","asc");
 }
 
 function create(newReservation) {
