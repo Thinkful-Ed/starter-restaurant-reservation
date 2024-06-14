@@ -12,7 +12,9 @@ import { today, previous, next } from "../utils/date-time";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  console.log("dashbaord - date: ",date);
   const[dateOfReservations, setDateOfReservations] = useState(date);
+  console.log("dashboard -  dateOfReservations: ",dateOfReservations);
 
   useEffect(loadDashboard, [dateOfReservations]);
 
