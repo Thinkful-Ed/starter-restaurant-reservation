@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -6,7 +6,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 function ReservationCreate() {
 
     const history = useHistory();
-    const[error, setError] = useState(null);
+    const [error, setError] = useState(null);
     const [reservation, setReservation] = useState({
         first_name: "",
         last_name: "",

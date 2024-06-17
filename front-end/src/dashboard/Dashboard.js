@@ -13,10 +13,9 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   console.log("dashbaord - date: ",date);
-  const[dateOfReservations, setDateOfReservations] = useState(date);
-  console.log("dashboard -  dateOfReservations: ",dateOfReservations);
+  const [dateOfReservations, setDateOfReservations] = useState(date);
+  console.log("dashboard -  dateOfReservation: ",dateOfReservations);
 
-  useEffect(loadDashboard, [dateOfReservations]);
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -27,6 +26,10 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
     return () => abortController.abort();
   }
+  
+  useEffect(loadDashboard, [dateOfReservations]);
+
+  
 
    
   
