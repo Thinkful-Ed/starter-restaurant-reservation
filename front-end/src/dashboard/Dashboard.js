@@ -12,9 +12,10 @@ import { today, previous, next } from "../utils/date-time";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const[dateOfReservations, setDateOfReservations] = useState(date);
+  console.log("dashbaord - date: ",date);
+  const [dateOfReservations, setDateOfReservations] = useState(date);
+  console.log("dashboard -  dateOfReservation: ",dateOfReservations);
 
-  useEffect(loadDashboard, [dateOfReservations]);
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -25,6 +26,10 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
     return () => abortController.abort();
   }
+  
+  useEffect(loadDashboard, [dateOfReservations]);
+
+  
 
    
   

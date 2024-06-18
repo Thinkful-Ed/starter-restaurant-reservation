@@ -68,16 +68,12 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
-// export async function listReservations(signal) {
-//     // return reservations;
-//       return [];
-//   }
-
+ 
 
 export async function createReservation(reservation, signal) {
   
-  // const url = new URL (`${API_BASE_URL}/reservations`);
- const url = `${API_BASE_URL}/reservations`;
+   const url = new URL (`${API_BASE_URL}/reservations`);
+  //  const url = `${API_BASE_URL}/reservations`;
    const options = {
       method: "POST",
       headers,
@@ -87,22 +83,3 @@ export async function createReservation(reservation, signal) {
 
  return await fetchJson(url, options);
 }
-
-// const reservations = [];
-
-// function nextId() {
-//   const uint32 = window.crypto.getRandomValues(new Uint32Array(1))[0];
-//   return uint32.toString(16);
-// }
-
-// export async function createReservation(reservation, signal) {
-//   const now = new Date().toISOString();
-//   const newReservation = {
-//     ...reservation,
-//     reservation_id: nextId(),
-//     created_at: now,
-//     updated_at: now,
-//   };
-//   reservations.push(newReservation);
-//   return newReservation;
-// }
