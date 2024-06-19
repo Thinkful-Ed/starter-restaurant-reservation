@@ -6,7 +6,9 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 
 function hasData(req, res, next) {
+
   console.log("Data: ",req.body.data);
+
   if (req.body.data) {
     return next()
   }
@@ -91,5 +93,6 @@ async function list(req, res, next) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
+
   create: [hasData,hasFirstAndLastName, hasMobileNumber, hasReservationDate, hasReservationTime, hasPeople, asyncErrorBoundary(create)],
 };

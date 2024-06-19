@@ -72,7 +72,9 @@ export async function listReservations(params, signal) {
  
 
 export async function createReservation(reservation, signal) {
+
   console.log("ReservationCreate - reservation: }", reservation)
+
    const url = new URL (`${API_BASE_URL}/reservations`);
   //  const url = `${API_BASE_URL}/reservations`;
    const options = {
@@ -81,6 +83,8 @@ export async function createReservation(reservation, signal) {
       body: JSON.stringify({ data: reservation }),
       signal,
      };
+
 console.log("ReservationCreate - url: }", url, "options: ", options)
 return await fetchJson(url, options);
 }
+
