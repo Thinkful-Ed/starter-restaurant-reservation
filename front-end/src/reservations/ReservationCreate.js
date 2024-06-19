@@ -23,7 +23,7 @@ function ReservationCreate() {
     function submitHandler(event) {
         event.preventDefault();
         createReservation(reservation)
-            .then(()=> { history.push("/"); })
+            .then(() => { history.push("/"); })
             .catch(setError);
     }
  
