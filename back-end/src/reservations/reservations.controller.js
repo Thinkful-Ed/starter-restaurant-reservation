@@ -6,7 +6,13 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 
 function hasData(req, res, next) {
+<<<<<<< HEAD
   // console.log("Data: ",req.body.data);
+=======
+
+  console.log("Data: ",req.body.data);
+
+>>>>>>> fa7e7124f3cbcc109be06b8217cc3e5749f4036c
   if (req.body.data) {
     return next()
   }
@@ -97,7 +103,13 @@ async function list(req, res, next) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
+<<<<<<< HEAD
   create: [ hasData,firstAndLastNameAreValid,mobileNumberIsValid,reservationDateIsValid,reservationTimeIsValid, peopleIsValid, asyncErrorBoundary(create)],
 };
 
 
+=======
+
+  create: [hasData,hasFirstAndLastName, hasMobileNumber, hasReservationDate, hasReservationTime, hasPeople, asyncErrorBoundary(create)],
+};
+>>>>>>> fa7e7124f3cbcc109be06b8217cc3e5749f4036c
