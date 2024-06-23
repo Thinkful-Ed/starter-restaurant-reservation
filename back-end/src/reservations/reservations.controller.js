@@ -6,75 +6,85 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 
 function hasData(req, res, next) {
+<<<<<<< HEAD
+  // console.log("Data: ",req.body.data);
+=======
 
   console.log("Data: ",req.body.data);
 
+>>>>>>> fa7e7124f3cbcc109be06b8217cc3e5749f4036c
   if (req.body.data) {
     return next()
   }
   next({ status: 400, message: "body must have data property" })
 }
 
-function hasFirstAndLastName(req, res, next) {
+function firstAndLastNameAreValid(req, res, next) {
   const regName =/^[a-zA-Z'-. ]+$/;
   const { first_name, last_name } =req.body.data;
-  console.log("First Name:", first_name, " Last Name: ",last_name);
-  if(!regName.test(first_name)){
-    next({ status: 400, message: "Must include valid first name."})
+  // console.log("First Name:", first_name, " Last Name: ",last_name);
+  if(!first_name || !regName.test(first_name)){
+    next({ status: 400, message: "Must include valid first_name."})
   }
 
-  if(!regName.test(last_name)){
-    next({ status: 400, message: "Must include valid last name." })
+  if(!last_name || !regName.test(last_name)){
+    next({ status: 400, message: "Must include valid last_name." })
   }
 
   return next();
 }
 
-function hasMobileNumber(req, res, next) {
+function mobileNumberIsValid(req, res, next) {
   const { mobile_number } = req.body.data;
   const regMobileNum = /^\d{3}-\d{3}-\d{4}$/
-  console.log("mobile_number: ", mobile_number);
+  // console.log("mobile_number: ", mobile_number);
   if(!regMobileNum.test(mobile_number)){
-    next({ status: 400, message: "Must include valid mobile number (ex. ddd-ddd-dddd)." })
+    next({ status: 400, message: "Must include valid mobile_number (ex. ddd-ddd-dddd)." })
   }
   return next();
 }
 
-function hasReservationDate(req, res, next) {
+function reservationDateIsValid(req, res, next) {
   const { reservation_date } = req.body.data;
   const regDate = /^\d{4}\-\d{1,2}\-\d{1,2}$/;
-  console.log("Reservation_date: ", reservation_date);
+  // console.log("Reservation_date: ", reservation_date);
   if(!regDate.test(reservation_date)){
-    next({ status: 400, message: "Must include valid reservation date (ex. dd/mm/yyyy)." })
+    next({ status: 400, message: "Must include valid reservation_date (ex. dd/mm/yyyy)." })
   }
   return next();
 }
 
 
-function hasReservationTime(req, res, next) {
+function reservationTimeIsValid(req, res, next) {
   const { reservation_time } = req.body.data;
   const regTime = /^(\d{1,2}):(\d{2})(:00)?([ap]m)?$/;
-  console.log("Reservation_time", reservation_time);
+  // console.log("Reservation_time", reservation_time);
   if(!regTime.test(reservation_time)){
-    next({ status: 400, message: "Must include valid reservation time (ex. hh:mm:[ap]m)." })
+    next({ status: 400, message: "Must include valid reservation_time (ex. hh:mm:[ap]m)." })
   }
    return next();
 }
+function peopleIsValid(req, res, next) {
+  const { people } = req.body.data;
 
-  function hasPeople(req, res, next) {
-    const { people } = req.body.data;
-    console.log("People: ",people);
-    if( people < 1){
-      next({ status: 400, message: "Must have 1 or more people." })
-    }
-   return next();
+  // Check if people is not a number
+  if (!Number.isInteger(people)) {
+    return next({ status: 400, message: "people must be an integer" });
   }
 
+  // Check if people is less than 1
+  if (people < 1) {
+    return next({ status: 400, message: "Must have 1 or more people ." });
+  }
+
+  // If validation passes
+  return next();
+}
 
 
 async function create(req, res) {
   const newReservation = await reservationsService.create(req.body.data);
-  console.log("New Reservation: ",newReservation);
+  // console.log("New Reservation: ",newReservation);
   res.status(201).json({
     data: newReservation
   });
@@ -82,7 +92,7 @@ async function create(req, res) {
 
 async function list(req, res, next) {
   console.log("req.query: ", req.query);
-  const date = req.query.dateOfReservations;
+  const date = req.query.date
   console.log("Date: ", date);
   const data = await reservationsService.list(date);
   console.log("data: ",data);
@@ -93,6 +103,13 @@ async function list(req, res, next) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
+<<<<<<< HEAD
+  create: [ hasData,firstAndLastNameAreValid,mobileNumberIsValid,reservationDateIsValid,reservationTimeIsValid, peopleIsValid, asyncErrorBoundary(create)],
+};
+
+
+=======
 
   create: [hasData,hasFirstAndLastName, hasMobileNumber, hasReservationDate, hasReservationTime, hasPeople, asyncErrorBoundary(create)],
 };
+>>>>>>> fa7e7124f3cbcc109be06b8217cc3e5749f4036c

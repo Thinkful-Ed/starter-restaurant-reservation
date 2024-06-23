@@ -63,7 +63,7 @@ export async function listReservations(params, signal) {
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
   );
-  console.log("listReservations - url: }", url );
+  console.log("listReservations - url: ", url );
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
@@ -72,19 +72,31 @@ export async function listReservations(params, signal) {
  
 
 export async function createReservation(reservation, signal) {
+<<<<<<< HEAD
+  console.log("ReservationCreate - reservation: ", reservation)
+  //  const url = new URL (`${API_BASE_URL}/reservations`);
+   const url = `${API_BASE_URL}/reservations`;
+=======
 
   console.log("ReservationCreate - reservation: }", reservation)
 
    const url = new URL (`${API_BASE_URL}/reservations`);
   //  const url = `${API_BASE_URL}/reservations`;
+>>>>>>> fa7e7124f3cbcc109be06b8217cc3e5749f4036c
    const options = {
       method: "POST",
       headers,
       body: JSON.stringify({ data: reservation }),
       signal,
      };
+<<<<<<< HEAD
+console.log("ReservationCreate - url: ", url, "options: ", options)
+return await fetchJson(url, options, reservation);
+}
+=======
 
 console.log("ReservationCreate - url: }", url, "options: ", options)
 return await fetchJson(url, options);
 }
 
+>>>>>>> fa7e7124f3cbcc109be06b8217cc3e5749f4036c
