@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import { formatAsDate } from "../utils/date-time";
+
 
 function ReservationCreate() {
 
@@ -13,7 +15,7 @@ function ReservationCreate() {
         mobile_number: "",
         reservation_date: "",
         reservation_time: "",
-        people: "",
+        people: 1,
     });  
 
     function cancelHandler() {
@@ -23,8 +25,9 @@ function ReservationCreate() {
     function submitHandler(event) {
         event.preventDefault();
         createReservation(reservation)
-            .then(() => { history.push("/"); })
-            .catch(setError);
+        // .then((savedReservations) => { history.push(`/dashboard?date=${formatAsDate(savedReservations.reservation_date)}`); })
+        .then((savedReservations) => { window.location.replace(`/dashboard?date=${formatAsDate(savedReservations.reservation_date)}`); })
+        .catch(setError);
     }
  
     function changeHandler({ target: { name, value } }) {
@@ -33,6 +36,14 @@ function ReservationCreate() {
             [name]: value,
         }));
     }
+
+
+    function numberChangeHandler({ target: { name, value } }) {
+        setReservation((previousReservation) => ({
+          ...previousReservation,
+          [name]: Number(value),
+        }));
+      }
 
 return (
     <main>
@@ -49,6 +60,7 @@ return (
                         id="first_name"
                         name="first_name"
                         type="text"
+                        pattern="/^[a-zA-Z'-. ]+$/"
                         value={reservation.first_name}
                         onChange={changeHandler}
                         required={true}
@@ -63,6 +75,7 @@ return (
                         id="last_name"
                         name="last_name"
                         type="text"
+                        pattern="/^[a-zA-Z'-. ]+$/"
                         value={reservation.last_name}
                         onChange={changeHandler}
                         required={true}
@@ -78,6 +91,7 @@ return (
                     id="mobile_number"
                     name="mobile_number"
                     type="text"
+                    pattern="/^\d{3}-\d{3}-\d{4}$/"
                     value={reservation.mobile_number}
                     onChange={changeHandler}
                     required={true}
@@ -122,10 +136,10 @@ return (
                         id="people"
                         name="people"
                         type="number"
-                        max="1000"
-                        min= "1"
+                        max={1000}
+                        min= {1}
                         value={reservation.people}
-                        onChange={changeHandler}
+                        onChange={numberChangeHandler}
                         required={true}
                     />
             </div>

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today, previous, next } from "../utils/date-time";
+// import { useLocation } from "react-router-dom";
+// import queryString from 'query-string';
+import DateButtons from "./DateButtons";
 
 /**
  * Defines the dashboard page.
@@ -10,31 +13,23 @@ import { today, previous, next } from "../utils/date-time";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  console.log("dashbaord - date: ",date);
-  const [dateOfReservations, setDateOfReservations] = useState(date);
-  console.log("dashboard -  dateOfReservation: ",dateOfReservations);
-
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ dateOfReservations
-     }, abortController.signal)
+      listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
   }
   
-  useEffect(loadDashboard, [dateOfReservations]);
+  useEffect(loadDashboard, [date]);
 
-  
-
-   
-  
-  const tableRows = reservations.map((reservation) =>(
-    <tr key={reservations.reservation_id}>
+  const tableRows = reservations.map((reservation) => (
+    <tr key={reservation.reservation_id}>
       <th scope="row">{reservation.reservation_id}</th>
       <td>{reservation.first_name}</td>
       <td>{reservation.last_name}</td>
@@ -49,43 +44,27 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date {dateOfReservations}</h4>
+        <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
-      <div className="mb-3"> 
-                    <button         
-                        type="button" 
-                        className="btn btn-secondary mr-2"
-                        onClick={() => setDateOfReservations(previous)}
-                    >Previous
-                    </button>
+      <DateButtons
+            previous={`/dashboard?date=${previous(date)}`}
+            today={`/dashboard?date=${today()}`}
+            next={`/dashboard?date=${next(date)}`} />
+      {/* <div className="mb-3">  */}
                   
-                    <button         
-                        type="button" 
-                        className="btn btn-secondary mr-2"
-                        onClick={()=> setDateOfReservations(today)}
-                    >Today
-                    </button>
-
-                    <button         
-                        type="button" 
-                        className="btn btn-secondary mr-2"
-                        onClick={() => setDateOfReservations(next)}
-                    >Next
-                    </button>
-      </div>       
+      {/* </div>        */}
       <ErrorAlert error={reservationsError} />
-      {/* {JSON.stringify(reservations)} */}
       <table className="table">
         <thead>
-        <tr>
-           <th scope="col">#</th>
-           <th scope="col">First Name</th>
-           <th scope="col">Last Name</th>
-           <th scope="col">Mobile Number</th>
-           <th scope="col">Reservation Date</th>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Mobile Number</th>
+            <th scope="col">Reservation Date</th>
             <th scope="col">Reservation Time</th>
             <th scope="col">People</th>
-        </tr>
+          </tr>
         </thead>
         <tbody>
            {tableRows}
