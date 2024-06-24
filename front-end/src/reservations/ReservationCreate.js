@@ -25,10 +25,11 @@ function ReservationCreate() {
     function submitHandler(event) {
         event.preventDefault();
         createReservation(reservation)
-        // .then((savedReservations) => { history.push(`/dashboard?date=${formatAsDate(savedReservations.reservation_date)}`); })
-        .then((savedReservations) => { window.location.replace(`/dashboard?date=${formatAsDate(savedReservations.reservation_date)}`); })
+        .then((savedReservations) => { history.push(`/dashboard?date=${formatAsDate(savedReservations.reservation_date)}`); })
+        // .then((savedReservations) => { window.location.replace(`/dashboard?date=${formatAsDate(savedReservations.reservation_date)}`); })
         .catch(setError);
     }
+    
  
     function changeHandler({ target: { name, value } }) {
         setReservation((previousReservation) => ({
@@ -60,7 +61,7 @@ return (
                         id="first_name"
                         name="first_name"
                         type="text"
-                        pattern="/^[a-zA-Z'-. ]+$/"
+                        
                         value={reservation.first_name}
                         onChange={changeHandler}
                         required={true}
@@ -75,7 +76,7 @@ return (
                         id="last_name"
                         name="last_name"
                         type="text"
-                        pattern="/^[a-zA-Z'-. ]+$/"
+                        
                         value={reservation.last_name}
                         onChange={changeHandler}
                         required={true}
@@ -91,7 +92,7 @@ return (
                     id="mobile_number"
                     name="mobile_number"
                     type="text"
-                    pattern="/^\d{3}-\d{3}-\d{4}$/"
+                    
                     value={reservation.mobile_number}
                     onChange={changeHandler}
                     required={true}
