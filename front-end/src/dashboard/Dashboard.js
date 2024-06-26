@@ -26,19 +26,31 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
   
+  // useEffect(loadDashboard, [date]);
+
+
   useEffect(loadDashboard, [date]);
 
-  const tableRows = reservations.map((reservation) => (
-    <tr key={reservation.reservation_id}>
-      <th scope="row">{reservation.reservation_id}</th>
-      <td>{reservation.first_name}</td>
-      <td>{reservation.last_name}</td>
-      <td>{reservation.mobile_number}</td>
-      <td>{reservation.reservation_date}</td>
-      <td>{reservation.reservation_time}</td>
-      <td>{reservation.people}</td>
+  const tableRows = reservations.length ? (
+    reservations.map((reservation) => (
+      <tr key={reservation.reservation_id}>
+        <th scope="row">{reservation.reservation_id}</th>
+        <td>{reservation.first_name}</td>
+        <td>{reservation.last_name}</td>
+        <td>{reservation.mobile_number}</td>
+        <td>{reservation.reservation_date}</td>
+        <td>{reservation.reservation_time}</td>
+        <td>{reservation.people}</td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="7" className="text-center">
+        No reservations for this date.
+      </td>
     </tr>
-  ))
+  );
+
 
   return (
     <main>
@@ -53,7 +65,7 @@ function Dashboard({ date }) {
       {/* <div className="mb-3">  */}
                   
       {/* </div>        */}
-      <ErrorAlert error={reservationsError} />
+      <ErrorAlert errors={reservationsError} />
       <table className="table">
         <thead>
           <tr>
