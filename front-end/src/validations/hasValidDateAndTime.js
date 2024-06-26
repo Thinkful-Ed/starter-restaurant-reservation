@@ -55,7 +55,7 @@ export function hasValidDateAndTime(reservation) {
     if (hours > 21 || (hours === 21 && minutes > 30)) {
       errors.afterClosing = { message: "Reservation must be before 9:30PM" };
     }
-  
+    console.log("errors: ",errors);
     return errors;
   }
 

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today, previous, next } from "../utils/date-time";
-// import { useLocation } from "react-router-dom";
-// import queryString from 'query-string';
 import DateButtons from "./DateButtons";
 
 /**
@@ -14,21 +12,21 @@ import DateButtons from "./DateButtons";
  */
 function Dashboard({ date }) {
 
-  const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
+  const [reservations, setReservations] = useState(null);
+  const [reservationsError, setReservationsError] = useState([]);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
       listReservations({ date }, abortController.signal)
       .then(setReservations)
-      .catch(setReservationsError);
+      // .catch(setReservationsError);
+      .catch((reservationsError) => {console.log("Dashboard - reservationsError: ", reservationsError);
+                                     setReservationsError(reservationsError)});
     return () => abortController.abort();
   }
   
-  // useEffect(loadDashboard, [date]);
-
-
+  
   useEffect(loadDashboard, [date]);
 
   const tableRows = reservations.length ? (
@@ -62,9 +60,6 @@ function Dashboard({ date }) {
             previous={`/dashboard?date=${previous(date)}`}
             today={`/dashboard?date=${today()}`}
             next={`/dashboard?date=${next(date)}`} />
-      {/* <div className="mb-3">  */}
-                  
-      {/* </div>        */}
       <ErrorAlert errors={reservationsError} />
       <table className="table">
         <thead>
