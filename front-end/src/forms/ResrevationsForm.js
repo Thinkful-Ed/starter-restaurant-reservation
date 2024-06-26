@@ -12,7 +12,7 @@ function ReservationsForm({ reservation, setReservation, errors, setReservationE
         history.goBack();
     }
 
- ,//  const submitHandler = async (event) => {
+//  const submitHandler = async (event) => {
 //     event.preventDefault();
 //    const abortController = new AbortController();
 //    const errors = hasValidDateAndTime(reservation);
