@@ -7,7 +7,8 @@ import { hasValidDateAndTime } from "../validations/hasValidDateAndTime";
 function ReservationsForm({ reservation, setReservation, errors, setReservationErrors }) {
 
     const history = useHistory();
-    function cancelHandler(){
+
+    function cancelHandler() {
         history.goBack();
     }
 
@@ -45,51 +46,38 @@ function ReservationsForm({ reservation, setReservation, errors, setReservationE
 //    return () => abortController.abort();
 //     };
 
-    const submitHandler = async (event) => {
-        event.preventDefault();
-        const abortController = new AbortController();
-        const errors = hasValidDateAndTime(reservation);
-      
-        if (Object.keys(errors).length > 0) {
-          // Convert the errors object to an array of error messages to setReservationErrors
-          console.log("CreateRes...Form - errors object: ", errors);
-          const errorMessages = Object.values(errors).map(error => error.message);
-          console.log("CreateRes...Form - errorMessages: ",errorMessages);
-          return setReservationErrors(errorMessages);
-        }
-      
-        try {
-          const savedReservation = await createReservation(reservation, abortController.signal);
-          const formattedDate = formatAsDate(savedReservation.reservation_date);
-          history.push(`/dashboard?date=${formattedDate}`);
-        } catch (error) {
-          setReservationErrors([error.message]);
-        }
-      
-        return () => abortController.abort();
-      };
-
-    // function changeHandler({ target: { name, value } }) {
-        function changeHandler(event) {
-        if (event.target.name ==="people") {setReservation((previousReservation) => ({
-            ...previousReservation,
-            [event.target.name]: Number(event.target.value),
-          }));
-            
-        }else{
-        setReservation((previousReservation) => ({
-         ...previousReservation,
-            [event.target.name]: event.target.value,
-        }));
+const submitHandler = async (event) => {
+    event.preventDefault();
+    const abortController = new AbortController();
+    const validationErrors = hasValidDateAndTime(reservation);
+  
+    if (Object.keys(validationErrors).length > 0) {
+      const errorMessages = Object.values(validationErrors).map(error => error.message);
+      return setReservationErrors(errorMessages);
     }
+  
+    try {
+      const savedReservation = await createReservation(reservation, abortController.signal);
+      const formattedDate = formatAsDate(savedReservation.reservation_date);
+      history.push(`/dashboard?date=${formattedDate}`);
+    } catch (error) {
+    console.log(" ReservationsForm -submitHandler -error: ", error, " error.message: ",error.message)
+      setReservationErrors([error.message]);
     }
+  
+    return () => abortController.abort();
+};
 
-    // function numberChangeHandler({ target: { name, value } }) {
-    //     setReservation((previousReservation) => ({
-    //       ...previousReservation,
-    //       [name]: Number(value),
-    //     }));
-    //   }
+function changeHandler(event) {
+    const { name, value } = event.target;
+    setReservation((previousReservation) => ({
+        ...previousReservation,
+        [name]: name === "people" ? Number(value) : value,
+    }));
+}
+
+
+    
 return (
     <form onSubmit={submitHandler} className="mb-4">
         {/* <ErrorAlert errors={errors} /> */}
@@ -153,7 +141,6 @@ return (
                     id="reservation_date"
                     name="reservation_date"
                     type="date"
-                    // placeholder="yyyy-mm-dd"
                     pattern="\d{4}-\d{2}-\d{2}"
                     value={reservation.reservation_date}
                     onChange={changeHandler}
@@ -169,7 +156,6 @@ return (
                     id="reservation_time"
                     name="reservation_time"
                     type="time"
-                    // placeholder="HH:MM"
                     pattern="[0-9]{2}:[0-9]{2}"
                     value={reservation.reservation_time}
                     onChange={changeHandler}
@@ -186,10 +172,8 @@ return (
                 id="people"
                 name="people"
                 type="number"
-                // aria-label="Number of people"
                 min= {1}
                 value={reservation.people}
-                // onChange={numberChangeHandler}
                 onChange={changeHandler}
                 required={true}
             />

@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-// import { useHistory } from "react-router-dom";
-// import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-// import { formatAsDate } from "../utils/date-time";
-// import { hasValidDateAndTime } from "../validations/hasValidDateAndTime";
 import  ReservationsForm   from "../forms/ResrevationsForm"
 function ReservationCreate() {
 
@@ -17,7 +13,7 @@ function ReservationCreate() {
         reservation_time: "",
         people: 1,
     });  
-
+console.log("ReservationCreate - reservationErrors: ",reservationErrors);
 
 
 return (
