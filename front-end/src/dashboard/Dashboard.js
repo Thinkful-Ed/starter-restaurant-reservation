@@ -12,19 +12,20 @@ import DateButtons from "./DateButtons";
  */
 function Dashboard({ date }) {
 
-  const [reservations, setReservations] = useState(null);
-  const [reservationsError, setReservationsError] = useState([]);
+const [reservations, setReservations] = useState([]);
+const [reservationsError, setReservationsError] = useState([]);
 
-  function loadDashboard() {
-    const abortController = new AbortController();
-    setReservationsError(null);
-      listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      // .catch(setReservationsError);
-      .catch((reservationsError) => {console.log("Dashboard - reservationsError: ", reservationsError);
-                                     setReservationsError(reservationsError)});
-    return () => abortController.abort();
-  }
+function loadDashboard() {
+  const abortController = new AbortController();
+  setReservationsError([]);
+  listReservations({ date }, abortController.signal)
+    .then(setReservations)
+    .catch((error) => {
+      console.log("Dashboard - reservationsError: ", error);
+      setReservationsError([error.message]);
+    });
+  return () => abortController.abort();
+}
   
   
   useEffect(loadDashboard, [date]);

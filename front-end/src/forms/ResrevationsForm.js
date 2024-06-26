@@ -12,21 +12,6 @@ function ReservationsForm({ reservation, setReservation, errors, setReservationE
         history.goBack();
     }
 
-   
-//     function submitHandler(event) {
-//         event.preventDefault();
-//         const abortController = new AbortController();
-//         createReservation(reservation, abortController.signal)
-//         // .then((savedReservations) => { history.push(`/dashboard?date=${formatAsDate(savedReservations.reservation_date)}`); })
-//         .then((savedReservation) => {
-//             const formattedDate = formatAsDate(savedReservation.reservation_date);
-//             console.log("Formatted Date:", formattedDate);
-//             history.push(`/dashboard?date=${formattedDate}`);
-//           })
-//         .catch(setReservationError);
-//         return () => abortController.abort();
-//  }
-    
 //  const submitHandler = async (event) => {
 //     event.preventDefault();
 //    const abortController = new AbortController();
@@ -52,7 +37,7 @@ const submitHandler = async (event) => {
     const validationErrors = hasValidDateAndTime(reservation);
   
     if (Object.keys(validationErrors).length > 0) {
-      const errorMessages = Object.values(validationErrors).map(error => error.message);
+      const errorMessages = Object.values(validationErrors).map(error => error.message||error);
       return setReservationErrors(errorMessages);
     }
   
@@ -61,8 +46,9 @@ const submitHandler = async (event) => {
       const formattedDate = formatAsDate(savedReservation.reservation_date);
       history.push(`/dashboard?date=${formattedDate}`);
     } catch (error) {
-    console.log(" ReservationsForm -submitHandler -error: ", error, " error.message: ",error.message)
-      setReservationErrors([error.message]);
+    console.log(" ReservationsForm -submitHandler -error: ", error, " error.message: ",error.message);
+    setReservationErrors([error.message || "Unknown error occurred."]); // Ensure error message is a string
+
     }
   
     return () => abortController.abort();

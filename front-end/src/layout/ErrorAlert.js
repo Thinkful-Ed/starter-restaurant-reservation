@@ -22,7 +22,7 @@ function ErrorAlert({ errors }) {
     errors.length > 0 &&
     errors.map((error, index) => {console.log("ErrorAlert - error: ", error, " error.message: ",error.message);
         return(
-          <div key={index} className="alert alert-danger m-2">Error: {error.message}</div>
+          <div key={index} className="alert alert-danger m-2">Error: {error}</div>
     );})
   );
 }

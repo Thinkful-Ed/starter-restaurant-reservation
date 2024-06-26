@@ -48,13 +48,13 @@ function reservationDateIsValid(req, res, next) {
    // No reservations on Tuesdays
    const day = new Date(reservation_date).getUTCDay();
    if (day === 2) {
-    next({status: 400, message: "Restaurant is closed on Tuesdays" });
+    next({status: 400, message: "Restaurant is closed on Tuesdays." });
    }
  
    // No reservations in the past
    const formattedDate = new Date(`${reservation_date}T${reservation_time}`);
    if (formattedDate <= new Date()) {
-     next({status: 400, message: "Reservation must be in the future" } );
+     next({status: 400, message: "Reservation must be in the future." } );
    }
   return next();
 }
@@ -73,10 +73,10 @@ function reservationTimeIsValid(req, res, next) {
 const hours = Number(reservation_time.split(":")[0]);
 const minutes = Number(reservation_time.split(":")[1]);
 if (hours < 10 || (hours === 10 && minutes < 30)) {
-  next({status: 400, message: "Reservation must be after 10:30AM" });
+  next({status: 400, message: "Reservation must be after 10:30AM." });
 }
 if (hours > 21 || (hours === 21 && minutes > 30)) {
-  next({status: 400, message: "Reservation must be before 9:30PM" });
+  next({status: 400, message: "Reservation must be before 9:30PM." });
 }
 
    return next();
