@@ -14,20 +14,22 @@ import useQuery from "../utils/useQuery";
  */
 function Routes() {
   const query =useQuery();
+  const date = query.get("date") || today();
+
   return (
     <Switch>
      
       <Route exact={true} path="/">
-        <Redirect to={"/dashboard"} />
+        <Redirect to={`/dashboard?date=${today()}`} />
       </Route>
       <Route exact={true} path="/reservations">
-        <Redirect to={"/dashboard"} />
+        <Redirect to={`/dashboard?date=${today()}`} />
       </Route>
-      <Route path="/reservations/new">
+      <Route exact={true} path="/reservations/new">
         <ReservationCreate />
       </Route>
-      <Route path="/dashboard">
-        <Dashboard date={ query.get("date") || today()} />
+      <Route exact={true} path="/dashboard">
+        <Dashboard date={date} />
       </Route>
       <Route>
         <NotFound />

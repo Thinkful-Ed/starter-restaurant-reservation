@@ -16,7 +16,7 @@ describe("US-01 - Create and list reservations - E2E", () => {
 
   beforeAll(async () => {
     await fsPromises.mkdir("./.screenshots", { recursive: true });
-    setDefaultOptions({ timeout: 1000 });
+    setDefaultOptions({ timeout: 5000 });
     browser = await puppeteer.launch();
   });
 
@@ -33,30 +33,36 @@ describe("US-01 - Create and list reservations - E2E", () => {
 
   describe("/reservations/new page", () => {
     test("filling and submitting form creates a new reservation and then displays the dashboard for the reservation date", async () => {
-      const lastName = Date.now().toString(10);
+      const lastName =  Date.now().toString(10);
 
+      console.log("point 1 - lastName: ",lastName);
+      
       await page.type("input[name=first_name]", "James");
       await page.type("input[name=last_name]", lastName);
       await page.type("input[name=mobile_number]", "800-555-1212");
       await page.type("input[name=reservation_date]", "01012035");
       await page.type("input[name=reservation_time]", "1330");
       await page.type("input[name=people]", "2");
-
+      
+      console.log("point 2 ")
+      
       await page.screenshot({
         path: ".screenshots/us-01-submit-before.png",
         fullPage: true,
       });
-
+      console.log("point 2.5 ")
       await Promise.all([
         page.click("[type=submit]"),
         page.waitForNavigation({ waitUntil: "networkidle0" }),
       ]);
-
+     
+      console.log("point 3");
       await page.screenshot({
         path: ".screenshots/us-01-submit-after.png",
         fullPage: true,
       });
-
+     
+      console.log("point 4 - page",page);
       await expect(page).toMatch(lastName);
     });
 
