@@ -104,7 +104,7 @@ function loadTablesToDashboard() {
            {tableRowsForReservations}
         </tbody>
       </table>
-      <ErrorAlert errors={tablesError} />
+      <ErrorAlert  errors={tablesError} />
       <h2>Tables</h2>
       <table className="table">
         <thead>
