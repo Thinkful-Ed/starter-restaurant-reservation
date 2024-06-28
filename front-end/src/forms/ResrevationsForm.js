@@ -1,7 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
-import { formatAsDate } from "../utils/date-time";
 import { hasValidDateAndTime } from "../validations/hasValidDateAndTime";
 
 function ReservationsForm({ reservation, setReservation, errors, setReservationErrors }) {
@@ -35,18 +34,17 @@ const submitHandler = async (event) => {
     event.preventDefault();
     const abortController = new AbortController();
     const validationErrors = hasValidDateAndTime(reservation);
-  
+ 
     if (Object.keys(validationErrors).length > 0) {
       const errorMessages = Object.values(validationErrors).map(error => error.message||error);
       return setReservationErrors(errorMessages);
     }
-  
+    
     try {
-      const savedReservation = await createReservation(reservation, abortController.signal);
-      const formattedDate = formatAsDate(savedReservation.reservation_date);
-      history.push(`/dashboard?date=${formattedDate}`);
+      const savedReservation = await createReservation(reservation, abortController.signal); 
+      history.push(`/dashboard?date=${savedReservation.reservation_date}`);
     } catch (error) {
-    console.log(" ReservationsForm -submitHandler -error: ", error, " error.message: ",error.message);
+   
     setReservationErrors([error.message || "Unknown error occurred."]); // Ensure error message is a string
 
     }
@@ -78,7 +76,7 @@ return (
                     name="first_name"
                     type="text"
                     placeholder="First Name"
-                    pattern="^[a-zA-Z'-. ]+$"
+                    pattern="^[a-zA-Z0-9'-. ]+$"
                     value={reservation.first_name}
                     onChange={changeHandler}
                     required={true}
@@ -94,7 +92,7 @@ return (
                     name="last_name"
                     type="text"
                     placeholder="Last Name"
-                    pattern="^[a-zA-Z'-. ]+$"
+                    pattern="^[a-zA-Z0-9'-. ]+$"
                     value={reservation.last_name}
                     onChange={changeHandler}
                     required={true}
