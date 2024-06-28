@@ -69,6 +69,15 @@ export async function listReservations(params, signal) {
 }
 
  
+export async function listTables(params, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  Object.entries(params).forEach(([key, value]) => 
+    url.searchParams.append(key, value.toString()));
+  // console.log("listReservations - url: ", url );
+  return await fetchJson(url, { headers, signal }, [])
+  .then(formatReservationDate)
+  .then(formatReservationTime);
+}
 
 export async function createReservation(reservation, signal) {
   console.log("ReservationCreate - reservation: ", reservation)
@@ -82,4 +91,18 @@ export async function createReservation(reservation, signal) {
   };
 console.log("ReservationCreate - url: ", url, "options: ", options)
 return await fetchJson(url, options, reservation);
+}
+
+export async function assignTable(table, signal) {
+  console.log("Table Assignement - table: ", table);
+   const url = new URL (`${API_BASE_URL}/tables`);
+  // const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: table }),
+    signal,
+  };
+console.log("Table assigment - url: ", url, "options: ", options)
+return await fetchJson(url, options, table);
 }
