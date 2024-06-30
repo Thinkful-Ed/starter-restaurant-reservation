@@ -10,6 +10,7 @@ import DateButtons from "./DateButtons";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
+
 function Dashboard({ date }) {
 
 const [reservations, setReservations] = useState([]);
@@ -21,9 +22,10 @@ function loadDashboard() {
   listReservations({ date }, abortController.signal)
     .then(setReservations)
     .catch((error) => {
-      console.log("Dashboard - reservationsError: ", error);
-      setReservationsError([error.message]);
+      const errorMessage = error.response?.data?.error || error.message || "Unknown error occurred.";
+      setReservationsError([errorMessage]);
     });
+    
   return () => abortController.abort();
 }
   
@@ -60,7 +62,8 @@ function loadDashboard() {
       <DateButtons
             previous={`/dashboard?date=${previous(date)}`}
             today={`/dashboard?date=${today()}`}
-            next={`/dashboard?date=${next(date)}`} />
+            next={`/dashboard?date=${next(date)}`} 
+      />
       <ErrorAlert errors={reservationsError} />
       <table className="table">
         <thead>

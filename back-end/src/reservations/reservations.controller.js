@@ -63,7 +63,8 @@ function reservationDateIsValid(req, res, next) {
 function reservationTimeIsValid(req, res, next) {
   const { reservation_time } = req.body.data;
   // const regTime = /^(\d{1,2}):(\d{2})(:00)?([ap]m)?$/;
-  const regTime = /^(\d{2}):(\d{2})$/;
+  // const regTime = /^\d{2}:\d{2}$/;
+  const regTime = /[0-9]{2}:[0-9]{2}/;
   console.log("ReservationTimeIsValid:", reservation_time);
   if(!regTime.test(reservation_time)){
     next({ status: 400, message: "Must include valid reservation_time (ex. hh:mm:[ap]m)." })

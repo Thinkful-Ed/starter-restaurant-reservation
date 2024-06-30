@@ -34,8 +34,8 @@ export function hasValidDateAndTime(reservation) {
     const date = reservation.reservation_date;
     const time = reservation.reservation_time;
     const errors = {};
-    console.log("date: ", date);
-    console.log("time: ", time);
+    // console.log("date: ", date);
+    // console.log("time: ", time);
     
     // No reservations on Tuesdays
     const day = new Date(date).getUTCDay();
@@ -45,8 +45,8 @@ export function hasValidDateAndTime(reservation) {
     
     // No reservations in the past
     const formattedDate = new Date(`${date}T${time}`);
-    console.log("formattedDate", formattedDate);
-    console.log("new Date()", new Date());
+    // console.log("formattedDate", formattedDate);
+    // console.log("new Date()", new Date());
     if (formattedDate <= new Date()) {
        errors.pastReservation = "Reservation must be in the future.";
     }
