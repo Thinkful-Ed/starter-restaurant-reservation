@@ -32,7 +32,7 @@ headers.append("Content-Type", "application/json");
 async function fetchJson(url, options, onCancel) {
   try {
     const response = await fetch(url, options);
-
+    console.log("Fetch response:", response); // Log response
     if (response.status === 204) {
       return null;
     }
@@ -62,7 +62,7 @@ export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
   Object.entries(params).forEach(([key, value]) => 
     url.searchParams.append(key, value.toString()));
-  // console.log("listReservations - url: ", url );
+  console.log("listReservations - url: ", url );
   return await fetchJson(url, { headers, signal }, [])
   .then(formatReservationDate)
   .then(formatReservationTime);

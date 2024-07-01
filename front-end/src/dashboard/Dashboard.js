@@ -24,9 +24,10 @@ function loadReservationsToDashboard() {
   listReservations({ date }, abortController.signal)
     .then(setReservations)
     .catch((error) => {
-      console.log("Dashboard - reservationsError: ", error);
-      setReservationsError([error.message]);
+      const errorMessage = error.response?.data?.error || error.message || "Unknown error occurred.";
+      setReservationsError([errorMessage]);
     });
+    
   return () => abortController.abort();
 }
   
@@ -89,7 +90,8 @@ function loadTablesToDashboard() {
       <DateButtons
             previous={`/dashboard?date=${previous(date)}`}
             today={`/dashboard?date=${today()}`}
-            next={`/dashboard?date=${next(date)}`} />
+            next={`/dashboard?date=${next(date)}`} 
+      />
       <ErrorAlert errors={reservationsError} />
       <h2>Reservations</h2>
       <table className="table">
