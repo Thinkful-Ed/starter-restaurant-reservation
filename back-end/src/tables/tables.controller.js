@@ -34,15 +34,16 @@ async function update(req, res, next) {
   const { table_id } = req.params;
   const { reservation_id } = req.body.data;
   const table = await tablesService.read(table_id);
-  const reservation = await reservationsService.read(reservation_id);
+  // const reservation = await reservationsService.read(reservation_id);
 
   if (!table) {
     return next({ status: 404, message: `Table ${table_id} not found` });
   }
 
   if(!reservation_id) {
-    return next({ status: 400, message: "reservation_id is missing. and data is missing"})
+    return next({ status: 400, message:  "reservation_id is missing" })
   }
+  const reservation = await reservationsService.read(reservation_id);
 
   if (table.reservation_id) {
     return next({ status: 400, message: "Table is already occupied" });
@@ -72,10 +73,10 @@ function hasReservationId(req,res,next) {
   }else{
     next({
       status: 400,
-      message: `reservation_id not found: ${ req.body.data.reservation_id}`,
+      message: `reservation_id is missing: ${ req.body.data.reservation_id}`,
     });
 
-}
+  }
 }
 
 
