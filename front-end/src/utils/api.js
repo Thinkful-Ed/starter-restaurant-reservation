@@ -32,7 +32,7 @@ headers.append("Content-Type", "application/json");
 async function fetchJson(url, options, onCancel) {
   try {
     const response = await fetch(url, options);
-
+    console.log("Fetch response:", response); // Log response
     if (response.status === 204) {
       return null;
     }
@@ -60,10 +60,93 @@ async function fetchJson(url, options, onCancel) {
 
 export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
-  Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.append(key, value.toString())
-  );
+  Object.entries(params).forEach(([key, value]) => 
+    url.searchParams.append(key, value.toString()));
+  console.log("listReservations - url: ", url );
   return await fetchJson(url, { headers, signal }, [])
-    .then(formatReservationDate)
-    .then(formatReservationTime);
+  .then(formatReservationDate)
+  .then(formatReservationTime);
+}
+
+
+export async function createReservation(reservation, signal) {
+  console.log("api- createReservation: ", reservation)
+   const url = new URL (`${API_BASE_URL}/reservations`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  };
+console.log("api - createReservation - url: ", url, "options: ", options)
+return await fetchJson(url, options, reservation);
+}
+
+export async function updateReservation(reservation, signal) {
+  console.log("api - updateReservation: ", reservation)
+  const url = new URL (`${API_BASE_URL}/reservations/${reservation.reservation_id}`);
+  // Object.entries(params).forEach(([key, value]) => 
+  //   url.searchParams.append(key, value.toString()));
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  };
+console.log("api - updateReservation - url: ", url, "options: ", options)
+return await fetchJson(url, options, reservation);
+}
+
+
+export async function listTables(params, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  // Object.entries(params).forEach(([key, value]) => 
+    // url.searchParams.append(key, value.toString()));
+  // console.log("listTables - url: ", url );
+  return await fetchJson(url, { headers, signal }, []);
+ 
+}
+
+
+// export async function updateTable(table_id, data, signal) {
+  export async function updateTable(data, signal) { 
+const url = new URL(`${API_BASE_URL}/tables`);
+  // Object.entries(params).forEach(([key, value]) => 
+  //   url.searchParams.append(key, value.toString()));
+  const options = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ data }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+
+export async function createTable(table, signal) {
+  console.log("Table Creation - table: ", table);
+   const url = new URL (`${API_BASE_URL}/tables/new`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: table }),
+    signal,
+  };
+console.log("Table Creation - url: ", url, "options: ", options)
+return await fetchJson(url, options, table);
+}
+
+
+
+export async function seatReservation(tableId, reservationId,signal) {
+  console.log("Table Assignement - tableId : ", tableId);
+  const url = new URL (`${API_BASE_URL}/tables/${tableId}/seat`);
+ const options = {
+   method: "PUT",
+   headers,
+   body: JSON.stringify({ data: { reservation_id:reservationId } }),
+   signal,
+ };
+console.log("Table Assigment - url: ", url, "options: ", options)
+return await fetchJson(url, options, tableId);
 }
