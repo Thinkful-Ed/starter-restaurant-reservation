@@ -1,10 +1,10 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
+import { createReservation, updateReservation } from "../utils/api";
 import { formatAsDate } from "../utils/date-time";
 import { hasValidDateAndTime } from "../validations/hasValidDateAndTime";
 
-function ReservationsForm({ reservation, setReservation, errors, setReservationErrors }) {
+function NewReservationForm({ reservation, setReservation, setReservationErrors }) {
 
     const history = useHistory();
 
@@ -42,10 +42,15 @@ const submitHandler = async (event) => {
     }
   
     try {
+     if(!reservation.reservation_id){
       const savedReservation = await createReservation(reservation, abortController.signal);
-      const formattedDate = formatAsDate(savedReservation.reservation_date);
-      history.push(`/dashboard?date=${formattedDate}`);
-    } catch (error) {
+      history.push(`/dashboard?date=${savedReservation.reservation_date}`);
+ 
+    }else{ 
+      const savedReservation = await updateReservation(reservation, abortController.signal);
+      history.push(`/dashboard?date=${savedReservation.reservation_date}`);
+    };
+          } catch (error) {
     console.log(" ReservationsForm -submitHandler -error: ", error, " error.message: ",error.message);
     setReservationErrors([error.message || "Unknown error occurred."]); // Ensure error message is a string
 
@@ -66,7 +71,6 @@ function changeHandler(event) {
     
 return (
     <form onSubmit={submitHandler} className="mb-4">
-        {/* <ErrorAlert errors={errors} /> */}
         <div className="row mb-3">
             <div className="col-6 form-group">
                 <label className="form-label" htmlFor="first_name">
@@ -78,7 +82,7 @@ return (
                     name="first_name"
                     type="text"
                     placeholder="First Name"
-                    pattern="^[a-zA-Z'-. ]+$"
+                    pattern="^[a-zA-Z0-9'-. ]+$"
                     value={reservation.first_name}
                     onChange={changeHandler}
                     required={true}
@@ -94,7 +98,7 @@ return (
                     name="last_name"
                     type="text"
                     placeholder="Last Name"
-                    pattern="^[a-zA-Z'-. ]+$"
+                    pattern="^[a-zA-Z0-9'-. ]+$"
                     value={reservation.last_name}
                     onChange={changeHandler}
                     required={true}
@@ -111,7 +115,7 @@ return (
                 name="mobile_number"
                 type="text"
                 placeholder="Mobile Number"
-                pattern="\d{3}-\d{3}-\d{4}"
+                // pattern="\d{3}-\d{3}-\d{4}"
                 value={reservation.mobile_number}
                 onChange={changeHandler}
                 required={true}
@@ -185,4 +189,4 @@ return (
 
 }
 
-export default ReservationsForm;
+export default NewReservationForm;

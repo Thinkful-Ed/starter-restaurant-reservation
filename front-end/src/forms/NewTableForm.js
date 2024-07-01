@@ -1,10 +1,9 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { assignTable } from "../utils/api";
-import { formatAsDate } from "../utils/date-time";
-// import { hasValidDateAndTime } from "../validations/hasValidDateAndTime";
+import { createTable } from "../utils/api";
 
-function TablesForm({ tableAssignment, setTableAssignment, errors, setTableAssignErrors }) {
+
+function NewTableForm({ table, setTable, setTableErrors }) {
    
     const history = useHistory();
 
@@ -12,42 +11,18 @@ function TablesForm({ tableAssignment, setTableAssignment, errors, setTableAssig
         history.goBack();
     }
 
-//  const submitHandler = async (event) => {
-//     event.preventDefault();
-//    const abortController = new AbortController();
-//    const errors = hasValidDateAndTime(reservation);
-//    if (errors.length) {
-//         return setReservationErrors(errors);
-//     }
-//    try {
-//        const savedReservation = await createReservation(reservation, abortController.signal);
-//        const formattedDate = formatAsDate(savedReservation.reservation_date);
-//        console.log("Formatted Date:", formattedDate);
-//        history.push(`/dashboard?date=${savedReservation.reservation_date}`);
-//     } 
-//     catch (error) {
-//       setReservationErrors([error]);
-//     }
-//    return () => abortController.abort();
-//     };
 
 const submitHandler = async (event) => {
     event.preventDefault();
     const abortController = new AbortController();
-    // const validationErrors = hasValidDateAndTime(reservation);
-  
-    // if (Object.keys(validationErrors).length > 0) {
-    //   const errorMessages = Object.values(validationErrors).map(error => error.message||error);
-    //   return setTableAssignErrors(errorMessages);
-    // }
+    
   
     try {
-      const savedTableAssignment = await  assignTable(tableAssignment, abortController.signal);
-      const formattedDate = formatAsDate(savedTableAssignment.reservation_date);
-      history.push(`/dashboard?date=${formattedDate}`);
+      const createdTable = await  createTable(table, abortController.signal);
+      history.push("/dashboard");
     } catch (error) {
     console.log(" TablesForm -submitHandler - error: ", error, " error.message: ",error.message);
-    setTableAssignErrors([error.message || "Unknown error occurred."]); // Ensure error message is a string
+    setTableErrors([error.message || "Unknown error occurred."]); // Ensure error message is a string
 
     }
   
@@ -56,19 +31,16 @@ const submitHandler = async (event) => {
 
 function changeHandler(event) {
     const { name, value } = event.target;
-    setTableAssignment((previousTableAssignment) => ({
-        ...previousTableAssignment,
+    setTable((previousTable) => ({
+        ...previousTable,
         [name]: name === "capacity" ? Number(value) : value,
     }));
 }
 
 
-    
 return (
     <form onSubmit={submitHandler} className="mb-4">
-        {/* <ErrorAlert errors={errors} /> */}
         <div className="mb-3">
-            
                 <label className="form-label" htmlFor="table_name">
                     Table Name
                 </label>
@@ -78,8 +50,8 @@ return (
                     name="table_name"
                     type="text"
                     placeholder="Table Name"
-                    pattern="^[a-zA-Z0-9'-. ]+$"
-                    value={tableAssignment.table_name}
+                    // pattern="^[a-zA-Z0-9'-. ]+$"
+                    value={table.table_name}
                     onChange={changeHandler}
                     required={true}
                 />
@@ -95,7 +67,7 @@ return (
                 name="capacity"
                 type="number"
                 min= {1}
-                value={tableAssignment.capacity}
+                value={table.capacity}
                 onChange={changeHandler}
                 required={true}
             />
@@ -114,11 +86,10 @@ return (
                 className="btn btn-primary"
             >Submit
             </button>
-        
         </div>    
     </form> 
 );
 
 }
 
-export default TablesForm;
+export default NewTableForm;

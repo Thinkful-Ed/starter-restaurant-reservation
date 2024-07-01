@@ -10,6 +10,7 @@ import DateButtons from "./DateButtons";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
+
 function Dashboard({ date }) {
 
 const [reservations, setReservations] = useState([]);
@@ -32,7 +33,7 @@ function loadReservationsToDashboard() {
 function loadTablesToDashboard() {
   const abortController = new AbortController();
   setTablesError([]);
-  listTables({ date }, abortController.signal)
+  listTables( abortController.signal)
     .then(setTables)
     .catch((error) => {
       console.log("Dashboard - talbesError: ", error);
@@ -41,23 +42,26 @@ function loadTablesToDashboard() {
   return () => abortController.abort();
 }
   useEffect(loadReservationsToDashboard, [date]);
-  useEffect(loadTablesToDashboard);
+  useEffect(loadTablesToDashboard,[]);
 
   const tableRowsForReservations = reservations.length ? (
-    reservations.map((reservation) => (
-      <tr key={reservation.reservation_id}>
-        <th scope="row">{reservation.reservation_id}</th>
+    reservations.map((reservation) => {
+      const reservation_id = reservation.reservation_id;
+      return(
+      <tr key={reservation_id}>
+        <th scope="row">{reservation_id}</th>
         <td>{reservation.first_name}</td>
         <td>{reservation.last_name}</td>
         <td>{reservation.mobile_number}</td>
         <td>{reservation.reservation_date}</td>
         <td>{reservation.reservation_time}</td>
         <td>{reservation.people}</td>
-        <td><a href={`/reservations/${reservation.reservation_id}/seat`} className="seat-button">
+        <td><a href={`/reservations/${reservation_id}/seat`} className="seat-button">
         Seat
       </a></td>
       </tr>
-    ))
+    )})
+
   ) : (
     <tr>
       <td colSpan="7" className="text-center">
@@ -67,11 +71,12 @@ function loadTablesToDashboard() {
   );
 
 
-  const tableRowsForTables =  tables.map((table) => (
+  const rowsForTables =  tables.map((table) => (
       <tr key={table.table_id}>
         <th scope="row">{table.table_id}</th>
         <td>{table.table_name}</td>
-        <td>{table.status}</td>
+        <td>{table.capacity}</td>
+        <td>{table.reservation_id ? "Occupied" : "Free"}</td>
       </tr>
     ));
 
@@ -108,14 +113,15 @@ function loadTablesToDashboard() {
       <h2>Tables</h2>
       <table className="table">
         <thead>
-        <tr>
+          <tr>
             <th scope="col">#</th>
             <th scope="col">Table Name</th>
+            <th scope="col">Capacity</th>
             <th scope="col">Status</th>
           </tr>    
         </thead>
         <tbody>
-           {tableRowsForTables}
+            {rowsForTables}
         </tbody>
       </table>
       

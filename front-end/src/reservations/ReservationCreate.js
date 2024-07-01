@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
-import  ReservationsForm   from "../forms/ResrevationsForm"
+import  ReservationsForm   from "../forms/NewResrevationForm"
 function ReservationCreate() {
 
     // const history = useHistory();
@@ -20,7 +20,7 @@ return (
     <main>
         <h1 className="mb-3">Create Reservation</h1>
         <ErrorAlert errors={reservationErrors} />
-        <div><ReservationsForm  reservation={reservation} setReservation={setReservation} errors={reservationErrors} setReservationErrors={setReservationErrors}/></div> 
+        <div><ReservationsForm  reservation={reservation} setReservation={setReservation}  setReservationErrors={setReservationErrors}/></div> 
     </main>
   );
 
