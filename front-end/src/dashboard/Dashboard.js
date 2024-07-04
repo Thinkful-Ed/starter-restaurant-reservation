@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import React from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today, previous, next } from "../utils/date-time";
 import DateButtons from "./DateButtons";
+import ReservationsTable from "../tables/ReservationsTable";
+import TablesTable from "../tables/TablesTable";
+import useReservations from "../hooks/useReservations";
+import useTables from "../hooks/useTables";
 
 /**
+ * 
  * Defines the dashboard page.
  * @param date
  *  the date for which the user wants to view reservations.
@@ -12,74 +16,12 @@ import DateButtons from "./DateButtons";
  */
 
 function Dashboard({ date }) {
-
-const [reservations, setReservations] = useState([]);
-const [reservationsError, setReservationsError] = useState([]);
-const [tables, setTables] = useState([]);
-const [tablesError, setTablesError] = useState([]);
-
-function loadReservationsToDashboard() {
-  const abortController = new AbortController();
-  setReservationsError([]);
-  listReservations({ date }, abortController.signal)
-    .then(setReservations)
-    .catch((error) => {
-      const errorMessage = error.response?.data?.error || error.message || "Unknown error occurred.";
-      setReservationsError([errorMessage]);
-    });
-    
-  return () => abortController.abort();
-}
-  
-function loadTablesToDashboard() {
-  const abortController = new AbortController();
-  setTablesError([]);
-  listTables( abortController.signal)
-    .then(setTables)
-    .catch((error) => {
-      console.log("Dashboard - talbesError: ", error);
-      setTablesError([error.message]);
-    });
-  return () => abortController.abort();
-}
-  useEffect(loadReservationsToDashboard, [date]);
-  useEffect(loadTablesToDashboard,[]);
-
-  const tableRowsForReservations = reservations.length ? (
-    reservations.map((reservation) => {
-      const reservation_id = reservation.reservation_id;
-      return(
-      <tr key={reservation_id}>
-        <th scope="row">{reservation_id}</th>
-        <td>{reservation.first_name}</td>
-        <td>{reservation.last_name}</td>
-        <td>{reservation.mobile_number}</td>
-        <td>{reservation.reservation_date}</td>
-        <td>{reservation.reservation_time}</td>
-        <td>{reservation.people}</td>
-        <td><a href={`/reservations/${reservation_id}/seat`} className="seat-button">
-        Seat
-      </a></td>
-      </tr>
-    )})
-
-  ) : (
-    <tr>
-      <td colSpan="7" className="text-center">
-        No reservations for this date.
-      </td>
-    </tr>
-  );
-
-
-  const rowsForTables =  tables.map((table) => (
-      <tr key={table.table_id}>
-        <th scope="row">{table.table_id}</th>
-        <td>{table.table_name}</td>
-        <td>{table.capacity}</td>
-        <td>{table.reservation_id ? "Occupied" : "Free"}</td>
-      </tr>
-    ));
+  const { reservations, isLoadingReservations, errorReservations } = useReservations(date);
+  const { tables, isLoadingTables, errorTables } = useTables();
+ 
+if(isLoadingReservations || isLoadingTables) {
+     return <p>...Loading</p>
+  }
 
   return (
     <main>
@@ -92,43 +34,16 @@ function loadTablesToDashboard() {
             today={`/dashboard?date=${today()}`}
             next={`/dashboard?date=${next(date)}`} 
       />
-      <ErrorAlert errors={reservationsError} />
+      <ErrorAlert errors={errorReservations} />
       <h2>Reservations</h2>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Mobile Number</th>
-            <th scope="col">Reservation Date</th>
-            <th scope="col">Reservation Time</th>
-            <th scope="col">People</th>
-            <th scope="col">Seat</th>
-          </tr>          
-        </thead>
-        <tbody>
-           {tableRowsForReservations}
-        </tbody>
-      </table>
-      <ErrorAlert  errors={tablesError} />
+      <ReservationsTable reservations={reservations}/>
+      <ErrorAlert  errors={errorTables} />
       <h2>Tables</h2>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Table Name</th>
-            <th scope="col">Capacity</th>
-            <th scope="col">Status</th>
-          </tr>    
-        </thead>
-        <tbody>
-            {rowsForTables}
-        </tbody>
-      </table>
+      <TablesTable tables={tables}/>
       
     </main>
   );
+
 }
 
 export default Dashboard;

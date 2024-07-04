@@ -1,32 +1,33 @@
 import React, { useState } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
-
-import  ReservationsForm   from "../forms/NewResrevationForm"
+import ReservationForm from "../forms/ReservationForm";
+import { hasValidDateAndTime } from "../validations/hasValidDateAndTime";
+import { createReservation } from "../utils/api";
+import useSubmitForm from '../hooks/useSubmitForm';
 
 function ReservationCreate() {
 
-    // const history = useHistory();
-    const [reservationErrors, setReservationErrors] = useState([]);
-    const [reservation, setReservation] = useState({
+    const initialReservationFormState = {
         first_name: "",
         last_name: "",
         mobile_number: "",
         reservation_date: "",
         reservation_time: "",
         people: 1,
-    });  
-// console.log("ReservationCreate - reservationErrors: ",reservationErrors);
+    }
+    const [reservation, setReservation] = useState({...initialReservationFormState});  
 
+    const onSuccess = (newReservation) => `/dashboard?date=${newReservation.reservation_date}`;
+    const {submitHandler, errors} = useSubmitForm(createReservation, hasValidDateAndTime, onSuccess);
+    const reservationErrors = errors;
 
-return (
-    <main>
-        <h1 className="mb-3">Create Reservation</h1>
-        <ErrorAlert errors={reservationErrors} />
-
-        <div><ReservationsForm  reservation={reservation} setReservation={setReservation} setReservationErrors={setReservationErrors} /></div> 
-
-    </main>
-  );
+    return( 
+        <div>
+          <h1 className="mb-3">Create Reservation</h1>
+          <ErrorAlert errors={reservationErrors} />
+          <ReservationForm reservation={reservation} setReservation={setReservation} submitHandler={submitHandler} />
+        </div>
+    );
 
 }
 

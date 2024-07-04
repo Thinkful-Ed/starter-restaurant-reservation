@@ -1,9 +1,9 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { createTable } from "../utils/api";
 
 
-function NewTableForm({ table, setTable, setTableErrors }) {
+
+function TableForm({ table, setTable, submitHandler }) {
    
     const history = useHistory();
 
@@ -11,24 +11,7 @@ function NewTableForm({ table, setTable, setTableErrors }) {
         history.goBack();
     }
 
-
-const submitHandler = async (event) => {
-    event.preventDefault();
-    const abortController = new AbortController();
     
-  
-    try {
-      const createdTable = await  createTable(table, abortController.signal);
-      history.push("/dashboard");
-    } catch (error) {
-    console.log(" TablesForm -submitHandler - error: ", error, " error.message: ",error.message);
-    setTableErrors([error.message || "Unknown error occurred."]); // Ensure error message is a string
-
-    }
-  
-    return () => abortController.abort();
-};
-
 function changeHandler(event) {
     const { name, value } = event.target;
     setTable((previousTable) => ({
@@ -92,4 +75,4 @@ return (
 
 }
 
-export default NewTableForm;
+export default TableForm;

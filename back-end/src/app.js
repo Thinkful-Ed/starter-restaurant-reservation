@@ -13,7 +13,7 @@ const tablesRouter = require("./tables/tables.router");
 const errorHandler = require("./errors/errorHandler");
 const notFound = require("./errors/notFound");
 
-
+tablesRouter
 
 app.use(cors());
 app.use(express.json());
