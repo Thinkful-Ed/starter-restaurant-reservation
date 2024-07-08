@@ -10,7 +10,7 @@ import { useHistory } from 'react-router-dom';
  * @returns {Object} Contains the submitHandler function and any submission errors.
  */
 
-function useSubmitForm(apiFunction,validationFunction, onSuccess) {
+function useSubmitHandler(apiFunction,validationFunction, onSuccess) {
   const [errors, setErrors] = useState([]);
   const history = useHistory();
 
@@ -43,4 +43,4 @@ function useSubmitForm(apiFunction,validationFunction, onSuccess) {
 
 }
 
-export default useSubmitForm;
+export default useSubmitHandler;

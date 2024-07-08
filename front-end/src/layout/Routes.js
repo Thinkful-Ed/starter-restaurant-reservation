@@ -8,6 +8,8 @@ import useQuery from "../utils/useQuery";
 import TableCreate from "../table/TableCreate";
 import SeatReservation from "../reservations/SeatReservation";
 import ReservationEdit from "../reservations/ReservationEdit";
+import Search from "../search/Search";
+
 /**
  * Defines all the routes for the application.
  *
@@ -49,6 +51,10 @@ function Routes() {
 
       <Route exact={true} path='/tables/new'>
         <TableCreate />
+      </Route>
+
+      <Route exact={true} path="/search">
+        <Search />
       </Route>
 
       {/* <Route path="/tables/:table_id/new">

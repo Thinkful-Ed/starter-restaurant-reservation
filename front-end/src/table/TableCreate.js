@@ -3,38 +3,44 @@ import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import TableForm from "../forms/TableForm";
 import { createTable } from "../utils/api";
+
+
 function TableCreate() {
 
-    // const history = useHistory();
-    const [tableErrors, setTableErrors] = useState([]);
-    const [table, setTable] = useState({
+    const initalFormState = {
         table_name: "",
         capacity: 1,
-    });
-     const history =useHistory();
-
- const submitHandler = async (event) => {
-    event.preventDefault();
-    const abortController = new AbortController();
-    
-    try {
-        const updatedTable = await  createTable(table, abortController.signal);
-        console.log("Table updated successfully:", updatedTable);
-        history.push("/dashboard");
-    } 
-    catch (error) {
-        console.error("Error during update of table:", error);
-        setTableErrors([error.response?.data?.error || error.message || "Unknown error occurred."]);
-        abortController.abort();
     }
- 
-};
+
+    const [table, setTable] = useState({ ...initalFormState });
+    const [tableErrors, setTableErrors] = useState([]);
+    const history = useHistory();
+
+    const submitHandler = async (event) => {
+        event.preventDefault();
+        const abortController = new AbortController();    
+        try {
+            const newTable = await  createTable(table, abortController.signal);
+            console.log("Table created successfully:", newTable);
+            history.push("/dashboard");
+        } 
+        catch (error) {
+            console.error("Error during update of table:", error);
+            setTableErrors([error.response?.data?.error || error.message || "Unknown error occurred."]);
+            
+        }
+        finally {
+            abortController.abort();
+        };
+    };
 
 return (
     <div>
         <h1 className="mb-3">Table Assignment</h1>
         <ErrorAlert errors={tableErrors} />
-        <div><TableForm table={table} setTable={setTable} submitHandler={submitHandler} /></div> 
+        <div>
+          <TableForm table={table} setTable={setTable} submitHandler={submitHandler} />
+        </div> 
     </div>
   );
 

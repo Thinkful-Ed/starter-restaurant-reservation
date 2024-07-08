@@ -13,13 +13,13 @@ function SeatReservationForm({ tables, tableId, setTableId, submitHandler }) {
     setTableId(target.value);
   };
 
-
   return (
-    <form onSubmit={submitHandler}>
+    <form onSubmit={submitHandler} className="form-inline">
 
       <label htmlFor="table_id">Table Number:</label>
       <select name="table_id"
-              id="table_id"              
+              id="table_id"
+              className="form-control"
               value={tableId} 
               onChange={changeHandler} 
               required={true}>
@@ -27,16 +27,16 @@ function SeatReservationForm({ tables, tableId, setTableId, submitHandler }) {
         {tables.map((table) => (
             <option key={table.table_id} 
                     value={table.table_id}>
-            {table.table_name} - {table.capacity}
+            {table.table_name} - Capacity: {table.capacity}
             </option>))
         }
       </select>
 
-      <div className="mb-3">
-        <button type="submit">
+      <div className="form-group mt-2">
+        <button type="submit" className="btn btn-primary">
             Submit
         </button>
-        <button type="button" onClick={cancelHandler}>
+        <button type="button" className="btn btn-secondary ml-2" onClick={cancelHandler}>
              Cancel
         </button>
       </div>
