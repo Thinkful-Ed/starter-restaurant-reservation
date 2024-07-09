@@ -4,7 +4,7 @@ import { listTables } from "../utils/api";
 function useTables() {
   const [tables, setTables] = useState([]);
   const [isLoadingTables, setIsLoadingTables] = useState(true);
-  const [errorTables, setErrorTables] = useState([]);
+  const [tablesError, setTablesError] = useState([]);
 
   useEffect(() => {
     
@@ -12,7 +12,7 @@ function useTables() {
     
     setTables([]);
     setIsLoadingTables(true);
-    setErrorTables([]);
+    setTablesError([]);
 
     async function loadTables() {
         try {
@@ -20,7 +20,7 @@ function useTables() {
             setTables(tablesList);
         } catch (error) {
             const errorMessage = error.response?.data?.error || error.message || "Unknown error occurred.";
-            setErrorTables([errorMessage]);
+            setTablesError([errorMessage]);
         } finally {
             setIsLoadingTables(false);
         }
@@ -32,7 +32,7 @@ function useTables() {
 
   }, []);
 
-  return { tables, isLoadingTables, errorTables };
+  return { tables, setTables, isLoadingTables, tablesError };
 }
 
 export default useTables;

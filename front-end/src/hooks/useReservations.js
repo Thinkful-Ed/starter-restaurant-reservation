@@ -8,8 +8,10 @@ function useReservations({ date, reservationId = null }) {
 
   useEffect(() => {
     const abortController = new AbortController();
+    
+    setReservations([]);
     setIsLoadingReservations(true);
-    setErrorReservations([]);
+    setReservationsError([]);
 
     async function loadReservations() {
       try {
@@ -35,7 +37,7 @@ function useReservations({ date, reservationId = null }) {
 
   }, [date, reservationId]); // Dependency array includes both date and reservationId
 
-  return { reservations, isLoadingReservations, reservations };
+  return { reservations, setReservations, isLoadingReservations, reservationsError };
 }
 
 export default useReservations;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {useHistory, /*Link*/ } from "react-router-dom";
 
-function DateButtons({ previous, today, next }) {
+function DateButtons({ previous, today, next, date }) {
 
    const [formDate, setFormDate] = useState(date);
    const history = useHistory();

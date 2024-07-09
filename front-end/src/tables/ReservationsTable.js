@@ -1,26 +1,27 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { updateStatus } from "../utils/api";
-import { useHistory } from "react-router-dom";
 
-function ReservationsTable({ reservations }) {
-    const history = useHistory();
-
+function ReservationsTable({ reservations, setReservations, setErrorMessages }) {
     async function updateStatusHandler(reservation_id, status) {
-        const abortController = new AbortController();
-        try {
-            await updateStatus(reservation_id, status, abortController.signal);
-            history.go(0);
-        } catch (error) {
-            console.error(error);
-        }
+      const abortController = new AbortController();
+      try {
+        await updateStatus(reservation_id, status, abortController.signal);
+        // Update the local state to reflect changes
+        const updatedReservations = reservations.map(reservation =>
+          reservation.reservation_id === reservation_id ? { ...reservation, status } : reservation
+        );
+        setReservations(updatedReservations);
+      } catch (error) {
+        setErrorMessages(previousErrorMessages => [...previousErrorMessages, error.message]);
+      }
     }
 
     const finishReservationHandler = async (reservation_id) => {
-        if (window.confirm('Do you want to cancel this reservation?')) {
-            await updateStatusHandler(reservation_id, 'finished');
+        if (window.confirm("Do you want to cancel this reservation?")) {
+          await updateStatusHandler(reservation_id, "finished");
         }
-    };
+      };
 
     const columnHeadingsForReservationTable = ( 
             <tr>
@@ -45,23 +46,23 @@ function ReservationsTable({ reservations }) {
                 <td>{reservation.reservation_time}</td>
                 <td>{reservation.people}</td>
                 <td>{reservation.status}</td>
-                {reservation.status === 'booked' && (
+                {reservation.status === "booked" && (
                     <>
                         <td>
                             <Link to={`/reservations/${reservation.reservation_id}/edit`}
-                                  className='btn btn-secondary'>
+                                  className="btn btn-secondary">
                                 Edit
                             </Link>
                         </td>
                         <td>
                             <Link to={`/reservations/${reservation.reservation_id}/seat`}
-                                  className='btn btn-primary'>
+                                  className="btn btn-primary">
                                 Seat
                             </Link>
                         </td>
                         <td>
-                            <button type='button'
-                                    className='btn btn-danger'
+                            <button type="button"
+                                    className="btn btn-danger"
                                     onClick={() => finishReservationHandler(reservation.reservation_id)}>
                                 Cancel
                             </button>

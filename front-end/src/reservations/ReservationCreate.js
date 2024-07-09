@@ -3,7 +3,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import ReservationForm from "../forms/ReservationForm";
 import { hasValidDateAndTime } from "../validations/hasValidDateAndTime";
 import { createReservation } from "../utils/api";
-import useSubmitForm from '../hooks/useSubmitForm';
+import useSubmitHandler from "../hooks/useSubmitHandler";
 
 function ReservationCreate() {
 
@@ -18,7 +18,7 @@ function ReservationCreate() {
     const [reservation, setReservation] = useState({...initialReservationFormState});  
 
     const onSuccess = (newReservation) => `/dashboard?date=${newReservation.reservation_date}`;
-    const {submitHandler, errors} = useSubmitForm(createReservation, hasValidDateAndTime, onSuccess);
+    const {submitHandler, errors} = useSubmitHandler(createReservation, hasValidDateAndTime, onSuccess);
     const reservationErrors = errors;
 
     return( 

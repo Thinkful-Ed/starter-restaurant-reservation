@@ -33,6 +33,7 @@ describe("US-01 - Create and list reservations - E2E", () => {
 
   describe("/reservations/new page", () => {
     test("filling and submitting form creates a new reservation and then displays the dashboard for the reservation date", async () => {
+      console.log("point1");
       const lastName =  Date.now().toString(10);
       
       await page.type("input[name=first_name]", "James");
@@ -41,59 +42,73 @@ describe("US-01 - Create and list reservations - E2E", () => {
       await page.type("input[name=reservation_date]", "01012035");
       await page.type("input[name=reservation_time]", "1330");
       await page.type("input[name=people]", "2");
-      
+      console.log("point2");
       
       await page.screenshot({
         path: ".screenshots/us-01-submit-before.png",
         fullPage: true,
       });
       
-      
+      console.log("point3");
+
       await Promise.all([
         page.click("[type=submit]"),
         page.waitForNavigation({ waitUntil: "networkidle0" }),
       ]);
       
-      
+      console.log("point4");
+
       await page.screenshot({
         path: ".screenshots/us-01-submit-after.png",
         fullPage: true,
       });
       
-      
+      console.log("point5");
+
       await expect(page).toMatch(lastName);
     });
+    console.log("point6");
 
-    test("canceling form returns to previous page", async () => {
+    test("canceling form returns to previous page", async () => {      
+      console.log("canceling - point1");
+
       await page.goto(`${baseURL}/dashboard`, { waitUntil: "networkidle0" });
       await page.goto(`${baseURL}/reservations/new`, {
         waitUntil: "networkidle0",
       });
+      console.log("canceling - point2");
 
       const [cancelButton] = await page.$x(
         "//button[contains(translate(., 'ACDEFGHIJKLMNOPQRSTUVWXYZ', 'acdefghijklmnopqrstuvwxyz'), 'cancel')]"
       );
+      console.log("canceling - point3");
 
       if (!cancelButton) {
         throw new Error("button containing cancel not found.");
       }
+      console.log("canceling - point4");
 
       await page.screenshot({
         path: ".screenshots/us-01-cancel-before.png",
         fullPage: true,
       });
+      console.log("canceling - point5");
 
       await Promise.all([
         cancelButton.click(),
         page.waitForNavigation({ waitUntil: "networkidle0" }),
       ]);
+      console.log("canceling - point6");
 
       await page.screenshot({
         path: ".screenshots/us-01-cancel-after.png",
         fullPage: true,
       });
+      console.log("canceling - point7");
 
       expect(page.url()).toContain("/dashboard");
+      console.log("canceling - point8");
+
     });
   });
 });

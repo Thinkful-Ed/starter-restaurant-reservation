@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useReservations from '../hooks/useReservations';
 import useSubmitHandler from '../hooks/useSubmitHandler';
-import ReservationForm from '../components/ReservationForm';
-import ErrorAlert from '../components/ErrorAlert';
+import ReservationForm from '../forms/ReservationForm';
+import ErrorAlert from '../layout/ErrorAlert';
 import { updateReservation } from "../utils/api";
 import { hasValidDateAndTime } from "../validations/hasValidDateAndTime";
 

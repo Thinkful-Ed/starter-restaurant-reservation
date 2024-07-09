@@ -12,17 +12,17 @@ function TableForm({ table, setTable, submitHandler }) {
     }
 
     
-function changeHandler(event) {
-    const { name, value } = event.target;
-    setTable((previousTable) => ({
-        ...previousTable,
-        [name]: name === "capacity" ? Number(value) : value,
-    }));
-}
+    function changeHandler(event) {
+        const { name, value } = event.target;
+        setTable((previousTable) => ({
+            ...previousTable,
+            [name]: name === "capacity" ? Number(value) : value,
+        }));
+    }
 
 
 return (
-    <form onSubmit={submitHandler} className="mb-4">
+    <form onSubmit={(event) => submitHandler(event, table)} className="mb-4">
         <div className="mb-3">
                 <label className="form-label" htmlFor="table_name">
                     Table Name
