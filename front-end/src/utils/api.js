@@ -4,9 +4,6 @@
  */
 import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-time";
-// const formatReservationDate = require("./format-reservation-date");
-// const formatReservationTime = require("./format-reservation-date");
-
 
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
@@ -160,20 +157,19 @@ export async function freeTable(table_id, signal) {
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   const options = {
     method: "DELETE",
-    headers: {
-     "Content-Type": "application/json",
-    },
+    headers,
     signal,
   };
   return await fetchJson(url, options);
 }
 
-export async function  updateStatus(reservation_id, status){
+export async function  updateStatus(reservation_id, status, signal){
   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
   const options = {
     method: "PUT",
     body: JSON.stringify({ data: { status } }),
     headers,
+    signal,
   };
   return await fetchJson(url, options);
 }
