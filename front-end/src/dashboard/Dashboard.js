@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-
+import { today, previous, next } from "../utils/date-time";
+import DateButtons from "./DateButtons";
+import ReservationsTable from "../tables/ReservationsTable";
 /**
  * Defines the dashboard page.
  * @param date
@@ -9,28 +11,42 @@ import ErrorAlert from "../layout/ErrorAlert";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
-  const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
 
+const [reservations, setReservations] = useState([]);
+const [reservationsError, setReservationsError] = useState(null);
+
+function loadDashboard() {
+  const abortController = new AbortController();
+  setReservationsError(null);
+  setReservations([]);
+  listReservations({ date }, abortController.signal)
+    .then(setReservations)
+    .catch((error) => {
+      console.log("Dashboard - reservationsError: ", error);
+      setReservationsError(error);
+    });
+  return () => abortController.abort();
+}
+  
+  
   useEffect(loadDashboard, [date]);
 
-  function loadDashboard() {
-    const abortController = new AbortController();
-    setReservationsError(null);
-    listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      .catch(setReservationsError);
-    return () => abortController.abort();
-  }
+ 
 
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
+      <DateButtons
+              previous={`/dashboard?date=${previous(date)}`}
+              today={`/dashboard?date=${today()}`}
+              next={`/dashboard?date=${next(date)}`}
+              date={date}
+      />
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      <ReservationsTable reservations={reservations} />
     </main>
   );
 }
