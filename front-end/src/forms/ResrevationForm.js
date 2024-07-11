@@ -1,70 +1,16 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
-import { hasValidDateAndTime } from "../validations/hasValidDateAndTime";
 
-function ReservationsForm({ reservation, setReservation, errors, setReservationErrors }) {
+function ReservationForm({ reservation, changeHandler, submitHandler }) {
 
     const history = useHistory();
 
     function cancelHandler() {
         history.goBack();
-    }
-
-//  const submitHandler = async (event) => {
-//     event.preventDefault();
-//    const abortController = new AbortController();
-//    const errors = hasValidDateAndTime(reservation);
-//    if (errors.length) {
-//         return setReservationErrors(errors);
-//     }
-//    try {
-//        const savedReservation = await createReservation(reservation, abortController.signal);
-//        const formattedDate = formatAsDate(savedReservation.reservation_date);
-//        console.log("Formatted Date:", formattedDate);
-//        history.push(`/dashboard?date=${savedReservation.reservation_date}`);
-//     } 
-//     catch (error) {
-//       setReservationErrors([error]);
-//     }
-//    return () => abortController.abort();
-//     };
-
-const submitHandler = async (event) => {
-    event.preventDefault();
-    const abortController = new AbortController();
-    const validationErrors = hasValidDateAndTime(reservation);
- 
-    if (Object.keys(validationErrors).length > 0) {
-      const errorMessages = Object.values(validationErrors).map(error => error.message||error);
-      return setReservationErrors(errorMessages);
-    }
-    
-    try {
-      const savedReservation = await createReservation(reservation, abortController.signal); 
-      history.push(`/dashboard?date=${savedReservation.reservation_date}`);
-    } catch (error) {
-   
-    setReservationErrors([error.message || "Unknown error occurred."]); // Ensure error message is a string
-
-    }
-  
-    return () => abortController.abort();
-};
-
-function changeHandler(event) {
-    const { name, value } = event.target;
-    setReservation((previousReservation) => ({
-        ...previousReservation,
-        [name]: name === "people" ? Number(value) : value,
-    }));
-}
-
-
+    } 
     
 return (
-    <form onSubmit={submitHandler} className="mb-4">
-        {/* <ErrorAlert errors={errors} /> */}
+    <form onSubmit={submitHandler} className="form-group mb-4">
         <div className="row mb-3">
             <div className="col-6 form-group">
                 <label className="form-label" htmlFor="first_name">
@@ -76,6 +22,7 @@ return (
                     name="first_name"
                     type="text"
                     placeholder="First Name"
+                    autoFocus
                     pattern="^[a-zA-Z0-9'-. ]+$"
                     value={reservation.first_name}
                     onChange={changeHandler}
@@ -109,7 +56,7 @@ return (
                 name="mobile_number"
                 type="text"
                 placeholder="Mobile Number"
-                pattern="\d{3}-\d{3}-\d{4}"
+                pattern="\d{3}-\d{3}-\d{4}"  // Escaped backslash for correct JSX interpretation
                 value={reservation.mobile_number}
                 onChange={changeHandler}
                 required={true}
@@ -125,7 +72,7 @@ return (
                     id="reservation_date"
                     name="reservation_date"
                     type="date"
-                    pattern="\d{4}-\d{2}-\d{2}"
+                    pattern="\\d{4}-\\d{2}-\\d{2}"
                     value={reservation.reservation_date}
                     onChange={changeHandler}
                     required={true}          
@@ -143,7 +90,7 @@ return (
                     pattern="[0-9]{2}:[0-9]{2}"
                     value={reservation.reservation_time}
                     onChange={changeHandler}
-                    required={true}               
+                    required={true}
                 />
             </div>
         </div>
@@ -151,7 +98,7 @@ return (
             <label className="form-label" htmlFor="people">
                 People
             </label>
-            <input  
+            <input
                 className="form-control"
                 id="people"
                 name="people"
@@ -176,11 +123,10 @@ return (
                 className="btn btn-primary"
             >Submit
             </button>
-        
         </div>    
     </form> 
 );
 
 }
 
-export default ReservationsForm;
+export default ReservationForm;
