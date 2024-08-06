@@ -1,3 +1,17 @@
+/* color palette
+PRIMARY
+#19647E - dark blue (links and buttons)
+#28AFB0 - light blue (secondary links and buttons)
+
+ACCENT 
+#F4D35E - yellow
+#EE964B - orange
+
+NEUTRAL 
+#1F271B - dark green (text and dark background)
+#FFFFFF - white (text and light background)
+*/
+
 body {
   overflow-x: hidden;
 }
@@ -105,8 +119,7 @@ button {
   background-color: #ee964b;
 }
 
-
-.navbar {
+nav {
   background-color: #1f271b; /* Updated background color */
   color: #ffffff; /* Updated text color */
 }
@@ -114,15 +127,22 @@ button {
 .navbar-brand {
   font-family: "Bona Nova", serif;
   font-weight: 700;
-  color: #ffffff; /* Updated text color */
+  font-size: 1.8em;
+  color: #ffffff;
+  transition: color 0.3s ease;
 }
 
-.navbar-nav .nav-link {
+.navbar-brand:hover {
+  color: #28afb0;
+}
+
+nav .nav-link {
   font-family: "Almarai", sans-serif;
   font-weight: 400;
-  color: #ffffff; /* Updated text color */
+  color: #ffffff;
+  transition: color 0.3s ease;
 }
 
-.navbar-nav .nav-item {
-  margin-right: 15px; /* Adjust spacing between menu items */
+nav .nav-link:hover {
+  color: #28afb0;
 }
