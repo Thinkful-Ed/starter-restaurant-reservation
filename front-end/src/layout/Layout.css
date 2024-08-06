@@ -31,8 +31,7 @@ h4 {
   color: #19647e; /* Secondary color */
 }
 
-body,
-button {
+body {
   font-family: "Almarai", sans-serif;
   font-weight: 400;
   color: #19647e; /* Secondary color */
@@ -40,7 +39,8 @@ button {
 
 /* Font style for buttons */
 button {
-  font-weight: 700;
+  font-family: "Bona Nova", serif !important;
+  font-weight: 700 !important;
 }
 
 /* Add styles for button colors */
@@ -127,7 +127,6 @@ nav {
 .navbar-brand {
   font-family: "Bona Nova", serif;
   font-weight: 700;
-  font-size: 2em;
   color: #ffffff;
   transition: color 0.3s ease;
 }

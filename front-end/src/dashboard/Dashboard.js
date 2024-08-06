@@ -83,10 +83,10 @@ function Dashboard({ date }) {
 
   return (
     <main className="container m-5 mx-auto">
-      <h2 className="mb-5 text-center">Dashboard</h2>
+      <h1 className="mb-5 text-center fs-1">Dashboard</h1>
       <section className="mb-4">
         <div className="d-md-flex justify-content-between align-items-center">
-          <h4 className="mb-0">Reservations for {date}</h4>
+          <h2 className="mb-0 fs-3">Reservations for {date}</h2>
           <div className="mb-md-0">
             <button
               type="button"
@@ -118,7 +118,7 @@ function Dashboard({ date }) {
         />
       </section>
       <section>
-        <h4 className="mb-lg-0">Tables</h4>
+        <h2 className="mb-lg-0 fs-3">Tables</h2>
         {loading ? (
           <div className="loading-container">
             <div className="loading-spinner"></div>

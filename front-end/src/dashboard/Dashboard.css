@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 300px; /* Adjust the height based on your design */
+    height: 300px; 
   }
   
   .loading-spinner {
