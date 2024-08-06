@@ -27,7 +27,7 @@ const Menu = () => {
         }}
       >
         <div className="p-3 d-flex flex-column align-items-start">
-          <Link className="navbar-brand mx-auto" to="/">
+          <Link className="navbar-brand mx-auto py-4" to="/">
             TableFlow
           </Link>
           <ul className="nav flex-column m-2">
