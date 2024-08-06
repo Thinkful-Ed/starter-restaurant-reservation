@@ -17,7 +17,7 @@ const Menu = () => {
     <>
       {/* Sidebar for Desktop */}
       <nav
-        className="d-none d-md-block position-fixed desktop"
+        className="d-none d-md-block position-fixed rounded-end"
         style={{
           height: "100%",
           width: "250px",
@@ -42,7 +42,7 @@ const Menu = () => {
                     width="18"
                     height="18"
                     fill="currentColor"
-                    className={`bi ${item.icon} mr-4`}
+                    className={`bi ${item.icon} me-4`}
                     viewBox="0 0 16 16"
                   >
                     {item.icon === "bi-house-door-fill" && (
@@ -73,22 +73,22 @@ const Menu = () => {
       </nav>
 
       {/* Top Nav for Mobile */}
-      <nav className="navbar navbar-expand-md navbar-dark d-md-none">
+      <nav className="navbar navbar-expand-md navbar-dark d-md-none p-3">
         <Link className="navbar-brand" to="/">
           TableFlow
         </Link>
         <button
-          className="navbar-toggler"
+          class="navbar-toggler"
           type="button"
-          data-toggle="collapse"
-          data-target="#navbarNav"
-          aria-controls="navbarNav"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          <span class="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav p-2">
             {menuItems.map((item, index) => (
               <li key={index} className="nav-item mb-2">
@@ -101,7 +101,7 @@ const Menu = () => {
                     width="18"
                     height="18"
                     fill="currentColor"
-                    className={`bi ${item.icon} mr-4`}
+                    className={`bi ${item.icon} me-4`}
                     viewBox="0 0 16 16"
                   >
                     {item.icon === "bi-house-door-fill" && (
