@@ -103,7 +103,7 @@ button {
 /* Custom badge styles for specific colors */
 .badge-booked {
   background-color: #19647e;
-  color: #ffffff; /* White text for visibility */
+  color: #ffffff;
 }
 
 .badge-seated {
@@ -112,7 +112,7 @@ button {
 
 .badge-finished {
   background-color: #1f271b;
-  color: #ffffff; /* White text for visibility */
+  color: #ffffff;
 }
 
 .badge-cancelled {
@@ -120,8 +120,8 @@ button {
 }
 
 nav {
-  background-color: #1f271b; /* Updated background color */
-  color: #ffffff; /* Updated text color */
+  background-color: #1f271b;
+  color: #ffffff;
 }
 
 .navbar-brand {
@@ -143,6 +143,7 @@ nav .nav-link {
   transition: color 0.3s ease;
 }
 
-nav .nav-link:hover {
+nav .nav-link:hover,
+nav .nav-link:focus {
   color: #28afb0;
 }

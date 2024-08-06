@@ -17,9 +17,8 @@ const Menu = () => {
     <>
       {/* Sidebar for Desktop */}
       <nav
-        className="d-none d-md-block position-fixed rounded-end"
+        className="d-none d-md-block position-static rounded-end-4 shadow-lg min-vh-100"
         style={{
-          height: "100%",
           width: "250px",
           top: 0,
           left: 0,

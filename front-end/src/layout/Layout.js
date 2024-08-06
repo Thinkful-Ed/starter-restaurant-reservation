@@ -6,9 +6,9 @@ import "./Layout.css";
 
 function Layout() {
   return (
-    <div>
+    <div className="d-md-flex">
       <Menu />
-        <div className="col">
+        <div className="flex-grow-1">
           <Routes />
         </div>
     </div>

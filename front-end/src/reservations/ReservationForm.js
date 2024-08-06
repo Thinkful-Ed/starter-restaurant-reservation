@@ -42,7 +42,7 @@ function ReservationForm({
 
   return (
     <form
-      className="row g-3 p-4 m-4 flex w-75 mx-auto border custom-border-color rounded bg-light"
+      className="p-4 m-4 w-75 mx-auto border custom-border-color rounded bg-light"
       onSubmit={onSubmit}
     >
       <div className="col-md-6 p-2">
@@ -120,10 +120,13 @@ function ReservationForm({
         />
       </div>
       <div className="col-6 p-2 d-flex justify-content-start">
-        <button onClick={(event) =>{
-          event.preventDefault(); 
-          history.goBack();
-          }} className="btn btn-outline-danger ">
+        <button
+          onClick={(event) => {
+            event.preventDefault();
+            history.goBack();
+          }}
+          className="btn btn-outline-danger "
+        >
           Cancel
         </button>
       </div>
