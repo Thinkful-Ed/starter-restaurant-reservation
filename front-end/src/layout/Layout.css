@@ -14,6 +14,7 @@ NEUTRAL
 
 body {
   overflow-x: hidden;
+  background-color: #F8FAF7;
 }
 
 /* Font styles for headings */
@@ -37,13 +38,17 @@ body {
   color: #19647e; /* Secondary color */
 }
 
-/* Font style for buttons */
+/* buttons */
 button {
   font-family: "Bona Nova", serif !important;
   font-weight: 700 !important;
 }
 
-/* Add styles for button colors */
+.dashboard-buttons a {
+  font-family: "Bona Nova", serif;
+  font-weight: 700;
+}
+
 .btn-info {
   border-color: #28afb0;
   background-color: #28afb0;
@@ -107,12 +112,13 @@ button {
 }
 
 .badge-seated {
-  background-color: #28afb0;
+  background-color: #F4D35E;
+  color: #1F271B;
 }
 
 .badge-finished {
-  background-color: #1f271b;
-  color: #ffffff;
+  background-color: #EE964B;
+  color: #1F271B;
 }
 
 .badge-cancelled {

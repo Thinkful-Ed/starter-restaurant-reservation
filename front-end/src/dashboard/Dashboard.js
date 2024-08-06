@@ -84,9 +84,9 @@ function Dashboard({ date }) {
   return (
     <main className="container m-5 mx-auto">
       <h1 className="mb-5 text-center fs-1">Dashboard</h1>
-      <section className="mb-4">
+      <section className="mb-4 px-4">
         <div className="d-md-flex justify-content-between align-items-center">
-          <h2 className="mb-0 fs-3">Reservations for {date}</h2>
+          <h2 className="mb-0 fs-2">Reservations for {date}</h2>
           <div className="mb-md-0">
             <button
               type="button"
