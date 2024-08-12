@@ -14,21 +14,19 @@ NEUTRAL
 
 body {
   overflow-x: hidden;
-  background-color: #F8FAF7;
+  background-color: #f8faf7;
 }
 
 /* Font styles for headings */
 h1,
 h2 {
   font-family: "Bona Nova", serif;
-  font-weight: 700;
   color: #1f271b; /* Primary color */
 }
 
 /* Font styles for body and buttons */
 h4 {
   font-family: "Almarai", sans-serif;
-  font-weight: 700;
   color: #19647e; /* Secondary color */
 }
 
@@ -112,13 +110,13 @@ button {
 }
 
 .badge-seated {
-  background-color: #F4D35E;
-  color: #1F271B;
+  background-color: #f4d35e;
+  color: #1f271b;
 }
 
 .badge-finished {
-  background-color: #EE964B;
-  color: #1F271B;
+  background-color: #ee964b;
+  color: #1f271b;
 }
 
 .badge-cancelled {
@@ -138,7 +136,7 @@ nav {
 }
 
 .navbar-brand:hover {
-  color: #28afb0;
+  color: #BCCBB4;
 }
 
 nav .nav-link {
@@ -150,5 +148,23 @@ nav .nav-link {
 
 nav .nav-link:hover,
 nav .nav-link:focus {
-  color: #28afb0;
+  color: #BCCBB4;
+}
+
+/* Dashboard card */
+.dotted-border {
+  border: 1px dashed #5b724f;
+}
+
+.new-res-card {
+  color: #5b724f;
+}
+
+.add-new-btn {
+  color: #5b724f;
+}
+
+.add-new-btn:hover,
+.add-new-btn:focus {
+  color: #506446;
 }
