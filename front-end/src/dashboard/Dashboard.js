@@ -87,24 +87,24 @@ function Dashboard({ date }) {
       <section className="mb-4">
         <div className="d-md-flex justify-content-between align-items-center">
           <h2 className="fs-2 fw-semibold">Reservations for {date}</h2>
-          <div className="d-flex justify-content-between">
+          <div className="d-flex justify-content-between w-md-25">
             <button
               type="button"
-              className="btn btn-outline-secondary btn-sm m-1"
+              className="btn btn-outline-secondary btn-sm m-1 w-100"
               onClick={handlePrevious}
             >
               Previous
             </button>
             <button
               type="button"
-              className="btn btn-info btn-sm m-1"
+              className="btn btn-info btn-sm m-1 w-100"
               onClick={handleToday}
             >
               Today
             </button>
             <button
               type="button"
-              className="btn btn-outline-secondary btn-sm m-1"
+              className="btn btn-outline-secondary btn-sm m-1 w-100"
               onClick={handleNext}
             >
               Next
@@ -118,7 +118,7 @@ function Dashboard({ date }) {
         />
       </section>
       <section>
-        <h2 className="mb-lg-0 fs-2 fw-semibold">Tables</h2>
+        <h2 className="mb-4 fs-2 fw-semibold">Tables</h2>
         {loading ? (
           <div className="loading-container">
             <div className="loading-spinner"></div>

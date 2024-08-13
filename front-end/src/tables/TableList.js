@@ -2,51 +2,60 @@ import React from "react";
 import { getTableStatusBadgeVariant } from "../utils/helpers";
 
 function TableList({ tables, handleFinish }) {
-  const tablesMap = tables.map((table) => (
-    <tr key={table.table_id}>
-      <td className="align-middle">{table.table_name}</td>
-      <td className="align-middle">{table.capacity}</td>
-      <td className="align-middle">
-        <span
-          className={`badge ${getTableStatusBadgeVariant(
-            table.reservation_id
-          )}`}
-          data-table-id-status={table.table_id}
-        >
-          {table.reservation_id ? "Occupied" : "Free"}
-        </span>
-      </td>
-      <td className="align-middle">
-        {table.reservation_id !== null ? (
-          <button
-            type="button"
-            className="btn btn-outline-info btn-sm align-middle"
-            data-table-id-finish={table.table_id}
-            onClick={() => handleFinish(table.table_id, table.reservation_id)}
-          >
-            Finish
-          </button>
-        ) : (
-          <> {null} </>
-        )}
-      </td>
-    </tr>
-  ));
-
   return (
-    <div className="table-responsive">
-      <table className="table table-hover table-sm table-bordered text-center ">
-        <thead className="thead-light">
-          <tr>
-            <th scope="col align-middle">Table Name</th>
-            <th scope="col align-middle">Capacity</th>
-            <th scope="col align-middle">Table Status</th>
-            <th scope="col align-middle">Actions</th>
-          </tr>
-        </thead>
+    <div className="container-fluid">
+      <div className="row row-cols-4 pb-2 text-center">
+        <div className="card-header bg-transparent border-0 p-0">
+          Table Name
+        </div>
+        <div className="card-header bg-transparent border-0 p-0">Capacity</div>
+        <div className="card-header bg-transparent border-0 p-0">
+          Table Status
+        </div>
+        <div className="card-header bg-transparent border-0 p-0">Actions</div>
+      </div>
 
-        <tbody className="table-group-divider">{tablesMap}</tbody>
-      </table>
+      <ul className="list-group list-group-flush">
+        {tables.map((table) => (
+          <div className="card d-flex flex-column border-0 rounded-4 shadow-sm my-2">
+            <div
+              key={table.table_id}
+              className="row row-cols-4 py-3 text-center"
+            >
+              <li className="list-group-item border-0 p-0 bg-transparent">
+                {table.table_name}
+              </li>
+              <li className="list-group-item border-0 p-0 bg-transparent">
+                {table.capacity}
+              </li>
+              <li className="list-group-item border-0 p-0 bg-transparent">
+                <span
+                  className={`badge ${getTableStatusBadgeVariant(
+                    table.reservation_id
+                  )}`}
+                  data-table-id-status={table.table_id}
+                >
+                  {table.reservation_id ? "Occupied" : "Free"}
+                </span>
+              </li>
+              <li className="list-group-item border-0 p-0 bg-transparent">
+                {table.reservation_id !== null ? (
+                  <button
+                    type="button"
+                    className="btn btn-outline-info btn-sm"
+                    data-table-id-finish={table.table_id}
+                    onClick={() =>
+                      handleFinish(table.table_id, table.reservation_id)
+                    }
+                  >
+                    Finish
+                  </button>
+                ) : null}
+              </li>
+            </div>
+          </div>
+        ))}
+      </ul>
     </div>
   );
 }

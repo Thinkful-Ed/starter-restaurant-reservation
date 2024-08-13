@@ -106,7 +106,7 @@ function ReservationList({ reservations, loadDashboard }) {
   ));
 
   return (
-    <div className="d-flex flex-wrap">
+    <div className="d-flex flex-wrap justify-content-center justify-content-lg-start">
       <div
         className="card new-res-card m-3 rounded-4 dotted-border bg-transparent w-2"
         style={{ width: "18rem" }}

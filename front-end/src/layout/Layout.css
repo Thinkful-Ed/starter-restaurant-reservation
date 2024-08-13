@@ -9,12 +9,15 @@ ACCENT
 
 NEUTRAL 
 #1F271B - dark green (text and dark background)
-#FFFFFF - white (text and light background)
+#f8faf7 - white (text and light background)
 */
 
 body {
   overflow-x: hidden;
   background-color: #f8faf7;
+  font-family: "Almarai", sans-serif;
+  font-weight: 400;
+  color: #1f271b; /* Secondary color */
 }
 
 /* Font styles for headings */
@@ -30,12 +33,6 @@ h4 {
   color: #19647e; /* Secondary color */
 }
 
-body {
-  font-family: "Almarai", sans-serif;
-  font-weight: 400;
-  color: #19647e; /* Secondary color */
-}
-
 /* buttons */
 button {
   font-family: "Bona Nova", serif !important;
@@ -48,53 +45,56 @@ button {
 }
 
 .btn-info {
-  border-color: #28afb0;
-  background-color: #28afb0;
+  border-color: #19647e;
+  background-color: #19647e;
+  color: #f8faf7;
 }
 
 .btn-info:hover {
-  border-color: #19647e;
-  background-color: #19647e;
+  border-color: #12485a;
+  background-color: #12485a;
+  color: #f8faf7;
 }
 
 .btn-outline-info {
-  color: #28afb0;
-  border-color: #28afb0;
-  background-color: transparent;
+  border-color: #19647e;
+  background-color: #19647e;
+  color: #f8faf7;
 }
 
 .btn-outline-info:hover {
-  color: #ffffff;
+  border-color: #12485a;
+  background-color: #12485a;
+  color: #f8faf7;
+}
+
+.btn-secondary {
   background-color: #28afb0;
   border-color: #28afb0;
 }
 
-.btn-secondary {
-  background-color: #19647e;
-  border-color: #19647e;
-}
-
 .btn-outline-secondary {
-  color: #19647e;
-  border-color: #19647e;
+  color: #1f271b;
+  border-color: #28afb0;
+  background-color: #28afb0;
 }
 
 .btn-outline-secondary:hover {
-  color: #ffffff;
-  background-color: #19647e;
-  border-color: #19647e;
+  color: #1f271b;
+  border-color: #219191;
+  background-color: #219191;
 }
 
 .btn-outline-danger {
-  color: #ee964b;
+  color: #1f271b;
   border-color: #ee964b;
-  background-color: transparent;
+  background-color: #ee964b;
 }
 
 .btn-outline-danger:hover {
-  color: #ffffff;
-  background-color: #ee964b;
-  border-color: #ee964b;
+  color: #1f271b;
+  background-color: #d08543;
+  border-color: #d08543;
 }
 
 /* border color for create and edit forms */
@@ -136,7 +136,7 @@ nav {
 }
 
 .navbar-brand:hover {
-  color: #BCCBB4;
+  color: #bccbb4;
 }
 
 nav .nav-link {
@@ -148,7 +148,7 @@ nav .nav-link {
 
 nav .nav-link:hover,
 nav .nav-link:focus {
-  color: #BCCBB4;
+  color: #bccbb4;
 }
 
 /* Dashboard card */
