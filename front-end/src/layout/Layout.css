@@ -97,10 +97,18 @@ button {
   border-color: #d08543;
 }
 
-/* border color for create and edit forms */
+/* Custom form styling */
 
-.custom-border-color {
-  border-color: #1f271b !important;
+.form-control {
+  background-color: #f1f5ef;
+  border: 1px solid #bccbb4;
+}
+
+.form-control:focus {
+  background-color: #f1f5ef;
+  border-color: #bccbb4;
+  box-shadow: 0 0 4px 2px #bccbb4;
+  outline: none;
 }
 
 /* Custom badge styles for specific colors */

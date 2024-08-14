@@ -41,102 +41,115 @@ function ReservationForm({
   };
 
   return (
-    <form
-      className="p-4 m-4 w-75 mx-auto border custom-border-color rounded bg-light"
-      onSubmit={onSubmit}
-    >
-      <div className="col-md-6 p-2">
-        <input
-          className="form-control"
-          name="first_name"
-          id="first_name"
-          type="text"
-          placeholder="First Name"
-          required={true}
-          onChange={handleChange}
-          value={reservationData.first_name || ""}
-        />
-      </div>
-      <div className="col-md-6 p-2">
-        <input
-          className="form-control"
-          name="last_name"
-          id="last_name"
-          type="text"
-          placeholder="Last Name"
-          required={true}
-          onChange={handleChange}
-          value={reservationData.last_name || ""}
-        />
-      </div>
-      <div className="col-md-6 p-2">
-        <input
-          className="form-control"
-          name="mobile_number"
-          id="mobile_number"
-          type="tel"
-          placeholder="Phone Number"
-          required={true}
-          onChange={handleChange}
-          value={reservationData.mobile_number || ""}
-        />
-      </div>
-      <div className="col-md-6 p-2">
-        <input
-          className="form-control"
-          name="people"
-          id="people"
-          type="number"
-          placeholder="Party Size"
-          required={true}
-          onChange={handleChange}
-          value={reservationData.people || ""}
-        />
-      </div>
-      <div className="col-md-6 p-2">
-        <input
-          className="form-control"
-          name="reservation_date"
-          id="reservation_date"
-          type="date"
-          placeholder="YYYY-MM-DD"
-          pattern="\d{4}-\d{2}-\d{2}"
-          required
-          onChange={handleChange}
-          value={reservationData.reservation_date || ""}
-        />
-      </div>
-      <div className="col-md-6 p-2">
-        <input
-          className="form-control"
-          name="reservation_time"
-          id="reservation_time"
-          type="time"
-          placeholder="HH:MM"
-          pattern="[0-9]{2}:[0-9]{2}"
-          required
-          onChange={handleChange}
-          value={reservationData.reservation_time || ""}
-        />
-      </div>
-      <div className="col-6 p-2 d-flex justify-content-start">
-        <button
-          onClick={(event) => {
-            event.preventDefault();
-            history.goBack();
-          }}
-          className="btn btn-outline-danger "
-        >
-          Cancel
-        </button>
-      </div>
+    <div className="d-flex row justify-content-center">
+      <form
+        className="p-4 m-4 w-100 rounded-4 bg-transparent"
+        onSubmit={onSubmit}
+      >
+        <div className="row">
+          <div className="col-lg-6 p-2">
+            <input
+              className="form-control"
+              name="first_name"
+              id="first_name"
+              type="text"
+              placeholder="First Name"
+              required={true}
+              onChange={handleChange}
+              value={reservationData.first_name || ""}
+            />
+          </div>
+          <div className="col-lg-6 p-2">
+            <input
+              className="form-control"
+              name="last_name"
+              id="last_name"
+              type="text"
+              placeholder="Last Name"
+              required={true}
+              onChange={handleChange}
+              value={reservationData.last_name || ""}
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-6 p-2">
+            <input
+              className="form-control"
+              name="mobile_number"
+              id="mobile_number"
+              type="tel"
+              placeholder="Phone Number"
+              required={true}
+              onChange={handleChange}
+              value={reservationData.mobile_number || ""}
+            />
+          </div>
 
-      <div className="col-6 p-2 d-flex justify-content-end">
-        <button type="submit" className="btn btn-outline-secondary">
-          Submit
-        </button>
-      </div>
-    </form>
+          <div className="col-lg-6 p-2">
+            <input
+              className="form-control"
+              name="people"
+              id="people"
+              type="number"
+              placeholder="Party Size"
+              required={true}
+              onChange={handleChange}
+              value={reservationData.people || ""}
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-6 p-2">
+            <input
+              className="form-control"
+              name="reservation_date"
+              id="reservation_date"
+              type="date"
+              placeholder="YYYY-MM-DD"
+              pattern="\d{4}-\d{2}-\d{2}"
+              required
+              onChange={handleChange}
+              value={reservationData.reservation_date || ""}
+            />
+          </div>
+          <div className="col-md-6 p-2">
+            <input
+              className="form-control"
+              name="reservation_time"
+              id="reservation_time"
+              type="time"
+              placeholder="HH:MM"
+              pattern="[0-9]{2}:[0-9]{2}"
+              required
+              onChange={handleChange}
+              value={reservationData.reservation_time || ""}
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="d-flex justify-content-between">
+            <div className="col-6 py-2">
+              <button
+                onClick={(event) => {
+                  event.preventDefault();
+                  history.goBack();
+                }}
+                className="btn btn-outline-danger "
+              >
+                Cancel
+              </button>
+            </div>
+
+            <div className="col-6 py-2 d-flex justify-content-end">
+              <button type="submit" className="btn btn-info">
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 }
 

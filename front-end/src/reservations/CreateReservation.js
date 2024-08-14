@@ -34,8 +34,8 @@ function CreateReservation() {
 
   // add bootstrap validation
   return (
-    <div>
-      <h2 className="p-4 m-4 text-center">Create a Reservation</h2>
+    <div className="container-fluid d-flex flex-column w-75">
+      <h1 className="p-4 m-2 text-center fs-1 fw-bold">Create a Reservation</h1>
       <ReservationForm
         handleSubmit={handleSubmit}
         initialFormState={initialFormState}

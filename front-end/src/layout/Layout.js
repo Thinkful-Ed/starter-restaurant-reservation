@@ -8,7 +8,7 @@ function Layout() {
   return (
     <div className="d-md-flex">
       <Menu />
-      <div className="flex-grow-1 w-md-75">
+      <div className="d-flex justify-content-center flex-grow-1">
         <Routes />
       </div>
     </div>
