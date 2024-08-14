@@ -82,7 +82,7 @@ function Dashboard({ date }) {
   };
 
   return (
-    <main className="container m-5 px-4 px-md-5 mx-auto">
+    <main className="container p-4 m-2 px-4 px-md-5 mx-auto">
       <h1 className="mb-5 text-start fs-1 fw-bold">Dashboard</h1>
       <section className="mb-4">
         <div className="d-md-flex justify-content-between align-items-center">

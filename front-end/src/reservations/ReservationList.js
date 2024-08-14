@@ -14,7 +14,7 @@ function ReservationList({ reservations, loadDashboard }) {
   reservationsMap = reservations.map((reservation) => (
     <div
       key={reservation.reservation_id}
-      className="card m-3 rounded-4 border border-0 shadow"
+      className="card m-2 rounded-4 border border-0 shadow"
       style={{ width: "18rem" }}
     >
       <div className="card-body">
@@ -77,12 +77,12 @@ function ReservationList({ reservations, loadDashboard }) {
           <p className="card-text">Party of {reservation.people}</p>
         </div>
 
-        <div className="d-flex justify-content-between dashboard-buttons">
+        <div className="row justify-content-between dashboard-buttons mx-1">
           {reservation.status === "booked" && (
             <a
               href={`/reservations/${reservation.reservation_id}/seat`}
               type="button"
-              className="btn btn-outline-info btn-sm m-1"
+              className="col btn btn-outline-info btn-sm m-1"
             >
               Seat
             </a>
@@ -90,7 +90,7 @@ function ReservationList({ reservations, loadDashboard }) {
           <a
             href={`/reservations/${reservation.reservation_id}/edit`}
             type="button"
-            className="btn btn-outline-secondary btn-sm m-1"
+            className=" col btn btn-outline-secondary btn-sm m-1"
           >
             Edit
           </a>
@@ -108,7 +108,7 @@ function ReservationList({ reservations, loadDashboard }) {
   return (
     <div className="d-flex flex-wrap justify-content-center justify-content-lg-start">
       <div
-        className="card new-res-card m-3 rounded-4 dotted-border bg-transparent w-2"
+        className="card new-res-card m-2 rounded-4 dotted-border bg-transparent"
         style={{ width: "18rem" }}
       >
         <div className="card-body d-flex flex-column align-items-center justify-content-center">
