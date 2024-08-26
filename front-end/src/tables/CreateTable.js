@@ -37,13 +37,13 @@ function CreateTable() {
     return abortController;
   };
 
-  // add bootstrap validation
   return (
     <div className="container-fluid d-flex flex-column w-75">
       <h1 className="p-4 m-2 text-center fs-1 fw-bold">Create a Table</h1>
       <div className="d-flex row justify-content-center">
         <form
-          className="p-4 m-4 rounded-4 bg-transparent" style={{ width: "30rem" }}
+          className="p-4 m-4 rounded-4 bg-transparent"
+          style={{ width: "30rem" }}
           onSubmit={handleSubmit}
         >
           <div className="row">

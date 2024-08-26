@@ -115,6 +115,7 @@ function Dashboard({ date }) {
         <ReservationList
           reservations={reservations}
           loadDashboard={loadDashboard}
+          showAddNewReservation={true}
         />
       </section>
       <section>
