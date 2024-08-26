@@ -17,7 +17,7 @@ function ReservationList({ reservations, loadDashboard }) {
       className="card m-2 rounded-4 border border-0 shadow"
       style={{ width: "18rem" }}
     >
-      <div className="card-body">
+      <div className="card-body d-flex flex-column justify-content-between">
         <div className="d-flex justify-content-between align-items-center text-capitalize mb-1">
           <h5 className="card-title fw-semibold fs-5 me-3">
             {reservation.first_name} {reservation.last_name}

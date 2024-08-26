@@ -43,7 +43,7 @@ function ReservationForm({
   return (
     <div className="d-flex row justify-content-center">
       <form
-        className="p-4 m-4 w-100 rounded-4 bg-transparent"
+        className="p-4 m-4 rounded-4 bg-transparent" style={{ width: "40rem" }}
         onSubmit={onSubmit}
       >
         <div className="row">
@@ -127,9 +127,9 @@ function ReservationForm({
             />
           </div>
         </div>
+        {/* Buttons */}
         <div className="row">
-          <div className="d-flex justify-content-between">
-            <div className="col-6 py-2">
+            <div className="col-6 p-2">
               <button
                 onClick={(event) => {
                   event.preventDefault();
@@ -141,12 +141,11 @@ function ReservationForm({
               </button>
             </div>
 
-            <div className="col-6 py-2 d-flex justify-content-end">
+            <div className="col-6 p-2 d-flex justify-content-end">
               <button type="submit" className="btn btn-info">
                 Submit
               </button>
             </div>
-          </div>
         </div>
       </form>
     </div>
