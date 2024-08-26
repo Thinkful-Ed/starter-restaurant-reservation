@@ -45,6 +45,7 @@ The following provides an overview of the API endpoints used in the frontend of 
 
 ### 1. List Reservations
 
+
 - **Endpoint:** `/reservations`
 - **Method:** `GET`
 - **Description:** Retrieves all existing reservations.
