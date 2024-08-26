@@ -20,11 +20,6 @@ function EditReservation() {
     return () => abortController.abort();
   }, [reservation_id]);
 
-  // const handleCancel = (event) => {
-  //   event.preventDefault();
-  //   history.goBack();
-  // };
-
   const handleSubmit = async (reservation) => {
     try {
       const formattedDate = formatAsDate(reservation.reservation_date);
@@ -38,8 +33,8 @@ function EditReservation() {
   };
 
   return (
-    <div>
-      <h2 className="p-4 m-4 text-center">Edit a Reservation</h2>
+    <div className="container-fluid d-flex flex-column w-75">
+      <h1 className="p-4 m-2 text-center fs-1 fw-bold">Edit a Reservation</h1>
       <ReservationForm
         handleSubmit={handleSubmit}
         initialFormState={currentReservation}
