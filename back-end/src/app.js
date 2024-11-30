@@ -4,16 +4,21 @@ require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
 const express = require("express");
 const cors = require("cors");
+const app = express();
+
+
+const reservationsRouter = require("./reservations/reservations.router");
+const tablesRouter = require("./tables/tables.router");
 
 const errorHandler = require("./errors/errorHandler");
 const notFound = require("./errors/notFound");
-const reservationsRouter = require("./reservations/reservations.router");
 
-const app = express();
+tablesRouter
 
 app.use(cors());
 app.use(express.json());
 
+app.use("/tables", tablesRouter);
 app.use("/reservations", reservationsRouter);
 
 app.use(notFound);

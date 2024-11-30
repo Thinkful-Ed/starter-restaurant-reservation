@@ -42,21 +42,21 @@ describe("US-02 - Create reservation on a future, working date - E2E", () => {
     test("displays an error message if the date of the reservation occurs in the past", async () => {
       await page.type("input[name=reservation_date]", "12242020");
       await page.type("input[name=reservation_time]", "05:30PM");
-
+      console.log("point 1 ");
       await page.screenshot({
         path: ".screenshots/us-02-reservation-is-future-before.png",
       });
-
+      console.log("point 2 ");
       await page.click("button[type=submit]");
-
+      console.log("point 3 ");
       await page.screenshot({
         path: ".screenshots/us-02-reservation-is-future-after.png",
       });
-
+      console.log("point 4 ");
       const alerts = await page.$$(".alert-danger");
       expect(alerts.length).toBeGreaterThan(0);
     });
-
+    console.log("point 5 ");
     test("displays an error message if reservation date falls on a Tuesday", async () => {
       await page.type("input[name=reservation_date]", "02062035");
       await page.type("input[name=reservation_time]", "05:30PM");
